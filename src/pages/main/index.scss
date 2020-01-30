@@ -1,0 +1,30 @@
+.index {
+  flex-direction: column;
+  width: 100%;
+  margin-bottom:20px;
+  .searchbar{
+    
+  }
+  .swiper{
+    
+  }
+  .itemize{
+    box-sizing:border-box;
+    padding:0 10px 10px 10px;
+  }
+  .news{
+    box-sizing:border-box;
+    padding:0 10px 10px 0;
+    .news-title{
+      margin-left:10px;
+      font-weight:bold;
+    }
+  }
+  .rank{
+    box-sizing:border-box;
+    padding:0 10px 10px 10px;
+    .rank-title{
+      font-weight:bold;
+    }
+  }
+}

@@ -1,0 +1,94 @@
+import qs from 'qs'
+import invariant from 'invariant'
+
+import {isType, extend, coverPromise} from './tool'
+
+const HTTP_METHODS = ['OPTIONS', 'GET', 'HEAD', 'POST', 'DELETE', 'PUT', 'TRACT', 'CONNECT']
+
+const isAlipay = process.env.TARO_ENV === 'alipay'
+
+const Taro: any = {}
+
+const defaultOptions = {
+    header: {
+        'content-type': 'application/x-www-form-urlencoded'
+    },
+    dataType: 'json',
+    responseType: 'text'
+}
+
+let defaultHost = null
+
+let dynamicOptions = function() {
+    return {}
+}
+
+let errorHandler: any = function() {
+    invariant(false, 'Error handle')
+}
+
+//拼接url
+function joinUrl(path, host, query) {
+    let queryString;
+    let ret;
+    if(query) {
+        queryString = qs.stringify(query)
+    }
+    if(/^https?:\/\//.test(path)) {
+        ret = path
+    }else {
+        ret = host + path
+    }
+    if(queryString) {
+        ret += '?' + queryString
+    }
+    return ret
+}
+
+//初始化
+const init = (settings) => {
+    const {options = {}, host = '', taro, error} = settings
+    extend(true, defaultOptions, options)
+
+    if(error) errorHandler = error
+
+    if(settings.dynamicOptions) dynamicOptions = settings.dynamicOptions
+
+    defaultHost = host
+
+    Taro.request = taro.request
+
+}
+
+const request = async function(method, path, settings:any={}) {
+    const {query, data, ...options} = settings
+    invariant(HTTP_METHODS.indexOf(method) >= 0, '错误的请求方法')
+
+    //参数配置
+    const setting: any = {
+        url: joinUrl(path, defaultHost, query),
+        method
+    }
+    
+    extend(true, setting, defaultOptions, options)
+
+    if(isType(dynamicOptions, 'Fucntion')) {
+        const dynamicOptionsPromise = coverPromise(dynamicOptions)
+        const args: any = []
+        args[0] = extend(true, {path, query}, setting)
+        const dynaicSetting = await dynamicOptionsPromise(...args)
+        extend(true, setting, {data: qs.stringify(data)}, dynamicOptions)
+    }
+    try {
+        const response = await Taro.request(setting)
+        return errorHandler('REQUEST_SUCCESS', {response})
+    }catch(err) {
+        if(!err.origin && isAlipay) {
+            return errorHandler("REQUEST_SUCCESS", {response: err})
+        }
+        throw err
+    }
+}
+
+request.init = init
+export default request

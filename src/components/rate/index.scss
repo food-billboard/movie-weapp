@@ -1,0 +1,17 @@
+@import '../../theme/custom-theme.scss';
+.rate{
+    position:relative;
+    left:0;
+    top:0;
+    .star{
+        
+    }
+    .number{
+        font-weight:bold;
+        position:absolute;
+        top:0;
+        right:50px;
+        font-size:40px;
+        color:rgba(255, 0, 0, 0.5);
+    }
+}

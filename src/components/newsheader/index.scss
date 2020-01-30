@@ -1,0 +1,42 @@
+@import "~taro-ui/dist/style/components/article.scss";
+.head{
+    $height:180px;
+    width:100%;
+    height:200px;
+    box-sizing:border-box;
+    padding:10px;
+    .img{
+      width: $height;
+      height:$height;
+      .content{
+          width:100%;
+          height:100%;
+      }
+    }
+    .detail{
+        width:430px;
+        height:$height;
+        .article{
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            word-break: break-all;
+        }
+    }
+    .img,
+    .detail{
+        margin-right:20px;
+        float:left;
+    }
+    .enter{
+        width:80px;
+        float:right;
+        height:$height;
+        font-size:50px;
+        text-align:center;
+        line-height:$height;
+        color:gray;
+        font-weight:500;
+    }
+}

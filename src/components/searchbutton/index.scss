@@ -1,0 +1,17 @@
+@import "~taro-ui/dist/style/components/flex.scss";
+@import '../../theme/custom-theme.scss';
+.searchbutton{
+    .search{
+       
+    }
+    .hotsearch{
+        margin:10px 0;
+        .title{
+            margin-top:5px;
+            margin-left:15px;
+        }
+        .hotlist{
+            margin-right:15px;
+        }
+    }
+}

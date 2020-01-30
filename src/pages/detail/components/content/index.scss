@@ -1,0 +1,81 @@
+@import "~taro-ui/dist/style/components/flex.scss";
+@import '../../../../theme/custom-theme.scss';
+.ellipsis{
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    overflow:hidden;
+}
+.content{
+    width:100%;
+    height:100%;
+    .title{
+        width:100%;
+        color:#ff6600;
+        font-weight:bold;
+        font-size:48px;
+        @extend .ellipsis;
+    }
+    .main{
+        width:100%;
+        .main-rate{
+
+        }
+        .text{
+            color:black;
+        }
+        .main-info{
+            width:100%;
+            .actor,
+            .type,
+            .time-area,
+            .hot,
+            .director-lan{
+                color:gray;
+                @extend .ellipsis;
+                text-align:left;
+                line-height:50px;
+            }
+            .actor{
+                
+            }
+            .director-lan{
+                
+            }
+            .type{
+
+            }
+            .time-area{
+
+            }
+            .hot{
+                .hot-text{
+                    color:rgba(0, 0, 0, 0.8);
+                    font-size:24px;
+                }
+            }
+            .description{
+                color:gray;
+                .text{
+                    color:black;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 4;
+                    overflow: hidden;
+                    word-break: break-all;
+                    text-indent:56px;
+                }
+                &-detail{
+                    display:inline-block;
+                    float:right;
+                    padding:0 30px;
+                    background-color:rgba(2, 231, 231, 0.6);
+                    color:black;
+                    border-radius:20px;
+                }
+            }
+            .introduce{
+                width:100%;
+            }
+        }
+    }
+}

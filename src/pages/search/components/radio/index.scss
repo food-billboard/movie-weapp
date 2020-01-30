@@ -1,0 +1,28 @@
+@import '../../../../theme/custom-theme.scss';
+.radio{
+    position:relative;
+    left:0;
+    top:0;
+    .select{
+        padding-left:32px;
+        font-size:32px;
+        line-height:60px;
+        padding-right:32px;
+    }
+    .list{
+        width:750px;
+        height:400px;
+        overflow:hidden;
+        position:absolute;
+        left:0;
+        top:60px;   
+        transition:.5s;
+        border:1px solid rgba(0, 0, 0, 0.1);
+        border-bottom-left-radius:10px;
+        border-bottom-right-radius:10px;
+        background-color:rgba(0, 0, 0, 0.1);
+        .content{
+            width:750px;
+        }
+    }
+}

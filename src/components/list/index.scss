@@ -1,0 +1,39 @@
+.list{
+    .list-content{
+        width:100%;
+        height:200px;
+        box-sizing:border-box;
+        padding:10px;
+        background-color:rgba(0, 0, 0, 0.1);
+        margin-bottom:20px;
+        .img{
+            width:180px;
+            height:180px;
+            margin-right:20px;
+            float:left;
+            &-content{
+                width:100%;
+                height:100%; 
+            }
+        }
+        .detail{
+            width:510px;
+            height:100%;
+            background-color:white;
+            float:right;
+            color:gray;
+            .name{
+                width:100%;
+                font-weight:bold;
+                color:#ff6600;
+                font-size:40px;
+                text-overflow:ellipsis;
+                overflow:hidden;
+                white-space:nowrap;
+            }
+        }
+    }
+}
+.title{
+    color:#ff6600;
+}

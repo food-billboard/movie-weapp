@@ -1,0 +1,90 @@
+import Taro, { Component } from '@tarojs/taro'
+import { View } from '@tarojs/components'
+import { AtTabs, AtTabsPane } from 'taro-ui'
+import './index.scss'
+import PropTypes from 'prop-types'
+
+interface Screen {
+    (value: string): void 
+}
+
+interface IProps {
+    screen: Screen
+}
+
+interface TabList {
+    title: string,
+    id: string
+}
+
+interface IState {
+    current: number,
+    tabList: Array<TabList>
+}
+
+export default class Head extends Component<IProps>{
+    public static defaultProps = {
+        screen: () => {}
+    }
+
+    public state:IState = {
+        current: 0,
+        tabList: [
+            {
+                title: '全部',
+                id: 'all'
+            },
+            {
+                title: '免费',
+                id: 'free'
+            },
+            {
+                title: '付费',
+                id: 'fee'
+            }
+        ]   
+    }
+    
+    public constructor() {
+        super(...arguments)
+        this.handleClick = this.handleClick.bind(this)
+    }
+
+    /**
+     * 条件筛选
+     */
+    public handleClick (value: number) {
+        console.log('tab跳转')
+        const { tabList } = this.state
+        this.setState({
+            current: value
+        })
+        this.props.screen(tabList[value]['title'])
+    }
+
+    public render() {
+        const { tabList } = this.state
+        const heads = tabList.map((value, index) => {
+            const { id } = value
+            return (
+                <AtTabsPane 
+                    current={this.state.current} 
+                    index={0} 
+                    key={id}
+                >
+                </AtTabsPane>
+            )
+        })
+        return (
+            <AtTabs 
+                animated={false}
+                current={this.state.current} 
+                tabList={tabList} 
+                onClick={this.handleClick.bind(this)}
+                className='head'    
+            >
+                {heads}
+            </AtTabs>
+        )
+    }
+}

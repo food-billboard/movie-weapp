@@ -1,0 +1,34 @@
+.detail{
+    background-color:rgba(0, 0, 0, 0.2);
+    .description,
+    .image,
+    .other{
+        margin-bottom:40px;
+    }
+    .video{
+        width:100%;
+        height:400px;
+        margin-bottom:10px;
+    }
+    .description{
+        width:100%;
+        height:660px;
+        box-sizing:border-box;
+        padding:40px;
+        border-top:1px solid rgba(0, 0, 0, 0.1);
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+
+    }
+    .image{
+
+    }
+    .other{
+        width:400px;
+        height:92px;
+        position:relative;
+        left:0;
+        top:0;
+        margin:0 auto;
+    }
+}
