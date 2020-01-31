@@ -1,3 +1,5 @@
+const path = require('path')
+
 const config = {
   projectName: 'movie',
   date: '2020-1-30',
@@ -6,6 +8,13 @@ const config = {
     '640': 2.34 / 2,
     '750': 1,
     '828': 1.81 / 2
+  },
+  alias: {
+    '~components': 'src/components',
+    '~lodash': 'src/lib/lodash',
+    '~utils': 'src/utils',
+    '~config': 'src/config',
+    '~services': 'src/services'
   },
   sourceRoot: 'src',
   outputRoot: 'dist',

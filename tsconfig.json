@@ -1,32 +1,37 @@
 {
   "compilerOptions": {
-    "target": "es2017",
-    "module": "commonjs",
-    "removeComments": false,
-    "preserveConstEnums": true,
-    "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "noImplicitAny": false,
-    "allowSyntheticDefaultImports": true,
-    "outDir": "lib",
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "strictNullChecks": true,
-    "sourceMap": true,
-    "baseUrl": ".",
-    "rootDir": ".",
-    "jsx": "preserve",
-    "jsxFactory": "Taro.createElement",
-    "allowJs": true,
-    "resolveJsonModule": true,
-    "typeRoots": [
-      "node_modules/@types",
-      "global.d.ts"
-    ]
+      "module": "commonjs",
+      "noImplicitAny": false,
+      "removeComments": false,
+      "preserveConstEnums": true,
+      "sourceMap": true,
+      "allowJs": true,
+      "allowSyntheticDefaultImports": true,
+      "baseUrl":".",
+      "experimentalDecorators": true,
+      "jsx": "preserve",
+      "jsxFactory": "Taro.createElement",
+      "moduleResolution":"node",
+      "noUnusedParameters":false,
+      "outDir": "lib",
+      "rootDir": ".",
+      "strictNullChecks": true,
+      "target": "es2017",
+
+      "typeRoots": [
+          "node_modules/@types",
+          "global.d.ts"
+        ],
+      "paths":{
+          "~*":["src/*"],
+          "~lodash": ["src/lib/lodash"]
+      }
   },
   "exclude": [
-    "node_modules",
-    "dist"
+      "node_modules",
+      "dist"
   ],
   "compileOnSave": false
 }
+
+
