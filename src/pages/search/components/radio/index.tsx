@@ -51,15 +51,19 @@ export default class RadioList extends Component<IProps>{
     /**
      * 条件选择
      */
-    public handleChange (value) {
-        const {show} = this.state
+    public handleChange (target: string) {
+        const { show, list } = this.state
         this.setState({
-            value,
-            text: value,
+            value: target,
+            text: target,
             show: !show
         })
-        console.log(`条件选择${value}`)
-        this.props.screen(value)
+        const query = list.filter(val => {
+            const { value } = val
+            return value === target
+        })
+        const { id } = query[0]
+        this.props.screen(id)
     }
 
     /**
@@ -82,7 +86,7 @@ export default class RadioList extends Component<IProps>{
                     {text}
                 </Text>
                 <View className='list'
-                    style={{height: show ? '400px' : '0'}}>
+                    style={{height: show ? '270px' : '0', visibility: show ? 'visible' : 'hidden'}}>
                     <AtRadio
                         options={list}
                         value={value}

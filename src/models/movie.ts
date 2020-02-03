@@ -5,18 +5,17 @@ import {
     getDailyNew,
     getRank,
     getComment,
-    factorSelect,
+    factorSearch,
     getTypeDetail,
     getCommentHeader,
     getDetail,
-    sort
 } from '~services'
 export default {
     namespace: 'movie',
     state: {
 
         //热搜
-        hot: [],
+        // hot: [],
 
         //分类
         type: [],
@@ -28,7 +27,7 @@ export default {
         comment: [],
         
         //搜索结果
-        search: []
+        // search: []
     },
     effects: {
         //获取热搜
@@ -78,8 +77,8 @@ export default {
         },
 
         //搜索结果筛选
-        * factorSelect({factor}, {call, put}) {     
-            const item = yield call(factorSelect, factor)
+        * factorSearch({factor}, {call, put}) {     
+            const item = yield call(factorSearch, factor)
             // yield put({type: 'setData', payload: {search: item}})
             return item
         },
@@ -96,11 +95,6 @@ export default {
             return detail
         },
 
-        //排序
-        * sort({query}, {call, put}) {
-            const response = yield call(sort, query)
-            return response
-        }
     },
     reducers: {
         setData(state, {payload}) {

@@ -3,32 +3,29 @@ import { View } from '@tarojs/components'
 import RadioList from '../radio'
 import Method from '../method' 
 import Select from '../select'
+
+import { FormData } from '../../interface'
+
 import './index.scss'
 
-interface SimpleScreen {
-    (value: string): void
-}
-
-interface ShowMethod {
-    (): void
-}
-
 interface IProps {
-    simpleScreen: SimpleScreen
-    showMethod: ShowMethod
+    sortScreen: (value: string) => void
+    showMethod: () =>void
+    queryScreen: (formData: FormData) => void
 }
 
 export default class Sub extends Component<IProps>{
     public static defaultProps = {
         simpleScreen: () => {},
-        showMethod: () => {}
+        showMethod: () => {},
+        queryScreen: (formData: FormData) => {}
     }
 
     public render() {
         return(
             <View className='at-row at-row__justify--around sub'>
                 <View className='at-col at-col-5 select'>
-                    <RadioList screen={this.props.simpleScreen} />
+                    <RadioList screen={this.props.sortScreen} />
                 </View>
                 <View className='at-col at-col-3 look'>
                     <Method
@@ -36,7 +33,9 @@ export default class Sub extends Component<IProps>{
                     />
                 </View>
                 <View className='at-col at-col-5 screen'>
-                    <Select />
+                    <Select
+                        screen={this.props.queryScreen}
+                    />
                 </View>
             </View>
         )

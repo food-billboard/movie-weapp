@@ -54,12 +54,11 @@ export default class Head extends Component<IProps>{
      * 条件筛选
      */
     public handleClick (value: number) {
-        console.log('tab跳转')
         const { tabList } = this.state
         this.setState({
             current: value
         })
-        this.props.screen(tabList[value]['title'])
+        this.props.screen(tabList[value]['id'])
     }
 
     public render() {

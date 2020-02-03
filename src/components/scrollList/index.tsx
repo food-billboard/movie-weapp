@@ -78,7 +78,7 @@ export default class List extends Component<IProps> {
 
   public componentDidMount = () => {
     const { query } = this.state
-    this.fetchData(query)
+    // this.fetchData(query)
   }
 
   //数据请求
@@ -139,6 +139,8 @@ export default class List extends Component<IProps> {
       bottom
     } = this.props
     const { empty, loading } = this.state
+    const _header = typeof header === 'boolean'
+    const _bottom = typeof bottom === 'boolean'
     return (
       <View className='list'>
         <ScrollView
@@ -152,7 +154,7 @@ export default class List extends Component<IProps> {
           onScrollToLower={onScrollToLower ? onScrollToLower : this.handleToLower}
           onScroll={onScroll}
         >
-          {header ? this.props.renderHeader : ''}
+          {_header ? '' : this.props.renderHeader}
           {this.props.renderContent}
           <GDivider
             show={empty}
@@ -160,7 +162,7 @@ export default class List extends Component<IProps> {
           {/* <Top 
             ref={this.topRef} 
           /> */}
-          {bottom ? this.props.renderBottom : ''}
+          {_bottom ? '' : this.props.renderBottom}
         </ScrollView>
         <View 
           className='active'

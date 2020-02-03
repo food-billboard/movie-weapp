@@ -5,7 +5,7 @@ import { dva, router, includes } from '~utils'
 
 import 'taro-ui/dist/style/index.scss'
 
-import Index from './pages/type/index'
+import Index from './pages/main/index'
 import configure from './configure'
 
 
@@ -39,16 +39,16 @@ const app = dva.createDva({
       }else if( statusCode === 401 ){
         const toast = { title: '未登录', icon: 'none' };
         Taro.showToast(toast);
-        // router.replace('/login')
+        router.replace('/login')
       }else if( statusCode === 200 ){
         const body = response.data
         const toast = { title: body.err.msg || '当前网络异常，请稍后重试', icon: 'none' };
         Taro.showToast(toast);
         if( body.err && includes(['401'], body.err.code) ){
-          // router.replace('/login')
+          router.replace('/login')
         }
         if( body.err && includes(['404'], body.err.code) ){
-          // setTimeout(() => router.replace('/login'), 500);
+          setTimeout(() => router.replace('/login'), 500);
         }
       }
       return
@@ -69,7 +69,6 @@ class App extends Component {
 
   public config: Config = {
     pages: [
-      'pages/type/index',
       'pages/main/index',
       'pages/mine/index',
       'pages/register/index',
@@ -83,7 +82,7 @@ class App extends Component {
       'pages/comment/index',
       'pages/user/index',
       'pages/search/index',
-      // 'pages/type/index',
+      'pages/type/index',
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -99,7 +98,7 @@ class App extends Component {
       "selectedColor": "#ff6600",
       "list": [
         {
-          "pagePath": "pages/type/index",
+          "pagePath": "pages/main/index",
           "text": "首页",
           "iconPath": "./assets/home-icon.png"
         },
@@ -120,10 +119,10 @@ class App extends Component {
     const dispatch = dva.getDispatch();
 
     await Taro.showLoading({mask: true, title: '加载中'})
-    // if( !includes(['/my', '/bound'], router.getOptions().alias) ){
-    //    // 获取个人详情判断是否已经登录
-    //   await dispatch({ type: 'global/getUserInfo'});
-    // }
+    if( !includes(['/my', '/bound'], router.getOptions().alias) ){
+       // 获取个人详情判断是否已经登录
+      await dispatch({ type: 'global/getUserInfo'});
+    }
     await Taro.hideLoading();
   }
 

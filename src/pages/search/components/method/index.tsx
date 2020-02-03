@@ -1,13 +1,12 @@
 import Taro, {Component} from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
+
+import icon from '../../../../assets/icon.png'
+import list from '../../../../assets/list.png'
 import './index.scss'
 
-interface Screen {
-    (value: string): void
-}
-
 interface IProps {
-    screen: Screen
+    screen: () => void
 }
 
 interface IState {
@@ -16,12 +15,12 @@ interface IState {
     active: number
 }
 
-export default class Methods extends Component<any>{
+export default class Methods extends Component<IProps, IState>{
     public static defaultProps = {
         screen: () => {}
     }
 
-    public state = {
+    public state: IState = {
         change: [0, 1],
         index: 0,
         active: 0
@@ -51,7 +50,7 @@ export default class Methods extends Component<any>{
         return (
             <View className='method'
                 onClick={this.change}>
-                <Image src={this.state.active ? '' : ''}></Image>
+                <Image className='active' style={{width:'20px', height: '20px'}} src={this.state.active ? list : icon}></Image>
             </View>
         )
     }

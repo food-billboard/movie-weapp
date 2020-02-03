@@ -16,7 +16,12 @@ interface IProps {
     confirm: any
 }
 
-class SearchButton extends Component<IProps>{
+interface IState {
+    focus: boolean
+    value?: string
+}
+
+class SearchButton extends Component<IProps, IState>{
     //默认数据
     public static defaultProps: IProps = {
         value: '',
@@ -27,10 +32,15 @@ class SearchButton extends Component<IProps>{
 
     public constructor() {
         super(...arguments)
+
         this.onChange = this.onChange.bind(this)
         this.onBlur = this.onBlur.bind(this)
         this.onFocus = this.onFocus.bind(this)
         this.confirm = this.confirm.bind(this)
+    }
+
+    public state: IState = {
+        focus: false
     }
 
     /**
@@ -46,7 +56,9 @@ class SearchButton extends Component<IProps>{
      *监听失去焦点 
      */
     public onBlur():any {
-        
+        this.setState({
+            focus: false
+        })
     }
 
     /**
@@ -54,6 +66,9 @@ class SearchButton extends Component<IProps>{
      */
     public onFocus():any {
         const { disabled } = this.props
+        this.setState({
+            focus: true
+        })
         if(!disabled) return
         router.push('/search')
     }

@@ -1,12 +1,13 @@
-@import '../../theme/custom-theme.scss';
-@import "~taro-ui/dist/style/components/icon.scss";
-.type{
+// @import '../../theme/custom-theme.scss';
+// @import "~taro-ui/dist/style/components/icon.scss";
+// .type{
     .header{
         height:80px;
         .header-type{
             position:relative;
             left:0;
             top:0;
+            white-space:nowrap;
             .text{
                 position:absolute;
                 left:0;
@@ -19,7 +20,6 @@
                 z-index:9999;
                 text-indent:20px;
             }
-            white-space:nowrap;
             .header-list{
                 width:100px;
                 height:100%;
@@ -36,4 +36,4 @@
         right:20px;
         bottom:50px;
     }
-}
+// }

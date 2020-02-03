@@ -1,9 +1,10 @@
 import Taro, {Component} from '@tarojs/taro'
 import { View, Picker } from '@tarojs/components'
 import { AtForm, AtInput, AtButton, AtCheckbox, AtList, AtListItem } from 'taro-ui'
-import {connect} from '@tarojs/redux'
-import {mapStateToProps, mapDispatchToProps} from './connect'
+import { FormData } from '../../../interface'
 import './index.scss'
+import { connect } from '@tarojs/redux'
+import {mapDispatchToProps, mapStateToProps} from './connect'
 
 interface Type {
     id: string,
@@ -11,24 +12,9 @@ interface Type {
     img: string
 }
 
-interface FactorSelect {
-    (formData: FormData): any
-}
-
 interface IProps {
-    type: Array<Type>,
-    factorSelect: FactorSelect
-}
-
-interface FormData {
-    maxPrice: number,
-    minPrice: number
-    priceDisable: boolean
-    fee: Array<string>,
-    type: string,
-    startDate: number,  
-    endDate: number,
-    actor: string
+    type?: Array<Type> | []
+    screen: (formData: FormData) => void
 }
 
 interface FeeOption {
@@ -49,7 +35,12 @@ interface IState {
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Forms extends Component<IProps> {
-    public formData = {
+
+    public static defaultProps = {
+        type: []
+    }
+
+    public formData: FormData = {
         maxPrice:0, //价格上限
         minPrice: 0,    //价格下限
         priceDisable: false,    //免费
@@ -57,17 +48,17 @@ export default class Forms extends Component<IProps> {
         type: '全部',   //电影类型
         startDate: 1888,  //起始时间,
         endDate: new Date().getFullYear(),    //结束时间,
-        actor: ''   //演员
+        // actor: ''   //演员
     }
 
     public constructor() {
         super(...arguments)
-        const { type } = this.props
+        const { type=[] } = this.props
         const arr = type.map(val => {
             const { value } = val
             return value
         })
-        this.setState({arr})
+        this.setState({type: arr})
         this.onSubmit = this.onSubmit.bind(this)
         this.onReset = this.onReset.bind(this)
         this.onDateChange = this.onDateChange.bind(this)
@@ -139,7 +130,7 @@ export default class Forms extends Component<IProps> {
     public onSubmit = async () => {
         this.filterFactor()
         const {formData} = this.state
-        await this.props.factorSelect(formData)
+        await this.props.screen(formData)
     }
 
     /**
@@ -163,7 +154,6 @@ export default class Forms extends Component<IProps> {
      */
     public feeChange = (value:Array<string>) => {
         const { formData } = this.state
-        let { priceDisable, fee } = formData
         formData.fee = value
         if(value.includes('免费') && value.length === 1) {
             formData.priceDisable = true

@@ -96,7 +96,7 @@ export const getUserComment = (id) => {
 }
 
 //搜索条件筛选
-export const factorSelect = (factor) => {
+export const factorSearch = (factor) => {
     return request('GET', '/api/movie/search', {query: {factor}})
 }
 
@@ -128,9 +128,4 @@ export const getCommentHeader = (id) => {
 //获取电影详情
 export const getDetail = (id) => {
     return request('GET', '/api/movie/detail', {query: {id}})
-}
-
-//排序
-export const sort = (query) => {
-    return request('GET', '/api/movie/sort', {query})
 }

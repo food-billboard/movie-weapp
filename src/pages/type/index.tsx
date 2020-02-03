@@ -2,9 +2,10 @@ import Taro, { Component, Config } from '@tarojs/taro'
 import { View, ScrollView, Text } from '@tarojs/components'
 import IconList from '~components/iconlist'
 import LinearList from '~components/list'
-import { AtFab } from 'taro-ui'
+import GScrollView from '~components/scrollList'
+import Fab from './components/fab'
+import { throttle } from 'lodash'
 
-import {router} from '~utils'
 import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToPrps } from './connect'
 
@@ -12,36 +13,70 @@ import './index.scss'
 
 @connect(mapStateToProps, mapDispatchToPrps)
 export default class Index extends Component<any> {
+
     public config:Config = {
         navigationBarTitleText: "分类"
     }
 
     public state = {
-        listShow: true,
         typeDetail: []
     }
 
-    public componentDidMount = async () => {
-        const {params} = this.$router
-        Taro.showLoading({
-            mask: true,
-            title: '加载中...'
-        })
-        const typeDetail = await this.props.getTypeDetail(params.id)
-        await this.setState({
-            typeDetail
-        })
-        Taro.hideLoading()
+    private _id 
+
+    public get id() {
+        return this._id || ''
     }
 
+    public set id(id: string) {
+        this._id = id
+    }
+
+    public scrollRef = Taro.createRef<GScrollView>()
+
+    public fabRef = Taro.createRef<Fab>()
+
+    public componentDidMount = async () => {
+        const {params} = this.$router
+        this.id = params.id || ''
+    }
+
+    /**
+     * 获取数据
+     */
+    public fetchData = async (query: any, isInit=false) => {
+        const { typeDetail } = this.state
+        const data = await this.props.getTypeDetail({id: this.id, ...query})
+        let newData
+        if(isInit) {
+            newData = [ ...data ]
+        }else {
+            newData = [ ...typeDetail, ...data ]
+        }
+        await this.setState({
+            typeDetail: newData
+        })
+        return typeDetail || []
+    }
+
+    /**
+     * 节流数据获取
+     */
+    public throttleFetchData = throttle(this.fetchData, 2000)
+
+    //改变当前页面路由
     public getTypeDetail = async(id: string) => {
-        Taro.showLoading({mask: true, title: '稍等一下...'})
-        await this.props.getTypeDetail(id)
-        Taro.hideLoading()
+        this.id = id
+        this.scrollRef.current!.handleToUpper()
+    }
+
+    //获取查看方式
+    public getShowState = () => {
+        this.fabRef.current!.listShow || true
     }
 
     public render() {
-        const { listShow, typeDetail } = this.state
+        const { typeDetail } = this.state
         const { type } = this.props
         const headerList = type.map((val) => {
             const { value, id } = val
@@ -56,29 +91,28 @@ export default class Index extends Component<any> {
             )
         })
         return (
-            <View className='type'>
-                <View className='header'>
-                    <View className='header-type'>
-                        <Text className='text'>分类: </Text>
-                        <ScrollView 
-                            scrollX={true}
-                            className='header'
-                        >
-                            {headerList}
-                        </ScrollView>
-                    </View>
-                </View>
-                <View className='main'>
-                    {listShow ? <LinearList list={typeDetail} /> : <IconList list={typeDetail} />}
-                </View>
-                <View className='btn'>
-                    <AtFab 
-                        onClick={() => {this.setState({listShow: !listShow})}}
-                    >
-                        <Text className={'at-fab__icon at-icon ' + (listShow ? 'at-icon-bullet-list' : 'at-icon-money')}></Text>
-                    </AtFab>
-                </View>
-            </View>
+            <GScrollView
+                sourceType={'Scope'}
+                scrollWithAnimation={true}
+                renderContent={this.getShowState.bind(this) ? <LinearList list={typeDetail} /> : <IconList list={typeDetail} />}
+                fetch={this.throttleFetchData}
+                header={80}
+                renderHeader={ <View className='header-type'>
+                                    <Text className='text'>分类: </Text>
+                                    <ScrollView 
+                                        scrollX={true}
+                                        className='header'
+                                    >
+                                        {headerList}
+                                    </ScrollView>
+                            </View>}
+                bottom={0}
+                renderBottom={ <View className="btn">
+                                <Fab ref={this.fabRef} />
+                              </View>}
+                ref={this.scrollRef}
+            >
+            </GScrollView> 
         )
     }
 }
