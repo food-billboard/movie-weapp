@@ -1,10 +1,7 @@
 export const mapStateToProps = (state) => {
-    const { type } = state.movie
-    return {
-        type
-    }
+    return {}
 }
 
 export const mapDispatchToProps = dispatch => ({
-    factorSelect: (formData) => dispatch({type: 'movie/factorSelect', formData})
+   getType: (count=12) => dispatch({type: 'movie/getSwitch', count})
 })

@@ -42,7 +42,7 @@ export default {
 
             const userInfo = yield call(sendUserLogon, data)
             yield put({ type:'setData', payload: { userInfo } })
-
+            return userInfo
         },
 
         //退出的登录
@@ -69,17 +69,35 @@ export default {
             // }
             const userInfo = yield call(getUserInfo)
             yield put({ type:'setData', payload: { userInfo } })
+            return userInfo
         },
 
         //注册
         * sendNewUser({data}, {call, put}) {
-            yield call(sendNewUser, data)
+
+            const { username } = data
+            if(username === 'admin') {
+                return {
+                    success: false,
+                    err: '用户名有重复'
+                }
+            }else {
+                return {
+                    success: true,
+                }
+            }
+
+            const response = yield call(sendNewUser, data)
+            return response
         },
 
         //获取小程序信息
         * getAppInfo(_, {call, put}) {
+            return {
+                about: '小程序的信息，不管你看不看，但是这里是我要显示的内容'
+            }
+
             const info = yield call(getAppInfo)
-            yield put({type: 'setData', payload: {appInfo: info}})
             return info
         }
     },

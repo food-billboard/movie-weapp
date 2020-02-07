@@ -28,6 +28,7 @@ const RouterConfig = {
     { path: 'pages/type/index', alias: '/type'},
     { path: 'pages/user/index', alias: '/user'},
     { path: 'pages/rank/index', alias: '/rank'},
+    { path: 'pages/commentdetail/index', alias: '/commentdetail' }
   ]
 }
 

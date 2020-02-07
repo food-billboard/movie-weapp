@@ -33,7 +33,7 @@ export default class extends Component<any> {
     //获取热搜
     const hot = await this.props.getHot()
     //获取轮播图
-    const swiper = await this.props.getSwiper(5)
+    const swiper = await this.props.getSwiper()
     //获取分类
     const type = await this.props.getSwitch()
     //获取每日上新

@@ -27,7 +27,9 @@ export default {
 
         //发布评论
         * publishComment({value, movie, user}, {call, put}) {
-            return
+            return {
+                success: true
+            }
 
             
             const response = yield call(publishComment, value, movie, user)
@@ -51,10 +53,11 @@ export default {
             }
 
             const response = yield call(sendStore, user, movie)
+            return response
         },
 
         //获取收藏
-        * getRecord({id}, {call, put}) {
+        * getRecord({query}, {call, put}) {
             if(a==0) {
                 a++
                 return [
@@ -238,7 +241,7 @@ export default {
             }else {
                 return []
             }
-            const record = yield call(getRecord, id)
+            const record = yield call(getRecord, query)
             return record
         },
 
@@ -250,14 +253,20 @@ export default {
 
         //回复用户评论
         * publishUserComment({commentId, content, user, mine}, {call, put}) {
+
+            return {
+                success: true
+            }
+
             const response = yield call(answerComment, commentId, content, user, mine)
             return response
         },
 
         //获取用户评论
-        * getUserComment({id}, {call, put}) {   
-            const comment = yield call(getUserComment, id)
-            yield put({type: 'setData', payload: {comment}})
+        * getUserComment({ query }, {call, put}) {   
+            const comment = yield call(getUserComment, query)
+            // yield put({type: 'setData', payload: {comment}})
+            return comment
         },
 
         //关注
@@ -272,7 +281,7 @@ export default {
         },
 
         //获取关注
-        * getAttention({id}, {call, put}) {
+        * getAttention({query}, {call, put}) {
 
             if(a===0) {
                 a++
@@ -401,7 +410,7 @@ export default {
                 return []
             }
 
-            const attention = yield call(getAttention, id)
+            const attention = yield call(getAttention, query)
             return attention
         },
 

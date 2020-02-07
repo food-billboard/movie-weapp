@@ -6,15 +6,15 @@ import './index.scss'
 import { connect } from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 
-interface Type {
+interface IType {
     id: string,
     value: string,
     img: string
 }
 
 interface IProps {
-    type?: Array<Type> | []
     screen: (formData: FormData) => void
+    getType: () => any
 }
 
 interface FeeOption {
@@ -31,14 +31,11 @@ interface IState {
     formData: FormData,
     formDefault: FormDefault,
     type: Array<string>
+    types: Array<IType>
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Forms extends Component<IProps> {
-
-    public static defaultProps = {
-        type: []
-    }
 
     public formData: FormData = {
         maxPrice:0, //价格上限
@@ -51,17 +48,33 @@ export default class Forms extends Component<IProps> {
         // actor: ''   //演员
     }
 
+    public componentDidMount = () => {
+
+    }
+
     public constructor() {
         super(...arguments)
-        const { type=[] } = this.props
-        const arr = type.map(val => {
-            const { value } = val
-            return value
-        })
-        this.setState({type: arr})
+
         this.onSubmit = this.onSubmit.bind(this)
         this.onReset = this.onReset.bind(this)
         this.onDateChange = this.onDateChange.bind(this)
+    }
+
+    /**
+     * 类型数据获取
+     */
+    public fetchTypeData = async () => {
+        Taro.showLoading({mask: true, title: '加载中'})
+        const data = await this.props.getType()
+        const list = data.map(val => {
+            const { value } = val
+            return value
+        })
+        this.setState({
+            type: list,
+            types: data
+        })
+        Taro.hideLoading()
     }
 
     public state: IState = {
@@ -80,7 +93,8 @@ export default class Forms extends Component<IProps> {
                 }
             ]
         },
-        type: []
+        type: [],
+        types: []
     }
 
     /**
@@ -185,8 +199,12 @@ export default class Forms extends Component<IProps> {
      */
     public typeChange(event) {
         const target = event.detail.value - 0
-        const { formData, type } = this.state
-        formData.type = type[target] 
+        const { formData, type, types } = this.state
+        const id = types.filter(val => {
+            const { value } = val
+            return type[target] === value
+        })
+        formData.type = id[0].id
         this.setState({
             formData
         })
@@ -252,7 +270,7 @@ export default class Forms extends Component<IProps> {
                 <View className='type'>
                     <Picker 
                         mode='selector' 
-                        range={this.props.type} 
+                        range={this.state.type} 
                         onChange={this.typeChange}
                     >
                         <View className='picker'>

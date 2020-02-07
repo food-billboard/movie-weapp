@@ -15,6 +15,7 @@ interface IProps {
     info: Info
     sendRate: (value: any, user: any, movie: any) => any
     sendStore: (user: any, movie: any) => any
+    getUserInfo: () => any
 }
 
 interface Info {
@@ -54,8 +55,12 @@ export default class Content extends Component<IProps>{
             store: true
         },
         sendRate: () => {},
-        sendStore: () => {}
+        sendStore: () => {},
+        getUserInfo: () => {}
     }   
+
+    //我的id
+    readonly id = this.props.id
 
     public state: any = {
         isOpened: false
@@ -78,18 +83,20 @@ export default class Content extends Component<IProps>{
 
     //评分
     public sendRate = async (value: string) => {
-        const {id='', movie} = this.props
+        this.props.getUserInfo()
+        const {movie} = this.props
         Taro.showLoading({mask: true, title: '评分中'})
-        const rate = await this.props.sendRate(value, id, movie)
+        const rate = await this.props.sendRate(value, this.id, movie)
         Taro.hideLoading()
         return rate
     }
 
     //收藏
     public sendStore = async () => {
-        const { id='', movie } = this.props
+        this.props.getUserInfo()
+        const { movie } = this.props
         Taro.showLoading({ mask: true, title: '联系收藏中' })
-        const store = await this.props.sendStore(id, movie)
+        const store = await this.props.sendStore(this.id, movie)
         Taro.hideLoading()
         return store
     }

@@ -24,6 +24,9 @@ export default class Setting extends Component<any>{
 
     public commentRef = Taro.createRef<Comment>()
 
+    //用户id
+    readonly id = this.props.id
+
     /**
      * 显示小程序信息
      */
@@ -33,7 +36,7 @@ export default class Setting extends Component<any>{
         Taro.showLoading({mask: true, title: '稍等...'})
         await this.props.getAppInfo()
         Taro.hideLoading()
-        info.about.model.content = this.props.appInfo.about
+        info.about.model.content = this.props.appInfo.about || '1234444'
         await this.setState({
             info,
             activeModel: info.about.model
@@ -46,7 +49,6 @@ export default class Setting extends Component<any>{
     public logConfirm = async () => {
         this.logClose()
         const {button} = this.state
-        const {id} = this.props
         var {index} = button
         index ++
         index %= 2
@@ -55,7 +57,7 @@ export default class Setting extends Component<any>{
             button
         })
         Taro.showLoading({mask: true, title: '稍等一下'})
-        await this.props.logout(id)
+        await this.props.logout(this.id)
         Taro.hideLoading()
         Taro.showToast({
             title: '好了',
@@ -64,7 +66,52 @@ export default class Setting extends Component<any>{
         })
     }
 
-    public state = {
+    /**
+     * 显示反馈组件
+     */
+    public showFeedback = async () => {
+        await this.props.getUserInfo()
+        this.commentRef.current!.open()
+        
+    }
+
+     /**
+     * 监听关于信息退出
+     */
+    public aboutClose = () => {
+        const {info} = this.state
+        info.about.model.isOpen = false
+        this.setState({
+            info
+        })
+    }
+
+    /**
+     * 监听关于信息确认
+     */
+    public aboutConfirm = () => {
+        this.aboutClose()
+    }
+
+     /**
+     * 监听退出登录状态退出
+     */
+    public logClose = () => {
+        const {button} = this.state
+        button.model.isOpen = false
+        this.setState({
+            button
+        })
+    }
+
+    /**
+     * 监听退出登录取消
+     */
+    public logCancel = () => {
+        this.logClose()
+    }
+
+    public state: any = {
         info: {
             about: {
                 id: 'about',
@@ -99,26 +146,13 @@ export default class Setting extends Component<any>{
                     size: 16, 
                     color: '#000'
                 },
-                handle: this.showFeedback,
-                feedOpen: false,
-                // model: {
-                //     isOpen: false,
-                //     title: '',
-                //     cancelText: '突然不想发了',
-                //     confirmText: '写完了',
-                //     onCancel: this.feedbackCancel,
-                //     onClose: this.feedbackClose,
-                //     onConfirm: this.feedbackConfirm,
-                //     content: null,
-                //     value: '',
-                //     onChange: this.feedbackChange
-                // }
+                handle: this.showFeedback
             }
         },
         button: {
             type:[warn, primary],
             value: ['退出登录', '账号登录'],
-            index: this.props.id.length ? 0 : 1,
+            index: this.id ? 0 : 1,
             model: {
                 isOpen: false,
                 title: '提示',
@@ -133,23 +167,6 @@ export default class Setting extends Component<any>{
         activeModel: {}
     }
 
-    public constructor() {
-        super(...arguments)
-        this.handleButton = this.handleButton.bind(this)
-        this.logClose = this.logClose.bind(this)
-        this.logCancel = this.logCancel.bind(this)
-        this.logConfirm = this.logConfirm.bind(this)
-        this.modelClose = this.modelClose.bind(this)
-        this.aboutClose = this.aboutClose.bind(this)
-        this.aboutConfirm = this.aboutConfirm.bind(this)
-        this.showAbout = this.showAbout.bind(this)
-        // this.feedbackCancel = this.feedbackCancel.bind(this)
-        // this.feedbackClose = this.feedbackClose.bind(this)
-        // this.feedbackConfirm = this.feedbackConfirm.bind(this)
-        // this.feedbackChange = this.feedbackChange.bind(this)
-        this.showFeedback = this.showFeedback.bind(this)
-    }
-
     /**
      * 退出登录
      */
@@ -157,14 +174,13 @@ export default class Setting extends Component<any>{
         //退出登录
         if(index == 0) {
             const {button} = this.state
-            const { params } = this.$router
             button.model.isOpen = true
             this.setState({
                 button,
                 activeModel: button.model
             })
             Taro.showLoading({mask: true, title: '稍等一下...'})
-            await this.props.logout(params.id)
+            await this.props.logout(this.id)
             Taro.hideLoading()
         }else {
             router.push('/login')
@@ -174,121 +190,13 @@ export default class Setting extends Component<any>{
     /**
      * 模态框状态关闭
      */
-    public modelClose(info:object={}, name:string): void {
+    public modelClose = (info:object={}, name:string) => {
         const {button} = this.state
         button.model.isOpen = false
         this.setState({
             button
         })
     }
-
-    /**
-     * 监听退出登录状态退出
-     */
-    public logClose(): void {
-        const {button} = this.state
-        button.model.isOpen = false
-        this.setState({
-            button
-        })
-    }
-
-    /**
-     * 监听退出登录取消
-     */
-    public logCancel():void {
-        this.logClose()
-    }
-
-    /**
-     * 监听关于信息退出
-     */
-    public aboutClose(): void {
-        const {info} = this.state
-        info.about.model.isOpen = false
-        this.setState({
-            info
-        })
-    }
-
-    /**
-     * 监听关于信息确认
-     */
-    public aboutConfirm(): void {
-        this.aboutClose()
-    }
-
-    /**
-     * 显示反馈组件
-     */
-    public showFeedback():void {
-        // const {info} = this.state
-        // if(!info.feedback.model.content) {
-        //     const com = () => {
-        //         return (
-        //             <AtTextarea value={info.feedback.model.value} onChange={info.feedback.model.onChange} />
-        //         )
-        //     }
-        //     info.feedback.model.content = Gtextarea({vlaue: info.feedback.model.value, onChange: info.feedback.model.onChange})
-        // }
-        // info.feedback.model.isOpen = true
-        // this.setState({
-        //     info,
-        //     activeModel: info.feedback.model
-        // })
-
-        this.commentRef.current!.open()
-        
-    }
-
-    /**
-     * 监听反馈取消
-     */
-    // public feedbackCancel(): void {
-    //     console.log('反馈取消')
-    //     this.feedbackClose()
-    // }
-
-    /**
-     * 监听反馈关闭
-     */
-    // public feedbackClose(): void {
-    //     console.log('反馈关闭')
-    //     const {info} = this.state
-    //     info.feedback.model.isOpen = false
-    //     this.setState({
-    //         button
-    //     })
-    // }
-
-    /**
-     * 监听反馈确认
-     */
-    // public feedbackConfirm(): void {
-    //     const {info} = this.state
-    //     const {feedback} = info
-    //     const {model} = feedback
-    //     const {value} = model
-    //     console.log(`反馈确认${value}`)
-    //     this.feedbackClose()
-    //     Taro.showToast({
-    //         title: '好了',
-    //         icon: 'success',
-    //         duration: 2000 
-    //     })
-    //     console.log('向后端发送退出登录命令, 需要等待后端返回数据后改变上述条件, 并且弹出发送成功提示')
-    // }
-
-    /**
-     * 监听反馈输入框数据改变
-     */
-    // public feedbackChange(event:any): void {
-    //     const {info} = this.state
-    //     info.feedback.model.value = event.target.value
-    //     this.setState({
-    //         info
-    //     })
-    // }
 
     public render() {
         const {button, info, activeModel} = this.state
@@ -297,7 +205,6 @@ export default class Setting extends Component<any>{
             value,
             index
         } = button
-        const {feedOpen} = info.feedback
         return (
             <View className='setting'>
                 <View className='list'>

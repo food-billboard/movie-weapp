@@ -3,6 +3,6 @@ export const mapStateToProps = (_) => {
 }
 
 export const mapDispatchToProps = dispatch => ({
-  getRank: (query) => dispatch({type: 'movie/getRank', query}),   //后端排行榜的id
+  getRank: (query) => dispatch({type: 'movie/getRank', query}),   
   getRankType: (count=6) => dispatch({ type: 'movie/getRankType', count })
 })

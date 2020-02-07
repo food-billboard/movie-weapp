@@ -8,13 +8,20 @@ import {router} from '~utils'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { connect } from '@tarojs/redux'
 
+interface IState {
+    username: string
+    password: string
+    phone: string
+    check: string
+}
+
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any>{
     public static config: Config = {
         navigationBarTitleText: '注册'
     }
 
-    public state = {
+    public state: IState = {
         username: '',
         password: '',
         phone: '',
@@ -23,6 +30,7 @@ export default class extends Component<any>{
 
     public constructor() {
         super(...arguments)
+
         this.handleUser = this.handleUser.bind(this)
         this.handlePass = this.handlePass.bind(this)
         this.handlePhone = this.handlePhone.bind(this)
@@ -46,10 +54,10 @@ export default class extends Component<any>{
      */
     public handlePass(value, event) {
         const {type} = event
-        if(type == 'blur' && value.length < 10) {
+        if(type == 'blur' && value.length < 6) {
             Taro.showModal({
                 title: '修改失败',
-                content: '密码长度不能低于10',
+                content: '密码长度不能低于6',
                 showCancel: false
             }).then(res => {
                 this.setState({
@@ -66,7 +74,7 @@ export default class extends Component<any>{
     /**
      * 监听手机号输入
      */
-    public handlePhone(value, event) {
+    public handlePhone(value) {
         this.setState({
             phone: value
         })
@@ -75,7 +83,7 @@ export default class extends Component<any>{
     /**
      * 监听验证码输入
      */
-    public handleCheck(value, event) {
+    public handleCheck(value) {
         this.setState({
             check: value
         })
@@ -86,8 +94,7 @@ export default class extends Component<any>{
      */
     public submit = async (e) => {
         const {username, password, phone, check} = this.state
-        // if(username.length < 8 || password.length < 10 || /^\d{6}$/g.test(check - 0)) {
-            if(username == '' || password == '') {
+        if(username.length < 4 || password.length < 6 || !/^\d{6}$/g.test(check)) {
             Taro.showToast({
                 title: '请输入用户名和密码',
                 icon: 'none',
@@ -95,17 +102,21 @@ export default class extends Component<any>{
             })
             return
         }
-        Taro.showLoading({mask: true, title: '正在验证'})
-        // await this.props.sendNewUser({username, password, phone, code: check})
-        await this.props.sendNewUser({username, password})
+        Taro.showLoading({mask: true, title: '正在验证...'})
+        const data = await this.props.sendNewUser({username, password, phone, code: check})
         Taro.hideLoading()
+        const { success, err } = data
+        let info = { title: '', icon: '' }
+        if(success) {
+            info = { title: '注册成功', icon: 'success' }
+        }else {
+            info = { title: err, icon: 'none' }
+        }
         Taro.showToast({
-            title: '注册成功',
-            icon: 'success',
+            ...info,
             duration: 2000
         })
-        console.log('数据提交')
-        router.replace('/login')
+        if(success) router.replace('/login', { password, username })
     }
 
     /**
@@ -138,14 +149,6 @@ export default class extends Component<any>{
      */
     public getData = async () => {
         const {phone} = this.state
-        if(!/^1[346789]\d{9}$/g.test(phone)) {
-            Taro.showToast({
-                title: '请填写正确的手机号',
-                icon: 'none',
-                duration: 3000
-            })
-            return
-        }
         await Taro.showLoading({ mask: true, title: '加载中' });
         await this.props.sendSMS(phone)
         await Taro.hideLoading()

@@ -17,6 +17,7 @@ export default class extends Component<any>{
         attention: []
     }
 
+    //用户id
     readonly id = this.$router.params.id
 
     public static config: Config = {

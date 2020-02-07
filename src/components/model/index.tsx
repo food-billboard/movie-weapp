@@ -15,7 +15,7 @@ interface Info {
 }
 
 interface IProps {
-    info: Info | {}
+    info: Info
 }
 
 export default class Setting extends Component<IProps>{

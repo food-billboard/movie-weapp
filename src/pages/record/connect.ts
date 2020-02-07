@@ -6,5 +6,5 @@ export const mapStateToProps = (_) => {
 }
   
 export const mapDispatchToProps = dispatch => ({   
-    getRecord: (id) => dispatch({type: 'user/getRecord', id})
+    getRecord: (query) => dispatch({type: 'user/getRecord', query})
 })

@@ -30,6 +30,9 @@ export default class extends Component<any> {
     //电影id
     readonly id = this.$router.params.id
 
+    //我的id
+    readonly mineId = this.props.id
+
     /**
      * 获取电影数据
      */
@@ -45,7 +48,7 @@ export default class extends Component<any> {
      */
     public fetchData = async (query: any, isInit=false) => {
         const { comment } = this.state
-        const data = await this.props.getComment({id: this.id, ...query})
+        const data = await this.props.getComment({commentId: this.id, userId: this.mineId, ...query})
         let newData
         if(isInit) {
             newData = [ ...data ]
@@ -66,8 +69,8 @@ export default class extends Component<any> {
     public state = {
         comment: [],
         commentId: false,
-        value: '',
-        commentShow: false,
+        // value: '',
+        // commentShow: false,
         userCall: false,
         userId: false,
         commentHeader: {name: '', detail: '', image: '', id: ''}
@@ -85,16 +88,29 @@ export default class extends Component<any> {
      * 发布评论
      */
     public publishComment = async (value) => {
-        const {id} = this.props
         const { userId, commentId } = this.state
         Taro.showLoading({ mask: true, title: '发布中' })
-        if(userId) {
+        let success
+        let info = { title: '', icon: '' }
+        if(typeof userId === 'string' || 'number') {
             //评论用户
-            await this.props.publishUserComment(commentId, value, userId, id)
+            const data = await this.props.publishUserComment(commentId, value, userId, this.mineId)
+            success = data.success
         }else {
             //评论电影
-            await this.props.publishComment(value, this.id, id)
+            const data = await this.props.publishComment(value, this.id, this.mineId)
+            success = data.success
         }
+        if(success) {
+            info = { ...info, title: '成功', icon: 'success' }
+        }else {
+            info = { ...info, title: '失败', icon: 'none' }
+        }
+        Taro.showToast({
+            title: info.title,
+            icon: info.icon,
+            duration: 2000
+        })
         Taro.hideLoading()
         await this.fetchData({...INIT_QUERY}, true)
     }
@@ -106,6 +122,7 @@ export default class extends Component<any> {
      * commentId: 评论id
      */
     public publish(isUserCall=false, user, commentId) {
+        this.props.getUserInfo()
         this.commentRef.current!.open()
         if(isUserCall) {
             this.setState({

@@ -21,6 +21,14 @@ export default class extends Component<any> {
     }
 
     public componentDidMount = async () => {
+        const { password, username } = this.$router.params
+        if(password.length && username.length) {
+            this.setState({
+                password,
+                username
+            })
+            return
+        }
         await this.props.getUserInfo()
     }
 

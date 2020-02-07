@@ -15,6 +15,7 @@ export default class extends Component<any>{
         navigationBarTitleText: '我的评论'
     }
 
+    //用户id
     readonly id = this.$router.params.id
 
     public state: any = {

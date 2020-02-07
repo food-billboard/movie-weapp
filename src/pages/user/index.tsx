@@ -22,7 +22,10 @@ export default class User extends Component<any>{
     }
 
     //用户id
-    readonly id = this.$router.params.id
+    readonly id = this.$router.params
+
+    //我的id
+    readonly mineId = this.props.id
 
     public constructor() {
         super(...arguments)
@@ -36,25 +39,28 @@ export default class User extends Component<any>{
 
     //数据获取
     public fetchData = async () => {
-        const { id } = this.props
         Taro.showLoading({mask: true, title: '加载中'})
-        const userInfo = await this.props.getUserInfo(this.id)
-        const attentionData = await this.props.getIsAttention(this.id, id)
-        const { attention } = attentionData
+        const userInfo = await this.props.getUserInfo()
+        if(this.mineId) {
+            const attentionData = await this.props.getIsAttention(this.id, this.mineId)
+            const { attention } = attentionData
+            await this.setState({
+                isAttention: attention
+            })
+        }
         const { info } = userInfo
         await this.setState({
             userInfo: info,
-            isAttention: attention
         })
         Taro.hideLoading()
     }
 
     //关注/取消关注
     public attention = async () => {
-        const {id} = this.props
+        await this.props.getUserInfo()
         const { isAttention } = this.state
         Taro.showLoading({mask: true, title: '操作中'})
-        const data = await this.props.toAttention(this.id, id, isAttention)
+        const data = await this.props.toAttention(this.id, this.mineId, isAttention)
         const { attention } = data
         await this.setState({
             isAttention: attention

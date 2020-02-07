@@ -19,6 +19,7 @@ export default class Index extends Component<any> {
         record: []
     }
 
+    //用户id
     readonly id = this.$router.params.id
 
     /**

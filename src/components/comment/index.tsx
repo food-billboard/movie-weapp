@@ -25,6 +25,7 @@ export default class Comment extends Component<IProps>{
         isOpen: false
     }
 
+    //modal打开
     public open = async () => {
         await this.setState({
             isOpen: true

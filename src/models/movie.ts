@@ -24,7 +24,7 @@ export default {
     },
     effects: {
         //获取热搜
-        * getHot(_, {call, put}) {
+        * getHot({count=3}, {call, put}) {
             return [
                 {
                     id: 0,
@@ -39,12 +39,12 @@ export default {
                     name: '热搜3'
                 }
             ]
-            const hot = yield call(getHot)
+            const hot = yield call(getHot, count)
             return hot
         },
 
         //获取轮播图
-        * getSwiper({count}, {call, put}) {
+        * getSwiper({count=5}, {call, put}) {
             return [
                 {
                     id: 0,
@@ -72,7 +72,7 @@ export default {
         },
 
         //获取分类条目
-        * getSwitch({count}, {call, put}) {
+        * getSwitch({count=12}, {call, put}) {
             return [
                 {
                     id: 0,
@@ -110,13 +110,13 @@ export default {
         },
 
         //获取分类具体信息
-        * getSwitchDetail({type}, {call, put}) {
-            const typeDetail = yield call(getTypeDetail, type)
+        * getSwitchDetail({query}, {call, put}) {
+            const typeDetail = yield call(getTypeDetail, query)
             return typeDetail
         },
 
         //获取每日上新
-        * getDailyNew({count}, {call, put}) {
+        * getDailyNew({count=10}, {call, put}) {
             return [
                 {
                     id: 0,
@@ -146,7 +146,6 @@ export default {
         //获取排行榜
         * getRank({query}, {call, put}) {
             if(a==0) {
-                console.log(111)
                 a++
                 return [
                     {
@@ -217,7 +216,6 @@ export default {
                     }
                 ]
             }else if(a==1) {
-                console.log(222)
                 a++
                 return [
                     {
@@ -288,7 +286,6 @@ export default {
                     }
                 ]
             }else {
-                console.log('第三次')
                 return []
             }
             const rank = yield call(getRank, query)
@@ -334,7 +331,7 @@ export default {
         },
 
         //获取电影评论
-        * getComment({movie}, {call, put}) {
+        * getComment({query}, {call, put}) {
             if(a===0) {
                 a++
             return [
@@ -685,18 +682,231 @@ export default {
             return []
         }
 
-            const comment = yield call(getComment, movie)
+            const comment = yield call(getComment, query)
             return comment
         },
 
         //获取评论详情
-        * getCommentDetail({ id }, { call, put }) {
+        * getCommentDetail({ query }, { call, put }) {
 
-            return {
-
+            if(a==0) {
+                a++
+                return {
+                    header: {
+                        id: '评论id',
+                        user: '用户名',
+                        userId: '用户id',
+                        content: '评论内容，不管你看不看，我都要显示出来给你看',
+                        icon: 'http://b-ssl.duitang.com/uploads/item/201803/30/20180330234706_stfoo.jpg',
+                        hot: 10000,
+                        time: 1997
+                    },
+                    comment: [
+                        {
+                            user: {
+                                name: '用户名',
+                                time: 1996,
+                                image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                id: '用户id1',
+                                content: '评论内容,这是另外一条评论，我想要给你看看是什么样子的',
+                                hot: 10000000
+                            },
+                            commentUsers: [
+                                {
+                                    image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                    id: '123123123'
+                                },
+                                {
+                                    image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                    id: '123123123'
+                                }
+                            ],
+                            id: 'idddd'
+                        },
+                        {
+                            user: {
+                                name: '用户名',
+                                time: 1996,
+                                image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                id: '用户id1',
+                                content: '评论内容,这是另外一条评论，我想要给你看看是什么样子的',
+                                hot: 10000000
+                            },
+                            commentUsers: [
+                                {
+                                    image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                    id: '123123123'
+                                },
+                                {
+                                    image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                    id: '123123123'
+                                }
+                            ],
+                            id: 'idddd'
+                        },
+                        {
+                            user: {
+                                name: '用户名',
+                                time: 1996,
+                                image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                id: '用户id1',
+                                content: '评论内容,这是另外一条评论，我想要给你看看是什么样子的',
+                                hot: 10000000
+                            },
+                            commentUsers: [
+                                {
+                                    image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                    id: '123123123'
+                                },
+                                {
+                                    image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                    id: '123123123'
+                                }
+                            ],
+                            id: 'idddd'
+                        },
+                        {
+                            user: {
+                                name: '用户名',
+                                time: 1996,
+                                image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                id: '用户id1',
+                                content: '评论内容,这是另外一条评论，我想要给你看看是什么样子的',
+                                hot: 10000000
+                            },
+                            commentUsers: [
+                                {
+                                    image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                    id: '123123123'
+                                },
+                                {
+                                    image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                    id: '123123123'
+                                }
+                            ],
+                            id: 'idddd'
+                        },
+                        {
+                            user: {
+                                name: '用户名',
+                                time: 1996,
+                                image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                id: '用户id1',
+                                content: '评论内容,这是另外一条评论，我想要给你看看是什么样子的',
+                                hot: 10000000
+                            },
+                            commentUsers: [
+                                {
+                                    image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                    id: '123123123'
+                                },
+                                {
+                                    image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                    id: '123123123'
+                                }
+                            ],
+                            id: 'idddd'
+                        },
+                        {
+                            user: {
+                                name: '用户名',
+                                time: 1996,
+                                image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                id: '用户id1',
+                                content: '评论内容,这是另外一条评论，我想要给你看看是什么样子的',
+                                hot: 10000000
+                            },
+                            commentUsers: [
+                                {
+                                    image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                    id: '123123123'
+                                },
+                                {
+                                    image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                    id: '123123123'
+                                }
+                            ],
+                            id: 'idddd'
+                        },
+                        {
+                            user: {
+                                name: '用户名',
+                                time: 1996,
+                                image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                id: '用户id1',
+                                content: '评论内容,这是另外一条评论，我想要给你看看是什么样子的',
+                                hot: 10000000
+                            },
+                            commentUsers: [
+                                {
+                                    image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                    id: '123123123'
+                                },
+                                {
+                                    image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                    id: '123123123'
+                                }
+                            ],
+                            id: 'idddd'
+                        },
+                    ]
+                }
+            }else if(a===1) {
+                a++
+                return {
+                    header: {
+                        id: '评论id',
+                        user: '用户名',
+                        userId: '用户id',
+                        content: '评论内容，不管你看不看，我都要显示出来给你看',
+                        icon: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                        hot: 10000,
+                        time: 1997
+                    },
+                    comment: [
+                        {
+                            user: {
+                                name: '用户名',
+                                time: 1996,
+                                image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                id: '用户id1',
+                                content: '评论内容,这是另外一条评论，我想要给你看看是什么样子的',
+                                hot: 10000000
+                            },
+                            commentUsers: [
+                                {
+                                    image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                    id: '123123123'
+                                },
+                                {
+                                    image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                    id: '123123123'
+                                }
+                            ],
+                            id: 'idddd'
+                        },
+                    ]
+                }
+            }else {
+                return {
+                    header: {
+                        id: '评论id',
+                        user: '用户名',
+                        userId: '用户id',
+                        content: '评论内容，不管你看不看，我都要显示出来给你看',
+                        icon: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                        hot: 10000,
+                        time: 1997
+                    },
+                    comment: []
+                }
             }
+            let params
+            Object.keys(query).map(val => {
+                if(query[val] !== undefined) params[val] = query[val]
+            })
 
-            const comment = yield call(getCommentDetail, id)
+            const comment = yield call(getCommentDetail, params)
             return comment
         },
 

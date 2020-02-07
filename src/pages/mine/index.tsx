@@ -48,14 +48,14 @@ export default class extends Component<any>{
     }
 
     public componentWillMount = () => {
-        // if(!this.id) {
-        //     router.replace('/login')
-        // }
+        if(!this.id) {
+            router.replace('/login')
+        }
     }
 
     public componentDidMount = async () => {
         Taro.showLoading({ mask: true, title: '加载中' })
-        const detail = await this.props.getUserInfo(this.id)
+        const detail = await this.props.getUserInfo()
         const { info } = detail
         Taro.hideLoading()
         await this.setState({

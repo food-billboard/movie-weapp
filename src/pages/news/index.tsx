@@ -18,6 +18,7 @@ export default class extends Component<any> {
         news: []
     }
 
+    //用户id
     readonly id = this.$router.params.id
 
     public componentDidMount = async () => {

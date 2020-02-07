@@ -15,7 +15,8 @@
 我的评论：头部、评论内容列表
 详情页面：头部、视频、详情、截图列表
 用户界面：头部、头像、条形列表、关注按钮
-主页：搜索栏、热搜、轮播图、分类列表、每日上新、排行榜列表
+主页：搜索栏、热搜、轮播图、分类列表、每日上新、排行榜列表 √
+排行榜
 
 common组件：
     头部：标题、副标题、（插槽）
@@ -28,24 +29,224 @@ common组件：
     搜索栏：功能（跳转/输入）
     热搜：无需改变
 
-热搜:id name
-轮播图: id img
-分类: id value image
-每日上新: id title img
-排行榜: [{type list[{rank id img name}]]
-用户关注: id name img
-电影评论: user(name, time, img, id, content, hot, isHot) commentUsers({img, id})
-电影评论 | 用户收藏: id name detail img
-电影详情: id video(src poster id) info(name, area, people, director, actor, type, time, publishTime, description, hot, rate) image(img)
-用户信息: info(id username hot icon) isAttention
-通知信息: id img username description
-分类列表(列表): id img name type time hot
-分类列表(图标): id img name hot 
-小程序信息: id time about 
+热搜: [
+    {
+        id: '热搜id',
+        name: '热搜名字
+    }
+]
+
+轮播图: [
+    {
+        id: 'id‘,
+        image: '图片'
+    }
+]
+
+分类: [
+    {
+        id: 'id',
+        value: '分类名称',
+        image: '分类图标'
+    }
+]
+
+每日上新: [
+    {
+        id: 'id',
+        title: '名称',
+        image: '图片'
+    }
+]
+
+排行榜: [
+    {
+        id: '排行榜类型id ( 0, 1, 2, 3, 4, 5, ... ) ',
+        type: '排行榜名称',
+        list: [
+            {
+                rank: '排名',
+                id: '电影id',
+                image: '电影海报',
+                name: '电影名称',
+                type: '类型',
+                time: '发布时间',
+                hot: '人气'
+            }
+        ]
+    }
+]
+
+排行榜分类: [
+    {
+        id: '排行榜类型id',
+        type: '排行榜类型名称',
+        image: '排行榜图标'
+    }
+]
+
+用户关注: [
+    {
+        id: '用户id',
+        name: '用户名称',
+        image: '用户头像'
+    }
+]
+
+电影评论简易(详情展示): [
+    {
+        id: '评论id',
+        image: '用户头像',
+        content: '评论内容'
+    }
+] 
+
+电影评论详细: {
+    header: {
+        id: '评论id',
+        user: '用户名',
+        userId: '用户id',
+        content: '评论内容',
+        icon: '用户头像',
+        hot: '人气',
+        time: '发布时间'
+    },
+    comment: [
+        {
+            user: {
+                name: '用户名',
+                time: '发布时间',
+                image: '用户头像',
+                id: '用户id',
+                content: '评论内容',
+                hot: '人气',
+                isHot: '是否点过赞 ( 传入个人id才会返回，否则返回统一为false ) '
+            },
+            commentUsers: [
+                {
+                    iamge: '用户头像',
+                    id: '用户id'
+                }
+            ],
+            id: '评论id'
+        }
+    ]
+}
+
+电影评论: {
+    user: [
+        {
+            name: '用户名',
+            time: '发布时间',
+            image: '用户头像',
+            id: '用户id',   
+            content: '评论内容',
+            hot: '人气',
+            isHot: '是否点过赞 ( 传入个人id才会返回，否则返回统一为false ) '
+        }
+    ],
+    commentUsers: [
+        {
+            image: '用户头像',
+            id: '用户id'
+        }
+    ],
+    id: '电影id'
+}
+
+电影评论 | 用户收藏(头部用): {
+    id: '电影id',
+    name: '电影名称',
+    detail: '电影描述',
+    image: '电影海报'
+}
+
+电影详情: {
+    id: '电影id',
+    video: {
+        src: '视频地址',
+        poster: '视频海报',
+        id: '视频id'
+    },
+    info: {
+        name: '电影名称',
+        area: ['电影产地'],
+        people: '查看人数',
+        director: ['电影导演'],
+        actor: ['电影演员'],
+        type: ['电影类型'],
+        time: '上线时间',
+        publishTime: '发布时间',
+        description: '电影描述',
+        hot: '人气',
+        reate: '评分',
+        store: '是否为收藏 ( 只有在传入用户id的情况下返回，否则统一返回false ) '
+    },
+    image: [
+        {
+            img: '电影截图海报',
+            id: '这里是临时写的，没什么用，是海报id'
+        }
+    ]
+}
+
+电影是否收藏: {
+    store: '是否为收藏状态'
+}
+
+电影评分: {
+    rate: '评分',
+    success: '是否评分成功'
+}
+
+用户信息: {
+    info: {
+        id: '用户id',
+        username: '用户名',
+        hot: '人气',
+        icon: '用户头像'
+    }
+}
+
+通知信息: [
+    {
+        id: '消息id',
+        image: '消息头像',
+        username: '发送人用户名',
+        description: '描述'
+    }
+]
+
+分类列表(列表): [
+    {
+        id: '电影id',
+        image: '电影海报',
+        name: '电影名称',
+        type: ['电影类型'],
+        time: '发布时间',
+        hot: '人气'
+    }
+]
+
+分类列表(图表): [
+    {
+        id: '电影id',
+        image: '电影海报',
+        name: '电影名称',
+        hot: '人气'
+    }
+]
+
+小程序信息: {
+    id: '小程序id',
+    time: '发布时间',
+    about: '相关信息'
+}
+
 购物车信息: [
     {
         商品id id
-        商品图片 img
+        商品图片 image
         商品数量 count
         商品选项描述 desc
         商品价格 price
@@ -62,4 +263,13 @@ toast的icon
 添加删除好友
 上传
 视频样式
+电影发布
+
+
+
+评论的详细界面( 头 )
+我的评论界面
+通知界面
+时间格式化
+数字格式化
 

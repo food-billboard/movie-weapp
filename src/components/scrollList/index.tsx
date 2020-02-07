@@ -123,12 +123,12 @@ export default class List extends Component<IProps> {
       this.fetchData(nextQuery)
     }
   
-    // //下拉刷新
-    // public handleToUpper = () => {
-    //   const { state, props } = this
-    //   const nextQuery = { ...state.query, ...INIT_QUERY, ...props.query }
-    //   this.fetchData(nextQuery, true)
-    // }
+    //下拉刷新
+    public handleToUpper = () => {
+      const { state, props } = this
+      const nextQuery = { ...state.query, ...INIT_QUERY, ...props.query }
+      this.fetchData(nextQuery, true)
+    }
 
   public render() {
     const {

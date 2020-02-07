@@ -6,5 +6,5 @@ export const mapStateToProps = (state) => {
 }
 
 export const mapDispatchToPrps = dispatch => ({
-    getTypeDetail: (item) => dispatch({type: 'movie/getSwitchDetail', item})
+    getTypeDetail: (item) => dispatch({type: 'movie/getSwitchDetail', query: item})
 })

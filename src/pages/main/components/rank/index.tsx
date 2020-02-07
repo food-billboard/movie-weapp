@@ -8,7 +8,7 @@ import {router} from '~utils'
 interface List {
     rank: number,
     id: string,
-    img: string,
+    image: string,
     name: string
 }
 
@@ -43,7 +43,7 @@ export default class Rank extends Component<IProps>{
     public render() {
         const { list, type, id, style={} } = this.props
         const ranks = list.map((value) => {
-            const {rank, id, img, name} = value
+            const {rank, id, image, name} = value
             return (
                 <View 
                     className='rank-list'
@@ -52,7 +52,7 @@ export default class Rank extends Component<IProps>{
                 >
                     <Image 
                         className='rank-img'
-                        src={img}
+                        src={image}
                     />
                     <RankIcon rank={rank} />
                 </View>

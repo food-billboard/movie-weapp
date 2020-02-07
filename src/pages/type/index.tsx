@@ -24,6 +24,7 @@ export default class Index extends Component<any> {
         typeDetail: []
     }
 
+    //电影分类id
     private _id
 
     public get id() {

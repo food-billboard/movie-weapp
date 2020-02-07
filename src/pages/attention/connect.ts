@@ -3,5 +3,5 @@ export const mapStateToProps = (_) => {
 }
   
 export const mapDispatchToProps = dispatch => ({   
-    getAttention: (id) => dispatch({type: 'user/getAttention', id})
+    getAttention: (query) => dispatch({type: 'user/getAttention', query})
 })

@@ -3,6 +3,6 @@ export const mapStateToProps = (_) => {
 }
   
 export const mapDispatchToProps = dispatch => ({   
-    getUserComment: (id) => dispatch({type: 'user/getUserComment', id}),
-    // getUserInfo: (id) => dispatch({type: '获取用户信息', id})
+    getUserComment: (query) => dispatch({type: 'user/getUserComment', query}),
+    getUserInfo: () => dispatch({type: '获取用户信息'})
 })

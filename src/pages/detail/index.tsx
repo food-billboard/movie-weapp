@@ -26,7 +26,11 @@ export default class extends Component<any> {
         commentList: []
     }
 
+    //电影id
     readonly id = this.$router.params.id
+
+    //我的id
+    readonly mineId = this.props.id
 
     public componentDidMount = async() => {
         this.fetchData()
@@ -46,6 +50,7 @@ export default class extends Component<any> {
 
     //打开评论界面
     public handleComment = () => {
+        this.props.getUserInfo()
         this.commentRef.current!.open()
     }
 
