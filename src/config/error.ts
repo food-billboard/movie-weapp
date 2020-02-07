@@ -9,11 +9,9 @@ export default (type, {response}) => {
         //设置响应状态码
         !response.statusCode && (response.statusCode = response.status)
         const statusCode = response.statusCode
-
         //设置cookie的set-Cookie
         setResponseCookie(response.header)
         setResponseCookie(response.header, 'set-Cookie')
-
         //成功状态码的情况
         if([200].indexOf(statusCode) >= 0) {
             const body = response.data

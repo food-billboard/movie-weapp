@@ -25,7 +25,7 @@ export default class IconHead extends Component<IProps>{
 
     public render() {
         const {list} = this.props
-        const {username, img, hot} = list
+        const {username='', img='', hot=0} = list
         return (
             <View className='head'>
                 <View className='icon'>
@@ -42,7 +42,7 @@ export default class IconHead extends Component<IProps>{
                     <Text className='username'>{username}</Text>
                 </View>
                 <View className='hot'>
-                    <Text className='count'>{hot}</Text>觉得很赞
+                    <Text className='count'>{hot}</Text>人觉得很赞
                 </View>
             </View>
         )

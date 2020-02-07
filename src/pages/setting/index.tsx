@@ -22,9 +22,52 @@ export default class Setting extends Component<any>{
         navigationBarTitleText: '设置'
     }
 
+    public commentRef = Taro.createRef<Comment>()
+
+    /**
+     * 显示小程序信息
+     */
+    public showAbout = async () => {
+        const {info} = this.state
+        info.about.model.isOpen = true
+        Taro.showLoading({mask: true, title: '稍等...'})
+        await this.props.getAppInfo()
+        Taro.hideLoading()
+        info.about.model.content = this.props.appInfo.about
+        await this.setState({
+            info,
+            activeModel: info.about.model
+        })
+    }
+
+    /**
+     * 监听退出登录确认
+     */
+    public logConfirm = async () => {
+        this.logClose()
+        const {button} = this.state
+        const {id} = this.props
+        var {index} = button
+        index ++
+        index %= 2
+        button.index = index
+        this.setState({
+            button
+        })
+        Taro.showLoading({mask: true, title: '稍等一下'})
+        await this.props.logout(id)
+        Taro.hideLoading()
+        Taro.showToast({
+            title: '好了',
+            icon: 'success',
+            duration: 1000 
+        })
+    }
+
     public state = {
         info: {
             about: {
+                id: 'about',
                 title: '关于我们',
                 disabled: false,
                 note: '',
@@ -46,6 +89,7 @@ export default class Setting extends Component<any>{
                 }
             },
             feedback: {
+                id: 'feedback',
                 title: '反馈',
                 disabled: false,
                 note: '',
@@ -157,30 +201,6 @@ export default class Setting extends Component<any>{
     }
 
     /**
-     * 监听退出登录确认
-     */
-    public logConfirm = async () => {
-        this.logClose()
-        const {button} = this.state
-        const {id} = this.props
-        var {index} = button
-        index ++
-        index %= 2
-        button.index = index
-        this.setState({
-            button
-        })
-        Taro.showLoading({mask: true, title: '稍等一下'})
-        await this.props.logout(id)
-        Taro.hideLoading()
-        Taro.showToast({
-            title: '好了',
-            icon: 'success',
-            duration: 1000 
-        })
-    }
-
-    /**
      * 监听关于信息退出
      */
     public aboutClose(): void {
@@ -217,27 +237,8 @@ export default class Setting extends Component<any>{
         //     activeModel: info.feedback.model
         // })
 
-        const {info} = this.state
-        info.feedback.feedOpen = true
-        this.setState({
-            info
-        })
-    }
-
-    /**
-     * 显示小程序信息
-     */
-    public showAbout = async () => {
-        const {info} = this.state
-        info.about.model.isOpen = true
-        Taro.showLoading({mask: true, title: '稍等...'})
-        await this.props.getAppInfo()
-        Taro.hideLoading()
-        info.about.model.content = this.props.appInfo.about
-        await this.setState({
-            info,
-            activeModel: info.about.model
-        })
+        this.commentRef.current!.open()
+        
     }
 
     /**
@@ -312,7 +313,7 @@ export default class Setting extends Component<any>{
                     </Button>
                 </View>
                 <Model info={activeModel}/>
-                <Comment buttonText={'发送'} isOpen={feedOpen}  />
+                <Comment buttonText={'发送'} ref={this.commentRef}  />
             </View>
         )
     }

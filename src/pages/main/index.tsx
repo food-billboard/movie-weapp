@@ -5,38 +5,49 @@ import Swipers from './components/swiper'
 import Itemize from './components/itemize'
 import News from './components/news'
 import Rank from './components/rank'
-
 import './index.scss'
 
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 
+const INIT_RANK_QUERY = { currPage: 1, pageSize: 3 }
+
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any> {
+
 
   public config: Config = {
     navigationBarTitleText: '电影推荐'
   }
 
-  public swiper
-  public type
-  public daily
+  public state: any = {
+    hot: [],
+    swiper: [],
+    type: [],
+    daily: [],
+    rank: []
+  }
 
   public componentDidMount = async () => {
     Taro.showLoading({ title: '加载中' })
     //获取热搜
-    await this.props.getHot()
+    const hot = await this.props.getHot()
     //获取轮播图
     const swiper = await this.props.getSwiper(5)
     //获取分类
-    const type = await this.props.getType()
+    const type = await this.props.getSwitch()
     //获取每日上新
     const daily = await this.props.getDailyNew()
     //获取排行榜
-    await this.props.getRank()
-    this.swiper = swiper
-    this.type = type
-    this.daily = daily
+    const rank = await this.props.getRank({ ...INIT_RANK_QUERY, id: 0 })
+
+    this.setState({
+      hot,
+      swiper,
+      type,
+      daily,
+      rank
+    })
     Taro.hideLoading();
   }
 
@@ -51,15 +62,15 @@ export default class extends Component<any> {
   public componentDidHide () { }
 
   public render () {
-    const {hot, rank} = this.props
+    const { rank, type, swiper, hot, daily } = this.state
     //排行榜列表
-    const ranks = rank.map((value, index) => {
+    const ranks = rank.map(value => {
       const { type, list } = value
       return (
         <Rank 
           key={type}
           type={type} 
-          list={list}
+          list={list.length >= 3 ? list.slice(0, 3) : list}
         />
       )
     })
@@ -73,18 +84,18 @@ export default class extends Component<any> {
         </View>
         <View className='swiper'>
           <Swipers
-            list={this.swiper}
+            list={swiper}
           />
         </View>
         <View className='itemize'>
           <Itemize
-            list={this.type}
+            list={type}
           />
         </View>
         <View className='news'>
           <Text className='news-title'>每日上新</Text>
           <News 
-            list={this.daily}
+            list={daily}
           />
         </View>
         <View className='rank'>

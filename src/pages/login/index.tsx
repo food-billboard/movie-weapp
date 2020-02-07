@@ -9,13 +9,22 @@ import {router} from '~utils'
 
 import './index.scss'
 
+interface IState {
+    username: string
+    password: string
+}
+
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any> {
     public static config: Config = {
         navigationBarTitleText: '登录'
     }
 
-    public state = {
+    public componentDidMount = async () => {
+        await this.props.getUserInfo()
+    }
+
+    public state: IState = {
         username: '',
         password: '',
         // check: ''
@@ -23,6 +32,7 @@ export default class extends Component<any> {
 
     public constructor() {
         super(...arguments)
+
         this.handleUser = this.handleUser.bind(this)
         this.handlePass = this.handlePass.bind(this)
         // this.handleCheck = this.handleCheck.bind(this)
@@ -33,7 +43,7 @@ export default class extends Component<any> {
     /**
      * 监听用户名输入
      */
-    public handleUser(value, event) {
+    public handleUser = (value: string, event) => {
         this.setState({
             username: value
         })
@@ -42,7 +52,7 @@ export default class extends Component<any> {
     /**
      * 监听密码输入
      */
-    public handlePass(value, event) {
+    public handlePass = (value, event) => {
         this.setState({
             password: value
         })
@@ -60,7 +70,7 @@ export default class extends Component<any> {
      */
     public submit = async (e) => {
         const {username, password} = this.state
-        if(username == '' || password == '') {
+        if(!username.length || !password.length) {
             Taro.showToast({
                 title: '请输入用户名和密码',
                 icon: 'none',
@@ -74,12 +84,23 @@ export default class extends Component<any> {
             password
         }
         await Taro.showLoading({ mask: true, title: '加载中' })
-        await this.props.sendUserLogon(formData);
+        const userInfo = await this.props.sendUserLogon(formData);
         await Taro.hideLoading()
-        await Taro.showToast({title: '登陆成功', icon: 'success', duration: 1000});
+        const { success } = userInfo
+        if(success) {
+            await Taro.showToast({title: '登陆成功', icon: 'success', duration: 1000});
+        }else {
+            await Taro.showToast({title: '账号或密码错误', icon: 'none', duration: 1000});
+            this.setState({
+                username: '',
+                passwrod: ''
+            })
+            return
+        }
         const { target }: any = this.$router.params
         if( target ) return router.replace(target);
-        router.replace('/mine')
+        Taro.switchTab({url: '/main'})
+        // router.replace('/main')
     }
 
     /**
@@ -99,7 +120,7 @@ export default class extends Component<any> {
                     name='username'
                     title='用户名'
                     type='text'
-                    placeholder='输入手机号'
+                    placeholder='用户名或账号'
                     value={this.state.username}
                     onChange={this.handleUser.bind(this)}
                 />
@@ -107,7 +128,7 @@ export default class extends Component<any> {
                         name='password'
                         title='密码'
                         type='password'
-                        placeholder='密码不能少于10位数'
+                        placeholder='请输入密码'
                         value={this.state.password}
                         onChange={this.handlePass.bind(this)}
                     />

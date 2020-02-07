@@ -1,44 +1,60 @@
 import Taro, {Component} from '@tarojs/taro'
 import { View, Text, Image } from '@tarojs/components'
 import { AtGrid } from "taro-ui"
-import './index.scss'
 import {router} from '~utils'
 
+import './index.scss'
+
+interface IIconInfo {
+    value?: string
+    size?: string | number
+    color?: string
+}
+
 interface List {
-    image: string,
+    image?: string
     value: string
+    iconInfo?: any | IIconInfo
 }
 
 interface IProps {
-    list: Array<List>,
     id: string
 }
 
 export default class IconList extends Component<IProps>{
-    public static defaultProps = {
-        list: [
-            {
-                image: '../../../../assets/attention.png',
-                value: '关注'
-            },
-            {
-                image: '../../../../assets/comment.png',
-                value: '我的评论'
-            },
-            {
-                image: '../../../../assets/record.png',
-                value: '浏览记录'
+
+    readonly list: Array<List> = [
+        {
+            value: '关注',
+            iconInfo: {
+                size: 28,
+                value: 'heart-2'
             }
-        ]
-    }
+        },
+        {
+            value: '我的评论',
+            iconInfo: {
+                size: 28,
+                value: 'bookmark'
+            }
+        },
+        {
+            value: '浏览记录',
+            iconInfo: {
+                size: 28,
+                value: 'filter'
+            }
+        }
+    ]
 
     public constructor() {
         super(...arguments)
+
         this.handleClick = this.handleClick.bind(this)
     }
 
-    public handleClick(item: object, index: number) {
-        console.log(`获取项目值${index}`)
+    //处理点击
+    public handleClick(item: any, index: number) {
         const {value} = item
         const {id} = this.props
         switch(value) {
@@ -55,11 +71,10 @@ export default class IconList extends Component<IProps>{
         }
     }
     public render() {
-        const {list} = this.props
         return (
             <View className='icon'>
                 <AtGrid 
-                    data={list}
+                    data={this.list}
                     mode={'square'}    
                     hasBorder={false}
                     columnNum={3}

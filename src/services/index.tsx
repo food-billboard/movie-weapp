@@ -55,6 +55,11 @@ export const getRank = (rank:string) => {
     return request('GET', '/api/movie/rank', {query: {type: rank}})
 }
 
+//获取排行榜分类列表
+export const getRankType = (count: number) => {
+    return request('GET', '/api/movie/rank_count', { query: { count } })
+}   
+
 //获取用户关注
 export const getAttention = (id) => {   
     return request('GET', '/api/user/attention', {query: {id}})
@@ -65,9 +70,19 @@ export const getComment = (movie) => {
     return request('GET', '/api/movie/comment', {query: {id: movie}})
 }
 
+//获取评论简易
+export const getCommentSimple = (movie) => {
+    return request('GET', '/api/movie/commentsimple', {query: {movie}})
+}
+
+//获取评论详情
+export const getCommentDetail = (id) => {
+    return request('GET', '/api/movie/commentdetail', { query: {id} })
+}
+
 //发布评论
-export const publishComment = (movie, user) => {
-    return request('POST', '/api/user/pushcomment', {data: {movie, id: user}})
+export const publishComment = (value, movie, user) => {
+    return request('POST', '/api/user/pushcomment', {data: {value, movie, id: user}})
 }
 
 //点赞
@@ -116,8 +131,8 @@ export const getAppInfo = () => {
 }
 
 //回复评论
-export const answerComment = (content, user, mine) => {
-    return request('POST', '/api/user/answercomment', {data: {content, user, id: mine}})
+export const answerComment = (commentId, content, user, mine) => {
+    return request('POST', '/api/user/answercomment', {data: {comment: commentId, content, user, id: mine}})
 }
 
 //获取评论头
@@ -128,4 +143,14 @@ export const getCommentHeader = (id) => {
 //获取电影详情
 export const getDetail = (id) => {
     return request('GET', '/api/movie/detail', {query: {id}})
+}
+
+//电影收藏
+export const sendStore = (id, movie) => {
+    return request('POST', '/api/user/store', { data: { id, movie } })
+}
+
+//查看是否为用户关注
+export const getIsAttention = (user, id) => {
+    return request('GET', '/api/user/isAttention', { query: {user, id} })
 }

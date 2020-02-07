@@ -26,7 +26,8 @@ const RouterConfig = {
     { path: 'pages/search/index', alias: '/search'},
     { path: 'pages/setting/index', alias: '/setting'},
     { path: 'pages/type/index', alias: '/type'},
-    { path: 'pages/user/index', alias: '/user'}
+    { path: 'pages/user/index', alias: '/user'},
+    { path: 'pages/rank/index', alias: '/rank'},
   ]
 }
 
@@ -70,5 +71,4 @@ const configs: IConfig = [
 
 ];
 
-export default (app)=> configs.forEach( config=>config(app) );
-
+export default (app)=> configs.forEach( config=>config(app) ); 

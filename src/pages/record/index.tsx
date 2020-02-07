@@ -11,7 +11,8 @@ import {router} from '~utils'
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Index extends Component<any> {
     public static config: Config = {
-        navigationBarTitleText: "浏览记录"
+        navigationBarTitleText: "收藏",
+        enablePullDownRefresh: true
     }
 
     public state = {
@@ -33,9 +34,9 @@ export default class Index extends Component<any> {
             newData = [ ...record, ...data ]
         }
         await this.setState({
-            attention: newData
+            record: newData
         })
-        return record || []
+        return data
     }
 
     /**
@@ -45,20 +46,27 @@ export default class Index extends Component<any> {
 
     public render() {
         const { record } = this.state
-        const list = record.map(( value ) => {
-            const { id } = value
-            return (
-                <List 
-                    content={value}
-                    key={id}
-                />
-            )
-        })
+        // const list = record.map(( value ) => {
+        //     const { id } = value
+        //     return (
+        //         <List 
+        //             content={value}
+        //             key={id}
+        //         />
+        //     )
+        // })
         return (
             <GScrollView 
                 sourceType={'Scope'}
                 scrollWithAnimation={true}
-                renderContent={<View>{list}</View>}
+                renderContent={<View>
+                    {
+                        record.map(val => {
+                            const { id } = val
+                            return <List content={val} key={id} />
+                        })
+                    }
+                </View>}
                 fetch={this.throttleFetchData}
             ></GScrollView>
         )

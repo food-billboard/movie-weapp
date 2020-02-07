@@ -16,12 +16,14 @@ const arrow:right = 'right'
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any>{
+
     public static config: Config = {
         navigationBarTitleText: '我的'
     }
 
-    public state = {
-        setting: {
+    //设置
+    readonly setting = [
+        {
             title: '设置',
             disabled: false,
             note: '',
@@ -33,32 +35,42 @@ export default class extends Component<any>{
             },
             handle: () => {
                 router.push('/setting')
-            }
+            },
+            id: 'setting'
         }
-    }   
+    ] 
 
-    public componentWillMount = () => {
-        const params = this.$router.params
-        if(!params.id) {
-            router.replace('/login')
-        }
+    //用户id
+    readonly id = this.$router.params.id
+
+    public state: any = {
+        detail: {}
     }
 
-    public componentDidMound = async () => {
-        const params = this.$router.params
+    public componentWillMount = () => {
+        // if(!this.id) {
+        //     router.replace('/login')
+        // }
+    }
+
+    public componentDidMount = async () => {
         Taro.showLoading({ mask: true, title: '加载中' })
-        await this.props.getUserInfo(params.id)
+        const detail = await this.props.getUserInfo(this.id)
+        const { info } = detail
         Taro.hideLoading()
+        await this.setState({
+            detail: info
+        })
     }
 
     public render() {
-        const {id, info} = this.props
-        const {setting} = this.state
+        const { id } = this.props
+        const { detail } = this.state
         return (
             <View className='mine'>
                 <View className='head'>
                     <IconHead
-                        list={info}
+                        list={detail}
                     />
                 </View>
                 <View className='main'>
@@ -74,7 +86,7 @@ export default class extends Component<any>{
                     </View>
                     <View className='list'>
                         <List
-                            list={[setting]}
+                            list={this.setting}
                         />
                     </View>
                 </View>

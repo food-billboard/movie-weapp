@@ -49,7 +49,6 @@ function joinUrl(path, host, query) {
 const init = (settings) => {
     const {options = {}, host = '', taro, error} = settings
     extend(true, defaultOptions, options)
-
     if(error) errorHandler = error
 
     if(settings.dynamicOptions) dynamicOptions = settings.dynamicOptions

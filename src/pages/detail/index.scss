@@ -1,5 +1,5 @@
 .detail{
-    background-color:rgba(0, 0, 0, 0.2);
+    // background-color:rgba(0, 0, 0, 0.2);
     .description,
     .image,
     .other{
@@ -23,8 +23,11 @@
     .image{
 
     }
+    .comment{
+        margin-bottom:120px;
+    }
     .other{
-        width:400px;
+        width:750px;
         height:92px;
         position:relative;
         left:0;

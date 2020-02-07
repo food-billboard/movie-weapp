@@ -59,9 +59,12 @@ class Itemize extends Component<IProps>{
     public render() {
         const { list, columnNum } = this.props
         return (
-            <AtGrid mode='rect' hasBorder={false} data={list} 
-               columnNum={columnNum}	
-               onClick={this.goTo}
+            <AtGrid 
+                mode='rect' 
+                hasBorder={false} 
+                data={list} 
+                columnNum={columnNum}	
+                onClick={this.goTo}
             />
         )
     }

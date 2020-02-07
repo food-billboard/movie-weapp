@@ -12,10 +12,10 @@ interface IProps {
   sourceType: 'Scope' | 'Dva',
   query?: any,
   scrollY?: boolean
-  upperThreshold?: number
+  // upperThreshold?: number
   lowerThreshold?: number
   scrollWithAnimation?: boolean
-  onScrollToUpper?: () => any
+  // onScrollToUpper?: () => any
   onScrollToLower?: () => any
   onScroll?: () => any
   fetch: (...args: any[]) => any
@@ -43,7 +43,7 @@ export default class List extends Component<IProps> {
     query: {},
     sourceType: 'Dva',
     scrollY: true,
-    upperThreshold: 200,
+    // upperThreshold: 50,
     lowerThreshold: 50,
     scrollWithAnimation: false,
     onScroll: () => {},
@@ -78,7 +78,7 @@ export default class List extends Component<IProps> {
 
   public componentDidMount = () => {
     const { query } = this.state
-    // this.fetchData(query)
+    this.fetchData(query)
   }
 
   //数据请求
@@ -89,9 +89,13 @@ export default class List extends Component<IProps> {
     if(sourceType === 'Scope') {
       const { data } = this.state
       const newData = await fetch(query, isInit)
-      
+      const { pageSize } = this.state.query
       //判断是否存在数据
-      if(!newData.length) this.setState({empty: true}) 
+      if(newData.length < pageSize) {
+        this.setState({empty: true}) 
+      }else {
+        this.setState({empty: false}) 
+      }
       
       let nextData
       //判断是否为初始化前端数据
@@ -104,7 +108,7 @@ export default class List extends Component<IProps> {
       return
     }else if(sourceType === 'Dva') {
       await fetch(query, isInit)
-      this.setState({loading: false})
+      await this.setState({loading: false})
       return
     }
   }
@@ -119,20 +123,20 @@ export default class List extends Component<IProps> {
       this.fetchData(nextQuery)
     }
   
-    //下拉刷新
-    public handleToUpper = () => {
-      const { state, props } = this
-      const nextQuery = { ...state.query, ...INIT_QUERY, ...props.query }
-      this.fetchData(nextQuery)
-    }
+    // //下拉刷新
+    // public handleToUpper = () => {
+    //   const { state, props } = this
+    //   const nextQuery = { ...state.query, ...INIT_QUERY, ...props.query }
+    //   this.fetchData(nextQuery, true)
+    // }
 
   public render() {
     const {
       scrollY,
-      upperThreshold,
+      // upperThreshold,
       lowerThreshold,
       scrollWithAnimation,
-      onScrollToUpper,
+      // onScrollToUpper,
       onScrollToLower,
       onScroll,
       header,
@@ -145,20 +149,20 @@ export default class List extends Component<IProps> {
       <View className='list'>
         <ScrollView
           className='scroll-view'
-          style={{marginBottom: bottom ? bottom : 0}}
+          // style={{paddingBottom: (bottom ? bottom : 0) + 'rpx'}}
           scrollY={scrollY}
-          upperThreshold={upperThreshold}
+          // upperThreshold={upperThreshold}
           lowerThreshold={lowerThreshold}
           scrollWithAnimation={scrollWithAnimation}
-          onScrollToUpper={onScrollToUpper ? onScrollToUpper : this.handleToUpper}
+          // onScrollToUpper={onScrollToUpper ? onScrollToUpper : this.handleToUpper}
           onScrollToLower={onScrollToLower ? onScrollToLower : this.handleToLower}
           onScroll={onScroll}
         >
           {_header ? '' : this.props.renderHeader}
           {this.props.renderContent}
-          <GDivider
-            show={empty}
-          />
+          {
+            empty ? <GDivider other={{paddingBottom: (bottom ? bottom + 20 : 0) + 'rpx'}} /> : null
+          }
           {/* <Top 
             ref={this.topRef} 
           /> */}
@@ -167,12 +171,12 @@ export default class List extends Component<IProps> {
         <View 
           className='active'
         >
-          <AtActivityIndicator 
+          {loading ? <AtActivityIndicator 
             size={100}
             color={'#666'}
             content={'玩命加载中...'}
-            className={ loading ? 'activeShow' : 'activeHide' }
-          />
+            // className={ loading ? 'activeShow' : 'activeHide' }
+          /> : ''}
         </View>
       </View>
     )

@@ -55,6 +55,11 @@
             }
             .description{
                 color:gray;
+                border-left:1px dashed rgba(0, 0, 0, 0.1);
+                border-right:1px dashed rgba(0, 0, 0, 0.1);
+                border-radius:20px;
+                box-sizing:border-box;
+                padding: 0 5px;
                 .text{
                     color:black;
                     display: -webkit-box;
@@ -68,9 +73,13 @@
                     display:inline-block;
                     float:right;
                     padding:0 30px;
-                    background-color:rgba(2, 231, 231, 0.6);
+                    background-color:rgba(2, 231, 231, 0.1);
                     color:black;
                     border-radius:20px;
+                    margin-top:-1px;
+                    z-index:1;
+                    border-top:1px dashed rgba(0, 0, 0, 0.1);
+                    border-bottom:1px dashed rgba(0, 0, 0, 0.1);
                 }
             }
             .introduce{

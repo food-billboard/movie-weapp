@@ -6,5 +6,7 @@ export const mapStateToProps = (_) => {
 }
 
 export const mapDispatchToProps = dispatch => ({
-    getUserInfo: (id) => dispatch({type: "global/getUserInfo", id})
+    getUserInfo: (id) => dispatch({type: "global/getUserInfo", id}),
+    getIsAttention: (user, mine) => dispatch({type: 'user/getIsAttention', user, mine}),
+    toAttention: (user, mine, isAttention) => dispatch({type: 'user/toAttention', user, mine, isAttention})
 })

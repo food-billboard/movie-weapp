@@ -12,6 +12,8 @@ interface IState {
     value: number
 }
 
+let FIRST = true
+
 export default class GTate extends Component<IProps>{
     public static defaultProps = {
         value: 0,
@@ -27,14 +29,22 @@ export default class GTate extends Component<IProps>{
         this.handleChange = this.handleChange.bind(this)
     }
 
+    public componentWillReceiveProps(props) {
+        if(!FIRST) return   
+        this.setState({
+            value: props.value
+        })
+        FIRST = false
+    }
+
     /**
      * 监听分数变化
      */
-    public handleChange (value: number): void {
-        this.setState({
+    public handleChange = async (value: number) => {
+        await this.setState({
             value
         })
-        this.props.sendRate(value)
+        const data = await this.props.sendRate(value)
     }
     render() {
         const {value} = this.state

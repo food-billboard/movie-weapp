@@ -1,8 +1,13 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Image, Text, ScrollView } from '@tarojs/components'
-import './index.scss'
+import { AtIcon } from 'taro-ui'
+
+import {connect} from '@tarojs/redux'
+import {mapDispatchToProps, mapStateToProps} from './connect'
 
 import {router} from '~utils'
+
+import './index.scss'
 
 interface IUser {
     name: string,
@@ -28,8 +33,10 @@ interface IProps {
     list: IList,
     like: any,
     comment: any
+    id: string
 }
 
+@connect(mapStateToProps, mapDispatchToProps)
 export default class List extends Component<IProps>{
     public static defaultProps: IProps = {
         list: {
@@ -49,6 +56,7 @@ export default class List extends Component<IProps>{
                 }
             ]
         },
+        id: '',
         like: () => {},
         comment: () => {}
     }
@@ -64,36 +72,50 @@ export default class List extends Component<IProps>{
     }
 
     /**
-     * 获取用户信息
-     */
-    public getUser(id: string) {
-        router.push('/user', {id})
-    }
-
-    /**
      * 点赞
+     * id: 评论用户id
+     * hot: 点赞人数
+     * isHot: 是否为点赞状态
+     * commentId: 评论id
      */
-    public like(id: string, hot: number = 0, isHot: boolean = false): void {
+    public like = async (id: string, hot: number = 0, isHot: boolean = false, commentId: string) => {
         const {list} = this.state
-        const {user} = list
-        var {isHot, hot} = user
         if(isHot) {
-            hot ++
+            list.user.hot ++
         }else {
-            hot --
+            list.user.hot --
         }
+        list.user.isHot = !list.user.isHot
         this.setState({
-            hot,
-            isHot: !isHot
+            list
         })
-        this.props.like(id)
+        Taro.showLoading({ mask: true, title: '等我一下' })
+        await this.props.like(commentId, id, this.props.id)   
+        Taro.hideLoading()
     }
 
     /**
      * 发布评论
+     * user: 用户id
+     * id: 我的id
      */
-    public pushComment(user) {
-        this.props.comment(true, user)
+    public pushComment(user: string, id: string) {
+        this.props.comment(true, user, id)
+    }
+
+    /**
+     * 查看详细评论
+     * id: 评论id
+     */
+    public getDetail = (id: string) => {
+        router.push('/commentdetail', { id })
+    }
+
+    /**
+     * 获取用户信息
+     */
+    public getUser(id: string) {
+        router.push('/user', {id})
     }
 
     public render() {
@@ -133,20 +155,24 @@ export default class List extends Component<IProps>{
                     </View>
                     <View className='name'>
                         <Text className='name-user'
-                            onClick={this.pushComment.bind(this, id)}>{name}</Text>说: 
+                            onClick={this.pushComment.bind(this, id, this.props.id)}>{name}</Text>说: 
                     </View>
                     <View className='up'
-                        onClick={this.like.bind(this, id, hot, isHot)}
+                        onClick={this.like.bind(this, id, hot, isHot, this.props.id)}
                     >
-                        <Text className={'up-text ' + (isHot ? 'up-like' : '')}>
+                        <Text className={'up-text'}>
                             {hot}
-                        </Text>❤
+                            <AtIcon value={isHot ? 'heart-2' : 'heart'} />
+                        </Text>
                     </View>
                     <View className='time'>
                         {time}
                     </View>
                 </View>
-                <View className='content'>
+                <View 
+                    className='content'
+                    onClick={this.getDetail.bind(this, this.props.id)}
+                >
                     {content}
                 </View>
                 <ScrollView
@@ -155,6 +181,7 @@ export default class List extends Component<IProps>{
                 >
                     {userList}
                 </ScrollView>
+
             </View>
         )
     }

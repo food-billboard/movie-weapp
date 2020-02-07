@@ -5,7 +5,7 @@ import './index.scss'
 import { router } from '~utils'
 
 interface IList {
-    img: string, 
+    image: string, 
     name: string, 
     type: string, 
     time: string | number, 
@@ -34,7 +34,7 @@ export default class List extends Component<IProps>{
     public render() {
         const { list } = this.props
         const lists = list.map((value) => {
-            const {img, name, type, time, hot, id} = value
+            const {image, name, type, time, hot, id} = value
             return (
                 <View className='list-content'
                     key={id}
@@ -43,7 +43,7 @@ export default class List extends Component<IProps>{
                     <View className='img'>  
                         <Image
                             className='img-content'
-                            src={img}
+                            src={image}
                         />
                     </View>
                     <View className='detail'>

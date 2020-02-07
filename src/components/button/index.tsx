@@ -31,13 +31,20 @@ export default class Button extends Component<IProps>{
         style: {}
     }
 
+    public componentWillReceiveProps(props) {
+        this.setState({
+            active: props.active
+        })
+    }
+
     public state: IState = {
-        active: 0,
-        mode: this.props.value ? this.props.value[0] : ''
+        active: this.props.active,
+        mode: this.props.value[this.props.active]
     }
 
     public constructor() {
         super(...arguments)
+        
         this.modeChange = this.modeChange.bind(this)
     }
 
@@ -67,7 +74,7 @@ export default class Button extends Component<IProps>{
                     circle={true}
                     onClick={this.modeChange}
                     size='normal'
-                >{mode}</AtButton>
+                >{this.props.value[this.state.active]}</AtButton>
             </View>
         )
     }

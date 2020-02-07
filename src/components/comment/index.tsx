@@ -6,8 +6,7 @@ import { AtModal, AtModalContent, AtModalAction, AtTextarea } from "taro-ui"
 
 interface IProps {
     buttonText: string,
-    isOpen: boolean,
-    publishCom: any
+    publishCom: (value: any) => any
 }
 
 interface IState {
@@ -18,25 +17,24 @@ interface IState {
 export default class Comment extends Component<IProps>{
     public static defaultProps: IProps = {
         buttonText: '发送评论',
-        isOpen:false,
         publishCom: () => {}
     }
 
     public state: IState = {
         value: '说点什么吧...',
-        isOpen: this.props.isOpen
+        isOpen: false
+    }
+
+    public open = async () => {
+        await this.setState({
+            isOpen: true
+        })
     }
 
     public constructor() {
         super(...arguments)
         this.handleChange = this.handleChange.bind(this)
         this.publish = this.publish.bind(this)
-    }
-
-    public componentWillReceiveProps(props) {
-        this.setState({
-            isOpen: props.isOpen
-        })
     }
 
     /**

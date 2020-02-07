@@ -11,6 +11,8 @@ import { mapStateToProps, mapDispatchToPrps } from './connect'
 
 import './index.scss'
 
+const INIT_QUERY = { currPage: 1, pageSize: 10 }
+
 @connect(mapStateToProps, mapDispatchToPrps)
 export default class Index extends Component<any> {
 
@@ -22,7 +24,7 @@ export default class Index extends Component<any> {
         typeDetail: []
     }
 
-    private _id 
+    private _id
 
     public get id() {
         return this._id || ''
@@ -67,7 +69,7 @@ export default class Index extends Component<any> {
     //改变当前页面路由
     public getTypeDetail = async(id: string) => {
         this.id = id
-        this.scrollRef.current!.handleToUpper()
+        this.scrollRef.current!.fetchData({INIT_QUERY}, true)
     }
 
     //获取查看方式

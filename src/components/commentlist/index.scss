@@ -1,3 +1,4 @@
+@import "~taro-ui/dist/style/components/icon.scss";
 .list{
     padding:0 20px;
     width:100%;
@@ -48,9 +49,9 @@
             &-text{
                 color:black;
             }
-            &-like{
-                color:red;
-            }
+            // &-like{
+            //     color:red;
+            // }
         }
         .time{
             width:150px;

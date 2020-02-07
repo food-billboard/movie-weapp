@@ -7,7 +7,7 @@ import {router} from '~utils'
 interface Content {
     name: string,
     detail: string,
-    img: string,
+    image: string,
     id: string  
 }
 
@@ -21,7 +21,7 @@ export default class NewsHead extends Component<IProps>{
         content: {
             name: '',
             detail: '',
-            img: '',
+            image: '',
             id: ''  
         },
         style: {}
@@ -38,13 +38,13 @@ export default class NewsHead extends Component<IProps>{
 
     public render() {
         const { content, style } = this.props
-        const {detail, name, id, img} = content
+        const {detail, name, id, image} = content
         return (
             <View className='head'
                 style={style}
                 onClick={this.handleClick.bind(this, id)}>
                 <View className='img'>
-                    <Image src={img} className='content'></Image>            
+                    <Image src={image} className='content'></Image>            
                 </View>
                 <View className='detail'>
                     <View className='at-article'>

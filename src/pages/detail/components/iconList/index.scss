@@ -1,0 +1,47 @@
+.list{
+  height:80px;
+  white-space:nowrap;
+  border-radius:30px;
+  border: 1px dashed rgba(0, 0, 0, 0.1);
+  position:relative;
+  left:0;
+  top:80px;
+  .icon{
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    overflow:hidden;
+    display:inline-block;
+  }
+}
+.content{
+  width:750px;
+  height:100px;
+  background-color:black;
+  border-radius:30px;
+  position:absolute;
+  color:white;
+  top:-20px;
+  left:0;
+  padding:20px;
+  box-sizing:border-box;
+  white-space: nowrap;
+  overflow:hidden;
+  text-overflow: ellipsis;
+  line-height:60px;
+  .arrow{
+    border-top:20px solid black;
+    border-left:20px solid transparent;
+    border-right:20px solid transparent;
+    border-bottom:20px solid transparent;
+    position:absolute;
+    bottom:-39px;
+    transform:translateX(-50%);
+    left:50%;
+  }
+}
+.icon-list{
+  position:relative;
+  left:0;
+  top:0;
+}

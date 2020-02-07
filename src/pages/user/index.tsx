@@ -16,6 +16,12 @@ export default class User extends Component<any>{
         navigationBarTitleText: '用户界面',
     }
 
+    public state: any = {
+        userInfo: {},
+        isAttention: false
+    }
+
+    //用户id
     readonly id = this.$router.params.id
 
     public constructor() {
@@ -25,39 +31,89 @@ export default class User extends Component<any>{
     }
 
     public componentDidMount = async () => {
+        this.fetchData()
+    }
+
+    //数据获取
+    public fetchData = async () => {
+        const { id } = this.props
         Taro.showLoading({mask: true, title: '加载中'})
-        await this.props.getUserInfo(this.id)
+        const userInfo = await this.props.getUserInfo(this.id)
+        const attentionData = await this.props.getIsAttention(this.id, id)
+        const { attention } = attentionData
+        const { info } = userInfo
+        await this.setState({
+            userInfo: info,
+            isAttention: attention
+        })
         Taro.hideLoading()
     }
 
+    //关注/取消关注
     public attention = async () => {
         const {id} = this.props
+        const { isAttention } = this.state
         Taro.showLoading({mask: true, title: '操作中'})
-        await this.props.toAttention(this.id, id, this.props.info.isAttention)
+        const data = await this.props.toAttention(this.id, id, isAttention)
+        const { attention } = data
+        await this.setState({
+            isAttention: attention
+        })
         Taro.hideLoading()
     }
 
+    //查看收藏
+    public handleCheckStore = async () => {
+        router.push('/record', {id: this.id})
+    }
+
+    //查看关注
+    public handleCheckAttention = async () => {
+        router.push('/attention', {id: this.id})
+    }
+
+    //用户界面的相关信息
+    readonly userInfo = [
+        {
+            title: 'Ta的收藏',
+            iconInfo: {
+                value: 'heart', 
+                size: 32, 
+            },
+            handle:this.handleCheckStore,
+            id: 'store'
+        },
+        {
+            title: 'Ta的关注',
+            iconInfo: {
+                value: 'star', 
+                size: 32, 
+            },
+            handle:this.handleCheckAttention,
+            id: 'attention'
+        }
+    ]
+
     public render() {
-        const {info} = this.props
-        const {isAttention} = info
+        const {isAttention, userInfo} = this.state
         return (
             <View className='user'>
                 <View className='icon'>
                     <IconHead
-                        list={info}
+                        list={userInfo}
                     />
                 </View>
                 <View className='list'>
-                    <List />
+                    <List 
+                        list={this.userInfo}
+                    />
                 </View>
-                {/* <View className='button'> */}
                 <GButton
                     style={{width: '100%', height: 120, position: 'fixed', left: 0, bottom: 0}}
-                    active={isAttention ? 0 : 1}
+                    active={isAttention ? 1 : 0}
                     value={['关注', '取消关注']}
                     operate={this.attention}
                 />
-                {/* </View> */}
             </View>
         )
     }

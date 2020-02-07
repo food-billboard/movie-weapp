@@ -13,16 +13,19 @@ interface List {
 }
 
 interface IProps {
-    count: number,
-    type: string,
+    count: number
+    type: string
     list: Array<List>
+    id: string
+    style?: any
 }
 
 export default class Rank extends Component<IProps>{
     public static defaultProps = {
         count: 3,
         type: '综合排行榜',
-        list: []
+        list: [],
+        id: 0
     }
 
     public constructor() {
@@ -38,7 +41,7 @@ export default class Rank extends Component<IProps>{
     }
 
     public render() {
-        const {list, type} = this.props
+        const { list, type, id, style={} } = this.props
         const ranks = list.map((value) => {
             const {rank, id, img, name} = value
             return (
@@ -56,8 +59,8 @@ export default class Rank extends Component<IProps>{
             )
         })
         return (
-            <View className='rank-main'>
-                <Text className='rank-title'>{type}</Text>
+            <View className='rank-main' style={style}>
+                <Text className='rank-title' onClick={() => { router.push('/rank', { id, type }) }}>{type}</Text>
                 <View className='ran-content'>
                     {ranks}
                 </View>

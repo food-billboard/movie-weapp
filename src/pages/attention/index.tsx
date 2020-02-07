@@ -46,7 +46,7 @@ export default class extends Component<any>{
         await this.setState({
             attention: newData
         })
-        return attention || []
+        return data
     }
 
     /**
@@ -63,27 +63,31 @@ export default class extends Component<any>{
 
     public render() {
         const { attention } = this.state
-        const lists = attention.map((value) => {
-            const {img, name, id} = value  
-            return (
-                <View className='list'
-                    key={id}
-                    onClick={this.getUser.bind(this, id)}    
-                >
-                    <Image src={img} className='img'></Image>
-                    <View className='username' >
-                        {name}
-                    </View>
-                    <Text className='enter'>></Text>
-                </View>
-            )
-        })
 
         return (
             <GScrollView 
                 sourceType={'Scope'}
                 scrollWithAnimation={true}
-                renderContent={<View>{lists}</View>}
+                query={{pageSize: 20}}
+                renderContent={<View>
+                    {
+                        attention.map((value) => {
+                            const {image, name, id} = value  
+                            return (
+                                <View className='list'
+                                    key={id}
+                                    onClick={this.getUser.bind(this, id)}    
+                                >
+                                    <Image src={image} className='img'></Image>
+                                    <View className='username' >
+                                        {name}
+                                    </View>
+                                    <Text className='enter'>></Text>
+                                </View>
+                            )
+                        })
+                    }
+                </View>}
                 fetch={this.throttleFetchData}
             ></GScrollView>
         )

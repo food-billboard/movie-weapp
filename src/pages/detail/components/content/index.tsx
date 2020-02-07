@@ -1,39 +1,47 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import GRate from '~components/rate'
-import './index.scss'
+import GStore from '~components/store'
 import { AtModal } from 'taro-ui'
 
-interface sendRate {
-    (value: string): void
-}
+import {connect} from '@tarojs/redux'
+import {mapDispatchToProps, mapStateToProps} from './connect'
+
+import './index.scss'
 
 interface IProps {
-    info: Info,
-    sendRate: sendRate
+    movie: string
+    id: string
+    info: Info
+    sendRate: (value: any, user: any, movie: any) => any
+    sendStore: (user: any, movie: any) => any
 }
 
 interface Info {
-    name: string,
-    area: string,
-    people: string,
-    director: Array<string>,
-    actor: Array<string>,
-    type: Array<string>,
-    time: string,
-    publishTime: string,
-    language: string,
-    description: string,
-    hot: number,
+    name: string
+    area: string
+    people: number
+    director: Array<string>
+    actor: Array<string>
+    type: Array<string>
+    time: string
+    publishTime: string
+    language: string
+    description: string
+    hot: number
     rate:number
+    store: boolean
 }
 
+@connect(mapStateToProps, mapDispatchToProps)
 export default class Content extends Component<IProps>{
-    public static defaultProps = {
+    public static defaultProps:IProps = {
+        movie: '',
+        id: '',
         info: {
             name: '',
             area: '',
-            people: '',
+            people: 0,
             director: [],
             actor: [],
             type: [],
@@ -42,12 +50,14 @@ export default class Content extends Component<IProps>{
             language: '',
             description: '',
             hot: 0,
-            rate:0
+            rate:0,
+            store: true
         },
-        sendRate: () => {}
+        sendRate: () => {},
+        sendStore: () => {}
     }   
 
-    public state = {
+    public state: any = {
         isOpened: false
     }
 
@@ -64,7 +74,24 @@ export default class Content extends Component<IProps>{
         this.setState({
             isOpened: !isOpened
         })
-        console.log('描述文字详情')
+    }
+
+    //评分
+    public sendRate = async (value: string) => {
+        const {id='', movie} = this.props
+        Taro.showLoading({mask: true, title: '评分中'})
+        const rate = await this.props.sendRate(value, id, movie)
+        Taro.hideLoading()
+        return rate
+    }
+
+    //收藏
+    public sendStore = async () => {
+        const { id='', movie } = this.props
+        Taro.showLoading({ mask: true, title: '联系收藏中' })
+        const store = await this.props.sendStore(id, movie)
+        Taro.hideLoading()
+        return store
     }
 
     public render() {
@@ -82,18 +109,23 @@ export default class Content extends Component<IProps>{
             language='',
             description='',
             hot=0,
-            rate=0
+            rate=0,
+            store=false
         } = info
         return (
             <View className='content'>
                 <View className='title'>
                     {name}
+                    <GStore
+                        handleClick={this.sendStore}
+                        store={store}
+                    />
                 </View>
                 <View className='main'>
                     <View className='main-rate'>
                         <GRate 
                             value={rate} 
-                            sendRate={this.props.sendRate}
+                            sendRate={this.sendRate}
                         />
                     </View>
                     <View className='main-info'>
@@ -104,9 +136,9 @@ export default class Content extends Component<IProps>{
                             <View className='at-col at-col-5 director'>
                                 导演: <Text className='text'>{director.join(' ')}</Text>
                             </View>
-                            <View className='at-col at-col-5 lan'>
+                            {/* <View className='at-col at-col-5 lan'>
                                 语言: <Text className='text'>{language}</Text>
-                            </View>
+                            </View> */}
                         </View>
                         <View className='type'>
                             分类: <Text className='text'>{type.join(' ')}</Text>

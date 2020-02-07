@@ -26,7 +26,7 @@ class Index extends Component<IProps>{
     public render() {
         const { list } = this.props
         const swiper = list.map((value) => {
-            const { id, img } = value
+            const { id, image } = value
             return (
                 <SwiperItem 
                     key={id}
@@ -34,7 +34,7 @@ class Index extends Component<IProps>{
                     onClick={(event) => {this.getDetail.bind(this, id, event)}}>
                     <Image
                         style={{width: "100%", height: "100%"}}
-                        src={img}
+                        src={image}
                     />
                 </SwiperItem>
             )

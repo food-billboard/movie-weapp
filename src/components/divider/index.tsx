@@ -1,5 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { AtDivider } from 'taro-ui'
+import './index.scss'
 
 interface IProps {
     content?: string
@@ -7,7 +8,7 @@ interface IProps {
     fontSize?: number
     lineColor?: string
     childNode?: any
-    show: boolean
+    other?: any
 }
 
 export default class Divider extends Component<IProps> {
@@ -17,19 +18,18 @@ export default class Divider extends Component<IProps> {
         fontSize: 32,
         lineColor: '#D3D3D3',
         childNode: '',
-        show: true
+        other: {}
     }
 
     public render() {
-        const { content, fontColor, fontSize, lineColor, show, childNode } = this.props
+        const { content, fontColor, fontSize, lineColor, childNode, other } = this.props
         return (
             <AtDivider
                 content={content}
                 fontColor={fontColor}
                 fontSize={fontSize}
                 lineColor={lineColor}
-                className={ show ? 'show' : 'hide' }
-                customStyle={{marginTop: '40px'}}
+                customStyle={{marginTop: '20px', ...other}}
             >
                 {content ? '' : childNode}
             </AtDivider>

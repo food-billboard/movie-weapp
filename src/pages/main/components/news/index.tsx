@@ -7,7 +7,7 @@ import {router} from '~utils'
 interface List {
     id: string,
     title: string,
-    img: string
+    image: string
 }
 
 interface IProps {
@@ -24,23 +24,21 @@ class News extends Component<IProps>{
     /**
      * 路由跳转
      */
-    public gotTo(id: string, title: string, event: object) {
-        console.log(`路由跳转${id}, ${title}`)
-        //还没有实现
+    public gotTo(id: string) {
         router.push('/detail', {id})
     }
 
     public render() {
         const {list} = this.props
         const news = list.map((value) => {
-            const { id, title, img } = value
+            const { id, title, image } = value
             return (
                 <View className='news-img'
-                    onClick={(event) => {this.gotTo.bind(this, id, title, event)}}
+                    onClick={(event) => {this.gotTo.call(this, id)}}
                     key={id}
                     >
                     <Image 
-                        src={img}
+                        src={image}
                         className='news-img-main'
                     />
                 </View>
