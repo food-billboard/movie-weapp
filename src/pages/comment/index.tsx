@@ -38,8 +38,9 @@ export default class extends Component<any> {
      */
     public fetchMovieData = async () => {
         const commentHeader = await this.props.getCommentHeader(this.id)
+        const data = commentHeader.data
         this.setState({
-            commentHeader
+            commentHeader: data
         })
     }
 
@@ -49,16 +50,17 @@ export default class extends Component<any> {
     public fetchData = async (query: any, isInit=false) => {
         const { comment } = this.state
         const data = await this.props.getComment({commentId: this.id, userId: this.mineId, ...query})
+        const _data = data.data
         let newData
         if(isInit) {
-            newData = [ ...data ]
+            newData = [ ..._data ]
         }else {
-            newData = [ ...comment, ...data ]
+            newData = [ ...comment, ..._data ]
         }
         await this.setState({
             comment: newData
         })
-        return data
+        return _data
     }
 
     /**
@@ -90,27 +92,13 @@ export default class extends Component<any> {
     public publishComment = async (value) => {
         const { userId, commentId } = this.state
         Taro.showLoading({ mask: true, title: '发布中' })
-        let success
-        let info = { title: '', icon: '' }
         if(typeof userId === 'string' || 'number') {
             //评论用户
-            const data = await this.props.publishUserComment(commentId, value, userId, this.mineId)
-            success = data.success
+            await this.props.publishUserComment(commentId, value, userId, this.mineId)
         }else {
             //评论电影
-            const data = await this.props.publishComment(value, this.id, this.mineId)
-            success = data.success
+            this.props.publishComment(value, this.id, this.mineId)
         }
-        if(success) {
-            info = { ...info, title: '成功', icon: 'success' }
-        }else {
-            info = { ...info, title: '失败', icon: 'none' }
-        }
-        Taro.showToast({
-            title: info.title,
-            icon: info.icon,
-            duration: 2000
-        })
         Taro.hideLoading()
         await this.fetchData({...INIT_QUERY}, true)
     }
@@ -150,13 +138,13 @@ export default class extends Component<any> {
                 renderContent={<View>
                     {
                         comment.map((value) => {
-                            const { id } = value
+                            const { commentId } = value
                             return (
                                 <List 
                                     comment={this.publish} 
-                                    key={id}
+                                    key={commentId}
                                     list={value}
-                                    id={id}
+                                    id={commentId}
                                 />
                             )
                         })

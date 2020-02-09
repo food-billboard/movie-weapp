@@ -44,6 +44,7 @@
     "dva": "^2.4.1",
     "dva-core": "^2.0.2",
     "dva-loading": "^3.0.20",
+    "moment": "^2.24.0",
     "nerv-devtools": "^1.4.0",
     "nervjs": "^1.4.0",
     "redux-logger": "^3.0.6",

@@ -38,16 +38,17 @@ export default class extends Component<any>{
     public fetchData = async (query: any, isInit=false) => {
         const { attention } = this.state
         const data = await this.props.getAttention({id: this.id, ...query})
+        const _data = data.data
         let newData
         if(isInit) {
-            newData = [ ...data ]
+            newData = [ ..._data ]
         }else {
-            newData = [ ...attention, ...data ]
+            newData = [ ...attention, ..._data ]
         }
         await this.setState({
             attention: newData
         })
-        return data
+        return _data
     }
 
     /**

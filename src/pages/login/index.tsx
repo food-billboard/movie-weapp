@@ -94,21 +94,11 @@ export default class extends Component<any> {
         await Taro.showLoading({ mask: true, title: '加载中' })
         const userInfo = await this.props.sendUserLogon(formData);
         await Taro.hideLoading()
-        const { success } = userInfo
-        if(success) {
-            await Taro.showToast({title: '登陆成功', icon: 'success', duration: 1000});
-        }else {
-            await Taro.showToast({title: '账号或密码错误', icon: 'none', duration: 1000});
-            this.setState({
-                username: '',
-                passwrod: ''
-            })
-            return
-        }
+        if(userInfo.success) return
+        //回到上一路由
         const { target }: any = this.$router.params
         if( target ) return router.replace(target);
         Taro.switchTab({url: '/main'})
-        // router.replace('/main')
     }
 
     /**

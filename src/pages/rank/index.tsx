@@ -54,8 +54,9 @@ export default class extends Component<any> {
   public fetchData = async (query: any, isInit=false) => {
     const { rank } = this.state
         const data = await this.props.getRank({id: this.id, ...query})
-        if(data.length) {
-          const { list, type, id } = data.slice(0, 1)[0]
+        const _data = data.rank
+        if(_data.length) {
+          const { list, type, id } = _data.slice(0, 1)[0]
           let newData
           if(isInit) {
               newData = [ ...list ]
@@ -75,7 +76,9 @@ export default class extends Component<any> {
   //获取排行榜分类列表
   public fetchRankTypeData = async () => {
     const data = await this.props.getRankType()
-    const rank = data.map(val => {
+    const _data = data.rank
+    
+    const rank = _data.map(val => {
       const { id, type, image } = val
       return {
         id,

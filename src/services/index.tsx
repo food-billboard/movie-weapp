@@ -40,6 +40,91 @@ export const sendNewUser = (data) => {
 }
 
 /**
+ * 发布评论
+ * @param value 评论内容
+ * @param movie 评论电影id
+ * @param user 评论用户id
+ */
+export const publishComment = (value, movie, user) => {
+    return request('POST', '/api/user/pushcomment', {data: {value, movie, id: user}})
+}
+
+/**
+ * 点赞
+ * @param comment 点赞的评论id
+ * @param user 点赞用户id
+ * @param mine 我的id
+ */
+export const gotolike = (comment, user, mine) => {
+    return request('POST', '/api/user/like', {data: {comment, user, mine}})
+}
+
+/**
+ * 电影评分
+ * @param rate 评分值
+ * @param user 用户id
+ * @param movie 电影id
+ */
+export const sendRate = (rate, user, movie) => {
+    return request('POST', '/api/user/rate', {data: {rate, id: user, movie}})
+}
+
+/**
+ * 回复评论
+ * @param commentId 评论id
+ * @param content 评论内容
+ * @param user 评论用户id
+ * @param mine 我的id
+ */
+export const answerComment = (commentId, content, user, mine) => {
+    return request('POST', '/api/user/answercomment', {data: {comment: commentId, content, user, id: mine}})
+}
+
+/**
+ * 关注用户
+ * @param user 用户id
+ * @param mine 我的id
+ * @param isAttention 是否为关注
+ */
+export const toAttention = (user, mine, isAttention) => {
+    return request('POST', '/api/user/attention', {data: {user, id: mine, isAttention}})
+} 
+
+/**
+ * 电影收藏
+ * @param id 用户id
+ * @param movie 电影id
+ */
+export const sendStore = (id, movie) => {
+    return request('POST', '/api/user/store', { data: { id, movie } })
+}
+
+/**
+ * 用户反馈
+ * @param user 用户id
+ * @param value 反馈内容
+ */
+export const feedback = (user, value) => {
+    return request('POST', '/api/usr/feedback', { data: {id: user, value} })
+}
+
+/**
+ * 获取评论头
+ * @param id 电影id
+ */
+export const getCommentHeader = (id) => {
+    return request('GET', '/api/movie/commentheader', {query: {id}})
+}
+
+/**
+ * 获取电影详情
+ * @param id 电影id
+ */
+export const getDetail = (id) => {
+    return request('GET', '/api/movie/detail', {query: {id}})
+}
+
+/**
  * 获取用户信息
  */
 export const getUserInfo = () => {
@@ -127,36 +212,6 @@ export const getCommentDetail = (query) => {
 }
 
 /**
- * 发布评论
- * @param value 评论内容
- * @param movie 评论电影id
- * @param user 评论用户id
- */
-export const publishComment = (value, movie, user) => {
-    return request('POST', '/api/user/pushcomment', {data: {value, movie, id: user}})
-}
-
-/**
- * 点赞
- * @param comment 点赞的评论id
- * @param user 点赞用户id
- * @param mine 我的id
- */
-export const gotolike = (comment, user, mine) => {
-    return request('POST', '/api/user/like', {data: {comment, user, mine}})
-}
-
-/**
- * 电影评分
- * @param rate 评分值
- * @param user 用户id
- * @param movie 电影id
- */
-export const sendRate = (rate, user, movie) => {
-    return request('POST', '/api/user/rate', {data: {rate, id: user, movie}})
-}
-
-/**
  * 获取通知
  * @param id 用户id
  */
@@ -186,17 +241,7 @@ export const getUserComment = (id) => {
  */
 export const factorSearch = (factor) => {
     return request('GET', '/api/movie/search', {query: {factor}})
-}
-
-/**
- * 关注用户
- * @param user 用户id
- * @param mine 我的id
- * @param isAttention 是否为关注
- */
-export const toAttention = (user, mine, isAttention) => {
-    return request('POST', '/api/user/attention', {data: {user, id: mine, isAttention}})
-}   
+}  
 
 /**
  * 获取分类具体信息
@@ -213,47 +258,3 @@ export const getAppInfo = () => {
     return request('GET', '/api/app/info')
 }
 
-/**
- * 回复评论
- * @param commentId 评论id
- * @param content 评论内容
- * @param user 评论用户id
- * @param mine 我的id
- */
-export const answerComment = (commentId, content, user, mine) => {
-    return request('POST', '/api/user/answercomment', {data: {comment: commentId, content, user, id: mine}})
-}
-
-/**
- * 获取评论头
- * @param id 电影id
- */
-export const getCommentHeader = (id) => {
-    return request('GET', '/api/movie/commentheader', {query: {id}})
-}
-
-/**
- * 获取电影详情
- * @param id 电影id
- */
-export const getDetail = (id) => {
-    return request('GET', '/api/movie/detail', {query: {id}})
-}
-
-/**
- * 电影收藏
- * @param id 用户id
- * @param movie 电影id
- */
-export const sendStore = (id, movie) => {
-    return request('POST', '/api/user/store', { data: { id, movie } })
-}
-
-/**
- * 查看是否为用户关注
- * @param user 用户id
- * @param id 我的id
- */
-export const getIsAttention = (user, id) => {
-    return request('GET', '/api/user/isAttention', { query: {user, id} })
-}

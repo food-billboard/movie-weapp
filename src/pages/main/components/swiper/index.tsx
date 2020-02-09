@@ -4,7 +4,7 @@ import {router} from '~utils'
 
 interface List {
     id: string,
-    img: string
+    image: string
 }
 
 interface IProps {

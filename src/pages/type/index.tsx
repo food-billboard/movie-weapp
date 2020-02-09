@@ -21,7 +21,9 @@ export default class Index extends Component<any> {
     }
 
     public state = {
-        typeDetail: []
+        typeDetail: [],
+        type: [],
+        listShow: true
     }
 
     //电影分类id
@@ -40,6 +42,7 @@ export default class Index extends Component<any> {
     public fabRef = Taro.createRef<Fab>()
 
     public componentDidMount = async () => {
+        this.fetchTypeData()
         const {params} = this.$router
         this.id = params.id || ''
     }
@@ -50,16 +53,17 @@ export default class Index extends Component<any> {
     public fetchData = async (query: any, isInit=false) => {
         const { typeDetail } = this.state
         const data = await this.props.getTypeDetail({id: this.id, ...query})
+        const _data = data.detail
         let newData
         if(isInit) {
-            newData = [ ...data ]
+            newData = [ ..._data ]
         }else {
-            newData = [ ...typeDetail, ...data ]
+            newData = [ ...typeDetail, ..._data ]
         }
         await this.setState({
             typeDetail: newData
         })
-        return typeDetail || []
+        return _data
     }
 
     /**
@@ -74,30 +78,36 @@ export default class Index extends Component<any> {
     }
 
     //获取查看方式
-    public getShowState = () => {
-        this.fabRef.current!.listShow || true
+    public listChange = () => {
+        const { listShow } = this.state
+        this.setState({
+            listShow: !listShow
+        })
+    }
+
+    //获取分类列表
+    public fetchTypeData = async () => {
+        const type = await this.props.getSwitch()
+        const data = type.switch
+        await this.setState({
+            type: data
+        })
     }
 
     public render() {
-        const { typeDetail } = this.state
-        const { type } = this.props
-        const headerList = type.map((val) => {
-            const { value, id } = val
-            return (
-                <View 
-                    className='header-list'
-                    key={id}
-                    onClick={this.getTypeDetail.bind(this, id)}
-                >   
-                    {value}
-                </View>
-            )
-        })
+        const { typeDetail, listShow, type } = this.state
+
         return (
             <GScrollView
                 sourceType={'Scope'}
                 scrollWithAnimation={true}
-                renderContent={this.getShowState.bind(this) ? <LinearList list={typeDetail} /> : <IconList list={typeDetail} />}
+                renderContent={
+                    <View>
+                        {
+                            listShow ? (<LinearList list={typeDetail} />) : (<IconList list={typeDetail} />)
+                        }
+                    </View>
+                }
                 fetch={this.throttleFetchData}
                 header={80}
                 renderHeader={ <View className='header-type'>
@@ -106,12 +116,25 @@ export default class Index extends Component<any> {
                                         scrollX={true}
                                         className='header'
                                     >
-                                        {headerList}
+                                        {
+                                            type.map((val) => {
+                                                const { value, id } = val
+                                                return (
+                                                    <View 
+                                                        className='header-list'
+                                                        key={id}
+                                                        onClick={(e) => {this.getTypeDetail.call(this, id)}}
+                                                    >   
+                                                        {value}
+                                                    </View>
+                                                )
+                                            })
+                                        }
                                     </ScrollView>
                             </View>}
                 bottom={0}
                 renderBottom={ <View className="btn">
-                                <Fab ref={this.fabRef} />
+                                <Fab value={listShow} change={this.listChange} />
                               </View>}
                 ref={this.scrollRef}
             >

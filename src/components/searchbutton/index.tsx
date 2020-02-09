@@ -14,6 +14,8 @@ interface IProps {
     disabled: boolean,
     hot: Array<Hot>,
     confirm: any
+    focus?: boolean
+    control?: (op: boolean) => any
 }
 
 interface IState {
@@ -27,7 +29,9 @@ class SearchButton extends Component<IProps, IState>{
         value: '',
         disabled: false,
         hot: [],
-        confirm: () => {}
+        confirm: () => {},
+        focus: false,
+        control: () => {}
     }
 
     public constructor() {
@@ -59,6 +63,7 @@ class SearchButton extends Component<IProps, IState>{
         this.setState({
             focus: false
         })
+        if(this.props.control) this.props.control(true)
     }
 
     /**
@@ -66,6 +71,7 @@ class SearchButton extends Component<IProps, IState>{
      */
     public onFocus():any {
         const { disabled } = this.props
+        if(this.props.control) this.props.control(false)
         this.setState({
             focus: true
         })
@@ -90,7 +96,7 @@ class SearchButton extends Component<IProps, IState>{
 
     public render() {
         //获取热搜信息列表
-        const { hot } = this.props
+        const { hot, focus } = this.props
         const hotList = hot.map((value) => {
             const { name, id } = value
             return (
@@ -116,6 +122,7 @@ class SearchButton extends Component<IProps, IState>{
                         actionName={"找一找"} 
                         onBlur={this.onBlur}
                         onFocus={this.onFocus}
+                        focus={focus}
                     />
                 </View>
                 <View className='at-row hotsearch'>

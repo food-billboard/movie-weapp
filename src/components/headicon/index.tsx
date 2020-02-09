@@ -6,7 +6,7 @@ import './index.scss'
 
 interface List {
     username: string, 
-    img: string, 
+    image: string, 
     hot: number
 }
 
@@ -15,23 +15,23 @@ interface IProps {
 }
 
 export default class IconHead extends Component<IProps>{
-    public static defaultPrps: IProps = {
+    public static defaultProps: IProps = {
         list: {
             username: '用户名',
-            img: '头像',
+            image: '头像',
             hot: 0
         }
     }
 
     public render() {
         const {list} = this.props
-        const {username='', img='', hot=0} = list
+        const {username='', image='', hot=0} = list
         return (
             <View className='head'>
                 <View className='icon'>
                     <View className='img'>
                         <AtAvatar
-                            image={img} 
+                            image={image} 
                             className='content' 
                             text={'头像'}
                             circle

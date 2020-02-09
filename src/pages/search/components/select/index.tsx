@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import { AtDrawer } from 'taro-ui'
-import Form from './form'
+import Forms from './form'
 
 import { FormData } from '../../interface'
 
@@ -47,7 +47,7 @@ export default class Select extends Component<IProps, IState>{
                     width='300px'
                     className='drawer'
                 >
-                    <Form screen={this.props.screen} />     
+                    <Forms screen={this.props.screen} />     
                 </AtDrawer>
             </View>
         )

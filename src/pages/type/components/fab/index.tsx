@@ -5,7 +5,8 @@ import { AtFab } from 'taro-ui'
 import './index.scss'
 
 interface IProps {
-
+  value: boolean
+  change: () => any
 }
 
 interface IState {
@@ -14,27 +15,22 @@ interface IState {
 
 export default class Fab extends Component<IProps, IState> {
 
-  private _listShow = true
-
-  public get listShow() {
-    return this._listShow || false
+  public static defualtProps: IProps = {
+    value: true,
+    change: () => {}
   }
 
-  public set listShow(state: boolean) {
-    this._listShow = state
-  }
-
-  public changeState = () => {
-    const listShow = this.listShow
-    this.listShow = !listShow
+  public state: IState = {
+    
   }
 
   public render() {
+    const { value } = this.props
     return (
       <AtFab 
-          onClick={this.changeState}
+          onClick={this.props.change}
       >
-          <Text className={'at-fab__icon at-icon ' + (this.listShow ? 'at-icon-bullet-list' : 'at-icon-money')}></Text>
+          <Text className={'at-fab__icon at-icon ' + (value ? 'at-icon-bullet-list' : 'at-icon-money')}></Text>
       </AtFab>
     )
   }

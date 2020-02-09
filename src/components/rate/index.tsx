@@ -44,7 +44,7 @@ export default class GTate extends Component<IProps>{
         await this.setState({
             value
         })
-        const data = await this.props.sendRate(value)
+        await this.props.sendRate(value)
     }
     render() {
         const {value} = this.state

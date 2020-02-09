@@ -15,7 +15,6 @@ export default {
     namespace: 'global',
     state: {
         userInfo: {},
-        siteInfo: {},
         appInfo: {}
     },
     effects: {
@@ -29,16 +28,21 @@ export default {
         * sendUserLogon ({data}, { call, put }){
 
             const { username, password } = data
+            let d
             if(username === 'admin' && password === '123456') {
-                return {
-                    id: 'admin',
-                    success: true
+                d = {
+                    success: true,
+                    data: {
+                        id: 'admin'
+                    }
                 }
             }else {
-                return {
-                    success: false
+                d = {
+                    success: false,
+                    data: {}
                 }
             }
+            return d.success
 
             const userInfo = yield call(sendUserLogon, data)
             yield put({ type:'setData', payload: { userInfo } })
@@ -47,20 +51,32 @@ export default {
 
         //退出的登录
         * sendLogout({id}, {call, put}) {
+
+            return {
+                success: true,
+                data: {}
+            }
+            return
+
             const response = yield call(logout, id)
             return response
         },
 
         // 获取用户详情
         * getUserInfo(_, { call, put}){
-            return {
-                info: {
-                    id: 0,
-                    username: '用户名',
-                    hot: 10000,
-                    img: 'http://img4.imgtn.bdimg.com/it/u=2359617007,2446763239&fm=26&gp=0.jpg'
+            let data = {
+                success: true,
+                data: {
+                    info: {
+                        id: 0,
+                        username: '用户名',
+                        hot: 10000,
+                        img: 'http://img4.imgtn.bdimg.com/it/u=2359617007,2446763239&fm=26&gp=0.jpg',
+                        isLike: false
+                    }
                 }
             }
+            return data.data
 
 
             const token = getCookie('token')
@@ -76,16 +92,22 @@ export default {
         * sendNewUser({data}, {call, put}) {
 
             const { username } = data
+            let d
             if(username === 'admin') {
-                return {
+                d = {
                     success: false,
-                    err: '用户名有重复'
+                    err: '用户名有重复',
+                    data: {}
                 }
             }else {
-                return {
+                d = {
                     success: true,
+                    data: {
+
+                    }
                 }
             }
+            return d.success
 
             const response = yield call(sendNewUser, data)
             return response
@@ -93,9 +115,15 @@ export default {
 
         //获取小程序信息
         * getAppInfo(_, {call, put}) {
-            return {
-                about: '小程序的信息，不管你看不看，但是这里是我要显示的内容'
+            let data = {
+                success: true,
+                data: {
+                    about: '小程序的信息，不管你看不看，但是这里是我要显示的内容',
+                    id: '小程序id',
+                    time: '发布时间',
+                }
             }
+            return data.data
 
             const info = yield call(getAppInfo)
             return info

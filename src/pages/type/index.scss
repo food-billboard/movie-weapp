@@ -1,9 +1,10 @@
-// @import '../../theme/custom-theme.scss';
+@import '../../theme/custom-theme.scss';
 // @import "~taro-ui/dist/style/components/icon.scss";
 // .type{
-    .header{
-        height:80px;
+    // .header{
+        // height:80px;
         .header-type{
+            height:80px;
             position:relative;
             left:0;
             top:0;
@@ -30,10 +31,11 @@
                 margin-left:100px;
             }
         }
-    }
+    // }
     .btn{
         position:fixed;
         right:20px;
         bottom:50px;
+        z-index:999;
     }
 // }

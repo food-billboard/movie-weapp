@@ -49,11 +49,11 @@ class Itemize extends Component<IProps>{
     /**
      * 分类跳转
      */
-    public goTo(item: object, index: number):void {
+    public goTo(item: List, index: number) {
         const { idList } = this.state
-        if(idList.length) return
-        const id = idList[index] 
-        router.push('/type', {id})
+        if(!idList.length) return
+        const { id } = item
+        return router.push('/type', {id})
     }
 
     public render() {

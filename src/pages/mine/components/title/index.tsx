@@ -22,7 +22,6 @@ export default class Title extends Component<IProps>{
 
     public handleClick(value) {
         const {id} = this.props
-        console.log(`事件处理${value}`)
         switch(value) {
             case '收藏':
                 router.push('/record', {id})

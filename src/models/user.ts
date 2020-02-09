@@ -9,7 +9,7 @@ import {
     toAttention,
     answerComment,
     sendStore,
-    getIsAttention
+    feedback
 } from '~services'
 var a = 0
 export default {
@@ -20,16 +20,23 @@ export default {
     effects: {
         //点赞
         * like({comment, user, mine}, {call, put}) {
-            return 
+            return {
+                success: true,
+                data: {}
+            }
+            return
+
             const response = yield call(gotolike, comment, user, mine)
             return response
         },
 
         //发布评论
         * publishComment({value, movie, user}, {call, put}) {
-            return {
-                success: true
+            let data = {
+                success: true,
+                data: {}
             }
+            return
 
             
             const response = yield call(publishComment, value, movie, user)
@@ -38,9 +45,13 @@ export default {
 
         //电影评分
         * sendRate({value, user, movie}, {call, put}) {
-            return {
-                rate: 9
+            let data = {
+                success: true,
+                data: {
+                    rate: 9
+                }
             }
+            return
 
             const response = yield call(sendRate, value, user, movie)
             return response
@@ -48,9 +59,11 @@ export default {
 
         //电影收藏
         * sendStore({user, movie}, { call, put }) {
-            return {
-                store: false
+            let data = {
+                success: true,
+                data: {}
             }
+            return
 
             const response = yield call(sendStore, user, movie)
             return response
@@ -58,9 +71,13 @@ export default {
 
         //获取收藏
         * getRecord({query}, {call, put}) {
+            let data
             if(a==0) {
                 a++
-                return [
+                data = {
+                    success: true,
+                    data: {
+                        data:[
                     {
                         id: 0,
                         name: '电影1',
@@ -134,9 +151,14 @@ export default {
                         detail: '这里是描述'
                     }
                 ]
+            }
+            }
             }else if(a===1) {
                 a++
-                return [
+                data = {
+                    success: true,
+                    data: {
+                        data: [
                     {
                         id: 12,
                         name: '电影1111',
@@ -210,9 +232,14 @@ export default {
                         detail: '这里是描述'
                     },
                 ]
+            }
+            }
             }else if(a==2) {
                 a++
-                return [
+                data = {
+                    success: true,
+                    data: {
+                        data:[
                     {
                         id: 8,
                         name: '电影1',
@@ -238,15 +265,32 @@ export default {
                         detail: '这里是描述'
                     },
                 ]
-            }else {
-                return []
             }
+            }
+            }else {
+                data = {
+                    success: true,
+                    data: {
+                        data: []
+                    }
+                }
+            }
+            return data.data
+
             const record = yield call(getRecord, query)
             return record
         },
 
         //通知
         * getNews({id}, {call, put}) {
+
+            return {
+                success: true,
+                data: {
+                    
+                }
+            }
+
             const news = yield call(getNews, id)
             return news
         },
@@ -254,27 +298,279 @@ export default {
         //回复用户评论
         * publishUserComment({commentId, content, user, mine}, {call, put}) {
 
-            return {
-                success: true
+            let data = {
+                success: true,
+                data: {}
             }
+            return
 
             const response = yield call(answerComment, commentId, content, user, mine)
             return response
         },
 
         //获取用户评论
-        * getUserComment({ query }, {call, put}) {   
+        * getUserComment({ query }, {call, put}) {  
+
+            let data
+            if(a===0) {
+                a++
+                data = {
+                    success: true,
+                    data: {
+                        id: '用户id',
+                    comment: [
+                        {
+                            user: {
+                                name: '用户名',
+                                time: '2020',
+                                image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg',
+                                id: '用户id',
+                                content: '评论内容',
+                                hot: 1000,
+                                isHot: false
+                            },
+                            commentUsers: [
+                                {
+                                    iamge: 'http://n.sinaimg.cn/sinacn17/530/w700h630/20181107/703a-hnprhzv9128002.jpg',
+                                    id: '用户id'
+                                }
+                            ],
+                            id: '评论id'
+                        },
+                        {
+                            user: {
+                                name: '用户名',
+                                time: '2020',
+                                image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg',
+                                id: '用户id',
+                                content: '评论内容',
+                                hot: 1000,
+                                isHot: false
+                            },
+                            commentUsers: [
+                                {
+                                    iamge: 'http://n.sinaimg.cn/sinacn17/530/w700h630/20181107/703a-hnprhzv9128002.jpg',
+                                    id: '用户id'
+                                }
+                            ],
+                            id: '评论id'
+                        },
+                        {
+                            user: {
+                                name: '用户名',
+                                time: '2020',
+                                image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg',
+                                id: '用户id',
+                                content: '评论内容',
+                                hot: 1000,
+                                isHot: false
+                            },
+                            commentUsers: [
+                                {
+                                    iamge: 'http://n.sinaimg.cn/sinacn17/530/w700h630/20181107/703a-hnprhzv9128002.jpg',
+                                    id: '用户id'
+                                }
+                            ],
+                            id: '评论id'
+                        },
+                        {
+                            user: {
+                                name: '用户名',
+                                time: '2020',
+                                image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg',
+                                id: '用户id',
+                                content: '评论内容',
+                                hot: 1000,
+                                isHot: false
+                            },
+                            commentUsers: [
+                                {
+                                    iamge: 'http://n.sinaimg.cn/sinacn17/530/w700h630/20181107/703a-hnprhzv9128002.jpg',
+                                    id: '用户id'
+                                }
+                            ],
+                            id: '评论id'
+                        },
+                        {
+                            user: {
+                                name: '用户名',
+                                time: '2020',
+                                image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg',
+                                id: '用户id',
+                                content: '评论内容',
+                                hot: 1000,
+                                isHot: false
+                            },
+                            commentUsers: [
+                                {
+                                    iamge: 'http://n.sinaimg.cn/sinacn17/530/w700h630/20181107/703a-hnprhzv9128002.jpg',
+                                    id: '用户id'
+                                }
+                            ],
+                            id: '评论id'
+                        },
+                        {
+                            user: {
+                                name: '用户名',
+                                time: '2020',
+                                image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg',
+                                id: '用户id',
+                                content: '评论内容',
+                                hot: 1000,
+                                isHot: false
+                            },
+                            commentUsers: [
+                                {
+                                    iamge: 'http://n.sinaimg.cn/sinacn17/530/w700h630/20181107/703a-hnprhzv9128002.jpg',
+                                    id: '用户id'
+                                }
+                            ],
+                            id: '评论id'
+                        },
+                        {
+                            user: {
+                                name: '用户名',
+                                time: '2020',
+                                image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg',
+                                id: '用户id',
+                                content: '评论内容',
+                                hot: 1000,
+                                isHot: false
+                            },
+                            commentUsers: [
+                                {
+                                    iamge: 'http://n.sinaimg.cn/sinacn17/530/w700h630/20181107/703a-hnprhzv9128002.jpg',
+                                    id: '用户id'
+                                }
+                            ],
+                            id: '评论id'
+                        },
+                        {
+                            user: {
+                                name: '用户名',
+                                time: '2020',
+                                image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg',
+                                id: '用户id',
+                                content: '评论内容',
+                                hot: 1000,
+                                isHot: false
+                            },
+                            commentUsers: [
+                                {
+                                    iamge: 'http://n.sinaimg.cn/sinacn17/530/w700h630/20181107/703a-hnprhzv9128002.jpg',
+                                    id: '用户id'
+                                }
+                            ],
+                            id: '评论id'
+                        },
+                        {
+                            user: {
+                                name: '用户名',
+                                time: '2020',
+                                image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg',
+                                id: '用户id',
+                                content: '评论内容',
+                                hot: 1000,
+                                isHot: false
+                            },
+                            commentUsers: [
+                                {
+                                    iamge: 'http://n.sinaimg.cn/sinacn17/530/w700h630/20181107/703a-hnprhzv9128002.jpg',
+                                    id: '用户id'
+                                }
+                            ],
+                            id: '评论id'
+                        },
+                        {
+                            user: {
+                                name: '用户名',
+                                time: '2020',
+                                image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg',
+                                id: '用户id',
+                                content: '评论内容',
+                                hot: 1000,
+                                isHot: false
+                            },
+                            commentUsers: [
+                                {
+                                    iamge: 'http://n.sinaimg.cn/sinacn17/530/w700h630/20181107/703a-hnprhzv9128002.jpg',
+                                    id: '用户id'
+                                }
+                            ],
+                            id: '评论id'
+                        }
+                    ]
+                }
+                }
+            }else if(a===1) {
+                a++
+                data = {
+                    success: true,
+                    data: {
+                        id: '用户id',
+                    comment: [
+                        {
+                            user: {
+                                name: '用户名',
+                                time: '2020',
+                                image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg',
+                                id: '用户id',
+                                content: '评论内容',
+                                hot: 1000,
+                                isHot: false
+                            },
+                            commentUsers: [
+                                {
+                                    iamge: 'http://n.sinaimg.cn/sinacn17/530/w700h630/20181107/703a-hnprhzv9128002.jpg',
+                                    id: '用户id'
+                                }
+                            ],
+                            id: '评论id'
+                        },
+                        {
+                            user: {
+                                name: '用户名',
+                                time: '2020',
+                                image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg',
+                                id: '用户id',
+                                content: '评论内容',
+                                hot: 1000,
+                                isHot: false
+                            },
+                            commentUsers: [
+                                {
+                                    iamge: 'http://n.sinaimg.cn/sinacn17/530/w700h630/20181107/703a-hnprhzv9128002.jpg',
+                                    id: '用户id'
+                                }
+                            ],
+                            id: '评论id'
+                        }
+                    ]
+                }
+                }
+            }else {
+                data = {
+                    success: true,
+                    data: {
+                    id: '用户id',
+                    comment: []
+                    }
+                }
+            }
+            return data.data
+            
             const comment = yield call(getUserComment, query)
-            // yield put({type: 'setData', payload: {comment}})
             return comment
         },
 
         //关注
         * toAttention({user, mine, isAttention=false}, {call, put}) {
 
-            return {
-                attention: false
+            let data = {
+                success: true,
+                data: {}
             }
+            return data.success
 
             const response = yield call(toAttention, user, mine, isAttention)
             return response
@@ -282,10 +578,13 @@ export default {
 
         //获取关注
         * getAttention({query}, {call, put}) {
-
+            let data
             if(a===0) {
                 a++
-                return [
+                data = {
+                    success: true,
+                    data: {
+                        data: [
                     {
                         id: 0,
                         name: '用户名',
@@ -387,9 +686,14 @@ export default {
                         image: 'http://img0.imgtn.bdimg.com/it/u=246040416,1581641406&fm=26&gp=0.jpg'
                     }
                 ]
+            }
+        }
             }else if(a===1) {
                 a++
-                return [
+                data = {
+                    success: true,
+                    data: {
+                        data: [
                     {
                         id: 20,
                         name: '用户名',
@@ -406,24 +710,36 @@ export default {
                         image: 'http://img0.imgtn.bdimg.com/it/u=246040416,1581641406&fm=26&gp=0.jpg'
                     }
                 ]
-            }else {
-                return []
             }
+        }
+            }else {
+                data = {
+                    success: true,
+                    data: {
+                        data: []
+                    }
+                }
+            }
+
+            return data.data
 
             const attention = yield call(getAttention, query)
             return attention
         },
+        
+        //用户反馈
+        * feedback({ user, value }, { call, put }) {
 
-        //判断是否为关注
-        * getIsAttention({user, mine}, { call, put }) {
-            
             return {
-                attention: true
+                success: true,
+                data: {}
             }
+            return 
 
-            const data = yield call(getIsAttention, user, mine)
-            return data
+            const response = yield call(feedback, user, value)
+            return response
         }
+
     },
     reducers: {
         setData(state, {payload}) {

@@ -41,17 +41,19 @@ export default class extends Component<any> {
   public fetchData = async (query: any, isInit=false) => {
     const { comment } = this.state
     const data = await this.props.getCommentDetail({commentId: this.id, userId: this.mineId,  ...query})
+    const commentList = data.comment
+    const header = data.header
     let newData
     if(isInit) {
-        newData = [ ...data.comment ]
+        newData = [ ...commentList ]
     }else {
-        newData = [ ...comment, ...data.comment ]
+        newData = [ ...comment, ...commentList ]
     }
     await this.setState({
         comment: newData,
-        commentheader: data.header
+        commentHeader: header
     })
-    return data.comment
+    return commentList
   }
 
   /**
@@ -99,22 +101,25 @@ export default class extends Component<any> {
         scrollWithAnimation={true}
         query={{pageSize: 7}}
         renderContent={
-          comment.map((value) => {
-            const { id } = value
-            return (
-                <Comment 
-                    comment={this.publish} 
-                    key={id}
-                    list={value}
-                    id={id}
-                />
-            )
-        })
+          <View>
+            <Header content={commentHeader}></Header>
+            {
+              comment.map((value) => {
+                const { id } = value
+                return (
+                  <Comment 
+                      comment={this.publish} 
+                      key={id}
+                      list={value}
+                      commentId={id}
+                  />
+                )
+              })
+            }
+          </View>
         }
         fetch={this.throttleFetchData}
-        header={200}
         bottom={92}
-        renderHeader={<Header content={commentHeader}></Header>}
                 renderBottom={<View>
                             <GButton 
                                 style={{width: '100%', height: '92', position: 'fixed', bottom: 0, left: 0, zIndex: '999'}}

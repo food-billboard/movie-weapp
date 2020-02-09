@@ -41,16 +41,11 @@ export default class User extends Component<any>{
     public fetchData = async () => {
         Taro.showLoading({mask: true, title: '加载中'})
         const userInfo = await this.props.getUserInfo()
-        if(this.mineId) {
-            const attentionData = await this.props.getIsAttention(this.id, this.mineId)
-            const { attention } = attentionData
-            await this.setState({
-                isAttention: attention
-            })
-        }
         const { info } = userInfo
+        const isLike = info.isLike
         await this.setState({
             userInfo: info,
+            isAttention: isLike
         })
         Taro.hideLoading()
     }
@@ -61,10 +56,11 @@ export default class User extends Component<any>{
         const { isAttention } = this.state
         Taro.showLoading({mask: true, title: '操作中'})
         const data = await this.props.toAttention(this.id, this.mineId, isAttention)
-        const { attention } = data
-        await this.setState({
-            isAttention: attention
-        })
+        if(data) {
+            await this.setState({
+                isAttention: !isAttention
+            })
+        }
         Taro.hideLoading()
     }
 

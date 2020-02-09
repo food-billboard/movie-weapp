@@ -33,19 +33,13 @@ export default class Index extends Component<any> {
     public searchBarRef = Taro.createRef<SearchBar>()
 
     public componentDidMount = async () => {
-        //需要将搜索的数据在下次进入页面时删除
-        Taro.showLoading({mask: true, title: '加载中'})
-        await this.setState({
-            hot: [],
-            searchList: []
-        })
-        await this.props.getHot()
-        Taro.hideLoading()
+        this.fetchHotData()
     }
 
     public state = {
         hot: [],
         showList: true,
+        listShow: false,
         searchList: [],
         query: {...INIT_QUERY}
     }
@@ -58,20 +52,33 @@ export default class Index extends Component<any> {
         this.showMethod = this.showMethod.bind(this)
     }
 
+    //获取热搜
+    public fetchHotData = async () => {
+        Taro.showLoading({mask: true, title: '加载中'})
+        const hot = await this.props.getHot()
+        const _hot = hot.hot
+        await this.setState({
+            searchList: [],
+            hot: _hot
+        })
+        Taro.hideLoading()
+    }
+
     //数据获取
     public fetchData = async (query: any, isInit=false) => {
         const { searchList } = this.state
         const data = await this.props.factorySearch({...query})
+        const _data = data.data
         let newData
         if(isInit) {
-            newData = [ ...data ]
+            newData = [ ..._data ]
         }else {
-            newData = [ ...searchList, ...data ]
+            newData = [ ...searchList, ..._data ]
         }
         await this.setState({
             searchList: newData
         })
-        return searchList || []
+        return _data || []
     }
 
     /**
@@ -80,10 +87,12 @@ export default class Index extends Component<any> {
     public confirm = async (value: string) => {
         Taro.showLoading({mask: true, title: '努力搜索中'})
         const data = await this.props.factorySearch({ ...INIT_PAGE, query: { query: {}, field: value } })
+        const _data = data.data
         await this.setState({
-            searchList: data
+            searchList: _data
         })
         Taro.hideLoading()
+        this.showList(true)
     }
 
     /**
@@ -95,9 +104,10 @@ export default class Index extends Component<any> {
             query: { ...query, type }
         })
         Taro.showLoading({mask: true, title: '筛选中'})
-        const data = await this.props.factorSearch({ ...INIT_PAGE, query: { ...INIT_QUERY, ...query, type, field: this.searchBarRef.current!.state!.value || '' } })
+        const data = await this.props.factorySearch({ ...INIT_PAGE, query: { ...INIT_QUERY, ...query, type, field: this.searchBarRef.current!.state!.value || '' } })
+        const _data = data.data
         await this.setState({
-            searchList: data
+            searchList: _data
         })
         Taro.hideLoading()
     }
@@ -111,9 +121,10 @@ export default class Index extends Component<any> {
             query: { ...query, sort }
         })
         Taro.showLoading({mask: true, title: '努力搜索中'})
-        const data = await this.props.factorSearch({ ...INIT_PAGE, query: { ...INIT_QUERY, ...query, sort, field: this.searchBarRef.current!.state!.value || '' } })
+        const data = await this.props.factorySearch({ ...INIT_PAGE, query: { ...INIT_QUERY, ...query, sort, field: this.searchBarRef.current!.state!.value || '' } })
+        const _data = data.data
         await this.setState({
-            searchList: data
+            searchList: _data
         })
         Taro.hideLoading()
     }
@@ -127,9 +138,10 @@ export default class Index extends Component<any> {
             query: { ...query, query: formData }
         })
         Taro.showLoading({ mask: true, title: '努力筛选中' })
-        const data  = await this.props.factorSearch({ ...INIT_PAGE, query: { ...INIT_QUERY, ...query, query: formData, field: this.searchBarRef.current!.state.value || '' } })
+        const data  = await this.props.factorySearch({ ...INIT_PAGE, query: { ...INIT_QUERY, ...query, query: formData, field: this.searchBarRef.current!.state.value || '' } })
+        const _data = data.data
         await this.setState({
-            searchList: data
+            searchList: _data
         })
         Taro.hideLoading()
     }
@@ -158,16 +170,23 @@ export default class Index extends Component<any> {
     public getSearchBarStatus = () => {
         const { current } = this.searchBarRef
         if(!current) return false
-        return current!.state.focus
+        return !current!.state.focus
+    }
+
+    //是否显示列表
+    public showList = (show: boolean) => {
+        this.setState({
+            listShow: show
+        })
     }
 
     public render() {
-        const { showList, searchList, hot } = this.state
+        const { showList, searchList, hot, listShow } = this.state
         return (
             <GScrollView
                 sourceType={'Scope'}
                 scrollWithAnimation={true}
-                renderContent={ <View className='search-main' style={{visibility: this.getSearchBarStatus.call(this) ? 'visible' : 'hidden'}}>
+                renderContent={ <View className='search-main' style={{visibility: listShow && searchList.length ? 'visible' : 'hidden'}}>
                                     <View className='head'>
                                         <Head screen={this.typeScreen} />
                                     </View>
@@ -188,6 +207,8 @@ export default class Index extends Component<any> {
                         confirm={this.debounceConfirm} 
                         hot={hot}
                         ref={this.searchBarRef}
+                        focus={true}
+                        control={this.showList}
                     />}
             >
             </GScrollView>

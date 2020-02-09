@@ -5,14 +5,14 @@ import { AtIcon } from 'taro-ui'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 
-import {router} from '~utils'
+import { router, formatTime, formatNumber } from '~utils'
 
 import './index.scss'
 
 interface IUser {
     name: string,
     time: string,
-    img: string,
+    image: string,
     id: string,
     content: string,
     hot: number,
@@ -20,7 +20,7 @@ interface IUser {
 }
 
 interface CommentUsers {
-    img: string,
+    image: string,
     id: string
 }
 
@@ -30,10 +30,12 @@ interface IList {
 }
 
 interface IProps {
-    list: IList,
-    like: any,
-    comment: any
+    list: IList
+    like: any
+    comment: (isUserCall: boolean, user: string, commentId: string) => any
     id: string
+    getUserInfo: () => any
+    commentId: string
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -43,7 +45,7 @@ export default class List extends Component<IProps>{
             user: {
                 name: '',
                 time: '',
-                img: '',
+                image: '',
                 id: '',
                 content:'',
                 hot: 0,
@@ -51,15 +53,20 @@ export default class List extends Component<IProps>{
             },
             commentUsers: [
                 {
-                    img: '',
+                    image: '',
                     id: ''
                 }
             ]
         },
         id: '',
+        commentId: '',
         like: () => {},
-        comment: () => {}
+        comment: () => {},
+        getUserInfo: () => {}
     }
+
+    //评论id
+    readonly commentId: string = this.props.commentId
 
     public state = {
         list: this.props.list
@@ -76,11 +83,11 @@ export default class List extends Component<IProps>{
      * id: 评论用户id
      * hot: 点赞人数
      * isHot: 是否为点赞状态
-     * commentId: 评论id
      */
-    public like = async (id: string, hot: number = 0, isHot: boolean = false, commentId: string) => {
+    public like = async (id: string, hot: number = 0, isHot: boolean = false) => {
+        this.props.getUserInfo()
         const {list} = this.state
-        if(isHot) {
+        if(!isHot) {
             list.user.hot ++
         }else {
             list.user.hot --
@@ -90,25 +97,24 @@ export default class List extends Component<IProps>{
             list
         })
         Taro.showLoading({ mask: true, title: '等我一下' })
-        await this.props.like(commentId, id, this.props.id)   
+        await this.props.like(this.commentId, id, this.props.id)   
         Taro.hideLoading()
     }
 
     /**
      * 发布评论
-     * user: 用户id
-     * id: 我的id
+     * @param user: 用户id
+     * @param id: 我的id
      */
-    public pushComment(user: string, id: string) {
-        this.props.comment(true, user, id)
+    public pushComment(user: string) {
+        this.props.comment(true, user, this.commentId)
     }
 
     /**
      * 查看详细评论
-     * id: 评论id
      */
-    public getDetail = (id: string) => {
-        router.push('/commentdetail', { id })
+    public getDetail = () => {
+        router.push('/commentdetail', { id: this.commentId })
     }
 
     /**
@@ -128,20 +134,20 @@ export default class List extends Component<IProps>{
             name,
             time,
             content,
-            img,
+            image,
             id,
             hot,
             isHot
         } = user
         //评论用户组件
         const userList = commentUsers.map((value) => {
-            const {img, id} = value
+            const {image, id} = value
             return (
                 <View className='footer-img'
                     key={id}
                     onClick={this.getUser.bind(this, id)}    
                 >
-                    <Image src={img} className='footer-img-content'></Image>
+                    <Image src={image} className='footer-img-content'></Image>
                 </View>
             )
         })
@@ -151,27 +157,27 @@ export default class List extends Component<IProps>{
                     <View className='head-img'
                         onClick={this.getUser.bind(this, id)}
                     >
-                        <Image src={img} className='head-img-content'></Image>
+                        <Image src={image} className='head-img-content'></Image>
                     </View>
                     <View className='name'>
                         <Text className='name-user'
-                            onClick={this.pushComment.bind(this, id, this.props.id)}>{name}</Text>说: 
+                            onClick={this.pushComment.bind(this, id)}>{name}</Text>说: 
                     </View>
                     <View className='up'
                         onClick={this.like.bind(this, id, hot, isHot, this.props.id)}
                     >
                         <Text className={'up-text'}>
-                            {hot}
+                            {formatNumber(hot)}
                             <AtIcon value={isHot ? 'heart-2' : 'heart'} />
                         </Text>
                     </View>
                     <View className='time'>
-                        {time}
+                        {formatTime(time)}
                     </View>
                 </View>
                 <View 
                     className='content'
-                    onClick={this.getDetail.bind(this, this.props.id)}
+                    onClick={this.getDetail.bind(this)}
                 >
                     {content}
                 </View>

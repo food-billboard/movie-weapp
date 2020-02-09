@@ -4,6 +4,8 @@ import GRate from '~components/rate'
 import GStore from '~components/store'
 import { AtModal } from 'taro-ui'
 
+import { formatTime, formatNumber } from '~utils'
+
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 
@@ -86,9 +88,8 @@ export default class Content extends Component<IProps>{
         this.props.getUserInfo()
         const {movie} = this.props
         Taro.showLoading({mask: true, title: '评分中'})
-        const rate = await this.props.sendRate(value, this.id, movie)
+        await this.props.sendRate(value, this.id, movie)
         Taro.hideLoading()
-        return rate
     }
 
     //收藏
@@ -96,9 +97,8 @@ export default class Content extends Component<IProps>{
         this.props.getUserInfo()
         const { movie } = this.props
         Taro.showLoading({ mask: true, title: '联系收藏中' })
-        const store = await this.props.sendStore(this.id, movie)
+        await this.props.sendStore(this.id, movie)
         Taro.hideLoading()
-        return store
     }
 
     public render() {
@@ -152,7 +152,7 @@ export default class Content extends Component<IProps>{
                         </View>
                         <View className='at-row at-row__justify--between time-area'>
                             <View className='at-col at-col-5 time'>
-                                时间: <Text className='text'>{publishTime}</Text>
+                                时间: <Text className='text'>{formatTime(publishTime)}</Text>
                             </View>
                             <View className='at-col at-col-5 area'>
                                 地区: <Text className='text'>{area}</Text>
@@ -160,7 +160,7 @@ export default class Content extends Component<IProps>{
                         </View>
                         <View className='hot'>
                             人气: 
-                            <Text className='text'>{hot}</Text>
+                            <Text className='text'>{formatNumber(hot)}</Text>
                             <Text className='hot-text'> 人看过</Text>
                         </View>
                         <View className='description'> 

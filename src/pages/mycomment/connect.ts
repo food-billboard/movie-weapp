@@ -1,11 +1,12 @@
 export const mapStateToProps = (_) => {
-    const {comment} = _.user
+    const { userInfo } = _.global
     return {
-        comment
+        id: userInfo.id
     }
 }
   
 export const mapDispatchToProps = dispatch => ({   
     getUserComment: (query) => dispatch({type: 'user/getUserComment', query}),
-    getUserInfo: () => dispatch({type: 'global/getUserInfo'})
+    getUserInfo: () => dispatch({type: 'global/getUserInfo'}),
+    publishUserComment: (id, comment, user, mine) => dispatch({type: "user/publishUserComment", id, comment, user, mine}),
 })

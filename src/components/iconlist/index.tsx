@@ -1,12 +1,12 @@
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Text, Image } from '@tarojs/components'
 import './index.scss'
-import { router } from '~utils'
+import { router, formatNumber } from '~utils'
 
 interface List {
     id: string, 
     name: string, 
-    img: string, 
+    image: string, 
     hot: number
 }
 
@@ -34,19 +34,19 @@ export default class IconList extends Component<IProps>{
     public render() {
         const {list} = this.props
         const lists = list.map((value) => {
-            const {id, name, img, hot} = value
+            const {id, name, image, hot} = value
             return (
                 <View className='icon-content at-col at-col-5'
                     onClick={(event) => {this.goTo.call(this, name, id, event)}}
                     key={id}
                 >
                     <View className='img'>             
-                        <Image src={img} className='img-main' />
+                        <Image src={image} className='img-main' />
                     </View>
                     <View>
                         <View className='name'>{name}</View>
                         <View className='count'>
-                            {hot}
+                            {formatNumber(hot)}
                             <Text className='text'>人看</Text>
                         </View>
                     </View>

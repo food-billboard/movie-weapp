@@ -41,9 +41,10 @@ export default class extends Component<any> {
         Taro.showLoading({ mask: true, title: '凶猛加载中' })
         const detail = await this.props.getDetail(this.id)
         const commentList = await this.props.getCommentSimple(this.id)
+        const comment = commentList.comment
         this.setState({
             detail,
-            commentList
+            commentList: comment
         })
         Taro.hideLoading()
     }

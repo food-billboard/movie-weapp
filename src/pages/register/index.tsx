@@ -105,18 +105,7 @@ export default class extends Component<any>{
         Taro.showLoading({mask: true, title: '正在验证...'})
         const data = await this.props.sendNewUser({username, password, phone, code: check})
         Taro.hideLoading()
-        const { success, err } = data
-        let info = { title: '', icon: '' }
-        if(success) {
-            info = { title: '注册成功', icon: 'success' }
-        }else {
-            info = { title: err, icon: 'none' }
-        }
-        Taro.showToast({
-            ...info,
-            duration: 2000
-        })
-        if(success) router.replace('/login', { password, username })
+        if(data.success) router.replace('/login', { password, username })
     }
 
     /**

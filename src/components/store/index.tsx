@@ -24,10 +24,10 @@ export default class extends Component<IProps, IState> {
   }
 
   public handleClick = async() => {
-    const data = await this.props.handleClick()
-    const { store } = data
+    await this.props.handleClick()
+    const { store } = this.state
     await this.setState({
-      store
+      store: !store
     })
   }
 

@@ -28,16 +28,17 @@ export default class Index extends Component<any> {
     public fetchData = async (query: any, isInit=false) => {
         const { record } = this.state
         const data = await this.props.getRecord({id: this.id, ...query})
+        const _data = data.data
         let newData
         if(isInit) {
-            newData = [ ...data ]
+            newData = [ ..._data ]
         }else {
-            newData = [ ...record, ...data ]
+            newData = [ ...record, ..._data ]
         }
         await this.setState({
             record: newData
         })
-        return data
+        return _data
     }
 
     /**
@@ -47,15 +48,6 @@ export default class Index extends Component<any> {
 
     public render() {
         const { record } = this.state
-        // const list = record.map(( value ) => {
-        //     const { id } = value
-        //     return (
-        //         <List 
-        //             content={value}
-        //             key={id}
-        //         />
-        //     )
-        // })
         return (
             <GScrollView 
                 sourceType={'Scope'}

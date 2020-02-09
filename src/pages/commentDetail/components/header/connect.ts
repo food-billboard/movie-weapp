@@ -6,6 +6,6 @@ export const mapStateToProps = (_) => {
 }
 
 export const mapDispatchToProps = dispatch => ({   
-  getUserInfo: () => dispatch({type: 'global/getUserInfo'}),
-  like: (comment, user, mine) => dispatch({type: 'user/like', comment, user, mine})
+  getUserInfo: () => dispatch({type: 'global/getuserInfo'}),
+  like: (comment, user, mine) => dispatch({type: 'user/like', comment, user, mine}),
 })

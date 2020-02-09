@@ -29,6 +29,10 @@ export default class extends Component<any> {
   }
 
   public componentDidMount = async () => {
+    this.fetchData()
+  }
+
+  public fetchData = async () => {
     Taro.showLoading({ title: '加载中' })
     //获取热搜
     const hot = await this.props.getHot()
@@ -41,12 +45,18 @@ export default class extends Component<any> {
     //获取排行榜
     const rank = await this.props.getRank({ ...INIT_RANK_QUERY, id: 0 })
 
+    const _hot = hot.hot
+    const _swiper = swiper.swiper
+    const _type = type.switch
+    const _daily = daily.daily
+    const _rank = rank.rank
+
     this.setState({
-      hot,
-      swiper,
-      type,
-      daily,
-      rank
+      hot: _hot,
+      swiper: _swiper,
+      type: _type,
+      daily: _daily,
+      rank: _rank
     })
     Taro.hideLoading();
   }

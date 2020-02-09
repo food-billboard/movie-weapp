@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Image, Text } from '@tarojs/components'
 import Item from './item'
 import './index.scss'
-import { router } from '~utils'
+import { router, formatTime } from '~utils'
 
 interface IList {
     image: string, 
@@ -56,7 +56,7 @@ export default class List extends Component<IProps>{
                         />
                         <Item 
                             type={'更新: '}
-                            value={time} 
+                            value={formatTime(time)} 
                         />
                         <Item 
                             type={'人气: '}

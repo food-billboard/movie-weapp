@@ -49,7 +49,7 @@ export default class Forms extends Component<IProps> {
     }
 
     public componentDidMount = () => {
-
+        this.fetchTypeData()
     }
 
     public constructor() {
@@ -66,13 +66,14 @@ export default class Forms extends Component<IProps> {
     public fetchTypeData = async () => {
         Taro.showLoading({mask: true, title: '加载中'})
         const data = await this.props.getType()
-        const list = data.map(val => {
+        const _data = data.switch
+        const list = _data.map(val => {
             const { value } = val
             return value
         })
         this.setState({
             type: list,
-            types: data
+            types: _data
         })
         Taro.hideLoading()
     }
@@ -274,7 +275,7 @@ export default class Forms extends Component<IProps> {
                         onChange={this.typeChange}
                     >
                         <View className='picker'>
-                            类型选择：{type}
+                            类型选择：{this.state.type[formData.type] || '全部'}
                         </View>
                     </Picker>
                 </View>
