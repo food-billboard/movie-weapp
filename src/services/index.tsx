@@ -258,3 +258,10 @@ export const getAppInfo = () => {
     return request('GET', '/api/app/info')
 }
 
+/**
+ * 获取用户收藏
+ * @param query 查询参数
+ */
+export const getStore = (query) => {
+    return request('get', '/api/user/getstore')
+}

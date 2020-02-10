@@ -22,11 +22,12 @@ export default class extends Component<any> {
 
   public componentDidMount = async () => {
     this.fetchRankTypeData()
+    this.title = this.$router.params.type || '排行榜'
   }
 
   private _id = this.$router.params.id
 
-  private _title = this.$router.params.type
+  private _title
 
   public scrollRef = Taro.createRef<GScrollView>()
 
@@ -44,6 +45,7 @@ export default class extends Component<any> {
 
   public set title(title) {
     this._title = title
+    Taro.setNavigationBarTitle({title})
   }
 
   public static config:Config = {

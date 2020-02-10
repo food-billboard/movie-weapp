@@ -49,7 +49,7 @@ export default class extends Component<any>{
 
     public componentWillMount = () => {
         if(!this.id) {
-            router.replace('/login')
+            // router.replace('/login')
         }
     }
 

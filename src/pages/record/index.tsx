@@ -11,8 +11,7 @@ import {router} from '~utils'
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Index extends Component<any> {
     public static config: Config = {
-        navigationBarTitleText: "收藏",
-        enablePullDownRefresh: true
+        navigationBarTitleText: "浏览记录"
     }
 
     public state = {

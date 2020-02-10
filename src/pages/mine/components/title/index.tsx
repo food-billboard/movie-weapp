@@ -24,7 +24,7 @@ export default class Title extends Component<IProps>{
         const {id} = this.props
         switch(value) {
             case '收藏':
-                router.push('/record', {id})
+                router.push('/store', {id})
                 break;
             case '通知':
                 router.push('/news', {id})

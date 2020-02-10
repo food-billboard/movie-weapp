@@ -11,12 +11,26 @@ import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 
 const INIT_QUERY = { currPage:1, pageSize: 7 }
+let FIRST = true
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any> {
 
   public static config: Config = {
       navigationBarTitleText: "评论"
+  }
+
+  public componentDidMount = async () => {
+      this.setTitle()
+  }
+
+  //设置标题
+  public setTitle = async () => {
+      const { commentHeader } = this.state
+      if(commentHeader.user && FIRST) {
+        FIRST = false
+        Taro.setNavigationBarTitle({title: `${commentHeader.user}的评论`})
+      }
   }
 
   //评论组件
@@ -94,6 +108,8 @@ export default class extends Component<any> {
   public render() {
 
     const { commentHeader, comment } = this.state
+
+    this.setTitle()
 
     return (
       <GScrollView

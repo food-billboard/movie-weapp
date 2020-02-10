@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
-import GRate from '~components/rate'
-import GStore from '~components/store'
+import GRate from '../rate'
+import GStore from '../store'
 import { AtModal } from 'taro-ui'
 
 import { formatTime, formatNumber } from '~utils'
@@ -54,7 +54,7 @@ export default class Content extends Component<IProps>{
             description: '',
             hot: 0,
             rate:0,
-            store: true
+            store: false
         },
         sendRate: () => {},
         sendStore: () => {},
@@ -116,8 +116,8 @@ export default class Content extends Component<IProps>{
             language='',
             description='',
             hot=0,
-            rate=0,
-            store=false
+            rate,
+            store
         } = info
         return (
             <View className='content'>

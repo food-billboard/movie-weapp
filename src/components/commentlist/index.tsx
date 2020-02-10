@@ -164,12 +164,12 @@ export default class List extends Component<IProps>{
                             onClick={this.pushComment.bind(this, id)}>{name}</Text>说: 
                     </View>
                     <View className='up'
-                        onClick={this.like.bind(this, id, hot, isHot, this.props.id)}
+                        onClick={this.like.bind(this, id, hot, isHot)}
                     >
-                        <Text className={'up-text'}>
+                        <View className={'up-text'}>
                             {formatNumber(hot)}
                             <AtIcon value={isHot ? 'heart-2' : 'heart'} />
-                        </Text>
+                        </View>
                     </View>
                     <View className='time'>
                         {formatTime(time)}

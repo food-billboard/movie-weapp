@@ -1,6 +1,6 @@
 import Taro, {Component} from '@tarojs/taro'
 import {View, Text} from '@tarojs/components'
-import { AtSearchBar, AtButton } from 'taro-ui'
+import { AtSearchBar, AtButton, AtTag } from 'taro-ui'
 import './index.scss'
 import {router} from '~utils'
 
@@ -102,13 +102,12 @@ class SearchButton extends Component<IProps, IState>{
             return (
                 <View className='at-col at-col-2 hotlist'
                     key={id}>
-                    <AtButton 
+                    <AtTag 
                         type={"secondary"}
-                        size={"small"}
+                        size={"normal"}
                         circle={true}
-                        openType={"openSetting"}
                         onClick={(event) => {this.getHot(value, event)}}
-                    >{name}</AtButton>
+                    >{name}</AtTag>
                 </View>
             )
         })

@@ -12,11 +12,13 @@ import './index.scss'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 
+let FIRST = true
+
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any> {
    
     public config: Config = {
-        navigationBarTitleText: "详情"
+        navigationBarTitleText: ""
     }
 
     public commentRef = Taro.createRef<Comment>()
@@ -34,6 +36,16 @@ export default class extends Component<any> {
 
     public componentDidMount = async() => {
         this.fetchData()
+    }
+
+    //设置标题
+    public setTitle = async () => {
+        const { detail } = this.state
+        const { info } = detail
+        if(info && FIRST) {
+            FIRST = false
+            Taro.setNavigationBarTitle({title: info.name})
+        }
     }
 
     //获取数据
@@ -70,6 +82,7 @@ export default class extends Component<any> {
             info,
             image
         } = detail
+        this.setTitle()
         return (
             <View className='detail'>
                 <View className='video'>

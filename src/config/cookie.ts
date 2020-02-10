@@ -83,3 +83,13 @@ export const setRequestCookie = () => {
     })
     return ret.join(';')
 }
+
+// 获取cookie并带入request
+export const getRequestCookie = ()=>{
+    const store = getCookie();
+    let ret: any[] = [];
+    store.map(({name, value, })=>{
+        ret.push(`${name}=${value}`)
+    })
+    return ret.join('; ')
+}

@@ -13,7 +13,7 @@ import {connect} from '@tarojs/redux'
 export default class User extends Component<any>{
     
     public static config: Config = {
-        navigationBarTitleText: '用户界面',
+        navigationBarTitleText: '用户',
     }
 
     public state: any = {
@@ -66,12 +66,17 @@ export default class User extends Component<any>{
 
     //查看收藏
     public handleCheckStore = async () => {
-        router.push('/record', {id: this.id})
+        router.push('/store', {id: this.id})
     }
 
     //查看关注
     public handleCheckAttention = async () => {
         router.push('/attention', {id: this.id})
+    }
+
+    //查看浏览记录
+    public handleCheckRecord = async () => {
+        router.push('/record', { id: this.id })
     }
 
     //用户界面的相关信息
@@ -93,6 +98,15 @@ export default class User extends Component<any>{
             },
             handle:this.handleCheckAttention,
             id: 'attention'
+        },
+        {
+            title: 'Ta的浏览记录',
+            iconInfo: {
+                value: 'list',
+                size: 32
+            },
+            handle: this.handleCheckRecord,
+            id: 'record'
         }
     ]
 

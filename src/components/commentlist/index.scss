@@ -3,7 +3,7 @@
     padding:0 20px;
     width:100%;
     box-sizing:border-box;
-    height:250px;
+    height:260px;
     background-color:rgba(0, 0, 0, 0.1);
     margin-bottom:40px;
     .head{
@@ -46,6 +46,7 @@
             color:white;
             text-align:center;
             line-height:60px;
+            vertical-align: middle;
             &-text{
                 color:black;
             }

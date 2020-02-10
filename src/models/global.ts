@@ -14,7 +14,10 @@ import { getCookie } from '~config'
 export default {
     namespace: 'global',
     state: {
-        userInfo: {},
+        userInfo: {
+            id: '伙食榜',
+            
+        },
         appInfo: {}
     },
     effects: {
@@ -64,6 +67,7 @@ export default {
 
         // 获取用户详情
         * getUserInfo(_, { call, put}){
+            const tokens = getCookie('token')
             let data = {
                 success: true,
                 data: {

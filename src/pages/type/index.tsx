@@ -12,12 +12,13 @@ import { mapStateToProps, mapDispatchToPrps } from './connect'
 import './index.scss'
 
 const INIT_QUERY = { currPage: 1, pageSize: 10 }
+let FIRST = true
 
 @connect(mapStateToProps, mapDispatchToPrps)
 export default class Index extends Component<any> {
 
     public config:Config = {
-        navigationBarTitleText: "分类"
+        navigationBarTitleText: ""
     }
 
     public state = {
@@ -35,6 +36,7 @@ export default class Index extends Component<any> {
 
     public set id(id: string) {
         this._id = id
+        this.setTitle(id)
     }
 
     public scrollRef = Taro.createRef<GScrollView>()
@@ -42,7 +44,7 @@ export default class Index extends Component<any> {
     public fabRef = Taro.createRef<Fab>()
 
     public componentDidMount = async () => {
-        this.fetchTypeData()
+        await this.fetchTypeData()
         const {params} = this.$router
         this.id = params.id || ''
     }
@@ -94,9 +96,18 @@ export default class Index extends Component<any> {
         })
     }
 
+    //设置标题
+    public setTitle = (id: string) => {
+        const { type } = this.state
+        const target: any = type.filter((val: any) => {
+            return val.id === id
+        })
+        const title = target.length ? target[0].value : '分类'
+        Taro.setNavigationBarTitle({title})
+    }
+
     public render() {
         const { typeDetail, listShow, type } = this.state
-
         return (
             <GScrollView
                 sourceType={'Scope'}

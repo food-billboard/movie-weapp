@@ -30,7 +30,6 @@ class Index extends Component<IProps>{
             return (
                 <SwiperItem 
                     key={id}
-                    style={{backgroundColor: 'yellow'}}
                     onClick={(event) => {this.getDetail.bind(this, id, event)}}>
                     <Image
                         style={{width: "100%", height: "100%"}}

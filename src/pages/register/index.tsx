@@ -7,6 +7,7 @@ import './index.scss'
 import {router} from '~utils'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { connect } from '@tarojs/redux'
+import { Toast } from '~components/toast'
 
 interface IState {
     username: string
@@ -95,10 +96,9 @@ export default class extends Component<any>{
     public submit = async (e) => {
         const {username, password, phone, check} = this.state
         if(username.length < 4 || password.length < 6 || !/^\d{6}$/g.test(check)) {
-            Taro.showToast({
+            Toast({
                 title: '请输入用户名和密码',
-                icon: 'none',
-                duration:1000
+                icon: 'fail'
             })
             return
         }

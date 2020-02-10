@@ -9,6 +9,7 @@ import {
     toAttention,
     answerComment,
     sendStore,
+    getStore,
     feedback
 } from '~services'
 var a = 0
@@ -69,7 +70,7 @@ export default {
             return response
         },
 
-        //获取收藏
+        //获取浏览记录
         * getRecord({query}, {call, put}) {
             let data
             if(a==0) {
@@ -737,6 +738,218 @@ export default {
             return 
 
             const response = yield call(feedback, user, value)
+            return response
+        },
+
+        //获取收藏
+        * getStore({query}, { call, put }) {
+            let data
+            if(a==0) {
+                a++
+                data = {
+                    success: true,
+                    data: {
+                        data:[
+                    {
+                        id: 0,
+                        name: '电影1',
+                        image: 'http://a0.att.hudong.com/16/12/01300535031999137270128786964.jpg',
+                        detail: '这里是描述'
+                    },
+                    {
+                        id: 1,
+                        name: '电影2',
+                        image: 'http://img.zybus.com/uploads/allimg/140830/1-140S0155522-50.jpg',
+                        detail: '这里是描述'
+                    },
+                    {
+                        id: 2,
+                        name: '电影3',
+                        image: 'http://a0.att.hudong.com/16/12/01300535031999137270128786964.jpg',
+                        detail: '这里是描述'
+                    },
+                    {
+                        id: 3,
+                        name: '电影2',
+                        image: 'http://img.zybus.com/uploads/allimg/140830/1-140S0155522-50.jpg',
+                        detail: '这里是描述'
+                    },
+                    {
+                        id: 4,
+                        name: '电影1',
+                        image: 'http://a0.att.hudong.com/16/12/01300535031999137270128786964.jpg',
+                        detail: '这里是描述'
+                    },
+                    {
+                        id: 5,
+                        name: '电影2',
+                        image: 'http://img.zybus.com/uploads/allimg/140830/1-140S0155522-50.jpg',
+                        detail: '这里是描述'
+                    },
+                    {
+                        id: 6,
+                        name: '电影3',
+                        image: 'http://a0.att.hudong.com/16/12/01300535031999137270128786964.jpg',
+                        detail: '这里是描述'
+                    },
+                    {
+                        id: 7,
+                        name: '电影2',
+                        image: 'http://img.zybus.com/uploads/allimg/140830/1-140S0155522-50.jpg',
+                        detail: '这里是描述'
+                    },
+                    {
+                        id: 8,
+                        name: '电影1',
+                        image: 'http://a0.att.hudong.com/16/12/01300535031999137270128786964.jpg',
+                        detail: '这里是描述'
+                    },
+                    {
+                        id: 9,
+                        name: '电影2',
+                        image: 'http://img.zybus.com/uploads/allimg/140830/1-140S0155522-50.jpg',
+                        detail: '这里是描述'
+                    },
+                    {
+                        id: 10,
+                        name: '电影3',
+                        image: 'http://a0.att.hudong.com/16/12/01300535031999137270128786964.jpg',
+                        detail: '这里是描述'
+                    },
+                    {
+                        id: 11,
+                        name: '电影2',
+                        image: 'http://img.zybus.com/uploads/allimg/140830/1-140S0155522-50.jpg',
+                        detail: '这里是描述'
+                    }
+                ]
+            }
+            }
+            }else if(a===1) {
+                a++
+                data = {
+                    success: true,
+                    data: {
+                        data: [
+                    {
+                        id: 12,
+                        name: '电影1111',
+                        image: 'http://a4.att.hudong.com/20/62/01000000000000119086280352820.jpg',
+                        detail: '这里是描述'
+                    },
+                    {
+                        id: 13,
+                        name: '电影5',
+                        image: 'http://a0.att.hudong.com/27/10/01300000324235124757108108752.jpg',
+                        detail: '这里是描述'
+                    },
+                    {
+                        id: 14,
+                        name: '电影6',
+                        image: 'http://a4.att.hudong.com/20/62/01000000000000119086280352820.jpg',
+                        detail: '这里是描述'
+                    },
+                    {
+                        id: 15,
+                        name: '电影7',
+                        image: 'http://a0.att.hudong.com/27/10/01300000324235124757108108752.jpg',
+                        detail: '这里是描述'
+                    },
+                    {
+                        id: 16,
+                        name: '电影4',
+                        image: 'http://a4.att.hudong.com/20/62/01000000000000119086280352820.jpg',
+                        detail: '这里是描述'
+                    },
+                    {
+                        id: 17,
+                        name: '电影5',
+                        image: 'http://a0.att.hudong.com/27/10/01300000324235124757108108752.jpg',
+                        detail: '这里是描述'
+                    },
+                    {
+                        id: 18,
+                        name: '电影6',
+                        image: 'http://a4.att.hudong.com/20/62/01000000000000119086280352820.jpg',
+                        detail: '这里是描述'
+                    },
+                    {
+                        id: 19,
+                        name: '电影7',
+                        image: 'http://a0.att.hudong.com/27/10/01300000324235124757108108752.jpg',
+                        detail: '这里是描述'
+                    },
+                    {
+                        id: 20,
+                        name: '电影4',
+                        image: 'http://a4.att.hudong.com/20/62/01000000000000119086280352820.jpg',
+                        detail: '这里是描述'
+                    },
+                    {
+                        id: 21,
+                        name: '电影5',
+                        image: 'http://a0.att.hudong.com/27/10/01300000324235124757108108752.jpg',
+                        detail: '这里是描述'
+                    },
+                    {
+                        id: 22,
+                        name: '电影6',
+                        image: 'http://a4.att.hudong.com/20/62/01000000000000119086280352820.jpg',
+                        detail: '这里是描述'
+                    },
+                    {
+                        id: 23,
+                        name: '电影7',
+                        image: 'http://a0.att.hudong.com/27/10/01300000324235124757108108752.jpg',
+                        detail: '这里是描述'
+                    },
+                ]
+            }
+            }
+            }else if(a==2) {
+                a++
+                data = {
+                    success: true,
+                    data: {
+                        data:[
+                    {
+                        id: 8,
+                        name: '电影1',
+                        image: 'http://01.minipic.eastday.com/20170408/20170408143858_c25cfaadbcee035e31fc7606a06fba47_3.jpeg',
+                        detail: '这里是描述'
+                    },
+                    {
+                        id: 9,
+                        name: '电影2',
+                        image: 'http://www.33lc.com/article/UploadPic/2012-10/2012102514181086564.jpg',
+                        detail: '这里是描述'
+                    },
+                    {
+                        id: 10,
+                        name: '电影3',
+                        image: 'http://01.minipic.eastday.com/20170408/20170408143858_c25cfaadbcee035e31fc7606a06fba47_3.jpeg',
+                        detail: '这里是描述'
+                    },
+                    {
+                        id: 11,
+                        name: '电影2',
+                        image: 'http://www.33lc.com/article/UploadPic/2012-10/2012102514181086564.jpg',
+                        detail: '这里是描述'
+                    },
+                ]
+            }
+            }
+            }else {
+                data = {
+                    success: true,
+                    data: {
+                        data: []
+                    }
+                }
+            }
+            return data.data
+
+            const response = yield call(getStore, query)
             return response
         }
 

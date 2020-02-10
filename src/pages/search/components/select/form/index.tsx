@@ -5,6 +5,7 @@ import { FormData } from '../../../interface'
 import './index.scss'
 import { connect } from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
+import { Toast } from '~components/toast'
 
 interface IType {
     id: string,
@@ -108,29 +109,23 @@ export default class Forms extends Component<IProps> {
             delete formData.minPrice
         }
         if(formData.startDate > formData.endDate) {     //筛选日期检测
-            Taro.showToast({
+            Toast({
                 title: '起始时间不能大于结束时间',
-                icon: 'none',
-                duration: 2000,
-                mask: true
+                icon: 'fail', 
             })
             return
         }
         if(formData.maxPrice < formData.minPrice) {
-            Taro.showToast({
+            Toast({
                 title: '最高价格不能低于最低价格',
-                icon: 'none',
-                duration: 2000,
-                mask: true              
+                icon: 'fail',
             })
             return
         }
         if(formData.maxPrice < 0 || formData.minPrice < 0) {
-            Taro.showToast({
+            Toast({
                 title: '价格不能为负数',
-                icon: 'none',
-                duration: 2000,
-                mask: true
+                icon: 'fail',
             })
             return
         }

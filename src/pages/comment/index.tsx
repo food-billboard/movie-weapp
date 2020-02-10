@@ -50,7 +50,7 @@ export default class extends Component<any> {
     public fetchData = async (query: any, isInit=false) => {
         const { comment } = this.state
         const data = await this.props.getComment({commentId: this.id, userId: this.mineId, ...query})
-        const _data = data.data
+        const _data = data.comment
         let newData
         if(isInit) {
             newData = [ ..._data ]
@@ -68,7 +68,7 @@ export default class extends Component<any> {
      */
     public throttleFetchData = throttle(this.fetchData, 2000)
 
-    public state = {
+    public state: any = {
         comment: [],
         commentId: false,
         // value: '',

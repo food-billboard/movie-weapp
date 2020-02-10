@@ -29,12 +29,17 @@ export default class GTate extends Component<IProps>{
         this.handleChange = this.handleChange.bind(this)
     }
 
-    public componentWillReceiveProps(props) {
-        if(!FIRST) return   
-        this.setState({
-            value: props.value
-        })
-        FIRST = false
+    // public componentWillReceiveProps(props) {
+        // if(!FIRST) return  
+        // console.log(props.value) 
+        // this.setState({
+        //     value: props.value
+        // })
+        // FIRST = false
+    // }
+
+    public componentWillReceiveProps = (props) => {
+        // console.log(props.value)
     }
 
     /**
@@ -46,7 +51,8 @@ export default class GTate extends Component<IProps>{
         })
         await this.props.sendRate(value)
     }
-    render() {
+
+    public render() {
         const {value} = this.state
         return (
             <View className='rate'>

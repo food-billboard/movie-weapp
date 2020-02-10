@@ -7,6 +7,8 @@ import { mapStateToProps, mapDispatchToProps } from './connect'
 
 import {router} from '~utils'
 
+import { Toast } from '~components/toast'
+
 import './index.scss'
 
 interface IState {
@@ -79,10 +81,9 @@ export default class extends Component<any> {
     public submit = async (e) => {
         const {username, password} = this.state
         if(!username.length || !password.length) {
-            Taro.showToast({
+            Toast({
                 title: '请输入用户名和密码',
-                icon: 'none',
-                duration:1000
+                icon: 'fail'
             })
             return
         }

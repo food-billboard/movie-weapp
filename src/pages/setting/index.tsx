@@ -8,6 +8,7 @@ import './index.scss'
 import {router} from '~utils'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
+import { Toast } from '~components/toast'
 
 type right = 'right'
 type warn = 'warn'
@@ -59,10 +60,9 @@ export default class Setting extends Component<any>{
         Taro.showLoading({mask: true, title: '稍等一下'})
         await this.props.logout(this.id)
         Taro.hideLoading()
-        Taro.showToast({
+        Toast({
             title: '好了',
-            icon: 'success',
-            duration: 1000 
+            icon: 'success'
         })
     }
 

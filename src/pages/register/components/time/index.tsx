@@ -2,6 +2,7 @@ import Taro, {Component} from '@tarojs/taro'
 import {View} from '@tarojs/components'
 import PropTypes from 'prop-types'
 import './index.scss'
+import { Toast } from '~components/toast'
 
 interface IState {
     text: string,
@@ -39,7 +40,7 @@ export default class Time extends Component<IProps>{
         const { open } = this.state
         const { phone } = this.props
         if(!/^1[346789]\d{9}$/g.test(phone)) {
-            Taro.showToast({duration: 2000, title: '请输入正确的手机号~!', icon: 'none'})
+            Toast({title: '请输入正确的手机号~!', icon: 'fail'})
             return
         }
         if(!open) {
