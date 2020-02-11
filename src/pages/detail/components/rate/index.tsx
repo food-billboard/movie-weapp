@@ -3,43 +3,60 @@ import { View, Text } from '@tarojs/components'
 import { AtRate } from 'taro-ui'
 import './index.scss'
 
+import {connect} from '@tarojs/redux'
+import {mapDispatchToProps, mapStateToProps} from './connect'
+
 interface IProps {
-    value: number,
-    sendRate: any
+    getUserInfo: () => any
+    sendRate: (rate: any, user: string, movie: string) => any
+    getRate: (movie: string) => any
+    movie: string
+    id: string
 }
 
 interface IState {
     value: number
 }
 
-let FIRST = true
-
-export default class GTate extends Component<IProps>{
-    public static defaultProps = {
-        value: 0,
-        sendRate: () => {}
+@connect(mapStateToProps, mapDispatchToProps)
+export default class GTate extends Component<IProps, IState>{
+    public static defaultProps: IProps = {
+        getUserInfo: () => {},
+        sendRate: () => {},
+        getRate: () => {},
+        movie: '',
+        id: ''
     }
 
     public state: IState = {
-        value: this.props.value
+        value: 0
     }
 
     public constructor() {
         super(...arguments)
         this.handleChange = this.handleChange.bind(this)
+    }  
+
+    public componentDidMount = async () => {
+        this.fetchData()
     }
 
-    // public componentWillReceiveProps(props) {
-        // if(!FIRST) return  
-        // console.log(props.value) 
-        // this.setState({
-        //     value: props.value
-        // })
-        // FIRST = false
-    // }
+    //数据获取
+    public fetchData = async () => {
+        const rate = await this.props.getRate(this.props.movie)
+        const data = rate.rate
+        this.setState({
+            value: data
+        })
+    }
 
-    public componentWillReceiveProps = (props) => {
-        // console.log(props.value)
+    //评分
+    public sendRate = async (value: string | number) => {
+        this.props.getUserInfo()
+        const {movie} = this.props
+        Taro.showLoading({mask: true, title: '评分中'})
+        await this.props.sendRate(value, this.props.id, movie)
+        Taro.hideLoading()
     }
 
     /**
@@ -49,11 +66,11 @@ export default class GTate extends Component<IProps>{
         await this.setState({
             value
         })
-        await this.props.sendRate(value)
+        await this.sendRate(value)
     }
 
     public render() {
-        const {value} = this.state
+        const { value } = this.state
         return (
             <View className='rate'>
                 <AtRate

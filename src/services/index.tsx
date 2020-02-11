@@ -265,3 +265,20 @@ export const getAppInfo = () => {
 export const getStore = (query) => {
     return request('get', '/api/user/getstore')
 }
+
+/**
+ * 获取电影评分
+ * @param movie 电影id
+ */
+export const getRate = (movie) => {
+    return request('GET', '/api/movie/getrate', {query: { movie }})
+}
+
+/**
+ * 获取电影是否收藏
+ * @param movie 电影id
+ * @param user 用户id
+ */
+export const getIsStore = (movie, user) => {
+    return request('GET', 'api/user/getisstore', { query: {movie, user} })
+}

@@ -6,7 +6,6 @@ export const mapStateToProps = (_) => {
 }
   
 export const mapDispatchToProps = dispatch => ({   
-    sendRate: (rate, user, movie) => dispatch({type: 'user/sendRate', value: rate, user, movie}),
     sendStore: (user, movie) => dispatch({ type: 'user/sendStore', user, movie }),
-    getUserInfo: () => dispatch({type: 'global/getuserInfo'})
+    getUserInfo: () => dispatch({type: 'global/getUserInfo'})
 })

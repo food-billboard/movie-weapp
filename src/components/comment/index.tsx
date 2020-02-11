@@ -1,8 +1,9 @@
 import Taro, { Component } from '@tarojs/taro'
-import { Button } from '@tarojs/components'
+import { Button, View, Image } from '@tarojs/components'
 import './index.scss'
 
-import { AtModal, AtModalContent, AtModalAction, AtTextarea } from "taro-ui"
+import { AtModal, AtModalContent, AtModalAction, AtTextarea, AtButton, AtIcon } from "taro-ui"
+import { Toast } from '~components/toast'
 
 interface IProps {
     buttonText: string,
@@ -10,8 +11,15 @@ interface IProps {
 }
 
 interface IState {
-    value: string,
+    value: string
     isOpen: boolean
+    images: Array<string>
+}
+
+const IMAGE_CONFIG = {
+    count: 6,
+    sizeType: ['original', 'compressed'],
+    sourceType: ['album', 'camera']
 }
 
 export default class Comment extends Component<IProps>{
@@ -20,9 +28,34 @@ export default class Comment extends Component<IProps>{
         publishCom: () => {}
     }
 
+    readonly imageConfig = {
+        ...IMAGE_CONFIG,
+        success: (res) => {
+            const { tempFilePaths } = res
+            const { images } = this.state
+            const len = images.length + tempFilePaths.length
+            const { count } = IMAGE_CONFIG
+            let data
+            if(len > count) {
+                const restLen = count - images.length
+                data = [ ...images, ...tempFilePaths.slice(0, restLen) ]
+            }else {
+                data = [ ...images, ...tempFilePaths ]
+            }
+            this.setState({
+                images: data
+            })
+            Toast({
+                title: '添加成功',
+                icon: 'success'
+            })
+        }
+    }
+
     public state: IState = {
         value: '说点什么吧...',
-        isOpen: false
+        isOpen: false,
+        images: []
     }
 
     //modal打开
@@ -59,8 +92,27 @@ export default class Comment extends Component<IProps>{
         this.props.publishCom(value)
     }
 
+    //选择图片
+    public handleSelectImg = () => {
+        Taro.chooseImage(this.imageConfig)
+    }
+
+    //查看图片
+    public prviewImage = () => {
+        Taro.previewImage({urls: this.state.images})
+    }
+
+    //删除图片
+    public deleteImage = (img: string) => {
+        const { images } = this.state
+        const data = images.filter(val => {
+            return img === val
+        })
+        //删除图片
+    }
+
     public render() {
-        const { isOpen } = this.state
+        const { isOpen, images } = this.state
         const { buttonText } = this.props
         return (
             <AtModal 
@@ -75,6 +127,38 @@ export default class Comment extends Component<IProps>{
                         height={280}
                         placeholder='说点什么吧...'
                     />
+                    <AtButton 
+                        onClick={this.handleSelectImg}
+                        type={'secondary'}
+                        circle
+                        customStyle={{width: '100%', height: '30px', padding: 0, lineHeight: '30px', margin: '16px 0'}}
+                    >
+                        选择图片
+                    </AtButton>
+                    <View className='at-row at-row--wrap image-list'>
+                        {
+                            images.map(val => {
+                                return (
+                                    <View
+                                        className='at-col at-col-2'
+                                        style={{position:'relative'}} 
+                                        key={val}
+                                    >
+                                        <View
+                                            className={'at-icon at-icon-close'} 
+                                            onClick={this.deleteImage.bind(this, val)}
+                                            style={{position:'absolute', right: '-7px', top: '-6px', color: 'red', padding: '3px'}}
+                                        ></View>
+                                        <Image 
+                                            onClick={this.prviewImage}
+                                            src={val} 
+                                            style={{width: '35px', height: '35px'}}
+                                        ></Image>
+                                    </View>
+                                )
+                            })
+                        }
+                    </View>
                 </AtModalContent>
                 <AtModalAction>
                     <Button

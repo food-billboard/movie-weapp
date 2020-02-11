@@ -11,7 +11,8 @@ import {
     getDetail,
     getRankType,
     getCommentSimple,
-    getCommentDetail
+    getCommentDetail,
+    getRate
 } from '~services'
 
 let a = 0
@@ -58,23 +59,23 @@ export default {
                     swiper: [
                         {
                             id: 0,
-                            image: 'http://img3.imgtn.bdimg.com/it/u=1208538952,1443328523&fm=26&gp=0.jpg'
+                            image: 'http://img3.imgtn.bdimg.com/it/u=1208538952,1443328523&fm=26&gp=0.jpg',
                         },
                         {
                             id: 1,
-                            image: 'http://a4.att.hudong.com/03/25/20300001045622130690259454464.jpg'
+                            image: 'http://a4.att.hudong.com/03/25/20300001045622130690259454464.jpg',
                         },
                         {
                             id: 2,
-                            image: 'http://img3.imgtn.bdimg.com/it/u=1208538952,1443328523&fm=26&gp=0.jpg'
+                            image: 'http://img3.imgtn.bdimg.com/it/u=1208538952,1443328523&fm=26&gp=0.jpg',
                         },
                         {
                             id: 3,
-                            image: 'http://a4.att.hudong.com/03/25/20300001045622130690259454464.jpg'
+                            image: 'http://a4.att.hudong.com/03/25/20300001045622130690259454464.jpg',
                         },
                         {
                             id: 4,
-                            image: 'http://img3.imgtn.bdimg.com/it/u=1208538952,1443328523&fm=26&gp=0.jpg'
+                            image: 'http://img3.imgtn.bdimg.com/it/u=1208538952,1443328523&fm=26&gp=0.jpg',
                         }
                     ]
                 }
@@ -1353,6 +1354,21 @@ export default {
             return data.data
             const detail = yield call(getDetail, id)
             return detail
+        },
+
+        //获取电影评分
+        * getRate({movie}, { call, put }) {
+
+            const _data = {
+                success: true,
+                data: {
+                    rate: 8
+                }
+            }
+            return _data.data
+
+            const data = yield call(getRate, movie)
+            return data
         }
 
     },

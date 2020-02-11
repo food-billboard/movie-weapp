@@ -36,8 +36,12 @@ interface Info {
     store: boolean
 }
 
+interface IState {
+    isOpened: boolean
+}
+
 @connect(mapStateToProps, mapDispatchToProps)
-export default class Content extends Component<IProps>{
+export default class Content extends Component<IProps, IState>{
     public static defaultProps:IProps = {
         movie: '',
         id: '',
@@ -64,7 +68,7 @@ export default class Content extends Component<IProps>{
     //我的id
     readonly id = this.props.id
 
-    public state: any = {
+    public state: IState = {
         isOpened: false
     }
 
@@ -83,27 +87,9 @@ export default class Content extends Component<IProps>{
         })
     }
 
-    //评分
-    public sendRate = async (value: string) => {
-        this.props.getUserInfo()
-        const {movie} = this.props
-        Taro.showLoading({mask: true, title: '评分中'})
-        await this.props.sendRate(value, this.id, movie)
-        Taro.hideLoading()
-    }
-
-    //收藏
-    public sendStore = async () => {
-        this.props.getUserInfo()
-        const { movie } = this.props
-        Taro.showLoading({ mask: true, title: '联系收藏中' })
-        await this.props.sendStore(this.id, movie)
-        Taro.hideLoading()
-    }
-
     public render() {
         const { isOpened } = this.state
-        const { info } = this.props
+        const { info, movie } = this.props
         const {
             name='',
             area='',
@@ -124,15 +110,13 @@ export default class Content extends Component<IProps>{
                 <View className='title'>
                     {name}
                     <GStore
-                        handleClick={this.sendStore}
-                        store={store}
+                        movie={movie}
                     />
                 </View>
                 <View className='main'>
                     <View className='main-rate'>
-                        <GRate 
-                            value={rate} 
-                            sendRate={this.sendRate}
+                        <GRate
+                            movie={movie}
                         />
                     </View>
                     <View className='main-info'>

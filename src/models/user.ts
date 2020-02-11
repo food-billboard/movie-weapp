@@ -10,7 +10,8 @@ import {
     answerComment,
     sendStore,
     getStore,
-    feedback
+    feedback,
+    getIsStore
 } from '~services'
 var a = 0
 export default {
@@ -951,6 +952,22 @@ export default {
 
             const response = yield call(getStore, query)
             return response
+        },
+
+        //获取是否收藏
+        * getIsStore({movie, user}, { call, put }) {
+
+            let d = {
+                success: true,
+                data: {
+                    store: false,
+                    id: '电影id'
+                }
+            }
+            return d.data
+
+            const data = yield call(getIsStore, movie, user)
+            return data
         }
 
     },
