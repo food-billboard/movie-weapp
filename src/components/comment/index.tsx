@@ -1,5 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { Button, View, Image } from '@tarojs/components'
+import { findIndex } from 'lodash'
 import './index.scss'
 
 import { AtModal, AtModalContent, AtModalAction, AtTextarea, AtButton, AtIcon } from "taro-ui"
@@ -47,7 +48,8 @@ export default class Comment extends Component<IProps>{
             })
             Toast({
                 title: '添加成功',
-                icon: 'success'
+                icon: 'success',
+                duration: 1000
             })
         }
     }
@@ -84,16 +86,26 @@ export default class Comment extends Component<IProps>{
      * 发布评论
      */
     public publish = async () => {
-        const {value, isOpen} = this.state
+        const { value, isOpen, images } = this.state
         await this.setState({
             isOpen: !isOpen
         })
         //评论发布
-        this.props.publishCom(value)
+        this.props.publishCom({value, images})
     }
 
     //选择图片
     public handleSelectImg = () => {
+        const { images } = this.state
+        const { count } = IMAGE_CONFIG
+        if(images.length === count) {
+            Toast({
+                icon: 'fail',
+                title: '图片已到上限',
+                duration: 1000
+            })
+            return
+        } 
         Taro.chooseImage(this.imageConfig)
     }
 
@@ -105,10 +117,13 @@ export default class Comment extends Component<IProps>{
     //删除图片
     public deleteImage = (img: string) => {
         const { images } = this.state
-        const data = images.filter(val => {
-            return img === val
+        const data = findIndex(images, (o: any) => {
+            return o === img
         })
-        //删除图片
+        images.splice(data, 1)
+        this.setState({
+            images
+        })
     }
 
     public render() {
