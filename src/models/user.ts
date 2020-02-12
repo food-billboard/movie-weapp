@@ -11,13 +11,19 @@ import {
     sendStore,
     getStore,
     feedback,
-    getIsStore
+    getIsStore,
+    getIssue,
+    editIssue,
+    sendIssue
 } from '~services'
 var a = 0
 export default {
     namespace: 'user',
     state: {
-        
+        issueSet: {
+            isIssue: false,
+            id: false
+        }
     },
     effects: {
         //点赞
@@ -298,7 +304,7 @@ export default {
         },
 
         //回复用户评论
-        * publishUserComment({commentId, content, user, mine}, {call, put}) {
+        * publishUserComment({commentId, value, user, mine}, {call, put}) {
 
             let data = {
                 success: true,
@@ -306,7 +312,7 @@ export default {
             }
             return
 
-            const response = yield call(answerComment, commentId, content, user, mine)
+            const response = yield call(answerComment, commentId, value, user, mine)
             return response
         },
 
@@ -337,7 +343,25 @@ export default {
                                     id: '用户id'
                                 }
                             ],
-                            id: '评论id'
+                            id: '评论id',
+                            images: [
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                }
+                            ]
                         },
                         {
                             user: {
@@ -355,7 +379,25 @@ export default {
                                     id: '用户id'
                                 }
                             ],
-                            id: '评论id'
+                            id: '评论id',
+                            images: [
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                }
+                            ]
                         },
                         {
                             user: {
@@ -373,7 +415,25 @@ export default {
                                     id: '用户id'
                                 }
                             ],
-                            id: '评论id'
+                            id: '评论id',
+                            images: [
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                }
+                            ]
                         },
                         {
                             user: {
@@ -391,7 +451,25 @@ export default {
                                     id: '用户id'
                                 }
                             ],
-                            id: '评论id'
+                            id: '评论id',
+                            images: [
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                }
+                            ]
                         },
                         {
                             user: {
@@ -409,7 +487,25 @@ export default {
                                     id: '用户id'
                                 }
                             ],
-                            id: '评论id'
+                            id: '评论id',
+                            images: [
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                }
+                            ]
                         },
                         {
                             user: {
@@ -427,7 +523,25 @@ export default {
                                     id: '用户id'
                                 }
                             ],
-                            id: '评论id'
+                            id: '评论id',
+                            images: [
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                }
+                            ]
                         },
                         {
                             user: {
@@ -445,7 +559,25 @@ export default {
                                     id: '用户id'
                                 }
                             ],
-                            id: '评论id'
+                            id: '评论id',
+                            images: [
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                }
+                            ]
                         },
                         {
                             user: {
@@ -463,7 +595,25 @@ export default {
                                     id: '用户id'
                                 }
                             ],
-                            id: '评论id'
+                            id: '评论id',
+                            images: [
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                }
+                            ]
                         },
                         {
                             user: {
@@ -481,7 +631,25 @@ export default {
                                     id: '用户id'
                                 }
                             ],
-                            id: '评论id'
+                            id: '评论id',
+                            images: [
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                }
+                            ]
                         },
                         {
                             user: {
@@ -499,7 +667,25 @@ export default {
                                     id: '用户id'
                                 }
                             ],
-                            id: '评论id'
+                            id: '评论id',
+                            images: [
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                }
+                            ]
                         }
                     ]
                 }
@@ -527,7 +713,25 @@ export default {
                                     id: '用户id'
                                 }
                             ],
-                            id: '评论id'
+                            id: '评论id',
+                            images: [
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                }
+                            ]
                         },
                         {
                             user: {
@@ -545,7 +749,25 @@ export default {
                                     id: '用户id'
                                 }
                             ],
-                            id: '评论id'
+                            id: '评论id',
+                            images: [
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                },
+                                {
+                                    image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                    id: '图片id'
+                                }
+                            ]
                         }
                     ]
                 }
@@ -967,6 +1189,303 @@ export default {
             return d.data
 
             const data = yield call(getIsStore, movie, user)
+            return data
+        },
+
+        //修改issue的设置
+        * setIssue({value}, { call, put }) {
+            yield put({ type:'setData', payload: { issueSet: value } })
+        },
+
+        //获取用户issue
+        * getIssue({query}, { call, put }) {
+
+            let d
+            if(a===0) {
+                a++
+                d = {
+                    success: true,
+                    data: {
+                        id: '用户id',
+                        detail: [
+                            {
+                                id: '电影id',
+                                image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '2020',
+                                hot: 1000
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '2020',
+                                hot: 1000
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '2020',
+                                hot: 1000
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '2020',
+                                hot: 1000
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '2020',
+                                hot: 1000
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '2020',
+                                hot: 1000
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '2020',
+                                hot: 1000
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '2020',
+                                hot: 1000
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '2020',
+                                hot: 1000
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '2020',
+                                hot: 1000
+                            }
+                        ]
+                    }
+                }
+            }else if(a===1) {
+                a++
+                d = {
+                    success: true,
+                    data: {
+                        id: '用户id',
+                        detail: [
+                            {
+                                id: '电影id',
+                                image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '2020',
+                                hot: 1000
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '2020',
+                                hot: 1000
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '2020',
+                                hot: 1000
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '2020',
+                                hot: 1000
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '2020',
+                                hot: 1000
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '2020',
+                                hot: 1000
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '2020',
+                                hot: 1000
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '2020',
+                                hot: 1000
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '2020',
+                                hot: 1000
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '2020',
+                                hot: 1000
+                            }
+                        ]
+                    }
+                }
+            }else {
+                d = {
+                    success: true,
+                    data: {
+                        id: '用户id',
+                        detail: []
+                    }
+                }
+            }
+            return d.data
+
+            const data = yield call(getIssue, query)
+            return data
+        },
+
+        //修改issue
+        * editIssue({ query }, { call, put }) {
+
+            let d = {
+                success: true,
+                data: {
+                    movie: {
+                        id: '电影id',
+                        video: {
+                            src: '视频地址',
+                            poster: 'http://www.33lc.com/article/UploadPic/2012-10/2012102514181086564.jpg',
+                            id: '视频id'
+                        },
+                        info: {
+                            name: '电影名称',
+                            area: [
+                                {
+                                    id: 0,
+                                    value: '美国'
+                                },
+                                {
+                                    id: 1,
+                                    value: '英国'
+                                }
+                            ],
+                            director: [
+                                {
+                                    id: 0,
+                                    value: '葛凌峰'
+                                },
+                                {
+                                    id: 1,
+                                    value: 'gelingfeng'
+                                }
+                            ],
+                            actor: [
+                                {
+                                    id: 0,
+                                    value: '葛凌峰'
+                                }
+                            ],
+                            type: [
+                                {
+                                    id: 0,
+                                    value: '类型'
+                                }
+                            ],
+                            time: '上线时间',
+                            description: '电影描述',
+                        },
+                        image: [
+                            {
+                                img: 'http://www.33lc.com/article/UploadPic/2012-10/2012102514181086564.jpg',
+                                id: '这里是临时写的，没什么用，是海报id'
+                            },
+                            {
+                                img: 'http://www.33lc.com/article/UploadPic/2012-10/2012102514181086564.jpg',
+                                id: '这里是临时写的，没什么用，是海报id'
+                            },
+                            {
+                                img: 'http://www.33lc.com/article/UploadPic/2012-10/2012102514181086564.jpg',
+                                id: '这里是临时写的，没什么用，是海报id'
+                            },
+                            {
+                                img: 'http://www.33lc.com/article/UploadPic/2012-10/2012102514181086564.jpg',
+                                id: '这里是临时写的，没什么用，是海报id'
+                            },
+                            {
+                                img: 'http://www.33lc.com/article/UploadPic/2012-10/2012102514181086564.jpg',
+                                id: '这里是临时写的，没什么用，是海报id'
+                            }
+                        ]
+                    }
+                }
+            }
+            return d.data
+
+            const data = yield call(editIssue, query)
+            return data
+        },
+
+        //发布issue
+        * sendIssue({ value }, { call, put }) {
+            let d = {
+                success: true,
+                data: {}
+            }
+            return d.success
+
+            const data = yield call(sendIssue, value)
             return data
         }
 

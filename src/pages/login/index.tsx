@@ -23,7 +23,7 @@ export default class extends Component<any> {
     }
 
     public componentDidMount = async () => {
-        const { password, username } = this.$router.params
+        const { password='', username='' } = this.$router.params
         if(password.length && username.length) {
             this.setState({
                 password,
@@ -99,7 +99,7 @@ export default class extends Component<any> {
         //回到上一路由
         const { target }: any = this.$router.params
         if( target ) return router.replace(target);
-        Taro.switchTab({url: '/main'})
+        Taro.switchTab({url: '../main'})
     }
 
     /**

@@ -79,6 +79,11 @@ export default class User extends Component<any>{
         router.push('/record', { id: this.id })
     }
 
+    //查看电影发布
+    public handleCheckIssue = async () => {
+        router.push('/userissue', { id: this.id })
+    }
+
     //用户界面的相关信息
     readonly userInfo = [
         {
@@ -107,6 +112,15 @@ export default class User extends Component<any>{
             },
             handle: this.handleCheckRecord,
             id: 'record'
+        },
+        {
+            title: 'Ta的电影',
+            iconInfo: {
+                value: 'share-2',
+                size: 32
+            },
+            handle: this.handleCheckIssue,
+            id: 'issue'
         }
     ]
 

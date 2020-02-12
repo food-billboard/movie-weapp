@@ -4,6 +4,9 @@ import Title from './components/title'
 import IconList from './components/icon'
 import List from '~components/linearlist'
 import IconHead from '~components/headicon'
+
+import { ISetting } from './interface'
+
 import './index.scss'
 
 import {router} from '~utils'
@@ -22,7 +25,21 @@ export default class extends Component<any>{
     }
 
     //设置
-    readonly setting = [
+    readonly setting: Array<ISetting> = [
+        {
+            title: 'Wo的发布',
+            disabled: false,
+            arrow: arrow,
+            iconInfo: {
+                value: '',
+                size: 14,
+                color: '#000'
+            },
+            handle: () => {
+                router.push('/userissue', { id: this.id })
+            },
+            id: 'issue'
+        },
         {
             title: '设置',
             disabled: false,
@@ -49,7 +66,7 @@ export default class extends Component<any>{
 
     public componentWillMount = () => {
         if(!this.id) {
-            // router.replace('/login')
+            router.replace('/login')
         }
     }
 

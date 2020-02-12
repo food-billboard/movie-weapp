@@ -8,7 +8,7 @@ export const mapStateToProps = (_) => {
 }
 
 export const mapDispatchToProps = dispatch => ({   
-  publishUserComment: (id, comment, user, mine) => dispatch({type: "user/publishUserComment", commentId: id, content: comment, user, mine}),
+  publishUserComment: (id, value, user, mine) => dispatch({type: "user/publishUserComment", commentId: id, value, user, mine}),
   getCommentDetail: (query) => dispatch({type: "movie/getCommentDetail", query}),
   getUserInfo: () => dispatch({type: 'global/getUserInfo'}),
 })

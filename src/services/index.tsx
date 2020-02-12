@@ -109,6 +109,22 @@ export const feedback = (user, value) => {
 }
 
 /**
+ * 用户发布电影
+ * @param value
+ */
+export const sendIssue = (value) => {
+    return request('POST', '/api/user/sendIssue', { data: { value } })
+}
+
+/**
+ * 用户修改发布电影
+ * @param value
+ */
+export const editIssue = (value) => {
+    return request('POST', '/api/user/editIssue', { data: { value } })
+}
+
+/**
  * 获取评论头
  * @param id 电影id
  */
@@ -281,4 +297,12 @@ export const getRate = (movie) => {
  */
 export const getIsStore = (movie, user) => {
     return request('GET', 'api/user/getisstore', { query: {movie, user} })
+}
+
+/**
+ * 获取用户电影发布
+ * @parma query 查询参数
+ */
+export const getIssue = (query) => {
+    return request('GET', '/api/user/getissue')
 }

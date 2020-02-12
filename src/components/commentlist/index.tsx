@@ -24,9 +24,16 @@ interface CommentUsers {
     id: string
 }
 
+interface IImageList {
+    image: string
+    id: string
+}
+
 interface IList {
-    user: IUser,
+    user: IUser
     commentUsers: Array<CommentUsers>
+    images: Array<IImageList>
+    id: string
 }
 
 interface IProps {
@@ -51,12 +58,9 @@ export default class List extends Component<IProps>{
                 hot: 0,
                 isHot: false
             },
-            commentUsers: [
-                {
-                    image: '',
-                    id: ''
-                }
-            ]
+            commentUsers: [],
+            id: '',
+            images: []
         },
         id: '',
         commentId: '',
@@ -124,11 +128,30 @@ export default class List extends Component<IProps>{
         router.push('/user', {id})
     }
 
+    /**
+     * 查看图片
+     */
+    public handlePreviewImage = (image: string) => {
+        const { list } = this.props
+        const { images=[] } = list
+        if(!images.length) return
+        const urlList = images.map(val => {
+            const { image } = val
+            return image
+        })
+        Taro.previewImage({
+            urls: urlList,
+            current: image
+        })
+    }
+
     public render() {
         const {list} = this.state
         const {
             user,
-            commentUsers
+            commentUsers,
+            id: commentId,
+            images=[]
         } = list
         const { 
             name,
@@ -139,18 +162,6 @@ export default class List extends Component<IProps>{
             hot,
             isHot
         } = user
-        //评论用户组件
-        const userList = commentUsers.map((value) => {
-            const {image, id} = value
-            return (
-                <View className='footer-img'
-                    key={id}
-                    onClick={this.getUser.bind(this, id)}    
-                >
-                    <Image src={image} className='footer-img-content'></Image>
-                </View>
-            )
-        })
         return (
             <View className='list'>
                 <View className='head'>
@@ -181,11 +192,39 @@ export default class List extends Component<IProps>{
                 >
                     {content}
                 </View>
+                <View className='image-list at-row at-row--wrap'>
+                    {
+                        images.map((val: IImageList, index: number) => {
+                            const { image: preImg, id } = val
+                            return (
+                                <View 
+                                    className={'at-col at-col-4 image'}
+                                    key={id}
+                                    onClick={this.handlePreviewImage.bind(this, preImg)}
+                                >
+                                    <Image src={preImg} className="image-content"></Image>
+                                </View>
+                            )
+                        })
+                    }
+                </View>
                 <ScrollView
                     scrollX
                     className='footer'
                 >
-                    {userList}
+                    {
+                        commentUsers.map((value) => {
+                            const {image:userIcon, id} = value
+                            return (
+                                <View className='footer-img'
+                                    key={id}
+                                    onClick={this.getUser.bind(this, id)}    
+                                >
+                                    <Image src={userIcon} className='footer-img-content'></Image>
+                                </View>
+                            )
+                        })
+                    }
                 </ScrollView>
 
             </View>

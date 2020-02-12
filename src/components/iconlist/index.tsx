@@ -3,7 +3,7 @@ import { View, Text, Image } from '@tarojs/components'
 import './index.scss'
 import { router, formatNumber } from '~utils'
 
-interface List {
+export interface IList {
     id: string, 
     name: string, 
     image: string, 
@@ -11,17 +11,27 @@ interface List {
 }
 
 interface IProps {
-    list: Array<List>
+    list: Array<IList>
+    handleClick: (...args: any) => any
 }
 
 export default class IconList extends Component<IProps>{
-    public static defaultProps = {
-        list: []
+    public static defaultProps: IProps = {
+        list: [],
+        handleClick: () => {}
     }
 
     public constructor() {
         super(...arguments)
         this.goTo = this.goTo.bind(this)
+    }
+
+    /**
+     * 自定义点击
+     * @parma id 电影id
+     */
+    public handleClick = (id: string) => {
+        this.props.handleClick(id)
     }
 
     /**
@@ -36,15 +46,21 @@ export default class IconList extends Component<IProps>{
         const lists = list.map((value) => {
             const {id, name, image, hot} = value
             return (
-                <View className='icon-content at-col at-col-5'
-                    onClick={(event) => {this.goTo.call(this, name, id, event)}}
+                <View 
+                    className='icon-content at-col at-col-5'
                     key={id}
                 >
-                    <View className='img'>             
+                    <View 
+                        className='img'
+                        onClick={(event) => {this.goTo.call(this, name, id, event)}}
+                    >             
                         <Image src={image} className='img-main' />
                     </View>
                     <View>
-                        <View className='name'>{name}</View>
+                        <View 
+                            className='name'
+                            onClick={this.handleClick.bind(this, id)}
+                        >{name}</View>
                         <View className='count'>
                             {formatNumber(hot)}
                             <Text className='text'>人看</Text>

@@ -17,7 +17,7 @@ interface IState {
     images: Array<string>
 }
 
-const IMAGE_CONFIG = {
+export const IMAGE_CONFIG = {
     count: 6,
     sizeType: ['original', 'compressed'],
     sourceType: ['album', 'camera']

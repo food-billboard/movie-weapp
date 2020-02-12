@@ -1,9 +1,9 @@
 @import "~taro-ui/dist/style/components/icon.scss";
+@import "~taro-ui/dist/style/components/flex.scss";
 .list{
-    padding:0 20px;
+    padding:20px;
     width:100%;
     box-sizing:border-box;
-    height:260px;
     background-color:rgba(0, 0, 0, 0.1);
     margin-bottom:40px;
     .head{
@@ -73,19 +73,38 @@
         word-break: break-all;
         box-sizing:border-box;
     }
+    .image-list{
+        width:100%;
+        box-sizing:border-box;
+        padding-left:20px;
+        .image{
+            height:220px;
+            overflow:hidden;
+            box-sizing:border-box;
+            padding-right:20px;
+            margin-bottom:20px;
+            .image-content{
+                width:100%;
+                height:100%;
+                box-sizing:border-box;
+                padding:2px;
+                border: 1px dashed gray;
+            }
+        }
+    }
     .footer{
-        height:40px;
+        height:50px;
         white-space:nowrap;
         &-img{
             display:inline-block;
-            width:40px;
+            width:50px;
             height:100%;
             border-radius:50%;
             overflow:hidden;
             &-content{
                 display:inline-block;
-                width:100%;
-                height:100%;
+                width:50px;
+                height:50px;
             }
         }
     }
