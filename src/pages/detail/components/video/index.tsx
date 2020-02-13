@@ -2,15 +2,15 @@ import Taro, { Component } from '@tarojs/taro'
 import { Video } from '@tarojs/components'
 import './index.scss'
 
-interface IProps {
+export interface IProps {
     src: string,
-    controls: boolean,
-    autoplay: boolean,
+    controls?: boolean,
+    autoplay?: boolean,
     poster: string,
-    initialTime: number,
-    id: string,
-    loop: boolean,
-    muted: boolean,
+    initialTime?: number,
+    id?: string,
+    loop?: boolean,
+    muted?: boolean,
 }
 
 export default class Media extends Component<IProps>{

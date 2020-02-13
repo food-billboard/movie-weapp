@@ -1839,14 +1839,55 @@ export default {
                 },
                 info: {
                     name: '电影名字', 
-                    area: '电影产地', 
+                    area: [
+                        {
+                            id: '0',
+                            value: '美国'
+                        }
+                    ], 
                     people: 100, 
-                    director: ['导演1号', '导演2号', '导演3号'], 
-                    actor: ['龙套1号', '龙套2号', '龙套3号'], 
-                    type: ['惊悚', '爱情'], 
+                    director: [
+                        {
+                            id: '导演1号', 
+                            value: '导演1号',
+                        },
+                        {
+                            id: '导演2号',
+                            value: '导演2号'
+                        }, 
+                        {
+                            id: '导演3号',
+                            value: '导演3号'
+                        }
+                    ], 
+                    actor: [
+                        {
+                            id: '龙套1号',
+                            value: '龙套1号'
+                        },
+                        {
+                            id: '龙套2号',
+                            value: '龙套2号'
+                        },
+                        {
+                            id: '龙套3号',
+                            vlaue: '龙套3号'
+                        }
+                    ], 
+                    type: [
+                        {
+                            id: '惊悚',
+                            value: '惊悚'
+                        },
+                        {
+                            id: '爱情',
+                            value: '爱情'
+                        }
+                    ], 
                     time: 10000000, 
                     publishTime: 1997, 
                     description: '电影的详细描述，虽然你不想看，但是我还是会写在这里', 
+                    language: '语言',
                     hot: 100000, 
                     rate: 8,
                     store: true
@@ -1871,6 +1912,68 @@ export default {
                     {
                         id: 4,
                         img: 'http://big5.wallcoo.com/nature/Arctic_Nature/wallpapers/1680x1050/arctic3.jpg'
+                    }
+                ],
+                tag: [
+                    {
+                        id: 0,
+                        value: '内容已'
+                    },
+                    {
+                        id: 1,
+                        value: '内容22222'
+                    },
+                    {
+                        id: 2,
+                        value: '内容22222'
+                    },
+                    {
+                        id: 3,
+                        value: '内容222222222222222222222'
+                    },
+                    {
+                        id: 4,
+                        value: '内容2222'
+                    },
+                    {
+                        id: 5,
+                        value: '内容已'
+                    },
+                    {
+                        id: 6,
+                        value: '内容22222'
+                    },
+                    {
+                        id: 7,
+                        value: '内容22222'
+                    },
+                    {
+                        id: 8,
+                        value: '内容222222222222222222222'
+                    },
+                    {
+                        id: 9,
+                        value: '内容2222'
+                    },
+                    {
+                        id: 10,
+                        value: '内容已'
+                    },
+                    {
+                        id: 11,
+                        value: '内容22222'
+                    },
+                    {
+                        id: 12,
+                        value: '内容22222'
+                    },
+                    {
+                        id: 13,
+                        value: '内容222222222222222222222'
+                    },
+                    {
+                        id: 14,
+                        value: '内容2222'
                     }
                 ]
             }

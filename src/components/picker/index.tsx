@@ -1,40 +1,45 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Picker, Text } from '@tarojs/components'
+import { PickerSelectorProps, PickerMultiSelectorProps, PickerTimeProps, PickerDateProps, PickerRegionProps } from '@tarojs/components/types/Picker'
 
 interface IProps {
   title: string
-  mode: 'selector' | 'multiSelector' | 'time' | 'date'
-  selectorChecked: any
+  // selectMode: 'configSelect' | 'configMulti' | 'configTime' | 'configDate'
+  // configSelect?: PickerSelectorProps | false
+  // configMulti?: PickerMultiSelectorProps | false
+  // configTime?: PickerTimeProps | false
+  // configDate?: PickerDateProps | false
+  config: PickerSelectorProps | PickerMultiSelectorProps | PickerTimeProps | PickerDateProps
 }
 
 interface IState {
-  selectorChecked: any
+  // selectorChecked: any
 }
 
 export default class extends Component<IProps, IState> {
 
-  public static defaultProps: IProps = {
-    title: '选择',
-    mode: 'selector'
-  }
-
   public state: IState = {
-    selectorChecked:
+    // selectorChecked:
   }
 
   public render() {
-
-    const { title } = this.props
-
+    const { title, config } = this.props
+    // const {
+    //   mode,
+      
+    // } = config
     return (
       <View className='page-section'>
         <Text>{title}</Text>
         <View>
-          <Picker mode='selector' range={this.state.selector} onChange={this.onChange}>
+          {/* <Picker 
+            mode={this.props[selectMode].mode} 
+            range={config.range ? range : []} 
+            onChange={this.onChange}>
             <View className='picker'>
               当前选择：{this.state.selectorChecked}
             </View>
-          </Picker>
+          </Picker> */}
         </View>
       </View>
     )

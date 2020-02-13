@@ -20,13 +20,18 @@ interface IProps {
     getUserInfo: () => any
 }
 
+interface IList {
+    id: string
+    value: string
+}
+
 interface Info {
     name: string
-    area: string
+    area: Array<IList>
     people: number
-    director: Array<string>
-    actor: Array<string>
-    type: Array<string>
+    director: Array<IList>
+    actor: Array<IList>
+    type: Array<IList>
     time: string
     publishTime: string
     language: string
@@ -47,7 +52,7 @@ export default class Content extends Component<IProps, IState>{
         id: '',
         info: {
             name: '',
-            area: '',
+            area: [],
             people: 0,
             director: [],
             actor: [],
@@ -58,7 +63,7 @@ export default class Content extends Component<IProps, IState>{
             description: '',
             hot: 0,
             rate:0,
-            store: false
+            store: false,
         },
         sendRate: () => {},
         sendStore: () => {},
@@ -92,7 +97,7 @@ export default class Content extends Component<IProps, IState>{
         const { info, movie } = this.props
         const {
             name='',
-            area='',
+            area=[],
             people=0,
             director=[],
             actor=[],
@@ -121,25 +126,37 @@ export default class Content extends Component<IProps, IState>{
                     </View>
                     <View className='main-info'>
                         <View className='actor'>
-                            主演: <Text className='text'>{actor.join(' ')}</Text>
+                            主演: <Text className='text'>{actor.map((val: IList) => {
+                                const { value } = val
+                                return value
+                            }).join(' ')}</Text>
                         </View>
                         <View className='at-row at-row__justify--between director-lan'>
                             <View className='at-col at-col-5 director'>
-                                导演: <Text className='text'>{director.join(' ')}</Text>
+                                导演: <Text className='text'>{director.map((val: IList) => {
+                                    const { value } = val
+                                    return value
+                                }).join(' ')}</Text>
                             </View>
                             {/* <View className='at-col at-col-5 lan'>
                                 语言: <Text className='text'>{language}</Text>
                             </View> */}
                         </View>
                         <View className='type'>
-                            分类: <Text className='text'>{type.join(' ')}</Text>
+                            分类: <Text className='text'>{type.map((val: IList) => {
+                                const { value } = val
+                                return value
+                            }).join(' ')}</Text>
                         </View>
                         <View className='at-row at-row__justify--between time-area'>
                             <View className='at-col at-col-5 time'>
                                 时间: <Text className='text'>{formatTime(publishTime)}</Text>
                             </View>
                             <View className='at-col at-col-5 area'>
-                                地区: <Text className='text'>{area}</Text>
+                                地区: <Text className='text'>{area.map((val: IList) => {
+                                    const { value } = val
+                                    return value
+                                }).join(' ')}</Text>
                             </View>
                         </View>
                         <View className='hot'>

@@ -6,6 +6,7 @@ import Content from './components/content'
 import GButton from '~components/button'
 import IconList from './components/iconList'
 import Comment from '~components/comment'
+import GTag from './components/tag'
 
 import './index.scss'
 
@@ -80,7 +81,8 @@ export default class extends Component<any> {
         const {
             video,
             info,
-            image
+            image,
+            tag
         } = detail
         this.setTitle()
         return (
@@ -104,6 +106,11 @@ export default class extends Component<any> {
                     <List 
                         list={image}
                     />
+                </View>
+                <View className='tag'> 
+                    <GTag
+                        list={tag}
+                    ></GTag>
                 </View>
                 <View className='comment'>
                     <IconList

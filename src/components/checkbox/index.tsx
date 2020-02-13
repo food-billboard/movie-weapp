@@ -1,6 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { AtCheckbox, AtButton, AtTag } from 'taro-ui'
 import { View } from '@tarojs/components'
+import { isObject } from '~utils'
 
 import './index.scss'
 
@@ -13,7 +14,8 @@ interface IOption {
 
 interface IProps {
   checkboxOption: Array<IOption>
-  checkedList: Array<IOption>
+  checkedList: Array<string> | false
+  style?: any
 }
 
 interface IState {
@@ -27,13 +29,18 @@ const BUTTON_STYLE = {
 
 export default class extends Component<IProps, IState> {
 
+  public static defaultProps: IProps = {
+    checkedList: false,
+    checkboxOption: [],
+    style: {}
+  }
+
   public state: IState = {
     checkedList: [],
     show: false
   }
 
-  //可选参数
-  // readonly checkboxOption = this.props.checkboxOption
+  private FIRST = true
 
   //处理选择
   public handleChange = (value: any) => {
@@ -57,15 +64,27 @@ export default class extends Component<IProps, IState> {
   }
 
   public render() {
-    const { checkedList, show } = this.state
-    const { checkboxOption=[] } = this.props
+    const { checkboxOption=[], checkedList, style } = this.props
+
+    //处理props第一次传值的问题
+    if(this.FIRST) {
+      if(Array.isArray(checkedList) && checkedList.length) {
+        this.FIRST = false
+        this.setState({
+          checkedList
+        })
+      }
+    }
+
+    const { show, checkedList: list } = this.state
+
     return (
-      <View>
+      <View style={isObject(style) ? style : {}}>
         <View className='at-row at-row__align--center at-row--wrap'>
           {
             checkboxOption.filter((val:IOption) => {
               const { value } = val
-              return checkedList.indexOf(value) !== -1
+              return list.indexOf(value) !== -1
             })
             .map((val: IOption) => {
               const { label, value } = val
@@ -88,7 +107,7 @@ export default class extends Component<IProps, IState> {
           show ? 
           <AtCheckbox
             options={this.props.checkboxOption}
-            selectedList={checkedList}
+            selectedList={list}
             onChange={this.handleChange}
           >
           </AtCheckbox>

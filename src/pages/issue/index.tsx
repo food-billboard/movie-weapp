@@ -1,10 +1,16 @@
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Picker, Textarea } from '@tarojs/components'
-import { AtInput, AtButton, AtTextarea, AtImagePicker } from 'taro-ui'
+import { View } from '@tarojs/components'
+import { AtInput, AtButton, AtTag } from 'taro-ui'
 import GCheckBox from '~components/checkbox'
-import GVideo from '../detail/components/video'
+import GVideo from './components/video'
+// import GPicker from '~components/picker'
+import GDescription from './components/description'
+import GImagePicker from '~components/imgPicker'
 import { IFormData } from './interface'
 import { country } from './config'
+import { connect } from '@tarojs/redux'
+import { mapStateToProps, mapDispatchToProps } from './connect'
+import './index.scss'
 
 const FORM_DATA: IFormData = {
   id: false,
@@ -22,6 +28,15 @@ const BUTTON_STYLE = {
   zIndex: 9
 }
 
+const TAT_STYLE = {
+  boxSizing: 'border-box', 
+  border: '1px dashed black', 
+  width:'100%', 
+  marginBottom: '5px', 
+  backgroundColor: 'white'
+}
+
+@connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any> {
   
   public static config: Config = {
@@ -33,11 +48,27 @@ export default class extends Component<any> {
     formData: { ...FORM_DATA }
   }
 
+  public componentDidMount = async () => {
+    this.fetchData()
+  }
+
+  //视频及海报
+  public videoRef = Taro.createRef<GVideo>()
+
+  //电影名称
+  public nameRef = Taro.createRef<GDescription>()
+
+  //电影描述
+  public descriptionRef = Taro.createRef<GDescription>()
+
+  //图片选择
+  public imagePickerRef = Taro.createRef<GImagePicker>()
+
   //获取数据
   public fetchData = async () => {
     const { issueSet } = this.props
     const { isIssue, id: movieId } = issueSet
-    if(!isIssue) return
+    if(isIssue) return
     const detail = await this.props.getDetail(movieId) 
     await this.setState({
       detail
@@ -87,7 +118,7 @@ export default class extends Component<any> {
 
   //提交
   public handleSubmit = async (e) => {
-    console.log('提交')
+    
   }
 
   //重置
@@ -119,24 +150,39 @@ export default class extends Component<any> {
     return (
       <View className='issue'>
         <View className='video'>
-          {
-              video ? <GVideo
-                src={video.src}
-                poster={video.poster}
-                id={video.id}
-            /> : null
-          }
-          <View>
-            选择图片 选择视频
-          </View>
+        <AtTag 
+            customStyle={TAT_STYLE} 
+            type={'primary'}
+          >
+            介绍短片及海报
+          </AtTag>
+          <GVideo
+            ref={this.videoRef}
+            info={video}
+          ></GVideo>
         </View>
-        <AtInput 
-          name='name' 
-          onChange={this.handleInputChange} 
-          value={name}
-        ></AtInput>
+        <View className='name'>
+          <AtTag 
+            customStyle={TAT_STYLE} 
+            type={'primary'}
+          >
+            电影名
+          </AtTag>
+          <GDescription
+            ref={this.nameRef}
+            value={name}
+            style={{marginBottom: '20px', backgroundColor: 'rgba(0, 0, 0, 0.1)', marginLeft: 0}}
+          ></GDescription>
+        </View>
         <View className='area'>
+          <AtTag 
+            customStyle={TAT_STYLE} 
+            type={'primary'}
+          >
+            地区
+          </AtTag>
           <GCheckBox
+            style={{marginBottom: '20px'}}
             checkedList={area.map((val: any) => {
               const { id } = val
               return id
@@ -145,19 +191,86 @@ export default class extends Component<any> {
           ></GCheckBox>
         </View>
         <View className='director'>
-          导演
+          <AtTag 
+            customStyle={TAT_STYLE} 
+            type={'primary'}
+          >
+            导演
+          </AtTag>
+          <GCheckBox
+            style={{marginBottom: '20px'}}
+            checkedList={director.map((val: any) => {
+              const { id } = val
+              return id
+            })}
+            checkboxOption={country}
+          ></GCheckBox>
+        </View>
+        <View className='actor'>
+          <AtTag 
+            customStyle={TAT_STYLE} 
+            type={'primary'}
+          >
+            演员
+          </AtTag>
+          <GCheckBox
+            style={{marginBottom: '20px'}}
+            checkedList={actor.map((val: any) => {
+              const { id } = val
+              return id
+            })}
+            checkboxOption={country}
+          ></GCheckBox>
         </View>
         <View className='type'>
-          类型
+          <AtTag 
+            customStyle={TAT_STYLE} 
+            type={'primary'}
+          >
+            类型
+          </AtTag>
+          <GCheckBox
+            style={{marginBottom: '20px'}}
+            checkedList={type.map((val: any) => {
+              const { id } = val
+              return id
+            })}
+            checkboxOption={country}
+          ></GCheckBox>
         </View>
         <View className='time'>
-          时间
+          {/* <GPicker title='' config={{mode: 'selector', range: [], value: '', onChange: () => {}}}></GPicker> */}
         </View>
-        <View>
-          描述
+        <View className='description'>
+          <AtTag
+            customStyle={TAT_STYLE} 
+            type={'primary'}
+          >电影描述</AtTag>
+          <GDescription
+            ref={this.descriptionRef}
+            type={'textarea'}
+            value={description}
+            style={{backgroundColor: 'rgba(0, 0, 0, 0.1)'}}
+          ></GDescription>
         </View>
         <View className='image'>
-          图片
+          <AtTag
+            customStyle={TAT_STYLE} 
+            type={'primary'}
+          >
+            电影截图选择
+          </AtTag>
+          <GImagePicker 
+            ref={this.imagePickerRef}
+            files={
+              image.map((val: any) => {
+                const { img } = val
+                return {
+                  url: img
+                }
+              })
+            }
+          ></GImagePicker>
         </View>
         <AtButton type={'primary'} onClick={this.handleSubmit} customStyle={ BUTTON_STYLE }>提交</AtButton>
         <AtButton type={'primary'} onClick={this.handleReset} customStyle={{ ...BUTTON_STYLE, bottom: '40px', backgroundColor: 'red' }}>重置</AtButton>
