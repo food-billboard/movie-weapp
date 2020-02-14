@@ -3,7 +3,7 @@ export default interface formData {
   video: {
       src: string
       poster: string
-      id: string
+      id?: string
   } | false
   info: {
       name: string
@@ -13,11 +13,12 @@ export default interface formData {
       type: Array<string>
       time: string | number
       description: string
+      language: string
   } | false
   image: Array<IImageList>
 }
 
 interface IImageList {
-  img: string,
-  id: string
+  image: string,
+  id?: string
 }

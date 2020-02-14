@@ -1,11 +1,14 @@
 import Taro, {Component} from '@tarojs/taro'
 import { View, Picker } from '@tarojs/components'
+import GPicker from '~components/picker'
+import GInput from '../../../../issue/components/description'
 import { AtForm, AtInput, AtButton, AtCheckbox, AtList, AtListItem } from 'taro-ui'
 import { FormData } from '../../../interface'
 import './index.scss'
 import { connect } from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { Toast } from '~components/toast'
+import { IFormData } from '~pages/issue/interface'
 
 interface IType {
     id: string,
@@ -49,6 +52,21 @@ export default class Forms extends Component<IProps> {
         // actor: ''   //演员
     }
 
+    //最低价格
+    public minPriceRef = Taro.createRef<GInput>()
+
+    //最高价格
+    public maxPriceRef = Taro.createRef<GInput>()
+
+    //类型
+    public typeRef = Taro.createRef<GPicker>()
+
+    //起始时间
+    public startTimeRef = Taro.createRef<GPicker>()
+
+    //结束时间
+    public endTimeRef = Taro.createRef<GPicker>()
+
     public componentDidMount = () => {
         this.fetchTypeData()
     }
@@ -58,7 +76,7 @@ export default class Forms extends Component<IProps> {
 
         this.onSubmit = this.onSubmit.bind(this)
         this.onReset = this.onReset.bind(this)
-        this.onDateChange = this.onDateChange.bind(this)
+        // this.onDateChange = this.onDateChange.bind(this)
     }
 
     /**
@@ -108,39 +126,43 @@ export default class Forms extends Component<IProps> {
             delete formData.maxPrice
             delete formData.minPrice
         }
-        if(formData.startDate > formData.endDate) {     //筛选日期检测
-            Toast({
-                title: '起始时间不能大于结束时间',
-                icon: 'fail', 
-            })
-            return
+        const startTime = this.startTimeRef.current!.state!.value
+        const endTime = this.endTimeRef.current!.state!.value
+        const minPrice = this.minPriceRef.current!.state!.value
+        const maxPrice = this.maxPriceRef.current!.state!.value
+        //日期检查
+        if( startTime.length && endTime.length) {
+            if(startTime > endTime) {
+                await Toast({
+                    title: '起始时间有误',
+                    icon: 'fail', 
+                })
+                return
+            }
         }
-        if(formData.maxPrice < formData.minPrice) {
-            Toast({
-                title: '最高价格不能低于最低价格',
-                icon: 'fail',
-            })
-            return
+        if(minPrice.length && maxPrice.length) {
+            if(minPrice > maxPrice) {
+                console.log(minPrice > maxPrice)
+                await Toast({
+                    title: '价格不能为负数',
+                    icon: 'fail',
+                })
+                return
+            }
         }
-        if(formData.maxPrice < 0 || formData.minPrice < 0) {
-            Toast({
-                title: '价格不能为负数',
-                icon: 'fail',
-            })
-            return
-        }
+        let data:FormData = { ...formData, ...{maxPrice, minPrice, startDate: startTime, endDate: endTime} }
         await this.setState({
-            formData
+            formData: data
         })
+        // return data
     }
 
     /**
      * 筛选提交
      */
     public onSubmit = async () => {
-        this.filterFactor()
-        const {formData} = this.state
-        await this.props.screen(formData)
+        const data:FormData = await this.filterFactor()
+        await this.props.screen(data)
     }
 
     /**
@@ -175,55 +197,55 @@ export default class Forms extends Component<IProps> {
         })
     }
 
-    /**
-     * 金额选择
-     */
-    public handlePrice = (type:number, value:number, event:any) => {
-        const { formData, formDefault } = this.state
-        if(type > 0) {
-            formData.maxPrice = value
-        }else {
-            formData.minPrice = value
-        }
-        this.setState({
-            formData
-        })
-    }
+    // /**
+    //  * 金额选择
+    //  */
+    // public handlePrice = (type:number, value:number, event:any) => {
+    //     const { formData, formDefault } = this.state
+    //     if(type > 0) {
+    //         formData.maxPrice = value
+    //     }else {
+    //         formData.minPrice = value
+    //     }
+    //     this.setState({
+    //         formData
+    //     })
+    // }
 
-    /**
-     * 类型选择
-     */
-    public typeChange(event) {
-        const target = event.detail.value - 0
-        const { formData, type, types } = this.state
-        const id = types.filter(val => {
-            const { value } = val
-            return type[target] === value
-        })
-        formData.type = id[0].id
-        this.setState({
-            formData
-        })
-    }
+    // /**
+    //  * 类型选择
+    //  */
+    // public typeChange(event) {
+    //     const target = event.detail.value - 0
+    //     const { formData, type, types } = this.state
+    //     const id = types.filter(val => {
+    //         const { value } = val
+    //         return type[target] === value
+    //     })
+    //     formData.type = id[0].id
+    //     this.setState({
+    //         formData
+    //     })
+    // }
 
-    /**
-     * 时间选择
-     */
-    public onDateChange(type:number, event:any) {
-        const value = event.detail.value - 0
-        const { formData } = this.state
-        if(type > 0) {
-            formData.endDate = value
-        }else {
-            formData.startDate = value
-        }
-        this.setState({
-            formData
-        })
-    }
+    // /**
+    //  * 时间选择
+    //  */
+    // public onDateChange(type:number, event:any) {
+    //     const value = event.detail.value - 0
+    //     const { formData } = this.state
+    //     if(type > 0) {
+    //         formData.endDate = value
+    //     }else {
+    //         formData.startDate = value
+    //     }
+    //     this.setState({
+    //         formData
+    //     })
+    // }
 
     public render() {
-        const { formDefault, formData } = this.state
+        const { formDefault, formData, type: movieType } = this.state
         const { feeOptions } = formDefault
         const { maxPrice, minPrice, fee, priceDisable, type, startDate, endDate } = formData
         return (
@@ -240,7 +262,13 @@ export default class Forms extends Component<IProps> {
                 </View>
                 <View className='price'>
                     <View className='low'>
-                        <AtInput
+                        <GInput
+                            inputType={'number'}
+                            placeholder={'最低价格'}
+                            disabled={priceDisable}
+                            ref={this.minPriceRef}
+                        ></GInput>
+                        {/* <AtInput
                             border={true}
                             name='最低价格'
                             title='最低价格'
@@ -249,10 +277,16 @@ export default class Forms extends Component<IProps> {
                             value={minPrice}
                             onChange={(value,event) => {this.handlePrice.call(this, -1, value, event)}}
                             disabled={priceDisable}
-                        />
+                        /> */}
                     </View>
                     <View className='high'>
-                        <AtInput
+                        <GInput
+                            inputType={'number'}
+                            placeholder={'最高价格'}
+                            disabled={priceDisable}
+                            ref={this.maxPriceRef}
+                        ></GInput>
+                        {/* <AtInput
                             name='最高价格'
                             title='最高价格'
                             type='number'
@@ -260,11 +294,17 @@ export default class Forms extends Component<IProps> {
                             value={maxPrice}
                             onChange={(value,event) => {this.handlePrice.call(this, 1, value, event)}}
                             disabled={priceDisable}
-                        />
+                        /> */}
                     </View>
                 </View>
                 <View className='type'>
-                    <Picker 
+                    <GPicker
+                        selector={{range: movieType}}
+                        title={'类型选择'}
+                        ref={this.typeRef}
+                    >
+                    </GPicker>
+                    {/* <Picker 
                         mode='selector' 
                         range={this.state.type} 
                         onChange={this.typeChange}
@@ -272,10 +312,17 @@ export default class Forms extends Component<IProps> {
                         <View className='picker'>
                             类型选择：{this.state.type[formData.type] || '全部'}
                         </View>
-                    </Picker>
+                    </Picker> */}
                 </View>
                 <View className='time'>
-                    <Picker 
+                    <GPicker
+                        date={{fields: 'year'}}
+                        title={'起始时间'}
+                        style={{marginBottom: '5px'}}
+                        ref={this.startTimeRef}
+                    >
+                    </GPicker>
+                    {/* <Picker 
                         className='list'
                         mode='date' 
                         onChange={(event) => {this.onDateChange.call(this, -1, event)}}
@@ -286,8 +333,14 @@ export default class Forms extends Component<IProps> {
                         <View className='picker'>
                             起始时间：{startDate}
                         </View>
-                    </Picker>
-                    <Picker 
+                    </Picker> */}
+                    <GPicker
+                        date={{fields: 'year'}}
+                        title={'结束时间'}
+                        ref={this.endTimeRef}
+                    >
+                    </GPicker>
+                    {/* <Picker 
                         className='list'
                         mode='date' 
                         onChange={(event) => {this.onDateChange.call(this, 1, event)}}
@@ -298,7 +351,7 @@ export default class Forms extends Component<IProps> {
                         <View className='picker'>
                             结束时间：{endDate}
                         </View>
-                    </Picker>
+                    </Picker> */}
                 </View>
                 {/* <View className='other'>
                     <AtList>

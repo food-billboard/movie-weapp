@@ -17,6 +17,7 @@ interface IProps {
 interface IState {
   files: Array<IFiles>
   showAddBtn: boolean
+  error: boolean
 }
 
 const { count } = IMAGE_CONFIG
@@ -25,10 +26,13 @@ export default class extends Component<IProps, IState> {
 
   public state: IState = {
     files: [],
-    showAddBtn: true
+    showAddBtn: true,
+    error: false
   }
 
   private FIRST = true
+
+  private initValue: any = false
 
   //图片选择/删除
   public handleChange = (files: Array<any>, operationType: string, index: number) => {
@@ -68,6 +72,28 @@ export default class extends Component<IProps, IState> {
     })
   }
 
+  //重置
+  public reset = () => {
+    this.setState({
+      files: this.initValue ? this.initValue : []
+    })
+  }
+
+  //获取数据
+  public getData = async () => {
+    const { files } = this.state
+    if(!files.length) {
+      await this.setState({
+        error: true
+      })
+      return false
+    }
+    await this.setState({
+      error: false
+    })
+    return files
+  }
+
   public render() {
 
     const { mode, multiple=true, length=6, files=false } = this.props
@@ -75,6 +101,7 @@ export default class extends Component<IProps, IState> {
     if(this.FIRST) {
       if(Array.isArray(files) && files.length) {
         this.FIRST = false
+        this.initValue = files
         this.setState({
           files
         })

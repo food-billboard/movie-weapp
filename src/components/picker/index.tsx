@@ -1,48 +1,259 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Picker, Text } from '@tarojs/components'
-import { PickerSelectorProps, PickerMultiSelectorProps, PickerTimeProps, PickerDateProps, PickerRegionProps } from '@tarojs/components/types/Picker'
+import { isObject, isArray } from '~utils'
+import moment from 'moment'
+import { FORM_ERROR } from '~config'
+
+interface ISelector {
+  disabled?: boolean
+  onCancel?: () => any
+  range: Array<any>
+  rangeKey?: string
+}
+
+type TMode = 'selector' | 'time' | 'date' | 'multiSelector' 
+
+interface IMulti {
+  range: Array<string[]> | Array<number[]> | Array<Object[]>
+  rangeKey?: string
+  value?: number[] | string[] | Object[]
+  onColumnChange?: () => any
+  disabled?: boolean
+  onCancel?: () => any
+}
+
+interface ITime {
+  start?: string
+  end?: string
+  onCancel?: () => any
+  disabled?: boolean
+}
+
+interface IDate {
+  start?: string
+  end?: string
+  fields?: 'year' | 'month' | 'day'
+  disabled?: boolean
+  onCancel?: () => any
+}
 
 interface IProps {
-  title: string
-  // selectMode: 'configSelect' | 'configMulti' | 'configTime' | 'configDate'
-  // configSelect?: PickerSelectorProps | false
-  // configMulti?: PickerMultiSelectorProps | false
-  // configTime?: PickerTimeProps | false
-  // configDate?: PickerDateProps | false
-  config: PickerSelectorProps | PickerMultiSelectorProps | PickerTimeProps | PickerDateProps
+  style?: any
+  selector?: ISelector | false
+  multi?: IMulti | false
+  time?: ITime | false
+  date?: IDate | false
+  value?: string | Array<any> | false
+  title?: string
 }
 
 interface IState {
-  // selectorChecked: any
+  value: string | Array<any>
+  error: boolean
+}
+
+const STYLE = {
+  width:'100%',
+  height: '30px',
+  backgroundColor: 'rgba(0, 0, 0, 0.1)',
+  lineHeight: '30px',
+  boxSizing: 'border-box'
 }
 
 export default class extends Component<IProps, IState> {
 
+  public static defaultProps: IProps = {
+    style: {},
+    selector: false,
+    multi: false,
+    time: false,
+    date: false
+  }
+
   public state: IState = {
-    // selectorChecked:
+    value: this.props.multi ? [] : '',
+    error: false
+  }
+
+  private FIRST = true
+
+  private initValue: any = false
+
+  //处理change
+  public handleChange = (e: any, mode: TMode) => {
+    const { value: newData } = e.detail
+    if(mode === 'selector') {
+      const { selector } = this.props
+      if(selector) {
+        const { range } = selector
+        this.setState({
+          value: range[newData]
+        })
+      } 
+    }else if(mode === 'multiSelector') {
+      const { multi } = this.props
+      if(multi) {
+        const { range } = multi
+        let data: any[] = []
+        newData.map((val, index) => {
+          const _arr = range[index]
+          data.push(_arr[val])
+        })
+        this.setState({
+          value: data
+        })
+      } 
+    }else if(mode === 'date' || mode === 'time') {
+      this.setState({
+        value: newData
+      })
+    }
+  }
+
+  //默认方法
+  public defaultFn = () => {
+
+  }
+
+  //重置
+  public reset = () => {
+    this.setState({
+      value: this.initValue ? this.initValue : (this.props.multi ? [] : '')
+    })
+  }
+
+  //获取数据
+  public getData = async () => {
+    const { value } = this.state
+    if(!(value+'').length) {
+      await this.setState({
+        error: true
+      })
+      return false
+    }
+    await this.setState({
+      error: false
+    })
+    return value
   }
 
   public render() {
-    const { title, config } = this.props
-    // const {
-    //   mode,
-      
-    // } = config
+
+    const { style, selector, multi, time, date, value: propsValue, title='选择' } = this.props
+
+    if(this.FIRST) {
+      if(propsValue) {
+        this.FIRST = false
+        this.initValue = propsValue
+        this.setState({
+          value: propsValue
+        })
+      }
+    }
+
+    let dateShow
+    if(date) {
+      switch(date.fields) {
+        case 'year': 
+          dateShow = 'YYYY'
+          break
+        case 'month':
+          dateShow = 'YYYY-MM'
+          break
+        case 'day': 
+        default:
+          dateShow = 'YYYY-MM-DD'
+          break
+      }
+    }
+
+    const { value, error } = this.state
+
+    const _style = isObject(style) ? { ...STYLE, ...style, ...(error ? FORM_ERROR : {})} : { ...STYLE, ...(error ? FORM_ERROR : {}) }
+
     return (
-      <View className='page-section'>
-        <Text>{title}</Text>
-        <View>
-          {/* <Picker 
-            mode={this.props[selectMode].mode} 
-            range={config.range ? range : []} 
-            onChange={this.onChange}>
-            <View className='picker'>
-              当前选择：{this.state.selectorChecked}
+      <View>
+        {
+          selector ? 
+          <Picker
+            disabled={selector.disabled || false}
+            onCancel={selector.onCancel || this.defaultFn}
+            range={selector.range || []}
+            rangeKey={selector.rangeKey || ''}
+            mode={'selector'}
+            onChange={(e) => {this.handleChange.call(this, e, 'selector')}}
+            value={value}
+          >
+            <View className='picker'
+              style={{..._style}}
+            >
+              {title}: {value}
             </View>
-          </Picker> */}
-        </View>
+          </Picker>
+          : null
+        }
+        {
+          multi ? 
+          <Picker
+            mode={'multiSelector'}
+            range={multi.range || []}
+            rangeKey={multi.rangeKey || ''}
+            value={value}
+            onChange={(e) => {this.handleChange.call(this, e, 'multiSelector')}}
+            onColumnChange={multi.onColumnChange || this.defaultFn}
+            disabled={multi.disabled || false}
+            onCancel={multi.onCancel || this.defaultFn}
+          >
+            <View className='picker'
+              style={{..._style}}
+            >
+              {title}: {Array.isArray(value) ? value.join(' & ') : value}
+            </View>
+          </Picker>
+          : null
+        }
+        {
+          date ? 
+          <Picker
+            {...date}
+            mode={'date'}
+            onChange={(e) => {this.handleChange.call(this, e, 'date')}}
+            value={value}
+            start={date.start || '1970-01-01'}
+            end={date.end || moment(new Date().getTime()).format(dateShow)}
+            fields={date.fields || 'day'}
+            disabled={date.disabled || false}
+            onCancel={date.onCancel || this.defaultFn}
+          >
+            <View className='picker'
+              style={{..._style}}
+            >
+              {title}: {(value+'').length ? moment(value).format(dateShow) : ''}
+            </View>
+          </Picker>
+          : null
+        }
+        {
+          time ? 
+          <Picker
+            mode={'time'}
+            value={value}
+            onChange={(e) => {this.handleChange.call(this, e, 'time')}}
+            onCancel={time.onCancel || this.defaultFn}
+            start={time.start || '00:00'}
+            end={time.end || '23:59'}
+            disabled={time.disabled}
+          >
+            <View className='picker'
+              style={{..._style}}
+            >
+              {title}: {(value + '').length ? moment(value).format('mm:ss') : ''}
+            </View>
+          </Picker>
+          : null
+        }
       </View>
     )
   }
 
-} 
+}

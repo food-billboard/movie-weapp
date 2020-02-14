@@ -279,7 +279,7 @@ export const getAppInfo = () => {
  * @param query 查询参数
  */
 export const getStore = (query) => {
-    return request('get', '/api/user/getstore')
+    return request('get', '/api/user/getstore', { query })
 }
 
 /**
@@ -304,5 +304,37 @@ export const getIsStore = (movie, user) => {
  * @parma query 查询参数
  */
 export const getIssue = (query) => {
-    return request('GET', '/api/user/getissue')
+    return request('GET', '/api/user/getissue', { query })
+}
+
+/**
+ * 获取电影地区列表
+ * @param count 查询数量
+ */
+export const getAreaList = (count) => {
+    return request('GET', '/api/movie/getAreaList', { query: { count } })
+}
+
+/**
+ * 获取电影语言列表
+ * @param count 查询数量
+ */
+export const getLanguageList = (count) => {
+    return request('GET', '/api/movie/getLanguageList', { query: { count } } )
+}
+
+/**
+ * 获取电影导演列表
+ * @param count 查询数量
+ */
+export const getDirectorList = (count) => {
+    return request('GET', '/api/movie/getDirectorList', { query: { count } })
+}
+
+/**
+ * 获取演员列表
+ * @param count 查询数量
+ */
+export const getActorList = (count) => {
+    return request('GET', '/api/movie/getActorList', { query: { count } })
 }

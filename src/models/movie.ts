@@ -12,7 +12,11 @@ import {
     getRankType,
     getCommentSimple,
     getCommentDetail,
-    getRate
+    getRate,
+    getAreaList,
+    getLanguageList,
+    getDirectorList,
+    getActorList,
 } from '~services'
 
 let a = 0
@@ -94,32 +98,32 @@ export default {
                 data: {
                     switch: [
                         {
-                            id: 0,
+                            id: '0',
                             value: '分类',
                             image: 'http://a0.att.hudong.com/27/10/01300000324235124757108108752.jpg'
                         },
                         {
-                            id: 1,
+                            id: '1',
                             value: '分类',
                             image: 'http://a0.att.hudong.com/27/10/01300000324235124757108108752.jpg'
                         },
                         {
-                            id: 2,
+                            id: '2',
                             value: '分类',
                             image: 'http://a0.att.hudong.com/27/10/01300000324235124757108108752.jpg'
                         },
                         {
-                            id: 3,
+                            id: '3',
                             value: '分类',
                             image: 'http://a0.att.hudong.com/27/10/01300000324235124757108108752.jpg'
                         },
                         {
-                            id: 4,
+                            id: '4',
                             value: '分类',
                             image: 'http://a0.att.hudong.com/27/10/01300000324235124757108108752.jpg'
                         },
                         {
-                            id: 5,
+                            id: '5',
                             value: '分类',
                             image: 'http://a0.att.hudong.com/27/10/01300000324235124757108108752.jpg'
                         }
@@ -1848,39 +1852,39 @@ export default {
                     people: 100, 
                     director: [
                         {
-                            id: '导演1号', 
+                            id: '0', 
                             value: '导演1号',
                         },
                         {
-                            id: '导演2号',
+                            id: '1',
                             value: '导演2号'
                         }, 
                         {
-                            id: '导演3号',
+                            id: '2',
                             value: '导演3号'
                         }
                     ], 
                     actor: [
                         {
-                            id: '龙套1号',
+                            id: '0',
                             value: '龙套1号'
                         },
                         {
-                            id: '龙套2号',
+                            id: '1',
                             value: '龙套2号'
                         },
                         {
-                            id: '龙套3号',
+                            id: '2',
                             vlaue: '龙套3号'
                         }
                     ], 
                     type: [
                         {
-                            id: '惊悚',
+                            id: '0',
                             value: '惊悚'
                         },
                         {
-                            id: '爱情',
+                            id: '1',
                             value: '爱情'
                         }
                     ], 
@@ -1995,6 +1999,206 @@ export default {
             return _data.data
 
             const data = yield call(getRate, movie)
+            return data
+        },
+
+        //获取电影导演列表
+        * getDirectorList({ count=12 }, { call, put }) {
+            const _data = {
+                success: true,
+                data: {
+                    data: [
+                        {
+                            id: '0',
+                            value: '0',
+                            image: ''
+                        },
+                        {
+                            id: '1',
+                            value: '1',
+                            image: ''
+                        },
+                        {
+                            id: '2',
+                            value: '2',
+                            image: ''
+                        },
+                        {
+                            id: '3',
+                            value: '3',
+                            image: ''
+                        },
+                        {
+                            id: '4',
+                            value: '4',
+                            image: ''
+                        },
+                        {
+                            id: '5',
+                            value: '5',
+                            image: ''
+                        },
+                        {
+                            id: '6',
+                            value: '6',
+                            image: ''
+                        }
+                    ]
+                }
+            }
+            return _data.data
+
+            const data = yield call(getDirectorList, count)
+            return data
+        },
+
+        //获取电影演员列表
+        * getActorList({ count=12 }, { call, put }) {
+
+            const _data = {
+                success: true,
+                data: {
+                    data: [
+                        {
+                            id: '0',
+                            value: '0',
+                            image: ''
+                        },
+                        {
+                            id: '1',
+                            value: '1',
+                            image: ''
+                        },
+                        {
+                            id: '2',
+                            value: '2',
+                            image: ''
+                        },
+                        {
+                            id: '3',
+                            value: '3',
+                            image: ''
+                        },
+                        {
+                            id: '4',
+                            value: '4',
+                            image: ''
+                        },
+                        {
+                            id: '5',
+                            value: '5',
+                            image: ''
+                        },
+                        {
+                            id: '6',
+                            value: '6',
+                            image: ''
+                        }
+                    ]
+                }
+            }
+            return _data.data
+
+            const data = yield call(getActorList, count)
+            return data
+        },
+
+        //获取电影地区列表
+        * getAreaList({ count=12 }, { call, put }) {
+            const _data = {
+                success: true,
+                data: {
+                    data: [
+                        {
+                            id: '0',
+                            value: '1',
+                            image: ''
+                        },
+                        {
+                            id: '1',
+                            value: '1',
+                            image: ''
+                        },
+                        {
+                            id: '2',
+                            value: '2',
+                            image: ''
+                        },
+                        {
+                            id: '3',
+                            value: '3',
+                            image: ''
+                        },
+                        {
+                            id: '4',
+                            value: '4',
+                            image: ''
+                        },
+                        {
+                            id: '5',
+                            value: '5',
+                            image: ''
+                        },
+                        {
+                            id: '6',
+                            value: '6',
+                            image: ''
+                        }
+                    ]
+                }
+            }
+            return _data.data
+
+            const data = yield call(getAreaList, count)
+        },
+
+        //获取电影语言列表
+        * getLanguageList({ count=12 }, { call, put }) {
+            const _data = {
+                success: true,
+                data: {
+                    data: [
+                        {
+                            id: '0',
+                            value: '0',
+                            image: ''
+                        },
+                        {
+                            id: '1',
+                            value: '1',
+                            image: ''
+                        },
+                        {
+                            id: '2',
+                            value: '2',
+                            image: ''
+                        },
+                        {
+                            id: '3',
+                            value: '3',
+                            image: ''
+                        },
+                        {
+                            id: '4',
+                            value: '4',
+                            image: ''
+                        },
+                        {
+                            id: '5',
+                            value: '5',
+                            image: ''
+                        },
+                        {
+                            id: '6',
+                            value: '6',
+                            image: ''
+                        }
+                    ]
+                }
+            }
+            return _data.data
+
+            const data = yield call(getLanguageList, count)
             return data
         }
 

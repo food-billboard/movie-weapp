@@ -1,6 +1,6 @@
 export interface FormData {
-  maxPrice: number,
-  minPrice: number
+  maxPrice: number | string,
+  minPrice: number | string
   priceDisable: boolean
   fee: Array<string>,
   type: string,

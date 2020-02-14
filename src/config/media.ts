@@ -5,3 +5,8 @@ export const IMAGE_CONFIG = {
   sourceType: ['album', 'camera']
 }
 
+//表单提示样式
+export const FORM_ERROR = {
+  border: '1px solid red'
+}
+

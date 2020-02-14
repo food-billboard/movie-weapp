@@ -6,6 +6,7 @@ import { AtButton } from 'taro-ui'
 import './index.scss'
 
 import { isObject } from '~utils'
+import { FORM_ERROR } from '~config'
 
 interface IProps {
   info: IVideo
@@ -13,14 +14,20 @@ interface IProps {
 
 interface IState {
   info: IVideo
+  srcError: boolean
+  posterError: boolean
 }
 
 export default class extends Component<IProps, IState> {
 
   private FIRST = true
 
+  private initValue:any = false
+
   public state: IState = {
-    info: {src: '', poster: ''}
+    info: {src: '', poster: ''},
+    srcError: false,
+    posterError: false
   }
 
   //添加海报
@@ -54,6 +61,37 @@ export default class extends Component<IProps, IState> {
     })
   }
 
+  //重置
+  public reset = () => {
+    this.setState({
+      info: this.initValue ? this.initValue : { src: '', poster: '' }
+    })
+  }
+
+  //获取数据
+  public getData = async () => {
+    const { info } = this.state
+    const { src, poster } = info
+    if(!src.length || !poster.length) {
+      if(!src.length) {
+        await this.setState({
+          srcError: true
+        })
+      }
+      if(!poster.length) {
+        await this.setState({
+          posterError: true
+        })
+      }
+      return false
+    }
+    await this.setState({
+      srcError: false,
+      posterError: false
+    })
+    return info
+  }
+
   public render() {
 
     const { info=false } = this.props
@@ -62,13 +100,14 @@ export default class extends Component<IProps, IState> {
       if(isObject(info)) {
         this.FIRST = false
         const { info: defaultInfo } = this.state
+        this.initValue = { ...defaultInfo, ...info }
         this.setState({
-          info: { ...defaultInfo, ...info  }
+          info: { ...defaultInfo, ...info }
         })
       }
     }
 
-    const { info: stateInfo } = this.state
+    const { info: stateInfo, srcError, posterError } = this.state
     const { 
       poster,
       src
@@ -81,8 +120,8 @@ export default class extends Component<IProps, IState> {
           src={src}
         ></GVideo>
         <View className='at-row at-row__justify--between'>
-          <AtButton onClick={this.handleAddPoster} className='at-col'>添加海报</AtButton>
-          <AtButton onClick={this.handleAddMedia} className='at-col'>添加视频</AtButton>
+          <AtButton onClick={this.handleAddPoster} className='at-col' customStyle={{...(posterError ? FORM_ERROR : {}) }} >添加海报</AtButton>
+          <AtButton onClick={this.handleAddMedia} className='at-col' customStyle={{...(srcError ? FORM_ERROR : {}) }} >添加视频</AtButton>
         </View>
       </View>
     )

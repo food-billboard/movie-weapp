@@ -3,14 +3,15 @@ import { View } from '@tarojs/components'
 import { AtInput, AtButton, AtTag } from 'taro-ui'
 import GCheckBox from '~components/checkbox'
 import GVideo from './components/video'
-// import GPicker from '~components/picker'
+import GPicker from '~components/picker'
 import GDescription from './components/description'
 import GImagePicker from '~components/imgPicker'
 import { IFormData } from './interface'
-import { country } from './config'
 import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToProps } from './connect'
+
 import './index.scss'
+import { Toast } from '~components/toast'
 
 const FORM_DATA: IFormData = {
   id: false,
@@ -36,6 +37,12 @@ const TAT_STYLE = {
   backgroundColor: 'white'
 }
 
+const PICKER_STYLE = {
+  height: '46px',
+  lineHeight: '46px',
+  marginBottom: '5px'
+}
+
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any> {
   
@@ -45,7 +52,8 @@ export default class extends Component<any> {
 
   public state: any = {
     detai: {},
-    formData: { ...FORM_DATA }
+    formData: { ...FORM_DATA },
+    lang: []
   }
 
   public componentDidMount = async () => {
@@ -64,11 +72,34 @@ export default class extends Component<any> {
   //图片选择
   public imagePickerRef = Taro.createRef<GImagePicker>()
 
+  //地区选择
+  public areaRef = Taro.createRef<GCheckBox>()
+
+  //语言选择
+  public langRef = Taro.createRef<GPicker>()
+
+  //上映时间选择
+  public timeRef = Taro.createRef<GPicker>()
+
+  //演员选择
+  public actorRef = Taro.createRef<GCheckBox>()
+
+  //导演选择
+  public directorRef = Taro.createRef<GCheckBox>()
+
+  //类型选择
+  public typeRef = Taro.createRef<GCheckBox>()
+
   //获取数据
   public fetchData = async () => {
     const { issueSet } = this.props
     const { isIssue, id: movieId } = issueSet
-    if(isIssue) return
+    const language = await this.props.getLanguageList()
+    const lang = language.data
+    await this.setState({
+      lang
+    })
+    if(!isIssue) return
     const detail = await this.props.getDetail(movieId) 
     await this.setState({
       detail
@@ -91,6 +122,7 @@ export default class extends Component<any> {
       actor,
       type,
       time,
+      language,
       description,
     } = inmformation
     this.setState({
@@ -105,6 +137,7 @@ export default class extends Component<any> {
           type,
           time,
           description,
+          language
         },
         image
       }
@@ -118,21 +151,103 @@ export default class extends Component<any> {
 
   //提交
   public handleSubmit = async (e) => {
-    
+    const video = await this.videoRef.current!.getData()
+    const name = await this.nameRef.current!.getData()
+    const area = await this.areaRef.current!.getData()
+    const director = await this.directorRef.current!.getData()
+    const actor = await this.actorRef.current!.getData()
+    const type = await this.typeRef.current!.getData()
+    const time = await this.timeRef.current!.getData()
+    const lang = await this.langRef.current!.getData()
+    const description = await this.descriptionRef.current!.getData()
+    const images = await this.imagePickerRef.current!.getData()
+    if(!video || 
+      !name || 
+      !area ||
+      !director || 
+      !actor || 
+      !type ||
+      !time || 
+      !lang ||
+      !description) {
+        Toast({
+          title: '信息好像没填对',
+          icon: 'fail'
+        })
+        return
+    }
+    if(!images) {
+      Toast({
+        title: '截图数不对',
+        icon: 'fail'
+      })
+      return
+    }
+    const { issueSet } = this.props
+    const { isIssue, id: movieId } = issueSet
+    const { lang: language } = this.state
+
+    const _lang = language.filter((val: any) => {
+      const { id, vlaue } = val
+      return id === lang
+    })
+
+    let _time = Array.isArray(time) ? time.join('') : time
+
+    let data: IFormData = {  
+      id: isIssue ? movieId : false,
+      video,
+      info: {
+        name,
+        area,
+        director,
+        actor,
+        type,
+        time: _time,
+        description,
+        language: _lang.length ? _lang[0]['id'] : lang
+      },
+      image: images.map((val: any) => {
+        return {
+          image: val
+        }
+      })
+    }
+    if(isIssue) {
+      await this.props.setIssue({
+        isIssue: false,
+        movieId: ''
+      })
+      this.editData(data)
+    }else {
+      await this.props.sendIssue(data)
+    }
   }
 
   //重置
   public handleReset = async (e) => {
-    console.log('重置')
-  }
-
-  //处理输入框内容改变
-  public handleInputChange = (value) => {
-
+    Taro.showModal({
+      title: '提示',
+      content: '是否确定重置数据'
+    }).then((res) => {
+      const { confirm } = res
+      if(confirm) {
+        this.videoRef.current!.reset()
+        this.nameRef.current!.reset()
+        this.descriptionRef.current!.reset()
+        this.imagePickerRef.current!.reset()
+        this.areaRef.current!.reset()
+        this.langRef.current!.reset()
+        this.timeRef.current!.reset()
+        this.actorRef.current!.reset() 
+        this.directorRef.current!.reset()
+        this.typeRef.current!.reset()
+      }
+    })
   }
 
   public render() {
-    const { formData } = this.state
+    const { formData, lang } = this.state
     const {
       video,
       info,
@@ -146,6 +261,7 @@ export default class extends Component<any> {
       type=[],
       time,
       description,
+      language
     } = info
     return (
       <View className='issue'>
@@ -182,12 +298,13 @@ export default class extends Component<any> {
             地区
           </AtTag>
           <GCheckBox
+            ref={this.areaRef}
             style={{marginBottom: '20px'}}
             checkedList={area.map((val: any) => {
               const { id } = val
               return id
             })}
-            checkboxOption={country}
+            type={'area'}
           ></GCheckBox>
         </View>
         <View className='director'>
@@ -198,12 +315,13 @@ export default class extends Component<any> {
             导演
           </AtTag>
           <GCheckBox
+            ref={this.directorRef}
             style={{marginBottom: '20px'}}
             checkedList={director.map((val: any) => {
               const { id } = val
               return id
             })}
-            checkboxOption={country}
+            type={'director'}
           ></GCheckBox>
         </View>
         <View className='actor'>
@@ -214,12 +332,13 @@ export default class extends Component<any> {
             演员
           </AtTag>
           <GCheckBox
+            ref={this.actorRef}
             style={{marginBottom: '20px'}}
             checkedList={actor.map((val: any) => {
               const { id } = val
               return id
             })}
-            checkboxOption={country}
+            type={'actor'}
           ></GCheckBox>
         </View>
         <View className='type'>
@@ -230,16 +349,45 @@ export default class extends Component<any> {
             类型
           </AtTag>
           <GCheckBox
+            ref={this.typeRef}
             style={{marginBottom: '20px'}}
             checkedList={type.map((val: any) => {
               const { id } = val
               return id
             })}
-            checkboxOption={country}
+            type={'type'}
           ></GCheckBox>
         </View>
-        <View className='time'>
-          {/* <GPicker title='' config={{mode: 'selector', range: [], value: '', onChange: () => {}}}></GPicker> */}
+        <View className='publishTime'>
+          <AtTag 
+            customStyle={TAT_STYLE} 
+            type={'primary'}
+          >
+            上映时间
+          </AtTag>
+          <GPicker
+            style={PICKER_STYLE}
+            date={{}}
+            value={time}
+            ref={this.timeRef}
+          ></GPicker>
+        </View>
+        <View className='language'>
+          <AtTag 
+            customStyle={TAT_STYLE} 
+            type={'primary'}
+          >
+            语言
+          </AtTag>
+          <GPicker
+            ref={this.langRef}
+            style={PICKER_STYLE}
+            selector={{range: lang.map((val: any) => {
+              const { value } = val
+              return value
+            })}}
+            value={language}
+          ></GPicker>
         </View>
         <View className='description'>
           <AtTag
