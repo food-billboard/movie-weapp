@@ -1,16 +1,16 @@
 import Taro, {Component} from '@tarojs/taro'
-import { View, Picker } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import GPicker from '~components/picker'
 import GInput from '../../../../issue/components/description'
-import { AtForm, AtInput, AtButton, AtCheckbox, AtList, AtListItem } from 'taro-ui'
+import { AtForm, AtButton, AtAccordion, AtTag } from 'taro-ui'
 import { FormData } from '../../../interface'
 import './index.scss'
 import { connect } from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { Toast } from '~components/toast'
-import { IFormData } from '~pages/issue/interface'
+import GCheckbox from '~components/checkbox'
 
-interface IType {
+interface ILang {
     id: string,
     value: string,
     img: string
@@ -18,7 +18,7 @@ interface IType {
 
 interface IProps {
     screen: (formData: FormData) => void
-    getType: () => any
+    getLanguageList: () => any
 }
 
 interface FeeOption {
@@ -32,25 +32,37 @@ interface FormDefault {
 }
 
 interface IState {
-    formData: FormData,
-    formDefault: FormDefault,
-    type: Array<string>
-    types: Array<IType>
+    lang: Array<ILang>
+    open: boolean
+}
+
+const TAT_STYLE = {
+    boxSizing: 'border-box', 
+    border: '1px dashed black', 
+    width:'100%', 
+    marginBottom: '5px', 
+    backgroundColor: 'white'
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Forms extends Component<IProps> {
 
-    public formData: FormData = {
+    //表单格式
+    readonly formData: FormData = {
         maxPrice:0, //价格上限
         minPrice: 0,    //价格下限
-        priceDisable: false,    //免费
         fee: [],   //是否免费
-        type: '全部',   //电影类型
-        startDate: 1888,  //起始时间,
-        endDate: new Date().getFullYear(),    //结束时间,
-        // actor: ''   //演员
+        type: '',   //电影类型
+        startDate: '',  //起始时间,
+        endDate: '',    //结束时间,
+        actor: [],   //演员
+        director: [],   //导演
+        lang: '',   //语言
+        area: [],   //地区
     }
+
+    //付费免费
+    public feeRef = Taro.createRef<GCheckbox>()
 
     //最低价格
     public minPriceRef = Taro.createRef<GInput>()
@@ -59,7 +71,7 @@ export default class Forms extends Component<IProps> {
     public maxPriceRef = Taro.createRef<GInput>()
 
     //类型
-    public typeRef = Taro.createRef<GPicker>()
+    public typeRef = Taro.createRef<GCheckbox>()
 
     //起始时间
     public startTimeRef = Taro.createRef<GPicker>()
@@ -67,8 +79,25 @@ export default class Forms extends Component<IProps> {
     //结束时间
     public endTimeRef = Taro.createRef<GPicker>()
 
+    //导演
+    public directorRef = Taro.createRef<GCheckbox>()
+
+    //演员
+    public actorRef = Taro.createRef<GCheckbox>()
+
+    //地区
+    public areaRef = Taro.createRef<GCheckbox>()
+
+    //语言
+    public langRef = Taro.createRef<GPicker>()
+
     public componentDidMount = () => {
         this.fetchTypeData()
+    }
+
+    public state: IState = {
+        lang: [],
+        open: false
     }
 
     public constructor() {
@@ -76,7 +105,6 @@ export default class Forms extends Component<IProps> {
 
         this.onSubmit = this.onSubmit.bind(this)
         this.onReset = this.onReset.bind(this)
-        // this.onDateChange = this.onDateChange.bind(this)
     }
 
     /**
@@ -84,65 +112,62 @@ export default class Forms extends Component<IProps> {
      */
     public fetchTypeData = async () => {
         Taro.showLoading({mask: true, title: '加载中'})
-        const data = await this.props.getType()
-        const _data = data.switch
-        const list = _data.map(val => {
-            const { value } = val
-            return value
-        })
-        this.setState({
-            type: list,
-            types: _data
+        const language = await this.props.getLanguageList()
+        const lang = language.data
+        await this.setState({
+            lang
         })
         Taro.hideLoading()
     }
 
-    public state: IState = {
-        formData: Object.assign({}, this.formData),
-        formDefault: {
-            feeOptions: [
-                {
-                    value: '免费',
-                    label: '免费',
-                    disabled: false
-                },
-                {
-                    value: '付费',
-                    label: '付费',
-                    disabled: false
-                }
-            ]
-        },
-        type: [],
-        types: []
+    //表单默认属性
+    readonly formDefault:FormDefault = {
+        feeOptions: [
+            {
+                value: 'free',
+                label: '免费',
+                disabled: false
+            },
+            {
+                value: 'fee',
+                label: '付费',
+                disabled: false
+            }
+        ]
     }
 
     /**
      * 搜索条件数据检验
      */
     public filterFactor = async() => {
-        const {formData} = this.state
-        if(formData.priceDisable) {     //免费
-            delete formData.maxPrice
-            delete formData.minPrice
+        const fee = await this.feeRef.current!.getData(false)
+        const startTime = await this.startTimeRef.current!.getData(false)
+        const endTime = await this.endTimeRef.current!.getData(false)
+        const minPrice = await this.minPriceRef.current!.getData(false)
+        const maxPrice = await this.maxPriceRef.current!.getData(false)
+        const type = await this.typeRef.current!.getData(false)
+        const lang = await this.langRef.current!.getData(false)
+        const area = await this.areaRef.current!.getData(false)
+        const director = await this.directorRef.current!.getData(false)
+        const actor = await this.actorRef.current!.getData(false)
+
+        const isArray = (data, string=false) => {
+            return  Array.isArray(data) ? (string ? data.join('') : data) : (data ? data : '')
         }
-        const startTime = this.startTimeRef.current!.state!.value
-        const endTime = this.endTimeRef.current!.state!.value
-        const minPrice = this.minPriceRef.current!.state!.value
-        const maxPrice = this.maxPriceRef.current!.state!.value
+
         //日期检查
-        if( startTime.length && endTime.length) {
+        if( startTime && endTime) {
             if(startTime > endTime) {
-                await Toast({
+                Toast({
                     title: '起始时间有误',
                     icon: 'fail', 
                 })
                 return
             }
         }
-        if(minPrice.length && maxPrice.length) {
+        //价格检查
+        if(minPrice && maxPrice) {
             if(minPrice > maxPrice) {
-                console.log(minPrice > maxPrice)
                 await Toast({
                     title: '价格不能为负数',
                     icon: 'fail',
@@ -150,19 +175,27 @@ export default class Forms extends Component<IProps> {
                 return
             }
         }
-        let data:FormData = { ...formData, ...{maxPrice, minPrice, startDate: startTime, endDate: endTime} }
-        await this.setState({
-            formData: data
-        })
-        // return data
+        let data: FormData = {
+            maxPrice: maxPrice ? maxPrice : '',
+            minPrice: minPrice ? minPrice : '',
+            fee: fee ? fee : [],
+            type: isArray(type),
+            startDate: isArray(startTime, true),
+            endDate: isArray(endTime, true),
+            lang: isArray(lang, true),
+            area: isArray(area),
+            director: isArray(director),
+            actor: isArray(actor)
+        }
+        return data
     }
 
     /**
      * 筛选提交
      */
     public onSubmit = async () => {
-        const data:FormData = await this.filterFactor()
-        await this.props.screen(data)
+        const data = await this.filterFactor()
+        await this.props.screen(data ? data : this.formData)
     }
 
     /**
@@ -176,145 +209,98 @@ export default class Forms extends Component<IProps> {
         if(!confirm) {
             return
         }
-        await this.setState({
-            formData: Object.assign({}, this.formData)
-        })
+        this.feeRef.current!.reset()
+        this.maxPriceRef.current!.reset()
+        this.minPriceRef.current!.reset()
+        this.startTimeRef.current!.reset()
+        this.endTimeRef.current!.reset()
+        this.typeRef.current!.reset()
+        this.areaRef.current!.reset()
+        this.actorRef.current!.reset()
+        this.directorRef.current!.reset()
+        this.langRef.current!.reset()
     }
 
     /**
-     * 是否免费选择
+     * 是否选择免费
      */
     public feeChange = (value:Array<string>) => {
-        const { formData } = this.state
-        formData.fee = value
-        if(value.includes('免费') && value.length === 1) {
-            formData.priceDisable = true
+        this.feeRef.current!.handleChange(value)
+        if(value.includes('free') && value.length === 1) {
+            this.minPriceRef.current!.setDisabled(true)
+            this.maxPriceRef.current!.setDisabled(true)
         }else {
-            formData.priceDisable = false
+            this.minPriceRef.current!.setDisabled(false)
+            this.maxPriceRef.current!.setDisabled(false)
         }
+    }
+
+    //处理其他筛选
+    public handleOther = (value) => {
         this.setState({
-            formData
+            open: value
         })
     }
 
-    // /**
-    //  * 金额选择
-    //  */
-    // public handlePrice = (type:number, value:number, event:any) => {
-    //     const { formData, formDefault } = this.state
-    //     if(type > 0) {
-    //         formData.maxPrice = value
-    //     }else {
-    //         formData.minPrice = value
-    //     }
-    //     this.setState({
-    //         formData
-    //     })
-    // }
-
-    // /**
-    //  * 类型选择
-    //  */
-    // public typeChange(event) {
-    //     const target = event.detail.value - 0
-    //     const { formData, type, types } = this.state
-    //     const id = types.filter(val => {
-    //         const { value } = val
-    //         return type[target] === value
-    //     })
-    //     formData.type = id[0].id
-    //     this.setState({
-    //         formData
-    //     })
-    // }
-
-    // /**
-    //  * 时间选择
-    //  */
-    // public onDateChange(type:number, event:any) {
-    //     const value = event.detail.value - 0
-    //     const { formData } = this.state
-    //     if(type > 0) {
-    //         formData.endDate = value
-    //     }else {
-    //         formData.startDate = value
-    //     }
-    //     this.setState({
-    //         formData
-    //     })
-    // }
-
     public render() {
-        const { formDefault, formData, type: movieType } = this.state
-        const { feeOptions } = formDefault
-        const { maxPrice, minPrice, fee, priceDisable, type, startDate, endDate } = formData
+        const { lang, open } = this.state
+        const { feeOptions } = this.formDefault
         return (
             <AtForm
                 onSubmit={this.onSubmit}
                 onReset={this.onReset}
             >
                 <View className='fee'>
-                    <AtCheckbox
-                        options={feeOptions}
-                        selectedList={fee}
-                        onChange={this.feeChange}
-                    />
+                    <AtTag 
+                        customStyle={TAT_STYLE} 
+                        type={'primary'}
+                    >
+                        价格选择
+                    </AtTag>
+                    <GCheckbox
+                        ref={this.feeRef}
+                        handleChange={this.feeChange}
+                        checkboxOption={feeOptions}
+                        needHiddenList={false}
+                    ></GCheckbox>
                 </View>
                 <View className='price'>
                     <View className='low'>
                         <GInput
                             inputType={'number'}
                             placeholder={'最低价格'}
-                            disabled={priceDisable}
                             ref={this.minPriceRef}
                         ></GInput>
-                        {/* <AtInput
-                            border={true}
-                            name='最低价格'
-                            title='最低价格'
-                            type='number'
-                            placeholder='最低价格'
-                            value={minPrice}
-                            onChange={(value,event) => {this.handlePrice.call(this, -1, value, event)}}
-                            disabled={priceDisable}
-                        /> */}
                     </View>
                     <View className='high'>
                         <GInput
                             inputType={'number'}
                             placeholder={'最高价格'}
-                            disabled={priceDisable}
                             ref={this.maxPriceRef}
                         ></GInput>
-                        {/* <AtInput
-                            name='最高价格'
-                            title='最高价格'
-                            type='number'
-                            placeholder='最高价格'
-                            value={maxPrice}
-                            onChange={(value,event) => {this.handlePrice.call(this, 1, value, event)}}
-                            disabled={priceDisable}
-                        /> */}
                     </View>
                 </View>
                 <View className='type'>
-                    <GPicker
-                        selector={{range: movieType}}
-                        title={'类型选择'}
+                    <AtTag 
+                        customStyle={TAT_STYLE} 
+                        type={'primary'}
+                    >
+                        分类
+                    </AtTag>
+                    <GCheckbox
                         ref={this.typeRef}
-                    >
-                    </GPicker>
-                    {/* <Picker 
-                        mode='selector' 
-                        range={this.state.type} 
-                        onChange={this.typeChange}
-                    >
-                        <View className='picker'>
-                            类型选择：{this.state.type[formData.type] || '全部'}
-                        </View>
-                    </Picker> */}
+                        style={{marginBottom: '20px'}}
+                        needHiddenList={false}
+                        type={'type'}
+                    ></GCheckbox>
                 </View>
                 <View className='time'>
+                    <AtTag 
+                        customStyle={TAT_STYLE} 
+                        type={'primary'}
+                    >
+                        时间选择
+                    </AtTag>
                     <GPicker
                         date={{fields: 'year'}}
                         title={'起始时间'}
@@ -322,58 +308,78 @@ export default class Forms extends Component<IProps> {
                         ref={this.startTimeRef}
                     >
                     </GPicker>
-                    {/* <Picker 
-                        className='list'
-                        mode='date' 
-                        onChange={(event) => {this.onDateChange.call(this, -1, event)}}
-                        fields='year'
-                        start={1888}
-                        end={new Date().getFullYear()}
-                    >
-                        <View className='picker'>
-                            起始时间：{startDate}
-                        </View>
-                    </Picker> */}
                     <GPicker
                         date={{fields: 'year'}}
                         title={'结束时间'}
+                        style={{paddingBottom:'20px'}}
                         ref={this.endTimeRef}
                     >
                     </GPicker>
-                    {/* <Picker 
-                        className='list'
-                        mode='date' 
-                        onChange={(event) => {this.onDateChange.call(this, 1, event)}}
-                        fields='year'
-                        end={new Date().getFullYear()}
-                        start={1888}
-                    >
-                        <View className='picker'>
-                            结束时间：{endDate}
-                        </View>
-                    </Picker> */}
                 </View>
-                {/* <View className='other'>
-                    <AtList>
-                        {this.props.other.map ? this.props.other.map((value, index) => {
-                            const { handleClick, title } = value
-                            return (
-                                <AtListItem 
-                                    key={index}
-                                    title={title} 
-                                    onClick={handleClick} 
-                                    arrow='down'
-                                />
-                            )
-                        }) : ''}
-                        <AtListItem title='标题文字' onClick={this.handleClick} />
-                        <AtListItem title='标题文字' arrow='right' />
-                        <AtListItem title='标题文字' extraText='详细信息' />
-                        <AtListItem title='禁用状态' disabled extraText='详细信息' />
-                    </AtList>
-                </View> */}
+                <View className='other'>
+                    <AtAccordion
+                        open={open}
+                        title={'其他筛选'}
+                        onClick={this.handleOther}
+                    >
+                        <View className='actor'>
+                            <AtTag 
+                                customStyle={TAT_STYLE} 
+                                type={'primary'}
+                            >
+                                演员
+                            </AtTag>
+                            <GCheckbox
+                                ref={this.actorRef}
+                                style={{marginBottom: '20px'}}
+                                type={'actor'}
+                            ></GCheckbox>
+                        </View>
+                        <View className='director'>
+                            <AtTag 
+                                customStyle={TAT_STYLE} 
+                                type={'primary'}
+                            >
+                                导演
+                            </AtTag>
+                            <GCheckbox
+                                ref={this.directorRef}
+                                style={{marginBottom: '20px'}}
+                                type={'director'}
+                            ></GCheckbox>
+                        </View >
+                        <View className='lang'>
+                            <AtTag 
+                                customStyle={TAT_STYLE} 
+                                type={'primary'}
+                            >
+                                语言
+                            </AtTag>
+                            <GPicker
+                                ref={this.langRef}
+                                selector={{range: lang.map((val: any) => {
+                                const { value } = val
+                                return value
+                                })}}
+                            ></GPicker>
+                        </View>
+                        <View className='area'>
+                            <AtTag 
+                                customStyle={TAT_STYLE} 
+                                type={'primary'}
+                            >
+                                地区
+                            </AtTag>
+                            <GCheckbox
+                                ref={this.areaRef}
+                                style={{marginBottom: '20px'}}
+                                type={'area'}
+                            ></GCheckbox>
+                        </View>
+                    </AtAccordion>
+                </View>
                 <View className='btn'>
-                    <AtButton formType='reset' type='secondary'>重置</AtButton>
+                    <AtButton formType='reset' type='secondary' customStyle={{backgroundColor: 'red'}}>重置</AtButton>
                     <AtButton formType='submit' type='primary'>确定</AtButton>
                 </View>
             </AtForm>

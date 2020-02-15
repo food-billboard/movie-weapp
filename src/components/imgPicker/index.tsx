@@ -80,9 +80,9 @@ export default class extends Component<IProps, IState> {
   }
 
   //获取数据
-  public getData = async () => {
+  public getData = async (emptyCharge=true) => {
     const { files } = this.state
-    if(!files.length) {
+    if(!files.length && emptyCharge) {
       await this.setState({
         error: true
       })

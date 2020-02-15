@@ -3,5 +3,5 @@ export const mapStateToProps = (state) => {
 }
 
 export const mapDispatchToProps = dispatch => ({
-   getType: (count=12) => dispatch({type: 'movie/getSwitch', count})
+    getLanguageList: (count=99) => dispatch({type: 'movie/getLanguageList', count})
 })

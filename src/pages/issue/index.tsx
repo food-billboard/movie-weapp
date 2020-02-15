@@ -266,7 +266,7 @@ export default class extends Component<any> {
     return (
       <View className='issue'>
         <View className='video'>
-        <AtTag 
+          <AtTag 
             customStyle={TAT_STYLE} 
             type={'primary'}
           >

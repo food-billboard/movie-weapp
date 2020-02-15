@@ -50,6 +50,7 @@ interface IProps {
 interface IState {
   value: string | Array<any>
   error: boolean
+  disabled: boolean
 }
 
 const STYLE = {
@@ -72,7 +73,8 @@ export default class extends Component<IProps, IState> {
 
   public state: IState = {
     value: this.props.multi ? [] : '',
-    error: false
+    error: false,
+    disabled: false
   }
 
   private FIRST = true
@@ -123,9 +125,9 @@ export default class extends Component<IProps, IState> {
   }
 
   //获取数据
-  public getData = async () => {
+  public getData = async (emptyCharge=true) => {
     const { value } = this.state
-    if(!(value+'').length) {
+    if(!(value+'').length && emptyCharge) {
       await this.setState({
         error: true
       })
@@ -135,6 +137,13 @@ export default class extends Component<IProps, IState> {
       error: false
     })
     return value
+  }
+
+  //设置禁止状态
+  public setDisabled = (state: boolean) => {
+    this.setState({
+      disabled: state
+    })
   }
 
   public render() {
@@ -167,7 +176,7 @@ export default class extends Component<IProps, IState> {
       }
     }
 
-    const { value, error } = this.state
+    const { value, error, disabled } = this.state
 
     const _style = isObject(style) ? { ...STYLE, ...style, ...(error ? FORM_ERROR : {})} : { ...STYLE, ...(error ? FORM_ERROR : {}) }
 
@@ -176,7 +185,7 @@ export default class extends Component<IProps, IState> {
         {
           selector ? 
           <Picker
-            disabled={selector.disabled || false}
+            disabled={disabled ? disabled : (selector.disabled || false)}
             onCancel={selector.onCancel || this.defaultFn}
             range={selector.range || []}
             rangeKey={selector.rangeKey || ''}
@@ -201,7 +210,7 @@ export default class extends Component<IProps, IState> {
             value={value}
             onChange={(e) => {this.handleChange.call(this, e, 'multiSelector')}}
             onColumnChange={multi.onColumnChange || this.defaultFn}
-            disabled={multi.disabled || false}
+            disabled={disabled ? disabled : (multi.disabled || false)}
             onCancel={multi.onCancel || this.defaultFn}
           >
             <View className='picker'
@@ -222,7 +231,7 @@ export default class extends Component<IProps, IState> {
             start={date.start || '1970-01-01'}
             end={date.end || moment(new Date().getTime()).format(dateShow)}
             fields={date.fields || 'day'}
-            disabled={date.disabled || false}
+            disabled={disabled ? disabled : (date.disabled || false)}
             onCancel={date.onCancel || this.defaultFn}
           >
             <View className='picker'
@@ -242,7 +251,7 @@ export default class extends Component<IProps, IState> {
             onCancel={time.onCancel || this.defaultFn}
             start={time.start || '00:00'}
             end={time.end || '23:59'}
-            disabled={time.disabled}
+            disabled={disabled ? disabled : (time.disabled || false)}
           >
             <View className='picker'
               style={{..._style}}

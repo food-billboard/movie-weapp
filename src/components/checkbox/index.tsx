@@ -20,12 +20,14 @@ interface IProps {
   checkedList?: Array<string> | false
   style?: any
   type: 'area' | 'actor' | 'director' | 'type' | 'country'
+  needHiddenList?: boolean
   getSwitch: (count?:number) => any
   getAreaList: (count?:number) => any
   getLanguageList: (count?:number) => any
   getActorList: (count?:number) => any
   getDirectorList: (count?:number) => any
   getCountryList: (count?:number) => any
+  handleChange?: (e: any) => any
 }
 
 interface IState {
@@ -44,12 +46,13 @@ export default class extends Component<IProps, IState> {
 
   public static defaultProps: IProps = {
     type: 'area',
+    needHiddenList: true,
     getSwitch: (count?:number) => {},
     getAreaList: (count?:number) => {},
     getLanguageList: (count?:number) => {},
     getActorList: (count?:number) => {},
     getDirectorList: (count?:number) => {},
-    getCountryList: (count?:number) => {}
+    getCountryList: (count?:number) => {},
   }
 
   public componentDidMount = async () => {
@@ -136,9 +139,9 @@ export default class extends Component<IProps, IState> {
   }
 
   //获取数据
-  public getData = async () => {
+  public getData = async (emptyCharge=true) => {
     const { checkedList } = this.state
-    if(!checkedList.length) {
+    if(!checkedList.length && emptyCharge) {
       await this.setState({
         error: true
       })
@@ -151,7 +154,7 @@ export default class extends Component<IProps, IState> {
   }
 
   public render() {
-    const { checkboxOption=[], checkedList=false, style={}, type } = this.props
+    const { checkboxOption=[], checkedList=false, style={}, needHiddenList } = this.props
 
     //处理props第一次传值的问题
     if(this.FIRST) {
@@ -168,41 +171,43 @@ export default class extends Component<IProps, IState> {
 
     return (
       <View style={isObject(style) ? style : {}}>
-        <View className='at-row at-row__align--center at-row--wrap'>
-          {
-            (checkOption.length ? checkOption : checkboxOption).filter((val:IOption) => {
-              const { value } = val
-              return list.indexOf(value) !== -1
-            })
-            .map((val: IOption) => {
-              const { label, value } = val
-              return (
-              <View className={'at-col'} style={{marginBottom: '5px'}} key={value}>
-                <AtTag key={value} customStyle={{fontSize: label.length >= 3 ? '18rpx' : '28rpx'}} >
-                  {label}
-                </AtTag>
-              </View>
-              )
-            })
-          }
-        </View>
         {
-          !show ?
+          needHiddenList ? <View className='at-row at-row__align--center at-row--wrap'>
+            {
+              (checkOption.length ? checkOption : checkboxOption).filter((val:IOption) => {
+                const { value } = val
+                return list.indexOf(value) !== -1
+              })
+              .map((val: IOption) => {
+                const { label, value } = val
+                return (
+                <View className={'at-col'} style={{marginBottom: '5px'}} key={value}>
+                  <AtTag key={value} customStyle={{fontSize: label.length >= 3 ? '18rpx' : '28rpx'}} >
+                    {label}
+                  </AtTag>
+                </View>
+                )
+              })
+            }
+          </View> : null
+        }
+        {
+          (needHiddenList ? !show : false) ?
           <AtButton type={'secondary'} onClick={this.open} customStyle={{ ...BUTTON_STYLE, ...(error ? FORM_ERROR : {}) }}>打开</AtButton>
           : null
         }
         {
-          show ? 
+          (needHiddenList ? show : true) ? 
           <AtCheckbox
             options={checkOption.length ? checkOption : checkboxOption}
             selectedList={list}
-            onChange={this.handleChange}
+            onChange={this.props.handleChange ? this.props.handleChange : this.handleChange}
           >
           </AtCheckbox>
           : null
         }
         {
-          show ?
+          (needHiddenList ? show : false) ?
           <AtButton type={'secondary'} onClick={this.close} customStyle={{ ...BUTTON_STYLE, ...(error ? FORM_ERROR : {})}}>收起</AtButton>
           : null 
         }

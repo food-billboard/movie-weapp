@@ -17,6 +17,7 @@ interface IProps {
 interface IState {
   value: string
   error: boolean
+  disabled: boolean
 }
 
 type TInitvalue = any
@@ -35,12 +36,20 @@ export default class extends Component<IProps, IState> {
 
   public state: IState = {
     value: '',
-    error: false
+    error: false,
+    disabled: false
   }
 
   private FIRST = true
 
   private initValue:TInitvalue = false
+
+  //设置禁止状态
+  public setDisabled = (state: boolean) => {
+    this.setState({
+      disabled: state
+    })
+  }
 
   //重置
   public reset = () => {
@@ -50,9 +59,9 @@ export default class extends Component<IProps, IState> {
   }
 
   //获取数据
-  public getData = async () => {
+  public getData = async (emptyCharge=true) => {
     const { value } = this.state
-    if(!value.length) {
+    if(!value.length && emptyCharge) {
       await this.setState({
         error: true
       })
@@ -91,7 +100,7 @@ export default class extends Component<IProps, IState> {
       }
     }
 
-    const { value: textValue, error } = this.state
+    const { value: textValue, error, disabled: stateDisabled } = this.state
 
     const errorStyle = error ? FORM_ERROR : {}
 
@@ -100,7 +109,7 @@ export default class extends Component<IProps, IState> {
         {
           type === 'input' ?
           <AtInput
-            disabled={disabled}
+            disabled={stateDisabled ? stateDisabled : disabled}
             customStyle={isObject(style) ? { ...style, ...errorStyle } : { ...errorStyle } }
             border={false}
             name='name'
@@ -110,7 +119,7 @@ export default class extends Component<IProps, IState> {
             placeholder={placeholder ? placeholder : ''}
           ></AtInput> :
           <AtTextarea
-            disabled={disabled}
+            disabled={stateDisabled ? stateDisabled : disabled}
             customStyle={isObject(style) ? { ...style, ...errorStyle } : { ...errorStyle } }
             value={textValue}
             onChange={this.props.handleChange ? this.props.handleChange : this.handleChange}
