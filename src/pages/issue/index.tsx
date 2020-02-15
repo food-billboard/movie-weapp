@@ -222,6 +222,14 @@ export default class extends Component<any> {
     }else {
       await this.props.sendIssue(data)
     }
+    Taro.showModal({
+      title: '提示',
+      content: '已经发送，不过需要审核'
+    }).then((res) => {
+      Taro.reLaunch({
+        url: '../main/index'
+      })
+    })
   }
 
   //重置

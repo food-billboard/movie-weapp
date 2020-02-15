@@ -150,7 +150,6 @@ export default class Forms extends Component<IProps> {
         const area = await this.areaRef.current!.getData(false)
         const director = await this.directorRef.current!.getData(false)
         const actor = await this.actorRef.current!.getData(false)
-
         const isArray = (data, string=false) => {
             return  Array.isArray(data) ? (string ? data.join('') : data) : (data ? data : '')
         }
@@ -262,6 +261,7 @@ export default class Forms extends Component<IProps> {
                         handleChange={this.feeChange}
                         checkboxOption={feeOptions}
                         needHiddenList={false}
+                        extraFactor={false}
                     ></GCheckbox>
                 </View>
                 <View className='price'>

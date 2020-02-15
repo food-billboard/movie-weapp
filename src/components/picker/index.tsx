@@ -1,6 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Picker, Text } from '@tarojs/components'
 import { isObject, isArray } from '~utils'
+import Rest from '~components/restFactor'
 import moment from 'moment'
 import { FORM_ERROR } from '~config'
 
@@ -81,6 +82,9 @@ export default class extends Component<IProps, IState> {
 
   private initValue: any = false
 
+  //额外内容
+  public restRef = Taro.createRef<Rest>()
+
   //处理change
   public handleChange = (e: any, mode: TMode) => {
     const { value: newData } = e.detail
@@ -119,6 +123,8 @@ export default class extends Component<IProps, IState> {
 
   //重置
   public reset = () => {
+    const { multi, selector } = this.props
+    if(multi || selector) this.restRef.current!.reset()
     this.setState({
       value: this.initValue ? this.initValue : (this.props.multi ? [] : '')
     })
@@ -127,7 +133,9 @@ export default class extends Component<IProps, IState> {
   //获取数据
   public getData = async (emptyCharge=true) => {
     const { value } = this.state
-    if(!(value+'').length && emptyCharge) {
+    const { multi, selector } = this.props
+    const data = (multi || selector) ? await this.restRef.current!.getData(false) : false
+    if(!(value+'').length && emptyCharge && !(Array.isArray(data) ? data.length : data)) {
       await this.setState({
         error: true
       })
@@ -136,7 +144,7 @@ export default class extends Component<IProps, IState> {
     await this.setState({
       error: false
     })
-    return value
+    return data ? (data.length ? data.pop() : value) : value
   }
 
   //设置禁止状态
@@ -259,6 +267,14 @@ export default class extends Component<IProps, IState> {
               {title}: {(value + '').length ? moment(value).format('mm:ss') : ''}
             </View>
           </Picker>
+          : null
+        }
+        {
+          (selector || multi) ?
+          <Rest
+            ref={this.restRef}
+            title={'找不到可以在下面手动添加, 但只会上传最后一项'}
+          ></Rest>
           : null
         }
       </View>

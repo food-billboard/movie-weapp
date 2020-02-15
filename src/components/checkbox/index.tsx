@@ -1,6 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { AtCheckbox, AtButton, AtTag } from 'taro-ui'
 import { View } from '@tarojs/components'
+import Rest from '~components/restFactor'
 import { isObject } from '~utils'
 import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToProps } from './connect'
@@ -21,6 +22,7 @@ interface IProps {
   style?: any
   type: 'area' | 'actor' | 'director' | 'type' | 'country'
   needHiddenList?: boolean
+  extraFactor?: boolean
   getSwitch: (count?:number) => any
   getAreaList: (count?:number) => any
   getLanguageList: (count?:number) => any
@@ -69,6 +71,9 @@ export default class extends Component<IProps, IState> {
   private FIRST = true
 
   private initValue: any = false
+
+  //额外内容
+  public restRef = Taro.createRef<Rest>()
 
   //获取数据
   public fetchData = async () => {
@@ -133,15 +138,20 @@ export default class extends Component<IProps, IState> {
 
   //重置
   public reset = () => {
+    const { extraFactor=true } = this.props
     this.setState({
       checkedList: this.initValue ? this.initValue : []
     })
+    this.close()
+    if(extraFactor) this.restRef.current!.reset()
   }
 
   //获取数据
   public getData = async (emptyCharge=true) => {
     const { checkedList } = this.state
-    if(!checkedList.length && emptyCharge) {
+    const { extraFactor=true } = this.props
+    const data = extraFactor ? await this.restRef.current!.getData(false) : false
+    if(!checkedList.length && emptyCharge && !(Array.isArray(data) ? data.length : data)) {
       await this.setState({
         error: true
       })
@@ -150,11 +160,11 @@ export default class extends Component<IProps, IState> {
     await this.setState({
       error: false
     })
-    return checkedList
+    return [ ...checkedList, ...(data ? data : []) ]
   }
 
   public render() {
-    const { checkboxOption=[], checkedList=false, style={}, needHiddenList } = this.props
+    const { checkboxOption=[], checkedList=false, style={}, needHiddenList, extraFactor=true } = this.props
 
     //处理props第一次传值的问题
     if(this.FIRST) {
@@ -207,9 +217,22 @@ export default class extends Component<IProps, IState> {
           : null
         }
         {
-          (needHiddenList ? show : false) ?
-          <AtButton type={'secondary'} onClick={this.close} customStyle={{ ...BUTTON_STYLE, ...(error ? FORM_ERROR : {})}}>收起</AtButton>
-          : null 
+          extraFactor ? 
+          <Rest
+            ref={this.restRef}
+            title={'上面找不到可以在下面手动添加'}
+            style={{marginBottom: '5px', display: (needHiddenList ? show : true) ? 'block' : 'none'}}
+          ></Rest>
+          : null
+        }
+        {
+          <AtButton 
+            type={'secondary'} 
+            onClick={this.close} 
+            customStyle={{ ...BUTTON_STYLE, ...(error ? FORM_ERROR : {}), display: (needHiddenList ? show : false) ? 'block' : 'none' }}
+          >
+            收起
+          </AtButton>
         }
       </View>
     )
