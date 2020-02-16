@@ -7,6 +7,7 @@ export * from './format'
 export * from './platform'
 
 export const includes = (collection: any=[], value:any='') => {
+    console.log(collection, value)
     return collection.indexOf(value)>=0
 }
 

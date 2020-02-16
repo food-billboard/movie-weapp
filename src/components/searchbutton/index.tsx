@@ -103,7 +103,7 @@ class SearchButton extends Component<IProps, IState>{
                 <View className='at-col at-col-2 hotlist'
                     key={id}>
                     <AtTag 
-                        type={"secondary"}
+                        type={"primary"}
                         size={"normal"}
                         circle={true}
                         onClick={(event) => {this.getHot(value, event)}}

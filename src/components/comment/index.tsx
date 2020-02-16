@@ -88,7 +88,7 @@ export default class Comment extends Component<IProps>{
                     />
                     <GImagePicker
                         ref={this.imgPickerRef}
-                        length={3}
+                        length={6}
                     ></GImagePicker>
                 </AtModalContent>
                 <AtModalAction>
