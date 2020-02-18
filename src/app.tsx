@@ -5,7 +5,7 @@ import { dva, router, includes } from '~utils'
 
 import 'taro-ui/dist/style/index.scss'
 
-import Index from './pages/issue/index'
+import Index from './pages/main/index'
 import configure from './configure'
 
 import './app.scss'
@@ -68,7 +68,7 @@ class App extends Component {
 
   public config: Config = {
     pages: [
-      'pages/issue/index',
+      // 'pages/setting/index',
       'pages/main/index',
       'pages/mine/index',
       'pages/register/index',
@@ -86,7 +86,7 @@ class App extends Component {
       'pages/rank/index',
       'pages/store/index',
       'pages/commentdetail/index',
-      // 'pages/issue/index',
+      'pages/issue/index',
       'pages/userissue/index'
     ],
     window: {
@@ -103,13 +103,13 @@ class App extends Component {
       "selectedColor": "#ff6600",
       "list": [
         {
-          "pagePath": "pages/issue/index",
+          "pagePath": "pages/main/index",
           "text": "首页",
           "iconPath": "./assets/home-icon.png",
           "selectedIconPath": './assets/home-icon-active.png'
         },
         {
-          "pagePath": "pages/main/index",
+          "pagePath": "pages/issue/index",
           "text": "发布",
           "iconPath": "./assets/issue-icon.png",
           "selectedIconPath": './assets/issue-icon-active.png'

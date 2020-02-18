@@ -1,5 +1,6 @@
 import Taro, { Component, Config } from '@tarojs/taro'
 import {View, Button} from '@tarojs/components'
+import GRadio from '~components/radio'
 import Model from '~components/model'
 import List from '~components/linearlist'
 import Comment from '~components/comment'
@@ -9,6 +10,7 @@ import {router} from '~utils'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { Toast } from '~components/toast'
+import { Option } from 'taro-ui/@types/radio'
 
 type right = 'right'
 type warn = 'warn'
@@ -24,6 +26,8 @@ export default class Setting extends Component<any>{
     }
 
     public commentRef = Taro.createRef<Comment>()
+
+    public radioRef = Taro.createRef<GRadio>()
 
     //用户id
     readonly id = this.props.id
@@ -133,6 +137,28 @@ export default class Setting extends Component<any>{
         feedback: this.handleFeedback
     }
 
+    //色调
+    readonly colorStyle:Array<Option<string>> = [
+        {
+            value: 'on',
+            label: '开启色调'
+        },
+        {
+            value: 'off',
+            label: '关闭色调',
+        }
+    ]
+
+    public colorStyleChange = (value) => {
+        this.radioRef.current!.handleClick(value)
+        let status
+        if(value==='on') {
+            status = true
+        }else if(value==='off') {
+            status = false
+        }
+        this.props.setColorStyle(status)
+    }
 
     public state: any = {
         //关于
@@ -210,6 +236,7 @@ export default class Setting extends Component<any>{
 
     public render() {
         const {button, activeModel, about} = this.state
+        const { colorStyle } = this.props
         const {
             type,
             value,
@@ -222,6 +249,14 @@ export default class Setting extends Component<any>{
                         this.feedback,
                         about
                     ]} />
+                    <GRadio
+                        style={{marginTop: '48px'}}
+                        extraFactor={false}
+                        needHiddenList={false}
+                        ref={this.radioRef}
+                        radioboxOption={this.colorStyle}
+                        active={this.colorStyle[colorStyle ? 0 : 1]['value']}
+                    ></GRadio>
                 </View>
                 <View className='button'>
                     <Button 

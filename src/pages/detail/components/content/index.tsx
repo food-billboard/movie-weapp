@@ -74,13 +74,17 @@ export default class Content extends Component<IProps, IState>{
         return (
             <View className='content'>
                 <View
-                    className={'title'}
+                    className={'title at-row'}
                     style={{...style.color('primary')}}
                 >
-                    {name}
-                    <GStore
-                        movie={movie}
-                    />
+                    <View className='title-name at-col at-col-10'>
+                        {name}
+                    </View>
+                    <View className='title-store at-col at-col-2'>
+                        <GStore
+                            movie={movie}
+                        />
+                    </View>
                 </View>
                 <View className='main'>
                     <View className='main-rate'>
@@ -138,7 +142,7 @@ export default class Content extends Component<IProps, IState>{
                             <Text className={'text'}
                                 style={{...style.color('primary')}}
                             >{formatNumber(hot)}</Text>
-                            <Text className='hot-text'> 人看过</Text>
+                            <Text className='hot-text' style={{...style.color('thirdly')}}> 人看过</Text>
                         </View>
                         <View className='description'
                             style={{...style.border(1, 'disabled', 'dashed', 'left_right')}}

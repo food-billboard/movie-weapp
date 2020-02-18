@@ -5,11 +5,12 @@ import Swipers from './components/swiper'
 import Itemize from './components/itemize'
 import News from './components/news'
 import Rank from './components/rank'
+import { colorChange, style } from '~theme/global-style'
+import { dateStyleChange } from '~utils'
 import './index.scss'
 
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
-import { style } from '~theme/global-style'
 
 const INIT_RANK_QUERY = { currPage: 1, pageSize: 3 }
 
@@ -29,7 +30,19 @@ export default class extends Component<any> {
   }
 
   public componentDidMount = async () => {
+    this.colorStyle()
     this.fetchData()
+  }
+
+  public colorStyle = () => {
+    const { colorStyle } = this.props
+    if(!colorStyle) return  
+    const status = dateStyleChange()
+    if(status) {
+      colorChange('day')
+    }else {
+      colorChange('night')
+    } 
   }
 
   public fetchData = async () => {

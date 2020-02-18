@@ -22,7 +22,8 @@ export default class extends Component<IProps, IState> {
     selector: false,
     multi: false,
     time: false,
-    date: false
+    date: false,
+    extraFactor: false
   }
 
   public state: IState = {
@@ -86,8 +87,8 @@ export default class extends Component<IProps, IState> {
   //获取数据
   public getData = async (emptyCharge=true) => {
     const { value } = this.state
-    const { multi, selector } = this.props
-    const data = (multi || selector) ? await this.restRef.current!.getData(false) : false
+    const { multi, selector, extraFactor } = this.props
+    const data = (extraFactor && (multi || selector)) ? await this.restRef.current!.getData(false) : false
     if(!(value+'').length && emptyCharge && !(Array.isArray(data) ? data.length : data)) {
       await this.setState({
         error: true
@@ -109,7 +110,7 @@ export default class extends Component<IProps, IState> {
 
   public render() {
 
-    const { style, selector, multi, time, date, value: propsValue, title='选择' } = this.props
+    const { style, selector, multi, time, date, value: propsValue, title='选择', extraFactor } = this.props
 
     if(this.FIRST) {
       if(propsValue) {
@@ -139,7 +140,7 @@ export default class extends Component<IProps, IState> {
 
     const { value, error, disabled } = this.state
 
-    const _style = isObject(style) ? { ...STYLE, ...style, ...customStyle.color('secondary'), ...(error ? FORM_ERROR : {})} : { ...STYLE, ...customStyle.color('secondary'), ...(error ? FORM_ERROR : {}) }
+    const _style = isObject(style) ? { ...STYLE, ...style, ...customStyle.color('secondary'), ...customStyle.backgroundColor('disabled'), ...(error ? FORM_ERROR : {})} : { ...STYLE, ...customStyle.color('secondary'), ...customStyle.backgroundColor('disabled'), ...(error ? FORM_ERROR : {}) }
 
     return (
       <View>
@@ -223,10 +224,10 @@ export default class extends Component<IProps, IState> {
           : null
         }
         {
-          (selector || multi) ?
+          (extraFactor && (selector || multi)) ?
           <Rest
             ref={this.restRef}
-            title={'找不到可以在下面手动添加, 但只会上传最后一项'}
+            title={'找不到可手动添加, 但只上传最后一项'}
           ></Rest>
           : null
         }

@@ -5,6 +5,7 @@ import { IMAGE_CONFIG } from '~config'
 import { AtModal, AtModalContent, AtModalAction, AtTextarea } from "taro-ui"
 
 import { IProps, IState } from './interface'
+import { style } from '~theme/global-style'
 
 export default class Comment extends Component<IProps>{
     public static defaultProps: IProps = {
@@ -77,6 +78,7 @@ export default class Comment extends Component<IProps>{
                 <AtModalAction>
                     <Button
                         onClick={this.publish}
+                        style={{...style.backgroundColor('disabled')}}
                     >
                         {buttonText}
                     </Button>

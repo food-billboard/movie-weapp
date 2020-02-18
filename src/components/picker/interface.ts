@@ -91,6 +91,7 @@ export interface IProps {
   date?: IDate | false
   value?: string | Array<any> | false
   title?: string
+  extraFactor?: boolean
 }
 
 export interface IState {

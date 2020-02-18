@@ -14,7 +14,7 @@ import important from '../../assets/important.png'
  * }
  */
 
-interface IQuery {
+export interface IQuery {
   title: string
   icon?: 'success' | 'fail' | 'none' | 'important' | 'ask'
   duration?: number

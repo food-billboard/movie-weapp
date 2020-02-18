@@ -10,14 +10,14 @@ import { Toast } from '~components/toast'
 import GCheckbox from '~components/checkbox'
 import { IState, IProps, FormDefault } from './interface'
 import { FormData } from '../../../interface'
-import { style } from '~theme/global-style'
+import { style, TypeColor } from '~theme/global-style'
 
 const TAT_STYLE = {
     boxSizing: 'border-box', 
     border: '1px dashed black', 
     width:'100%', 
     marginBottom: '5px', 
-    backgroundColor: 'white'
+    backgroundColor: TypeColor['disabled']
 }
 
 @connect(mapStateToProps, mapDispatchToProps)

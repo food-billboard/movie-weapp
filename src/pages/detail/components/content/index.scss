@@ -11,7 +11,12 @@
         width:100%;
         font-weight:bold;
         font-size:48px;
-        @extend .ellipsis;
+        &-name{
+            @extend .ellipsis
+        }
+        &-store{
+
+        }
     }
     .main{
         width:100%;
@@ -51,7 +56,6 @@
                 }
             }
             .description{
-                color:gray;
                 border-radius:20px;
                 box-sizing:border-box;
                 padding: 0 5px;

@@ -34,4 +34,5 @@ export interface IProps {
 export interface IState {
   item: Array<Item>
   error: boolean
+  disabled: boolean
 }

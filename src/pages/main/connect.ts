@@ -1,5 +1,8 @@
 export const mapStateToProps = (_) => {
-    return {}
+    const { colorStyle } = _.global
+    return {
+        colorStyle
+    }
 }
   
 export const mapDispatchToProps = dispatch => ({

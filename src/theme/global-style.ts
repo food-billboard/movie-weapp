@@ -1,23 +1,25 @@
-import { dateStyleChange } from '~utils'
 export let TypeColor = {
   'primary':'#cc9f01',
   'secondary': '#ffc701',
   'disabled': '#FFFFE0',
-  'thirdly': '#ffd541'
+  'thirdly': '#ffd541',
+  'bgColor': '#FFFFF0'
 }
 
 const dayTypeColor = {
   'primary':'#cc9f01',
   'secondary': '#ffc701',
   'disabled': '#FFFFE0',
-  'thirdly': '#ffd541'
+  'thirdly': '#ffd541',
+  'bgColor': '#FFFFF0'
 }
 
 const nightTypeColor = {
   'primary':'#353436',
   'secondary': '#424143',
   'disabled': '#F5F5F5',
-  'thirdly': '#717172'
+  'thirdly': '#717172',
+  'bgColor': '#fff'
 }
 
 const Direction = {
