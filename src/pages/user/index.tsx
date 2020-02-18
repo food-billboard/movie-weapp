@@ -3,6 +3,7 @@ import { View } from '@tarojs/components'
 import IconHead from '~components/headicon'
 import List from '~components/linearlist'
 import GButton from '~components/button'
+import { style } from '~theme/global-style'
 import './index.scss'
 
 import {mapStateToProps, mapDispatchToProps} from './connect'
@@ -26,12 +27,6 @@ export default class User extends Component<any>{
 
     //我的id
     readonly mineId = this.props.id
-
-    public constructor() {
-        super(...arguments)
-        
-        this.attention = this.attention.bind(this)
-    }
 
     public componentDidMount = async () => {
         this.fetchData()
@@ -133,12 +128,15 @@ export default class User extends Component<any>{
                         list={userInfo}
                     />
                 </View>
-                <View className='list'>
+                <View className='list'
+                    style={{...style.border(1, 'disabled', 'solid', 'bottom')}}
+                >
                     <List 
                         list={this.userInfo}
                     />
                 </View>
                 <GButton
+                    type={'secondary'}
                     style={{width: '100%', height: 120, position: 'fixed', left: 0, bottom: 0}}
                     active={isAttention ? 1 : 0}
                     value={['关注', '取消关注']}

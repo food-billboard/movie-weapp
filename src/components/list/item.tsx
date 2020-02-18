@@ -1,14 +1,11 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
+import { IItemProps } from './interface'
+
 import './index.scss'
 
-interface IProps {
-    type: string,
-    value: string | number
-}
-
-export default class Item extends Component<IProps>{
-    public static defaultProps: IProps = {
+export default class Item extends Component<IItemProps>{
+    public static defaultProps: IItemProps = {
         type: '',
         value: ''
     }   
@@ -19,7 +16,7 @@ export default class Item extends Component<IProps>{
             <View>
                 <Text className='title'>{type}</Text>
                 <Text>
-                    {value}
+                    {Array.isArray(value) ? value.join('') : value}
                 </Text>
             </View>
         )

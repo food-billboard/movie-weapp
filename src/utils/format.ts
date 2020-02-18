@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { style } from '../theme/global-style'
 
 const momentConfig: any = {
     months: '一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月'.split('_'),
@@ -156,4 +157,15 @@ export const formatNumber = (data: number) => {
         return data / 10000 + 'w'
     }
     return data
+}
+
+const dateStyleConfig = {
+    start: 8, 
+    end: 18
+}
+
+export const dateStyleChange = () => {
+    const date = new Date().getHours()
+    const {start, end} = dateStyleConfig
+    return date > start && date < end
 }

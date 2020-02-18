@@ -4,7 +4,7 @@ import Title from './components/title'
 import IconList from './components/icon'
 import List from '~components/linearlist'
 import IconHead from '~components/headicon'
-
+import { style, TypeColor } from '~theme/global-style'
 import { ISetting } from './interface'
 
 import './index.scss'
@@ -33,7 +33,7 @@ export default class extends Component<any>{
             iconInfo: {
                 value: '',
                 size: 14,
-                color: '#000'
+                color: TypeColor['primary']
             },
             handle: () => {
                 router.push('/userissue', { id: this.id })
@@ -48,7 +48,7 @@ export default class extends Component<any>{
             iconInfo: {
                 value: 'bell',
                 size: 14, 
-                color: '#000'
+                color: TypeColor['primary']
             },
             handle: () => {
                 router.push('/setting')
@@ -66,7 +66,7 @@ export default class extends Component<any>{
 
     public componentWillMount = () => {
         if(!this.id) {
-            router.replace('/login')
+            // router.replace('/login')
         }
     }
 
@@ -90,7 +90,9 @@ export default class extends Component<any>{
                         list={detail}
                     />
                 </View>
-                <View className='main'>
+                <View className='main'
+                    style={{...style.backgroundColor('disabled')}}
+                >
                     <View className='title'>
                         <Title 
                             id={id}

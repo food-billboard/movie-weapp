@@ -2,7 +2,7 @@ import Taro, {Component, Config} from '@tarojs/taro'
 import {View} from '@tarojs/components'
 import { AtList, AtListItem } from "taro-ui"
 import './index.scss'
-
+import { style } from '~theme/global-style'
 import { mapDispatchToProps, mapStateToProps } from './connect'
 import {connect} from '@tarojs/redux'
 
@@ -52,6 +52,7 @@ export default class extends Component<any> {
             return (
                 <AtListItem
                     className='list'
+                    customStyle={{...style.backgroundColor('disabled')}}
                     key={id}
                     title={username}
                     arrow='right'

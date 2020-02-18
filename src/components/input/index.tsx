@@ -3,24 +3,7 @@ import { View } from '@tarojs/components'
 import { AtTextarea, AtInput } from 'taro-ui'
 import { isObject } from '~utils'
 import { FORM_ERROR } from '~config'
-
-interface IProps {
-  value?: string | false
-  style: any
-  type?: 'input' | 'textarea'
-  handleChange?: (() => any) | false
-  placeholder?: string | false
-  inputType?:string
-  disabled?: boolean
-}
-
-interface IState {
-  value: string
-  error: boolean
-  disabled: boolean
-}
-
-type TInitvalue = any
+import { IProps, IState } from './interface'
 
 export default class extends Component<IProps, IState> {
 
@@ -42,7 +25,7 @@ export default class extends Component<IProps, IState> {
 
   private FIRST = true
 
-  private initValue:TInitvalue = false
+  private initValue:any = false
 
   //设置禁止状态
   public setDisabled = (state: boolean) => {

@@ -4,7 +4,6 @@
     padding:20px;
     width:100%;
     box-sizing:border-box;
-    background-color:rgba(0, 0, 0, 0.1);
     margin-bottom:40px;
     .head{
         width:100%;
@@ -29,37 +28,30 @@
             width:250px;
             height:100%;
             line-height:60px;
-            color:gray;
             &-user{
                 width:90%;
                 height:100%;
                 text-overflow:ellipsis;
                 overflow:hidden;
                 white-space: nowrap;
-                color:rgba(0, 0, 255, 0.9);
             }
         }
         .up{
             width:150px;
             height:100%;
-            background-color:pink;
-            color:white;
             text-align:center;
             line-height:60px;
             vertical-align: middle;
             &-text{
-                color:black;
+                // color:black;
             }
-            // &-like{
-            //     color:red;
-            // }
         }
         .time{
             width:150px;
             height:100%;
-            color:gray;
             float:right;
             margin-right:20px;
+            line-height:60px;
         }
     }
     .content{
@@ -88,7 +80,6 @@
                 height:100%;
                 box-sizing:border-box;
                 padding:2px;
-                border: 1px dashed gray;
             }
         }
     }

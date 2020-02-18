@@ -4,7 +4,7 @@ import Model from '~components/model'
 import List from '~components/linearlist'
 import Comment from '~components/comment'
 import './index.scss'
-
+import { TypeColor } from '~theme/global-style'
 import {router} from '~utils'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
@@ -127,7 +127,7 @@ export default class Setting extends Component<any>{
         iconInfo: {
             value: 'bell',
             size: 16, 
-            color: '#000'
+            color: TypeColor['primary']
         },
         handle: this.showFeedback,
         feedback: this.handleFeedback
@@ -145,7 +145,7 @@ export default class Setting extends Component<any>{
             iconInfo: {
                 value: 'tag',
                 size: 16, 
-                color: '#000'
+                color: TypeColor['primary']
             },
             handle: this.showAbout,
             model: {

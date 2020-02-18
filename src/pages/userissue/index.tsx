@@ -1,5 +1,4 @@
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View } from '@tarojs/components'
 import GScrollView from '~components/scrollList'
 import IconList from '~components/iconlist'
 
@@ -8,8 +7,6 @@ import { throttle } from 'lodash'
 import {router} from '~utils'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
-
-import './index.scss'
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any>{ 

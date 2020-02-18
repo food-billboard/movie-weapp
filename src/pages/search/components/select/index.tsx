@@ -2,19 +2,9 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import { AtDrawer } from 'taro-ui'
 import Forms from './form'
-
-import { FormData } from '../../interface'
+import { IProps, IState } from './interface'
 
 import './index.scss'
-
-interface IProps {
-    screen: (fromData: FormData) => void
-}
-
-interface IState {
-    show: boolean,
-    right: boolean
-}
 
 export default class Select extends Component<IProps, IState>{
 

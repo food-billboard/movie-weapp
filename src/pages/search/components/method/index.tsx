@@ -3,17 +3,9 @@ import { View, Image } from '@tarojs/components'
 
 import icon from '../../../../assets/icon.png'
 import list from '../../../../assets/list.png'
+import { IProps, IState } from './interface'
+
 import './index.scss'
-
-interface IProps {
-    screen: () => void
-}
-
-interface IState {
-    change: Array<number>,
-    index: number,
-    active: number
-}
 
 export default class Methods extends Component<IProps, IState>{
     public static defaultProps = {

@@ -5,48 +5,15 @@ import { AtIcon } from 'taro-ui'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 
-import { router, formatTime, formatNumber } from '~utils'
+import { router, formatTime, formatNumber  } from '~utils'
+import { style } from '~theme/global-style'
 
 import './index.scss'
 
-interface IUser {
-    name: string,
-    time: string,
-    image: string,
-    id: string,
-    content: string,
-    hot: number,
-    isHot: boolean
-}
-
-interface CommentUsers {
-    image: string,
-    id: string
-}
-
-interface IImageList {
-    image: string
-    id: string
-}
-
-interface IList {
-    user: IUser
-    commentUsers: Array<CommentUsers>
-    images: Array<IImageList>
-    id: string
-}
-
-interface IProps {
-    list: IList
-    like: any
-    comment: (isUserCall: boolean, user: string, commentId: string) => any
-    id: string
-    getUserInfo: () => any
-    commentId: string
-}
+import { IState, IProps, IImageList } from './interface'
 
 @connect(mapStateToProps, mapDispatchToProps)
-export default class List extends Component<IProps>{
+export default class List extends Component<IProps, IState>{
     public static defaultProps: IProps = {
         list: {
             user: {
@@ -72,14 +39,8 @@ export default class List extends Component<IProps>{
     //评论id
     readonly commentId: string = this.props.commentId
 
-    public state = {
+    public state: IState = {
         list: this.props.list
-    }
-
-    public constructor() {
-        super(...arguments)
-        this.getUser = this.getUser.bind(this)
-        this.like = this.like.bind(this)
     }
 
     /**
@@ -110,7 +71,7 @@ export default class List extends Component<IProps>{
      * @param user: 用户id
      * @param id: 我的id
      */
-    public pushComment(user: string) {
+    public pushComment = (user: string) => {
         this.props.comment(true, user, this.commentId)
     }
 
@@ -124,7 +85,7 @@ export default class List extends Component<IProps>{
     /**
      * 获取用户信息
      */
-    public getUser(id: string) {
+    public getUser = (id: string) => {
         router.push('/user', {id})
     }
 
@@ -146,7 +107,7 @@ export default class List extends Component<IProps>{
     }
 
     public render() {
-        const {list} = this.state
+        const { list } = this.state
         const {
             user,
             commentUsers,
@@ -163,31 +124,46 @@ export default class List extends Component<IProps>{
             isHot
         } = user
         return (
-            <View className='list'>
+            <View 
+                className={'list'}
+                style={{...style.backgroundColor('disabled')}}
+            >
                 <View className='head'>
                     <View className='head-img'
                         onClick={this.getUser.bind(this, id)}
                     >
                         <Image src={image} className='head-img-content'></Image>
                     </View>
-                    <View className='name'>
-                        <Text className='name-user'
-                            onClick={this.pushComment.bind(this, id)}>{name}</Text>说: 
+                    <View 
+                        className={'name'}
+                        style={{...style.color('thirdly')}}
+                    >
+                        <Text 
+                            className={'name-user'}
+                            onClick={this.pushComment.bind(this, id)}
+                            style={{...style.color('primary')}}
+                        >{name}</Text>说: 
                     </View>
-                    <View className='up'
+                    <View 
+                        className={'up'}
                         onClick={this.like.bind(this, id, hot, isHot)}
+                        style={{...style.color('thirdly')}}
                     >
                         <View className={'up-text'}>
                             {formatNumber(hot)}
                             <AtIcon value={isHot ? 'heart-2' : 'heart'} />
                         </View>
                     </View>
-                    <View className='time'>
+                    <View 
+                        className={'time'}
+                        style={{...style.color('thirdly')}}
+                    >
                         {formatTime(time)}
                     </View>
                 </View>
                 <View 
                     className='content'
+                    style={{...style.color('primary')}}
                     onClick={this.getDetail.bind(this)}
                 >
                     {content}
@@ -202,7 +178,11 @@ export default class List extends Component<IProps>{
                                     key={id}
                                     onClick={this.handlePreviewImage.bind(this, preImg)}
                                 >
-                                    <Image src={preImg} className="image-content"></Image>
+                                    <Image 
+                                        src={preImg} 
+                                        style={{...style.border(1, 'thirdly', 'dashed', 'all')}}
+                                        className={'image-content'}
+                                    ></Image>
                                 </View>
                             )
                         })

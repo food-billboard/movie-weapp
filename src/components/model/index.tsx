@@ -1,22 +1,6 @@
-import Taro, { Component, Config } from '@tarojs/taro'
+import Taro, { Component } from '@tarojs/taro'
 import { AtModal } from "taro-ui"
-
-import './index.scss'
-
-interface Info {
-    isOpen: boolean,
-    title: string,
-    cancelText?: string,
-    confirmText: string,
-    onClose?: () => any,
-    onCancel?: () => any,
-    onConfirm: () => any,
-    content: string
-}
-
-interface IProps {
-    info: Info
-}
+import { IProps } from './interface'
 
 export default class Setting extends Component<IProps>{
     public static defaultProps = {

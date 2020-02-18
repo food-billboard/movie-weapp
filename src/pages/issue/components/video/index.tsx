@@ -1,22 +1,13 @@
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import GVideo, { IProps as IVideo } from '../../../detail/components/video'
+import GVideo from '~components/video'
 import { AtButton } from 'taro-ui'
 
 import './index.scss'
 
 import { isObject } from '~utils'
 import { FORM_ERROR } from '~config'
-
-interface IProps {
-  info: IVideo
-}
-
-interface IState {
-  info: IVideo
-  srcError: boolean
-  posterError: boolean
-}
+import { IProps, IState } from './interface'
 
 export default class extends Component<IProps, IState> {
 

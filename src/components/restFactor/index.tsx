@@ -1,31 +1,14 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtTimeline, AtButton, AtTag } from 'taro-ui'
-import { Item } from 'taro-ui/@types/timeline'
-import GInput from '../../pages/issue/components/description'
-
+import GInput from '../input'
+import { IProps, IState } from './interface'
 import { Toast } from '~components/toast'
-
+import { Item } from 'taro-ui/@types/timeline'
 import { isObject } from '~utils'
+import { TypeColor, style as customStyle } from '~theme/global-style'
 
 import './index.scss'
-
-interface IDefaultItemStyle {
-  icon: string
-  color: string
-}
-
-interface IProps {
-  title: string | false
-  style?: any
-  item?: Array<Item> | false
-  defaultItemStyle?: IDefaultItemStyle | false
-}
-
-interface IState {
-  item: Array<Item>
-  error: boolean
-}
 
 const TAT_STYLE = {
   boxSizing: 'border-box', 
@@ -41,8 +24,7 @@ const itemStyleIconList = [
 ]
 
 const itemStyleColorList = [
-  '#E6E6FA', '#B0C4DE', '#778899', '#708090', '#2F4F4F', '#DCDCDC', '#D3D3D3', '#C0C0C0',
-  '#A9A9A9', '#808080', '#696969', '#000000'
+  TypeColor['primary'], TypeColor['secondary'], TypeColor['disabled']
 ]
 
 const getDefaultItemStyle = () => {
@@ -163,7 +145,7 @@ export default class extends Component<IProps, IState> {
         <View className='input at-row'>
           <View className='at-col at-col-8'>
             <GInput
-              style={{backgroundColor: 'rgba(0, 0, 0, 0.1)', marginLeft: 0}}
+              style={{...customStyle.backgroundColor('disabled'), marginLeft: 0}}
               ref={this.inputRef}
             ></GInput>
           </View>

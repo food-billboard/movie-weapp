@@ -4,7 +4,6 @@
     position:relative;
     left:0;
     top:0;
-    background-color:rgba(255, 255, 0, 0.8);
     .icon{
         $height:200px;
         width:200px;
@@ -39,12 +38,10 @@
         height:50px;
         margin:290px 0 0 0;
         float:right;
-        color:gray;
         font-size:24px;
         margin-right:20px;
         .count{
             font-size:32px;
-            color:black;
             font-weight:bold;
         }
     }

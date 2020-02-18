@@ -1,25 +1,11 @@
 import Taro, {Component} from '@tarojs/taro'
-import { View, Text, Image } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import { AtGrid } from "taro-ui"
 import {router} from '~utils'
+import { IProps, List } from './interface'
+import { style } from '~theme/global-style'
 
 import './index.scss'
-
-interface IIconInfo {
-    value?: string
-    size?: string | number
-    color?: string
-}
-
-interface List {
-    image?: string
-    value: string
-    iconInfo?: any | IIconInfo
-}
-
-interface IProps {
-    id: string
-}
 
 export default class IconList extends Component<IProps>{
 
@@ -47,14 +33,8 @@ export default class IconList extends Component<IProps>{
         }
     ]
 
-    public constructor() {
-        super(...arguments)
-
-        this.handleClick = this.handleClick.bind(this)
-    }
-
     //处理点击
-    public handleClick(item: any, index: number) {
+    public handleClick = (item: any, index: number) => {
         const {value} = item
         const {id} = this.props
         switch(value) {
@@ -72,7 +52,9 @@ export default class IconList extends Component<IProps>{
     }
     public render() {
         return (
-            <View className='icon'>
+            <View className='icon'
+                style={{...style.border(1, 'thirdly', 'solid', 'bottom')}}
+            >
                 <AtGrid 
                     data={this.list}
                     mode={'square'}    

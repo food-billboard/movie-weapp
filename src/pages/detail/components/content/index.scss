@@ -1,5 +1,4 @@
 @import "~taro-ui/dist/style/components/flex.scss";
-// @import '../../../../theme/custom-theme.scss';
 .ellipsis{
     white-space:nowrap;
     text-overflow:ellipsis;
@@ -10,7 +9,6 @@
     height:100%;
     .title{
         width:100%;
-        color:#ff6600;
         font-weight:bold;
         font-size:48px;
         @extend .ellipsis;
@@ -21,7 +19,7 @@
 
         }
         .text{
-            color:black;
+           
         }
         .main-info{
             width:100%;
@@ -30,7 +28,6 @@
             .time-area,
             .hot,
             .director-lan{
-                color:gray;
                 @extend .ellipsis;
                 text-align:left;
                 line-height:50px;
@@ -55,13 +52,10 @@
             }
             .description{
                 color:gray;
-                border-left:1px dashed rgba(0, 0, 0, 0.1);
-                border-right:1px dashed rgba(0, 0, 0, 0.1);
                 border-radius:20px;
                 box-sizing:border-box;
                 padding: 0 5px;
                 .text{
-                    color:black;
                     display: -webkit-box;
                     -webkit-box-orient: vertical;
                     -webkit-line-clamp: 4;
@@ -73,13 +67,10 @@
                     display:inline-block;
                     float:right;
                     padding:0 30px;
-                    background-color:rgba(2, 231, 231, 0.1);
                     color:black;
                     border-radius:20px;
                     margin-top:-1px;
                     z-index:1;
-                    border-top:1px dashed rgba(0, 0, 0, 0.1);
-                    border-bottom:1px dashed rgba(0, 0, 0, 0.1);
                 }
             }
             .introduce{

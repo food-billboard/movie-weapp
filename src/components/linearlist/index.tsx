@@ -1,35 +1,9 @@
-import Taro, {Component, Config} from '@tarojs/taro'
-import { View, Text, Image } from '@tarojs/components'
+import Taro, {Component} from '@tarojs/taro'
+import { View } from '@tarojs/components'
 import { AtList, AtListItem } from "taro-ui"
+import { IProps } from './interface'
+
 import './index.scss'
-
-type up = 'up'
-type right = 'right'
-type down = 'down'
-type undefined = undefined
-
-interface IconInfo {
-    value: string, 
-    size?: string | number, 
-    color?: string, 
-    prefixClass?: string,
-    className?: string,
-    customStyle?: string
-}
-
-interface IList {
-    title: string,
-    disabled?: boolean,
-    note?: string,
-    arrow?: up | down | right | undefined,
-    iconInfo: IconInfo,
-    handle?: any,
-    id: string
-}   
-
-interface IProps {
-    list: Array<IList>
-}
 
 export default class List extends Component<IProps>{
     public static defaultProps: IProps = {

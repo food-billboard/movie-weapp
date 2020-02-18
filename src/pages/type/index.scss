@@ -1,41 +1,33 @@
-// @import '../../theme/custom-theme.scss';
-// @import "~taro-ui/dist/style/components/icon.scss";
-// .type{
-    // .header{
-        // height:80px;
-        .header-type{
-            height:80px;
-            position:relative;
-            left:0;
-            top:0;
-            white-space:nowrap;
-            .text{
-                position:absolute;
-                left:0;
-                top:0;
-                display:inline-block;
-                width:100px;
-                height:100%;
-                background-color:white;
-                line-height:80px;
-                z-index:9999;
-                text-indent:20px;
-            }
-            .header-list{
-                width:100px;
-                height:100%;
-                display:inline-block;
-                text-align:center;
-                line-height:80px;
-                font-weight:bold;
-                margin-left:100px;
-            }
-        }
-    // }
-    .btn{
-        position:fixed;
-        right:20px;
-        bottom:50px;
-        z-index:999;
+.header-type{
+    height:80px;
+    position:relative;
+    left:0;
+    top:0;
+    white-space:nowrap;
+    .text{
+        position:absolute;
+        left:0;
+        top:0;
+        display:inline-block;
+        width:100px;
+        height:100%;
+        line-height:80px;
+        z-index:9999;
+        text-indent:20px;
     }
-// }
+    .header-list{
+        width:100px;
+        height:100%;
+        display:inline-block;
+        text-align:center;
+        line-height:80px;
+        font-weight:bold;
+        margin-left:100px;
+    }
+}
+.btn{
+    position:fixed;
+    right:20px;
+    bottom:50px;
+    z-index:999;
+}

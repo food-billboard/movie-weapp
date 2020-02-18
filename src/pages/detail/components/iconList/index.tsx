@@ -2,24 +2,10 @@ import Taro, { Component } from '@tarojs/taro'
 import { ScrollView, View, Image } from '@tarojs/components'
 import './index.scss'
 import { router } from '~utils'
+import { style } from '~theme/global-style'
+import { IState, IProps } from './interface'
 
-interface IList {
-  image: string
-  id: string
-  content: string
-}
-
-interface IProps {
-  list: Array<IList>
-  id: string
-}
-
-interface IState {
-  activeShow: boolean
-  active: string
-}
-
-export default class extends Component<IProps> {
+export default class extends Component<IProps, IState> {
 
   public static defaultProps: IProps = {
     list: [],
@@ -55,15 +41,19 @@ export default class extends Component<IProps> {
       <View className='icon-list'>
         <View 
             className='content' 
-            style={{visibility: activeShow ? 'visible' : 'hidden'}}
+            style={{visibility: activeShow ? 'visible' : 'hidden', ...style.backgroundColor('primary'), ...style.color('disabled')}}
             onClick={() => {router.push('/comment', {id: this.props.id})}}
           >
             {active}
-            <View className='arrow'></View>
+            <View 
+              className='arrow'
+              style={{...style.border(20, 'primary', 'solid', 'top')}}
+            ></View>
           </View>
         <ScrollView
           scrollX={true}
           className='list'
+          style={{...style.border(1, 'disabled', 'dashed', 'all')}}
         >
           {
             showList.map(val => {

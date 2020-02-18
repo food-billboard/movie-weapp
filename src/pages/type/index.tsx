@@ -5,14 +5,13 @@ import LinearList from '~components/list'
 import GScrollView from '~components/scrollList'
 import Fab from './components/fab'
 import { throttle } from 'lodash'
-
+import { style } from '~theme/global-style'
 import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToPrps } from './connect'
 
 import './index.scss'
 
 const INIT_QUERY = { currPage: 1, pageSize: 10 }
-let FIRST = true
 
 @connect(mapStateToProps, mapDispatchToPrps)
 export default class Index extends Component<any> {
@@ -122,7 +121,9 @@ export default class Index extends Component<any> {
                 fetch={this.throttleFetchData}
                 header={80}
                 renderHeader={ <View className='header-type'>
-                                    <Text className='text'>分类: </Text>
+                                    <Text className='text'
+                                        style={{...style.color('thirdly')}}
+                                    >分类: </Text>
                                     <ScrollView 
                                         scrollX={true}
                                         className='header'
@@ -133,6 +134,7 @@ export default class Index extends Component<any> {
                                                 return (
                                                     <View 
                                                         className='header-list'
+                                                        style={{...style.color('primary')}}
                                                         key={id}
                                                         onClick={(e) => {this.getTypeDetail.call(this, id)}}
                                                     >   

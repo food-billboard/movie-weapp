@@ -1,26 +1,14 @@
 import Taro, {Component} from '@tarojs/taro'
 import {View} from '@tarojs/components'
-import PropTypes from 'prop-types'
+import { style } from '~theme/global-style'
 import './index.scss'
 import { Toast } from '~components/toast'
-
-interface IState {
-    text: string,
-    open: boolean
-}
-
-interface getData {
-    (): void
-}
-
-interface IProps {
-    getData: getData,
-    phone: string 
-}
+import { IProps, IState } from './interface'
 
 export default class Time extends Component<IProps>{
-    public static propTypes = {
-        getData: PropTypes.func
+    public static defaultProps: IProps = {
+        getData: () => {},
+        phone: ''
     }
 
     public state: IState = {
@@ -28,15 +16,10 @@ export default class Time extends Component<IProps>{
         open:true
     }
 
-    public constructor(){
-        super(...arguments)
-        this.handleClick = this.handleClick.bind(this)
-    }
-
     /**
      * 处理点击
      */
-    public handleClick() {
+    public handleClick = () => {
         const { open } = this.state
         const { phone } = this.props
         if(!/^1[346789]\d{9}$/g.test(phone)) {
@@ -73,7 +56,8 @@ export default class Time extends Component<IProps>{
         const {open, text} = this.state
         return (
             <View 
-                className={'time ' + (open ? 'color' : '')}
+                className={'time'}
+                style={{...style.color(open ? 'primary' : 'thirdly')}}
                 onClick={this.handleClick}
             >
                 {text}

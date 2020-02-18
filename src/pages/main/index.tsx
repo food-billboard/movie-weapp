@@ -9,12 +9,12 @@ import './index.scss'
 
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
+import { style } from '~theme/global-style'
 
 const INIT_RANK_QUERY = { currPage: 1, pageSize: 3 }
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any> {
-
 
   public config: Config = {
     navigationBarTitleText: '电影推荐'
@@ -103,13 +103,17 @@ export default class extends Component<any> {
           />
         </View>
         <View className='news'>
-          <Text className='news-title'>每日上新</Text>
+          <Text className='news-title'
+            style={{...style.color('secondary')}}
+          >每日上新</Text>
           <News 
             list={daily}
           />
         </View>
         <View className='rank'>
-          <Text className='rank-title'>排行榜</Text>
+          <Text className='rank-title'
+            style={{...style.color('secondary')}}
+          >排行榜</Text>
           {ranks}
         </View>
       </View>

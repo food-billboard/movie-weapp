@@ -1,5 +1,4 @@
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View } from '@tarojs/components'
 import List from '~components/commentlist'
 import GScrollView from '~components/scrollList'
 import Comment from '~components/comment'

@@ -1,25 +1,9 @@
 import Taro, {Component} from '@tarojs/taro'
 import { AtGrid } from 'taro-ui'
 import {router} from '~utils'
+import { IProps, IState, List } from './interface'
 
-import './index.scss'
-
-interface List {
-    id: string,
-    value: string,
-    image: string
-}
-
-interface IProps {
-    columnNum: number,
-    list: Array<List>
-}
-
-interface IState {
-    idList: Array<string>
-}
-
-class Itemize extends Component<IProps>{
+class Itemize extends Component<IProps, IState>{
     public static defaultProps = {
         columnNum: 3,
         list: []
@@ -41,15 +25,10 @@ class Itemize extends Component<IProps>{
         idList:[]
     }
 
-    public constructor() {
-        super(...arguments)
-        this.goTo = this.goTo.bind(this)
-    }
-
     /**
      * 分类跳转
      */
-    public goTo(item: List, index: number) {
+    public goTo = (item: List, index: number) => {
         const { idList } = this.state
         if(!idList.length) return
         const { id } = item
@@ -60,8 +39,8 @@ class Itemize extends Component<IProps>{
         const { list, columnNum } = this.props
         return (
             <AtGrid 
-                mode='rect' 
-                hasBorder={false} 
+                mode='square' 
+                hasBorder={true} 
                 data={list} 
                 columnNum={columnNum}	
                 onClick={this.goTo}

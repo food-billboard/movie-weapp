@@ -1,23 +1,10 @@
 import Taro, { Component } from '@tarojs/taro'
 import { Text } from '@tarojs/components'
-
-import './index.scss'
+import { IProps, IState } from './interface'
+import { style } from '~theme/global-style'
 
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
-
-interface IProps {
-  text?: string
-  getStore: (movie: any, user: any) => any
-  sendStore: (user: any, movie: any) => any
-  movie: string
-  id: string
-  getUserInfo: () => any
-}
-
-interface IState {
-  store: boolean
-}
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<IProps, IState> {
@@ -71,7 +58,7 @@ export default class extends Component<IProps, IState> {
     const { store } = this.state
     return (
       <Text
-        className={ 'store ' + (store ? 'show' : 'hide') }
+        style={{...style.color(store ? 'primary' : 'thirdly')}}
         onClick={this.handleClick}
       >
         {text}

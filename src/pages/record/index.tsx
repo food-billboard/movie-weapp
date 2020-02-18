@@ -6,7 +6,6 @@ import { throttle } from 'lodash'
 
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import {connect} from '@tarojs/redux'
-import {router} from '~utils'
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Index extends Component<any> {
@@ -14,7 +13,7 @@ export default class Index extends Component<any> {
         navigationBarTitleText: "浏览记录"
     }
 
-    public state = {
+    public state: any = {
         record: []
     }
 

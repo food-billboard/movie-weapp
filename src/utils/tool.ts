@@ -36,6 +36,8 @@ export const isDef = val => val !== null || val !== undefined
 
 export const isTrue = val => val === true
 
+export const isFalse = val => val === false
+
 //合并对象
 export const merge = (...args) => {
     return Object.assign({}, ...args)

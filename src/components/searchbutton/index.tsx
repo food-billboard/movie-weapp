@@ -1,27 +1,10 @@
-import Taro, {Component} from '@tarojs/taro'
-import {View, Text} from '@tarojs/components'
-import { AtSearchBar, AtButton, AtTag } from 'taro-ui'
+import Taro, { Component } from '@tarojs/taro'
+import { View } from '@tarojs/components'
+import { AtSearchBar, AtTag } from 'taro-ui'
 import './index.scss'
-import {router} from '~utils'
-
-interface Hot {
-    name: string,
-    id: string
-}
-
-interface IProps {
-    value: string,
-    disabled: boolean,
-    hot: Array<Hot>,
-    confirm: any
-    focus?: boolean
-    control?: (op: boolean) => any
-}
-
-interface IState {
-    focus: boolean
-    value?: string
-}
+import { router } from '~utils'
+import { IProps, IState } from './interface'
+import { style } from '~theme/global-style'
 
 class SearchButton extends Component<IProps, IState>{
     //默认数据
@@ -34,15 +17,6 @@ class SearchButton extends Component<IProps, IState>{
         control: () => {}
     }
 
-    public constructor() {
-        super(...arguments)
-
-        this.onChange = this.onChange.bind(this)
-        this.onBlur = this.onBlur.bind(this)
-        this.onFocus = this.onFocus.bind(this)
-        this.confirm = this.confirm.bind(this)
-    }
-
     public state: IState = {
         focus: false
     }
@@ -50,7 +24,7 @@ class SearchButton extends Component<IProps, IState>{
     /**
      * 监听输入框改变
      */
-    public onChange(value: string = ''):any {
+    public onChange = (value: string = '') => {
         this.setState({
             value: value
         })
@@ -59,7 +33,7 @@ class SearchButton extends Component<IProps, IState>{
     /**
      *监听失去焦点 
      */
-    public onBlur():any {
+    public onBlur = () => {
         this.setState({
             focus: false
         })
@@ -69,7 +43,7 @@ class SearchButton extends Component<IProps, IState>{
     /**
      * 监听获取焦点
      */
-    public onFocus():any {
+    public onFocus = () => {
         const { disabled } = this.props
         if(this.props.control) this.props.control(false)
         this.setState({
@@ -82,14 +56,14 @@ class SearchButton extends Component<IProps, IState>{
     /**
      * 获取热搜信息
      */
-    public getHot(value: any, event: any): void {
+    public getHot = (value: any, event: any) => {
         router.push('/detail', {id: value.id})
     }
 
     /**
      * 搜索
      */
-    public confirm() {
+    public confirm = () => {
         const {value} = this.props
         this.props.confirm(value)
     }
@@ -103,6 +77,7 @@ class SearchButton extends Component<IProps, IState>{
                 <View className='at-col at-col-2 hotlist'
                     key={id}>
                     <AtTag 
+                        customStyle={{...style.backgroundColor('disabled')}}
                         type={"primary"}
                         size={"normal"}
                         circle={true}

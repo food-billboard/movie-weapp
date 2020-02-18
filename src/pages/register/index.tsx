@@ -199,7 +199,7 @@ export default class extends Component<any>{
                     </AtButton>
                     <AtButton 
                         formType='reset'
-                        type={'primary'}
+                        type={'secondary'}
                     >
                         重置
                     </AtButton>

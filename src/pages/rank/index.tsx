@@ -129,11 +129,11 @@ export default class extends Component<any> {
               list={data}
             />
             <AtGrid
-              hasBorder={false}
+              hasBorder={true}
               data={rankType}
               onClick={this.exchangeRank}
             />
-            <List list={detail} />
+            <List list={detail} style={{marginTop: '10px'}} />
           </View>
         }
         fetch={this.throttleFetchData}

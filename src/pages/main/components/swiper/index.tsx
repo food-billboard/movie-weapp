@@ -1,15 +1,8 @@
 import Taro, {Component} from '@tarojs/taro'
 import { Swiper, SwiperItem, Image } from '@tarojs/components'
 import {router} from '~utils'
-
-interface List {
-    id: string,
-    image: string
-}
-
-interface IProps {
-    list: Array<List>
-}
+import { IProps } from './interface'
+import { TypeColor } from '~theme/global-style'
 
 class Index extends Component<IProps>{
     public static defaultProps = {
@@ -40,8 +33,8 @@ class Index extends Component<IProps>{
         })
         return (
             <Swiper
-                indicatorColor='#999'
-                indicatorActiveColor='#333'
+                indicatorColor={TypeColor['primary']}
+                indicatorActiveColor={TypeColor['disabled']}
                 circular
                 indicatorDots
                 autoplay>

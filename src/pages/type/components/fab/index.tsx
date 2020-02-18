@@ -1,17 +1,9 @@
 import Taro, { Component } from '@tarojs/taro'
 import { Text } from '@tarojs/components'
 import { AtFab } from 'taro-ui'
+import { IProps, IState } from './interface'
 
 import './index.scss'
-
-interface IProps {
-  value: boolean
-  change: () => any
-}
-
-interface IState {
-  
-}
 
 export default class Fab extends Component<IProps, IState> {
 

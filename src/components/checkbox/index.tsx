@@ -6,38 +6,9 @@ import { isObject } from '~utils'
 import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToProps } from './connect'
 import { FORM_ERROR } from '~config'
+import { IState, IProps, IOption } from './interface'
 
 import './index.scss'
-
-interface IOption {
-  value: string
-  label: string
-  desc?: string
-  disabled?: boolean
-}
-
-interface IProps {
-  checkboxOption?: Array<IOption>
-  checkedList?: Array<string> | false
-  style?: any
-  type: 'area' | 'actor' | 'director' | 'type' | 'country'
-  needHiddenList?: boolean
-  extraFactor?: boolean
-  getSwitch: (count?:number) => any
-  getAreaList: (count?:number) => any
-  getLanguageList: (count?:number) => any
-  getActorList: (count?:number) => any
-  getDirectorList: (count?:number) => any
-  getCountryList: (count?:number) => any
-  handleChange?: (e: any) => any
-}
-
-interface IState {
-  checkedList: Array<string>
-  show: boolean
-  checkOption: Array<IOption>
-  error: boolean
-}
 
 const BUTTON_STYLE = {
   height:'40px'

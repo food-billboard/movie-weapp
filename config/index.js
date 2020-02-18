@@ -14,7 +14,8 @@ const config = {
     '~lodash': 'src/lib/lodash',
     '~utils': 'src/utils',
     '~config': 'src/config',
-    '~services': 'src/services'
+    '~services': 'src/services',
+    '~theme': 'src/theme'
   },
   sourceRoot: 'src',
   outputRoot: 'dist',

@@ -1,19 +1,10 @@
 import Taro, {Component} from '@tarojs/taro'
 import {ScrollView, View, Image} from '@tarojs/components'
+import { IProps } from './interface'
+
 import './index.scss'
 
 import {router} from '~utils'
-
-interface List {
-    id: string,
-    title: string,
-    image: string
-}
-
-interface IProps {
-    count: number,
-    list: Array<List>
-}
 
 class News extends Component<IProps>{
     public static defaultProps = {

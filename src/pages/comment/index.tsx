@@ -7,8 +7,6 @@ import CommentCom from '~components/comment'
 import GScrollView from '~components/scrollList'
 import { throttle } from 'lodash'
 
-import './index.scss'
-
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 
@@ -22,6 +20,14 @@ export default class extends Component<any> {
 
     public componentDidMount = async () => {
         this.fetchMovieData()
+    }
+
+    public state: any = {
+        comment: [],
+        commentId: false,
+        userCall: false,
+        userId: false,
+        commentHeader: {name: '', detail: '', image: '', id: ''},
     }
 
     //评论组件
@@ -68,24 +74,6 @@ export default class extends Component<any> {
      */
     public throttleFetchData = throttle(this.fetchData, 2000)
 
-    public state: any = {
-        comment: [],
-        commentId: false,
-        // value: '',
-        // commentShow: false,
-        userCall: false,
-        userId: false,
-        commentHeader: {name: '', detail: '', image: '', id: ''}
-    }
-
-    public constructor() {
-        super(...arguments)
-
-        this.publishComment = this.publishComment.bind(this)
-        this.publish = this.publish.bind(this)
-        this.fetchData = this.fetchData.bind(this)
-    }
-
     /**
      * 发布评论
      */
@@ -109,7 +97,7 @@ export default class extends Component<any> {
      * user: 用户id
      * commentId: 评论id
      */
-    public publish(isUserCall=false, user, commentId) {
+    public publish = (isUserCall=false, user, commentId) => {
         this.props.getUserInfo()
         this.commentRef.current!.open()
         if(isUserCall) {

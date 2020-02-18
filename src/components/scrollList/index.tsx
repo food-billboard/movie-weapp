@@ -3,39 +3,12 @@ import { View, ScrollView, Text } from '@tarojs/components'
 import { AtActivityIndicator } from 'taro-ui'
 import GDivider from '~components/divider'
 import Top from '../topbutton'
+import { IProps, IState } from './interface'
 import './index.scss'
-
-//header定义的同时也需要定义renderHeader才可以显示header信息
-//bottom定义的同时也需要定义renderBottom才可以显示bottom信息
-//bottom 内的内容只能是固定定位
-interface IProps {
-  sourceType: 'Scope' | 'Dva',
-  query?: any,
-  scrollY?: boolean
-  // upperThreshold?: number
-  lowerThreshold?: number
-  scrollWithAnimation?: boolean
-  // onScrollToUpper?: () => any
-  onScrollToLower?: () => any
-  onScroll?: () => any
-  fetch: (...args: any[]) => any
-  header?: false | number
-  bottom?: false | number
-  renderContent?: any
-  renderHeader?: any
-  renderBottom?: any
-}
-
-interface IState {
-  data: Array<any>
-  empty: boolean
-  query: any
-  loading: boolean
-}
 
 const INIT_QUERY = { pageSize: 10, currPage: 1 }
 
-export default class List extends Component<IProps> {
+export default class List extends Component<IProps, IState> {
 
   public topRef = Taro.createRef<Top>()
   
@@ -173,7 +146,6 @@ export default class List extends Component<IProps> {
         >
           {loading ? <AtActivityIndicator 
             size={100}
-            color={'#666'}
             content={'玩命加载中...'}
             // className={ loading ? 'activeShow' : 'activeHide' }
           /> : ''}

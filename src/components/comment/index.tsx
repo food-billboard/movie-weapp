@@ -1,22 +1,10 @@
 import Taro, { Component } from '@tarojs/taro'
-import { Button, View, Image } from '@tarojs/components'
+import { Button } from '@tarojs/components'
 import GImagePicker from '../imgPicker'
-import { findIndex } from 'lodash'
 import { IMAGE_CONFIG } from '~config'
-import './index.scss'
+import { AtModal, AtModalContent, AtModalAction, AtTextarea } from "taro-ui"
 
-import { AtModal, AtModalContent, AtModalAction, AtTextarea, AtButton, AtIcon } from "taro-ui"
-import { Toast } from '~components/toast'
-
-interface IProps {
-    buttonText: string,
-    publishCom: (value: any) => any
-}
-
-interface IState {
-    value: string
-    isOpen: boolean
-}
+import { IProps, IState } from './interface'
 
 export default class Comment extends Component<IProps>{
     public static defaultProps: IProps = {
@@ -26,6 +14,7 @@ export default class Comment extends Component<IProps>{
 
     readonly imgPickerRef = Taro.createRef<GImagePicker>()
 
+    //图片提交的配置
     readonly imageConfig = {
         ...IMAGE_CONFIG,
     }
@@ -42,16 +31,10 @@ export default class Comment extends Component<IProps>{
         })
     }
 
-    public constructor() {
-        super(...arguments)
-        this.handleChange = this.handleChange.bind(this)
-        this.publish = this.publish.bind(this)
-    }
-
     /**
      * 监听数据改变
      */
-    public handleChange(event) {
+    public handleChange = (event) => {
         this.setState({
             value: event.target.value
         })

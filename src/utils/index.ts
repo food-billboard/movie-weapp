@@ -5,6 +5,7 @@ export { default as router } from './router';
 export * from './tool'
 export * from './format'
 export * from './platform'
+export * from './globalType'
 
 export const includes = (collection: any=[], value:any='') => {
     console.log(collection, value)

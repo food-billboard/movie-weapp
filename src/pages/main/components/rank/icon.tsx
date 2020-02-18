@@ -1,24 +1,23 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
+import { IIconProps as IProps } from './interface'
+import { style } from '~theme/global-style'
 import './index.scss'
 
-interface IProps {
-    rank: number
-}
-
 export default class RankIcon extends Component<IProps>{
-    public static defaultProps = {
+    public static defaultProps:IProps = {
         rank: 1
     }
 
-    public constructor() {
-        super(...arguments)
-    }
     render() {
         const { rank } = this.props
         return(
-            <View className='icon'>
-                <Text className='icon-text'>▲{rank}</Text>
+            <View className={'icon'}
+                style={{...style.backgroundColor('disabled')}}
+            >
+                <Text className={'icon-text'}
+                    style={{...style.color('thirdly')}}
+                >▲{rank}</Text>
             </View>
         )
     }

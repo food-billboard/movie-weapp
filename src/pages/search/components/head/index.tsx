@@ -1,26 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View } from '@tarojs/components'
 import { AtTabs, AtTabsPane } from 'taro-ui'
+import { IState, IProps } from './interface'
 import './index.scss'
-import PropTypes from 'prop-types'
-
-interface Screen {
-    (value: string): void 
-}
-
-interface IProps {
-    screen: Screen
-}
-
-interface TabList {
-    title: string,
-    id: string
-}
-
-interface IState {
-    current: number,
-    tabList: Array<TabList>
-}
 
 export default class Head extends Component<IProps>{
     public static defaultProps = {
@@ -44,16 +25,11 @@ export default class Head extends Component<IProps>{
             }
         ]   
     }
-    
-    public constructor() {
-        super(...arguments)
-        this.handleClick = this.handleClick.bind(this)
-    }
 
     /**
      * 条件筛选
      */
-    public handleClick (value: number) {
+    public handleClick = (value: number) => {
         const { tabList } = this.state
         this.setState({
             current: value

@@ -1,17 +1,8 @@
 import Taro, { Component } from '@tarojs/taro'
 import { Video } from '@tarojs/components'
-import './index.scss'
+import { IProps } from './interface'
 
-export interface IProps {
-    src: string,
-    controls?: boolean,
-    autoplay?: boolean,
-    poster: string,
-    initialTime?: number,
-    id?: string,
-    loop?: boolean,
-    muted?: boolean,
-}
+import './index.scss'
 
 export default class Media extends Component<IProps>{
     public static defaultProps = {
@@ -25,15 +16,7 @@ export default class Media extends Component<IProps>{
         muted: false,
     }
 
-    public constructor() {
-        super(...arguments)
-        this.state = {
-            
-        }
-        this.error = this.error.bind(this)
-    }
-
-    public error(err) {
+    public error = (err) => {
         console.log(err)
     }
 

@@ -6,7 +6,6 @@ import Sub from './components/sub'
 import List from '~components/list'
 import IconList from '~components/iconlist'
 import GScrollView from '~components/scrollList'
-
 import { debounce, throttle } from 'lodash'
 import { FormData } from './interface'
 
@@ -42,14 +41,6 @@ export default class Index extends Component<any> {
         listShow: false,
         searchList: [],
         query: {...INIT_QUERY}
-    }
-
-    public constructor() {
-        super(...arguments)
-
-        this.typeScreen = this.typeScreen.bind(this)
-        this.sortScreen = this.sortScreen.bind(this)
-        this.showMethod = this.showMethod.bind(this)
     }
 
     //获取热搜
@@ -159,7 +150,7 @@ export default class Index extends Component<any> {
     /**
      * 展示方式切换
      */
-    public showMethod() {
+    public showMethod = () => {
         const {showList} = this.state
         this.setState({
             showList: !showList

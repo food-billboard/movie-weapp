@@ -1,12 +1,13 @@
 import Taro, {Component, Config} from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import GVideo from './components/video'
+import GVideo from '~components/video'
 import List from './components/imglist'
 import Content from './components/content'
 import GButton from '~components/button'
 import IconList from './components/iconList'
 import Comment from '~components/comment'
 import GTag from './components/tag'
+import { style } from '~theme/global-style'
 
 import './index.scss'
 
@@ -96,7 +97,9 @@ export default class extends Component<any> {
                     /> : null
                     }
                 </View>
-                <View className='description'>
+                <View className={'description'}
+                    style={{...style.color('thirdly'), ...style.border(1, 'thirdly', 'solid', 'top')}}
+                >
                     <Content
                         info={info}
                         movie={this.id}

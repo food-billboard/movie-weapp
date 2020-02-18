@@ -1,15 +1,8 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
+import { IProps, IState } from './interface'
+import { style } from '~theme/global-style'
 import './index.scss'
-
-interface IProps {
-  text: string
-}
-
-interface IState {
-  show: boolean
-  maxLen: number
-}
 
 export default class extends Component<IProps, IState> {
 
@@ -26,7 +19,6 @@ export default class extends Component<IProps, IState> {
    * 获取详情
    */
   public getDetail = () => {
-    console.log(1111)
     this.setState({
       show: true
     })
@@ -45,17 +37,18 @@ export default class extends Component<IProps, IState> {
   }
 
   public render() {
-    const { show } = this.state
     const { text } = this.props
     const _text = this.getText()
     return (
-      <View className='ellipsis '>
+      <View className='ellipsis'
+        style={{...style.color('secondary')}}
+      >
         <Text style={{display: 'inline-block', wordBreak: 'break-word'}}>
           {_text}
         </Text>
         <Text 
-            onClick={this.getDetail.bind(this)} 
-            style={{display: text.length !== _text.length ? 'block' : 'none'}} 
+            onClick={this.getDetail} 
+            style={{display: text.length !== _text.length ? 'block' : 'none', ...style.color('thirdly')}} 
             className='detail'
           >
             查看详情>

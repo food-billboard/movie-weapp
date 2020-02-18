@@ -3,47 +3,13 @@ import { View, Text } from '@tarojs/components'
 import GRate from '../rate'
 import GStore from '../store'
 import { AtModal } from 'taro-ui'
-
-import { formatTime, formatNumber } from '~utils'
-
+import { formatTime, formatNumber, ItypeList } from '~utils'
+import { IProps, IState } from './interface'
+import { style } from '~theme/global-style'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 
 import './index.scss'
-
-interface IProps {
-    movie: string
-    id: string
-    info: Info
-    sendRate: (value: any, user: any, movie: any) => any
-    sendStore: (user: any, movie: any) => any
-    getUserInfo: () => any
-}
-
-interface IList {
-    id: string
-    value: string
-}
-
-interface Info {
-    name: string
-    area: Array<IList>
-    people: number
-    director: Array<IList>
-    actor: Array<IList>
-    type: Array<IList>
-    time: string
-    publishTime: string
-    language: string
-    description: string
-    hot: number
-    rate:number
-    store: boolean
-}
-
-interface IState {
-    isOpened: boolean
-}
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Content extends Component<IProps, IState>{
@@ -77,15 +43,10 @@ export default class Content extends Component<IProps, IState>{
         isOpened: false
     }
 
-    public constructor() {
-        super(...arguments)
-        this.showDetail = this.showDetail.bind(this)
-    }
-
     /**
      * 显示详情
      */
-    public showDetail():void {
+    public showDetail = () => {
         const {isOpened} = this.state
         this.setState({
             isOpened: !isOpened
@@ -112,7 +73,10 @@ export default class Content extends Component<IProps, IState>{
         } = info
         return (
             <View className='content'>
-                <View className='title'>
+                <View
+                    className={'title'}
+                    style={{...style.color('primary')}}
+                >
                     {name}
                     <GStore
                         movie={movie}
@@ -126,14 +90,18 @@ export default class Content extends Component<IProps, IState>{
                     </View>
                     <View className='main-info'>
                         <View className='actor'>
-                            主演: <Text className='text'>{actor.map((val: IList) => {
+                            主演: <Text className='text'
+                                    style={{...style.color('primary')}}
+                                >{actor.map((val: ItypeList) => {
                                 const { value } = val
                                 return value
                             }).join(' ')}</Text>
                         </View>
                         <View className='at-row at-row__justify--between director-lan'>
                             <View className='at-col at-col-5 director'>
-                                导演: <Text className='text'>{director.map((val: IList) => {
+                                导演: <Text className={'text'}
+                                        style={{...style.color('primary')}}
+                                >{director.map((val: ItypeList) => {
                                     const { value } = val
                                     return value
                                 }).join(' ')}</Text>
@@ -143,17 +111,23 @@ export default class Content extends Component<IProps, IState>{
                             </View> */}
                         </View>
                         <View className='type'>
-                            分类: <Text className='text'>{type.map((val: IList) => {
+                            分类: <Text className={'text'}
+                                style={{...style.color('primary')}}
+                            >{type.map((val: ItypeList) => {
                                 const { value } = val
                                 return value
                             }).join(' ')}</Text>
                         </View>
                         <View className='at-row at-row__justify--between time-area'>
                             <View className='at-col at-col-5 time'>
-                                时间: <Text className='text'>{formatTime(publishTime)}</Text>
+                                时间: <Text className={'text'}
+                                    style={{...style.color('primary')}}
+                                >{formatTime(publishTime)}</Text>
                             </View>
                             <View className='at-col at-col-5 area'>
-                                地区: <Text className='text'>{area.map((val: IList) => {
+                                地区: <Text className={'text'}
+                                    style={{...style.color('primary')}}
+                                >{area.map((val: ItypeList) => {
                                     const { value } = val
                                     return value
                                 }).join(' ')}</Text>
@@ -161,12 +135,19 @@ export default class Content extends Component<IProps, IState>{
                         </View>
                         <View className='hot'>
                             人气: 
-                            <Text className='text'>{formatNumber(hot)}</Text>
+                            <Text className={'text'}
+                                style={{...style.color('primary')}}
+                            >{formatNumber(hot)}</Text>
                             <Text className='hot-text'> 人看过</Text>
                         </View>
-                        <View className='description'> 
-                            简介: <Text className='text'>{description}</Text>
+                        <View className='description'
+                            style={{...style.border(1, 'disabled', 'dashed', 'left_right')}}
+                        > 
+                            简介: <Text className={'text'}
+                                style={{...style.color('primary')}}
+                            >{description}</Text>
                             <Text className='description-detail'
+                                style={{...style.border(1, 'secondary', 'dashed', 'top_bottom'), ...style.backgroundColor('disabled')}}
                                 onClick={this.showDetail}
                             >
                                 详情>

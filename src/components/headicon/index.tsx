@@ -1,18 +1,9 @@
 import Taro, {Component} from '@tarojs/taro'
-import { View, Text, Image } from '@tarojs/components'
+import { View, Text } from '@tarojs/components'
 import { AtAvatar } from 'taro-ui'
-
+import { IProps } from './interface'
+import { style } from '~theme/global-style'
 import './index.scss'
-
-interface List {
-    username: string, 
-    image: string, 
-    hot: number
-}
-
-interface IProps {
-    list: List
-}
 
 export default class IconHead extends Component<IProps>{
     public static defaultProps: IProps = {
@@ -27,7 +18,9 @@ export default class IconHead extends Component<IProps>{
         const {list} = this.props
         const {username='', image='', hot=0} = list
         return (
-            <View className='head'>
+            <View className='head'
+                style={{...style.backgroundColor('thirdly')}}
+            >
                 <View className='icon'>
                     <View className='img'>
                         <AtAvatar
@@ -39,10 +32,14 @@ export default class IconHead extends Component<IProps>{
                             customStyle={{width: '100%', height: '100%'}}
                          />
                     </View>
-                    <Text className='username'>{username}</Text>
+                    <Text className='username' style={{...style.color('primary')}}>{username}</Text>
                 </View>
-                <View className='hot'>
-                    <Text className='count'>{hot}</Text>人觉得很赞
+                <View className='hot'
+                    style={{...style.color('disabled')}}
+                >
+                    <Text className='count'
+                        style={{...style.color('primary')}}
+                    >{hot}</Text>人觉得很赞
                 </View>
             </View>
         )

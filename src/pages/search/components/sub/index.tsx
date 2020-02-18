@@ -3,16 +3,10 @@ import { View } from '@tarojs/components'
 import RadioList from '../radio'
 import Method from '../method' 
 import Select from '../select'
-
+import { IProps } from './interface'
 import { FormData } from '../../interface'
 
 import './index.scss'
-
-interface IProps {
-    sortScreen: (value: string) => void
-    showMethod: () =>void
-    queryScreen: (formData: FormData) => void
-}
 
 export default class Sub extends Component<IProps>{
     public static defaultProps = {

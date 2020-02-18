@@ -1,24 +1,12 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtTag } from 'taro-ui'
-import { isObject } from '~utils'
+import { isObject, ItypeList } from '~utils'
+import { IProps, IState } from './interface'
+import { TypeColor } from '~theme/global-style'
 import './index.scss'
 
-interface IList {
-  id: string
-  value: string
-}
-
-interface IProps {
-  list: Array<IList>
-  style?: any
-}
-
-interface IState {
-
-}
-
-const COLOR_LIST = [ 'rgba(245, 245, 245, 1)', 'rgba(245, 235, 245, 1)', 'rgba(235, 245, 245, 1)', 'rgba(245, 245, 235, 1)'  ]
+const COLOR_LIST = [ TypeColor['thirdly'], TypeColor['secondary'], TypeColor['primary'] ]
 
 const randomArea = () => {
   return Math.ceil(Math.random() * 20) + 'px'
@@ -31,7 +19,8 @@ const randomColor = () => {
 
 const TAG_STYLE = {
   marginBottom: '5px',
-  marginRight: '10px'
+  marginRight: '10px',
+  color: '#fff'
 }
 
 export default class extends Component<IProps, IState> {
@@ -43,7 +32,7 @@ export default class extends Component<IProps, IState> {
     return (
       <View className='tag'>
         {
-          list.map((val: IList) => {
+          list.map((val: ItypeList) => {
             const { id, value } = val
             return (
               <AtTag 

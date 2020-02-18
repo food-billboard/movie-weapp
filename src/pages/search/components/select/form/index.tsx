@@ -1,40 +1,16 @@
 import Taro, {Component} from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import GPicker from '~components/picker'
-import GInput from '../../../../issue/components/description'
+import GInput from '~components/input'
 import { AtForm, AtButton, AtAccordion, AtTag } from 'taro-ui'
-import { FormData } from '../../../interface'
 import './index.scss'
 import { connect } from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { Toast } from '~components/toast'
 import GCheckbox from '~components/checkbox'
-
-interface ILang {
-    id: string,
-    value: string,
-    img: string
-}
-
-interface IProps {
-    screen: (formData: FormData) => void
-    getLanguageList: () => any
-}
-
-interface FeeOption {
-    value: string,
-    label: string,
-    disabled: boolean
-}
-
-interface FormDefault {
-    feeOptions: Array<FeeOption>
-}
-
-interface IState {
-    lang: Array<ILang>
-    open: boolean
-}
+import { IState, IProps, FormDefault } from './interface'
+import { FormData } from '../../../interface'
+import { style } from '~theme/global-style'
 
 const TAT_STYLE = {
     boxSizing: 'border-box', 
@@ -98,13 +74,6 @@ export default class Forms extends Component<IProps> {
     public state: IState = {
         lang: [],
         open: false
-    }
-
-    public constructor() {
-        super(...arguments)
-
-        this.onSubmit = this.onSubmit.bind(this)
-        this.onReset = this.onReset.bind(this)
     }
 
     /**
@@ -379,7 +348,7 @@ export default class Forms extends Component<IProps> {
                     </AtAccordion>
                 </View>
                 <View className='btn'>
-                    <AtButton formType='reset' type='secondary' customStyle={{backgroundColor: 'red'}}>重置</AtButton>
+                    <AtButton formType='reset' type='secondary' customStyle={{...style.backgroundColor('disabled')}}>重置</AtButton>
                     <AtButton formType='submit' type='primary'>确定</AtButton>
                 </View>
             </AtForm>

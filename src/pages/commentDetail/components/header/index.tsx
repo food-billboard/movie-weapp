@@ -2,33 +2,10 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Image, Text } from '@tarojs/components'
 import { AtIcon, AtAvatar } from 'taro-ui'
 import Ellipsis from '~components/ellipsis'
-
 import { router, formatTime, formatNumber } from '~utils'
-
+import { IProps, IState } from './interface'
+import { style } from '~theme/global-style'
 import './index.scss'
-
-interface IContent {
-  id: string
-  user: string
-  userId: string
-  content: string
-  icon: string
-  hot: number
-  time: string
-  isLike: boolean
-}
-
-interface IProps {
-  content: IContent
-  like: (commentId: string, user: string, mine: string) => any
-  id: string
-  total: number
-  getUserInfo: () => any
-}
-
-interface IState {
-  content: IContent
-}
 
 export default class extends Component<IProps, IState> {
 
@@ -50,7 +27,7 @@ export default class extends Component<IProps, IState> {
   }
 
   public state: IState = {
-    content: this.props.content
+    content: this.props.content,
   }
 
   public componentWillReceiveProps = (props) => {
@@ -105,7 +82,10 @@ export default class extends Component<IProps, IState> {
     const { total } = this.props
     return (
       <View className='header'>
-        <View className='content'>
+        <View   
+          className={'content'}
+          style={{...style.border(2, 'disabled', 'dashed', 'top_bottom')}}
+        >
           <View className='content-header at-row'>
             <View 
               className='at-col at-col-2'
@@ -121,10 +101,11 @@ export default class extends Component<IProps, IState> {
             </View>
             <View 
               className='at-col at-col-7 user'
+              style={{...style.color('primary')}}
             >
               {user}
             </View>
-            <View className='content-header-extra at-col at-col-3 time'>
+            <View className='content-header-extra at-col at-col-3 time' style={{...style.color('secondary')}}>
               {formatTime(time)}
             </View>
           </View>
@@ -142,14 +123,14 @@ export default class extends Component<IProps, IState> {
               <View className='at-row at-row__align--center content-footer-main'>
                 <View className='at-col at-col-6 at-row at-row__align--center'>
                   <AtIcon value={'message'} size={16} customStyle={{marginRight: '5px', display: 'inline-block'}} />
-                  <Text>{formatNumber(total)}</Text>
+                  <Text style={{...style.color('thirdly')}}>{formatNumber(total)}</Text>
                 </View>
                 <View 
                   className='at-col at-col-6'
                   onClick={this.like.bind(this, userId, hot, isLike, id)}
                 >
                   <AtIcon size={16} value={isLike ? 'heart-2' : 'heart'} customStyle={{marginRight: '5px', display: 'inline-block'}} />
-                  <Text>{formatNumber(hot)}</Text>
+                  <Text style={{...style.color('thirdly')}}>{formatNumber(hot)}</Text>
                 </View>
               </View>
           </View>

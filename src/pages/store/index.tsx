@@ -14,7 +14,7 @@ export default class Index extends Component<any> {
         navigationBarTitleText: "收藏"
     }
 
-    public state = {
+    public state: any = {
         store: []
     }
 

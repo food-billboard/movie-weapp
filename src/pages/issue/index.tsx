@@ -4,11 +4,12 @@ import { AtInput, AtButton, AtTag } from 'taro-ui'
 import GCheckBox from '~components/checkbox'
 import GVideo from './components/video'
 import GPicker from '~components/picker'
-import GDescription from './components/description'
+import GDescription from '~components/input'
 import GImagePicker from '~components/imgPicker'
 import { IFormData } from './interface'
 import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToProps } from './connect'
+import { style } from '~theme/global-style'
 
 import './index.scss'
 import { Toast } from '~components/toast'
@@ -31,10 +32,10 @@ const BUTTON_STYLE = {
 
 const TAT_STYLE = {
   boxSizing: 'border-box', 
-  border: '1px dashed black', 
   width:'100%', 
   marginBottom: '5px', 
-  backgroundColor: 'white'
+  ...style.backgroundColor('disabled'),
+  ...style.border(1, 'primary', 'dashed', 'all')
 }
 
 const PICKER_STYLE = {
@@ -295,7 +296,7 @@ export default class extends Component<any> {
           <GDescription
             ref={this.nameRef}
             value={name}
-            style={{marginBottom: '20px', backgroundColor: 'rgba(0, 0, 0, 0.1)', marginLeft: 0}}
+            style={{marginBottom: '20px', marginLeft: 0, ...style.backgroundColor('disabled')}}
           ></GDescription>
         </View>
         <View className='area'>
@@ -406,7 +407,7 @@ export default class extends Component<any> {
             ref={this.descriptionRef}
             type={'textarea'}
             value={description}
-            style={{backgroundColor: 'rgba(0, 0, 0, 0.1)'}}
+            style={style.backgroundColor('disabled')}
           ></GDescription>
         </View>
         <View className='image'>
@@ -429,7 +430,7 @@ export default class extends Component<any> {
           ></GImagePicker>
         </View>
         <AtButton type={'primary'} onClick={this.handleSubmit} customStyle={ BUTTON_STYLE }>提交</AtButton>
-        <AtButton type={'primary'} onClick={this.handleReset} customStyle={{ ...BUTTON_STYLE, bottom: '40px', backgroundColor: 'red' }}>重置</AtButton>
+        <AtButton type={'primary'} onClick={this.handleReset} customStyle={{ ...BUTTON_STYLE, bottom: '40px', ...style.backgroundColor('thirdly') }}>重置</AtButton>
       </View>
     )
   }

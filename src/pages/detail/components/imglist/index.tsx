@@ -1,15 +1,8 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
+import { IProps } from './interface'
+
 import './index.scss'
-
-interface IList {
-    img: string,
-    id: string
-}
-
-interface IProps {
-    list: Array<IList>
-}
 
 export default class List extends Component<IProps> {
     public static defaultProps = {
@@ -19,13 +12,13 @@ export default class List extends Component<IProps> {
     public render() {
         const {list} = this.props
         const lists = list.map((value, index) => {
-            const { img, id } = value
+            const { image, id } = value
             return (
                 <View className='content'
                     key={id}
                 >
                     <Image 
-                        src={img} 
+                        src={image} 
                         className='main'
                      />
                 </View>

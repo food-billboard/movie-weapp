@@ -2,23 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { AtImagePicker } from 'taro-ui'
 import { IMAGE_CONFIG } from '~config'
 import {Toast} from '../toast'
-
-interface IFiles {
-  url: string
-}
-
-interface IProps {
-  files?: Array<IFiles> | false
-  mode?: 'scaleToFill'|'aspectFit'|'aspectFill'|'widthFix'|'top'|'bottom'|'center'|'left'|'right'|'top left'|'top right'|'bottom left'|'bottom right'
-  multiple?: boolean
-  length?: number
-}
-
-interface IState {
-  files: Array<IFiles>
-  showAddBtn: boolean
-  error: boolean
-}
+import { IProps, IState } from './interface'
 
 const { count } = IMAGE_CONFIG
 

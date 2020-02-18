@@ -1,22 +1,12 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import { AtRate } from 'taro-ui'
+import { IProps, IState } from './interface'
+import { style } from '~theme/global-style'
 import './index.scss'
 
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
-
-interface IProps {
-    getUserInfo: () => any
-    sendRate: (rate: any, user: string, movie: string) => any
-    getRate: (movie: string) => any
-    movie: string
-    id: string
-}
-
-interface IState {
-    value: number
-}
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class GTate extends Component<IProps, IState>{
@@ -31,11 +21,6 @@ export default class GTate extends Component<IProps, IState>{
     public state: IState = {
         value: 0
     }
-
-    public constructor() {
-        super(...arguments)
-        this.handleChange = this.handleChange.bind(this)
-    }  
 
     public componentDidMount = async () => {
         this.fetchData()
@@ -80,7 +65,10 @@ export default class GTate extends Component<IProps, IState>{
                     value={value}
                     onChange={(value) => {this.handleChange.call(this, value)}}
                 /> 
-                <Text className='number'>{value}</Text>
+                <Text 
+                    className='number'
+                    style={{...style.color('secondary')}}
+                >{value}</Text>
             </View>
         )
     }

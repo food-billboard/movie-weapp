@@ -1,22 +1,11 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
+import { IProps, IState } from './interface'
 import './index.scss'
+import { style } from '~theme/global-style'
+import { router } from '~utils'
 
-import {router} from '~utils'
-
-interface Content {
-    name: string,
-    detail: string,
-    image: string,
-    id: string  
-}
-
-interface IProps {
-    content: Content
-    style?: {} | object
-}
-
-export default class NewsHead extends Component<IProps>{
+export default class NewsHead extends Component<IProps, IState>{
     public static defaultProps: IProps = {
         content: {
             name: '',
@@ -27,21 +16,16 @@ export default class NewsHead extends Component<IProps>{
         style: {}
     }
 
-    public constructor() {
-        super(...arguments)
-        this.handleClick = this.handleClick.bind(this)
-    }
-
-    public handleClick(id: string): void {
+    public handleClick = (id: string) => {
         router.push('/detail', {id})
     }
 
     public render() {
-        const { content, style } = this.props
+        const { content, style:propsStyle } = this.props
         const {detail, name, id, image} = content
         return (
             <View className='head'
-                style={style}
+                style={propsStyle}
                 onClick={this.handleClick.bind(this, id)}>
                 <View className='img'>
                     <Image src={image} className='content'></Image>            
@@ -60,7 +44,9 @@ export default class NewsHead extends Component<IProps>{
                         </View>
                     </View>
                 </View>
-                <View className='enter'>
+                <View className={'enter'}
+                    style={{...style.color('thirdly')}}
+                >
                     >
                 </View>
             </View>

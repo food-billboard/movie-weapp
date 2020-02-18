@@ -1,59 +1,12 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Picker, Text } from '@tarojs/components'
-import { isObject, isArray } from '~utils'
+import { View, Picker } from '@tarojs/components'
+import { isObject } from '~utils'
 import Rest from '~components/restFactor'
 import moment from 'moment'
 import { FORM_ERROR } from '~config'
-
-interface ISelector {
-  disabled?: boolean
-  onCancel?: () => any
-  range: Array<any>
-  rangeKey?: string
-}
-
-type TMode = 'selector' | 'time' | 'date' | 'multiSelector' 
-
-interface IMulti {
-  range: Array<string[]> | Array<number[]> | Array<Object[]>
-  rangeKey?: string
-  value?: number[] | string[] | Object[]
-  onColumnChange?: () => any
-  disabled?: boolean
-  onCancel?: () => any
-}
-
-interface ITime {
-  start?: string
-  end?: string
-  onCancel?: () => any
-  disabled?: boolean
-}
-
-interface IDate {
-  start?: string
-  end?: string
-  fields?: 'year' | 'month' | 'day'
-  disabled?: boolean
-  onCancel?: () => any
-}
-
-interface IProps {
-  style?: any
-  selector?: ISelector | false
-  multi?: IMulti | false
-  time?: ITime | false
-  date?: IDate | false
-  value?: string | Array<any> | false
-  title?: string
-}
-
-interface IState {
-  value: string | Array<any>
-  error: boolean
-  disabled: boolean
-}
-
+import { IProps, IState, TMode } from './interface'
+import { style as customStyle } from '~theme/global-style'
+ 
 const STYLE = {
   width:'100%',
   height: '30px',
@@ -186,7 +139,7 @@ export default class extends Component<IProps, IState> {
 
     const { value, error, disabled } = this.state
 
-    const _style = isObject(style) ? { ...STYLE, ...style, ...(error ? FORM_ERROR : {})} : { ...STYLE, ...(error ? FORM_ERROR : {}) }
+    const _style = isObject(style) ? { ...STYLE, ...style, ...customStyle.color('secondary'), ...(error ? FORM_ERROR : {})} : { ...STYLE, ...customStyle.color('secondary'), ...(error ? FORM_ERROR : {}) }
 
     return (
       <View>
@@ -202,7 +155,7 @@ export default class extends Component<IProps, IState> {
             value={value}
           >
             <View className='picker'
-              style={{..._style}}
+              style={{..._style }}
             >
               {title}: {value}
             </View>
