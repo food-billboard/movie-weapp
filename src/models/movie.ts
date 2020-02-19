@@ -319,7 +319,7 @@ export default {
                                 {
                                     id: 0,
                                     rank: 0,
-                                    img: 'http://a0.att.hudong.com/27/10/01300000324235124757108108752.jpg',
+                                    image: 'http://a0.att.hudong.com/27/10/01300000324235124757108108752.jpg',
                                     name: '电影'
                                 },
                                 {

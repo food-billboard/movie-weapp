@@ -3,7 +3,7 @@ import { View } from '@tarojs/components'
 import IconHead from '~components/headicon'
 import List from '~components/linearlist'
 import GButton from '~components/button'
-import { style } from '~theme/global-style'
+import { style, TypeColor } from '~theme/global-style'
 import './index.scss'
 
 import {mapStateToProps, mapDispatchToProps} from './connect'
@@ -86,6 +86,7 @@ export default class User extends Component<any>{
             iconInfo: {
                 value: 'heart', 
                 size: 32, 
+                color: TypeColor['primary']
             },
             handle:this.handleCheckStore,
             id: 'store'
@@ -95,6 +96,7 @@ export default class User extends Component<any>{
             iconInfo: {
                 value: 'star', 
                 size: 32, 
+                color: TypeColor['primary']
             },
             handle:this.handleCheckAttention,
             id: 'attention'
@@ -103,7 +105,8 @@ export default class User extends Component<any>{
             title: 'Ta的浏览记录',
             iconInfo: {
                 value: 'list',
-                size: 32
+                size: 32,
+                color: TypeColor['primary']
             },
             handle: this.handleCheckRecord,
             id: 'record'
@@ -112,7 +115,8 @@ export default class User extends Component<any>{
             title: 'Ta的电影',
             iconInfo: {
                 value: 'share-2',
-                size: 32
+                size: 32,
+                color: TypeColor['primary']
             },
             handle: this.handleCheckIssue,
             id: 'issue'

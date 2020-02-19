@@ -175,9 +175,10 @@ export default class Index extends Component<any> {
         const { showList, searchList, hot, listShow } = this.state
         return (
             <GScrollView
+                autoFetch={false}
                 sourceType={'Scope'}
                 scrollWithAnimation={true}
-                renderContent={ <View className='search-main' style={{visibility: listShow && searchList.length ? 'visible' : 'hidden'}}>
+                renderContent={ <View className='search-main' style={{display: listShow && searchList.length ? 'block' : 'none'}}>
                                     <View className='head'>
                                         <Head screen={this.typeScreen} />
                                     </View>
@@ -198,7 +199,7 @@ export default class Index extends Component<any> {
                         confirm={this.debounceConfirm} 
                         hot={hot}
                         ref={this.searchBarRef}
-                        focus={true}
+                        focus={false}
                         control={this.showList}
                     />}
             >

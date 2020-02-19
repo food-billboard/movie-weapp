@@ -22,6 +22,28 @@ const nightTypeColor = {
   'bgColor': '#fff'
 }
 
+//色调类型 蓝黑黄红
+export const Color = ['#6190E8', '#424143', '#FFC701', '#E93B3D']
+
+const typeColor = {
+  6190E8: {
+    'primary':'#',
+    'secondary': '#',
+    'disabled': '#',
+    'thirdly': '#',
+    'bgColor': '#'
+  },
+  424143: { ...nightTypeColor },
+  FFC701: { ...dayTypeColor },
+  E93B3D: {
+    'primary':'#',
+    'secondary': '#',
+    'disabled': '#',
+    'thirdly': '#',
+    'bgColor': '#'
+  }
+}
+
 const Direction = {
   all: [ 'Top', 'Bottom', 'Left', 'Right' ],
   top: ['top'],
@@ -39,10 +61,13 @@ const Direction = {
   no_bottom: ['Top', 'Right', 'Left']
 } 
 
+//border 线型样式
 type TLine = 'solid' | 'dashed'
 
-type TType = 'day' | 'night'
+//色调开启时的色调类型
+type TType = 'day' | 'night' | false
 
+//默认的border样式
 const defaultBorder = {
   borderBottom: '',
   borderLeft: '',
@@ -50,14 +75,18 @@ const defaultBorder = {
   borderTop: ''
 }
 
-export const colorChange = (type: TType) => {
+//色调修改
+export const colorChange = (type: TType, color: string='#6190E8') => {
   if(type === 'day') {
     TypeColor = { ...TypeColor, ...dayTypeColor }
-  }else {
+  }else if(type === 'night'){
     TypeColor = { ...TypeColor, ...nightTypeColor }
+  }else {
+    TypeColor = { ...TypeColor, ...typeColor[color.slice(1)] }
   }
 }
 
+//样式库
 export const style = {
     border: (size: number, type: keyof typeof TypeColor = 'primary', line: TLine = 'solid', direction: keyof typeof Direction) => {
       let data = { ...defaultBorder }

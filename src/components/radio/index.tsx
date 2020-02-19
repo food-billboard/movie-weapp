@@ -6,6 +6,8 @@ import { IProps, IState } from './interface'
 import { isObject } from '~utils'
 import { FORM_ERROR } from '~config'
 
+import './index.scss'
+
 const BUTTON_STYLE = {
   height:'40px'
 }
@@ -86,7 +88,7 @@ export default class extends Component<IProps, IState> {
       }
     }
 
-    const { show, active: activeMode, error } = this.state
+    const { show, active: activeMode='on', error } = this.state
 
     return (
       <View style={isObject(style) ? style : {}}>

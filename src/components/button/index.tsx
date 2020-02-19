@@ -2,6 +2,7 @@ import { AtButton } from 'taro-ui'
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { IProps, IState } from './interface'
+import { style } from '~theme/global-style'
 
 export default class Button extends Component<IProps, IState>{
     public static defaultProps:IProps = {
@@ -37,10 +38,11 @@ export default class Button extends Component<IProps, IState>{
     }
 
     public render() {
-        const { type, style } = this.props
+        const { type, style: customStyle } = this.props
         return (
-            <View style={style}>
+            <View style={customStyle}>
                 <AtButton
+                    customStyle={{...style.border(1, 'primary', 'solid', 'all'), ...style.color('primary')}}
                     type={type}
                     circle={true}
                     onClick={this.modeChange}

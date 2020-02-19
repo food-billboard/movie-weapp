@@ -29,6 +29,7 @@
 //bottom 内的内容只能是固定定位
 export interface IProps {
   sourceType: 'Scope' | 'Dva',
+  autoFetch?: boolean
   query?: any,
   scrollY?: boolean
   // upperThreshold?: number

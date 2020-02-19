@@ -164,7 +164,7 @@ const dateStyleConfig = {
     end: 18
 }
 
-export const dateStyleChange = () => {
+export const styleChange = () => {
     const date = new Date().getHours()
     const {start, end} = dateStyleConfig
     return date > start && date < end

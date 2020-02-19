@@ -14,10 +14,10 @@ import { style, TypeColor } from '~theme/global-style'
 
 const TAT_STYLE = {
     boxSizing: 'border-box', 
-    border: '1px dashed black', 
+    border: `1px dashed ${TypeColor['primary']}`, 
     width:'100%', 
     marginBottom: '5px', 
-    backgroundColor: TypeColor['disabled']
+    color: TypeColor['primary']
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -348,8 +348,20 @@ export default class Forms extends Component<IProps> {
                     </AtAccordion>
                 </View>
                 <View className='btn'>
-                    <AtButton formType='reset' type='secondary' customStyle={{...style.backgroundColor('disabled')}}>重置</AtButton>
-                    <AtButton formType='submit' type='primary'>确定</AtButton>
+                    <AtButton 
+                        formType='reset' 
+                        type='secondary' 
+                        customStyle={{
+                            ...style.backgroundColor('disabled'),
+                            ...style.border(1, 'primary', 'solid', 'all'),
+                            ...style.color('primary')
+                        }}
+                    >重置</AtButton>
+                    <AtButton 
+                        formType='submit' 
+                        type='primary' 
+                        customStyle={{...style.backgroundColor('primary'), ...style.border(1, 'primary', 'solid', 'all'), ...style.color('disabled')}}
+                    >确定</AtButton>
                 </View>
             </AtForm>
         )

@@ -7,6 +7,7 @@ import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToProps } from './connect'
 import { FORM_ERROR } from '~config'
 import { IState, IProps, IOption } from './interface'
+import { style as styleColor } from '~theme/global-style'
 
 import './index.scss'
 
@@ -174,7 +175,14 @@ export default class extends Component<IProps, IState> {
         }
         {
           (needHiddenList ? !show : false) ?
-          <AtButton type={'secondary'} onClick={this.open} customStyle={{ ...BUTTON_STYLE, ...(error ? FORM_ERROR : {}) }}>打开</AtButton>
+          <AtButton 
+            type={'secondary'} 
+            onClick={this.open} 
+            customStyle={{ 
+              ...BUTTON_STYLE, 
+              ...styleColor.border(1, 'primary', 'solid', 'all'), 
+              ...styleColor.color('primary'), 
+              ...(error ? FORM_ERROR : {}) }}>打开</AtButton>
           : null
         }
         {
@@ -200,7 +208,13 @@ export default class extends Component<IProps, IState> {
           <AtButton 
             type={'secondary'} 
             onClick={this.close} 
-            customStyle={{ ...BUTTON_STYLE, ...(error ? FORM_ERROR : {}), display: (needHiddenList ? show : false) ? 'block' : 'none' }}
+            customStyle={{ 
+              ...BUTTON_STYLE, 
+              ...styleColor.border(1, 'primary', 'solid', 'all'), 
+              ...styleColor.color('primary'), 
+              ...(error ? FORM_ERROR : {}), 
+              display: (needHiddenList ? show : false) ? 'block' : 'none' 
+            }}
           >
             收起
           </AtButton>

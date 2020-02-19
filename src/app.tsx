@@ -3,8 +3,6 @@ import Taro, { Component, Config } from '@tarojs/taro'
 import { Provider } from '@tarojs/redux'
 import { dva, router, includes } from '~utils'
 
-import 'taro-ui/dist/style/index.scss'
-
 import Index from './pages/main/index'
 import configure from './configure'
 
@@ -64,11 +62,12 @@ const app = dva.createDva({
 //获取store
 const store = app.getStore()
 
+
 class App extends Component {
 
   public config: Config = {
     pages: [
-      // 'pages/setting/index',
+      // 'pages/search/index',
       'pages/main/index',
       'pages/mine/index',
       'pages/register/index',

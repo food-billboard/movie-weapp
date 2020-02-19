@@ -22,7 +22,8 @@ export default class List extends Component<IProps, IState> {
     onScroll: () => {},
     fetch: () => {},
     header: false,
-    bottom: false
+    bottom: false,
+    autoFetch: true
   }
 
   public state: IState = {
@@ -50,6 +51,8 @@ export default class List extends Component<IProps, IState> {
   }
 
   public componentDidMount = () => {
+    const { autoFetch } = this.props
+    if(!autoFetch) return
     const { query } = this.state
     this.fetchData(query)
   }

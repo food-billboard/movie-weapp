@@ -10,9 +10,9 @@
 
 export interface IProps {
   content?: string
-  // fontColor?: string
+  fontColor?: string
   fontSize?: number
-  // lineColor?: string
+  lineColor?: string
   childNode?: any
   other?: any
 }

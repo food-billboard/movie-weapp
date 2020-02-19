@@ -31,7 +31,7 @@ export default class extends Component<any>{
             disabled: false,
             arrow: arrow,
             iconInfo: {
-                value: '',
+                value: 'share-2',
                 size: 14,
                 color: TypeColor['primary']
             },
@@ -46,7 +46,7 @@ export default class extends Component<any>{
             note: '',
             arrow: arrow,
             iconInfo: {
-                value: 'bell',
+                value: 'settings',
                 size: 14, 
                 color: TypeColor['primary']
             },
@@ -66,7 +66,7 @@ export default class extends Component<any>{
 
     public componentWillMount = () => {
         if(!this.id) {
-            router.replace('/login')
+            // router.replace('/login')
         }
     }
 

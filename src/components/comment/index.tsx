@@ -78,7 +78,7 @@ export default class Comment extends Component<IProps>{
                 <AtModalAction>
                     <Button
                         onClick={this.publish}
-                        style={{...style.backgroundColor('disabled')}}
+                        style={{...style.backgroundColor('disabled'), ...style.color('primary')}}
                     >
                         {buttonText}
                     </Button>

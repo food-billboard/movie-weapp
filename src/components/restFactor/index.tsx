@@ -13,10 +13,10 @@ import './index.scss'
 
 const TAT_STYLE = {
   boxSizing: 'border-box', 
-  border: '1px dashed black', 
+  border: `1px dashed ${TypeColor['primary']}`,
   width:'100%', 
   marginBottom: '5px', 
-  backgroundColor: 'white'
+  color: TypeColor['primary']
 }
 
 const itemStyleIconList = [
@@ -196,6 +196,7 @@ export default class extends Component<IProps, IState> {
             <AtButton
               onClick={this.handleAdd}
               type={'primary'}
+              customStyle={{...customStyle.backgroundColor('primary')}}
             >添加</AtButton>
           </View>
           <View className='at-col at-col-6'>

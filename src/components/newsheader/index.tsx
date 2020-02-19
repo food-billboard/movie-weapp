@@ -32,12 +32,12 @@ export default class NewsHead extends Component<IProps, IState>{
                 </View>
                 <View className='detail'>
                     <View className='at-article'>
-                        <View className='at-article__h3'>
+                        <View className='at-article__h3' style={{...style.color('primary')}}>
                             {name}
                         </View>
                         <View className='at-article__content'>
                             <View className='at-article__section'>
-                                <View className='at-article__p article'>
+                                <View className='at-article__p article' style={{...style.color('thirdly')}}>
                                     {detail}
                                 </View>
                             </View>
@@ -45,7 +45,7 @@ export default class NewsHead extends Component<IProps, IState>{
                     </View>
                 </View>
                 <View className={'enter'}
-                    style={{...style.color('thirdly')}}
+                    style={{color: 'rgb(193, 193, 193)'}}
                 >
                     >
                 </View>

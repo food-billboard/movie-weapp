@@ -3,7 +3,7 @@ import { View } from '@tarojs/components'
 import { AtGrid } from "taro-ui"
 import {router} from '~utils'
 import { IProps, List } from './interface'
-import { style } from '~theme/global-style'
+import { style, TypeColor } from '~theme/global-style'
 
 import './index.scss'
 
@@ -14,21 +14,24 @@ export default class IconList extends Component<IProps>{
             value: '关注',
             iconInfo: {
                 size: 28,
-                value: 'heart-2'
+                value: 'heart-2',
+                color: TypeColor['thirdly']
             }
         },
         {
             value: '我的评论',
             iconInfo: {
                 size: 28,
-                value: 'bookmark'
+                value: 'bookmark',
+                color: TypeColor['thirdly']
             }
         },
         {
             value: '浏览记录',
             iconInfo: {
                 size: 28,
-                value: 'filter'
+                value: 'filter',
+                color: TypeColor['thirdly']
             }
         }
     ]

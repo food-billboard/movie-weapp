@@ -34,7 +34,7 @@ const TAT_STYLE = {
   boxSizing: 'border-box', 
   width:'100%', 
   marginBottom: '5px', 
-  ...style.backgroundColor('disabled'),
+  // ...style.backgroundColor('disabled'),
   ...style.border(1, 'primary', 'dashed', 'all')
 }
 
@@ -391,6 +391,7 @@ export default class extends Component<any> {
           <GPicker
             ref={this.langRef}
             style={PICKER_STYLE}
+            extraFactor={true}
             selector={{range: lang.map((val: any) => {
               const { value } = val
               return value
@@ -429,8 +430,8 @@ export default class extends Component<any> {
             }
           ></GImagePicker>
         </View>
-        <AtButton type={'primary'} onClick={this.handleSubmit} customStyle={ BUTTON_STYLE }>提交</AtButton>
-        <AtButton type={'primary'} onClick={this.handleReset} customStyle={{ ...BUTTON_STYLE, bottom: '40px', ...style.backgroundColor('thirdly') }}>重置</AtButton>
+        <AtButton type={'primary'} onClick={this.handleSubmit} customStyle={{ ...BUTTON_STYLE, ...style.backgroundColor('thirdly'), ...style.border(1, 'thirdly', 'solid', 'all') }}>提交</AtButton>
+        <AtButton type={'primary'} onClick={this.handleReset} customStyle={{ ...BUTTON_STYLE, bottom: '40px', ...style.backgroundColor('primary'), ...style.border(1, 'primary', 'solid', 'all') }}>重置</AtButton>
       </View>
     )
   }

@@ -8,6 +8,7 @@ import './index.scss'
 import { isObject } from '~utils'
 import { FORM_ERROR } from '~config'
 import { IProps, IState } from './interface'
+import { style } from '~theme/global-style'
 
 export default class extends Component<IProps, IState> {
 
@@ -111,8 +112,8 @@ export default class extends Component<IProps, IState> {
           src={src}
         ></GVideo>
         <View className='at-row at-row__justify--between'>
-          <AtButton onClick={this.handleAddPoster} className='at-col' customStyle={{...(posterError ? FORM_ERROR : {}) }} >添加海报</AtButton>
-          <AtButton onClick={this.handleAddMedia} className='at-col' customStyle={{...(srcError ? FORM_ERROR : {}) }} >添加视频</AtButton>
+          <AtButton onClick={this.handleAddPoster} className='at-col' customStyle={{...style.border(1, 'primary', 'solid', 'all'), ...(posterError ? FORM_ERROR : {}) }} >添加海报</AtButton>
+          <AtButton onClick={this.handleAddMedia} className='at-col' customStyle={{...style.border(1, 'primary', 'solid', 'all'), ...(srcError ? FORM_ERROR : {}) }} >添加视频</AtButton>
         </View>
       </View>
     )

@@ -1,7 +1,7 @@
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import { AtInput, AtForm, AtButton } from 'taro-ui'
-
+import { style } from '~theme/global-style'
 import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToProps } from './connect'
 
@@ -38,16 +38,6 @@ export default class extends Component<any> {
         username: '',
         password: '',
         // check: ''
-    }
-
-    public constructor() {
-        super(...arguments)
-
-        this.handleUser = this.handleUser.bind(this)
-        this.handlePass = this.handlePass.bind(this)
-        // this.handleCheck = this.handleCheck.bind(this)
-        this.submit = this.submit.bind(this)
-        this.register = this.register.bind(this)
     }
 
     /**
@@ -99,13 +89,13 @@ export default class extends Component<any> {
         //回到上一路由
         const { target }: any = this.$router.params
         if( target ) return router.replace(target);
-        Taro.switchTab({url: '../main'})
+        Taro.switchTab({url: '../main/index'})
     }
 
     /**
      * 注册
      */
-    public register() {
+    public register = () => {
         router.push('/register')
     }
 
@@ -146,12 +136,14 @@ export default class extends Component<any> {
                         formType='submit' 
                         type={'primary'} 
                         className='submit'
+                        customStyle={{...style.border(1, 'primary', 'solid', 'all'), ...style.backgroundColor('primary')}}
                     >
                         提交
                     </AtButton>
                     <AtButton 
                         onClick={this.register}
                         type={'secondary'}
+                        customStyle={{...style.color('primary'), ...style.border(1, 'primary', 'solid', 'all')}}
                     >
                         注册
                     </AtButton>

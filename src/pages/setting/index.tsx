@@ -4,13 +4,21 @@ import GRadio from '~components/radio'
 import Model from '~components/model'
 import List from '~components/linearlist'
 import Comment from '~components/comment'
-import './index.scss'
-import { TypeColor } from '~theme/global-style'
-import {router} from '~utils'
+import GColor from './components/color'
+import { TypeColor, colorChange } from '~theme/global-style'
+import { router, styleChange } from '~utils'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { Toast } from '~components/toast'
 import { Option } from 'taro-ui/@types/radio'
+
+import './index.scss'
+
+type TOptionType = 'on' | 'off'
+
+interface IOption extends Option<string> {
+    value: TOptionType
+}
 
 type right = 'right'
 type warn = 'warn'
@@ -28,6 +36,8 @@ export default class Setting extends Component<any>{
     public commentRef = Taro.createRef<Comment>()
 
     public radioRef = Taro.createRef<GRadio>()
+
+    public colorRef = Taro.createRef<GColor>()
 
     //用户id
     readonly id = this.props.id
@@ -138,7 +148,7 @@ export default class Setting extends Component<any>{
     }
 
     //色调
-    readonly colorStyle:Array<Option<string>> = [
+    readonly colorStyle:Array<IOption> = [
         {
             value: 'on',
             label: '开启色调'
@@ -149,15 +159,33 @@ export default class Setting extends Component<any>{
         }
     ]
 
-    public colorStyleChange = (value) => {
+    //控制色调开启关闭
+    public colorStyleChange = async (value: TOptionType) => {
         this.radioRef.current!.handleClick(value)
         let status
         if(value==='on') {
-            status = true
-        }else if(value==='off') {
             status = false
+            const date = styleChange()
+            if(status) {
+                colorChange('day')
+            }else {
+                colorChange('night')
+            } 
+        }else if(value==='off') {
+            const data = this.colorRef.current!.state.active
+            colorChange(false, data)
+            status = data
         }
+        this.setState({
+            colorStyle: status
+        })
         this.props.setColorStyle(status)
+    }
+
+    //颜色选择 
+    public colorSelect = (value) => {
+        this.colorRef.current!.handleClick(value)
+        colorChange(false, value)
     }
 
     public state: any = {
@@ -200,7 +228,8 @@ export default class Setting extends Component<any>{
                 content: '亲! 确认要退出吗?'
             }
         },
-        activeModel: {}
+        activeModel: {},
+        colorStyle: this.props.colorStyle
     }
 
     /**
@@ -235,8 +264,7 @@ export default class Setting extends Component<any>{
     // }
 
     public render() {
-        const {button, activeModel, about} = this.state
-        const { colorStyle } = this.props
+        const {button, activeModel, about, colorStyle: color} = this.state
         const {
             type,
             value,
@@ -255,8 +283,14 @@ export default class Setting extends Component<any>{
                         needHiddenList={false}
                         ref={this.radioRef}
                         radioboxOption={this.colorStyle}
-                        active={this.colorStyle[colorStyle ? 0 : 1]['value']}
+                        active={this.colorStyle[color ? 1 : 0]['value']}
+                        handleClick={this.colorStyleChange}
                     ></GRadio>
+                    <GColor
+                        ref={this.colorRef}
+                        style={{height: '48px', visibility: color ? 'visible' : 'hidden' }}
+                        handleClick={this.colorSelect}
+                    ></GColor>
                 </View>
                 <View className='button'>
                     <Button 

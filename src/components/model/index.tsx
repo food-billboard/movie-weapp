@@ -1,6 +1,10 @@
 import Taro, { Component } from '@tarojs/taro'
-import { AtModal } from "taro-ui"
+import { View, Text } from '@tarojs/components'
+import { AtModal, AtModalHeader, AtModalContent, AtModalAction, AtButton } from "taro-ui"
 import { IProps } from './interface'
+import { style } from '~theme/global-style'
+
+import './index.scss'
 
 export default class Setting extends Component<IProps>{
     public static defaultProps = {
@@ -21,7 +25,7 @@ export default class Setting extends Component<IProps>{
         const {
             isOpen,
             title,
-            cancelText,
+            cancelText='',
             confirmText,
             onClose,
             onCancel,
@@ -31,14 +35,24 @@ export default class Setting extends Component<IProps>{
         return (
             <AtModal
                 isOpened={isOpen}
-                title={title}
-                cancelText={cancelText}
-                confirmText={confirmText}
-                onClose={ onClose }
-                onCancel={ onCancel }
-                onConfirm={ onConfirm }
-                content={content}
-            />
+                onCancel={onCancel}
+            >
+                <AtModalHeader><Text style={{...style.color('primary')}}>{title}</Text></AtModalHeader>
+                <AtModalContent>
+                    {content}
+                </AtModalContent>
+                <AtModalAction>
+                    <View className='at-row'>
+
+                        {
+                            cancelText.length ?
+                            <View className='at-col'><AtButton customStyle={{border: 'none', ...style.color('primary')}} onClick={onClose}>{cancelText}</AtButton></View> 
+                            : null
+                        }
+                        <View className='at-col'><AtButton customStyle={{border: 'none', ...style.color('primary')}} onClick={onConfirm}>{confirmText}</AtButton></View> 
+                    </View>
+                </AtModalAction>
+            </AtModal>
         )
     }
 

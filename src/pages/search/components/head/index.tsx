@@ -2,6 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { AtTabs, AtTabsPane } from 'taro-ui'
 import { IState, IProps } from './interface'
 import './index.scss'
+import { style } from '~theme/global-style'
 
 export default class Head extends Component<IProps>{
     public static defaultProps = {

@@ -4,7 +4,7 @@ import { AtIcon, AtAvatar } from 'taro-ui'
 import Ellipsis from '~components/ellipsis'
 import { router, formatTime, formatNumber } from '~utils'
 import { IProps, IState } from './interface'
-import { style } from '~theme/global-style'
+import { style, TypeColor } from '~theme/global-style'
 import './index.scss'
 
 export default class extends Component<IProps, IState> {
@@ -122,15 +122,15 @@ export default class extends Component<IProps, IState> {
           <View className='content-footer'>
               <View className='at-row at-row__align--center content-footer-main'>
                 <View className='at-col at-col-6 at-row at-row__align--center'>
-                  <AtIcon value={'message'} size={16} customStyle={{marginRight: '5px', display: 'inline-block'}} />
-                  <Text style={{...style.color('thirdly')}}>{formatNumber(total)}</Text>
+                  <AtIcon color={TypeColor['thirdly']} value={'message'} size={16} customStyle={{marginRight: '5px', display: 'inline-block'}} />
+                  <Text style={{...style.color('secondary')}}>{formatNumber(total)}</Text>
                 </View>
                 <View 
                   className='at-col at-col-6'
                   onClick={this.like.bind(this, userId, hot, isLike, id)}
                 >
-                  <AtIcon size={16} value={isLike ? 'heart-2' : 'heart'} customStyle={{marginRight: '5px', display: 'inline-block'}} />
-                  <Text style={{...style.color('thirdly')}}>{formatNumber(hot)}</Text>
+                  <AtIcon color={TypeColor['thirdly']} size={16} value={isLike ? 'heart-2' : 'heart'} customStyle={{marginRight: '5px', display: 'inline-block'}} />
+                  <Text style={{...style.color('secondary')}}>{formatNumber(hot)}</Text>
                 </View>
               </View>
           </View>

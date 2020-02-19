@@ -52,6 +52,13 @@ export default class RadioList extends Component<IProps>{
         })
     }
 
+    //关闭表单
+    public handleClose = () => {
+        this.setState({
+            show: false
+        })
+    }
+
     public render() {
         const { text, show, value } = this.state
         return (
@@ -69,7 +76,23 @@ export default class RadioList extends Component<IProps>{
                         onClick={this.handleChange}
                     />
                 </View>
+                <View className='curtain' style={{display: show ? 'block' : 'none'}} onClick={this.handleClose}></View>
             </View>
+            // <View className='radio'>
+            //     <Text className='select'
+            //         onClick={this.showList}
+            //     >
+            //         {text}
+            //     </Text>
+            //     <View className='list'
+            //         style={{height: show ? '270px' : '0', visibility: show ? 'visible' : 'hidden', ...style.backgroundColor('disabled')}}>
+            //         <AtRadio
+            //             options={this.list}
+            //             value={value}
+            //             onClick={this.handleChange}
+            //         />
+            //     </View>
+            // </View>
         )
     }
 }

@@ -6,7 +6,7 @@ import Itemize from './components/itemize'
 import News from './components/news'
 import Rank from './components/rank'
 import { colorChange, style } from '~theme/global-style'
-import { dateStyleChange } from '~utils'
+import { styleChange } from '~utils'
 import './index.scss'
 
 import {connect} from '@tarojs/redux'
@@ -34,15 +34,20 @@ export default class extends Component<any> {
     this.fetchData()
   }
 
-  public colorStyle = () => {
+  public colorStyle = async () => {
     const { colorStyle } = this.props
-    if(!colorStyle) return  
-    const status = dateStyleChange()
-    if(status) {
-      colorChange('day')
-    }else {
-      colorChange('night')
-    } 
+    await this.props.setColorStyle()
+    //色调开启
+    if(!colorStyle) {
+      const status = styleChange()
+      if(status) {
+        colorChange('day')
+      }else {
+        colorChange('night')
+      } 
+    }else { //色调关闭
+      colorChange(false, colorStyle)
+    }
   }
 
   public fetchData = async () => {

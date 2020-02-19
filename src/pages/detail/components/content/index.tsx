@@ -151,7 +151,7 @@ export default class Content extends Component<IProps, IState>{
                                 style={{...style.color('primary')}}
                             >{description}</Text>
                             <Text className='description-detail'
-                                style={{...style.border(1, 'secondary', 'dashed', 'top_bottom'), ...style.backgroundColor('disabled')}}
+                                style={{...style.color('primary'), ...style.border(1, 'secondary', 'dashed', 'top_bottom'), ...style.backgroundColor('disabled')}}
                                 onClick={this.showDetail}
                             >
                                 详情>

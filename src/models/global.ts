@@ -25,8 +25,8 @@ export default {
 
         //设置色调开启关闭
         * setColorStyle({status}, { call, put }) {
-            yield put({type: 'setData', colorStyle: status})
-        }
+            yield put({type: 'setData', payload: {colorStyle: status}})
+        },
 
         // 发送验证码
         * sendSMS({ mobile }, { call }){

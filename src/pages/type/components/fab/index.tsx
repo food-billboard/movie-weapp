@@ -2,6 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { Text } from '@tarojs/components'
 import { AtFab } from 'taro-ui'
 import { IProps, IState } from './interface'
+import { style } from '~theme/global-style'
 
 import './index.scss'
 
@@ -22,7 +23,7 @@ export default class Fab extends Component<IProps, IState> {
       <AtFab 
           onClick={this.props.change}
       >
-          <Text className={'at-fab__icon at-icon ' + (value ? 'at-icon-bullet-list' : 'at-icon-money')}></Text>
+          <Text style={{...style.color('secondary')}} className={'at-fab__icon at-icon ' + (value ? 'at-icon-bullet-list' : 'at-icon-money')}></Text>
       </AtFab>
     )
   }

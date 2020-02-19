@@ -1,7 +1,8 @@
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Image } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import { AtInput, AtForm, AtButton } from 'taro-ui'
 import Time from './components/time'
+import { style } from '~theme/global-style'
 import './index.scss'
 
 import {router} from '~utils'
@@ -194,12 +195,14 @@ export default class extends Component<any>{
                         formType='submit' 
                         type={'primary'} 
                         className='submit'
+                        customStyle={{...style.backgroundColor('primary'), ...style.border(1, 'primary', 'solid', 'all')}}
                     >
                         提交
                     </AtButton>
                     <AtButton 
                         formType='reset'
                         type={'secondary'}
+                        customStyle={{...style.border(1, 'primary', 'solid', 'all'), ...style.color('primary')}}
                     >
                         重置
                     </AtButton>

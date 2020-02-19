@@ -2,6 +2,7 @@ import Taro, {Component} from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtList, AtListItem } from "taro-ui"
 import { IProps } from './interface'
+import { style } from '~theme/global-style'
 
 import './index.scss'
 
@@ -30,7 +31,7 @@ export default class List extends Component<IProps>{
                     onClick={handle}
                     note={note}
                     arrow={arrow}
-                    iconInfo={iconInfo}
+                    iconInfo={{...iconInfo}}
                 />
             )
         })
