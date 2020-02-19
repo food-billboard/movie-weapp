@@ -36,7 +36,6 @@ export default class extends Component<any> {
 
   public colorStyle = async () => {
     const { colorStyle } = this.props
-    await this.props.setColorStyle()
     //色调开启
     if(!colorStyle) {
       const status = styleChange()
