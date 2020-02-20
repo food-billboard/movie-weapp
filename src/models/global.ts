@@ -4,7 +4,8 @@ import {
     getUserInfo,
     sendNewUser,
     getAppInfo,
-    logout
+    logout,
+    getNotice
 } from '~services'
 import { isAlipay, system } from '~utils';
 
@@ -131,6 +132,22 @@ export default {
 
             const info = yield call(getAppInfo)
             return info
+        },
+
+        //获取跑马灯
+        * getNotice(_, { call, put }) {
+            let _data = {
+                success: true,
+                data: {
+                    data: {
+                        text: '我是一个快乐的跑马马马马马马马马马马马马马马马马马马马马马马马马马马马马马马马马马马马马马马马马马马灯灯灯灯灯灯'
+                    }
+                }
+            }
+            return _data.data
+
+            const data = yield call(getNotice)
+            return data
         }
     },
     reducers: {

@@ -338,3 +338,10 @@ export const getDirectorList = (count) => {
 export const getActorList = (count) => {
     return request('GET', '/api/movie/getActorList', { query: { count } })
 }
+
+/**
+ * 获取跑马灯
+ */
+export const getNotice = () => {
+    return request('GET', '/api/movie/getNotice')
+}

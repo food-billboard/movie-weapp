@@ -5,6 +5,7 @@ import Swipers from './components/swiper'
 import Itemize from './components/itemize'
 import News from './components/news'
 import Rank from './components/rank'
+import NoticeBar from '~components/noticeBar'
 import { colorChange, style, TypeColor } from '~theme/global-style'
 import { styleChange } from '~utils'
 import { getStyle } from '~config'
@@ -29,6 +30,7 @@ export default class extends Component<any> {
     type: [],
     daily: [],
     rank: [],
+    notice: {},
     typeColor: TypeColor
   }
 
@@ -75,19 +77,23 @@ export default class extends Component<any> {
     const daily = await this.props.getDailyNew()
     //获取排行榜
     const rank = await this.props.getRank({ ...INIT_RANK_QUERY, id: 0 })
+    //获取跑马灯内容
+    const notice = await this.props.getNotice()
 
     const _hot = hot.hot
     const _swiper = swiper.swiper
     const _type = type.switch
     const _daily = daily.daily
     const _rank = rank.rank
+    const _notice = notice.data
 
     this.setState({
       hot: _hot,
       swiper: _swiper,
       type: _type,
       daily: _daily,
-      rank: _rank
+      rank: _rank,
+      notice: _notice
     })
     Taro.hideLoading();
   }
@@ -102,7 +108,7 @@ export default class extends Component<any> {
   public componentDidHide () { }
 
   public render () {
-    const { rank, type, swiper, hot, daily } = this.state
+    const { rank, type, swiper, hot, daily, notice } = this.state
     //排行榜列表
     const ranks = rank.map(value => {
       const { type, list } = value
@@ -123,6 +129,9 @@ export default class extends Component<any> {
           />
         </View>
         <View className='swiper'>
+          <NoticeBar
+            text={notice.text}
+          ></NoticeBar>
           <Swipers
             list={swiper}
           />
