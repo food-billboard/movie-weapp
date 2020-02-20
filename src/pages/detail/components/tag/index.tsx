@@ -6,13 +6,12 @@ import { IProps, IState } from './interface'
 import { TypeColor } from '~theme/global-style'
 import './index.scss'
 
-const COLOR_LIST = [ TypeColor['thirdly'], TypeColor['secondary'], TypeColor['primary'] ]
-
 const randomArea = () => {
   return Math.ceil(Math.random() * 20) + 'px'
 }
 
 const randomColor = () => {
+  const COLOR_LIST = [ TypeColor['thirdly'], TypeColor['secondary'], TypeColor['primary'] ]
   const len = COLOR_LIST.length
   return COLOR_LIST[Math.floor(Math.random() * len)]
 }

@@ -2,6 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import GRate from '../rate'
 import GStore from '../store'
+import Modal from '~components/model'
 import { AtModal } from 'taro-ui'
 import { formatTime, formatNumber, ItypeList } from '~utils'
 import { IProps, IState } from './interface'
@@ -157,14 +158,17 @@ export default class Content extends Component<IProps, IState>{
                                 详情>
                             </Text>
                         </View>
-                        <AtModal
-                            className='introduce'
-                            isOpened={isOpened}
-                            confirmText='确认'
-                            onClose={ () => {this.setState({isOpened: false})}}
-                            onConfirm={() => {this.setState({isOpened: false})}}
-                            content={description}
-                        />
+                        <Modal
+                            info={{
+                                isOpen: isOpened,
+                                title: name,
+                                cancelText: '',
+                                confirmText: '我知道了',
+                                onClose:() => {this.setState({isOpened: false})},
+                                onConfirm: () => {this.setState({isOpened: false})},
+                                content: description
+                            }}
+                        ></Modal>
                     </View>
                 </View>
             </View>

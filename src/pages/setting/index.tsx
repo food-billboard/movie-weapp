@@ -11,6 +11,7 @@ import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { Toast } from '~components/toast'
 import { Option } from 'taro-ui/@types/radio'
+import { getStyle } from '~config'
 
 import './index.scss'
 
@@ -27,6 +28,8 @@ const arrow: right = 'right'
 const warn: warn = 'warn'
 const primary: primary = 'primary'
 
+const ICON_COLOR = 'primary'
+
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Setting extends Component<any>{
     public static config: Config = {
@@ -41,6 +44,14 @@ export default class Setting extends Component<any>{
 
     //用户id
     readonly id = this.props.id
+
+    public componentDidMount = () => {
+        const { colorStyle } = this.props
+        const storage = getStyle()
+        this.setState({
+            colorStyle: storage ? storage : colorStyle
+        })
+    }
 
     /**
      * 显示小程序信息
@@ -141,7 +152,7 @@ export default class Setting extends Component<any>{
         iconInfo: {
             value: 'bell',
             size: 16, 
-            color: TypeColor['primary']
+            color: TypeColor[ICON_COLOR]
         },
         handle: this.showFeedback,
         feedback: this.handleFeedback
@@ -166,7 +177,7 @@ export default class Setting extends Component<any>{
         if(value==='on') {
             status = false
             const date = styleChange()
-            if(status) {
+            if(date) {
                 colorChange('day')
             }else {
                 colorChange('night')
@@ -179,13 +190,13 @@ export default class Setting extends Component<any>{
         this.setState({
             colorStyle: status
         })
-        this.props.setColorStyle(status)
     }
 
     //颜色选择 
-    public colorSelect = (value) => {
+    public colorSelect = async (value) => {
         this.colorRef.current!.handleClick(value)
         colorChange(false, value)
+        this.setState({})
     }
 
     public state: any = {
@@ -199,7 +210,7 @@ export default class Setting extends Component<any>{
             iconInfo: {
                 value: 'tag',
                 size: 16, 
-                color: TypeColor['primary']
+                color: TypeColor[ICON_COLOR]
             },
             handle: this.showAbout,
             model: {
@@ -229,7 +240,7 @@ export default class Setting extends Component<any>{
             }
         },
         activeModel: {},
-        colorStyle: this.props.colorStyle
+        colorStyle: getStyle(),
     }
 
     /**
@@ -264,18 +275,22 @@ export default class Setting extends Component<any>{
     // }
 
     public render() {
-        const {button, activeModel, about, colorStyle: color} = this.state
+
+        const {button, activeModel, about, colorStyle: color } = this.state
         const {
             type,
             value,
             index
         } = button
+        const { iconInfo: feedbackInconInfo } = this.feedback
+        const { iconInfo: aboutInconInfo } = about
+
         return (
             <View className='setting'>
                 <View className='list'>
                     <List list={[
-                        this.feedback,
-                        about
+                        {...this.feedback, iconInfo: { ...feedbackInconInfo, color: TypeColor[ICON_COLOR] }},
+                        {...about, iconInfo: { ...aboutInconInfo, color: TypeColor[ICON_COLOR] }}
                     ]} />
                     <GRadio
                         style={{marginTop: '48px'}}

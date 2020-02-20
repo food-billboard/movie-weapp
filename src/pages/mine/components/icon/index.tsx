@@ -9,6 +9,16 @@ import './index.scss'
 
 export default class IconList extends Component<IProps>{
 
+    public state: any = {
+        typeColor: TypeColor
+    }
+
+    public componentDidShow = () => {
+        const { typeColor } = this.state
+        if(typeColor == TypeColor) return
+        this.setState({typeColor: TypeColor})
+    }
+
     readonly list: Array<List> = [
         {
             value: '关注',
@@ -53,13 +63,20 @@ export default class IconList extends Component<IProps>{
 
         }
     }
+
     public render() {
         return (
             <View className='icon'
                 style={{...style.border(1, 'thirdly', 'solid', 'bottom')}}
             >
                 <AtGrid 
-                    data={this.list}
+                    data={this.list.map((val: List) => {
+                        const { iconInfo } = val
+                        return { 
+                            ...val,
+                            iconInfo: { ...iconInfo, color: TypeColor['thirdly'] }
+                        }
+                    })}
                     mode={'square'}    
                     hasBorder={false}
                     columnNum={3}

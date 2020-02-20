@@ -39,7 +39,7 @@ export default class Setting extends Component<IProps>{
             >
                 <AtModalHeader><Text style={{...style.color('primary')}}>{title}</Text></AtModalHeader>
                 <AtModalContent>
-                    {content}
+                    <Text style={{...style.color('thirdly')}}>{content}</Text>
                 </AtModalContent>
                 <AtModalAction>
                     <View className='at-row'>

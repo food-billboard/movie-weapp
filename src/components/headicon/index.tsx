@@ -14,6 +14,14 @@ export default class IconHead extends Component<IProps>{
         }
     }
 
+    //查看图片
+    public previewImage = (image: string) => {
+        Taro.previewImage({
+            current: image,
+            urls: [image]
+        })
+    }
+
     public render() {
         const {list} = this.props
         const {username='', image='', hot=0} = list
@@ -22,7 +30,9 @@ export default class IconHead extends Component<IProps>{
                 style={{...style.backgroundColor('thirdly')}}
             >
                 <View className='icon'>
-                    <View className='img'>
+                    <View className='img'
+                        onClick={this.previewImage.bind(this, image)}
+                    >
                         <AtAvatar
                             image={image} 
                             className='content' 

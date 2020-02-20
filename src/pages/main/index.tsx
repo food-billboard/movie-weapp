@@ -5,8 +5,10 @@ import Swipers from './components/swiper'
 import Itemize from './components/itemize'
 import News from './components/news'
 import Rank from './components/rank'
-import { colorChange, style } from '~theme/global-style'
+import { colorChange, style, TypeColor } from '~theme/global-style'
 import { styleChange } from '~utils'
+import { getStyle } from '~config'
+
 import './index.scss'
 
 import {connect} from '@tarojs/redux'
@@ -26,7 +28,15 @@ export default class extends Component<any> {
     swiper: [],
     type: [],
     daily: [],
-    rank: []
+    rank: [],
+    typeColor: TypeColor
+  }
+
+  //色调修改时重绘用
+  public componentDidShow = () => {
+    const { typeColor } = this.state
+    if(typeColor == TypeColor) return
+    this.setState({typeColor: TypeColor})
   }
 
   public componentDidMount = async () => {
@@ -34,10 +44,14 @@ export default class extends Component<any> {
     this.fetchData()
   }
 
+  //色调显示
   public colorStyle = async () => {
-    const { colorStyle } = this.props
+    let _status
+    //查看缓存
+    const value = getStyle()
+    _status = value
     //色调开启
-    if(!colorStyle) {
+    if(!_status) {
       const status = styleChange()
       if(status) {
         colorChange('day')
@@ -45,7 +59,7 @@ export default class extends Component<any> {
         colorChange('night')
       } 
     }else { //色调关闭
-      colorChange(false, colorStyle)
+      colorChange(false, _status)
     }
   }
 
@@ -84,7 +98,6 @@ export default class extends Component<any> {
 
   public componentWillUnmount () { }
 
-  public componentDidShow () { }
 
   public componentDidHide () { }
 
@@ -102,7 +115,7 @@ export default class extends Component<any> {
       )
     })
     return (
-      <View className='index'>
+      <View className='index' style={{...style.backgroundColor('bgColor')}}>
         <View className='searchbar'>
           <SearchBar 
             disabled={true}

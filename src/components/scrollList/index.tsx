@@ -4,6 +4,8 @@ import { AtActivityIndicator } from 'taro-ui'
 import GDivider from '~components/divider'
 import Top from '../topbutton'
 import { IProps, IState } from './interface'
+import { isObject } from '~utils'
+
 import './index.scss'
 
 const INIT_QUERY = { pageSize: 10, currPage: 1 }
@@ -116,7 +118,8 @@ export default class List extends Component<IProps, IState> {
       onScrollToLower,
       onScroll,
       header,
-      bottom
+      bottom,
+      style={}
     } = this.props
     const { empty, loading } = this.state
     const _header = typeof header === 'boolean'
@@ -124,6 +127,7 @@ export default class List extends Component<IProps, IState> {
     return (
       <View className='list'>
         <ScrollView
+          style={isObject(style) ? style : {}}
           className='scroll-view'
           // style={{paddingBottom: (bottom ? bottom : 0) + 'rpx'}}
           scrollY={scrollY}

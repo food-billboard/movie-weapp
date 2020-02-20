@@ -112,8 +112,8 @@ export default class extends Component<IProps, IState> {
           src={src}
         ></GVideo>
         <View className='at-row at-row__justify--between'>
-          <AtButton onClick={this.handleAddPoster} className='at-col' customStyle={{...style.border(1, 'primary', 'solid', 'all'), ...(posterError ? FORM_ERROR : {}) }} >添加海报</AtButton>
-          <AtButton onClick={this.handleAddMedia} className='at-col' customStyle={{...style.border(1, 'primary', 'solid', 'all'), ...(srcError ? FORM_ERROR : {}) }} >添加视频</AtButton>
+          <AtButton onClick={this.handleAddPoster} className='at-col' customStyle={{...style.border(1, 'primary', 'solid', 'all'), ...style.color('thirdly'), ...(posterError ? FORM_ERROR : {}) }} >添加海报</AtButton>
+          <AtButton onClick={this.handleAddMedia} className='at-col' customStyle={{...style.border(1, 'primary', 'solid', 'all'), ...style.color('thirdly'),  ...(srcError ? FORM_ERROR : {}) }} >添加视频</AtButton>
         </View>
       </View>
     )

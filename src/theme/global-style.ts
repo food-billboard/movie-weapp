@@ -1,3 +1,5 @@
+import { setStyle } from '~config'
+//小程序色调
 export let TypeColor = {
   'primary':'#cc9f01',
   'secondary': '#ffc701',
@@ -6,43 +8,46 @@ export let TypeColor = {
   'bgColor': '#FFFFF0'
 }
 
-const dayTypeColor = {
-  'primary':'#cc9f01',
-  'secondary': '#ffc701',
-  'disabled': '#FFFFE0',
-  'thirdly': '#ffd541',
-  'bgColor': '#FFFFF0'
-}
-
-const nightTypeColor = {
-  'primary':'#353436',
-  'secondary': '#424143',
-  'disabled': '#F5F5F5',
-  'thirdly': '#717172',
-  'bgColor': '#fff'
-}
-
 //色调类型 蓝黑黄红
 export const Color = ['#6190E8', '#424143', '#FFC701', '#E93B3D']
 
+//分类色调
 const typeColor = {
-  6190E8: {
-    'primary':'#',
-    'secondary': '#',
-    'disabled': '#',
-    'thirdly': '#',
-    'bgColor': '#'
+  '#6190E8': {
+    'primary':'#78A4F4',
+    'secondary': '#6190E8',
+    'disabled': '#b4d3fc',
+    'thirdly': '#346FC2',
+    'bgColor': '#d2e2f8'
   },
-  424143: { ...nightTypeColor },
-  FFC701: { ...dayTypeColor },
-  E93B3D: {
-    'primary':'#',
-    'secondary': '#',
-    'disabled': '#',
-    'thirdly': '#',
-    'bgColor': '#'
+  '#424143': {   //夜
+    'primary':'#353436',
+    'secondary': '#424143',
+    'disabled': '#e6e6e6',
+    'thirdly': '#717172',
+    'bgColor': '#aeb3b3'
+   },
+  '#FFC701': {   //日
+    'primary':'#cc9f01',
+    'secondary': '#ffc701',
+    'disabled': '#FFFFE0',
+    'thirdly': '#ffd541',
+    'bgColor': '#FFFFF0'
+   },
+  '#E93B3D': {
+    'primary':'#ef6c6e',
+    'secondary': '#e93b3d',
+    'disabled': '#ea9b9b',
+    'thirdly': '#ba2f31',
+    'bgColor': '#eac0c0'
   }
 }
+
+//日色调
+const dayTypeColor = {...typeColor['#FFC701']}
+
+//夜色调
+const nightTypeColor = {...typeColor['#424143']}
 
 const Direction = {
   all: [ 'Top', 'Bottom', 'Left', 'Right' ],
@@ -79,11 +84,15 @@ const defaultBorder = {
 export const colorChange = (type: TType, color: string='#6190E8') => {
   if(type === 'day') {
     TypeColor = { ...TypeColor, ...dayTypeColor }
+    setStyle(false)
   }else if(type === 'night'){
     TypeColor = { ...TypeColor, ...nightTypeColor }
+    setStyle(false)
   }else {
-    TypeColor = { ...TypeColor, ...typeColor[color.slice(1)] }
+    TypeColor = { ...TypeColor, ...typeColor[color] }
+    setStyle(color)
   }
+  return TypeColor
 }
 
 //样式库

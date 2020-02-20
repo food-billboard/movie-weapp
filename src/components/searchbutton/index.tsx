@@ -87,9 +87,12 @@ class SearchButton extends Component<IProps, IState>{
             )
         })
         return (
-            <View className="searchbutton">
+            <View className="searchbutton"
+                style={{...style.backgroundColor('bgColor')}}
+            >
                 <View className="search">
                     <AtSearchBar
+                        customStyle={{...style.backgroundColor('bgColor')}}
                         onActionClick={this.confirm}
                         value={this.props.value} 
                         onChange={this.onChange}

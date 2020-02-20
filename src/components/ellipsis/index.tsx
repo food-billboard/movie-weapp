@@ -2,6 +2,8 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import { IProps, IState } from './interface'
 import { style } from '~theme/global-style'
+import { isObject } from '~utils'
+
 import './index.scss'
 
 export default class extends Component<IProps, IState> {
@@ -37,22 +39,26 @@ export default class extends Component<IProps, IState> {
   }
 
   public render() {
-    const { text } = this.props
+    const { text, needPoint, style:customStyle={} } = this.props
     const _text = this.getText()
     return (
       <View className='ellipsis'
-        style={{...style.color('secondary')}}
+        style={{...style.color('secondary'), ...(isObject(customStyle) ? customStyle : {})}}
       >
         <Text style={{display: 'inline-block', wordBreak: 'break-word'}}>
           {_text}
         </Text>
-        <Text 
+        {
+          needPoint ? 
+          <Text 
             onClick={this.getDetail} 
             style={{display: text.length !== _text.length ? 'block' : 'none', ...style.color('thirdly')}} 
             className='detail'
           >
             查看详情>
-          </Text>
+          </Text> :
+          null
+        }
       </View>
     )
   }

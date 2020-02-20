@@ -3,10 +3,20 @@ import { View } from '@tarojs/components'
 import { IProps, IState } from './interface'
 import { Color } from '~theme/global-style'
 import { isObject } from '~utils'
+import { getStyle, setStyle } from '~config'
 
 import './index.scss'
 
 export default class extends Component<IProps, IState> {
+
+  public componentDidMount = () => {
+    const color = getStyle()
+    if(color) {
+      this.setState({
+        active: color
+      })
+    }
+  }
 
   public state:IState = {
     active: '#6190E8',

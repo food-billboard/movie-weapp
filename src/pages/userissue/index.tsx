@@ -1,7 +1,7 @@
 import Taro, { Component, Config } from '@tarojs/taro'
 import GScrollView from '~components/scrollList'
 import IconList from '~components/iconlist'
-
+import { style } from '~theme/global-style'
 import { throttle } from 'lodash'
 
 import {router} from '~utils'
@@ -69,6 +69,7 @@ export default class extends Component<any>{
 
     return (
       <GScrollView
+        style={{...style.backgroundColor('bgColor')}}
         sourceType={'Scope'}
         scrollWithAnimation={true}
         fetch={this.throttleFetchData}

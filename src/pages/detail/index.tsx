@@ -87,7 +87,7 @@ export default class extends Component<any> {
         } = detail
         this.setTitle()
         return (
-            <View className='detail'>
+            <View className='detail' style={{...style.backgroundColor('bgColor')}}>
                 <View className='video'>
                     {
                         video ? <GVideo

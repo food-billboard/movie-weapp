@@ -1,9 +1,8 @@
 export const mapStateToProps = (_) => {
-    const {appInfo, userInfo, colorStyle} = _.global
+    const {appInfo, userInfo } = _.global
     return {
         id: userInfo.id,
-        appInfo,
-        colorStyle
+        appInfo
     }
 }
 export const mapDispatchToProps = dispatch => ({
@@ -11,5 +10,4 @@ export const mapDispatchToProps = dispatch => ({
     getAppInfo: () => dispatch({type: 'global/getAppInfo'}),
     getUserInfo: () => dispatch({type: 'global/getUserInfo'}),
     feedback: (user, value) => dispatch({type: 'user/feedback', user, value}),
-    setColorStyle: (status) => dispatch({type: 'global/setColorStyle', status})
 })

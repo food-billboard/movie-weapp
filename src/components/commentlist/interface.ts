@@ -61,17 +61,27 @@ export interface IImageList {
   id: string
 }
 
+export interface IInfo {
+  origin: boolean
+  image: string | null
+  id: string
+  content: string
+}
+
 interface IList {
   id: string
   user: IUser
   commentUsers: Array<CommentUsers>
   images: Array<IImageList>
+  info: IInfo
 }
 
 export interface IProps {
   list: IList
   id: string
   commentId: string
+  extra?: boolean
+  renderExtra?: any
   like: (...args: any) => any
   comment: (isUserCall: boolean, user: string, commentId: string) => any
   getUserInfo: () => any

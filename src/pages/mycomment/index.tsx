@@ -1,9 +1,11 @@
 import Taro, { Component, Config } from '@tarojs/taro'
-import List from '~components/commentlist'
+import { View } from '@tarojs/components'
+import {List} from '~components/commentlist'
 import GScrollView from '~components/scrollList'
 import Comment from '~components/comment'
-
+import Origin from './components/originComment'
 import { throttle } from 'lodash'
+import { style } from '~theme/global-style'
 
 import './index.scss'
 
@@ -83,29 +85,29 @@ export default class extends Component<any>{
 
     public render() {
         const {comment} = this.state
-        const list = comment.map(( value ) => {
-            const { id } = value
-            return (
-                <List 
-                    key={id}
-                    list={value}
-                />
-            )
-        })
         return (
             <GScrollView 
+                style={{...style.backgroundColor('bgColor')}}
                 sourceType={'Scope'}
                 scrollWithAnimation={true}
                 renderContent={
                     comment.map((value) => {
-                        const { id } = value
+                        const { id, origin } = value
                         return (
-                            <List 
-                                comment={this.publish} 
-                                key={id}
-                                list={value}
-                                commentId={id}
-                            />
+                            <View>
+                                <List 
+                                    comment={this.publish} 
+                                    key={id}
+                                    list={value}
+                                    commentId={id}
+                                    extra={true}
+                                    renderExtra={
+                                        <Origin
+                                            info={origin}
+                                        />
+                                    }
+                                />
+                            </View>
                         )
                     })
                 }

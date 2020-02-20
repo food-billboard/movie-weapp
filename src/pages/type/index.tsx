@@ -109,6 +109,7 @@ export default class Index extends Component<any> {
         const { typeDetail, listShow, type } = this.state
         return (
             <GScrollView
+                style={{...style.backgroundColor('bgColor')}}
                 sourceType={'Scope'}
                 scrollWithAnimation={true}
                 renderContent={

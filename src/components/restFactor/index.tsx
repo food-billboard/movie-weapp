@@ -181,7 +181,7 @@ export default class extends Component<IProps, IState> {
         {
           title ? 
           <AtTag 
-            customStyle={TAT_STYLE} 
+            customStyle={{...TAT_STYLE, ...customStyle.border(1, 'primary', 'dashed', 'all'), ...customStyle.color('primary')}} 
             type={'primary'}
           >
             {title}

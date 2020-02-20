@@ -147,7 +147,7 @@ export default class extends Component<any>{
     public render() {
         const { phone } = this.state
         return (
-            <View className='register'>
+            <View className='register' style={{...style.backgroundColor('bgColor')}}>
                 <AtForm
                     onSubmit={this.submit}
                     onReset={this.reset}

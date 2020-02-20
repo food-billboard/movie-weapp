@@ -3,10 +3,9 @@ import {View} from '@tarojs/components'
 import List from '~components/newsheader'
 import GScrollView from '~components/scrollList'
 import { throttle } from 'lodash'
-
+import { style } from '~theme/global-style'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import {connect} from '@tarojs/redux'
-import {router} from '~utils'
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Index extends Component<any> {
@@ -49,6 +48,7 @@ export default class Index extends Component<any> {
         const { store } = this.state
         return (
             <GScrollView 
+                style={{...style.backgroundColor('bgColor')}}
                 sourceType={'Scope'}
                 scrollWithAnimation={true}
                 renderContent={<View>

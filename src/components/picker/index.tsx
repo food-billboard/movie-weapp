@@ -140,7 +140,7 @@ export default class extends Component<IProps, IState> {
 
     const { value, error, disabled } = this.state
 
-    const _style = isObject(style) ? { ...STYLE, ...style, ...customStyle.color('secondary'), ...customStyle.backgroundColor('disabled'), ...(error ? FORM_ERROR : {})} : { ...STYLE, ...customStyle.color('secondary'), ...customStyle.backgroundColor('disabled'), ...(error ? FORM_ERROR : {}) }
+    const _style = isObject(style) ? { ...STYLE, ...style, ...customStyle.backgroundColor('disabled'), ...(error ? FORM_ERROR : {})} : { ...STYLE, ...customStyle.backgroundColor('disabled'), ...(error ? FORM_ERROR : {}) }
 
     return (
       <View>

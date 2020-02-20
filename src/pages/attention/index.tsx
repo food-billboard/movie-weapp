@@ -63,6 +63,7 @@ export default class extends Component<any>{
                 sourceType={'Scope'}
                 scrollWithAnimation={true}
                 query={{pageSize: 20}}
+                style={{...style.backgroundColor('bgColor')}}
                 renderContent={<View>
                     {
                         attention.map((value) => {

@@ -13,7 +13,7 @@ import './index.scss'
 import { IState, IProps, IImageList } from './interface'
 
 @connect(mapStateToProps, mapDispatchToProps)
-export default class List extends Component<IProps, IState>{
+class List extends Component<IProps, IState>{
     public static defaultProps: IProps = {
         list: {
             user: {
@@ -27,7 +27,13 @@ export default class List extends Component<IProps, IState>{
             },
             commentUsers: [],
             id: '',
-            images: []
+            images: [],
+            info: {
+                id: '',
+                image: '',
+                content: '',
+                origin: false
+            }
         },
         id: '',
         commentId: '',
@@ -123,6 +129,7 @@ export default class List extends Component<IProps, IState>{
             hot,
             isHot
         } = user
+        const { extra=false } = this.props
         return (
             <View 
                 className={'list'}
@@ -188,6 +195,9 @@ export default class List extends Component<IProps, IState>{
                         })
                     }
                 </View>
+                {
+                    extra ? this.props.renderExtra : null
+                }
                 <ScrollView
                     scrollX
                     className='footer'
@@ -210,4 +220,8 @@ export default class List extends Component<IProps, IState>{
             </View>
         )
     }
+}
+
+export {
+    List
 }

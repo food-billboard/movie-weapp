@@ -4,7 +4,7 @@ import { AtGrid } from "taro-ui"
 import GScrollView from '~components/scrollList'
 import Rank from '../main/components/rank'
 import List from '~components/list'
-
+import { style } from '~theme/global-style'
 import { throttle } from 'lodash'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
@@ -118,6 +118,7 @@ export default class extends Component<any> {
     const detail = rank.slice(3)
     return(
       <GScrollView
+        style={{...style.backgroundColor('bgColor')}}
         ref={this.scrollRef}
         sourceType={'Scope'}
         scrollWithAnimation={true}

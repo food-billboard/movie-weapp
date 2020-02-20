@@ -2,9 +2,10 @@ import Taro, {Component, Config} from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import GButton from '~components/button'
 import Header from '~components/newsheader'
-import List from '~components/commentlist'
+import {List} from '~components/commentlist'
 import CommentCom from '~components/comment'
 import GScrollView from '~components/scrollList'
+import { style } from '~theme/global-style'
 import { throttle } from 'lodash'
 
 import {connect} from '@tarojs/redux'
@@ -123,6 +124,7 @@ export default class extends Component<any> {
                 sourceType={'Scope'}
                 scrollWithAnimation={true}
                 query={{pageSize: 6}}
+                style={{...style.backgroundColor('bgColor')}}
                 renderContent={<View>
                     {
                         comment.map((value) => {

@@ -18,7 +18,7 @@
  * }
  */
 
-interface IFiles {
+export interface IFiles {
   url: string
 }
 

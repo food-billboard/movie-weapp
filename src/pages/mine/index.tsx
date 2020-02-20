@@ -17,6 +17,8 @@ import { mapStateToProps, mapDispatchToProps } from './connect'
 type right = 'right'
 const arrow:right = 'right'
 
+const ICON_COLOR = 'primary'
+
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any>{
 
@@ -33,7 +35,7 @@ export default class extends Component<any>{
             iconInfo: {
                 value: 'share-2',
                 size: 14,
-                color: TypeColor['primary']
+                color: TypeColor[ICON_COLOR]
             },
             handle: () => {
                 router.push('/userissue', { id: this.id })
@@ -48,7 +50,7 @@ export default class extends Component<any>{
             iconInfo: {
                 value: 'settings',
                 size: 14, 
-                color: TypeColor['primary']
+                color: TypeColor[ICON_COLOR]
             },
             handle: () => {
                 router.push('/setting')
@@ -61,7 +63,8 @@ export default class extends Component<any>{
     readonly id = this.$router.params.id
 
     public state: any = {
-        detail: {}
+        detail: {},
+        typeColor: TypeColor
     }
 
     public componentWillMount = () => {
@@ -78,6 +81,13 @@ export default class extends Component<any>{
         await this.setState({
             detail: info
         })
+    }
+
+    //色调修改时重绘
+    public componentDidShow = () => {
+        const { typeColor } = this.state
+        if(typeColor == TypeColor) return
+        this.setState({typeColor: TypeColor})
     }
 
     public render() {
@@ -105,7 +115,16 @@ export default class extends Component<any>{
                     </View>
                     <View className='list'>
                         <List
-                            list={this.setting}
+                            list={this.setting.map((val: ISetting) => {
+                                const { iconInfo } = val
+                                return {
+                                    ...val,
+                                    iconInfo: {
+                                        ...iconInfo,
+                                        color: TypeColor[ICON_COLOR]
+                                    }
+                                }
+                            })}
                         />
                     </View>
                 </View>

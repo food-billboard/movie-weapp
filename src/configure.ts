@@ -31,7 +31,7 @@ const RouterConfig = {
     { path: 'pages/commentdetail/index', alias: '/commentdetail' },
     { path: 'pages/store/index', alias: '/store' },
     { path: 'pages/issue/index', alias: '/issue' },
-    { path: 'pages/userissue/oindex', alias: '/userissue' }
+    { path: 'pages/userissue/index', alias: '/userissue' }
   ]
 }
 

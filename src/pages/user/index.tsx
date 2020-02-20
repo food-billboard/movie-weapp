@@ -79,6 +79,11 @@ export default class User extends Component<any>{
         router.push('/userissue', { id: this.id })
     }
 
+    //查看评论
+    public handleCheckComment = async () => {
+        router.push('/mycomment', { id: this.id })
+    }
+
     //用户界面的相关信息
     readonly userInfo = [
         {
@@ -112,6 +117,16 @@ export default class User extends Component<any>{
             id: 'record'
         },
         {
+            title: 'Ta的评论',
+            iconInfo: {
+                value: 'bookmark',
+                size: 32,
+                color: TypeColor['primary']
+            },
+            handle: this.handleCheckComment,
+            id: 'comment'
+        },
+        {
             title: 'Ta的电影',
             iconInfo: {
                 value: 'share-2',
@@ -133,7 +148,8 @@ export default class User extends Component<any>{
                     />
                 </View>
                 <View className='list'
-                    style={{...style.border(1, 'disabled', 'solid', 'bottom')}}
+                    // style={{...style.border(1, 'disabled', 'solid', 'bottom')}}
+                    style={{borderBottom: '1px solid rgb(237, 243, 248)'}}
                 >
                     <List 
                         list={this.userInfo}

@@ -361,7 +361,13 @@ export default {
                                     image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
                                     id: '图片id'
                                 }
-                            ]
+                            ],
+                            origin: {
+                                id: '评论id',
+                                origin: true,
+                                image: '',
+                                content: '原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容'
+                            }
                         },
                         {
                             user: {
@@ -397,7 +403,13 @@ export default {
                                     image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
                                     id: '图片id'
                                 }
-                            ]
+                            ],
+                            origin: {
+                                id: '评论id',
+                                origin: true,
+                                image: '',
+                                content: '原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容'
+                            }
                         },
                         {
                             user: {
@@ -433,7 +445,13 @@ export default {
                                     image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
                                     id: '图片id'
                                 }
-                            ]
+                            ],
+                            origin: {
+                                id: '评论id',
+                                origin: true,
+                                image: '',
+                                content: '原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容'
+                            }
                         },
                         {
                             user: {
@@ -469,7 +487,13 @@ export default {
                                     image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
                                     id: '图片id'
                                 }
-                            ]
+                            ],
+                            origin: {
+                                id: '评论id',
+                                origin: true,
+                                image: '',
+                                content: '原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容'
+                            }
                         },
                         {
                             user: {
@@ -505,7 +529,13 @@ export default {
                                     image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
                                     id: '图片id'
                                 }
-                            ]
+                            ],
+                            origin: {
+                                id: '评论id',
+                                origin: true,
+                                image: '',
+                                content: '原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容'
+                            }
                         },
                         {
                             user: {
@@ -541,7 +571,13 @@ export default {
                                     image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
                                     id: '图片id'
                                 }
-                            ]
+                            ],
+                            origin: {
+                                id: '评论id',
+                                origin: true,
+                                image: '',
+                                content: '原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容'
+                            }
                         },
                         {
                             user: {
@@ -577,7 +613,13 @@ export default {
                                     image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
                                     id: '图片id'
                                 }
-                            ]
+                            ],
+                            origin: {
+                                id: '评论id',
+                                origin: true,
+                                image: '',
+                                content: '原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容'
+                            }
                         },
                         {
                             user: {
@@ -613,7 +655,13 @@ export default {
                                     image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
                                     id: '图片id'
                                 }
-                            ]
+                            ],
+                            origin: {
+                                id: '评论id',
+                                origin: true,
+                                image: '',
+                                content: '原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容'
+                            }
                         },
                         {
                             user: {
@@ -649,7 +697,13 @@ export default {
                                     image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
                                     id: '图片id'
                                 }
-                            ]
+                            ],
+                            origin: {
+                                id: '评论id',
+                                origin: true,
+                                image: '',
+                                content: '原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容'
+                            }
                         },
                         {
                             user: {
@@ -685,7 +739,13 @@ export default {
                                     image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
                                     id: '图片id'
                                 }
-                            ]
+                            ],
+                            origin: {
+                                id: '评论id',
+                                origin: true,
+                                image: '',
+                                content: '原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容'
+                            }
                         }
                     ]
                 }
@@ -731,7 +791,13 @@ export default {
                                     image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
                                     id: '图片id'
                                 }
-                            ]
+                            ],
+                            origin: {
+                                id: '评论id',
+                                origin: true,
+                                image: '',
+                                content: '原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容'
+                            }
                         },
                         {
                             user: {
@@ -767,7 +833,13 @@ export default {
                                     image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
                                     id: '图片id'
                                 }
-                            ]
+                            ],
+                            origin: {
+                                id: '评论id',
+                                origin: true,
+                                image: '',
+                                content: '原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容原始评论给内容'
+                            }
                         }
                     ]
                 }

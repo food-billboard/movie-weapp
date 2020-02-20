@@ -1,6 +1,6 @@
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import { AtInput, AtButton, AtTag } from 'taro-ui'
+import { AtButton, AtTag } from 'taro-ui'
 import GCheckBox from '~components/checkbox'
 import GVideo from './components/video'
 import GPicker from '~components/picker'
@@ -9,7 +9,7 @@ import GImagePicker from '~components/imgPicker'
 import { IFormData } from './interface'
 import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToProps } from './connect'
-import { style } from '~theme/global-style'
+import { style, TypeColor } from '~theme/global-style'
 
 import './index.scss'
 import { Toast } from '~components/toast'
@@ -34,7 +34,6 @@ const TAT_STYLE = {
   boxSizing: 'border-box', 
   width:'100%', 
   marginBottom: '5px', 
-  // ...style.backgroundColor('disabled'),
   ...style.border(1, 'primary', 'dashed', 'all')
 }
 
@@ -54,7 +53,15 @@ export default class extends Component<any> {
   public state: any = {
     detai: {},
     formData: { ...FORM_DATA },
-    lang: []
+    lang: [],
+    typeColor: TypeColor
+  }
+
+  //色调修改时重绘用
+  public componentDidShow = () => {
+    const { typeColor } = this.state
+    if(typeColor == TypeColor) return
+    this.setState({typeColor: TypeColor})
   }
 
   public componentDidMount = async () => {
@@ -273,10 +280,10 @@ export default class extends Component<any> {
       language
     } = info
     return (
-      <View className='issue'>
+      <View className='issue' style={{...style.backgroundColor('bgColor')}}>
         <View className='video'>
           <AtTag 
-            customStyle={TAT_STYLE} 
+            customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
             type={'primary'}
           >
             介绍短片及海报
@@ -288,7 +295,7 @@ export default class extends Component<any> {
         </View>
         <View className='name'>
           <AtTag 
-            customStyle={TAT_STYLE} 
+            customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
             type={'primary'}
           >
             电影名
@@ -301,7 +308,7 @@ export default class extends Component<any> {
         </View>
         <View className='area'>
           <AtTag 
-            customStyle={TAT_STYLE} 
+            customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
             type={'primary'}
           >
             地区
@@ -318,7 +325,7 @@ export default class extends Component<any> {
         </View>
         <View className='director'>
           <AtTag 
-            customStyle={TAT_STYLE} 
+            customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
             type={'primary'}
           >
             导演
@@ -335,7 +342,7 @@ export default class extends Component<any> {
         </View>
         <View className='actor'>
           <AtTag 
-            customStyle={TAT_STYLE} 
+            customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
             type={'primary'}
           >
             演员
@@ -352,7 +359,7 @@ export default class extends Component<any> {
         </View>
         <View className='type'>
           <AtTag 
-            customStyle={TAT_STYLE} 
+            customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
             type={'primary'}
           >
             类型
@@ -369,7 +376,7 @@ export default class extends Component<any> {
         </View>
         <View className='publishTime'>
           <AtTag 
-            customStyle={TAT_STYLE} 
+            customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
             type={'primary'}
           >
             上映时间
@@ -383,7 +390,7 @@ export default class extends Component<any> {
         </View>
         <View className='language'>
           <AtTag 
-            customStyle={TAT_STYLE} 
+            customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
             type={'primary'}
           >
             语言
@@ -401,7 +408,7 @@ export default class extends Component<any> {
         </View>
         <View className='description'>
           <AtTag
-            customStyle={TAT_STYLE} 
+            customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
             type={'primary'}
           >电影描述</AtTag>
           <GDescription
@@ -413,7 +420,7 @@ export default class extends Component<any> {
         </View>
         <View className='image'>
           <AtTag
-            customStyle={TAT_STYLE} 
+            customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
             type={'primary'}
           >
             电影截图选择

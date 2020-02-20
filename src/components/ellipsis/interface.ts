@@ -2,6 +2,7 @@
  * 多行文字隐藏组件
  * props: {
  *  text: 文字内容
+ *  needPoint: 是否需要显示详情功能
  * }
  * 
  * state: {
@@ -12,6 +13,8 @@
 
 export interface IProps {
   text: string
+  needPoint?: boolean
+  style?: any
 }
 
 export interface IState {

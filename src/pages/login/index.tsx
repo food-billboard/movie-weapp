@@ -101,7 +101,7 @@ export default class extends Component<any> {
 
     public render() {
         return (
-            <View className='login'>
+            <View className='login' style={{...style.backgroundColor('bgColor')}}>
                 <AtForm
                     onSubmit={this.submit}
                 >

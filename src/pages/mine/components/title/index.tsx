@@ -12,6 +12,10 @@ export default class Title extends Component<IProps>{
         id: ''
     }
 
+    public componentDidShow = () => {
+        this.setState({})
+    }
+
     public handleClick = (value) => {
         const {id} = this.props
         switch(value) {

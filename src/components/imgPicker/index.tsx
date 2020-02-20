@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { AtImagePicker } from 'taro-ui'
 import { IMAGE_CONFIG } from '~config'
 import {Toast} from '../toast'
-import { IProps, IState } from './interface'
+import { IProps, IState, IFiles } from './interface'
 
 const { count } = IMAGE_CONFIG
 

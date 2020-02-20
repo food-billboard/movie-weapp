@@ -1,12 +1,12 @@
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import { View, Text } from '@tarojs/components'
 import CommentCom from '~components/comment'
 import GScrollView from '~components/scrollList'
-import Comment from '~components/commentlist'
+import {List} from '~components/commentlist'
 import GButton from '~components/button'
 import { throttle } from 'lodash'
 import Header from './components/header'
-
+import { style } from '~theme/global-style'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 
@@ -113,6 +113,7 @@ export default class extends Component<any> {
 
     return (
       <GScrollView
+        style={{...style.backgroundColor('bgColor')}}
         sourceType={'Scope'}
         scrollWithAnimation={true}
         query={{pageSize: 7}}
@@ -123,12 +124,14 @@ export default class extends Component<any> {
               comment.map((value) => {
                 const { id } = value
                 return (
-                  <Comment 
+                  <View>
+                    <List 
                       comment={this.publish} 
                       key={id}
                       list={value}
                       commentId={id}
-                  />
+                    />
+                  </View>
                 )
               })
             }
