@@ -8,10 +8,19 @@ const { count } = IMAGE_CONFIG
 
 export default class extends Component<IProps, IState> {
 
+  //处理count变化
+  public componentWillReceiveProps = (props) => {
+    if(props.count === false) return
+    this.setState({
+      count: props.count
+    })
+  }
+
   public state: IState = {
     files: [],
     showAddBtn: true,
-    error: false
+    error: false,
+    count: this.props.count ? this.props.count : count
   }
 
   private FIRST = true
@@ -20,8 +29,7 @@ export default class extends Component<IProps, IState> {
 
   //图片选择/删除
   public handleChange = (files: Array<any>, operationType: string, index: number) => {
-    const { files: list } = this.state
-    const listLen = list.length
+    const { files: list, count } = this.state
     const fileLen = files.length
     if(operationType === 'add') {
       if(fileLen > count) {
@@ -33,14 +41,26 @@ export default class extends Component<IProps, IState> {
         return
       }
     } 
-    this.setState({
-      files,
-      showAddBtn: !(fileLen === count)
-    })
+    this.setImageItem(files)
+    this.controlShowBtn(!(fileLen === count))
     Toast({
       title: operationType === 'add' ? '添加成功' : '删除成功',
       icon: 'success',
       duration: 500
+    })
+  }
+
+  //设置图片
+  public setImageItem = (files: Array<any>) => {
+    this.setState({
+      files
+    })
+  }
+
+  //控制按钮的显示隐藏
+  public controlShowBtn = (status: boolean) => {
+    this.setState({
+      showAddBtn: status
     })
   }
 
@@ -80,7 +100,7 @@ export default class extends Component<IProps, IState> {
 
   public render() {
 
-    const { mode, multiple=true, length=6, files=false } = this.props
+    const { mode, multiple=true, length=6, files=false, count:propsCount=false } = this.props
 
     if(this.FIRST) {
       if(Array.isArray(files) && files.length) {
@@ -100,10 +120,10 @@ export default class extends Component<IProps, IState> {
         mode={mode}
         showAddBtn={showAddBtn}
         multiple={multiple}
-        count={count}
+        count={propsCount ? propsCount : count}
         sizeType={['100', '100']}
         length={length}
-        onChange={this.handleChange}
+        onChange={this.props.handleChange ? this.props.handleChange : this.handleChange}
         onImageClick={this.handleClick}
       ></AtImagePicker>
     )

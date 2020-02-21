@@ -66,6 +66,8 @@ export interface IInfo {
   image: string | null
   id: string
   content: string
+  hasImage: boolean
+  hasVideo: boolean
 }
 
 interface IList {

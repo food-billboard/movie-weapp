@@ -1,6 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { Video } from '@tarojs/components'
 import { IProps } from './interface'
+import { isObject } from '~utils'
 
 import './index.scss'
 
@@ -29,11 +30,13 @@ export default class Media extends Component<IProps>{
             initialTime=0,
             id='video',
             loop=false,
-            muted=false
+            muted=false,
+            style={}
         } = this.props
         return (
             <Video
                 className='video'
+                style={isObject(style) ? style : {}}
                 src={src}
                 controls={controls}
                 autoplay={autoplay}

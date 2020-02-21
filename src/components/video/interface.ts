@@ -9,6 +9,7 @@
  *  id: 视频id
  *  loop: 是否循环播放
  *  muted: 是否静音
+ *  style: 样式
  * }
  */
 export interface IProps {
@@ -20,4 +21,5 @@ export interface IProps {
   id?: string,
   loop?: boolean,
   muted?: boolean,
+  style?: any
 }

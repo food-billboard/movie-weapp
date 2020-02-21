@@ -1,9 +1,9 @@
 import Taro, { Component } from '@tarojs/taro'
 import { Button } from '@tarojs/components'
-import GImagePicker from '../imgPicker'
+import MediaPicker from '../mediaPicker'
+import { IItem } from '../mediaPicker/interface'
 import { IMAGE_CONFIG } from '~config'
 import { AtModal, AtModalContent, AtModalAction, AtTextarea } from "taro-ui"
-
 import { IProps, IState } from './interface'
 import { style } from '~theme/global-style'
 
@@ -13,7 +13,7 @@ export default class Comment extends Component<IProps>{
         publishCom: () => {}
     }
 
-    readonly imgPickerRef = Taro.createRef<GImagePicker>()
+    readonly mediaPickerRef = Taro.createRef<MediaPicker>()
 
     //图片提交的配置
     readonly imageConfig = {
@@ -32,6 +32,15 @@ export default class Comment extends Component<IProps>{
         })
     }
 
+    //modal关闭
+    public close = () => {
+        this.setState({
+            isOpen: false,
+            value: '说点什么吧...'
+        })
+        this.mediaPickerRef.current!.reset()
+    }
+
     /**
      * 监听数据改变
      */
@@ -46,12 +55,22 @@ export default class Comment extends Component<IProps>{
      */
     public publish = async () => {
         const { value, isOpen } = this.state
-        const {files}  = this.imgPickerRef.current!.state
-        await this.setState({
-            isOpen: !isOpen
-        })
+        const data = await this.mediaPickerRef.current!.getData(false)
+        this.close()
+        let image:Array<any> = [],
+            video:Array<any> = []
+        if(data) {
+            data.map((val: IItem) => {
+                const { url, type } = val
+                if(type === 'image') {
+                    image.push({url})
+                }else if(type === 'video') {
+                    video.push({url})
+                }
+            })
+        }
         //评论发布
-        this.props.publishCom({value, images: files})
+        this.props.publishCom({value, images: image, videos: video })
     }
 
     public render() {
@@ -60,7 +79,8 @@ export default class Comment extends Component<IProps>{
         return (
             <AtModal 
                 isOpened={isOpen}
-                onClose={() => {this.setState({isOpen: false})}}
+                onClose={() => {this.close.call(this)}}
+                onCancel={() => { this.close.call(this) }}
             >
                 <AtModalContent>
                     <AtTextarea 
@@ -70,10 +90,11 @@ export default class Comment extends Component<IProps>{
                         height={280}
                         placeholder='说点什么吧...'
                     />
-                    <GImagePicker
-                        ref={this.imgPickerRef}
-                        length={6}
-                    ></GImagePicker>
+                    <MediaPicker
+                        style={{marginTop:'20px'}}
+                        ref={this.mediaPickerRef}
+                        height={70}
+                    ></MediaPicker>
                 </AtModalContent>
                 <AtModalAction>
                     <Button

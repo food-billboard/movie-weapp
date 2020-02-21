@@ -15,7 +15,9 @@ export default class extends Component<IProps> {
       id: '',
       image: '',
       origin: true,
-      content: ''
+      content: '',
+      hasImage: false,
+      hasVideo: false
     }
   }
 
@@ -34,8 +36,16 @@ export default class extends Component<IProps> {
       id='',
       image='',
       origin=false,
-      content=''
+      content='',
+      hasImage=false,
+      hasVideo=false
     } = info
+    let text = content
+    if(hasVideo) {
+      text = '[视频]' + text
+    }else if(hasImage) {
+      text = '[图片]' + text
+    }
     return(
       <View className='origin at-row'
         style={{...style.border(1, 'thirdly', 'dashed', 'all')}}
@@ -50,7 +60,7 @@ export default class extends Component<IProps> {
         }
         <View className={(image && image.length) ? 'at-col-10' : 'at-col-12'}>
           <Ellipsis
-            text={content}
+            text={text}
             needPoint={false}
             // style={{...style.color('thirdly')}}
             style={{color: 'gray'}}

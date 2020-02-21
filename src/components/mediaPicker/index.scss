@@ -1,0 +1,41 @@
+@import "~taro-ui/dist/style/components/flex.scss";
+@import "~taro-ui/dist/style/components/icon.scss";
+.video-title{
+  text-align:right;
+}
+.media-content{
+  display:flex;
+  box-sizing: border-box;
+  padding:10px;
+  position: relative;
+  left:0;
+  top:0;
+  .media-main{
+    flex:1;
+  }
+}
+.icon{
+  position:absolute;
+  left:0;
+  top:0;
+}
+.image,
+.video{
+  width:100%;
+  height:100%;
+}
+.preview-video{
+  width:100%;
+  height:100%;
+  position:fixed;
+  left:50%;
+  top:50%;
+  transform:translateX(-50%) translateY(-50%);
+  z-index:99;
+}
+.video-icon{
+  position:absolute;
+  right:0;
+  top:0;
+  font-size:40px;
+}
