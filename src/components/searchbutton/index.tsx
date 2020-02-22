@@ -6,6 +6,8 @@ import { router } from '~utils'
 import { IProps, IState } from './interface'
 import { style } from '~theme/global-style'
 
+const HOT_HEIGHT = 35
+
 class SearchButton extends Component<IProps, IState>{
     //默认数据
     public static defaultProps: IProps = {
@@ -70,22 +72,7 @@ class SearchButton extends Component<IProps, IState>{
 
     public render() {
         //获取热搜信息列表
-        const { hot, focus } = this.props
-        const hotList = hot.map((value) => {
-            const { name, id } = value
-            return (
-                <View className='at-col at-col-2 hotlist'
-                    key={id}>
-                    <AtTag 
-                        customStyle={{...style.backgroundColor('disabled')}}
-                        type={"primary"}
-                        size={"normal"}
-                        circle={true}
-                        onClick={(event) => {this.getHot(value, event)}}
-                    >{name}</AtTag>
-                </View>
-            )
-        })
+        const { hot, focus, hotShow=HOT_HEIGHT } = this.props
         return (
             <View className="searchbutton"
                 style={{...style.backgroundColor('bgColor')}}
@@ -102,9 +89,25 @@ class SearchButton extends Component<IProps, IState>{
                         focus={focus}
                     />
                 </View>
-                <View className='at-row hotsearch'>
+                <View className='at-row hotsearch at-row__align--center' style={{height: hotShow ? hotShow + 'px' : '0'}}>
                     <View className='at-col at-col-1 hotlist title'>热搜</View>
-                    {hotList}
+                    {
+                        hot.map((value) => {
+                            const { name, id } = value
+                            return (
+                                <View className='at-col at-col-2 hotlist'
+                                    key={id}>
+                                    <AtTag 
+                                        customStyle={{...style.backgroundColor('disabled')}}
+                                        type={"primary"}
+                                        size={"normal"}
+                                        circle={true}
+                                        onClick={(event) => {this.getHot(value, event)}}
+                                    >{name}</AtTag>
+                                </View>
+                            )
+                        })
+                    }
                 </View>
             </View>
         )

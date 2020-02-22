@@ -5,6 +5,8 @@
     }
     .hotsearch{
         margin:10px 0;
+        overflow: hidden;
+        transition:.3s;
         .title{
             margin-top:5px;
             margin-left:15px;

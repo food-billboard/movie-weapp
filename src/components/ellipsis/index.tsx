@@ -35,12 +35,13 @@ export default class extends Component<IProps, IState> {
     if(show) {
       return text
     }
-    return text.length <= maxLen ? text : text.slice(0, maxLen)
+    return text.length <= maxLen ? text : (text.slice(0, maxLen) + '...')
   }
 
   public render() {
     const { text, needPoint, style:customStyle={} } = this.props
     const _text = this.getText()
+
     return (
       <View className='ellipsis'
         style={{...style.color('secondary'), ...(isObject(customStyle) ? customStyle : {})}}

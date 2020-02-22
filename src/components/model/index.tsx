@@ -21,7 +21,7 @@ export default class Setting extends Component<IProps>{
     }  
 
     public render() {
-        const { info } = this.props
+        const { info, content:renderContent=false } = this.props
         const {
             isOpen,
             title,
@@ -37,21 +37,37 @@ export default class Setting extends Component<IProps>{
                 isOpened={isOpen}
                 onCancel={onCancel}
             >
-                <AtModalHeader><Text style={{...style.color('primary')}}>{title}</Text></AtModalHeader>
+                {
+                    title && title.length ? 
+                    <AtModalHeader><Text style={{...style.color('primary')}}>{title}</Text></AtModalHeader>
+                    : null
+                }
                 <AtModalContent>
-                    <Text style={{...style.color('thirdly')}}>{content}</Text>
+                    {
+                        renderContent ? 
+                        this.props.renderContent :
+                        <Text style={{...style.color('thirdly')}}>{content}</Text>
+                    }
                 </AtModalContent>
-                <AtModalAction>
-                    <View className='at-row'>
+                {
+                    (cancelText && cancelText.length) || (confirmText && confirmText.length) ?
+                    <AtModalAction>
+                        <View className='at-row'>
 
-                        {
-                            cancelText.length ?
-                            <View className='at-col'><AtButton customStyle={{border: 'none', ...style.color('primary')}} onClick={onClose}>{cancelText}</AtButton></View> 
-                            : null
-                        }
-                        <View className='at-col'><AtButton customStyle={{border: 'none', ...style.color('primary')}} onClick={onConfirm}>{confirmText}</AtButton></View> 
-                    </View>
-                </AtModalAction>
+                            {
+                                cancelText && cancelText.length ?
+                                <View className='at-col'><AtButton customStyle={{border: 'none', ...style.color('primary')}} onClick={onClose}>{cancelText}</AtButton></View> 
+                                : null
+                            }
+                            {
+                                confirmText && confirmText.length ? 
+                                <View className='at-col'><AtButton customStyle={{border: 'none', ...style.color('primary')}} onClick={onConfirm}>{confirmText}</AtButton></View>
+                                : null
+                            } 
+                        </View>
+                    </AtModalAction>
+                    : null
+                }
             </AtModal>
         )
     }

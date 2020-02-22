@@ -67,7 +67,7 @@ class App extends Component {
 
   public config: Config = {
     pages: [
-      // 'pages/setting/index',
+      // 'pages/search/index',
       'pages/main/index',
       'pages/mine/index',
       'pages/register/index',

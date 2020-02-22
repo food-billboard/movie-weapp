@@ -2,6 +2,8 @@
  * 模态框组件
  * props: {
  *  info: 模态框内容
+ *  contnet: 是否启用jsx渲染内容
+ *  renderContent: jsx内容
  * }
  * 
  * info: {
@@ -16,7 +18,7 @@
  * }
  */
 
-interface Info {
+export interface Info {
   isOpen: boolean,
   title: string,
   cancelText?: string,
@@ -29,4 +31,6 @@ interface Info {
 
 export interface IProps {
   info: Info
+  renderContent?: any
+  content?: boolean
 }

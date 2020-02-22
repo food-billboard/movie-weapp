@@ -1,6 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import { IProps, IState } from './interface'
+import Ellipsis from '../ellipsis'
 import './index.scss'
 import { style } from '~theme/global-style'
 import { router } from '~utils'
@@ -38,7 +39,10 @@ export default class NewsHead extends Component<IProps, IState>{
                         <View className='at-article__content'>
                             <View className='at-article__section'>
                                 <View className='at-article__p article' style={{...style.color('thirdly')}}>
-                                    {detail}
+                                    <Ellipsis
+                                        style={{padding:0}}
+                                        text={detail}
+                                    ></Ellipsis>
                                 </View>
                             </View>
                         </View>

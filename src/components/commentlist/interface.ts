@@ -1,3 +1,4 @@
+import { TMediaType } from '~utils'
 /**
  * 评论列表
  * props: {
@@ -11,6 +12,8 @@
  * 
  * state: {
  *  list: 评论列表
+ *  activeVideo: 当前显示的视频
+ *  videoShow: 控制视频的显示隐藏
  * }
  * 
  * user: {
@@ -28,9 +31,11 @@
  *  id: 用户id
  * }
  * 
- * imageList: {
+ * mediaList: {
  *  image: 评论图片
  *  id: 图片id
+ *  src: '媒体地址'
+ *  type: '媒体类型'
  * }
  * 
  * list: {
@@ -56,9 +61,11 @@ interface CommentUsers {
   id: string
 }
 
-export interface IImageList {
+export interface IMediaList {
   image: string
   id: string
+  type: TMediaType
+  src: string
 }
 
 export interface IInfo {
@@ -74,7 +81,7 @@ interface IList {
   id: string
   user: IUser
   commentUsers: Array<CommentUsers>
-  images: Array<IImageList>
+  media: Array<IMediaList>
   info: IInfo
 }
 
@@ -91,4 +98,6 @@ export interface IProps {
 
 export interface IState {
   list: IList
+  activeVideo: string
+  videoShow: boolean
 }

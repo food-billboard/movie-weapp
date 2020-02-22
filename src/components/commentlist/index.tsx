@@ -1,16 +1,16 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Image, Text, ScrollView } from '@tarojs/components'
 import { AtIcon } from 'taro-ui'
-
+import GVideo from '../video'
+import Modal from '../model'
+import { Info } from '../model/interface'
+import { router, formatTime, formatNumber, TMediaType } from '~utils'
+import { style } from '~theme/global-style'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
-
-import { router, formatTime, formatNumber  } from '~utils'
-import { style } from '~theme/global-style'
+import { IState, IProps, IMediaList } from './interface'
 
 import './index.scss'
-
-import { IState, IProps, IImageList } from './interface'
 
 @connect(mapStateToProps, mapDispatchToProps)
 class List extends Component<IProps, IState>{
@@ -27,12 +27,14 @@ class List extends Component<IProps, IState>{
             },
             commentUsers: [],
             id: '',
-            images: [],
+            media: [],
             info: {
                 id: '',
                 image: '',
                 content: '',
-                origin: false
+                origin: false,
+                hasImage: false,
+                hasVideo: false
             }
         },
         id: '',
@@ -45,8 +47,27 @@ class List extends Component<IProps, IState>{
     //评论id
     readonly commentId: string = this.props.commentId
 
+    //视频modal配置
+    readonly videoConfig:Info = {
+        isOpen: false,
+        title: '',
+        cancelText:'',
+        confirmText: '',
+        onCancel: () => {
+            this.setState({
+                videoShow: false,
+                activeVideo: ''
+            })
+        },
+        onConfirm: () => {},
+        onClose: () => {},
+        content: ''
+    }
+
     public state: IState = {
-        list: this.props.list
+        list: this.props.list,
+        videoShow: false,
+        activeVideo: ''
     }
 
     /**
@@ -96,29 +117,72 @@ class List extends Component<IProps, IState>{
     }
 
     /**
+     * 预览媒体
+     */
+    public handlePreviewMedia = (src: string, type: TMediaType) => {
+        const { list } = this.props
+        const { media=[] } = list
+        if(!media.length) return
+        if(type === 'image') {
+            this.handlePreviewImage(src, media.filter((val: IMediaList) => {
+                const { type } = val
+                return type === 'image'
+            }).map((val: IMediaList) => {
+                const { src } = val
+                return src
+            }))
+        }else if(type === 'video') {
+            this.handlePreviewVideo(src)
+        }
+    }
+
+    /**
      * 查看图片
      */
-    public handlePreviewImage = (image: string) => {
-        const { list } = this.props
-        const { images=[] } = list
-        if(!images.length) return
-        const urlList = images.map(val => {
-            const { image } = val
-            return image
-        })
+    public handlePreviewImage = (target: string, list: Array<string>) => {
         Taro.previewImage({
-            urls: urlList,
-            current: image
+            urls: list,
+            current: target
         })
     }
 
+    /**
+     * 查看视频
+     */
+    public handlePreviewVideo = (target: string) => {
+        this.setState({
+            activeVideo: target,
+            videoShow: true
+        })
+    }
+
+    //监听视频关闭
+    public handleVideoClose = () => {
+        this.setState({
+            videoShow: false,
+            activeVideo: ''
+        })
+    }
+
+    //获取视频地址
+    public getVideoSrc = () => {
+        const { activeVideo } = this.state
+        return activeVideo
+    }
+
+    //获取视频显示隐藏
+    public getVideoShowStatus = () => {
+        const { videoShow } = this.state
+        return videoShow
+    }
+
     public render() {
-        const { list } = this.state
+        const { list, activeVideo, videoShow } = this.state
         const {
             user,
             commentUsers,
             id: commentId,
-            images=[]
+            media=[]
         } = list
         const { 
             name,
@@ -177,19 +241,33 @@ class List extends Component<IProps, IState>{
                 </View>
                 <View className='image-list at-row at-row--wrap'>
                     {
-                        images.map((val: IImageList, index: number) => {
-                            const { image: preImg, id } = val
+                        media.map((val: IMediaList, index: number) => {
+                            const { image, id, src, type } = val
                             return (
                                 <View 
                                     className={'at-col at-col-4 image'}
                                     key={id}
-                                    onClick={this.handlePreviewImage.bind(this, preImg)}
                                 >
-                                    <Image 
-                                        src={preImg} 
-                                        style={{...style.border(1, 'thirdly', 'dashed', 'all')}}
-                                        className={'image-content'}
-                                    ></Image>
+                                    {
+                                        type === 'video' ?
+                                        <Image 
+                                            onClick={() => {this.handlePreviewMedia.call(this, src, 'video')}}
+                                            src={image} 
+                                            style={{...style.border(1, 'thirdly', 'dashed', 'all')}}
+                                            className={'image-content'}
+                                        ></Image>
+                                        : null
+                                    }
+                                    {
+                                        type === 'image' ?
+                                        <Image 
+                                            onClick={() => {this.handlePreviewMedia.call(this, src, 'image')}}
+                                            src={src} 
+                                            style={{...style.border(1, 'thirdly', 'dashed', 'all')}}
+                                            className={'image-content'}
+                                        ></Image>
+                                        : null
+                                    }
                                 </View>
                             )
                         })
@@ -216,7 +294,23 @@ class List extends Component<IProps, IState>{
                         })
                     }
                 </ScrollView>
-
+                <Modal
+                    info={{...this.videoConfig, isOpen: videoShow}}
+                    content={true}
+                    renderContent={
+                        <View className='video'>
+                            <View 
+                                className='at-icon at-icon-close icon'
+                                style={{...style.color('primary')}}
+                                onClick={this.handleVideoClose}
+                            ></View>
+                            <GVideo
+                                style={{width: '100%', height: '97%'}}
+                                src={activeVideo}
+                            ></GVideo>
+                        </View>
+                    }
+                ></Modal>
             </View>
         )
     }

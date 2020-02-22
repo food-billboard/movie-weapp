@@ -20,6 +20,9 @@ const INIT_PAGE = { currPage:1, pageSize: 10 }
 //初始化参数
 const INIT_QUERY = { type: '', sort: '', query: {} }
 
+//初始hot高度
+const HOT_HEIGHT = 35
+
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Index extends Component<any> {
 
@@ -37,6 +40,7 @@ export default class Index extends Component<any> {
 
     public state = {
         hot: [],
+        hotShow: HOT_HEIGHT,
         showList: true,
         listShow: false,
         searchList: [],
@@ -171,14 +175,34 @@ export default class Index extends Component<any> {
         })
     }
 
+    //控制热搜显示隐藏
+    public handleScroll = (e) => {
+        const { detail } = e
+        const { scrollTop } = detail
+        const { hotShow } = this.state
+        if(scrollTop >= HOT_HEIGHT) {
+            if(hotShow === 0) return
+            this.setState({
+                hotShow: 0
+            })
+        }
+        if(scrollTop < HOT_HEIGHT) {
+            if(hotShow === HOT_HEIGHT) return
+            this.setState({
+                hotShow: HOT_HEIGHT
+            })
+        }
+    }
+
     public render() {
-        const { showList, searchList, hot, listShow } = this.state
+        const { showList, searchList, hot, listShow, hotShow } = this.state
         return (
             <GScrollView
                 style={{...style.backgroundColor('bgColor')}}
                 autoFetch={false}
                 sourceType={'Scope'}
                 scrollWithAnimation={true}
+                onScroll={this.handleScroll}
                 renderContent={ <View className='search-main' style={{display: listShow && searchList.length ? 'block' : 'none'}}>
                                     <View className='head'>
                                         <Head screen={this.typeScreen} />
@@ -195,14 +219,19 @@ export default class Index extends Component<any> {
                                     </View>
                                 </View>}
                 fetch={this.throttleFetchData}
-                header={71}
-                renderHeader={<SearchBar 
-                        confirm={this.debounceConfirm} 
-                        hot={hot}
-                        ref={this.searchBarRef}
-                        focus={false}
-                        control={this.showList}
-                    />}
+                header={150}
+                renderHeader={
+                    <View style={{width: '375px'}}>
+                        <SearchBar 
+                            confirm={this.debounceConfirm} 
+                            hot={hot}
+                            ref={this.searchBarRef}
+                            focus={false}
+                            control={this.showList}
+                            hotShow={hotShow}
+                        />
+                    </View>
+                }
             >
             </GScrollView>
         )

@@ -38,7 +38,7 @@ export interface IProps {
   scrollWithAnimation?: boolean
   // onScrollToUpper?: () => any
   onScrollToLower?: () => any
-  onScroll?: () => any
+  onScroll?: (...args: any[]) => any
   fetch: (...args: any[]) => any
   header?: false | number
   bottom?: false | number

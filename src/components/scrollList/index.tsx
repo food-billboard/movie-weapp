@@ -5,6 +5,7 @@ import GDivider from '~components/divider'
 import Top from '../topbutton'
 import { IProps, IState } from './interface'
 import { isObject } from '~utils'
+import { style as customStyle } from '~theme/global-style'
 
 import './index.scss'
 
@@ -138,15 +139,25 @@ export default class List extends Component<IProps, IState> {
           onScrollToLower={onScrollToLower ? onScrollToLower : this.handleToLower}
           onScroll={onScroll}
         >
-          {_header ? '' : this.props.renderHeader}
-          {this.props.renderContent}
+          {
+            _header ? 
+            null : 
+            <View className='header' style={{...customStyle.backgroundColor('disabled')}}>
+              {
+                this.props.renderHeader
+              }
+            </View>
+          }
+          <View style={{paddingTop: header + 'rpx'}}>
+            {this.props.renderContent}
+          </View>
           {
             empty ? <GDivider other={{paddingBottom: (bottom ? bottom + 20 : 0) + 'rpx'}} /> : null
           }
           {/* <Top 
             ref={this.topRef} 
           /> */}
-          {_bottom ? '' : this.props.renderBottom}
+          {_bottom ? null : this.props.renderBottom}
         </ScrollView>
         <View 
           className='active'
