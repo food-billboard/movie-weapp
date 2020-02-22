@@ -6,6 +6,7 @@
  *  getRate: 获取评分
  *  movie: 电影id
  *  id: 用户id
+ *  readonly: 是否只读
  * }
  * 
  * state: {
@@ -18,6 +19,7 @@ export interface IProps {
   getRate: (movie: string) => any
   movie: string
   id: string
+  readonly?: boolean
 }
 
 export interface IState {

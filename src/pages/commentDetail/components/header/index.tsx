@@ -113,6 +113,7 @@ export default class extends Component<IProps, IState> {
             <View className='content-main-text'>
               <Ellipsis
                 text={content}
+                style={{...style.color('primary')}}
               />
             </View>
             <View className='content-main-extra'>

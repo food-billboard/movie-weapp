@@ -1,9 +1,9 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
+import { AtRate } from 'taro-ui'
 import GRate from '../rate'
 import GStore from '../store'
-import Modal from '~components/model'
-import { AtModal } from 'taro-ui'
+import Ellipsis from '~components/ellipsis'
 import { formatTime, formatNumber, ItypeList } from '~utils'
 import { IProps, IState } from './interface'
 import { style } from '~theme/global-style'
@@ -30,7 +30,9 @@ export default class Content extends Component<IProps, IState>{
             description: '',
             hot: 0,
             rate:0,
+            rateMine: 0,
             store: false,
+            mine: ''
         },
         sendRate: () => {},
         sendStore: () => {},
@@ -41,21 +43,12 @@ export default class Content extends Component<IProps, IState>{
     readonly id = this.props.id
 
     public state: IState = {
-        isOpened: false
+        isOpened: false,
+        modalText: ''
     }
-
-    /**
-     * 显示详情
-     */
-    public showDetail = () => {
-        const {isOpened} = this.state
-        this.setState({
-            isOpened: !isOpened
-        })
-    }
-
+    
     public render() {
-        const { isOpened } = this.state
+        const { isOpened, modalText } = this.state
         const { info, movie } = this.props
         const {
             name='',
@@ -70,7 +63,9 @@ export default class Content extends Component<IProps, IState>{
             description='',
             hot=0,
             rate,
-            store
+            rateMine,
+            store,
+            mine
         } = info
         return (
             <View className='content'>
@@ -92,6 +87,21 @@ export default class Content extends Component<IProps, IState>{
                         <GRate
                             movie={movie}
                         />
+                    </View>
+                    <View className='main-rate'>
+                        <View>楼主评分: </View>
+                        <View className='at-row at-row__align--center'>
+                            <View className='at-col at-col-9'>
+                                <AtRate
+                                    value={rateMine}
+                                    max={10}
+                                    size={20}
+                                ></AtRate>
+                            </View>
+                            <View className='at-col at-col-1 main-rate-number'>
+                                {rateMine}
+                            </View>
+                        </View>
                     </View>
                     <View className='main-info'>
                         <View className='actor'>
@@ -148,27 +158,24 @@ export default class Content extends Component<IProps, IState>{
                         <View className='description'
                             style={{...style.border(1, 'disabled', 'dashed', 'left_right')}}
                         > 
-                            简介: <Text className={'text'}
-                                style={{...style.color('primary')}}
-                            >{description}</Text>
-                            <Text className='description-detail'
-                                style={{...style.color('primary'), ...style.border(1, 'secondary', 'dashed', 'top_bottom'), ...style.backgroundColor('disabled')}}
-                                onClick={this.showDetail}
-                            >
-                                详情>
-                            </Text>
+                            简介: 
+                            <Ellipsis
+                                text={description}
+                                style={{lineHeight: '25px', ...style.color('primary')}}
+                                needPoint={true}
+                            ></Ellipsis>
                         </View>
-                        <Modal
-                            info={{
-                                isOpen: isOpened,
-                                title: name,
-                                cancelText: '',
-                                confirmText: '我知道了',
-                                onClose:() => {this.setState({isOpened: false})},
-                                onConfirm: () => {this.setState({isOpened: false})},
-                                content: description
-                            }}
-                        ></Modal>
+                        <View   
+                            className='mine description'
+                            style={{...style.border(1, 'disabled', 'dashed', 'left_right')}}
+                        >
+                            楼主认为: 
+                            <Ellipsis
+                                text={mine}
+                                style={{lineHeight: '25px', ...style.color('primary')}}
+                                needPoint={true}
+                            ></Ellipsis>
+                        </View>
                     </View>
                 </View>
             </View>

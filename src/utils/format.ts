@@ -153,7 +153,7 @@ export const formatTime = (date: any, type: string = 'YYYY-MM-DD', before: numbe
 
 export const formatNumber = (data: number) => {
     if(data > 9999) {
-        return data / 10000 + 'w'
+        return Math.round(data / 10000) + 'w'
     }
     return data
 }

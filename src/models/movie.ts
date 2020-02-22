@@ -2115,9 +2115,11 @@ export default {
                     time: 10000000, 
                     publishTime: 1997, 
                     description: '电影的详细描述，虽然你不想看，但是我还是会写在这里', 
+                    mine: '电影的详细描述，虽然你不想看，但是我还是会写在这里电影的详细描述，虽然你不想看，但是我还是会写在这里电影的详细描述，虽然你不想看，但是我还是会写在这里',
                     language: '语言',
                     hot: 100000, 
                     rate: 8,
+                    rateMine: 8,
                     store: true
                 },
                 image: [

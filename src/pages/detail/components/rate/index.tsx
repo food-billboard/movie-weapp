@@ -56,15 +56,26 @@ export default class GTate extends Component<IProps, IState>{
 
     public render() {
         const { value } = this.state
+        const { readonly=false } = this.props
         return (
             <View className='rate'>
-                <AtRate
-                    className='star'
-                    size={25}
-                    max={10}
-                    value={value}
-                    onChange={(value) => {this.handleChange.call(this, value)}}
-                /> 
+                {
+                    readonly ? 
+                    <AtRate
+                        className='star'
+                        size={25}
+                        max={10}
+                        value={value}
+                    /> 
+                    :
+                    <AtRate
+                        className='star'
+                        size={25}
+                        max={10}
+                        value={value}
+                        onChange={(value) => {this.handleChange.call(this, value)}}
+                    /> 
+                }
                 <Text 
                     className='number'
                     style={{...style.color('secondary')}}

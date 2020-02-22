@@ -23,11 +23,14 @@ import { ItypeList } from '~utils'
  *  description: 描述
  *  hot: 人气
  *  rate: 评分
+ *  rateMine: 个人评分
  *  store: 收藏
+ *  mine: 楼主认为的电影描述
  * }
  * 
  * state: {
  *  isOpened: 控制详情显示隐藏
+ *  modalText: modal文字
  * }
  */
 
@@ -53,9 +56,12 @@ interface Info {
   description: string
   hot: number
   rate:number
+  rateMine: number
   store: boolean
+  mine: string
 }
 
 export interface IState {
   isOpened: boolean
+  modalText: string
 }

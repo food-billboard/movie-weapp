@@ -8,10 +8,6 @@ import './index.scss'
 
 export default class extends Component<IProps, IState> {
 
-  public static defaultProps:IProps = {
-    text: ''
-  }
-
   public state: IState = {
     show: false,
     maxLen: 40
@@ -21,8 +17,9 @@ export default class extends Component<IProps, IState> {
    * 获取详情
    */
   public getDetail = () => {
+    const { show } = this.state
     this.setState({
-      show: true
+      show: !show
     })
   }
 
@@ -31,7 +28,7 @@ export default class extends Component<IProps, IState> {
    */
   public getText = () => {
     const { show, maxLen } = this.state
-    const { text } = this.props
+    const { text='' } = this.props
     if(show) {
       return text
     }
@@ -39,9 +36,9 @@ export default class extends Component<IProps, IState> {
   }
 
   public render() {
-    const { text, needPoint, style:customStyle={} } = this.props
+    const { style:customStyle={}, text, needPoint=true } = this.props
     const _text = this.getText()
-
+    const { show, maxLen } = this.state
     return (
       <View className='ellipsis'
         style={{...style.color('secondary'), ...(isObject(customStyle) ? customStyle : {})}}
@@ -50,14 +47,14 @@ export default class extends Component<IProps, IState> {
           {_text}
         </Text>
         {
-          needPoint ? 
-          <Text 
+          needPoint && (text && text.length >= maxLen) ? 
+          <View 
             onClick={this.getDetail} 
-            style={{display: text.length !== _text.length ? 'block' : 'none', ...style.color('thirdly')}} 
+            style={{...style.color('thirdly')}} 
             className='detail'
           >
-            查看详情>
-          </Text> :
+            {show ? '收起' : '查看详情>'}
+          </View> :
           null
         }
       </View>
