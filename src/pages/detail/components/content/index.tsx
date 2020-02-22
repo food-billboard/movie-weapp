@@ -156,7 +156,7 @@ export default class Content extends Component<IProps, IState>{
                             <Text className='hot-text' style={{...style.color('thirdly')}}> 人看过</Text>
                         </View>
                         <View className='description'
-                            style={{...style.border(1, 'disabled', 'dashed', 'left_right')}}
+                            style={{...style.border(1, 'disabled', 'dashed', 'left_right'), marginBottom: '10px'}}
                         > 
                             简介: 
                             <Ellipsis
