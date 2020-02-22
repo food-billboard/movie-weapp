@@ -51,8 +51,6 @@ class SearchButton extends Component<IProps, IState>{
         this.setState({
             focus: true
         })
-        if(!disabled) return
-        router.push('/search')
     }
 
     /**
@@ -70,14 +68,21 @@ class SearchButton extends Component<IProps, IState>{
         this.props.confirm(value)
     }
 
+    //处理点击搜索栏
+    public handleClick = () => {
+        const { disabled } = this.props
+        if(!disabled) return
+        router.push('/search')
+    }
+
     public render() {
         //获取热搜信息列表
-        const { hot, focus, hotShow=HOT_HEIGHT } = this.props
+        const { hot, focus, hotShow=HOT_HEIGHT, disabled=false } = this.props
         return (
             <View className="searchbutton"
                 style={{...style.backgroundColor('bgColor')}}
             >
-                <View className="search">
+                <View className="search" onClick={this.handleClick}>
                     <AtSearchBar
                         customStyle={{...style.backgroundColor('bgColor')}}
                         onActionClick={this.confirm}
@@ -87,6 +92,7 @@ class SearchButton extends Component<IProps, IState>{
                         onBlur={this.onBlur}
                         onFocus={this.onFocus}
                         focus={focus}
+                        disabled={disabled}
                     />
                 </View>
                 <View className='at-row hotsearch at-row__align--center' style={{height: hotShow ? hotShow + 'px' : '0'}}>
