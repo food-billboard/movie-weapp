@@ -126,6 +126,31 @@ export default {
                             id: '5',
                             value: '分类',
                             image: 'http://a0.att.hudong.com/27/10/01300000324235124757108108752.jpg'
+                        },
+                        {
+                            id: '6',
+                            value: '分类',
+                            image: 'http://a0.att.hudong.com/27/10/01300000324235124757108108752.jpg'
+                        },
+                        {
+                            id: '7',
+                            value: '分类',
+                            image: 'http://a0.att.hudong.com/27/10/01300000324235124757108108752.jpg'
+                        },
+                        {
+                            id: '8',
+                            value: '分类',
+                            image: 'http://a0.att.hudong.com/27/10/01300000324235124757108108752.jpg'
+                        },
+                        {
+                            id: '9',
+                            value: '分类',
+                            image: 'http://a0.att.hudong.com/27/10/01300000324235124757108108752.jpg'
+                        },
+                        {
+                            id: '10',
+                            value: '分类',
+                            image: 'http://a0.att.hudong.com/27/10/01300000324235124757108108752.jpg'
                         }
                     ]
                 }

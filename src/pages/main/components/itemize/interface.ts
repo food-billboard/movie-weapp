@@ -6,7 +6,7 @@
  * }
  * 
  * state: {
- *  idList: id列表
+ * 
  * }
  * 
  * list: {
@@ -28,5 +28,5 @@ export interface IProps {
 }
 
 export interface IState {
-  idList: Array<string>
+  
 }
