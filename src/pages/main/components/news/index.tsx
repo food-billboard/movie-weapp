@@ -1,14 +1,16 @@
 import Taro, {Component} from '@tarojs/taro'
-import {ScrollView, View, Image} from '@tarojs/components'
+import { ScrollView, View, Image, Text } from '@tarojs/components'
+import { style, TypeColor } from '~theme/global-style'
 import { IProps } from './interface'
+import {router} from '~utils'
 
 import './index.scss'
 
-import {router} from '~utils'
+const MAX_COUNT = 10
 
 class News extends Component<IProps>{
     public static defaultProps = {
-        count: 8,
+        count: MAX_COUNT,
         list: []
     }
     
@@ -21,27 +23,32 @@ class News extends Component<IProps>{
 
     public render() {
         const {list} = this.props
-        const news = list.map((value) => {
-            const { id, title, image } = value
-            return (
-                <View className='news-img'
-                    onClick={(event) => {this.gotTo.call(this, id)}}
-                    key={id}
-                    >
-                    <Image 
-                        src={image}
-                        className='news-img-main'
-                    />
-                </View>
-            )
-        })
         return (
             <ScrollView
                 scrollX
                 scrollWithAnimation
                 className='news-main'
             >
-                {news}
+                {
+                    list.map((value) => {
+                        const { id, title, image } = value
+                        return (
+                            <View className='news-img'
+                                onClick={(event) => {this.gotTo.call(this, id)}}
+                                key={id}
+                                >
+                                <Text 
+                                    className='news-title'
+                                    style={{...style.color('primary'), textShadow: `0 0 2px ${TypeColor['disabled']}`}}
+                                >{title}</Text>
+                                <Image 
+                                    src={image}
+                                    className='news-img-main'
+                                />
+                            </View>
+                        )
+                    })
+                }
             </ScrollView>
         )
     }

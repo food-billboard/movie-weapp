@@ -67,7 +67,7 @@ class App extends Component {
 
   public config: Config = {
     pages: [
-      // 'pages/detail/index',
+      // 'pages/setting/index',
       'pages/main/index',
       'pages/mine/index',
       'pages/register/index',
@@ -94,8 +94,9 @@ class App extends Component {
       navigationBarTitleText: 'WeChat',
       navigationBarTextStyle: 'black',
       backgroundColor: '#000',
-      backgroundColorTop: 'black',
-      onReachBottomDistance: 50
+      backgroundColorTop: '#fff',
+      onReachBottomDistance: 50,
+      enablePullDownRefresh: false
     },
     tabBar: {
       "color": "black",

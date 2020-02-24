@@ -159,10 +159,13 @@ export default class Index extends Component<any> {
                     </View>
                 }
                 fetch={this.throttleFetchData}
-                header={headerHeight}
+                header={headerHeight / 2}
                 renderHeader={ 
-                    <View className='header-type' style={{...bgColor, height: headerHeight / 2 + 'px'}}>
-                        
+                    <View className='header-type' style={{
+                        ...bgColor, 
+                        height: headerHeight / 2 + 'px'
+                    }}
+                    >
                         <Text className='text'
                             style={{...style.color('thirdly'), ...bgColor}}
                         >分类: </Text>
@@ -196,7 +199,7 @@ export default class Index extends Component<any> {
                                     : null
                                 }
                             </ScrollView>
-                            :
+                                :
                             <View className='header-type-detail at-row at-row--wrap'>
                                 {list}
                                 <View 

@@ -37,7 +37,8 @@ export default class extends Component<IProps, IState> {
   //重置
   public reset = () => {
     this.setState({
-      value: this.initValue ? this.initValue : ''
+      value: this.initValue ? this.initValue : '',
+      error: false
     })
   }
 
@@ -57,6 +58,7 @@ export default class extends Component<IProps, IState> {
   }
 
   public handleChange = (e) => {
+    const { error } = this.state
     let data
     if(e.target) {  //textarea
       data = e.target.value
@@ -64,7 +66,8 @@ export default class extends Component<IProps, IState> {
       data = e
     }
     this.setState({
-      value: data
+      value: data,
+      error: data.length ? false : error
     })
   }
 

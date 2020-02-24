@@ -89,8 +89,10 @@ export default class extends Component<IProps, IState> {
 
   //处理选择
   public handleChange = (value: any) => {
+    const { error } = this.state
     this.setState({
-      checkedList: value
+      checkedList: value,
+      error: false
     })
   }
 
@@ -112,7 +114,8 @@ export default class extends Component<IProps, IState> {
   public reset = () => {
     const { extraFactor=true } = this.props
     this.setState({
-      checkedList: this.initValue ? this.initValue : []
+      checkedList: this.initValue ? this.initValue : [],
+      error: false
     })
     this.close()
     if(extraFactor) this.restRef.current!.reset()
@@ -151,6 +154,13 @@ export default class extends Component<IProps, IState> {
 
     const { show, checkedList: list, checkOption=[], error } = this.state
 
+    const btnStyle = {
+      ...BUTTON_STYLE, 
+      ...styleColor.border(1, 'primary', 'solid', 'all'), 
+      ...styleColor.color('primary'), 
+      ...(error ? FORM_ERROR : {})
+    }
+
     return (
       <View style={isObject(style) ? style : {}}>
         {
@@ -178,11 +188,7 @@ export default class extends Component<IProps, IState> {
           <AtButton 
             type={'secondary'} 
             onClick={this.open} 
-            customStyle={{ 
-              ...BUTTON_STYLE, 
-              ...styleColor.border(1, 'primary', 'solid', 'all'), 
-              ...styleColor.color('primary'), 
-              ...(error ? FORM_ERROR : {}) }}>打开</AtButton>
+            customStyle={{...btnStyle}}>打开</AtButton>
           : null
         }
         {
@@ -198,6 +204,7 @@ export default class extends Component<IProps, IState> {
         {
           extraFactor ? 
           <Rest
+            handleError={(status) => {this.setState({error: status})}}
             ref={this.restRef}
             title={'上面找不到可以在下面手动添加'}
             style={{marginBottom: '5px', display: (needHiddenList ? show : true) ? 'block' : 'none'}}
@@ -209,10 +216,7 @@ export default class extends Component<IProps, IState> {
             type={'secondary'} 
             onClick={this.close} 
             customStyle={{ 
-              ...BUTTON_STYLE, 
-              ...styleColor.border(1, 'primary', 'solid', 'all'), 
-              ...styleColor.color('primary'), 
-              ...(error ? FORM_ERROR : {}), 
+              ...btnStyle, 
               display: (needHiddenList ? show : false) ? 'block' : 'none' 
             }}
           >

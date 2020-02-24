@@ -16,10 +16,12 @@ export default class IconHead extends Component<IProps>{
 
     //查看图片
     public previewImage = (image: string) => {
-        Taro.previewImage({
-            current: image,
-            urls: [image]
-        })
+        if(image && image.length) {
+            Taro.previewImage({
+                current: image,
+                urls: [image]
+            })
+        }
     }
 
     public render() {

@@ -9,6 +9,7 @@ import NoticeBar from '~components/noticeBar'
 import { colorChange, style, TypeColor } from '~theme/global-style'
 import { styleChange } from '~utils'
 import { getStyle } from '~config'
+import { AtTextarea } from 'taro-ui'
 
 import './index.scss'
 
@@ -109,17 +110,9 @@ export default class extends Component<any> {
 
   public render () {
     const { rank, type, swiper, hot, daily, notice } = this.state
-    //排行榜列表
-    const ranks = rank.map(value => {
-      const { type, list } = value
-      return (
-        <Rank 
-          key={type}
-          type={type} 
-          list={list.length >= 3 ? list.slice(0, 3) : list}
-        />
-      )
-    })
+
+    const secondaryColor = style.color('secondary')
+
     return (
       <View className='index' style={{...style.backgroundColor('bgColor')}}>
         <View className='searchbar'>
@@ -143,7 +136,7 @@ export default class extends Component<any> {
         </View>
         <View className='news'>
           <Text className='news-title'
-            style={{...style.color('secondary')}}
+            style={{...secondaryColor}}
           >每日上新</Text>
           <News 
             list={daily}
@@ -151,9 +144,20 @@ export default class extends Component<any> {
         </View>
         <View className='rank'>
           <Text className='rank-title'
-            style={{...style.color('secondary')}}
+            style={{...secondaryColor}}
           >排行榜</Text>
-          {ranks}
+          {
+            rank.map(value => {
+              const { type, list } = value
+              return (
+                <Rank 
+                  key={type}
+                  type={type} 
+                  list={list.length >= 3 ? list.slice(0, 3) : list}
+                />
+              )
+            })
+          }
         </View>
       </View>
     )

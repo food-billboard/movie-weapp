@@ -8,12 +8,19 @@
  *  image: 图片
  *  id: 图片id
  * }
+ * state: {
+ *  imageList: 图片
+ * }
  */
-interface IList {
+export interface IList {
   image: string,
   id: string
 }
 
 export interface IProps {
   list: Array<IList>
+}
+
+export interface IState {
+  imageList: Array<string>
 }

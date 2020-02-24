@@ -1,4 +1,5 @@
 .detail{
+    padding-bottom:92px;
     .description,
     .image,
     .other{
@@ -27,9 +28,10 @@
     .other{
         width:750px;
         height:92px;
-        position:relative;
+        position:fixed;
         left:0;
-        top:0;
+        bottom:0;
         margin:0 auto;
+        box-sizing:border-box;
     }
 }

@@ -1,11 +1,13 @@
 import Taro, { Component } from '@tarojs/taro'
-import { Button } from '@tarojs/components'
+import { Button, View } from '@tarojs/components'
 import MediaPicker from '../mediaPicker'
 import { IItem } from '../mediaPicker/interface'
 import { IMAGE_CONFIG } from '~config'
-import { AtModal, AtModalContent, AtModalAction, AtTextarea } from "taro-ui"
+import { AtTextarea } from "taro-ui"
 import { IProps, IState } from './interface'
 import { style } from '~theme/global-style'
+
+import './index.scss'
 
 export default class Comment extends Component<IProps>{
     public static defaultProps: IProps = {
@@ -77,34 +79,47 @@ export default class Comment extends Component<IProps>{
         const { isOpen } = this.state
         const { buttonText } = this.props
         return (
-            <AtModal 
-                isOpened={isOpen}
-                onClose={() => {this.close.call(this)}}
-                onCancel={() => { this.close.call(this) }}
+            <View 
+                className='comment'
+                style={{display: isOpen ? 'block' : 'none'}}
             >
-                <AtModalContent>
-                    <AtTextarea 
-                        value={this.state.value}
-                        onChange={this.handleChange.bind(this)}
-                        maxLength={250}
-                        height={280}
-                        placeholder='说点什么吧...'
-                    />
-                    <MediaPicker
-                        style={{marginTop:'20px'}}
-                        ref={this.mediaPickerRef}
-                        height={70}
-                    ></MediaPicker>
-                </AtModalContent>
-                <AtModalAction>
-                    <Button
-                        onClick={this.publish}
-                        style={{...style.backgroundColor('disabled'), ...style.color('primary')}}
-                    >
-                        {buttonText}
-                    </Button>
-                </AtModalAction>
-            </AtModal>
+                <View className='shade'></View>
+                <View 
+                    className='main'
+                >
+                    <View className='content'>
+                        {
+                            isOpen ? 
+                            <AtTextarea 
+                                value={this.state.value}
+                                onChange={this.handleChange.bind(this)}
+                                maxLength={250}
+                                height={280}
+                                placeholder='说点什么吧...'
+                            />
+                            : null
+                        }
+                        <MediaPicker
+                            style={{marginTop:'20px'}}
+                            ref={this.mediaPickerRef}
+                            height={70}
+                        ></MediaPicker>
+                    </View>
+                    <View className='action'>
+                        <Button
+                            onClick={this.publish}
+                            style={{...style.backgroundColor('disabled'), ...style.color('primary')}}
+                        >
+                            {buttonText}
+                        </Button>
+                    </View>
+                    <View 
+                        className='close at-icon at-icon-close' 
+                        style={{...style.color('primary')}}
+                        onClick={() => {this.close.call(this)}}
+                    ></View>
+                </View>
+            </View>
         )
     }
 }

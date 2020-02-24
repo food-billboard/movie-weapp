@@ -307,6 +307,8 @@ class List extends Component<IProps, IState>{
                             <GVideo
                                 style={{width: '100%', height: '97%'}}
                                 src={activeVideo}
+                                controls={true}
+                                loop={true}
                             ></GVideo>
                         </View>
                     }

@@ -32,7 +32,8 @@ export default class extends Component<IProps, IState> {
         var tempFilePaths = res.tempFilePaths
         const { info } = this.state
         this.setState({
-          info: { ...info, poster: tempFilePaths[0] }
+          info: { ...info, poster: tempFilePaths[0] },
+          posterError: false
         })
       }
     })
@@ -47,7 +48,8 @@ export default class extends Component<IProps, IState> {
         const file = res.tempFilePath
         const { info } = this.state
         this.setState({
-          info: { ...info, src: file }
+          info: { ...info, src: file },
+          srcError: false
         })
       }
     })
@@ -56,7 +58,9 @@ export default class extends Component<IProps, IState> {
   //重置
   public reset = () => {
     this.setState({
-      info: this.initValue ? this.initValue : { src: '', poster: '' }
+      info: this.initValue ? this.initValue : { src: '', poster: '' },
+      srcError: false,
+      posterError: false
     })
   }
 

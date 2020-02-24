@@ -3,7 +3,7 @@ import { View } from '@tarojs/components'
 import IconHead from '~components/headicon'
 import List from '~components/linearlist'
 import GButton from '~components/button'
-import { style, TypeColor } from '~theme/global-style'
+import { TypeColor } from '~theme/global-style'
 import './index.scss'
 
 import {mapStateToProps, mapDispatchToProps} from './connect'
@@ -157,7 +157,7 @@ export default class User extends Component<any>{
                 </View>
                 <GButton
                     type={'secondary'}
-                    style={{width: '100%', height: 120, position: 'fixed', left: 0, bottom: 0}}
+                    style={{width: '100%', height: 120, position: 'fixed', left: 0, bottom: 5}}
                     active={isAttention ? 1 : 0}
                     value={['关注', '取消关注']}
                     operate={this.attention}

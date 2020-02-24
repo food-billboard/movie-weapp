@@ -3,7 +3,7 @@ import { AtGrid } from 'taro-ui'
 import {router} from '~utils'
 import { IProps, IState, List } from './interface'
 
-const COLUMN_COUNT = 5
+const COLUMN_COUNT = 4
 
 class Itemize extends Component<IProps, IState>{
     public static defaultProps = {
@@ -28,7 +28,7 @@ class Itemize extends Component<IProps, IState>{
         return (
             <AtGrid 
                 mode='square' 
-                hasBorder={true} 
+                hasBorder={false} 
                 data={list} 
                 columnNum={columnNum}	
                 onClick={this.goTo}

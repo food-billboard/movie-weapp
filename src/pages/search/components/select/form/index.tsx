@@ -187,6 +187,9 @@ export default class Forms extends Component<IProps> {
         this.actorRef.current!.reset()
         this.directorRef.current!.reset()
         this.langRef.current!.reset()
+        this.setState({
+            open: false
+        })
     }
 
     /**
@@ -204,8 +207,8 @@ export default class Forms extends Component<IProps> {
     }
 
     //处理其他筛选
-    public handleOther = (value) => {
-        this.setState({
+    public handleOther = async (value) => {
+        await this.setState({
             open: value
         })
     }

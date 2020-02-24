@@ -10,9 +10,9 @@ import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { router } from '~utils'
 
-const COLUMN_COUNT = 3
+const COLUMN_COUNT = 4
 
-const COLUMN_MAX = 5
+const COLUMN_MAX = 12
 
 const SHOW_MORE = 'show_more'
 const HIDE_MORE = 'hide_more'
@@ -24,7 +24,7 @@ const SHOW_ICON = {
 }
 
 const HIDE_ICON = {
-  value: 'chevron-right',
+  value: 'chevron-left',
   color: '',
   size: 32
 }
@@ -177,7 +177,7 @@ export default class extends Component<any> {
               list={data}
             />
             <AtGrid
-              hasBorder={true}
+              hasBorder={false}
               data={
                 showMore ? 
                 (

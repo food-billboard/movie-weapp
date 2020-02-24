@@ -42,6 +42,7 @@ export default class extends Component<IProps, IState> {
   //处理change
   public handleChange = (e: any, mode: TMode) => {
     const { value: newData } = e.detail
+    const { error } = this.state
     if(mode === 'selector') {
       const { selector } = this.props
       if(selector) {
@@ -68,6 +69,7 @@ export default class extends Component<IProps, IState> {
         value: newData
       })
     }
+    if(error) this.setState({error: false})
   }
 
   //默认方法
@@ -77,10 +79,11 @@ export default class extends Component<IProps, IState> {
 
   //重置
   public reset = () => {
-    const { multi, selector } = this.props
-    if(multi || selector) this.restRef.current!.reset()
+    const { multi, selector, extraFactor } = this.props
+    if(extraFactor && (multi || selector)) this.restRef.current!.reset()
     this.setState({
-      value: this.initValue ? this.initValue : (this.props.multi ? [] : '')
+      value: this.initValue ? this.initValue : (this.props.multi ? [] : ''),
+      error: false
     })
   }
 
@@ -226,6 +229,7 @@ export default class extends Component<IProps, IState> {
         {
           (extraFactor && (selector || multi)) ?
           <Rest
+            handleError={(status) => {this.setState({error: status})}}
             ref={this.restRef}
             title={'找不到可手动添加, 但只上传最后一项'}
           ></Rest>

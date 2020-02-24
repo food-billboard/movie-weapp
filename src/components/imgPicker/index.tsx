@@ -42,7 +42,7 @@ export default class extends Component<IProps, IState> {
       }
     } 
     this.setImageItem(files)
-    this.controlShowBtn(!(fileLen === count))
+    this.controlShowBtn(!(fileLen >= count))
     Toast({
       title: operationType === 'add' ? '添加成功' : '删除成功',
       icon: 'success',
@@ -79,7 +79,8 @@ export default class extends Component<IProps, IState> {
   //重置
   public reset = () => {
     this.setState({
-      files: this.initValue ? this.initValue : []
+      files: this.initValue ? this.initValue : [],
+      showAddBtn: this.initValue ? (this.initValue.length >= count ? false : true) : true
     })
   }
 

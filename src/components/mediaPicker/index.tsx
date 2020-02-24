@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text, Image, Video } from '@tarojs/components'
+import { View, Text, Image, Button } from '@tarojs/components'
 import { AtButton } from 'taro-ui'
 import GVideo from '../video'
 import { IProps, IState, IItem } from './interface'
@@ -170,22 +170,24 @@ export default class extends Component<IProps, IState> {
       <View className='media' style={isObject(customStyle) ? customStyle : {}}>
         <View className='title at-row at-row__justify--between' style={{display: maxCount === items.length ? 'none' : 'flex'}}>
           <View className='image-title at-col at-col-5'>
-            <AtButton 
-              customStyle={{...style.backgroundColor('disabled'), ...style.color('primary'), ...style.border(1, 'disabled', 'solid', 'all')}}
+            <View 
+              className='at-row at-row__align--center at-row__justify--center btn' 
+              style={{...style.backgroundColor('disabled'), ...style.color('primary'), ...style.border(1, 'disabled', 'solid', 'all')}}
               onClick={this.handleImageChange.bind(this)}
             >
               <View className='at-icon at-icon-image'></View>
               <Text>图片选择</Text>
-            </AtButton>
+            </View>
           </View>
           <View className='video-title at-col at-col-5 at-col-offset-2'>
-            <AtButton 
-              customStyle={{...style.backgroundColor('disabled'), ...style.color('primary'), ...style.border(1, 'disabled', 'solid', 'all')}}
+            <View 
+              className='at-row at-row__align--center at-row__justify--center btn' 
+              style={{...style.backgroundColor('disabled'), ...style.color('primary'), ...style.border(1, 'disabled', 'solid', 'all')}}
               onClick={this.handleVideoChange.bind(this)}
             >
               <View className='at-icon at-icon-video'></View>
               <Text>视频选择</Text>
-            </AtButton>
+            </View>
           </View>
         </View>
         <View className='main at-row at-row--wrap' style={{marginTop: '10px'}}>

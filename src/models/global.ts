@@ -128,9 +128,11 @@ export default {
                     time: '发布时间',
                 }
             }
+            yield put({type: 'setData', payload: { appInfo: data.data }})
             return data.data
 
             const info = yield call(getAppInfo)
+            yield put({type: 'setData', payload: { appInfo: info.data }})
             return info
         },
 
