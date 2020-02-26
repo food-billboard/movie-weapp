@@ -1,7 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import { IProps, IState, IList } from './interface'
-
 import './index.scss'
 
 export default class List extends Component<IProps, IState> {
@@ -17,16 +16,6 @@ export default class List extends Component<IProps, IState> {
     public handlePreviewImage = (image: string) => {
         if(image && image.length) {
             const { list } = this.props
-            // const { imageList } = this.state
-            // if(list.length != imageList.length) {
-            //     let _list = list.map((val: IList) => {
-            //         const { image } = val
-            //         return image
-            //     })
-            //     this.setState({
-            //         imageList: _list
-            //     })
-            // }
             Taro.previewImage({
                 current: image,
                 urls: list.map((val: IList) => {

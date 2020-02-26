@@ -1,52 +1,50 @@
 import Taro, { Component } from '@tarojs/taro'
 import { AtTabs, AtTabsPane } from 'taro-ui'
-import { IState, IProps } from './interface'
+import { IState, IProps, TabList, idList, all, free, fee } from './interface'
 import './index.scss'
-import { style } from '~theme/global-style'
 
-export default class Head extends Component<IProps>{
+export default class Head extends Component<IProps, IState>{
     public static defaultProps = {
         screen: () => {}
     }
 
+    readonly tabList: Array<TabList> = [
+        {
+            title: '全部',
+            id: all
+        },
+        {
+            title: '免费',
+            id: free
+        },
+        {
+            title: '付费',
+            id: fee
+        }
+    ]
+
     public state:IState = {
-        current: 0,
-        tabList: [
-            {
-                title: '全部',
-                id: 'all'
-            },
-            {
-                title: '免费',
-                id: 'free'
-            },
-            {
-                title: '付费',
-                id: 'fee'
-            }
-        ]   
+        current: 0  
     }
 
     /**
      * 条件筛选
      */
     public handleClick = (value: number) => {
-        const { tabList } = this.state
         this.setState({
             current: value
         })
-        this.props.screen(tabList[value]['id'])
+        this.props.screen(idList[this.tabList[value]['id']])
     }
 
     public render() {
-        const { tabList } = this.state
-        const heads = tabList.map((value, index) => {
+        const heads = this.tabList.map((value, index) => {
             const { id } = value
             return (
                 <AtTabsPane 
                     current={this.state.current} 
                     index={0} 
-                    key={id}
+                    key={id.toString()}
                 >
                 </AtTabsPane>
             )
@@ -55,7 +53,7 @@ export default class Head extends Component<IProps>{
             <AtTabs 
                 animated={false}
                 current={this.state.current} 
-                tabList={tabList} 
+                tabList={this.tabList} 
                 onClick={this.handleClick.bind(this)}
                 className='head'    
             >

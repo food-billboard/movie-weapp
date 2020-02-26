@@ -3,7 +3,7 @@ import { View } from '@tarojs/components'
 import { IProps, IState } from './interface'
 import { Color } from '~theme/global-style'
 import { isObject } from '~utils'
-import { getStyle, setStyle } from '~config'
+import { getStyle } from '~config'
 
 import './index.scss'
 
@@ -19,7 +19,7 @@ export default class extends Component<IProps, IState> {
   }
 
   public state:IState = {
-    active: '#6190E8',
+    active: Color[0],
     color: [ ...Color ]
   }
 

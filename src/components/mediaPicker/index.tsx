@@ -1,13 +1,12 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text, Image, Button } from '@tarojs/components'
-import { AtButton } from 'taro-ui'
+import { View, Text, Image } from '@tarojs/components'
 import GVideo from '../video'
 import { IProps, IState, IItem } from './interface'
 import { IMAGE_CONFIG } from '~config'
 import { style } from '~theme/global-style'
 import { findIndex } from 'lodash'
 import { Toast } from '~components/toast'
-import { isObject } from '~utils'
+import { isObject, mediaType } from '~utils'
 
 import './index.scss'
 
@@ -29,16 +28,16 @@ export default class extends Component<IProps, IState> {
     isVideo: false
   }
 
-  public handleSelect = (type: 'image' | 'video') => {
-    if(type === 'image') {
+  public handleSelect = (type:keyof typeof mediaType) => {
+    if(mediaType[type] === mediaType.image) {
       return Taro.chooseImage({
-        count: count, 
+        count: IMAGE_CONFIG.count, 
         sizeType: ['original', 'compressed'],
         sourceType: ['album', 'camera'],
       })
-    }else if(type === 'video') {
+    }else if(mediaType[type] === mediaType.video) {
       return Taro.chooseVideo({
-        sourceType: ['album'],
+        sourceType: ['album']
       })
     }
   }
@@ -236,7 +235,7 @@ export default class extends Component<IProps, IState> {
         >
           {
             <GVideo
-              style={{width: '100%', height: '100%'}}
+              style={{width: '100%', height: '100%', ...(isVideo ? {} : {display: 'none'})}}
               src={activeVideo}
             ></GVideo>
           }

@@ -13,6 +13,12 @@ export default class extends Component<IProps, IState> {
     maxLen: 40
   }
 
+  //展开收起文字
+  readonly textContent = {
+    unfold: '查看详情>',
+    retract: '收起'
+  }
+
   /**
    * 获取详情
    */
@@ -53,7 +59,7 @@ export default class extends Component<IProps, IState> {
             style={{...style.color('thirdly')}} 
             className='detail'
           >
-            {show ? '收起' : '查看详情>'}
+            {show ? this.textContent.retract : this.textContent.unfold}
           </View> :
           null
         }

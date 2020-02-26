@@ -7,7 +7,7 @@ import { TypeColor } from '~theme/global-style'
 import './index.scss'
 
 import {mapStateToProps, mapDispatchToProps} from './connect'
-import {router} from '~utils'
+import { router, routeAlias } from '~utils'
 import {connect} from '@tarojs/redux'
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -61,27 +61,27 @@ export default class User extends Component<any>{
 
     //查看收藏
     public handleCheckStore = async () => {
-        router.push('/store', {id: this.id})
+        router.push(routeAlias.store, {id: this.id})
     }
 
     //查看关注
     public handleCheckAttention = async () => {
-        router.push('/attention', {id: this.id})
+        router.push(routeAlias.attention, {id: this.id})
     }
 
     //查看浏览记录
     public handleCheckRecord = async () => {
-        router.push('/record', { id: this.id })
+        router.push(routeAlias.record, { id: this.id })
     }
 
     //查看电影发布
     public handleCheckIssue = async () => {
-        router.push('/userissue', { id: this.id })
+        router.push(routeAlias.userissue, { id: this.id })
     }
 
     //查看评论
     public handleCheckComment = async () => {
-        router.push('/mycomment', { id: this.id })
+        router.push(routeAlias.mycomment, { id: this.id })
     }
 
     //用户界面的相关信息
@@ -94,7 +94,7 @@ export default class User extends Component<any>{
                 color: TypeColor['primary']
             },
             handle:this.handleCheckStore,
-            id: 'store'
+            id: Symbol('store')
         },
         {
             title: 'Ta的关注',
@@ -104,7 +104,7 @@ export default class User extends Component<any>{
                 color: TypeColor['primary']
             },
             handle:this.handleCheckAttention,
-            id: 'attention'
+            id: Symbol('attention')
         },
         {
             title: 'Ta的浏览记录',
@@ -114,7 +114,7 @@ export default class User extends Component<any>{
                 color: TypeColor['primary']
             },
             handle: this.handleCheckRecord,
-            id: 'record'
+            id: Symbol('record')
         },
         {
             title: 'Ta的评论',
@@ -124,7 +124,7 @@ export default class User extends Component<any>{
                 color: TypeColor['primary']
             },
             handle: this.handleCheckComment,
-            id: 'comment'
+            id: Symbol('comment')
         },
         {
             title: 'Ta的电影',
@@ -134,7 +134,7 @@ export default class User extends Component<any>{
                 color: TypeColor['primary']
             },
             handle: this.handleCheckIssue,
-            id: 'issue'
+            id: Symbol('issue')
         }
     ]
 

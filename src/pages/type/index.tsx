@@ -17,8 +17,13 @@ const SINGLE_HEADER_HEIGHT = 80
 
 const SCROLL_MAX_SHOW_COUNT = 10
 
-const SHOW_MORE = 'show_more'
-const HIDE_MORE = 'hide_more'
+const SHOW_MORE = 'SHOW_MORE'
+const HIDE_MORE = 'HIDE_MORE'
+
+const SHOW_TYPE = {
+    SHOW_MORE: Symbol('show_more'),
+    HIDE_MORE: Symbol('hide_more')
+}
 
 @connect(mapStateToProps, mapDispatchToPrps)
 export default class Index extends Component<any> {
@@ -114,9 +119,9 @@ export default class Index extends Component<any> {
     }
 
     //控制详细分类的显示隐藏
-    public handleControlTypeDetail = (type: 'show_more' | 'hide_more') => {
+    public handleControlTypeDetail = (type: keyof typeof SHOW_TYPE) => {
         let status = false
-        if(type === 'show_more') status = true
+        if(SHOW_TYPE[type] === SHOW_TYPE.SHOW_MORE) status = true
         this.setState({
             typeShow: status
         })
@@ -144,7 +149,6 @@ export default class Index extends Component<any> {
         })
 
         const headerHeight = (showType || !typeShow) ? SINGLE_HEADER_HEIGHT : SINGLE_HEADER_HEIGHT * (Math.ceil((type.length + 2) / 6))
-
         return (
             <GScrollView
                 style={{...bgColor}}
@@ -159,7 +163,7 @@ export default class Index extends Component<any> {
                     </View>
                 }
                 fetch={this.throttleFetchData}
-                header={headerHeight / 2}
+                header={headerHeight}
                 renderHeader={ 
                     <View className='header-type' style={{
                         ...bgColor, 
@@ -187,17 +191,6 @@ export default class Index extends Component<any> {
                                     : null
                                 }
                                 {list}
-                                {
-                                    !showType ?
-                                    <View 
-                                        className={'header-list header-list-size'}
-                                        style={{...style.color('primary'), fontWeight: 'normal'}}
-                                        onClick={(e) => {this.handleControlTypeDetail.call(this, SHOW_MORE)}}
-                                    >   
-                                        展开
-                                    </View>
-                                    : null
-                                }
                             </ScrollView>
                                 :
                             <View className='header-type-detail at-row at-row--wrap'>

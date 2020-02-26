@@ -27,6 +27,11 @@
       box-sizing:border-box;
       padding:0 20px;
       border-bottom:1px solid rgba(0, 0, 0, 0.1);
+      .textarea{
+        position:absolute;
+        left:20px;
+        top:20px;
+      }
     }
     .action {
       width:100%;
@@ -38,7 +43,7 @@
       top:10px;
       font-size:40px;
       z-index:1000;
-      padding:15px;
+      padding:30px;
     }
   }
 }

@@ -6,7 +6,7 @@ import { isObject } from '~utils'
 import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToProps } from './connect'
 import { FORM_ERROR } from '~config'
-import { IState, IProps, IOption } from './interface'
+import { IState, IProps, IOption, typeList } from './interface'
 import { style as styleColor } from '~theme/global-style'
 
 import './index.scss'
@@ -52,29 +52,27 @@ export default class extends Component<IProps, IState> {
     const { checkboxOption=[], type } = this.props
     if(checkboxOption.length)  return
     let data 
-    switch(type) {
-      case 'type': 
+    switch(typeList[type]) {
+      case typeList.type: 
         var _data = await this.props.getSwitch()
         data = _data.switch
         break
-      case 'actor':
+      case typeList.actor:
         var _data = await this.props.getActorList()
         data = _data.data
         break
-      case 'area':
+      case typeList.area:
         var _data = await this.props.getAreaList()
         data = _data.data
         break
-      case 'country':
+      case typeList.country:
         var _data = await this.props.getCountryList()
         data = _data.data
         break
-      case 'director':
+      case typeList.director:
         var _data = await this.props.getDirectorList()
         data = _data.data
         break
-      default:
-        data = []
     }
     await this.setState({
       checkOption: data.map((val: any) => {
@@ -174,7 +172,10 @@ export default class extends Component<IProps, IState> {
                 const { label, value } = val
                 return (
                 <View className={'at-col'} style={{marginBottom: '5px'}} key={value}>
-                  <AtTag key={value} customStyle={{fontSize: label.length >= 3 ? '18rpx' : '28rpx'}} >
+                  <AtTag 
+                    key={value} 
+                    customStyle={{fontSize: label.length >= 3 ? '18rpx' : '28rpx'}} 
+                  >
                     {label}
                   </AtTag>
                 </View>

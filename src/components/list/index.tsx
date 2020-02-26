@@ -2,9 +2,10 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import Item from './item'
 import { style } from '~theme/global-style'
-import './index.scss'
-import { router, formatTime, isObject } from '~utils'
+import { router, formatTime, isObject, routeAlias } from '~utils'
 import {  IProps } from './interface'
+
+import './index.scss'
 
 export default class List extends Component<IProps>{
     public static defaultProps: IProps = {
@@ -12,7 +13,7 @@ export default class List extends Component<IProps>{
     }
 
     public goTo = (id: string) => {
-        router.push('/detail', {id})
+        router.push(routeAlias.detail, {id})
     }
 
     public render() {

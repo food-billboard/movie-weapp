@@ -5,11 +5,17 @@ import { IProps } from './interface'
 import { style, TypeColor } from '~theme/global-style'
 import './index.scss'
 
-import {router} from '~utils'
+import { router, routeAlias } from '~utils'
 
 export default class Title extends Component<IProps>{
     public static defaultProps = {
         id: ''
+    }
+
+    //标题
+    readonly titleConfig = {
+        store: '收藏',
+        news: '通知'
     }
 
     public componentDidShow = () => {
@@ -19,11 +25,11 @@ export default class Title extends Component<IProps>{
     public handleClick = (value) => {
         const {id} = this.props
         switch(value) {
-            case '收藏':
-                router.push('/store', {id})
+            case this.titleConfig.store:
+                router.push(routeAlias.store, {id})
                 break;
-            case '通知':
-                router.push('/news', {id})
+            case this.titleConfig.news:
+                router.push(routeAlias.news, {id})
                 break;
         }
     }
@@ -34,19 +40,19 @@ export default class Title extends Component<IProps>{
                 style={{...style.border(1, 'thirdly', 'solid', 'bottom')}}
             >
                 <View className='message at-col at-col-5'
-                    onClick={() => {this.handleClick.call(this, '收藏')}}
+                    onClick={() => {this.handleClick.call(this, this.titleConfig.store)}}
                 >
                     <AtIcon value='message' size='30' color={TypeColor['secondary']}></AtIcon>
-                    <Text className='text'>收藏</Text>
+                    <Text className='text'>{this.titleConfig.store}</Text>
                 </View>
                 <View className='separate'
                     style={{...style.backgroundColor('thirdly')}}
                 ></View>
                 <View className='folder at-col at-col-5'
-                    onClick={() => {this.handleClick.call(this, '通知')}}
+                    onClick={() => {this.handleClick.call(this, this.titleConfig.news)}}
                 >
                     <AtIcon value='folder' size='30' color={TypeColor['secondary']}></AtIcon>
-                    <Text className='text'>通知</Text>
+                    <Text className='text'>{this.titleConfig.news}</Text>
                 </View>
             </View>
         )

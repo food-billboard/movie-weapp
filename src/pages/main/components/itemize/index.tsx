@@ -1,6 +1,6 @@
 import Taro, {Component} from '@tarojs/taro'
 import { AtGrid } from 'taro-ui'
-import {router} from '~utils'
+import { router, routeAlias } from '~utils'
 import { IProps, IState, List } from './interface'
 
 const COLUMN_COUNT = 4
@@ -20,7 +20,7 @@ class Itemize extends Component<IProps, IState>{
      */
     public goTo = (item: List, index: number) => {
         const { id } = item
-        return router.push('/type', {id})
+        return router.push(routeAlias.type, {id})
     }
 
     public render() {

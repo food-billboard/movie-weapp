@@ -19,12 +19,21 @@ export interface IProps {
   screen: (value: string) => any
 }
 
-interface TabList {
+export interface TabList {
   title: string,
-  id: string
+  id: symbol
 }
 
 export interface IState {
-  current: number,
-  tabList: Array<TabList>
+  current: number
+}
+
+export const all = Symbol('all')
+export const fee = Symbol('fee')
+export const free = Symbol('free')
+
+export const idList = {
+  [all]:'all',
+  [fee]: 'fee',
+  [free]: 'free'
 }

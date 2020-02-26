@@ -17,6 +17,7 @@ import {
     getLanguageList,
     getDirectorList,
     getActorList,
+    getOrderList
 } from '~services'
 
 let a = 0
@@ -28,6 +29,27 @@ export default {
 
     },
     effects: {
+
+        //获取排序方式列表
+        * getOrderList({_}, {call, put}) {
+            const d = {
+                success: true,
+                data: {
+                    data: [
+                        { label: '综合', id: '0'},
+                        { label: '点赞', id: '1' },
+                        { label: '价格升序', id: '2'},
+                        { label: '价格降序', id: '3'},
+                        { label: '播放量', id: '4'}
+                    ]
+                }
+            }
+            return d.data
+
+            const response = yield call(getOrderList)
+            return response
+        },
+
         //获取热搜
         * getHot({count=3}, {call, put}) {
             let data = {

@@ -345,3 +345,10 @@ export const getActorList = (count) => {
 export const getNotice = () => {
     return request('GET', '/api/movie/getNotice')
 }
+
+/**
+ * 获取排序列表
+ */
+export const getOrderList = () => {
+    return request('GET', '/api/movie/getOrderList')
+}

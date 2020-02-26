@@ -23,7 +23,7 @@
  *  rangeKey: 当前选择
  * }
  * 
- * mode: 单选表单选择模式
+ * modeList: 单选表单选择模式
  * 
  * multi: {
  *  range: 选择范围
@@ -48,6 +48,8 @@
  *  disabled: 控制禁止
  *  onCancel: 取消触发
  * }
+ * 
+ * fieldTypeList: date显示类型
  */
 
 interface ISelector {
@@ -57,7 +59,12 @@ interface ISelector {
   rangeKey?: string
 }
 
-export type TMode = 'selector' | 'time' | 'date' | 'multiSelector' 
+export const modeList = {
+  selector: Symbol('selector'),
+  time: Symbol('time'),
+  date: Symbol('date'),
+  multiSelector: Symbol('multiSelector')
+}
 
 interface IMulti {
   range: Array<string[]> | Array<number[]> | Array<Object[]>
@@ -78,7 +85,7 @@ interface ITime {
 interface IDate {
   start?: string
   end?: string
-  fields?: 'year' | 'month' | 'day'
+  fields?: keyof typeof fieldTypeList
   disabled?: boolean
   onCancel?: () => any
 }
@@ -98,4 +105,16 @@ export interface IState {
   value: string | Array<any>
   error: boolean
   disabled: boolean
+}
+
+export const fieldTypeList = {
+  year: 'YYYY',
+  month: 'YYYY-MM',
+  day: 'YYYY-MM-DD'
+}
+
+export const fieldTypeSymbol = {
+  year: Symbol('year'),
+  month: Symbol('month'),
+  day: Symbol('day')
 }

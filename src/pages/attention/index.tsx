@@ -2,13 +2,12 @@ import Taro, {Component, Config } from '@tarojs/taro'
 import { View, Image, Text } from '@tarojs/components'
 import GScrollView from '~components/scrollList'
 import { style } from '~theme/global-style'
-import './index.scss'
-
 import { throttle } from 'lodash'
-
-import { router } from '~utils'
+import { router, routeAlias } from '~utils'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
+
+import './index.scss'
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any>{
@@ -52,7 +51,7 @@ export default class extends Component<any>{
      * 获取用户信息
      */
     public getUser = (id: string) => {
-        router.push('/user', {id})
+        router.push(routeAlias.user, {id})
     }
 
     public render() {

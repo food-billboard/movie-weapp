@@ -70,7 +70,11 @@ const Direction = {
 type TLine = 'solid' | 'dashed'
 
 //色调开启时的色调类型
-type TType = 'day' | 'night' | false
+// type TType = 'day' | 'night' | false
+export const dateTypeList = {
+  day: Symbol(),
+  night: Symbol()
+}
 
 //默认的border样式
 const defaultBorder = {
@@ -81,11 +85,11 @@ const defaultBorder = {
 }
 
 //色调修改
-export const colorChange = (type: TType, color: string='#6190E8') => {
-  if(type === 'day') {
+export const colorChange = (type, color: string='#6190E8') => {
+  if(type === dateTypeList.day) {
     TypeColor = { ...TypeColor, ...dayTypeColor }
     setStyle(false)
-  }else if(type === 'night'){
+  }else if(type === dateTypeList.night){
     TypeColor = { ...TypeColor, ...nightTypeColor }
     setStyle(false)
   }else {

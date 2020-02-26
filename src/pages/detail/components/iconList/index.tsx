@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { ScrollView, View, Image } from '@tarojs/components'
 import './index.scss'
-import { router } from '~utils'
+import { router, routeAlias } from '~utils'
 import { style } from '~theme/global-style'
 import { IState, IProps } from './interface'
 
@@ -42,7 +42,7 @@ export default class extends Component<IProps, IState> {
         <View 
             className='content' 
             style={{visibility: activeShow ? 'visible' : 'hidden', ...style.backgroundColor('primary'), ...style.color('disabled')}}
-            onClick={() => {router.push('/comment', {id: this.props.id})}}
+            onClick={() => {router.push(routeAlias.commentdetail, {id: this.props.id})}}
           >
             {active}
             <View 

@@ -20,6 +20,12 @@
 
 export interface IProps {
   screen: (value: string) => void
+  getOrderList: () => any
+}
+
+export interface IRadio {
+  id: string
+  label: string
 }
 
 export interface List {
@@ -32,4 +38,5 @@ export interface IState {
   value: string,
   text: string,
   show: boolean,
+  radioList: Array<List>
 }

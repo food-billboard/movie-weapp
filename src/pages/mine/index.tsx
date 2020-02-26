@@ -5,11 +5,11 @@ import IconList from './components/icon'
 import List from '~components/linearlist'
 import IconHead from '~components/headicon'
 import { style, TypeColor } from '~theme/global-style'
-import { ISetting } from './interface'
+import { IList } from '~components/linearlist/interface'
 
 import './index.scss'
 
-import {router} from '~utils'
+import { router, routeAlias } from '~utils'
 
 import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToProps } from './connect'
@@ -27,7 +27,7 @@ export default class extends Component<any>{
     }
 
     //设置
-    readonly setting: Array<ISetting> = [
+    readonly setting: Array<IList> = [
         {
             title: 'Wo的发布',
             disabled: false,
@@ -38,9 +38,9 @@ export default class extends Component<any>{
                 color: TypeColor[ICON_COLOR]
             },
             handle: () => {
-                router.push('/userissue', { id: this.id })
+                router.push(routeAlias.userissue, { id: this.id })
             },
-            id: 'issue'
+            id: Symbol('issue')
         },
         {
             title: '设置',
@@ -53,9 +53,9 @@ export default class extends Component<any>{
                 color: TypeColor[ICON_COLOR]
             },
             handle: () => {
-                router.push('/setting')
+                router.push(routeAlias.setting)
             },
-            id: 'setting'
+            id: Symbol('setting')
         }
     ] 
 
@@ -115,7 +115,7 @@ export default class extends Component<any>{
                     </View>
                     <View className='list'>
                         <List
-                            list={this.setting.map((val: ISetting) => {
+                            list={this.setting.map((val: IList) => {
                                 const { iconInfo } = val
                                 return {
                                     ...val,

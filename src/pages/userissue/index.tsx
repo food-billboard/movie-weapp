@@ -4,7 +4,7 @@ import IconList from '~components/iconlist'
 import { style } from '~theme/global-style'
 import { throttle } from 'lodash'
 
-import {router} from '~utils'
+import { router, routeAlias } from '~utils'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 
@@ -50,7 +50,7 @@ export default class extends Component<any>{
    * 获取电影详情
    */
   public getUser = (id: string) => {
-    router.push('/detail', {id})
+    router.push(routeAlias.detail, {id})
   }
 
   /**

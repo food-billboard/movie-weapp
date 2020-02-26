@@ -4,7 +4,7 @@ import { AtIcon } from 'taro-ui'
 import GVideo from '../video'
 import Modal from '../model'
 import { Info } from '../model/interface'
-import { router, formatTime, formatNumber, TMediaType } from '~utils'
+import { router, formatTime, formatNumber, mediaType, routeAlias } from '~utils'
 import { style } from '~theme/global-style'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
@@ -106,32 +106,32 @@ class List extends Component<IProps, IState>{
      * 查看详细评论
      */
     public getDetail = () => {
-        router.push('/commentdetail', { id: this.commentId })
+        router.push(routeAlias.commentdetail, { id: this.commentId })
     }
 
     /**
      * 获取用户信息
      */
     public getUser = (id: string) => {
-        router.push('/user', {id})
+        router.push(routeAlias.user, {id})
     }
 
     /**
      * 预览媒体
      */
-    public handlePreviewMedia = (src: string, type: TMediaType) => {
+    public handlePreviewMedia = (src: string, type: keyof typeof mediaType) => {
         const { list } = this.props
         const { media=[] } = list
         if(!media.length) return
-        if(type === 'image') {
+        if(mediaType[type] === mediaType.image) {
             this.handlePreviewImage(src, media.filter((val: IMediaList) => {
                 const { type } = val
-                return type === 'image'
+                return mediaType[type] === mediaType.image
             }).map((val: IMediaList) => {
                 const { src } = val
                 return src
             }))
-        }else if(type === 'video') {
+        }else if(mediaType[type] === mediaType.video) {
             this.handlePreviewVideo(src)
         }
     }

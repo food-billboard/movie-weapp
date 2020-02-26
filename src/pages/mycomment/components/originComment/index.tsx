@@ -4,7 +4,7 @@ import { IProps } from './interface'
 import { style } from '~theme/global-style'
 import Ellipsis from '~components/ellipsis'
 
-import { router } from '~utils'
+import { router, routeAlias } from '~utils'
 
 import './index.scss'
 
@@ -23,9 +23,9 @@ export default class extends Component<IProps> {
 
   public handleClick = (id, origin) => {
     if(origin) {
-      router.push('/comment', { id })
+      router.push(routeAlias.comment, { id })
     }else {
-      router.push('/commentdetail', { id })
+      router.push(routeAlias.commentdetail, { id })
     }
   }
 

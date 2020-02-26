@@ -34,6 +34,16 @@ interface IDefaultItemStyle {
   color: string
 }
 
+interface IOperate<T> {
+  add: T
+  cancel: T
+}
+
+export const operateType: IOperate<TStatus> = {
+  add: 'add',
+  cancel: 'cancel'
+}
+
 export type TStatus = 'add' | 'cancel'
 
 export interface IStatusData {

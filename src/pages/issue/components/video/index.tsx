@@ -1,14 +1,13 @@
-import Taro, { Component, Config } from '@tarojs/taro'
+import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import GVideo from '~components/video'
 import { AtButton } from 'taro-ui'
-
-import './index.scss'
-
 import { isObject } from '~utils'
 import { FORM_ERROR } from '~config'
 import { IProps, IState } from './interface'
 import { style } from '~theme/global-style'
+
+import './index.scss'
 
 export default class extends Component<IProps, IState> {
 

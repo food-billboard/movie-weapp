@@ -2,9 +2,10 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import { IProps, IState } from './interface'
 import Ellipsis from '../ellipsis'
-import './index.scss'
 import { style } from '~theme/global-style'
-import { router } from '~utils'
+import { router, routeAlias } from '~utils'
+
+import './index.scss'
 
 export default class NewsHead extends Component<IProps, IState>{
     public static defaultProps: IProps = {
@@ -18,7 +19,7 @@ export default class NewsHead extends Component<IProps, IState>{
     }
 
     public handleClick = (id: string) => {
-        router.push('/detail', {id})
+        router.push(routeAlias.detail, {id})
     }
 
     public render() {

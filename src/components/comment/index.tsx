@@ -6,6 +6,7 @@ import { IMAGE_CONFIG } from '~config'
 import { AtTextarea } from "taro-ui"
 import { IProps, IState } from './interface'
 import { style } from '~theme/global-style'
+import { mediaType } from '~utils'
 
 import './index.scss'
 
@@ -64,9 +65,9 @@ export default class Comment extends Component<IProps>{
         if(data) {
             data.map((val: IItem) => {
                 const { url, type } = val
-                if(type === 'image') {
+                if(mediaType[type] === mediaType.image) {
                     image.push({url})
-                }else if(type === 'video') {
+                }else if(mediaType[type] === mediaType.video) {
                     video.push({url})
                 }
             })
@@ -91,6 +92,7 @@ export default class Comment extends Component<IProps>{
                         {
                             isOpen ? 
                             <AtTextarea 
+                                className='textarea'
                                 value={this.state.value}
                                 onChange={this.handleChange.bind(this)}
                                 maxLength={250}

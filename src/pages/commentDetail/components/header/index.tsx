@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Image, Text } from '@tarojs/components'
 import { AtIcon, AtAvatar } from 'taro-ui'
 import Ellipsis from '~components/ellipsis'
-import { router, formatTime, formatNumber } from '~utils'
+import { router, formatTime, formatNumber, routeAlias } from '~utils'
 import { IProps, IState } from './interface'
 import { style, TypeColor } from '~theme/global-style'
 import './index.scss'
@@ -41,7 +41,7 @@ export default class extends Component<IProps, IState> {
    * @param id 用户id
    */
   public getUser = (id: string) => {
-    router.push('/user', { id })
+    router.push(routeAlias.user, { id })
   }
 
   /**

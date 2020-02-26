@@ -3,7 +3,7 @@ import { View, ScrollView, Text } from '@tarojs/components'
 import { AtActivityIndicator } from 'taro-ui'
 import GDivider from '~components/divider'
 import Top from '../topbutton'
-import { IProps, IState } from './interface'
+import { IProps, IState, sourceTypeList } from './interface'
 import { isObject } from '~utils'
 import { style as customStyle } from '~theme/global-style'
 
@@ -65,7 +65,7 @@ export default class List extends Component<IProps, IState> {
     const { sourceType, fetch } = this.props
     this.setState({query})
     this.setState({loading: true})
-    if(sourceType === 'Scope') {
+    if(sourceTypeList[sourceType] === sourceTypeList.Scope) {
       const { data } = this.state
       const newData = await fetch(query, isInit)
       const { pageSize } = this.state.query
@@ -85,7 +85,7 @@ export default class List extends Component<IProps, IState> {
       }
       this.setState({data: nextData, loading: false})
       return
-    }else if(sourceType === 'Dva') {
+    }else if(sourceTypeList[sourceType] === sourceTypeList.Dva) {
       await fetch(query, isInit)
       await this.setState({loading: false})
       return

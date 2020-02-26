@@ -4,7 +4,7 @@ import { isObject } from '~utils'
 import Rest from '~components/restFactor'
 import moment from 'moment'
 import { FORM_ERROR } from '~config'
-import { IProps, IState, TMode } from './interface'
+import { IProps, IState, modeList, fieldTypeList } from './interface'
 import { style as customStyle } from '~theme/global-style'
  
 const STYLE = {
@@ -36,14 +36,49 @@ export default class extends Component<IProps, IState> {
 
   private initValue: any = false
 
+  //picker默认参数配置
+  readonly defaultConfig = {
+    rangeKey: {
+      selector: '',
+      multi: '',
+      time: '',
+      date: ''
+    },
+    range: {
+      selector: [],
+      multi: [],
+      time: [],
+      date: []
+    },
+    start: {
+      selector: '',
+      multi: '',
+      time: '00:00',
+      date: '1970-01-01'
+    },
+    end: {
+      selector: '',
+      multi: '',
+      time: '23:59',
+      date: ''
+    },
+    fields: {
+      selector: '',
+      multi: '',
+      time: '',
+      date: 'year'
+    },
+    time: 'mm:ss'
+  }
+
   //额外内容
   public restRef = Taro.createRef<Rest>()
 
   //处理change
-  public handleChange = (e: any, mode: TMode) => {
+  public handleChange = (e: any, mode) => {
     const { value: newData } = e.detail
     const { error } = this.state
-    if(mode === 'selector') {
+    if(mode === modeList.selector) {
       const { selector } = this.props
       if(selector) {
         const { range } = selector
@@ -51,7 +86,7 @@ export default class extends Component<IProps, IState> {
           value: range[newData]
         })
       } 
-    }else if(mode === 'multiSelector') {
+    }else if(mode === modeList.multiSelector) {
       const { multi } = this.props
       if(multi) {
         const { range } = multi
@@ -64,7 +99,7 @@ export default class extends Component<IProps, IState> {
           value: data
         })
       } 
-    }else if(mode === 'date' || mode === 'time') {
+    }else if(mode === modeList.date || mode === modeList.time) {
       this.setState({
         value: newData
       })
@@ -127,18 +162,7 @@ export default class extends Component<IProps, IState> {
 
     let dateShow
     if(date) {
-      switch(date.fields) {
-        case 'year': 
-          dateShow = 'YYYY'
-          break
-        case 'month':
-          dateShow = 'YYYY-MM'
-          break
-        case 'day': 
-        default:
-          dateShow = 'YYYY-MM-DD'
-          break
-      }
+      dateShow = fieldTypeList[date.fields='year']
     }
 
     const { value, error, disabled } = this.state
@@ -152,10 +176,10 @@ export default class extends Component<IProps, IState> {
           <Picker
             disabled={disabled ? disabled : (selector.disabled || false)}
             onCancel={selector.onCancel || this.defaultFn}
-            range={selector.range || []}
-            rangeKey={selector.rangeKey || ''}
+            range={selector.range || this.defaultConfig.range.selector}
+            rangeKey={selector.rangeKey || this.defaultConfig.rangeKey.selector}
             mode={'selector'}
-            onChange={(e) => {this.handleChange.call(this, e, 'selector')}}
+            onChange={(e) => {this.handleChange.call(this, e, modeList.selector)}}
             value={value}
           >
             <View className='picker'
@@ -170,10 +194,10 @@ export default class extends Component<IProps, IState> {
           multi ? 
           <Picker
             mode={'multiSelector'}
-            range={multi.range || []}
-            rangeKey={multi.rangeKey || ''}
+            range={multi.range || this.defaultConfig.range.multi}
+            rangeKey={multi.rangeKey || this.defaultConfig.rangeKey.multi}
             value={value}
-            onChange={(e) => {this.handleChange.call(this, e, 'multiSelector')}}
+            onChange={(e) => {this.handleChange.call(this, e, modeList.multiSelector)}}
             onColumnChange={multi.onColumnChange || this.defaultFn}
             disabled={disabled ? disabled : (multi.disabled || false)}
             onCancel={multi.onCancel || this.defaultFn}
@@ -191,11 +215,11 @@ export default class extends Component<IProps, IState> {
           <Picker
             {...date}
             mode={'date'}
-            onChange={(e) => {this.handleChange.call(this, e, 'date')}}
+            onChange={(e) => {this.handleChange.call(this, e, modeList.date)}}
             value={value}
-            start={date.start || '1970-01-01'}
+            start={date.start || this.defaultConfig.start.date}
             end={date.end || moment(new Date().getTime()).format(dateShow)}
-            fields={date.fields || 'day'}
+            fields={date.fields || this.defaultConfig.fields.date}
             disabled={disabled ? disabled : (date.disabled || false)}
             onCancel={date.onCancel || this.defaultFn}
           >
@@ -212,16 +236,16 @@ export default class extends Component<IProps, IState> {
           <Picker
             mode={'time'}
             value={value}
-            onChange={(e) => {this.handleChange.call(this, e, 'time')}}
+            onChange={(e) => {this.handleChange.call(this, e, modeList.time)}}
             onCancel={time.onCancel || this.defaultFn}
-            start={time.start || '00:00'}
-            end={time.end || '23:59'}
+            start={time.start || this.defaultConfig.start.time}
+            end={time.end || this.defaultConfig.end.time}
             disabled={disabled ? disabled : (time.disabled || false)}
           >
             <View className='picker'
               style={{..._style}}
             >
-              {title}: {(value + '').length ? moment(value).format('mm:ss') : ''}
+              {title}: {(value + '').length ? moment(value).format(this.defaultConfig.time) : ''}
             </View>
           </Picker>
           : null

@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro';
-import { request, router } from '~utils';
+import { request, router, routeConfig } from '~utils';
 import { requestError, getRequestCookie } from '~config'
 
 import models from './models'
@@ -12,27 +12,7 @@ export type IConfig = [
 ]
 
 const RouterConfig = {
-  routes: [
-    { path: 'pages/main/index', alias: '/main' },
-    { path: 'pages/mine/index', alias: '/mine' },
-    { path: 'pages/login/index', alias: '/login'},
-    { path: 'pages/register/index', alias: '/register'},
-    { path: 'pages/comment/index', alias: '/comment' },
-    { path: 'pages/news/index', alias: '/news' },
-    { path: 'pages/attention/index', alias: '/attention' },
-    { path: 'pages/detail/index', alias: '/detail' },
-    { path: 'pages/mycomment/index', alias: '/mycomment'},
-    { path: 'pages/record/index', alias: '/record'},
-    { path: 'pages/search/index', alias: '/search'},
-    { path: 'pages/setting/index', alias: '/setting'},
-    { path: 'pages/type/index', alias: '/type'},
-    { path: 'pages/user/index', alias: '/user'},
-    { path: 'pages/rank/index', alias: '/rank'},
-    { path: 'pages/commentdetail/index', alias: '/commentdetail' },
-    { path: 'pages/store/index', alias: '/store' },
-    { path: 'pages/issue/index', alias: '/issue' },
-    { path: 'pages/userissue/index', alias: '/userissue' }
-  ]
+  routes: routeConfig
 }
 
 const configs: IConfig = [

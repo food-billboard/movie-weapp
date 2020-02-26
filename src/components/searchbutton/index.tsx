@@ -1,10 +1,11 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtSearchBar, AtTag } from 'taro-ui'
-import './index.scss'
-import { router } from '~utils'
+import { router, routeAlias } from '~utils'
 import { IProps, IState } from './interface'
 import { style } from '~theme/global-style'
+
+import './index.scss'
 
 const HOT_HEIGHT = 35
 
@@ -57,7 +58,7 @@ class SearchButton extends Component<IProps, IState>{
      * 获取热搜信息
      */
     public getHot = (value: any, event: any) => {
-        router.push('/detail', {id: value.id})
+        router.push(routeAlias.detail, {id: value.id})
     }
 
     /**
@@ -72,7 +73,7 @@ class SearchButton extends Component<IProps, IState>{
     public handleClick = () => {
         const { disabled } = this.props
         if(!disabled) return
-        router.push('/search')
+        router.push(routeAlias.search)
     }
 
     public render() {

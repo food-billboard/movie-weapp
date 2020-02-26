@@ -5,6 +5,7 @@ import { IProps, IState } from './interface'
 import { style } from '~theme/global-style'
 
 export default class Button extends Component<IProps, IState>{
+
     public static defaultProps:IProps = {
         value: ['是', '不是'],
         active: 0,

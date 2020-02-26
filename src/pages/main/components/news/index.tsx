@@ -2,7 +2,7 @@ import Taro, {Component} from '@tarojs/taro'
 import { ScrollView, View, Image, Text } from '@tarojs/components'
 import { style, TypeColor } from '~theme/global-style'
 import { IProps } from './interface'
-import {router} from '~utils'
+import { router, routeAlias} from '~utils'
 
 import './index.scss'
 
@@ -18,7 +18,7 @@ class News extends Component<IProps>{
      * 路由跳转
      */
     public gotTo(id: string) {
-        router.push('/detail', {id})
+        router.push(routeAlias.detail, {id})
     }
 
     public render() {

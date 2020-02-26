@@ -33,14 +33,14 @@ interface IconInfo extends AtIconBaseProps{
     // customStyle?: string
 }
 
-interface IList {
+export interface IList {
     title: string,
     disabled?: boolean,
     note?: string,
     arrow?: up | down | right | undefined,
     iconInfo: IconInfo,
     handle?: any,
-    id: string
+    id: symbol
 }   
 
 export interface IProps {

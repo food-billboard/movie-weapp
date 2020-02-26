@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtTimeline, AtButton, AtTag } from 'taro-ui'
 import GInput from '../input'
-import { IProps, IState, IStatusData, TStatus } from './interface'
+import { IProps, IState, IStatusData, TStatus, operateType } from './interface'
 import { Toast, IQuery } from '~components/toast'
 import { Item } from 'taro-ui/@types/timeline'
 import { isObject } from '~utils'
@@ -110,7 +110,7 @@ export default class extends Component<IProps, IState> {
         error: false,
         disabled: false,
         //记录最近操作
-        status: [ ...status, 'add' ],
+        status: [ ...status, operateType.add ],
         statusData: [ ...statusData, {
             value: newItem,
             index: itemLen
@@ -155,7 +155,7 @@ export default class extends Component<IProps, IState> {
           disabled: arr.length ? false : true,
 
           //记录最近操作
-          status: [ ...status, 'cancel' ],
+          status: [ ...status, operateType.cancel ],
           statusData: [ ...statusData, {
               value: deleteItem,
               index: index
@@ -186,9 +186,9 @@ export default class extends Component<IProps, IState> {
 
     //判断需要撤销的操作
     const { value, index } = __statusData
-    if(__status === 'add') {
+    if(__status === operateType.add) {
       arr.splice(index, 1)
-    }else if(__status === 'cancel') {
+    }else if(__status === operateType.cancel) {
       arr.splice(index, 0, value)
     }
 

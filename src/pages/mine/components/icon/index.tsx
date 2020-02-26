@@ -1,7 +1,7 @@
 import Taro, {Component} from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtGrid } from "taro-ui"
-import {router} from '~utils'
+import { router, routeAlias } from '~utils'
 import { IProps, List } from './interface'
 import { style, TypeColor } from '~theme/global-style'
 
@@ -19,9 +19,16 @@ export default class IconList extends Component<IProps>{
         this.setState({typeColor: TypeColor})
     }
 
+    //标题配置
+    readonly titleConfig = {
+        attention: '关注',
+        comment: '我的评论',
+        record: '浏览记录'
+    }
+
     readonly list: Array<List> = [
         {
-            value: '关注',
+            value: this.titleConfig.attention,
             iconInfo: {
                 size: 28,
                 value: 'heart-2',
@@ -29,7 +36,7 @@ export default class IconList extends Component<IProps>{
             }
         },
         {
-            value: '我的评论',
+            value: this.titleConfig.comment,
             iconInfo: {
                 size: 28,
                 value: 'bookmark',
@@ -37,7 +44,7 @@ export default class IconList extends Component<IProps>{
             }
         },
         {
-            value: '浏览记录',
+            value: this.titleConfig.record,
             iconInfo: {
                 size: 28,
                 value: 'filter',
@@ -51,15 +58,15 @@ export default class IconList extends Component<IProps>{
         const {value} = item
         const {id} = this.props
         switch(value) {
-            case '关注': 
-                router.push('/attention', {id})
+            case titleConfig.attention: 
+                router.push(routeAlias.attention, {id})
                 break;
-            case '我的评论': 
-                router.push('/mycomment', {id})
+            case titleConfig.comment: 
+                router.push(routeAlias.mycomment, {id})
                 break
-            case '浏览记录':
+            case titleConfig.record:
             default:
-                router.push('/record', {id})
+                router.push(routeAlias.record, {id})
 
         }
     }

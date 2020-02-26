@@ -28,7 +28,7 @@
 //bottom定义的同时也需要定义renderBottom才可以显示bottom信息
 //bottom 内的内容只能是固定定位
 export interface IProps {
-  sourceType: 'Scope' | 'Dva',
+  sourceType: keyof typeof sourceTypeList,
   style?: any
   autoFetch?: boolean
   query?: any,
@@ -52,4 +52,9 @@ export interface IState {
   empty: boolean
   query: any
   loading: boolean
+}
+
+export const sourceTypeList = {
+  Scope: Symbol('scope'),
+  Dva: Symbol('Dva')
 }

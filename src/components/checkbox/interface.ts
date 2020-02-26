@@ -42,7 +42,7 @@ export interface IProps {
   checkboxOption?: Array<IOption>
   checkedList?: Array<string> | false
   style?: any
-  type: 'area' | 'actor' | 'director' | 'type' | 'country'
+  type: keyof typeof typeList
   needHiddenList?: boolean
   extraFactor?: boolean
   getSwitch: (count?:number) => any
@@ -59,4 +59,12 @@ export interface IState {
   show: boolean
   checkOption: Array<IOption>
   error: boolean
+}
+
+export const typeList = {
+  type: Symbol('type'),
+  actor: Symbol('actor'),
+  area: Symbol('area'),
+  country: Symbol('country'),
+  director: Symbol('director')
 }

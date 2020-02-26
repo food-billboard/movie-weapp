@@ -1,6 +1,6 @@
 import Taro, {Component} from '@tarojs/taro'
 import { Swiper, SwiperItem, Image } from '@tarojs/components'
-import {router} from '~utils'
+import { router, routeAlias } from '~utils'
 import { IProps } from './interface'
 import { TypeColor } from '~theme/global-style'
 
@@ -13,7 +13,7 @@ class Index extends Component<IProps>{
      * 轮播图地址跳转
      */
     public getDetail(id: string, event: any): void {
-        router.push('/detail', {id})
+        router.push(routeAlias.detail, {id})
     }
 
     public render() {

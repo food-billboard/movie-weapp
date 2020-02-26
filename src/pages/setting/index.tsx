@@ -5,8 +5,8 @@ import Model from '~components/model'
 import List from '~components/linearlist'
 import Comment from '~components/comment'
 import GColor from './components/color'
-import { TypeColor, colorChange } from '~theme/global-style'
-import { router, styleChange } from '~utils'
+import { TypeColor, colorChange, dateTypeList } from '~theme/global-style'
+import { router, styleChange, routeAlias } from '~utils'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { Toast } from '~components/toast'
@@ -18,7 +18,7 @@ import './index.scss'
 type TOptionType = 'on' | 'off'
 
 interface IOption extends Option<string> {
-    value: TOptionType
+    value: string
 }
 
 type right = 'right'
@@ -29,6 +29,11 @@ const warn: warn = 'warn'
 const primary: primary = 'primary'
 
 const ICON_COLOR = 'primary'
+
+const colorControl = {
+    on: 'on',
+    off: 'off'
+}
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Setting extends Component<any>{
@@ -144,7 +149,7 @@ export default class Setting extends Component<any>{
 
     //反馈
     readonly feedback = {
-        id: 'feedback',
+        id: Symbol('feedback'),
         title: '反馈',
         disabled: false,
         note: '',
@@ -161,11 +166,11 @@ export default class Setting extends Component<any>{
     //色调
     readonly colorStyle:Array<IOption> = [
         {
-            value: 'on',
+            value: colorControl.on,
             label: '开启色调'
         },
         {
-            value: 'off',
+            value: colorControl.off,
             label: '关闭色调',
         }
     ]
@@ -174,15 +179,15 @@ export default class Setting extends Component<any>{
     public colorStyleChange = async (value: TOptionType) => {
         this.radioRef.current!.handleClick(value)
         let status
-        if(value==='on') {
+        if(value === colorControl.on) {
             status = false
             const date = styleChange()
             if(date) {
-                colorChange('day')
+                colorChange(dateTypeList.day)
             }else {
-                colorChange('night')
+                colorChange(dateTypeList.night)
             } 
-        }else if(value==='off') {
+        }else if(value === colorControl.off) {
             const data = this.colorRef.current!.state.active
             colorChange(false, data)
             status = data
@@ -202,7 +207,7 @@ export default class Setting extends Component<any>{
     public state: any = {
         //关于
         about: {
-            id: 'about',
+            id: Symbol('about'),
             title: '关于我们',
             disabled: false,
             note: '',
@@ -259,7 +264,7 @@ export default class Setting extends Component<any>{
             await this.props.logout(this.id)
             Taro.hideLoading()
         }else {
-            router.push('/login')
+            router.push(routeAlias.login)
         }
     }
 

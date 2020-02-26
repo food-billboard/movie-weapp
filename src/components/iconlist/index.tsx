@@ -3,7 +3,7 @@ import { View, Text, Image } from '@tarojs/components'
 import { IProps } from './interface'
 import { style } from '~theme/global-style'
 import './index.scss'
-import { router, formatNumber } from '~utils'
+import { router, formatNumber, routeAlias } from '~utils'
 
 export default class IconList extends Component<IProps>{
     public static defaultProps: IProps = {
@@ -23,7 +23,7 @@ export default class IconList extends Component<IProps>{
      * 路由跳转
      */
     public goTo = (name, id, event) => {
-        router.push('/detail', {id})
+        router.push(routeAlias.detail, {id})
     }
 
     public render() {

@@ -6,10 +6,9 @@ import Itemize from './components/itemize'
 import News from './components/news'
 import Rank from './components/rank'
 import NoticeBar from '~components/noticeBar'
-import { colorChange, style, TypeColor } from '~theme/global-style'
+import { colorChange, style, TypeColor, dateTypeList } from '~theme/global-style'
 import { styleChange } from '~utils'
 import { getStyle } from '~config'
-import { AtTextarea } from 'taro-ui'
 
 import './index.scss'
 
@@ -57,12 +56,12 @@ export default class extends Component<any> {
     if(!_status) {
       const status = styleChange()
       if(status) {
-        colorChange('day')
+        colorChange(dateTypeList.day)
       }else {
-        colorChange('night')
+        colorChange(dateTypeList.night)
       } 
     }else { //色调关闭
-      colorChange(false, _status)
+      colorChange(null, _status)
     }
   }
 

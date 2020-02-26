@@ -8,14 +8,16 @@ import { style, TypeColor } from '~theme/global-style'
 import { throttle } from 'lodash'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
-import { router } from '~utils'
+import { router, routeAlias } from '~utils'
 
 const COLUMN_COUNT = 4
 
 const COLUMN_MAX = 12
 
-const SHOW_MORE = 'show_more'
-const HIDE_MORE = 'hide_more'
+const showType = {
+  SHOW_MORE: Symbol(),
+  HIDE_MORE: Symbol()
+}
 
 const SHOW_ICON = {
   value: 'chevron-right',
@@ -30,13 +32,13 @@ const HIDE_ICON = {
 }
 
 const SHOW_MORE_CONFIG = {
-  id: SHOW_MORE,
+  id: showType.SHOW_MORE,
   value: '展开',
   iconInfo: {...SHOW_ICON}
 }
 
 const HIDE_MORE_CONFIG = {
-  id: HIDE_MORE,
+  id: showType.HIDE_MORE,
   value: '收起',
   iconInfo: {...HIDE_ICON}
 }
@@ -133,13 +135,13 @@ export default class extends Component<any> {
 
   //查看详细信息
   public getDetail = async (id: string) => {
-    router.push('/detail', {id})
+    router.push(routeAlias.detail, {id})
   }
 
   //切换排行榜
   public exchangeRank = async (item, index: number) => {
     const { id, value } = item
-    if(id === HIDE_MORE || id === SHOW_MORE) return this.handleControlRank(id)
+    if(id === showType.HIDE_MORE || id === showType.SHOW_MORE) return this.handleControlRank(id)
     this.id = id
     this.title = value
     await this.fetchRankTypeData()
@@ -147,9 +149,9 @@ export default class extends Component<any> {
   }
 
   //展开收起排行榜
-  public handleControlRank = (id: 'hide_more' | 'show_more') => {
+  public handleControlRank = (id:keyof typeof showType) => {
     let status = true
-    if(id === 'hide_more') status = false
+    if(showType[id] === showType.HIDE_MORE) status = false
     this.setState({
       showMore: status
     })

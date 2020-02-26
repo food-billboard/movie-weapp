@@ -3,7 +3,7 @@ import { View, Image, Text } from '@tarojs/components'
 import './index.scss'
 import RankIcon from './icon'
 import { IProps, IState } from './interface'
-import { router } from '~utils'
+import { router, routeAlias } from '~utils'
 import { style } from '~theme/global-style'
 
 export default class Rank extends Component<IProps, IState>{
@@ -18,7 +18,7 @@ export default class Rank extends Component<IProps, IState>{
      * 获取详细信息
      */
     public getDetail = (id: string) => {
-        router.push('/detail', {id})
+        router.push(routeAlias.detail, {id})
     }
 
     public render() {
@@ -44,7 +44,7 @@ export default class Rank extends Component<IProps, IState>{
                 <Text 
                     className={'rank-title'} 
                     style={{...style.backgroundColor('secondary'), ...style.color('disabled')}}
-                    onClick={() => { router.push('/rank', { id, type }) }}
+                    onClick={() => { router.push(routeAlias.rank, { id, type }) }}
                 >{type}</Text>
                 <View className='ran-content'>
                     {ranks}
