@@ -157,7 +157,7 @@ export default class User extends Component<any>{
                 </View>
                 <GButton
                     type={'secondary'}
-                    style={{width: '100%', height: 120, position: 'fixed', left: 0, bottom: 5}}
+                    style={{width: '100%', height: 120, position: 'fixed', left: 0, bottom: 0}}
                     active={isAttention ? 1 : 0}
                     value={['关注', '取消关注']}
                     operate={this.attention}

@@ -1,21 +1,18 @@
 @import "~taro-ui/dist/style/components/flex.scss";
+$item_width: 125px;
 .header-type{
-    width:100%;
-    position:relative;
-    left:0;
-    top:0;
-    white-space:nowrap;
     overflow:hidden;
     transition:.3s;
     .header{
-
+        position:fixed;
+        white-space:nowrap;
     }
     .text{
         position:fixed;
         left:0;
         top:0;
         display:inline-block;
-        width:125px;
+        width:$item_width;
         height:80px;
         line-height:80px;
         z-index:9999;
@@ -30,14 +27,13 @@
         font-weight:bold;
     }
     .header-list:nth-of-type(1) {
-        margin-left:125px;
+        margin-left:$item_width;
     }
     .header-list-size{
-        width:125px;
+        width:$item_width;
     }
     .header-type-detail{
-        width:100%;
-        height:100%;
+        position:fixed;
     }
 }
 .btn{

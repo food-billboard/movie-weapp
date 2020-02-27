@@ -1,0 +1,24 @@
+$width:130px;
+$height:202px;
+.actor{
+  white-space: nowrap;
+  .item{
+    display:inline-block;
+    width:$width;
+    height:$height;
+    margin-left:20px;
+    .image-item{
+      width:100%;
+      height:($height - 32);
+    }
+  }
+  .text{
+    width:100%;
+    height:32px;
+    line-height:32px;
+    text-align:center;
+    text-overflow:ellipsis;
+    overflow:hidden;
+    white-space: nowrap;
+  }
+}

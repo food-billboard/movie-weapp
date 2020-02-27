@@ -41,14 +41,8 @@ export default class Content extends Component<IProps, IState>{
 
     //我的id
     readonly id = this.props.id
-
-    public state: IState = {
-        isOpened: false,
-        modalText: ''
-    }
     
     public render() {
-        const { isOpened, modalText } = this.state
         const { info, movie } = this.props
         const {
             name='',
@@ -112,8 +106,8 @@ export default class Content extends Component<IProps, IState>{
                                 return value
                             }).join(' ')}</Text>
                         </View>
-                        <View className='at-row at-row__justify--between director-lan'>
-                            <View className='at-col at-col-5 director'>
+                        <View className='director'>
+                            <View className='at-col director-content'>
                                 导演: <Text className={'text'}
                                         style={{...style.color('primary')}}
                                 >{director.map((val: ItypeList) => {
@@ -121,9 +115,6 @@ export default class Content extends Component<IProps, IState>{
                                     return value
                                 }).join(' ')}</Text>
                             </View>
-                            {/* <View className='at-col at-col-5 lan'>
-                                语言: <Text className='text'>{language}</Text>
-                            </View> */}
                         </View>
                         <View className='type'>
                             分类: <Text className={'text'}
@@ -133,11 +124,23 @@ export default class Content extends Component<IProps, IState>{
                                 return value
                             }).join(' ')}</Text>
                         </View>
-                        <View className='at-row at-row__justify--between time-area'>
-                            <View className='at-col at-col-5 time'>
+                        <View className='at-row at-row__justify--between time-publish'>
+                            <View className='at-col at-col-5 publish'>
                                 时间: <Text className={'text'}
                                     style={{...style.color('primary')}}
                                 >{formatTime(publishTime)}</Text>
+                            </View>
+                            <View className='at-col at-col-5 time'>
+                                上映: <Text className={'text'}
+                                    style={{...style.color('primary')}}
+                                >{formatTime(time)}</Text>
+                            </View>
+                        </View>
+                        <View className='at-row at-row__justify--between area-lang'>
+                            <View className='at-col at-col-5 lang'>
+                                语言: <Text className={'text'}
+                                    style={{...style.color('primary')}}
+                                >{language}</Text>
                             </View>
                             <View className='at-col at-col-5 area'>
                                 地区: <Text className={'text'}
@@ -153,7 +156,14 @@ export default class Content extends Component<IProps, IState>{
                             <Text className={'text'}
                                 style={{...style.color('primary')}}
                             >{formatNumber(hot)}</Text>
-                            <Text className='hot-text' style={{...style.color('thirdly')}}> 人看过</Text>
+                            <Text className='hot-text' style={{...style.color('thirdly')}}> 人收藏</Text>
+                        </View>
+                        <View className='look'>
+                            浏览: 
+                            <Text className={'text'}
+                                style={{...style.color('primary')}}
+                            >{formatNumber(people)}</Text>
+                            <Text className='look-text' style={{...style.color('thirdly')}}> 人看过</Text>
                         </View>
                         <View className='description'
                             style={{...style.border(1, 'disabled', 'dashed', 'left_right'), marginBottom: '10px'}}

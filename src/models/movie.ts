@@ -2168,15 +2168,48 @@ export default {
                     actor: [
                         {
                             id: '0',
-                            value: '龙套1号'
+                            value: '龙套1号',
+                            image: 'http://images.china.cn/attachement/jpg/site1000/20140709/00e04c3600081526f96d2a.jpg'
                         },
                         {
                             id: '1',
-                            value: '龙套2号'
+                            value: '龙套2号',
+                            image: 'http://images.china.cn/attachement/jpg/site1000/20140709/00e04c3600081526f96d2a.jpg'
                         },
                         {
                             id: '2',
-                            vlaue: '龙套3号'
+                            value: '龙套3号',
+                            image: 'http://images.china.cn/attachement/jpg/site1000/20140709/00e04c3600081526f96d2a.jpg'
+                        },
+                        {
+                            id: '0',
+                            value: '龙套1号',
+                            image: 'http://images.china.cn/attachement/jpg/site1000/20140709/00e04c3600081526f96d2a.jpg'
+                        },
+                        {
+                            id: '1',
+                            value: '龙套2号',
+                            image: 'http://images.china.cn/attachement/jpg/site1000/20140709/00e04c3600081526f96d2a.jpg'
+                        },
+                        {
+                            id: '2',
+                            value: '龙套3号',
+                            image: 'http://images.china.cn/attachement/jpg/site1000/20140709/00e04c3600081526f96d2a.jpg'
+                        },
+                        {
+                            id: '0',
+                            value: '龙套1号',
+                            image: 'http://images.china.cn/attachement/jpg/site1000/20140709/00e04c3600081526f96d2a.jpg'
+                        },
+                        {
+                            id: '1',
+                            value: '龙套2号',
+                            image: 'http://images.china.cn/attachement/jpg/site1000/20140709/00e04c3600081526f96d2a.jpg'
+                        },
+                        {
+                            id: '2',
+                            value: '龙套3号',
+                            image: 'http://images.china.cn/attachement/jpg/site1000/20140709/00e04c3600081526f96d2a.jpg'
                         }
                     ], 
                     type: [

@@ -156,56 +156,58 @@ export default class Index extends Component<any> {
                 scrollWithAnimation={true}
                 renderContent={
                     <View>
-
-                        {
-                            listShow ? (<LinearList list={typeDetail} />) : (<IconList list={typeDetail} />)
-                        }
+                        <View className='header-type' style={{
+                            ...bgColor, 
+                            height: headerHeight / 2 + 'px'
+                        }}
+                        >
+                            <Text className='text'
+                                style={{...style.color('thirdly'), ...bgColor}}
+                            >分类: </Text>
+                            {
+                                showType || !typeShow ?
+                                <ScrollView 
+                                    scrollX={true}
+                                    className='header'
+                                    style={{...bgColor}}
+                                >
+                                    {
+                                        !showType ?
+                                        <View 
+                                            className={'header-list header-list-size'}
+                                            style={{...style.color('primary'), fontWeight: 'normal'}}
+                                            onClick={(e) => {this.handleControlTypeDetail.call(this, SHOW_MORE)}}
+                                        >   
+                                            展开
+                                        </View>
+                                        : null
+                                    }
+                                    {list}
+                                </ScrollView>
+                                    :
+                                <View 
+                                    className='header-type-detail at-row at-row--wrap'
+                                    style={{...bgColor}}
+                                >
+                                    {list}
+                                    <View 
+                                        className={'header-list at-col at-col-2'}
+                                        style={{...style.color('primary'), fontWeight: 'normal'}}
+                                        onClick={(e) => {this.handleControlTypeDetail.call(this, HIDE_MORE)}}
+                                    >   
+                                        收起
+                                    </View>
+                                </View>
+                            }
+                        </View>
+                        <View>
+                            {
+                                listShow ? (<LinearList list={typeDetail} />) : (<IconList list={typeDetail} />)
+                            }
+                        </View>
                     </View>
                 }
                 fetch={this.throttleFetchData}
-                header={headerHeight}
-                renderHeader={ 
-                    <View className='header-type' style={{
-                        ...bgColor, 
-                        height: headerHeight / 2 + 'px'
-                    }}
-                    >
-                        <Text className='text'
-                            style={{...style.color('thirdly'), ...bgColor}}
-                        >分类: </Text>
-                        {
-                            showType || !typeShow ?
-                            <ScrollView 
-                                scrollX={true}
-                                className='header'
-                            >
-                                {
-                                    !showType ?
-                                    <View 
-                                        className={'header-list header-list-size'}
-                                        style={{...style.color('primary'), fontWeight: 'normal'}}
-                                        onClick={(e) => {this.handleControlTypeDetail.call(this, SHOW_MORE)}}
-                                    >   
-                                        展开
-                                    </View>
-                                    : null
-                                }
-                                {list}
-                            </ScrollView>
-                                :
-                            <View className='header-type-detail at-row at-row--wrap'>
-                                {list}
-                                <View 
-                                    className={'header-list at-col at-col-2'}
-                                    style={{...style.color('primary'), fontWeight: 'normal'}}
-                                    onClick={(e) => {this.handleControlTypeDetail.call(this, HIDE_MORE)}}
-                                >   
-                                    收起
-                                </View>
-                            </View>
-                        }
-                    </View>
-                }
                 bottom={80}
                 renderBottom={ <View className="btn">
                                 <Fab value={listShow} change={this.listChange} />

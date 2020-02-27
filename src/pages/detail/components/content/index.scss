@@ -33,9 +33,11 @@
             width:100%;
             .actor,
             .type,
-            .time-area,
+            .time-publish,
+            .area-lang,
             .hot,
-            .director-lan{
+            .look,
+            .director{
                 @extend .ellipsis;
                 text-align:left;
                 line-height:50px;
@@ -43,17 +45,24 @@
             .actor{
                 
             }
-            .director-lan{
+            .director-content{
                 
             }
             .type{
 
             }
-            .time-area{
+            .time-publish{
+                .time{
 
+                }
+                .publish{
+                    
+                }
             }
-            .hot{
-                .hot-text{
+            .hot,
+            .look{
+                .hot-text,
+                .look-text{
                     color:rgba(0, 0, 0, 0.8);
                     font-size:24px;
                 }

@@ -84,7 +84,10 @@ export default class Comment extends Component<IProps>{
                 className='comment'
                 style={{display: isOpen ? 'block' : 'none'}}
             >
-                <View className='shade'></View>
+                <View 
+                    className='shade'
+                    style={{visibility: isOpen ? 'visible' : 'hidden'}}
+                ></View>
                 <View 
                     className='main'
                 >
@@ -117,7 +120,10 @@ export default class Comment extends Component<IProps>{
                     </View>
                     <View 
                         className='close at-icon at-icon-close' 
-                        style={{...style.color('primary')}}
+                        style={{
+                            ...style.color('primary'),
+                            ...style.backgroundColor('disabled')
+                        }}
                         onClick={() => {this.close.call(this)}}
                     ></View>
                 </View>

@@ -199,6 +199,8 @@ export default class extends Component<IProps, IState> {
       status: status.length === _status.length ? status : _status,
       statusData: statusData.length === _statusData.length ? statusData : _statusData
     })
+    
+    this.inputRef.current!.reset()
   }
 
   public render() {

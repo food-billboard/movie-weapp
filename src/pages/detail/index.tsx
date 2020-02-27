@@ -1,5 +1,5 @@
 import Taro, {Component, Config} from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import { View, Text } from '@tarojs/components'
 import GVideo from '~components/video'
 import List from './components/imglist'
 import Content from './components/content'
@@ -7,6 +7,7 @@ import GButton from '~components/button'
 import IconList from './components/iconList'
 import Comment from '~components/comment'
 import GTag from './components/tag'
+import Actor from './components/actor'
 import { style } from '~theme/global-style'
 
 import './index.scss'
@@ -107,16 +108,35 @@ export default class extends Component<any> {
                     />
                 </View>
                 <View className='image'>
+                    <Text 
+                        style={{...style.color('primary')}}
+                        className='item-title'
+                    >截图</Text>
                     <List 
                         list={image}
                     />
                 </View>
+                <View className='actor'>
+                    <Text 
+                        style={{...style.color('primary')}}
+                        className='item-title'    
+                    >演员</Text>
+                    <Actor list={info ? info.actor : []} />
+                </View>
                 <View className='tag'> 
+                    <Text 
+                        style={{...style.color('primary')}}
+                        className='item-title'
+                    >大家都说</Text>
                     <GTag
                         list={tag}
                     ></GTag>
                 </View>
                 <View className='comment'>
+                    <Text 
+                        style={{...style.color('primary')}}
+                        className='item-title'
+                    >评论用户</Text>
                     <IconList
                         list={commentList}
                         id={this.id}        

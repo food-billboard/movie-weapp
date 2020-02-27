@@ -42,7 +42,7 @@ export default class extends Component<IProps, IState> {
         <View 
             className='content' 
             style={{visibility: activeShow ? 'visible' : 'hidden', ...style.backgroundColor('primary'), ...style.color('disabled')}}
-            onClick={() => {router.push(routeAlias.commentdetail, {id: this.props.id})}}
+            onClick={() => {router.push(routeAlias.comment, {id: this.props.id})}}
           >
             {active}
             <View 

@@ -29,8 +29,7 @@ import { ItypeList } from '~utils'
  * }
  * 
  * state: {
- *  isOpened: 控制详情显示隐藏
- *  modalText: modal文字
+ *
  * }
  */
 
@@ -62,6 +61,5 @@ interface Info {
 }
 
 export interface IState {
-  isOpened: boolean
-  modalText: string
+  
 }
