@@ -53,6 +53,11 @@ export default class Comment extends Component<IProps>{
         })
     }
 
+    //阻止手指滑动
+    public handleStopMove = (e) => {
+        e.stopPropagation()
+    }   
+
     /**
      * 发布评论
      */
@@ -87,6 +92,7 @@ export default class Comment extends Component<IProps>{
                 <View 
                     className='shade'
                     style={{visibility: isOpen ? 'visible' : 'hidden'}}
+                    onTouchMove={this.handleStopMove}
                 ></View>
                 <View 
                     className='main'

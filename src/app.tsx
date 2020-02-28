@@ -86,7 +86,8 @@ class App extends Component {
       'pages/store/index',
       'pages/commentdetail/index',
       'pages/issue/index',
-      'pages/userissue/index'
+      'pages/userissue/index',
+      'pages/special/index'
     ],
     window: {
       backgroundTextStyle: 'light',

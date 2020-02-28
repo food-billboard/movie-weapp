@@ -2,7 +2,8 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Image, Text, ScrollView } from '@tarojs/components'
 import { AtIcon } from 'taro-ui'
 import GVideo from '../video'
-import Modal from '../model'
+// import Modal from '../model'
+import Curtain from '../curtain'
 import { Info } from '../model/interface'
 import { router, formatTime, formatNumber, mediaType, routeAlias } from '~utils'
 import { style } from '~theme/global-style'
@@ -11,6 +12,13 @@ import {mapDispatchToProps, mapStateToProps} from './connect'
 import { IState, IProps, IMediaList } from './interface'
 
 import './index.scss'
+
+//媒体的图标类型
+const ICON_TYPE = {
+    [mediaType.video]: 'at-icon-video',
+    [mediaType.image]: 'at-icon-image',
+    [mediaType.audio]: 'at-icon-soung'
+}
 
 @connect(mapStateToProps, mapDispatchToProps)
 class List extends Component<IProps, IState>{
@@ -248,8 +256,15 @@ class List extends Component<IProps, IState>{
                                     className={'at-col at-col-4 image'}
                                     key={id}
                                 >
+                                    <View 
+                                        className={`image-icon at-icon ${ICON_TYPE[type]}`}
+                                        style={{
+                                            ...style.backgroundColor('bgColor'),
+                                            ...style.color('primary')
+                                        }}
+                                    ></View>
                                     {
-                                        type === 'video' ?
+                                        mediaType[type] === mediaType.video ?
                                         <Image 
                                             onClick={() => {this.handlePreviewMedia.call(this, src, 'video')}}
                                             src={image} 
@@ -259,7 +274,7 @@ class List extends Component<IProps, IState>{
                                         : null
                                     }
                                     {
-                                        type === 'image' ?
+                                        mediaType[type] === mediaType.image ?
                                         <Image 
                                             onClick={() => {this.handlePreviewMedia.call(this, src, 'image')}}
                                             src={src} 
@@ -294,7 +309,7 @@ class List extends Component<IProps, IState>{
                         })
                     }
                 </ScrollView>
-                <Modal
+                {/* <Modal
                     info={{...this.videoConfig, isOpen: videoShow}}
                     content={true}
                     renderContent={
@@ -312,7 +327,16 @@ class List extends Component<IProps, IState>{
                             ></GVideo>
                         </View>
                     }
-                ></Modal>
+                ></Modal> */}
+                <Curtain
+                    isOpen={videoShow}
+                    title={false}
+                    main={true}
+                    renderMain={<View>111111</View>}
+                    action={false}
+                    other={false}
+                    cancel={false}
+                ></Curtain>
             </View>
         )
     }

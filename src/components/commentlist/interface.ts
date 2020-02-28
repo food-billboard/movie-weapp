@@ -1,4 +1,4 @@
-import { TMediaType } from '~utils'
+import { mediaType } from '~utils'
 /**
  * 评论列表
  * props: {
@@ -64,7 +64,7 @@ interface CommentUsers {
 export interface IMediaList {
   image: string
   id: string
-  type: TMediaType
+  type: keyof typeof mediaType
   src: string
 }
 

@@ -30,7 +30,8 @@ export const routeAlias = {
   commentdetail: '/commentdetail',
   store: '/store',
   issue: '/issue',
-  userissue: '/userissue'
+  userissue: '/userissue',
+  special: '/special'
 }
 
 //路由配置
@@ -53,5 +54,13 @@ export const routeConfig = [
   { path: 'pages/commentdetail/index', alias: routeAlias.commentdetail },
   { path: 'pages/store/index', alias: routeAlias.store },
   { path: 'pages/issue/index', alias: routeAlias.issue },
-  { path: 'pages/userissue/index', alias: routeAlias.userissue }
+  { path: 'pages/userissue/index', alias: routeAlias.userissue },
+  { path: 'pages/special/index', alias: routeAlias.special },
 ]
+
+//轮播图路由跳转类型
+export const swiperRouteType = {
+  media: Symbol('media'),
+  comment: Symbol('comment'),
+  special: Symbol('special')
+}

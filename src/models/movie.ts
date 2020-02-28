@@ -17,7 +17,8 @@ import {
     getLanguageList,
     getDirectorList,
     getActorList,
-    getOrderList
+    getOrderList,
+    getSpecial
 } from '~services'
 
 let a = 0
@@ -29,6 +30,117 @@ export default {
 
     },
     effects: {
+
+        //获取专题电影列表
+        * getSpecial({id}, {call, put}) {
+            let d
+            if(a==0) {
+                d = {
+                success: true,
+                data: {
+                    data: [
+                        {
+                            id: '电影id',
+                            name: '电影名称',
+                            detail: '电影描述',
+                            image: '电影海报'
+                        },
+                        {
+                            id: '电影id',
+                            name: '电影名称',
+                            detail: '电影描述',
+                            image: '电影海报'
+                        },
+                        {
+                            id: '电影id',
+                            name: '电影名称',
+                            detail: '电影描述',
+                            image: '电影海报'
+                        },
+                        {
+                            id: '电影id',
+                            name: '电影名称',
+                            detail: '电影描述',
+                            image: '电影海报'
+                        },
+                        {
+                            id: '电影id',
+                            name: '电影名称',
+                            detail: '电影描述',
+                            image: '电影海报'
+                        },
+                        {
+                            id: '电影id',
+                            name: '电影名称',
+                            detail: '电影描述',
+                            image: '电影海报'
+                        },
+                        {
+                            id: '电影id',
+                            name: '电影名称',
+                            detail: '电影描述',
+                            image: '电影海报'
+                        },
+                        {
+                            id: '电影id',
+                            name: '电影名称',
+                            detail: '电影描述',
+                            image: '电影海报'
+                        },
+                        {
+                            id: '电影id',
+                            name: '电影名称',
+                            detail: '电影描述',
+                            image: '电影海报'
+                        },
+                        {
+                            id: '电影id',
+                            name: '电影名称',
+                            detail: '电影描述',
+                            image: '电影海报'
+                        },
+                    ]
+                }
+            }
+        }else if(a===1) {
+            d = {
+                success: true,
+                data: {
+                    data: [
+                        {
+                            id: '电影id',
+                            name: '电影名称',
+                            detail: '电影描述',
+                            image: '电影海报'
+                        },
+                        {
+                            id: '电影id',
+                            name: '电影名称',
+                            detail: '电影描述',
+                            image: '电影海报'
+                        },
+                        {
+                            id: '电影id',
+                            name: '电影名称',
+                            detail: '电影描述',
+                            image: '电影海报'
+                        },
+                    ]
+                }
+            }
+        }else {
+            d = {
+                success: true,
+                data: {
+                    data: []
+                }
+            }
+        }
+            return d.data
+
+            const data = yield call(getSpecial, id)
+            return data
+        },
 
         //获取排序方式列表
         * getOrderList({_}, {call, put}) {
@@ -86,22 +198,27 @@ export default {
                         {
                             id: 0,
                             image: 'http://img3.imgtn.bdimg.com/it/u=1208538952,1443328523&fm=26&gp=0.jpg',
+                            type: 'media'
                         },
                         {
                             id: 1,
                             image: 'http://a4.att.hudong.com/03/25/20300001045622130690259454464.jpg',
+                            type: 'comment'
                         },
                         {
                             id: 2,
                             image: 'http://img3.imgtn.bdimg.com/it/u=1208538952,1443328523&fm=26&gp=0.jpg',
+                            type: 'special'
                         },
                         {
                             id: 3,
                             image: 'http://a4.att.hudong.com/03/25/20300001045622130690259454464.jpg',
+                            type: 'media'
                         },
                         {
                             id: 4,
                             image: 'http://img3.imgtn.bdimg.com/it/u=1208538952,1443328523&fm=26&gp=0.jpg',
+                            type: 'special'
                         }
                     ]
                 }

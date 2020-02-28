@@ -352,3 +352,11 @@ export const getNotice = () => {
 export const getOrderList = () => {
     return request('GET', '/api/movie/getOrderList')
 }
+
+/**
+ * 获取专题电影列表
+ * @param id 专题id
+ */
+export const getSpecial = (id) => {
+    return request('GET', '/api/movie/special', { query: {id} })
+}

@@ -78,6 +78,18 @@
             box-sizing:border-box;
             padding-right:20px;
             margin-bottom:20px;
+            position:relative;
+            left:0;
+            top:0;
+            .image-icon{
+                position:absolute;
+                left:50%;
+                height:50%;
+                transform:translateX(-50%) translateY(-50%);
+                font-size:32px;
+                border-radius:32px;
+                opacity: 0.5;
+            }
             .image-content{
                 width:100%;
                 height:100%;
