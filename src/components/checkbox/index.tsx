@@ -6,7 +6,7 @@ import { isObject } from '~utils'
 import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToProps } from './connect'
 import { FORM_ERROR } from '~config'
-import { IState, IProps, IOption, typeList } from './interface'
+import { IState, IProps, IOption, typeList } from './index.d'
 import { style as styleColor } from '~theme/global-style'
 
 import './index.scss'

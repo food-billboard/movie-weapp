@@ -3,7 +3,7 @@ import {View} from '@tarojs/components'
 import { style } from '~theme/global-style'
 import './index.scss'
 import { Toast } from '~components/toast'
-import { IProps, IState } from './interface'
+import { IProps, IState } from './index.d'
 
 export default class Time extends Component<IProps>{
     public static defaultProps: IProps = {

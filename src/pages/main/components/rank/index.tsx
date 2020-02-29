@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Image, Text } from '@tarojs/components'
 import './index.scss'
 import RankIcon from './icon'
-import { IProps, IState } from './interface'
+import { IProps, IState } from './index.d'
 import { router, routeAlias } from '~utils'
 import { style } from '~theme/global-style'
 

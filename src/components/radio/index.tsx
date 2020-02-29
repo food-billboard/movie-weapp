@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtRadio, AtButton } from 'taro-ui'
 import Rest from '~components/restFactor'
-import { IProps, IState } from './interface'
+import { IProps, IState } from './index.d'
 import { isObject } from '~utils'
 import { FORM_ERROR } from '~config'
 

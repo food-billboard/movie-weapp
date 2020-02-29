@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import { AtDrawer } from 'taro-ui'
 import Forms from './form'
-import { IProps, IState } from './interface'
+import { IProps, IState } from './index.d'
 
 import './index.scss'
 

@@ -1,7 +1,7 @@
 import Taro, {Component} from '@tarojs/taro'
 import { AtGrid } from 'taro-ui'
 import { router, routeAlias } from '~utils'
-import { IProps, IState, List } from './interface'
+import { IProps, IState, List } from './index.d'
 
 const COLUMN_COUNT = 4
 

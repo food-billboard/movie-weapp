@@ -4,7 +4,7 @@ import { isObject } from '~utils'
 import Rest from '~components/restFactor'
 import moment from 'moment'
 import { FORM_ERROR } from '~config'
-import { IProps, IState, modeList, fieldTypeList } from './interface'
+import { IProps, IState, modeList, fieldTypeList } from './index.d'
 import { style as customStyle } from '~theme/global-style'
  
 const STYLE = {

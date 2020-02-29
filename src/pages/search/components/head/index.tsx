@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { AtTabs, AtTabsPane } from 'taro-ui'
-import { IState, IProps, TabList, idList, all, free, fee } from './interface'
+import { IState, IProps, TabList, idList, all, free, fee } from './index.d'
 import './index.scss'
 
 export default class Head extends Component<IProps, IState>{

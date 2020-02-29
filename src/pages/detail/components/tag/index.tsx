@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtTag } from 'taro-ui'
 import { isObject, ItypeList } from '~utils'
-import { IProps, IState } from './interface'
+import { IProps, IState } from './index.d'
 import { TypeColor } from '~theme/global-style'
 import './index.scss'
 

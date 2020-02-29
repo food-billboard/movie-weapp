@@ -8,7 +8,7 @@ import { connect } from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { Toast } from '~components/toast'
 import GCheckbox from '~components/checkbox'
-import { IState, IProps, FormDefault } from './interface'
+import { IState, IProps, FormDefault } from './index.d'
 import { FormData } from '../../../interface'
 import { style, TypeColor } from '~theme/global-style'
 

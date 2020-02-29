@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { ScrollView, View, Image, Text } from '@tarojs/components'
-import { IProps, IState, IList } from './interface'
+import { IProps, IState, IList } from './index.d'
 
 import './index.scss'
 
@@ -20,7 +20,6 @@ export default class extends Component<IProps> {
   public render() {
 
     const { list=[] } = this.props
-    console.log(list)
 
     return (
       <ScrollView

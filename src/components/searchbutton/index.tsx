@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtSearchBar, AtTag } from 'taro-ui'
 import { router, routeAlias } from '~utils'
-import { IProps, IState } from './interface'
+import { IProps, IState } from './index.d'
 import { style } from '~theme/global-style'
 
 import './index.scss'

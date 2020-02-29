@@ -1,7 +1,7 @@
 import Taro, {Component} from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtList, AtListItem } from "taro-ui"
-import { IProps } from './interface'
+import { IProps } from './index.d'
 
 import './index.scss'
 

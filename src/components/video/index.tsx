@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { Video } from '@tarojs/components'
-import { IProps } from './interface'
+import { IProps } from './index.d'
 import { isObject } from '~utils'
 
 import './index.scss'

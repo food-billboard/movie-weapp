@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
-import { IProps } from './interface'
+import { IProps } from './index.d'
 import { style } from '~theme/global-style'
 import Ellipsis from '~components/ellipsis'
 

@@ -3,7 +3,7 @@ import { View, Text } from '@tarojs/components'
 import { AtRadio } from 'taro-ui'
 import { style } from '~theme/global-style'
 import './index.scss'
-import { IProps, IState, List, IRadio } from './interface'
+import { IProps, IState, List, IRadio } from './index.d'
 import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToProps } from './connect'
 

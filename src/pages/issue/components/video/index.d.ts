@@ -1,4 +1,4 @@
-import { IProps as IVideo } from '~components/video/interface'
+import { IProps as IVideo } from '~components/video/index.d'
 /**
  * 视频选择表单组件
  * props: {

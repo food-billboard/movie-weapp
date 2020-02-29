@@ -1,7 +1,7 @@
 import Taro, {Component} from '@tarojs/taro'
-import { Swiper, SwiperItem, Image } from '@tarojs/components'
+import { Swiper, SwiperItem, Image, View } from '@tarojs/components'
 import { router, routeAlias, swiperRouteType } from '~utils'
-import { IProps } from './interface'
+import { IProps } from './index.d'
 import { TypeColor } from '~theme/global-style'
 
 class Index extends Component<IProps>{
@@ -33,7 +33,8 @@ class Index extends Component<IProps>{
             return (
                 <SwiperItem 
                     key={id}
-                    onClick={(event) => {this.getDetail.call(this, id, type)}}>
+                    onClick={(event) => {this.getDetail.call(this, id, type)}}
+                >
                     <Image
                         style={{width: "100%", height: "100%"}}
                         src={image}
@@ -47,7 +48,8 @@ class Index extends Component<IProps>{
                 indicatorActiveColor={TypeColor['disabled']}
                 circular
                 indicatorDots
-                autoplay>
+                autoplay={false}
+            >
                 {swiper}
             </Swiper>
         )   

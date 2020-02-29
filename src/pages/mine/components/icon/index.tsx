@@ -2,7 +2,7 @@ import Taro, {Component} from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtGrid } from "taro-ui"
 import { router, routeAlias } from '~utils'
-import { IProps, List } from './interface'
+import { IProps, List } from './index.d'
 import { style, TypeColor } from '~theme/global-style'
 
 import './index.scss'

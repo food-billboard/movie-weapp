@@ -5,7 +5,7 @@ import IconList from './components/icon'
 import List from '~components/linearlist'
 import IconHead from '~components/headicon'
 import { style, TypeColor } from '~theme/global-style'
-import { IList } from '~components/linearlist/interface'
+import { IList } from '~components/linearlist/index.d'
 
 import './index.scss'
 

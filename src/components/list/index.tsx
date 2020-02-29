@@ -3,7 +3,7 @@ import { View, Image } from '@tarojs/components'
 import Item from './item'
 import { style } from '~theme/global-style'
 import { router, formatTime, isObject, routeAlias } from '~utils'
-import {  IProps } from './interface'
+import {  IProps } from './index.d'
 
 import './index.scss'
 

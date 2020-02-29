@@ -3,7 +3,7 @@ import { View } from '@tarojs/components'
 import RadioList from '../radio'
 import Method from '../method' 
 import Select from '../select'
-import { IProps } from './interface'
+import { IProps } from './index.d'
 import { FormData } from '../../interface'
 
 import './index.scss'

@@ -3,7 +3,7 @@ import { View, Input, Textarea } from '@tarojs/components'
 import { AtTextarea, AtInput } from 'taro-ui'
 import { isObject } from '~utils'
 import { FORM_ERROR } from '~config'
-import { IProps, IState } from './interface'
+import { IProps, IState } from './index.d'
 
 import './index.scss'
 

@@ -3,7 +3,7 @@ import { View, Image, Text } from '@tarojs/components'
 import { AtIcon, AtAvatar } from 'taro-ui'
 import Ellipsis from '~components/ellipsis'
 import { router, formatTime, formatNumber, routeAlias } from '~utils'
-import { IProps, IState } from './interface'
+import { IProps, IState } from './index.d'
 import { style, TypeColor } from '~theme/global-style'
 import './index.scss'
 

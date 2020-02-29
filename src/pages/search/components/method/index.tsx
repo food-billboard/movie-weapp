@@ -2,7 +2,7 @@ import Taro, {Component} from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import icon from '../../../../assets/icon.png'
 import list from '../../../../assets/list.png'
-import { IProps, IState } from './interface'
+import { IProps, IState } from './index.d'
 
 import './index.scss'
 

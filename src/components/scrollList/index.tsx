@@ -3,7 +3,7 @@ import { View, ScrollView, Text } from '@tarojs/components'
 import { AtActivityIndicator } from 'taro-ui'
 import GDivider from '~components/divider'
 import Top from '../topbutton'
-import { IProps, IState, sourceTypeList } from './interface'
+import { IProps, IState, sourceTypeList } from './index.d'
 import { isObject } from '~utils'
 import { style as customStyle } from '~theme/global-style'
 

@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import Modal from '../model'
 import { AtNoticebar } from 'taro-ui'
-import { IProps, IState } from './interface'
+import { IProps, IState } from './index.d'
 
 export default class extends Component<IProps, IState> {
 

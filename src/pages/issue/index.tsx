@@ -279,7 +279,6 @@ export default class extends Component<any> {
       description,
       language
     } = info
-    console.log(111)
     return (
       <View className='issue' style={{...style.backgroundColor('bgColor')}}>
         <View className='video'>

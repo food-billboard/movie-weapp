@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
-import { IProps, IState } from './interface'
+import { IProps, IState } from './index.d'
 import { style } from '~theme/global-style'
 import { isObject } from '~utils'
 

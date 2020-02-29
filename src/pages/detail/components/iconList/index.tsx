@@ -3,7 +3,7 @@ import { ScrollView, View, Image } from '@tarojs/components'
 import './index.scss'
 import { router, routeAlias } from '~utils'
 import { style } from '~theme/global-style'
-import { IState, IProps } from './interface'
+import { IState, IProps } from './index.d'
 
 export default class extends Component<IProps, IState> {
 

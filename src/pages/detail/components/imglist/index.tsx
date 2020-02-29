@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
-import { IProps, IState, IList } from './interface'
+import { IProps, IState, IList } from './index.d'
 import './index.scss'
 
 export default class List extends Component<IProps, IState> {

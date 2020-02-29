@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Image } from '@tarojs/components'
-import { IProps } from './interface'
+import { IProps } from './index.d'
 import { style } from '~theme/global-style'
 import './index.scss'
 import { router, formatNumber, routeAlias } from '~utils'
