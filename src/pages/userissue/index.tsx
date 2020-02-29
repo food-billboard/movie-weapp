@@ -47,13 +47,6 @@ export default class extends Component<any>{
   public throttleFetchData = throttle(this.fetchData, 2000)
 
   /**
-   * 获取电影详情
-   */
-  public getUser = (id: string) => {
-    router.push(routeAlias.detail, {id})
-  }
-
-  /**
    * 修改电影内容
    */
   public editMovie = async (id: string) => {

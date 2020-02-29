@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import { IProps, IState } from './interface'
+import { IProps, IState } from './index.d'
 import { isObject } from '~utils'
 import { style as customeStyle } from '~theme/global-style'
 
@@ -16,27 +16,22 @@ export default class extends Component<IProps, IState> {
 
   //取消
   public handleCancel = () => {
-    this.handleclose()
+    this.props.handleClose()
   }
 
-  //关闭
-  public handleclose = () => {
-    this.setState({
-      isOpen: false
-    })
+  //阻止手指滑动
+  public stopMove = (e) => {
+    e.stopPropagation()
   }
 
   public render() {
 
     const { 
-      style={}, 
-      renderTitle,
+      contentStyle={}, 
+      curtainStyle={},
       title=false,
-      renderMain, 
       main=false,
-      renderAction, 
       action=false,
-      renderOther, 
       other=false,
       cancel=true ,
       isOpen=false
@@ -45,15 +40,17 @@ export default class extends Component<IProps, IState> {
     return (
       <View 
         className='curtain'
-        style={{ ...(isObject(style) ? style : {}), display: isOpen ? 'block' : 'none' }}
+        style={{ display: isOpen ? 'block' : 'none' }}
       > 
         <View 
           className='shadow'
-          style={{...customeStyle.backgroundColor('primary')}}
+          onTouchMove={this.stopMove}
+          style={{...customeStyle.backgroundColor('primary'), ...(isObject(curtainStyle) ? curtainStyle : {})}}
           onClick={() => {cancel ? (this.props.handleCancel ? this.props.handleCancel.call(this) : this.handleCancel.call(this)) : this.emptyFn}}
         ></View>
         <View 
           className='main'
+          style={{...customeStyle.backgroundColor('bgColor'), ...(isObject(contentStyle) ? contentStyle : {})}}
         >
           {
             title && 
@@ -62,14 +59,14 @@ export default class extends Component<IProps, IState> {
               style={{...customeStyle.border(1, 'disabled', 'solid', 'bottom')}}
             >
               {
-                renderTitle
+                this.props.renderTitle
               }
             </View>
           }
           {
             main && 
             <View className='content'>
-              {renderMain}
+              {this.props.renderMain}
             </View>
           }
           {
@@ -78,19 +75,19 @@ export default class extends Component<IProps, IState> {
               className='action'
               style={{...customeStyle.border(1, 'disabled', 'solid', 'top')}}
             >
-              {renderAction}
+              {this.props.renderAction}
             </View>
           }
           {
             other &&
             <View className='other'>
-              {renderOther}
+              {this.props.renderOther}
             </View>
           }
           <View 
             className='close at-icon at-icon-close'
             style={{...customeStyle.backgroundColor('bgColor'), ...customeStyle.color('primary')}}
-            onClick={this.handleclose}
+            onClick={this.props.handleClose}
           ></View>
         </View>
       </View>

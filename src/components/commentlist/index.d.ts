@@ -14,6 +14,7 @@ import { mediaType } from '~utils'
  *  list: 评论列表
  *  activeVideo: 当前显示的视频
  *  videoShow: 控制视频的显示隐藏
+ *  activeVideoPoster: 当前显示视频的海报
  * }
  * 
  * user: {
@@ -100,4 +101,5 @@ export interface IState {
   list: IList
   activeVideo: string
   videoShow: boolean
+  activeVideoPoster: string
 }

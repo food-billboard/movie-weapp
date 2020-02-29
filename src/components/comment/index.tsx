@@ -1,12 +1,13 @@
 import Taro, { Component } from '@tarojs/taro'
 import { Button, View } from '@tarojs/components'
 import MediaPicker from '../mediaPicker'
-import { IItem } from '../mediaPicker/interface'
+import { IItem } from '../mediaPicker/index.d'
 import { IMAGE_CONFIG } from '~config'
 import { AtTextarea } from "taro-ui"
-import { IProps, IState } from './interface'
+import { IProps, IState } from './index.d'
 import { style } from '~theme/global-style'
 import { mediaType } from '~utils'
+import Curtain from '../curtain'
 
 import './index.scss'
 
@@ -36,12 +37,21 @@ export default class Comment extends Component<IProps>{
     }
 
     //modal关闭
-    public close = () => {
-        this.setState({
-            isOpen: false,
-            value: '说点什么吧...'
-        })
-        this.mediaPickerRef.current!.reset()
+    public close = async (complete:boolean=false) => {
+        if(!complete){
+            const data = this.mediaPickerRef.current!.state!.isVideo
+            if(data) return this.mediaPickerRef.current!.videoClose()
+            await Taro.showModal({
+                title: '温馨提示',
+                content: '你填写的内容还没有提交，是否关闭',
+            }).then(res => {
+                const { confirm } = res
+                if(!confirm) return
+                this.reset()
+            })
+        }else {
+            this.reset()
+        }
     }
 
     /**
@@ -58,13 +68,22 @@ export default class Comment extends Component<IProps>{
         e.stopPropagation()
     }   
 
+    //重置
+    public reset = () => {
+        this.setState({
+            isOpen: false,
+            value: '说点什么吧...'
+        })
+        this.mediaPickerRef.current!.reset()
+    }
+
     /**
      * 发布评论
      */
     public publish = async () => {
-        const { value, isOpen } = this.state
+        const { value } = this.state
         const data = await this.mediaPickerRef.current!.getData(false)
-        this.close()
+        this.close(true)
         let image:Array<any> = [],
             video:Array<any> = []
         if(data) {
@@ -85,19 +104,17 @@ export default class Comment extends Component<IProps>{
         const { isOpen } = this.state
         const { buttonText } = this.props
         return (
-            <View 
-                className='comment'
-                style={{display: isOpen ? 'block' : 'none'}}
-            >
-                <View 
-                    className='shade'
-                    style={{visibility: isOpen ? 'visible' : 'hidden'}}
-                    onTouchMove={this.handleStopMove}
-                ></View>
-                <View 
-                    className='main'
-                >
-                    <View className='content'>
+            <Curtain
+                isOpen={isOpen}
+                title={false}
+                main={true}
+                action={true}
+                other={true}
+                handleClose={() => {this.close.call(this)}}
+                cancel={false}
+                contentStyle={{width: '300px'}}
+                renderMain={
+                    <View className='main'>
                         {
                             isOpen ? 
                             <AtTextarea 
@@ -114,26 +131,20 @@ export default class Comment extends Component<IProps>{
                             style={{marginTop:'20px'}}
                             ref={this.mediaPickerRef}
                             height={70}
+                            close={false}
                         ></MediaPicker>
                     </View>
-                    <View className='action'>
-                        <Button
-                            onClick={this.publish}
-                            style={{...style.backgroundColor('disabled'), ...style.color('primary')}}
-                        >
-                            {buttonText}
-                        </Button>
-                    </View>
-                    <View 
-                        className='close at-icon at-icon-close' 
-                        style={{
-                            ...style.color('primary'),
-                            ...style.backgroundColor('disabled')
-                        }}
-                        onClick={() => {this.close.call(this)}}
-                    ></View>
-                </View>
-            </View>
+                }
+                renderAction={
+                    <Button
+                        className='action'
+                        onClick={this.publish}
+                        style={{...style.backgroundColor('disabled'), ...style.color('primary')}}
+                    >
+                        {buttonText}
+                    </Button>
+                }
+            ></Curtain>
         )
     }
 }

@@ -6,6 +6,7 @@
  *  style: 样式
  *  width: 图片宽度
  *  height: 图片高度
+ *  close: 是否需要关闭按钮
  * }
  * 
  * state: {
@@ -49,6 +50,7 @@ export interface IFile {
   style?: any
   width?: number | false
   height?:number | false
+  close?: boolean
 }
 
  export interface IState {

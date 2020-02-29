@@ -38,6 +38,7 @@ export default {
                 d = {
                 success: true,
                 data: {
+                    title: '专题标题',
                     data: [
                         {
                             id: '电影id',
@@ -106,6 +107,7 @@ export default {
             d = {
                 success: true,
                 data: {
+                    title: '专题标题',
                     data: [
                         {
                             id: '电影id',
@@ -132,6 +134,7 @@ export default {
             d = {
                 success: true,
                 data: {
+                    title: '专题标题',
                     data: []
                 }
             }
@@ -722,11 +725,11 @@ export default {
                         comment: [
                         {   
                             user: {
-                                name: '评论人姓名',
+                                name: '评论人姓名1111',
                                 time: 1234324324,
                                 image: 'http://img0.imgtn.bdimg.com/it/u=1339525308,2468653122&fm=11&gp=0.jpg',
                                 id: 0,
-                                content: '这里是评论内容，不管你看不看，我都在这里，我不管',
+                                content: '这里是评论内容，不管你看不看，我都在这里，我不管aaaoooeee',
                                 hot: 100,
                                 isHot: true
                             },
@@ -741,8 +744,8 @@ export default {
                                 {
                                     image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
                                     id: '图片id',
-                                    src: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
-                                    type: 'image'
+                                    type: 'video',
+                                    src:'https://vdeptold.bdstatic.com/6739726e636151456e39614c78593978/466e573349674d34/129eaf60414fd82d36d0463f0a4700fb1ad027d6412ef5d2d75b5d9039915ca176a717310d86d952c407bafe710e81f7e065d797e2108810e9f5e126a0b455c04755799f49c49ad44f499dd8ffa5981b39791e054010872e26f991d17fa721fe.mp4?auth_key=1582894620-0-0-a0453837f02479986128e3c9f98510cd'
                                 },
                                 {
                                     image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
@@ -785,8 +788,8 @@ export default {
                                 {
                                     image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
                                     id: '图片id',
-                                    type: 'image',
-                                    src: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg'
+                                    type: 'video',
+                                    src:'https://vdeptold.bdstatic.com/6739726e636151456e39614c78593978/466e573349674d34/129eaf60414fd82d36d0463f0a4700fb1ad027d6412ef5d2d75b5d9039915ca176a717310d86d952c407bafe710e81f7e065d797e2108810e9f5e126a0b455c04755799f49c49ad44f499dd8ffa5981b39791e054010872e26f991d17fa721fe.mp4?auth_key=1582894620-0-0-a0453837f02479986128e3c9f98510cd'
                                 },
                                 {
                                     image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
@@ -1190,8 +1193,8 @@ export default {
                                 {
                                     image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
                                     id: '图片id',
-                                    type: 'image',
-                                    src: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg'
+                                    type: 'video',
+                                    src:'https://vdeptold.bdstatic.com/6739726e636151456e39614c78593978/466e573349674d34/129eaf60414fd82d36d0463f0a4700fb1ad027d6412ef5d2d75b5d9039915ca176a717310d86d952c407bafe710e81f7e065d797e2108810e9f5e126a0b455c04755799f49c49ad44f499dd8ffa5981b39791e054010872e26f991d17fa721fe.mp4?auth_key=1582894620-0-0-a0453837f02479986128e3c9f98510cd'
                                 },
                                 {
                                     image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
@@ -1234,8 +1237,8 @@ export default {
                                 {
                                     image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
                                     id: '图片id',
-                                    type: 'image',
-                                    src: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg'
+                                    type: 'video',
+                                    src:'https://vdeptold.bdstatic.com/6739726e636151456e39614c78593978/466e573349674d34/129eaf60414fd82d36d0463f0a4700fb1ad027d6412ef5d2d75b5d9039915ca176a717310d86d952c407bafe710e81f7e065d797e2108810e9f5e126a0b455c04755799f49c49ad44f499dd8ffa5981b39791e054010872e26f991d17fa721fe.mp4?auth_key=1582894620-0-0-a0453837f02479986128e3c9f98510cd'
                                 },
                                 {
                                     image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
@@ -1670,8 +1673,102 @@ export default {
                                     {
                                         image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
                                         id: '图片id',
+                                        type: 'video',
+                                        src:'https://vdeptold.bdstatic.com/6739726e636151456e39614c78593978/466e573349674d34/129eaf60414fd82d36d0463f0a4700fb1ad027d6412ef5d2d75b5d9039915ca176a717310d86d952c407bafe710e81f7e065d797e2108810e9f5e126a0b455c04755799f49c49ad44f499dd8ffa5981b39791e054010872e26f991d17fa721fe.mp4?auth_key=1582894620-0-0-a0453837f02479986128e3c9f98510cd'
+                                    },
+                                    {
+                                        image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                        id: '图片id',
+                                        type: 'video',
+                                        src:'https://vdeptold.bdstatic.com/6739726e636151456e39614c78593978/466e573349674d34/129eaf60414fd82d36d0463f0a4700fb1ad027d6412ef5d2d75b5d9039915ca176a717310d86d952c407bafe710e81f7e065d797e2108810e9f5e126a0b455c04755799f49c49ad44f499dd8ffa5981b39791e054010872e26f991d17fa721fe.mp4?auth_key=1582894620-0-0-a0453837f02479986128e3c9f98510cd'
+                                    },
+                                    {
+                                        image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                        id: '图片id',
                                         type: 'image',
                                         src: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg'
+                                    },
+                                    {
+                                        image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                        id: '图片id',
+                                        type: 'image',
+                                        src: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg'
+                                    }
+                                ]
+                            },
+                            {
+                                user: {
+                                    name: '用户名',
+                                    time: 1996,
+                                    image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                    id: '用户id1',
+                                    content: '评论内容,这是另外一条评论，我想要给你看看是什么样子的',
+                                    hot: 10000000
+                                },
+                                commentUsers: [
+                                    {
+                                        image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                        id: '123123123'
+                                    },
+                                    {
+                                        image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                        id: '123123123'
+                                    }
+                                ],
+                                id: 'idddd',
+                                media: [
+                                    {
+                                        image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                        id: '图片id',
+                                        type: 'video',
+                                        src:'https://vdeptold.bdstatic.com/6739726e636151456e39614c78593978/466e573349674d34/129eaf60414fd82d36d0463f0a4700fb1ad027d6412ef5d2d75b5d9039915ca176a717310d86d952c407bafe710e81f7e065d797e2108810e9f5e126a0b455c04755799f49c49ad44f499dd8ffa5981b39791e054010872e26f991d17fa721fe.mp4?auth_key=1582894620-0-0-a0453837f02479986128e3c9f98510cd'
+                                    },
+                                    {
+                                        image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                        id: '图片id',
+                                        type: 'image',
+                                        src: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg'
+                                    },
+                                    {
+                                        image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                        id: '图片id',
+                                        type: 'image',
+                                        src: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg'
+                                    },
+                                    {
+                                        image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                        id: '图片id',
+                                        type: 'image',
+                                        src: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg'
+                                    }
+                                ]
+                            },
+                            {
+                                user: {
+                                    name: '用户名',
+                                    time: 1996,
+                                    image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                    id: '用户id1',
+                                    content: '评论内容,这是另外一条评论，我想要给你看看是什么样子的',
+                                    hot: 10000000
+                                },
+                                commentUsers: [
+                                    {
+                                        image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                        id: '123123123'
+                                    },
+                                    {
+                                        image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
+                                        id: '123123123'
+                                    }
+                                ],
+                                id: 'idddd',
+                                media: [
+                                    {
+                                        image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
+                                        id: '图片id',
+                                        type: 'video',
+                                        src:'https://vdeptold.bdstatic.com/6739726e636151456e39614c78593978/466e573349674d34/129eaf60414fd82d36d0463f0a4700fb1ad027d6412ef5d2d75b5d9039915ca176a717310d86d952c407bafe710e81f7e065d797e2108810e9f5e126a0b455c04755799f49c49ad44f499dd8ffa5981b39791e054010872e26f991d17fa721fe.mp4?auth_key=1582894620-0-0-a0453837f02479986128e3c9f98510cd'
                                     },
                                     {
                                         image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
@@ -1764,102 +1861,8 @@ export default {
                                     {
                                         image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
                                         id: '图片id',
-                                        type: 'image',
-                                        src: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg'
-                                    },
-                                    {
-                                        image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
-                                        id: '图片id',
-                                        type: 'image',
-                                        src: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg'
-                                    },
-                                    {
-                                        image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
-                                        id: '图片id',
-                                        type: 'image',
-                                        src: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg'
-                                    },
-                                    {
-                                        image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
-                                        id: '图片id',
-                                        type: 'image',
-                                        src: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg'
-                                    }
-                                ]
-                            },
-                            {
-                                user: {
-                                    name: '用户名',
-                                    time: 1996,
-                                    image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
-                                    id: '用户id1',
-                                    content: '评论内容,这是另外一条评论，我想要给你看看是什么样子的',
-                                    hot: 10000000
-                                },
-                                commentUsers: [
-                                    {
-                                        image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
-                                        id: '123123123'
-                                    },
-                                    {
-                                        image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
-                                        id: '123123123'
-                                    }
-                                ],
-                                id: 'idddd',
-                                media: [
-                                    {
-                                        image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
-                                        id: '图片id',
-                                        type: 'image',
-                                        src: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg'
-                                    },
-                                    {
-                                        image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
-                                        id: '图片id',
-                                        type: 'image',
-                                        src: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg'
-                                    },
-                                    {
-                                        image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
-                                        id: '图片id',
-                                        type: 'image',
-                                        src: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg'
-                                    },
-                                    {
-                                        image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
-                                        id: '图片id',
-                                        type: 'image',
-                                        src: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg'
-                                    }
-                                ]
-                            },
-                            {
-                                user: {
-                                    name: '用户名',
-                                    time: 1996,
-                                    image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
-                                    id: '用户id1',
-                                    content: '评论内容,这是另外一条评论，我想要给你看看是什么样子的',
-                                    hot: 10000000
-                                },
-                                commentUsers: [
-                                    {
-                                        image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
-                                        id: '123123123'
-                                    },
-                                    {
-                                        image: 'http://img0.imgtn.bdimg.com/it/u=415401095,3314669772&fm=214&gp=0.jpg',
-                                        id: '123123123'
-                                    }
-                                ],
-                                id: 'idddd',
-                                media: [
-                                    {
-                                        image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',
-                                        id: '图片id',
-                                        type: 'image',
-                                        src: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg'
+                                        type: 'video',
+                                        src:'https://vdeptold.bdstatic.com/6739726e636151456e39614c78593978/466e573349674d34/129eaf60414fd82d36d0463f0a4700fb1ad027d6412ef5d2d75b5d9039915ca176a717310d86d952c407bafe710e81f7e065d797e2108810e9f5e126a0b455c04755799f49c49ad44f499dd8ffa5981b39791e054010872e26f991d17fa721fe.mp4?auth_key=1582894620-0-0-a0453837f02479986128e3c9f98510cd'
                                     },
                                     {
                                         image: 'http://www.t-chs.com/tuhsJDEwLmFsaWNkbi5jb20vaTMvMjU4OTI3MTUxNS9UQjJOWDhJbUxCTlRLSmpTc3piWFhhRnJGWGFfISEyNTg5MjcxNTE1JDk.jpg',

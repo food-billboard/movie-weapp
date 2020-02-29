@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Image } from '@tarojs/components'
 import GVideo from '../video'
-import { IProps, IState, IItem } from './interface'
+import { IProps, IState, IItem } from './index.d'
 import { IMAGE_CONFIG } from '~config'
 import { style } from '~theme/global-style'
 import { findIndex } from 'lodash'
@@ -28,6 +28,7 @@ export default class extends Component<IProps, IState> {
     isVideo: false
   }
 
+  //媒体选择
   public handleSelect = (type:keyof typeof mediaType) => {
     if(mediaType[type] === mediaType.image) {
       return Taro.chooseImage({
@@ -148,9 +149,14 @@ export default class extends Component<IProps, IState> {
     return items
   }
 
+  //关闭视频
+  public videoClose = () => {
+    this.setState({isVideo: false, activeVideo: ''})
+  }
+
   public render() {
 
-    const { files=false, length=3, style: customStyle={}, width, height } = this.props
+    const { files=false, length=3, style: customStyle={}, width, height, close=true } = this.props
 
     //处理props数据
     if(this.FIRST) {
@@ -239,11 +245,14 @@ export default class extends Component<IProps, IState> {
               src={activeVideo}
             ></GVideo>
           }
-          <View 
-            className='at-icon at-icon-close video-icon' 
-            style={{...style.color('primary')}}
-            onClick={() => {this.setState({isVideo: false, activeVideo: ''})}}></View>
-        </View>
+          {
+            close && 
+            <View 
+              className='at-icon at-icon-close video-icon' 
+              style={{...style.color('primary')}}
+              onClick={() => {this.videoClose.call(this)}}></View>
+          }
+          </View>
       </View>
     )
   }

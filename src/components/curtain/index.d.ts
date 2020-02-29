@@ -2,7 +2,8 @@ import { Component } from 'react'
 /**
  * 自定义幕帘组件
  * props: {
- *  style: 样式
+ *  contentStyle: 容器样式
+ *  curtainStyle: 幕帘样式
  *  title: 标题
  *  main: 主要内容
  *  action: 操作内容
@@ -23,7 +24,8 @@ import { Component } from 'react'
  */
 
  export interface IProps {
-  style?: any
+  contentStyle?: any
+  curtainStyle?: any
   title: boolean
   main:boolean
   action: boolean
@@ -32,7 +34,7 @@ import { Component } from 'react'
   renderMain?: any
   renderAction?: any
   renderOther?: any
-  handleClose?: (...args: any[]) => any
+  handleClose: (...args: any[]) => any
   handleCancel?: (...args: any[]) => any
   cancel?: boolean
   isOpen: boolean

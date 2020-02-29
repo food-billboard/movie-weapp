@@ -2,22 +2,21 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Image, Text, ScrollView } from '@tarojs/components'
 import { AtIcon } from 'taro-ui'
 import GVideo from '../video'
-// import Modal from '../model'
 import Curtain from '../curtain'
 import { Info } from '../model/interface'
 import { router, formatTime, formatNumber, mediaType, routeAlias } from '~utils'
 import { style } from '~theme/global-style'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
-import { IState, IProps, IMediaList } from './interface'
+import { IState, IProps, IMediaList } from './index.d'
 
 import './index.scss'
 
 //媒体的图标类型
 const ICON_TYPE = {
-    [mediaType.video]: 'at-icon-video',
-    [mediaType.image]: 'at-icon-image',
-    [mediaType.audio]: 'at-icon-soung'
+    video: 'at-icon-video',
+    image: 'at-icon-image',
+    action: 'at-icon-soung'
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -75,7 +74,8 @@ class List extends Component<IProps, IState>{
     public state: IState = {
         list: this.props.list,
         videoShow: false,
-        activeVideo: ''
+        activeVideo: '',
+        activeVideoPoster: ''
     }
 
     /**
@@ -127,7 +127,7 @@ class List extends Component<IProps, IState>{
     /**
      * 预览媒体
      */
-    public handlePreviewMedia = (src: string, type: keyof typeof mediaType) => {
+    public handlePreviewMedia = (src: string, type: keyof typeof mediaType, image: string='') => {
         const { list } = this.props
         const { media=[] } = list
         if(!media.length) return
@@ -140,7 +140,7 @@ class List extends Component<IProps, IState>{
                 return src
             }))
         }else if(mediaType[type] === mediaType.video) {
-            this.handlePreviewVideo(src)
+            this.handlePreviewVideo(src, image)
         }
     }
 
@@ -157,10 +157,11 @@ class List extends Component<IProps, IState>{
     /**
      * 查看视频
      */
-    public handlePreviewVideo = (target: string) => {
+    public handlePreviewVideo = (target: string, poster: string) => {
         this.setState({
             activeVideo: target,
-            videoShow: true
+            videoShow: true,
+            activeVideoPoster: poster
         })
     }
 
@@ -168,7 +169,8 @@ class List extends Component<IProps, IState>{
     public handleVideoClose = () => {
         this.setState({
             videoShow: false,
-            activeVideo: ''
+            activeVideo: '',
+            activeVideoPoster: ''
         })
     }
 
@@ -185,7 +187,7 @@ class List extends Component<IProps, IState>{
     }
 
     public render() {
-        const { list, activeVideo, videoShow } = this.state
+        const { list, activeVideo, videoShow, activeVideoPoster } = this.state
         const {
             user,
             commentUsers,
@@ -221,7 +223,8 @@ class List extends Component<IProps, IState>{
                             className={'name-user'}
                             onClick={this.pushComment.bind(this, id)}
                             style={{...style.color('primary')}}
-                        >{name}</Text>说: 
+                        >{name.length <= 6 ? name : (name.slice(0, 6) + '...')}</Text>
+                        <Text style={{display: 'inline-block'}}>说: </Text>
                     </View>
                     <View 
                         className={'up'}
@@ -251,10 +254,26 @@ class List extends Component<IProps, IState>{
                     {
                         media.map((val: IMediaList, index: number) => {
                             const { image, id, src, type } = val
+                            //处理不同类型的文件
+                            let imageSrc,
+                                args
+                            switch(mediaType[type]) {
+                                case mediaType.video: 
+                                    imageSrc = image
+                                    args = [ src, 'video', image ]
+                                    break
+                                case mediaType.image:
+                                    imageSrc = src
+                                    args = [ src, 'image' ]
+                                    break
+                                case mediaType.audio:
+                                    break
+                            }
                             return (
                                 <View 
                                     className={'at-col at-col-4 image'}
                                     key={id}
+                                    onClick={() => { this.handlePreviewMedia.apply(this, args) }}
                                 >
                                     <View 
                                         className={`image-icon at-icon ${ICON_TYPE[type]}`}
@@ -263,26 +282,12 @@ class List extends Component<IProps, IState>{
                                             ...style.color('primary')
                                         }}
                                     ></View>
-                                    {
-                                        mediaType[type] === mediaType.video ?
-                                        <Image 
-                                            onClick={() => {this.handlePreviewMedia.call(this, src, 'video')}}
-                                            src={image} 
-                                            style={{...style.border(1, 'thirdly', 'dashed', 'all')}}
-                                            className={'image-content'}
-                                        ></Image>
-                                        : null
-                                    }
-                                    {
-                                        mediaType[type] === mediaType.image ?
-                                        <Image 
-                                            onClick={() => {this.handlePreviewMedia.call(this, src, 'image')}}
-                                            src={src} 
-                                            style={{...style.border(1, 'thirdly', 'dashed', 'all')}}
-                                            className={'image-content'}
-                                        ></Image>
-                                        : null
-                                    }
+                                    <Image
+                                        src={imageSrc}
+                                        style={{...style.border(1, 'thirdly', 'dashed', 'all')}}
+                                        className={'image-content'}
+                                    >
+                                    </Image>
                                 </View>
                             )
                         })
@@ -309,30 +314,35 @@ class List extends Component<IProps, IState>{
                         })
                     }
                 </ScrollView>
-                {/* <Modal
-                    info={{...this.videoConfig, isOpen: videoShow}}
-                    content={true}
-                    renderContent={
-                        <View className='video'>
-                            <View 
-                                className='at-icon at-icon-close icon'
-                                style={{...style.color('primary')}}
-                                onClick={this.handleVideoClose}
-                            ></View>
+                <View 
+                    className='video-preview'
+                    style={{display: videoShow ? 'block' : 'none'}}
+                >
+                    <View className='shadow'></View>
+                    <View className='main'>
+
+                    </View>
+                </View>
+                <Curtain
+                    isOpen={videoShow}
+                    handleClose={this.handleVideoClose}
+                    title={false}
+                    main={true}
+                    curtainStyle={{backgroundColor:'#000', opacity: 1}}
+                    renderMain={
+                        <View 
+                            className='video'
+                        >
                             <GVideo
-                                style={{width: '100%', height: '97%'}}
+                                style={{width: '100%', height: '100%'}}
                                 src={activeVideo}
                                 controls={true}
                                 loop={true}
+                                autoplay={true}
+                                poster={activeVideoPoster}
                             ></GVideo>
                         </View>
                     }
-                ></Modal> */}
-                <Curtain
-                    isOpen={videoShow}
-                    title={false}
-                    main={true}
-                    renderMain={<View>111111</View>}
                     action={false}
                     other={false}
                     cancel={false}
