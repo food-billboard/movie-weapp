@@ -29,7 +29,19 @@ const SHOW_TYPE = {
 export default class Index extends Component<any> {
 
     public config:Config = {
-        navigationBarTitleText: ""
+        navigationBarTitleText: "",
+        enablePullDownRefresh: true
+    }
+
+    //下拉刷新
+    public onPullDownRefresh = async () => {
+        await this.scrollRef.current!.handleToUpper()
+        Taro.stopPullDownRefresh()
+    }
+    
+    //上拉加载
+    public onReachBottom = async () => {
+        await this.scrollRef.current!.handleToLower()
     }
 
     public state = {
@@ -151,6 +163,7 @@ export default class Index extends Component<any> {
         const headerHeight = (showType || !typeShow) ? SINGLE_HEADER_HEIGHT : SINGLE_HEADER_HEIGHT * (Math.ceil((type.length + 2) / 6))
         return (
             <GScrollView
+                ref={this.scrollRef}
                 style={{...bgColor}}
                 sourceType={'Scope'}
                 scrollWithAnimation={true}

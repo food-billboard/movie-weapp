@@ -19,8 +19,22 @@ export default class extends Component<any>{
     //用户id
     readonly id = this.$router.params.id
 
+    private scrollRef = Taro.createRef<GScrollView>()
+
     public static config: Config = {
-        navigationBarTitleText: '关注'
+        navigationBarTitleText: '关注',
+        enablePullDownRefresh: true
+    }
+
+    //下拉刷新
+    public onPullDownRefresh = async () => {
+        await this.scrollRef.current!.handleToUpper()
+        Taro.stopPullDownRefresh()
+    }
+    
+    //上拉加载
+    public onReachBottom = async () => {
+        await this.scrollRef.current!.handleToLower()
     }
 
     /**
@@ -59,6 +73,7 @@ export default class extends Component<any>{
 
         return (
             <GScrollView 
+                ref={this.scrollRef}
                 sourceType={'Scope'}
                 scrollWithAnimation={true}
                 query={{pageSize: 20}}

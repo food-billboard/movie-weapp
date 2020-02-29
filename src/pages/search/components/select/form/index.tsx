@@ -11,6 +11,8 @@ import GCheckbox from '~components/checkbox'
 import { IState, IProps, FormDefault } from './index.d'
 import { FormData } from '../../../interface'
 import { style, TypeColor } from '~theme/global-style'
+import List from '~components/linearlist'
+import { IList } from '~components/linearlist/index.d'
 
 const TAT_STYLE = {
     boxSizing: 'border-box', 
@@ -19,6 +21,8 @@ const TAT_STYLE = {
     marginBottom: '5px', 
     color: TypeColor['primary']
 }
+
+const ICON_COLOR = 'primary'
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Forms extends Component<IProps> {
@@ -104,6 +108,24 @@ export default class Forms extends Component<IProps> {
             }
         ]
     }
+
+    //详细筛选控制按钮信息
+    readonly detailScreenBtn:IList = {
+            title: '其他筛选',
+            arrow: 'down',
+            handle: () => {
+                const { open } = this.state
+                this.setState({
+                    open: !open
+                })
+            },
+            iconInfo: {
+                value: 'numbered-list',
+                size: 16, 
+                color: TypeColor[ICON_COLOR]
+            },
+            id: Symbol('other')
+        }
 
     /**
      * 搜索条件数据检验
@@ -207,8 +229,8 @@ export default class Forms extends Component<IProps> {
     }
 
     //处理其他筛选
-    public handleOther = async (value) => {
-        await this.setState({
+    public handleOther = (value) => {
+        this.setState({
             open: value
         })
     }
@@ -288,12 +310,12 @@ export default class Forms extends Component<IProps> {
                     >
                     </GPicker>
                 </View>
-                <View className='other'>
-                    <AtAccordion
-                        open={open}
-                        title={'其他筛选'}
-                        onClick={this.handleOther}
-                    >
+                <List
+                    list={[{...this.detailScreenBtn, arrow: open ? 'up' : 'down'}]}
+                    style={open ? {} : {paddingBottom: '92px'}}
+                ></List>
+                {
+                    open && <View className='other'>
                         <View className='actor'>
                             <AtTag 
                                 customStyle={TAT_STYLE} 
@@ -348,8 +370,8 @@ export default class Forms extends Component<IProps> {
                                 type={'area'}
                             ></GCheckbox>
                         </View>
-                    </AtAccordion>
-                </View>
+                    </View>
+                }
                 <View className='btn'>
                     <AtButton 
                         formType='reset' 

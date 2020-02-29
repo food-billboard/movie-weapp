@@ -3,8 +3,8 @@ import { View, ScrollView, Text } from '@tarojs/components'
 import { AtActivityIndicator } from 'taro-ui'
 import GDivider from '~components/divider'
 import Top from '../topbutton'
-import { IProps, IState, sourceTypeList } from './index.d'
-import { isObject } from '~utils'
+import { IProps, IState } from './index.d'
+import { isObject, sourceTypeList } from '~utils'
 import { style as customStyle } from '~theme/global-style'
 
 import './index.scss'
@@ -19,7 +19,6 @@ export default class List extends Component<IProps, IState> {
     query: {},
     sourceType: 'Dva',
     scrollY: true,
-    // upperThreshold: 50,
     lowerThreshold: 50,
     scrollWithAnimation: false,
     onScroll: () => {},
@@ -33,7 +32,7 @@ export default class List extends Component<IProps, IState> {
     data: [],
     empty: false,
     query: {},
-    loading: false
+    loading: false,
   }
 
   public constructor() {
@@ -92,52 +91,40 @@ export default class List extends Component<IProps, IState> {
     }
   }
 
-    //上拉加载
-    public handleToLower = () => {
-      const { query, loading, empty } = this.state
-      if(loading) return
-      if(empty) return
-      const { currPage } = query
-      const nextQuery = { ...query, currPage: currPage + 1 }
-      this.fetchData(nextQuery)
-    }
+  //上拉加载
+  public handleToLower = () => {
+    const { query, loading, empty } = this.state
+    if(loading) return
+    if(empty) return
+    const { currPage } = query
+    const nextQuery = { ...query, currPage: currPage + 1 }
+    this.fetchData(nextQuery)
+  }
   
-    //下拉刷新
-    public handleToUpper = () => {
-      const { state, props } = this
-      const nextQuery = { ...state.query, ...INIT_QUERY, ...props.query }
-      this.fetchData(nextQuery, true)
-    }
+  //下拉刷新
+  public handleToUpper = async () => {
+    const { state, props } = this
+    const nextQuery = { ...state.query, ...INIT_QUERY, ...props.query }
+    await this.fetchData(nextQuery, true)
+  }
+
+  //空函数
+  public defaultFn = () => {}
 
   public render() {
     const {
-      scrollY,
-      // upperThreshold,
-      lowerThreshold,
-      scrollWithAnimation,
-      // onScrollToUpper,
-      onScrollToLower,
-      onScroll,
       header,
       bottom,
-      style={}
+      style={},
     } = this.props
     const { empty, loading } = this.state
     const _header = typeof header === 'boolean'
     const _bottom = typeof bottom === 'boolean'
     return (
       <View className='list'>
-        <ScrollView
+        <View
           style={isObject(style) ? style : {}}
           className='scroll-view'
-          // style={{paddingBottom: (bottom ? bottom : 0) + 'rpx'}}
-          scrollY={scrollY}
-          // upperThreshold={upperThreshold}
-          lowerThreshold={lowerThreshold}
-          scrollWithAnimation={scrollWithAnimation}
-          // onScrollToUpper={onScrollToUpper ? onScrollToUpper : this.handleToUpper}
-          onScrollToLower={onScrollToLower ? onScrollToLower : this.handleToLower}
-          onScroll={onScroll}
         >
           {
             _header ? 
@@ -148,7 +135,8 @@ export default class List extends Component<IProps, IState> {
               }
             </View>
           }
-          <View style={{paddingTop: header + 'rpx'}}>
+          <View style={{...customStyle.backgroundColor('bgColor'), paddingTop: (header || 0) + 'rpx'}}
+          >
             {this.props.renderContent}
           </View>
           {
@@ -158,15 +146,16 @@ export default class List extends Component<IProps, IState> {
             ref={this.topRef} 
           /> */}
           {_bottom ? null : this.props.renderBottom}
-        </ScrollView>
+        </View>
         <View 
           className='active'
         >
-          {loading ? <AtActivityIndicator 
-            size={100}
-            content={'玩命加载中...'}
-            // className={ loading ? 'activeShow' : 'activeHide' }
-          /> : ''}
+          {loading &&
+            <AtActivityIndicator 
+              size={100}
+              content={'玩命加载中...'}
+            />
+          }
         </View>
       </View>
     )

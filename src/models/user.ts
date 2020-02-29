@@ -81,7 +81,7 @@ export default {
         * getRecord({query}, {call, put}) {
             let data
             if(a==0) {
-                a++
+                a=0
                 data = {
                     success: true,
                     data: {
@@ -162,7 +162,7 @@ export default {
             }
             }
             }else if(a===1) {
-                a++
+                a=0
                 data = {
                     success: true,
                     data: {
@@ -243,7 +243,7 @@ export default {
             }
             }
             }else if(a==2) {
-                a++
+                a=0
                 data = {
                     success: true,
                     data: {
@@ -321,7 +321,7 @@ export default {
 
             let data
             if(a===0) {
-                a++
+                a=0
                 data = {
                     success: true,
                     data: {
@@ -831,7 +831,7 @@ export default {
                 }
                 }
             }else if(a===1) {
-                a++
+                a=0
                 data = {
                     success: true,
                     data: {
@@ -972,7 +972,7 @@ export default {
         * getAttention({query}, {call, put}) {
             let data
             if(a===0) {
-                a++
+                a=0
                 data = {
                     success: true,
                     data: {
@@ -1081,7 +1081,7 @@ export default {
             }
         }
             }else if(a===1) {
-                a++
+                a=0
                 data = {
                     success: true,
                     data: {
@@ -1136,7 +1136,7 @@ export default {
         * getStore({query}, { call, put }) {
             let data
             if(a==0) {
-                a++
+                a=0
                 data = {
                     success: true,
                     data: {
@@ -1217,7 +1217,7 @@ export default {
             }
             }
             }else if(a===1) {
-                a++
+                a=0
                 data = {
                     success: true,
                     data: {
@@ -1298,7 +1298,7 @@ export default {
             }
             }
             }else if(a==2) {
-                a++
+                a=0
                 data = {
                     success: true,
                     data: {
@@ -1370,7 +1370,7 @@ export default {
 
             let d
             if(a===0) {
-                a++
+                a=0
                 d = {
                     success: true,
                     data: {
@@ -1455,12 +1455,60 @@ export default {
                                 type: ['电影类型'],
                                 time: '2020',
                                 hot: 1000
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '2020',
+                                hot: 1000
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '2020',
+                                hot: 1000
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '2020',
+                                hot: 1000
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '2020',
+                                hot: 1000
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '2020',
+                                hot: 1000
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '2020',
+                                hot: 1000
                             }
                         ]
                     }
                 }
             }else if(a===1) {
-                a++
+                a=0
                 d = {
                     success: true,
                     data: {

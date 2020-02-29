@@ -67,7 +67,7 @@ class App extends Component {
 
   public config: Config = {
     pages: [
-      // 'pages/setting/index',
+      // 'pages/attention/index',
       'pages/main/index',
       'pages/mine/index',
       'pages/register/index',
@@ -90,7 +90,7 @@ class App extends Component {
       'pages/special/index'
     ],
     window: {
-      backgroundTextStyle: 'light',
+      backgroundTextStyle: 'dark',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: 'WeChat',
       navigationBarTextStyle: 'black',

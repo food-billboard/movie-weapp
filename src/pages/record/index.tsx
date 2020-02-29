@@ -10,7 +10,8 @@ import {connect} from '@tarojs/redux'
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Index extends Component<any> {
     public static config: Config = {
-        navigationBarTitleText: "浏览记录"
+        navigationBarTitleText: "浏览记录",
+        enablePullDownRefresh: true
     }
 
     public state: any = {
@@ -19,6 +20,19 @@ export default class Index extends Component<any> {
 
     //用户id
     readonly id = this.$router.params.id
+
+    private scrollRef = Taro.createRef<GScrollView>()
+
+    //下拉刷新
+    public onPullDownRefresh = async () => {
+        await this.scrollRef.current!.handleToUpper()
+        Taro.stopPullDownRefresh()
+    }
+    
+    //上拉加载
+    public onReachBottom = async () => {
+        await this.scrollRef.current!.handleToLower()
+    }
 
     /**
      * 获取数据
@@ -48,6 +62,7 @@ export default class Index extends Component<any> {
         const { record } = this.state
         return (
             <GScrollView 
+                ref={this.scrollRef}
                 style={{...style.backgroundColor('bgColor')}}
                 sourceType={'Scope'}
                 scrollWithAnimation={true}

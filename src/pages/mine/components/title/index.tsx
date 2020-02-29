@@ -24,23 +24,27 @@ export default class Title extends Component<IProps>{
 
     public handleClick = (value) => {
         const {id} = this.props
+        const { titleConfig } = this
         switch(value) {
-            case this.titleConfig.store:
+            case titleConfig.store:
                 router.push(routeAlias.store, {id})
                 break;
-            case this.titleConfig.news:
+            case titleConfig.news:
                 router.push(routeAlias.news, {id})
                 break;
         }
     }
 
     public render(){
+
+        const { titleConfig: config } = this
+
         return (
             <View className='title at-row at-row__justify--around'
                 style={{...style.border(1, 'thirdly', 'solid', 'bottom')}}
             >
                 <View className='message at-col at-col-5'
-                    onClick={() => {this.handleClick.call(this, this.titleConfig.store)}}
+                    onClick={() => {this.handleClick.call(this, config.store)}}
                 >
                     <AtIcon value='message' size='30' color={TypeColor['secondary']}></AtIcon>
                     <Text className='text'>{this.titleConfig.store}</Text>
@@ -49,7 +53,7 @@ export default class Title extends Component<IProps>{
                     style={{...style.backgroundColor('thirdly')}}
                 ></View>
                 <View className='folder at-col at-col-5'
-                    onClick={() => {this.handleClick.call(this, this.titleConfig.news)}}
+                    onClick={() => {this.handleClick.call(this, config.news)}}
                 >
                     <AtIcon value='folder' size='30' color={TypeColor['secondary']}></AtIcon>
                     <Text className='text'>{this.titleConfig.news}</Text>

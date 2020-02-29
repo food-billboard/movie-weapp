@@ -1,4 +1,5 @@
 import { setStyle } from '~config'
+import Taro from '@tarojs/taro'
 //小程序色调
 export let TypeColor = {
   'primary':'#cc9f01',
@@ -96,6 +97,10 @@ export const colorChange = (type, color: string='#6190E8') => {
     TypeColor = { ...TypeColor, ...typeColor[color] }
     setStyle(color)
   }
+  Taro.setBackgroundColor({
+    backgroundColorTop: TypeColor['bgColor'], // 顶部窗口的背景色为白色
+    backgroundColorBottom: TypeColor['bgColor'], // 底部窗口的背景色为白色
+  })
   return TypeColor
 }
 

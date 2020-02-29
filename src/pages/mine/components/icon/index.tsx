@@ -57,6 +57,7 @@ export default class IconList extends Component<IProps>{
     public handleClick = (item: any, index: number) => {
         const {value} = item
         const {id} = this.props
+        const { titleConfig } = this
         switch(value) {
             case titleConfig.attention: 
                 router.push(routeAlias.attention, {id})

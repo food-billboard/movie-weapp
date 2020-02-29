@@ -3,6 +3,7 @@ import { AtIconBaseProps } from 'taro-ui/@types/base'
  * 列表形式组件
  * props: {
  *  list: 列表内容
+ *  style: 样式
  * }
  * 
  * list: {
@@ -45,4 +46,5 @@ export interface IList {
 
 export interface IProps {
     list: Array<IList>
+    style?: any
 }

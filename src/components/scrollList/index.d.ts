@@ -1,13 +1,9 @@
+import { sourceTypeList } from '~utils'
 /**
  * 滚动列表组件
  * props: {
  *  sourceType: 资源获取方式
  *  query: 查询参数
- *  scrollY: 控制纵向滚动
- *  lowerThreshold: 控制底部滑动上线的距离
- *  scrollWithAnimation: 是否展示滚动动画
- *  onScrollToLower: 滚动到底部的方法
- *  onScroll: 滚动时触发的方法
  *  fetch: 数据获取方法
  *  header: 顶部偏移距离
  *  bottom: 底部偏移距离
@@ -32,13 +28,6 @@ export interface IProps {
   style?: any
   autoFetch?: boolean
   query?: any,
-  scrollY?: boolean
-  // upperThreshold?: number
-  lowerThreshold?: number
-  scrollWithAnimation?: boolean
-  // onScrollToUpper?: () => any
-  onScrollToLower?: () => any
-  onScroll?: (...args: any[]) => any
   fetch: (...args: any[]) => any
   header?: false | number
   bottom?: false | number
@@ -52,9 +41,4 @@ export interface IState {
   empty: boolean
   query: any
   loading: boolean
-}
-
-export const sourceTypeList = {
-  Scope: Symbol('scope'),
-  Dva: Symbol('Dva')
 }

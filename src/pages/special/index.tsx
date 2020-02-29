@@ -12,12 +12,23 @@ let FIRST = true
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any>{
 
+  public static config: Config = {
+   
+  }
+
   //专题id
   readonly id = this.$router.params.id
 
   public state: any = {
     list: [],
     title: false
+  }
+
+  private scrollRef = Taro.createRef<Scroll>()
+    
+  //上拉加载
+  public onReachBottom = async () => {
+      await this.scrollRef.current!.handleToLower()
   }
 
   //设置标题
@@ -70,7 +81,9 @@ export default class extends Component<any>{
 
     return (
       <Scroll
+        ref={this.scrollRef}
         style={{...style.backgroundColor('bgColor')}}
+        query={{pageSize: 16}}
         sourceType={'Scope'}
         scrollWithAnimation={true}
         fetch={this.throttleFetchData}

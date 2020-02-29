@@ -18,10 +18,13 @@ const INIT_QUERY = { currPage:1, pageSize: 10 }
 export default class extends Component<any>{
 
     public static config: Config = {
-        navigationBarTitleText: '评论'
+        navigationBarTitleText: '评论',
+        enablePullDownRefresh: true
     }
 
-    public commentRef = Taro.createRef<Comment>()
+    private commentRef = Taro.createRef<Comment>()
+
+    private scrollRef = Taro.createRef<GScrollView>()
 
     //用户id
     readonly id = this.$router.params.id
@@ -31,6 +34,17 @@ export default class extends Component<any>{
 
     public state: any = {
         comment: []
+    }
+
+    //下拉刷新
+    public onPullDownRefresh = async () => {
+        await this.scrollRef.current!.handleToUpper()
+        Taro.stopPullDownRefresh()
+    }
+    
+    //上拉加载
+    public onReachBottom = async () => {
+        await this.scrollRef.current!.handleToLower()
     }
 
     /**
@@ -87,6 +101,8 @@ export default class extends Component<any>{
         const {comment} = this.state
         return (
             <GScrollView 
+                ref={this.scrollRef}
+                query={{pageSize: 6}}
                 style={{...style.backgroundColor('bgColor')}}
                 sourceType={'Scope'}
                 scrollWithAnimation={true}

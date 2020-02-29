@@ -34,6 +34,15 @@ export default class Index extends Component<any> {
 
     public searchBarRef = Taro.createRef<SearchBar>()
 
+    public scrollRef = Taro.createRef<GScrollView>()
+
+    private scrollTop = 0
+
+    //上拉加载
+    public onReachBottom = async () => {
+        await this.scrollRef.current!.handleToLower()
+    }
+
     public componentDidMount = async () => {
         this.fetchHotData()
     }
@@ -174,11 +183,11 @@ export default class Index extends Component<any> {
             listShow: show
         })
     }
-
+    
     //控制热搜显示隐藏
-    public handleScroll = (e) => {
-        const { detail } = e
-        const { scrollTop } = detail
+    public onPageScroll = (e) => {
+        const { scrollTop } = e
+        this.scrollTop += scrollTop
         const { hotShow } = this.state
         if(scrollTop >= HOT_HEIGHT) {
             if(hotShow === 0) return
@@ -198,11 +207,11 @@ export default class Index extends Component<any> {
         const { showList, searchList, hot, listShow, hotShow } = this.state
         return (
             <GScrollView
-                style={{...style.backgroundColor('bgColor')}}
+                ref={this.scrollRef}
+                style={{...style.backgroundColor('bgColor'), overflowX: 'hidden'}}
                 autoFetch={false}
                 sourceType={'Scope'}
                 scrollWithAnimation={true}
-                onScroll={this.handleScroll}
                 renderContent={ <View className='search-main' style={{display: listShow && searchList.length ? 'block' : 'none'}}>
                                     <View className='head'>
                                         <Head screen={this.typeScreen} />

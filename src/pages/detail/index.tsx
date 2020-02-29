@@ -21,8 +21,7 @@ let FIRST = true
 export default class extends Component<any> {
    
     public config: Config = {
-        navigationBarTitleText: "",
-        enablePullDownRefresh: false
+        navigationBarTitleText: ""
     }
 
     public commentRef = Taro.createRef<Comment>()

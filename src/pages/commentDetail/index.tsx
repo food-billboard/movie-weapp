@@ -17,11 +17,34 @@ let FIRST = true
 export default class extends Component<any> {
 
   public static config: Config = {
-      navigationBarTitleText: "评论"
+      navigationBarTitleText: "评论",
+      enablePullDownRefresh: true
   }
+
+  private scrollRef = Taro.createRef<GScrollView>()
+
+  //评论组件
+  public commentRef = Taro.createRef<CommentCom>()
+
+  //评论id
+  readonly id = this.$router.params.id
+
+  //我的id
+  readonly mineId = this.props.id
 
   public componentDidMount = async () => {
       this.setTitle()
+  }
+
+  //下拉刷新
+  public onPullDownRefresh = async () => {
+    await this.scrollRef.current!.handleToUpper()
+    Taro.stopPullDownRefresh()
+  }
+  
+  //上拉加载
+  public onReachBottom = async () => {
+      await this.scrollRef.current!.handleToLower()
   }
 
   //设置标题
@@ -32,15 +55,6 @@ export default class extends Component<any> {
         Taro.setNavigationBarTitle({title: `${commentHeader.user}的评论`})
       }
   }
-
-  //评论组件
-  public commentRef = Taro.createRef<CommentCom>()
-
-  //评论id
-  readonly id = this.$router.params.id
-
-  //我的id
-  readonly mineId = this.props.id
 
   public state: any = {
     commentHeader: {},
@@ -113,6 +127,7 @@ export default class extends Component<any> {
 
     return (
       <GScrollView
+        ref={this.scrollRef}
         style={{...style.backgroundColor('bgColor')}}
         sourceType={'Scope'}
         scrollWithAnimation={true}

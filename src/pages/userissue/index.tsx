@@ -12,7 +12,21 @@ import {mapDispatchToProps, mapStateToProps} from './connect'
 export default class extends Component<any>{ 
 
   public static config: Config = {
-    navigationBarTitleText: '某人的发布'
+    navigationBarTitleText: '某人的发布',
+    enablePullDownRefresh: true
+  }
+
+  private scrollRef = Taro.createRef<GScrollView>()
+
+  //下拉刷新
+  public onPullDownRefresh = async () => {
+    await this.scrollRef.current!.handleToUpper()
+    Taro.stopPullDownRefresh()
+  }
+  
+  //上拉加载
+  public onReachBottom = async () => {
+      await this.scrollRef.current!.handleToLower()
   }
 
   public state: any = {
@@ -62,6 +76,8 @@ export default class extends Component<any>{
 
     return (
       <GScrollView
+        ref={this.scrollRef}
+        query={{pageSize: 16}}
         style={{...style.backgroundColor('bgColor')}}
         sourceType={'Scope'}
         scrollWithAnimation={true}

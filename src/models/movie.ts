@@ -100,6 +100,42 @@ export default {
                             detail: '电影描述',
                             image: '电影海报'
                         },
+                        {
+                            id: '电影id',
+                            name: '电影名称',
+                            detail: '电影描述',
+                            image: '电影海报'
+                        },
+                        {
+                            id: '电影id',
+                            name: '电影名称',
+                            detail: '电影描述',
+                            image: '电影海报'
+                        },
+                        {
+                            id: '电影id',
+                            name: '电影名称',
+                            detail: '电影描述',
+                            image: '电影海报'
+                        },
+                        {
+                            id: '电影id',
+                            name: '电影名称',
+                            detail: '电影描述',
+                            image: '电影海报'
+                        },
+                        {
+                            id: '电影id',
+                            name: '电影名称',
+                            detail: '电影描述',
+                            image: '电影海报'
+                        },
+                        {
+                            id: '电影id',
+                            name: '电影名称',
+                            detail: '电影描述',
+                            image: '电影海报'
+                        },
                     ]
                 }
             }
@@ -308,11 +344,43 @@ export default {
 
             let data
             if(a===0) {
-                a++
+                a=0
                 data = {
                     success: true,
                     data: {
                         detail: [
+                            {
+                                id: '电影id',
+                                image: 'http://img4.imgtn.bdimg.com/it/u=4018035745,1696920805&fm=26&gp=0.jpg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '发布时间',
+                                hot: 100
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://img4.imgtn.bdimg.com/it/u=4018035745,1696920805&fm=26&gp=0.jpg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '发布时间',
+                                hot: 100
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://img4.imgtn.bdimg.com/it/u=4018035745,1696920805&fm=26&gp=0.jpg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '发布时间',
+                                hot: 100
+                            },
+                            {
+                                id: '电影id',
+                                image: 'http://img4.imgtn.bdimg.com/it/u=4018035745,1696920805&fm=26&gp=0.jpg',
+                                name: '电影名称',
+                                type: ['电影类型'],
+                                time: '发布时间',
+                                hot: 100
+                            },
                             {
                                 id: '电影id',
                                 image: 'http://img4.imgtn.bdimg.com/it/u=4018035745,1696920805&fm=26&gp=0.jpg',
@@ -365,7 +433,7 @@ export default {
                     }
                 }
             }else if(a===1) {
-                a++
+                a=0
                 data = {
                     success: true,
                     data: {
@@ -504,7 +572,7 @@ export default {
         * getRank({query}, {call, put}) {
             let data
             if(a==0) {
-                a++
+                a=0
                 data = {
                     success: true,
                     data: {
@@ -523,6 +591,30 @@ export default {
                                     id: 1,
                                     rank: 1,
                                     image: 'http://a0.att.hudong.com/27/10/01300000324235124757108108752.jpg',
+                                    name: '电影'
+                                },
+                                {
+                                    id: 2,
+                                    rank: 2,
+                                    image: 'http://a0.att.hudong.com/27/10/01300000324235124757108108752.jpg',
+                                    name: '电影'
+                                },
+                                {
+                                    id: 3,
+                                    rank: 3,
+                                    image: 'http://image3.imgtn.bdimg.com/it/u=1208538952,1443328523&fm=26&gp=0.jpg',
+                                    name: '电影'
+                                },
+                                {
+                                    id: 4,
+                                    rank: 4,
+                                    image: 'http://img3.imgtn.bdimg.com/it/u=1208538952,1443328523&fm=26&gp=0.jpg',
+                                    name: '电影'
+                                },
+                                {
+                                    id: 5,
+                                    rank: 5,
+                                    image: 'http://img3.imgtn.bdimg.com/it/u=1208538952,1443328523&fm=26&gp=0.jpg',
                                     name: '电影'
                                 },
                                 {
@@ -579,7 +671,7 @@ export default {
                     }
                 }
             }else if(a==1) {
-                a++
+                a=0
                 data = {
                     success: true,
                     data: {
@@ -717,7 +809,7 @@ export default {
         * getComment({query}, {call, put}) {
             let data
             if(a===0) {
-                a++
+                a=0
                 data = {
                     success: true,
                     data: {
@@ -1166,7 +1258,7 @@ export default {
                 }
                 }
         }else if(a===1) {
-            a++
+            a=0
             data = {
                 success: true,
                 data: {
@@ -1634,7 +1726,7 @@ export default {
 
             let data
             if(a==0) {
-                a++
+                a=0
                 data = {
                     success: true,
                     data: {
@@ -1982,7 +2074,7 @@ export default {
                     }
                 }
             }else if(a===1) {
-                a++
+                a=0
                 data = {
                     success: true,
                     data: {
@@ -2158,6 +2250,22 @@ export default {
                 success: true,
                 data: {
                     data:[
+                    {
+                        id: '电影id',
+                        image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                        name: '电影名称',
+                        type: ['电影类型'],
+                        time: '2020',
+                        hot: 1000
+                    },
+                    {
+                        id: '电影id',
+                        image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',
+                        name: '电影名称',
+                        type: ['电影类型'],
+                        time: '2020',
+                        hot: 1000
+                    },
                     {
                         id: '电影id',
                         image: 'http://b-ssl.duitang.com/uploads/item/201501/25/20150125095908_GvyWW.jpeg',

@@ -46,6 +46,11 @@ const HIDE_MORE_CONFIG = {
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any> {
 
+  public static config:Config = {
+    navigationBarTitleText: '排行榜',
+    enablePullDownRefresh: true
+  }
+
   public state: any = {
     rank: [],
     rankType: [],
@@ -78,13 +83,20 @@ export default class extends Component<any> {
     return this._title
   }
 
+  //下拉刷新
+  public onPullDownRefresh = async () => {
+    await this.scrollRef.current!.handleToUpper()
+    Taro.stopPullDownRefresh()
+  }
+  
+  //上拉加载
+  public onReachBottom = async () => {
+      await this.scrollRef.current!.handleToLower()
+  }
+
   public set title(title) {
     this._title = title
     Taro.setNavigationBarTitle({title})
-  }
-
-  public static config:Config = {
-    navigationBarTitleText: '排行榜'
   }
 
   //数据获取
@@ -170,6 +182,7 @@ export default class extends Component<any> {
         style={{...style.backgroundColor('bgColor')}}
         ref={this.scrollRef}
         sourceType={'Scope'}
+        query={{pageSize: 8}}
         scrollWithAnimation={true}
         renderContent={
           <View>

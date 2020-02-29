@@ -2,6 +2,7 @@ import Taro, {Component} from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtList, AtListItem } from "taro-ui"
 import { IProps } from './index.d'
+import { isObject } from '~utils'
 
 import './index.scss'
 
@@ -11,7 +12,7 @@ export default class List extends Component<IProps>{
     }
 
     public render() {
-        const {list} = this.props
+        const { list, style={} } = this.props
         const icon = list.map((value) => {
             const {
                 title = '标签',
@@ -24,7 +25,7 @@ export default class List extends Component<IProps>{
             } = value
             return (
                 <AtListItem
-                    key={id} 
+                    key={id.toString()} 
                     title={title}
                     disabled={disabled} 
                     onClick={handle}
@@ -35,7 +36,10 @@ export default class List extends Component<IProps>{
             )
         })
         return(
-            <View className='list'>
+            <View 
+                className='list'
+                style={isObject(style) ? style : {}}
+            >   
                 <AtList hasBorder={true}>
                     {icon}
                 </AtList>

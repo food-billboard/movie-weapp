@@ -64,3 +64,9 @@ export const swiperRouteType = {
   comment: Symbol('comment'),
   special: Symbol('special')
 }
+
+//数据获取方式
+export const sourceTypeList = {
+  Dva: Symbol('dva'),
+  Scope: Symbol('scrope')
+}
