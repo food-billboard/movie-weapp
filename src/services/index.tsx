@@ -1,8 +1,3 @@
-//通知
-/**
- * 通知信息
- */
-
 import {request} from '~utils'
 
  /**
@@ -11,6 +6,24 @@ import {request} from '~utils'
   */
 export const sendSMS = (mobile) => {
 
+}
+
+/**
+ * 删除消息
+ * @param id 用户id
+ * @param date 删除多久之前的
+ */
+export const deleteNews = (id, date) => {
+    return request('DELETE', '/api/user/deleteNews', { data: { id, date} })
+}   
+
+/**
+ * 阅读消息
+ * @param id 用户id
+ * @param date 阅读多久之前的 
+ */
+export const readNews = (id, date) => {
+    return request('POST', '/api/user/readNews', { data: { id, date } })
 }
 
 /**
@@ -122,6 +135,14 @@ export const sendIssue = (value) => {
  */
 export const editIssue = (value) => {
     return request('POST', '/api/user/editIssue', { data: { value } })
+}
+
+/**
+ * 发送消息
+ * @param data 信息
+ */
+export const sendNews = (data) => {
+    return request('POST', '/api/user/sendNews', {data})
 }
 
 /**
@@ -367,4 +388,12 @@ export const getSpecial = (query) => {
  */
 export const getUserFans = (query) => {
     return request('GET', '/api/user/fans', { query })
+}
+
+/**
+ * 获取通知信息详情
+ * @param query 查询参数
+ */
+export const getNewsDetail = (query) => {
+    return request('GET', '/api/user/newsdetail', { query })
 }

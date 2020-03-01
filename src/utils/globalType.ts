@@ -32,7 +32,8 @@ export const routeAlias = {
   issue: '/issue',
   userissue: '/userissue',
   special: '/special',
-  fans: '/fans'
+  fans: '/fans',
+  newsdetail: '/newsdetail'
 }
 
 //路由配置
@@ -58,6 +59,7 @@ export const routeConfig = [
   { path: 'pages/userissue/index', alias: routeAlias.userissue },
   { path: 'pages/special/index', alias: routeAlias.special },
   { path: 'pages/fans/index', alias: routeAlias.fans },
+  { path: 'pages/newsdetail/index', alias: routeAlias.newsdetail },
 ]
 
 //轮播图路由跳转类型
@@ -71,4 +73,24 @@ export const swiperRouteType = {
 export const sourceTypeList = {
   Dva: Symbol('dva'),
   Scope: Symbol('scrope')
+}
+
+//通知消息类型
+export const infomationType = {
+  attention: Symbol('attention'),
+  app: Symbol('app')
+}
+
+//详细消息类型
+export const newsType = {
+  image: 'image',
+  audio:'audio',
+  video: 'video',
+  text: 'text',
+}
+
+//响应类型
+export const responseType = {
+  success: 'success',
+  fail: 'fail'
 }

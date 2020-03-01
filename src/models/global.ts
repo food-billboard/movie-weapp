@@ -76,7 +76,7 @@ export default {
                         id: 0,
                         username: '用户名',
                         hot: 10000,
-                        img: 'http://img4.imgtn.bdimg.com/it/u=2359617007,2446763239&fm=26&gp=0.jpg',
+                        image: 'http://img4.imgtn.bdimg.com/it/u=2359617007,2446763239&fm=26&gp=0.jpg',
                         isLike: false
                     }
                 }

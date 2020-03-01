@@ -187,7 +187,6 @@ export default class extends Component<any> {
         ref={this.scrollRef}
         sourceType={'Scope'}
         query={{pageSize: 8}}
-        scrollWithAnimation={true}
         renderContent={
           <View>
             <Rank

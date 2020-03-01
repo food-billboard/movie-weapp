@@ -1,0 +1,22 @@
+@import "~taro-ui/dist/style/components/icon.scss";
+@import "~taro-ui/dist/style/components/flex.scss";
+.bottom{
+  width:100%;
+  min-height:100px;
+  position:fixed;
+  left:0;
+  box-sizing:border-box;
+  bottom:20px;
+  .icon{
+    margin-bottom:10px;
+    .icon-content{
+      text-align:center;
+      font-size:46px;
+    }
+  }
+  .input{
+    width:100%;
+    box-sizing:border-box;
+    padding:0 20px;
+  }
+}

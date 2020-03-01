@@ -1,16 +1,11 @@
-.news{
+.list{
     width:100%;
     box-sizing:border-box;
-    padding:0 20px;
-    .list{
-        width:100%;
-    }
-    .list:nth-of-type(1) {
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-    }
-    .list:nth-last-of-type(1) {
-        border-bottom-left-radius: 10px;
-        border-bottom-right-radius: 10px;
-    }
+    padding:0 40px;
+    min-height:100px;
+    line-height:100px;
+}
+.list:nth-of-type(1) {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }

@@ -1,8 +1,12 @@
 export const mapStateToProps = (_) => {
-    return {}
+    const { news } = _.user
+    return {
+        news
+    }
 }
   
 export const mapDispatchToProps = dispatch => ({   
-    getUserComment: (query) => dispatch({type: 'user/getUserComment', query}),
-    getUserInfo: () => dispatch({type: '获取用户信息'})
+    getNews: (query) => dispatch({type: 'user/getNews', query}),
+    readNews: (id, date) => dispatch({type: 'user/readNews', id, date}),
+    deleteNews: (id, date) => dispatch({type: 'user/deleteNews', id, date})
 })

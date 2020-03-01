@@ -5,6 +5,7 @@ import {
     sendRate,
     getRecord,
     getNews,
+    getNewsDetail,
     getUserComment,
     toAttention,
     answerComment,
@@ -15,8 +16,13 @@ import {
     getIssue,
     editIssue,
     sendIssue,
-    getUserFans
+    getUserFans,
+    sendNews,
+    deleteNews,
+    readNews
 } from '~services'
+import { findIndex } from 'lodash'
+
 var a = 0
 export default {
     namespace: 'user',
@@ -24,7 +30,8 @@ export default {
         issueSet: {
             isIssue: false,
             id: false
-        }
+        },
+        news: []
     },
     effects: {
         //点赞
@@ -290,18 +297,444 @@ export default {
             return record
         },
 
-        //通知
-        * getNews({id}, {call, put}) {
+        //获取通知
+        * getNews({query}, {call, put}) {
 
-            return {
+            let d = {
                 success: true,
                 data: {
-                    
+                    data: [
+                        {
+                            id: 'id',
+                            image: 'http://www.33lc.com/article/UploadPic/2012-10/2012102514181086564.jpg',
+                            username: '这是条已读消息应该在下面',
+                            type: 'attention',
+                            list: [
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: true,
+                                    time: 111111111111
+                                }
+                            ]
+                        },
+                        {
+                            id: 'id',
+                            image: 'http://01.minipic.eastday.com/20170408/20170408143858_c25cfaadbcee035e31fc7606a06fba47_3.jpeg',
+                            username: '未读第一条',
+                            type: 'app',
+                            list: [
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 11111111111
+                                },
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                }
+                            ]
+                        },
+                        {
+                            id: 'id',
+                            image: 'http://www.33lc.com/article/UploadPic/2012-10/2012102514181086564.jpg',
+                            username: '发送人用户名',
+                            type: 'attention',
+                            list: [
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                }
+                            ]
+                        },
+                        {
+                            id: 'id',
+                            image: 'http://01.minipic.eastday.com/20170408/20170408143858_c25cfaadbcee035e31fc7606a06fba47_3.jpeg',
+                            username: '未读第二条',
+                            type: 'app',
+                            list: [
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 11111111111
+                                },
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                },
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                }
+                            ]
+                        },
+                        {
+                            id: 'id',
+                            image: 'http://www.33lc.com/article/UploadPic/2012-10/2012102514181086564.jpg',
+                            username: '发送人用户名',
+                            type: 'attention',
+                            list: [
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                }
+                            ]
+                        },
+                        {
+                            id: 'id',
+                            image: 'http://01.minipic.eastday.com/20170408/20170408143858_c25cfaadbcee035e31fc7606a06fba47_3.jpeg',
+                            username: '发送人用户名',
+                            type: 'app',
+                            list: [
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                },
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                }
+                            ]
+                        },
+                        {
+                            id: 'id',
+                            image: 'http://www.33lc.com/article/UploadPic/2012-10/2012102514181086564.jpg',
+                            username: '发送人用户名',
+                            type: 'attention',
+                            list: [
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                }
+                            ]
+                        },
+                        {
+                            id: 'id',
+                            image: 'http://01.minipic.eastday.com/20170408/20170408143858_c25cfaadbcee035e31fc7606a06fba47_3.jpeg',
+                            username: '发送人用户名',
+                            type: 'app',
+                            list: [
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                },
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                }
+                            ]
+                        },
+                        {
+                            id: 'id',
+                            image: 'http://www.33lc.com/article/UploadPic/2012-10/2012102514181086564.jpg',
+                            username: '发送人用户名',
+                            type: 'attention',
+                            list: [
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                }
+                            ]
+                        },
+                        {
+                            id: 'id',
+                            image: 'http://01.minipic.eastday.com/20170408/20170408143858_c25cfaadbcee035e31fc7606a06fba47_3.jpeg',
+                            username: '发送人用户名',
+                            type: 'app',
+                            list: [
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                },
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                }
+                            ]
+                        },
+                        {
+                            id: 'id',
+                            image: 'http://www.33lc.com/article/UploadPic/2012-10/2012102514181086564.jpg',
+                            username: '发送人用户名',
+                            type: 'attention',
+                            list: [
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                }
+                            ]
+                        },
+                        {
+                            id: 'id',
+                            image: 'http://01.minipic.eastday.com/20170408/20170408143858_c25cfaadbcee035e31fc7606a06fba47_3.jpeg',
+                            username: '发送人用户名',
+                            type: 'app',
+                            list: [
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                },
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                }
+                            ]
+                        },
+                        {
+                            id: 'id',
+                            image: 'http://www.33lc.com/article/UploadPic/2012-10/2012102514181086564.jpg',
+                            username: '发送人用户名',
+                            type: 'attention',
+                            list: [
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                }
+                            ]
+                        },
+                        {
+                            id: 'id',
+                            image: 'http://01.minipic.eastday.com/20170408/20170408143858_c25cfaadbcee035e31fc7606a06fba47_3.jpeg',
+                            username: '发送人用户名',
+                            type: 'app',
+                            list: [
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                },
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                }
+                            ]
+                        },
+                        {
+                            id: 'id',
+                            image: 'http://www.33lc.com/article/UploadPic/2012-10/2012102514181086564.jpg',
+                            username: '发送人用户名',
+                            type: 'attention',
+                            list: [
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                }
+                            ]
+                        },
+                        {
+                            id: 'id',
+                            image: 'http://01.minipic.eastday.com/20170408/20170408143858_c25cfaadbcee035e31fc7606a06fba47_3.jpeg',
+                            username: '发送人用户名',
+                            type: 'app',
+                            list: [
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                },
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                }
+                            ]
+                        },
+                        {
+                            id: 'id',
+                            image: 'http://www.33lc.com/article/UploadPic/2012-10/2012102514181086564.jpg',
+                            username: '发送人用户名',
+                            type: 'attention',
+                            list: [
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                }
+                            ]
+                        },
+                        {
+                            id: 'id',
+                            image: 'http://01.minipic.eastday.com/20170408/20170408143858_c25cfaadbcee035e31fc7606a06fba47_3.jpeg',
+                            username: '发送人用户名',
+                            type: 'app',
+                            list: [
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                },
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                }
+                            ]
+                        },
+                        {
+                            id: 'id',
+                            image: 'http://www.33lc.com/article/UploadPic/2012-10/2012102514181086564.jpg',
+                            username: '发送人用户名',
+                            type: 'attention',
+                            list: [
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                }
+                            ]
+                        },
+                        {
+                            id: 'id',
+                            image: 'http://01.minipic.eastday.com/20170408/20170408143858_c25cfaadbcee035e31fc7606a06fba47_3.jpeg',
+                            username: '发送人用户名',
+                            type: 'app',
+                            list: [
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                },
+                                {
+                                    description: '这里是详细描述信息，你想看的话可以看一下',
+                                    read: false,
+                                    time: 111111111
+                                }
+                            ]
+                        },
+                    ]
+                }
+            }
+            yield put({type: 'addData', payload: {news: d.data.data}, data: 'news'})
+            return
+
+            const news = yield call(getNews, query)
+            yield put({type: 'addData', payload: {news: news}, data: 'news'})
+        },
+
+        //发送消息
+        * sendNews({data}, {call, put}) {
+            let d = {
+                success: true,
+                data: {
+                    res: 'success',
+                    id: '消息id'
+                }
+            }
+            return d.data
+
+            const res = yield call(sendNews, data)
+            return res
+        },
+
+        //删除通知
+        * deleteNews({id, date}, {call, put}) {
+            let d = {
+                success: true,
+                data: {
+                    res: 'success',
+                    id: '消息id'
+                }
+            }
+            yield put({type: 'deleteNewsData', payload: {}, data: {id, date}})
+            return d.data
+
+            const res = yield call(deleteNews, id, date)
+            return res
+        },
+
+        //阅读通知
+        * readNews({id, date}, {call, put}) {
+            let d = {
+                success: true,
+                data: {
+                    res: 'success',
+                    id: '消息id'
+                }
+            }
+            yield put({type: 'editNewsData', payload: {}, data: {id, date}})
+            return d.data
+
+            const res = yield call(readNews, id, date)
+            return res
+        },
+
+        //通知详情
+        * getNewsDetail({query}, {call, put}) {
+            const d = {
+                success: true,
+                data: {
+                    info: {
+                        id: '用户id',
+                        image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg',
+                        username: '用户名',
+                        data: [
+                            {
+                                content: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg',
+                                type: 'image',
+                                time: 11111111111111,
+                                username: '用户',
+                                id: '用户id',
+                                image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg'
+                            },
+                            {
+                                content: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg',
+                                type: 'video',
+                                time: 11111111111111,
+                                username: '用户',
+                                id: '用户id',
+                                image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg'
+                            },
+                            {
+                                content: '内容内容内容内容内容内容内容内容内容内容内容内容',
+                                type: 'text',
+                                time: 11111111111111,
+                                username: '用户',
+                                id: '用户id',
+                                image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg'
+                            },
+                            {
+                                content: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg',
+                                type: 'audio',
+                                time: 11111111111111,
+                                username: '用户',
+                                id: '用户id',
+                                image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg'
+                            },
+                            {
+                                content: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg',
+                                type: 'image',
+                                time: 11111111111111,
+                                username: '用户',
+                                id: '用户id',
+                                image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg'
+                            }
+                        ]
+                    }
                 }
             }
 
-            const news = yield call(getNews, id)
-            return news
+            return d.data
+
+            const response = yield call(getNewsDetail, query)
+            return response
         },
 
         //回复用户评论
@@ -1861,6 +2294,42 @@ export default {
     reducers: {
         setData(state, {payload}) {
             return {...state, ...payload}
-        }
+        },
+
+        addData(state, { payload, data }) {
+
+            return { ...state, [data] : [ ...state[data], ...payload[data] ] }
+        },
+
+        editNewsData(state, { payload, data }) {
+            const { news } = state
+            const { id: user, date } = data
+            const list = [... news]
+            const index = findIndex(list, (val: any) => {
+                const { id } = val
+                return id == user
+            })
+            if(index < 0) return { ...state }
+            list[index]['list'].map((val: any) => {
+                const { time } = val
+                // if(time < date) {
+                    val.read = true
+                // }
+            })
+            return { ...state, news: [...list] }
+        },
+
+        deleteNewsData(state, { payload, data }) {
+            const { news } = state
+            const { id: user, date } = data
+            const list = [... news]
+            const index = findIndex(list, (val: any) => {
+                const { id } = val
+                return id == user
+            })
+            if(index < 0) return { ...state }
+            list.splice(index, 1)
+            return { ...state, news: [...list] }
+        }   
     }
 }

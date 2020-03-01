@@ -30,6 +30,9 @@ export default class Title extends Component<IProps>{
                 router.push(routeAlias.store, {id})
                 break;
             case titleConfig.news:
+                Taro.hideTabBarRedDot({
+                    index:2
+                })
                 router.push(routeAlias.news, {id})
                 break;
         }
