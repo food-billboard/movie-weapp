@@ -1,4 +1,5 @@
-import { setStyle } from '~config'
+import { setStyle, getStyle } from '~config'
+import { styleChange } from '~utils'
 import Taro from '@tarojs/taro'
 //小程序色调
 export let TypeColor = {
@@ -98,8 +99,17 @@ export const colorChange = (type, color: string='#6190E8') => {
     setStyle(color)
   }
   Taro.setBackgroundColor({
-    backgroundColorTop: TypeColor['bgColor'], // 顶部窗口的背景色为白色
-    backgroundColorBottom: TypeColor['bgColor'], // 底部窗口的背景色为白色
+    backgroundColor: TypeColor['bgColor'],
+    backgroundColorTop: TypeColor['bgColor'], 
+    backgroundColorBottom: TypeColor['bgColor'], 
+  })
+  Taro.setNavigationBarColor({
+    frontColor: '#000000',
+    backgroundColor: TypeColor['bgColor'],
+    animation: {
+        duration: 400,
+        timingFunc: 'easeIn'
+    }
   })
   return TypeColor
 }
@@ -124,5 +134,32 @@ export const style = {
       return {
         backgroundColor: `${TypeColor[type]}`
       }
+    }
+}
+
+//样式修改
+export const colorStyleChange = (isTab=false) => {
+  let _status
+    //查看缓存
+    const value = getStyle()
+    _status = value
+    //色调开启
+    if(!_status) {
+      const status = styleChange()
+      if(status) {
+        colorChange(dateTypeList.day)
+      }else {
+        colorChange(dateTypeList.night)
+      } 
+    }else { //色调关闭
+      colorChange(null, _status)
+    }
+    if(isTab) {
+      Taro.setTabBarStyle({ 
+        color: '#000000',
+        selectedColor: '#ff6600',
+        backgroundColor: TypeColor['bgColor'],
+        borderStyle: 'white'
+      })
     }
 }

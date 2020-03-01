@@ -1,7 +1,7 @@
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import { AtInput, AtForm, AtButton } from 'taro-ui'
-import { style } from '~theme/global-style'
+import { style, colorStyleChange } from '~theme/global-style'
 import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToProps } from './connect'
 
@@ -32,6 +32,10 @@ export default class extends Component<any> {
             return
         }
         await this.props.getUserInfo()
+    }
+
+    public componentDidShow = () => {
+        colorStyleChange()
     }
 
     public state: IState = {

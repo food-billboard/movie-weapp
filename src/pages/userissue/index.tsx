@@ -1,7 +1,7 @@
 import Taro, { Component, Config } from '@tarojs/taro'
 import GScrollView from '~components/scrollList'
 import IconList from '~components/iconlist'
-import { style } from '~theme/global-style'
+import { style, colorStyleChange } from '~theme/global-style'
 import { throttle } from 'lodash'
 
 import { router, routeAlias } from '~utils'
@@ -17,6 +17,10 @@ export default class extends Component<any>{
   }
 
   private scrollRef = Taro.createRef<GScrollView>()
+
+  public colorStyleChange = () => {
+    colorStyleChange()
+  }
 
   //下拉刷新
   public onPullDownRefresh = async () => {

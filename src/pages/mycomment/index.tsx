@@ -5,7 +5,7 @@ import GScrollView from '~components/scrollList'
 import Comment from '~components/comment'
 import Origin from './components/originComment'
 import { throttle } from 'lodash'
-import { style } from '~theme/global-style'
+import { style, colorStyleChange } from '~theme/global-style'
 
 import './index.scss'
 
@@ -34,6 +34,10 @@ export default class extends Component<any>{
 
     public state: any = {
         comment: []
+    }
+
+    public componentDidShow = () => {
+        colorStyleChange()
     }
 
     //下拉刷新

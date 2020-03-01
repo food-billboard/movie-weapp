@@ -6,7 +6,7 @@ import {List} from '~components/commentlist'
 import GButton from '~components/button'
 import { throttle } from 'lodash'
 import Header from './components/header'
-import { style } from '~theme/global-style'
+import { style, colorStyleChange } from '~theme/global-style'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 
@@ -19,6 +19,10 @@ export default class extends Component<any> {
   public static config: Config = {
       navigationBarTitleText: "评论",
       enablePullDownRefresh: true
+  }
+
+  public componentDidShow = () => {
+    colorStyleChange()
   }
 
   private scrollRef = Taro.createRef<GScrollView>()

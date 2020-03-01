@@ -31,7 +31,8 @@ export const routeAlias = {
   store: '/store',
   issue: '/issue',
   userissue: '/userissue',
-  special: '/special'
+  special: '/special',
+  fans: '/fans'
 }
 
 //路由配置
@@ -56,6 +57,7 @@ export const routeConfig = [
   { path: 'pages/issue/index', alias: routeAlias.issue },
   { path: 'pages/userissue/index', alias: routeAlias.userissue },
   { path: 'pages/special/index', alias: routeAlias.special },
+  { path: 'pages/fans/index', alias: routeAlias.fans },
 ]
 
 //轮播图路由跳转类型

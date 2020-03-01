@@ -1,0 +1,34 @@
+.list{
+  width:100%;
+  height:100px;
+  box-sizing:border-box;
+  padding:0 20px;
+  .img{
+      width:90px;
+      height:90px;
+      border-radius: 50%;
+      overflow:hidden;
+      margin-top:5px;
+      margin-right:20px;
+  }
+  .img,
+  .username{
+      float:left;
+  }
+  .username,
+  .enter{
+      line-height:100px;
+  }
+  .username{
+      width:400px;
+      white-space:nowrap;
+      text-overflow:ellipsis;
+      overflow:hidden;
+  }
+  .enter{
+      float:right;
+      margin-right:50px;
+      font-weight:500;
+      font-size:50px;
+  }
+}

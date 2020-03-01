@@ -5,7 +5,7 @@ import Model from '~components/model'
 import List from '~components/linearlist'
 import Comment from '~components/comment'
 import GColor from './components/color'
-import { TypeColor, colorChange, dateTypeList } from '~theme/global-style'
+import { TypeColor, colorChange, dateTypeList, colorStyleChange } from '~theme/global-style'
 import { router, styleChange, routeAlias } from '~utils'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
@@ -49,6 +49,10 @@ export default class Setting extends Component<any>{
 
     //用户id
     readonly id = this.props.id
+
+    public componentDidShow = () => {
+        colorStyleChange()
+    }
 
     public componentDidMount = () => {
         const { colorStyle } = this.props

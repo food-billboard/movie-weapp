@@ -5,7 +5,7 @@ import LinearList from '~components/list'
 import GScrollView from '~components/scrollList'
 import Fab from './components/fab'
 import { throttle } from 'lodash'
-import { style } from '~theme/global-style'
+import { style, colorStyleChange } from '~theme/global-style'
 import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToPrps } from './connect'
 
@@ -31,6 +31,10 @@ export default class Index extends Component<any> {
     public config:Config = {
         navigationBarTitleText: "",
         enablePullDownRefresh: true
+    }
+
+    public componentDidShow = () => {
+        colorStyleChange()
     }
 
     //下拉刷新

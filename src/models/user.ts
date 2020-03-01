@@ -14,7 +14,8 @@ import {
     getIsStore,
     getIssue,
     editIssue,
-    sendIssue
+    sendIssue,
+    getUserFans
 } from '~services'
 var a = 0
 export default {
@@ -1117,6 +1118,157 @@ export default {
 
             const attention = yield call(getAttention, query)
             return attention
+        },
+
+        //获取关注
+        * getUserFans({query}, {call, put}) {
+            let data
+            if(a===0) {
+                a=0
+                data = {
+                    success: true,
+                    data: {
+                        data: [
+                    {
+                        id: 0,
+                        name: '用户名',
+                        image: 'http://b-ssl.duitang.com/uploads/item/201612/18/20161218182807_uzGxY.jpeg'
+                    },
+                    {
+                        id: 1,
+                        name: '用户名',
+                        image: 'http://b-ssl.duitang.com/uploads/item/201612/18/20161218182807_uzGxY.jpeg'
+                    },
+                    {
+                        id: 2,
+                        name: '用户名',
+                        image: 'http://b-ssl.duitang.com/uploads/item/201612/18/20161218182807_uzGxY.jpeg'
+                    },
+                    {
+                        id: 3,
+                        name: '用户名',
+                        image: 'http://b-ssl.duitang.com/uploads/item/201612/18/20161218182807_uzGxY.jpeg'
+                    },
+                    {
+                        id: 4,
+                        name: '用户名',
+                        image: 'http://img0.imgtn.bdimg.com/it/u=246040416,1581641406&fm=26&gp=0.jpg'
+                    },
+                    {
+                        id: 5,
+                        name: '用户名',
+                        image: 'http://img0.imgtn.bdimg.com/it/u=246040416,1581641406&fm=26&gp=0.jpg'
+                    },
+                    {
+                        id: 6,
+                        name: '用户名',
+                        image: 'http://img0.imgtn.bdimg.com/it/u=246040416,1581641406&fm=26&gp=0.jpg'
+                    },
+                    {
+                        id: 7,
+                        name: '用户名',
+                        image: 'http://img0.imgtn.bdimg.com/it/u=246040416,1581641406&fm=26&gp=0.jpg'
+                    },
+                    {
+                        id: 8,
+                        name: '用户名',
+                        image: 'http://img0.imgtn.bdimg.com/it/u=246040416,1581641406&fm=26&gp=0.jpg'
+                    },
+                    {
+                        id: 9,
+                        name: '用户名',
+                        image: 'http://img0.imgtn.bdimg.com/it/u=246040416,1581641406&fm=26&gp=0.jpg'
+                    },
+                    {
+                        id: 10,
+                        name: '用户名',
+                        image: 'http://tupian.qqjay.com/tou2/2018/1219/0cd5bc06f89a0269f9bc9a9fdbcd4e40.jpg'
+                    },
+                    {
+                        id: 11,
+                        name: '用户名',
+                        image: 'http://tupian.qqjay.com/tou2/2018/1219/0cd5bc06f89a0269f9bc9a9fdbcd4e40.jpg'
+                    },
+                    {
+                        id: 12,
+                        name: '用户名',
+                        image: 'http://img0.imgtn.bdimg.com/it/u=246040416,1581641406&fm=26&gp=0.jpg'
+                    },
+                    {
+                        id: 13,
+                        name: '用户名',
+                        image: 'http://img0.imgtn.bdimg.com/it/u=246040416,1581641406&fm=26&gp=0.jpg'
+                    },
+                    {
+                        id: 14,
+                        name: '用户名',
+                        image: 'http://img0.imgtn.bdimg.com/it/u=246040416,1581641406&fm=26&gp=0.jpg'
+                    },
+                    {
+                        id: 15,
+                        name: '用户名',
+                        image: 'http://img0.imgtn.bdimg.com/it/u=246040416,1581641406&fm=26&gp=0.jpg'
+                    },
+                    {
+                        id: 16,
+                        name: '用户名',
+                        image: 'http://img0.imgtn.bdimg.com/it/u=246040416,1581641406&fm=26&gp=0.jpg'
+                    },
+                    {
+                        id: 17,
+                        name: '用户名',
+                        image: 'http://img0.imgtn.bdimg.com/it/u=246040416,1581641406&fm=26&gp=0.jpg'
+                    },
+                    {
+                        id: 18,
+                        name: '用户名',
+                        image: 'http://img0.imgtn.bdimg.com/it/u=246040416,1581641406&fm=26&gp=0.jpg'
+                    },
+                    {
+                        id: 19,
+                        name: '用户名',
+                        image: 'http://img0.imgtn.bdimg.com/it/u=246040416,1581641406&fm=26&gp=0.jpg'
+                    }
+                ]
+            }
+        }
+            }else if(a===1) {
+                a=0
+                data = {
+                    success: true,
+                    data: {
+                        data: [
+                    {
+                        id: 20,
+                        name: '用户名',
+                        image: 'http://img0.imgtn.bdimg.com/it/u=246040416,1581641406&fm=26&gp=0.jpg'
+                    },
+                    {
+                        id: 21,
+                        name: '用户名',
+                        image: 'http://img0.imgtn.bdimg.com/it/u=246040416,1581641406&fm=26&gp=0.jpg'
+                    },
+                    {
+                        id: 22,
+                        name: '用户名',
+                        image: 'http://img0.imgtn.bdimg.com/it/u=246040416,1581641406&fm=26&gp=0.jpg'
+                    }
+                ]
+            }
+        }
+            }else {
+                data = {
+                    success: true,
+                    data: {
+                        data: []
+                    }
+                }
+            }
+
+            return data.data
+
+            const fans = yield call(getUserFans, query)
+            return fans
         },
         
         //用户反馈

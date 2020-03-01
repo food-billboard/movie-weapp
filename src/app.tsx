@@ -67,7 +67,7 @@ class App extends Component {
 
   public config: Config = {
     pages: [
-      // 'pages/attention/index',
+      // 'pages/news/index',
       'pages/main/index',
       'pages/mine/index',
       'pages/register/index',
@@ -87,15 +87,13 @@ class App extends Component {
       'pages/commentdetail/index',
       'pages/issue/index',
       'pages/userissue/index',
-      'pages/special/index'
+      'pages/special/index',
+      'pages/fans/index'
     ],
     window: {
       backgroundTextStyle: 'dark',
-      navigationBarBackgroundColor: '#fff',
-      navigationBarTitleText: 'WeChat',
       navigationBarTextStyle: 'black',
-      backgroundColor: '#fff',
-      backgroundColorTop: '#fff',
+      navigationBarBackgroundColor: '#fff',
       onReachBottomDistance: 50,
       enablePullDownRefresh: false
     },

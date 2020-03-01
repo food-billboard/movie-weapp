@@ -355,8 +355,16 @@ export const getOrderList = () => {
 
 /**
  * 获取专题电影列表
- * @param id 专题id
+ * @param query 查询参数
  */
-export const getSpecial = (id) => {
-    return request('GET', '/api/movie/special', { query: {id} })
+export const getSpecial = (query) => {
+    return request('GET', '/api/movie/special', { query })
+}
+
+/**
+ * 获取用户粉丝
+ * @param query 查询参数
+ */
+export const getUserFans = (query) => {
+    return request('GET', '/api/user/fans', { query })
 }

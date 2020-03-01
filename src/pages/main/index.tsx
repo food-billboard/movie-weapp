@@ -6,9 +6,7 @@ import Itemize from './components/itemize'
 import News from './components/news'
 import Rank from './components/rank'
 import NoticeBar from '~components/noticeBar'
-import { colorChange, style, TypeColor, dateTypeList } from '~theme/global-style'
-import { styleChange } from '~utils'
-import { getStyle } from '~config'
+import { style, TypeColor, colorStyleChange } from '~theme/global-style'
 
 import './index.scss'
 
@@ -36,33 +34,15 @@ export default class extends Component<any> {
 
   //色调修改时重绘用
   public componentDidShow = () => {
+    colorStyleChange(true)
     const { typeColor } = this.state
     if(typeColor == TypeColor) return
     this.setState({typeColor: TypeColor})
   }
 
   public componentDidMount = async () => {
-    this.colorStyle()
+    colorStyleChange()
     this.fetchData()
-  }
-
-  //色调显示
-  public colorStyle = async () => {
-    let _status
-    //查看缓存
-    const value = getStyle()
-    _status = value
-    //色调开启
-    if(!_status) {
-      const status = styleChange()
-      if(status) {
-        colorChange(dateTypeList.day)
-      }else {
-        colorChange(dateTypeList.night)
-      } 
-    }else { //色调关闭
-      colorChange(null, _status)
-    }
   }
 
   public fetchData = async () => {

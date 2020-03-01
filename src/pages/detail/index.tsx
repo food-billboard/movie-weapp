@@ -8,7 +8,7 @@ import IconList from './components/iconList'
 import Comment from '~components/comment'
 import GTag from './components/tag'
 import Actor from './components/actor'
-import { style } from '~theme/global-style'
+import { style, colorStyleChange } from '~theme/global-style'
 
 import './index.scss'
 
@@ -22,6 +22,10 @@ export default class extends Component<any> {
    
     public config: Config = {
         navigationBarTitleText: ""
+    }
+
+    public componentDidShow = () => {
+        colorStyleChange()
     }
 
     public commentRef = Taro.createRef<Comment>()

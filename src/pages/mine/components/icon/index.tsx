@@ -7,6 +7,11 @@ import { style, TypeColor } from '~theme/global-style'
 
 import './index.scss'
 
+const ICON_INFO = {
+    size: 28,
+    color: TypeColor['thirdly']
+}
+
 export default class IconList extends Component<IProps>{
 
     public state: any = {
@@ -22,33 +27,38 @@ export default class IconList extends Component<IProps>{
     //标题配置
     readonly titleConfig = {
         attention: '关注',
-        comment: '我的评论',
-        record: '浏览记录'
+        comment: 'Wo的评论',
+        record: '浏览记录',
+        fans: '粉丝'
     }
 
     readonly list: Array<List> = [
         {
             value: this.titleConfig.attention,
             iconInfo: {
-                size: 28,
                 value: 'heart-2',
-                color: TypeColor['thirdly']
+                ...ICON_INFO
             }
         },
         {
             value: this.titleConfig.comment,
             iconInfo: {
-                size: 28,
                 value: 'bookmark',
-                color: TypeColor['thirdly']
+                ...ICON_INFO
             }
         },
         {
             value: this.titleConfig.record,
             iconInfo: {
-                size: 28,
                 value: 'filter',
-                color: TypeColor['thirdly']
+                ...ICON_INFO
+            }
+        },
+        {
+            value: this.titleConfig.fans,
+            iconInfo: {
+                value: 'user',
+                ...ICON_INFO
             }
         }
     ]
@@ -66,9 +76,11 @@ export default class IconList extends Component<IProps>{
                 router.push(routeAlias.mycomment, {id})
                 break
             case titleConfig.record:
-            default:
                 router.push(routeAlias.record, {id})
-
+                break
+            case titleConfig.fans:
+                router.push(routeAlias.fans, {id})
+                break
         }
     }
 
@@ -87,7 +99,7 @@ export default class IconList extends Component<IProps>{
                     })}
                     mode={'square'}    
                     hasBorder={false}
-                    columnNum={3}
+                    columnNum={4}
                     onClick={this.handleClick}
                 />
             </View>

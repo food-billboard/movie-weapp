@@ -4,7 +4,7 @@ import Title from './components/title'
 import IconList from './components/icon'
 import List from '~components/linearlist'
 import IconHead from '~components/headicon'
-import { style, TypeColor } from '~theme/global-style'
+import { style, TypeColor, colorStyleChange } from '~theme/global-style'
 import { IList } from '~components/linearlist/index.d'
 
 import './index.scss'
@@ -85,6 +85,7 @@ export default class extends Component<any>{
 
     //色调修改时重绘
     public componentDidShow = () => {
+        colorStyleChange(true)
         const { typeColor } = this.state
         if(typeColor == TypeColor) return
         this.setState({typeColor: TypeColor})

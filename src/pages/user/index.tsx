@@ -3,7 +3,7 @@ import { View } from '@tarojs/components'
 import IconHead from '~components/headicon'
 import List from '~components/linearlist'
 import GButton from '~components/button'
-import { TypeColor } from '~theme/global-style'
+import { TypeColor, colorStyleChange } from '~theme/global-style'
 import './index.scss'
 
 import {mapStateToProps, mapDispatchToProps} from './connect'
@@ -27,6 +27,10 @@ export default class User extends Component<any>{
 
     //我的id
     readonly mineId = this.props.id
+
+    public componentDidShow = () => {
+        colorStyleChange()
+    }
 
     public componentDidMount = async () => {
         this.fetchData()
@@ -84,6 +88,11 @@ export default class User extends Component<any>{
         router.push(routeAlias.mycomment, { id: this.id })
     }
 
+    //查看粉丝
+    public handleCheckFans = async() => {
+        router.push(routeAlias.fans, { id: this.id })
+    }
+
     //用户界面的相关信息
     readonly userInfo = [
         {
@@ -105,6 +114,16 @@ export default class User extends Component<any>{
             },
             handle:this.handleCheckAttention,
             id: Symbol('attention')
+        },
+        {
+            title: 'Ta的粉丝',
+            iconInfo: {
+                value: 'user',
+                size: 32,
+                color: TypeColor['primary']
+            },
+            handle: this.handleCheckFans,
+            id: Symbol('fans')
         },
         {
             title: 'Ta的浏览记录',

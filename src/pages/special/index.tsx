@@ -2,7 +2,7 @@ import Taro, { Component, Config } from '@tarojs/taro'
 import Scroll from '~components/scrollList'
 import { throttle } from 'lodash'
 import IconList from '~components/iconlist'
-import { style } from '~theme/global-style'
+import { style, colorStyleChange } from '~theme/global-style'
 import { router, routeAlias } from '~utils'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
@@ -25,6 +25,10 @@ export default class extends Component<any>{
   }
 
   private scrollRef = Taro.createRef<Scroll>()
+
+  public colorStyleChange = () => {
+    colorStyleChange()
+  }
     
   //上拉加载
   public onReachBottom = async () => {

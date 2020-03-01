@@ -2,7 +2,7 @@ import Taro, { Component, Config } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtInput, AtForm, AtButton } from 'taro-ui'
 import Time from './components/time'
-import { style } from '~theme/global-style'
+import { style, colorStyleChange } from '~theme/global-style'
 import './index.scss'
 
 import {router} from '~utils'
@@ -40,6 +40,10 @@ export default class extends Component<any>{
         this.submit = this.submit.bind(this)
         this.reset = this.reset.bind(this)
         this.getData = this.getData.bind(this)
+    }
+
+    public componentDidShow = () => {
+        colorStyleChange()
     }
 
     /**

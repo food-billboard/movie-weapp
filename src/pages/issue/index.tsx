@@ -9,7 +9,7 @@ import GImagePicker from '~components/imgPicker'
 import { IFormData } from './interface'
 import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToProps } from './connect'
-import { style, TypeColor } from '~theme/global-style'
+import { style, TypeColor, colorStyleChange } from '~theme/global-style'
 
 import './index.scss'
 import { Toast } from '~components/toast'
@@ -59,6 +59,7 @@ export default class extends Component<any> {
 
   //色调修改时重绘用
   public componentDidShow = () => {
+    colorStyleChange(true)
     const { typeColor } = this.state
     if(typeColor == TypeColor) return
     this.setState({typeColor: TypeColor})

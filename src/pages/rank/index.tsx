@@ -4,7 +4,7 @@ import { AtGrid } from "taro-ui"
 import GScrollView from '~components/scrollList'
 import Rank from '../main/components/rank'
 import List from '~components/list'
-import { style, TypeColor } from '~theme/global-style'
+import { style, TypeColor, colorStyleChange } from '~theme/global-style'
 import { throttle } from 'lodash'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
@@ -57,6 +57,10 @@ export default class extends Component<any> {
     title: '',
     id: '',
     showMore: false
+  }
+
+  public componentDidShow = () => {
+    colorStyleChange()
   }
 
   public componentDidMount = async () => {

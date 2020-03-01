@@ -1,7 +1,7 @@
 import Taro, {Component, Config } from '@tarojs/taro'
 import { View, Image, Text } from '@tarojs/components'
 import GScrollView from '~components/scrollList'
-import { style } from '~theme/global-style'
+import { style, colorStyleChange } from '~theme/global-style'
 import { throttle } from 'lodash'
 import { router, routeAlias } from '~utils'
 import {connect} from '@tarojs/redux'
@@ -20,6 +20,10 @@ export default class extends Component<any>{
     readonly id = this.$router.params.id
 
     private scrollRef = Taro.createRef<GScrollView>()
+
+    public componentDidShow = () => {
+        colorStyleChange()
+    }
 
     public static config: Config = {
         navigationBarTitleText: '关注',

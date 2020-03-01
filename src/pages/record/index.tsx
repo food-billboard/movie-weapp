@@ -3,7 +3,7 @@ import {View} from '@tarojs/components'
 import List from '~components/newsheader'
 import GScrollView from '~components/scrollList'
 import { throttle } from 'lodash'
-import { style } from '~theme/global-style'
+import { style, colorStyleChange } from '~theme/global-style'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import {connect} from '@tarojs/redux'
 
@@ -22,6 +22,10 @@ export default class Index extends Component<any> {
     readonly id = this.$router.params.id
 
     private scrollRef = Taro.createRef<GScrollView>()
+
+    public componentDidShow = () => {
+        colorStyleChange()
+    }
 
     //下拉刷新
     public onPullDownRefresh = async () => {

@@ -5,7 +5,7 @@ import Header from '~components/newsheader'
 import {List} from '~components/commentlist'
 import CommentCom from '~components/comment'
 import GScrollView from '~components/scrollList'
-import { style } from '~theme/global-style'
+import { style, colorStyleChange } from '~theme/global-style'
 import { throttle } from 'lodash'
 
 import {connect} from '@tarojs/redux'
@@ -22,6 +22,10 @@ export default class extends Component<any> {
 
     public componentDidMount = async () => {
         this.fetchMovieData()
+    }
+
+    public componentDidShow = () => {
+        colorStyleChange()
     }
 
     private scrollRef = Taro.createRef<GScrollView>()

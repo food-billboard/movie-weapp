@@ -1,12 +1,13 @@
 import Taro, {Component, Config} from '@tarojs/taro'
 import {View} from '@tarojs/components'
+import Scroll from '~components/scrollList'
 import { AtList, AtListItem } from "taro-ui"
-import './index.scss'
-import { style } from '~theme/global-style'
+import { style, colorStyleChange } from '~theme/global-style'
 import { mapDispatchToProps, mapStateToProps } from './connect'
 import {connect} from '@tarojs/redux'
-
 import {router} from '~utils'
+
+import './index.scss'
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any> {
@@ -21,17 +22,16 @@ export default class extends Component<any> {
     //用户id
     readonly id = this.$router.params.id
 
+    public componentDidShow = () => {
+        colorStyleChange()
+    }
+
     public componentDidMount = async () => {
         this.fetchData()
     }
 
-    public constructor() {
-        super(...arguments)
-        this.getDetail = this.getDetail.bind(this)
-    }
-
     //获取详细信息
-    public getDetail(id: string) {
+    public getDetail = (id: string) => {
         router.push('/user', {id})
     }
 

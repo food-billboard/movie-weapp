@@ -8,7 +8,7 @@ import IconList from '~components/iconlist'
 import GScrollView from '~components/scrollList'
 import { debounce, throttle } from 'lodash'
 import { FormData } from './interface'
-import { style } from '~theme/global-style'
+import { style, colorStyleChange } from '~theme/global-style'
 import './index.scss'
 
 import {connect} from '@tarojs/redux'
@@ -37,6 +37,10 @@ export default class Index extends Component<any> {
     public scrollRef = Taro.createRef<GScrollView>()
 
     private scrollTop = 0
+
+    public componentDidShow = () => {
+        colorStyleChange()
+    }
 
     //上拉加载
     public onReachBottom = async () => {
