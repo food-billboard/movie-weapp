@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
-import { AtIcon } from 'taro-ui'
+import { AtIcon, AtBadge } from 'taro-ui'
 import { IProps } from './index.d'
 import { style, TypeColor } from '~theme/global-style'
 import './index.scss'
@@ -41,6 +41,7 @@ export default class Title extends Component<IProps>{
     public render(){
 
         const { titleConfig: config } = this
+        const { hasNews=false } = this.props
 
         return (
             <View className='title at-row at-row__justify--around'
@@ -58,7 +59,9 @@ export default class Title extends Component<IProps>{
                 <View className='folder at-col at-col-5'
                     onClick={() => {this.handleClick.call(this, config.news)}}
                 >
-                    <AtIcon value='folder' size='30' color={TypeColor['secondary']}></AtIcon>
+                    <AtBadge dot={hasNews}>
+                        <AtIcon value='folder' size='30' color={TypeColor['secondary']}></AtIcon>
+                    </AtBadge>
                     <Text className='text'>{this.titleConfig.news}</Text>
                 </View>
             </View>

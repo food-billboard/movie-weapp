@@ -23,6 +23,36 @@ import {
 } from '~services'
 import { findIndex } from 'lodash'
 
+const editNews = (news, newData) => {
+    let origin = [...news]
+    if(!origin.length) return newData
+    let newList: any[] = []
+    let newNews: any[] = []
+    let count = 0
+
+    newData.map((val: any, ind: number) => {
+        const { id, list, type } = val
+
+        origin.map((value: any, index: number) => {
+            const { id: originId, list: originList, type: originType } = value
+            if(originId == id && originType == type) {
+                newList = [ ...list, ...originList ]
+                origin[index]['list'] = [ ...newList ]
+            }else {
+                count ++
+            }
+            newList = []
+        })
+
+        if(count == origin.length) {
+            origin = [...origin, newData[ind]]
+        }
+        count = 0
+    })
+
+    return origin
+}
+
 var a = 0
 export default {
     namespace: 'user',
@@ -31,9 +61,18 @@ export default {
             isIssue: false,
             id: false
         },
-        news: []
+        news: [],
+        hasNews: false
     },
     effects: {
+
+        //临时获取新消息
+        * _getnews({data}, {call, put}) {
+            yield put({type: 'editData', data: 'news', callback: (news) => {
+                return editNews(news, data)
+            }})
+        },
+
         //点赞
         * like({comment, user, mine}, {call, put}) {
             return {
@@ -297,7 +336,7 @@ export default {
             return record
         },
 
-        //获取通知
+        //获取历史记录通知
         * getNews({id}, {call, put}) {
             let d = {
                 success: true,
@@ -621,7 +660,9 @@ export default {
                     ]
                 }
             }
-            yield put({type: 'setData', payload: {news: d.data.data}})
+            yield put({type: 'editData', data: 'news', callback: (news) => {
+                return editNews(news, d.data.data)
+            }})
             return
 
             const news = yield call(getNews, id)
@@ -652,7 +693,7 @@ export default {
                     id: '消息id'
                 }
             }
-            yield put({type: 'editData', data: 'news', calllback: (news) => {
+            yield put({type: 'editData', data: 'news', callback: (news) => {
                 const list = [...news]
                 const index= findIndex(list, (val: any) => {
                     const { id: user } = val
@@ -677,7 +718,7 @@ export default {
                     id: '消息id'
                 }
             }
-            yield put({type: 'editData', data: 'news', calllback: (news) => {
+            yield put({type: 'editData', data: 'news', callback: (news) => {
                 const list = [...news]
                 const index = findIndex(list, (val: any) => {
                     const { id: user } = val
@@ -2320,13 +2361,13 @@ export default {
         },
 
         addData(state, { payload, data }) {
-
             return { ...state, [data] : [ ...state[data], ...payload[data] ] }
         },
 
-        editData(state, { data, calllback }) {
-            const _data = calllback(state[data])
+        editData(state, { data, callback }) {
+            const _data = callback(state[data])
             return { ...state, [data]: [ ..._data ] }
         }
+
     }
 }

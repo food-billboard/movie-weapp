@@ -7,6 +7,7 @@ import News from './components/news'
 import Rank from './components/rank'
 import NoticeBar from '~components/noticeBar'
 import { style, TypeColor, colorStyleChange } from '~theme/global-style'
+import { createSocket } from '~utils'
 
 import './index.scss'
 
@@ -21,8 +22,6 @@ export default class extends Component<any> {
   public config: Config = {
     navigationBarTitleText: '电影推荐'
   }
-
-  private newsTimer
 
   public state: any = {
     hot: [],
@@ -45,14 +44,17 @@ export default class extends Component<any> {
   public componentDidMount = async () => {
     colorStyleChange()
     this.fetchData()
+    await this.getNews()
   }
 
-  // public getNews = async () => {
-  //   clearInterval(this.newsTimer)
-  //   this.newsTimer = setInterval(() => {
-
-  //   }, 10000)
-  // }
+  public getNews = async () => {
+    createSocket((response) => {
+      const { data } = response
+      if(!data.data.length) return
+      Taro.showTabBarRedDot({index: 2})
+      this.props.getNews(data.data)
+    })
+  }
 
   public fetchData = async () => {
     Taro.showLoading({ title: '加载中' })

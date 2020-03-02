@@ -92,7 +92,7 @@ export default class extends Component<any>{
     }
 
     public render() {
-        const { id } = this.props
+        const { id, hasNews=false } = this.props
         const { detail } = this.state
         return (
             <View className='mine'>
@@ -106,6 +106,7 @@ export default class extends Component<any>{
                 >
                     <View className='title'>
                         <Title 
+                            hasNews={hasNews}
                             id={id}
                         />
                     </View>
