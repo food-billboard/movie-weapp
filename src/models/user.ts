@@ -298,8 +298,7 @@ export default {
         },
 
         //获取通知
-        * getNews({query}, {call, put}) {
-
+        * getNews({query, init}, {call, put}) {
             let d = {
                 success: true,
                 data: {
@@ -622,7 +621,11 @@ export default {
                     ]
                 }
             }
-            yield put({type: 'addData', payload: {news: d.data.data}, data: 'news'})
+            if(init) {
+                yield put({type: 'setData', payload: {news: d.data.data}})
+            }else {
+                yield put({type: 'addData', payload: {news: d.data.data}, data: 'news'})
+            }
             return
 
             const news = yield call(getNews, query)
@@ -653,7 +656,17 @@ export default {
                     id: '消息id'
                 }
             }
-            yield put({type: 'deleteNewsData', payload: {}, data: {id, date}})
+            // yield put({type: 'deleteNewsData', payload: {}, data: {id, date}})
+            yield put({type: 'editData', data: 'news', calllback: (news) => {
+                const list = [...news]
+                const index= findIndex(list, (val: any) => {
+                    const { id: user } = val
+                    return user === id
+                })
+                if(index < 0) return news
+                list.splice(index, 1)
+                return list
+            }})
             return d.data
 
             const res = yield call(deleteNews, id, date)
@@ -669,7 +682,22 @@ export default {
                     id: '消息id'
                 }
             }
-            yield put({type: 'editNewsData', payload: {}, data: {id, date}})
+            // yield put({type: 'editNewsData', payload: {}, data: {id, date}})
+            yield put({type: 'editData', data: 'news', calllback: (news) => {
+                const list = [...news]
+                const index = findIndex(list, (val: any) => {
+                    const { id: user } = val
+                    return id === user
+                })
+                if(index < 0) return news
+                list[index]['list'].map((val: any) => {
+                    const { time } = val
+                    // if(time < date) {
+                        val.read = true
+                    // }
+                })
+                return list
+            }})
             return d.data
 
             const res = yield call(readNews, id, date)
@@ -2299,6 +2327,11 @@ export default {
         addData(state, { payload, data }) {
 
             return { ...state, [data] : [ ...state[data], ...payload[data] ] }
+        },
+
+        editData(state, { data, calllback }) {
+            const _data = calllback(state[data])
+            return { ...state, [data]: [ state[data], ..._data ] }
         },
 
         editNewsData(state, { payload, data }) {

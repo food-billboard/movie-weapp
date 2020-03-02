@@ -3,6 +3,8 @@ import { View, Text } from '@tarojs/components'
 import { AtAvatar } from 'taro-ui'
 import { IProps } from './index.d'
 import { style } from '~theme/global-style'
+import { formatNumber } from '~utils'
+
 import './index.scss'
 
 export default class IconHead extends Component<IProps>{
@@ -10,7 +12,9 @@ export default class IconHead extends Component<IProps>{
         list: {
             username: '用户名',
             image: '头像',
-            hot: 0
+            hot: 0,
+            fans: 0,
+            attention: 0
         }
     }
 
@@ -26,32 +30,49 @@ export default class IconHead extends Component<IProps>{
 
     public render() {
         const {list} = this.props
-        const {username='', image='', hot=0} = list
+        const {username='', image='', hot=0, fans, attention} = list
         return (
             <View className='head'
                 style={{...style.backgroundColor('thirdly')}}
             >
                 <View className='icon'>
-                    <View className='img'
+                    <View className='content'
                         onClick={this.previewImage.bind(this, image)}
                     >
-                        <AtAvatar
-                            image={image} 
-                            className='content' 
-                            text={'头像'}
-                            circle
-                            size={'large'}
-                            customStyle={{width: '100%', height: '100%'}}
-                         />
+                        <View className='img'>
+                            <AtAvatar
+                                image={image} 
+                                text={'头像'}
+                                circle
+                                size={'large'}
+                                customStyle={{width: '100%', height: '100%'}}
+                            />
+                         </View>
                     </View>
-                    <Text className='username' style={{...style.color('primary')}}>{username}</Text>
+                    <View className='username' style={{...style.color('primary')}}>
+                        <Text 
+                            className='user-text'
+                        >{username}</Text>
+                    </View>
                 </View>
-                <View className='hot'
+                <View className='hot at-row'
                     style={{...style.color('disabled')}}
                 >
-                    <Text className='count'
-                        style={{...style.color('primary')}}
-                    >{hot}</Text>人觉得很赞
+                    <View className='at-col text'>
+                        粉丝: <Text className='count'
+                            style={{...style.color('primary')}}
+                        >{formatNumber(fans)}</Text>
+                    </View>
+                    <View className='at-col text'>
+                        关注: <Text className='count'
+                            style={{...style.color('primary')}}
+                        >{formatNumber(attention)}</Text>
+                    </View>
+                    <View className='at-col text'>
+                        <Text className='count'
+                            style={{...style.color('primary')}}
+                        >{formatNumber(hot)}</Text>人觉得很赞
+                    </View>
                 </View>
             </View>
         )

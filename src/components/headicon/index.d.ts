@@ -15,6 +15,8 @@ interface List {
   username: string, 
   image: string, 
   hot: number
+  fans: number
+  attention: number
 }
 
 export interface IProps {

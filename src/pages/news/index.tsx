@@ -76,7 +76,7 @@ export default class extends Component<any> {
 
     //获取数据
     public fetchData = async (query, isInit=false) => {
-        await this.props.getNews({id: this.id, ...query})
+        await this.props.getNews({id: this.id, ...query}, isInit)
     }   
 
     //处理消息操作按钮
