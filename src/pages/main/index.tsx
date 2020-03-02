@@ -22,6 +22,8 @@ export default class extends Component<any> {
     navigationBarTitleText: '电影推荐'
   }
 
+  private newsTimer
+
   public state: any = {
     hot: [],
     swiper: [],
@@ -44,6 +46,13 @@ export default class extends Component<any> {
     colorStyleChange()
     this.fetchData()
   }
+
+  // public getNews = async () => {
+  //   clearInterval(this.newsTimer)
+  //   this.newsTimer = setInterval(() => {
+
+  //   }, 10000)
+  // }
 
   public fetchData = async () => {
     Taro.showLoading({ title: '加载中' })

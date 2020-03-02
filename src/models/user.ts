@@ -298,13 +298,13 @@ export default {
         },
 
         //获取通知
-        * getNews({query, init}, {call, put}) {
+        * getNews({id}, {call, put}) {
             let d = {
                 success: true,
                 data: {
                     data: [
                         {
-                            id: 'id',
+                            id: '已读消息',
                             image: 'http://www.33lc.com/article/UploadPic/2012-10/2012102514181086564.jpg',
                             username: '这是条已读消息应该在下面',
                             type: 'attention',
@@ -317,7 +317,7 @@ export default {
                             ]
                         },
                         {
-                            id: 'id',
+                            id: '未读第一条',
                             image: 'http://01.minipic.eastday.com/20170408/20170408143858_c25cfaadbcee035e31fc7606a06fba47_3.jpeg',
                             username: '未读第一条',
                             type: 'app',
@@ -335,7 +335,7 @@ export default {
                             ]
                         },
                         {
-                            id: 'id',
+                            id: '未读第2条',
                             image: 'http://www.33lc.com/article/UploadPic/2012-10/2012102514181086564.jpg',
                             username: '发送人用户名',
                             type: 'attention',
@@ -348,7 +348,7 @@ export default {
                             ]
                         },
                         {
-                            id: 'id',
+                            id: '未读第3条',
                             image: 'http://01.minipic.eastday.com/20170408/20170408143858_c25cfaadbcee035e31fc7606a06fba47_3.jpeg',
                             username: '未读第二条',
                             type: 'app',
@@ -371,7 +371,7 @@ export default {
                             ]
                         },
                         {
-                            id: 'id',
+                            id: '未读第4条',
                             image: 'http://www.33lc.com/article/UploadPic/2012-10/2012102514181086564.jpg',
                             username: '发送人用户名',
                             type: 'attention',
@@ -384,7 +384,7 @@ export default {
                             ]
                         },
                         {
-                            id: 'id',
+                            id: '未读第5条',
                             image: 'http://01.minipic.eastday.com/20170408/20170408143858_c25cfaadbcee035e31fc7606a06fba47_3.jpeg',
                             username: '发送人用户名',
                             type: 'app',
@@ -402,7 +402,7 @@ export default {
                             ]
                         },
                         {
-                            id: 'id',
+                            id: '未读第6条',
                             image: 'http://www.33lc.com/article/UploadPic/2012-10/2012102514181086564.jpg',
                             username: '发送人用户名',
                             type: 'attention',
@@ -415,7 +415,7 @@ export default {
                             ]
                         },
                         {
-                            id: 'id',
+                            id: '未读第7条',
                             image: 'http://01.minipic.eastday.com/20170408/20170408143858_c25cfaadbcee035e31fc7606a06fba47_3.jpeg',
                             username: '发送人用户名',
                             type: 'app',
@@ -433,7 +433,7 @@ export default {
                             ]
                         },
                         {
-                            id: 'id',
+                            id: '未读第8条',
                             image: 'http://www.33lc.com/article/UploadPic/2012-10/2012102514181086564.jpg',
                             username: '发送人用户名',
                             type: 'attention',
@@ -621,15 +621,11 @@ export default {
                     ]
                 }
             }
-            if(init) {
-                yield put({type: 'setData', payload: {news: d.data.data}})
-            }else {
-                yield put({type: 'addData', payload: {news: d.data.data}, data: 'news'})
-            }
+            yield put({type: 'setData', payload: {news: d.data.data}})
             return
 
-            const news = yield call(getNews, query)
-            yield put({type: 'addData', payload: {news: news}, data: 'news'})
+            const news = yield call(getNews, id)
+            yield put({type: 'setData', payload: {news: news}})
         },
 
         //发送消息
@@ -656,7 +652,6 @@ export default {
                     id: '消息id'
                 }
             }
-            // yield put({type: 'deleteNewsData', payload: {}, data: {id, date}})
             yield put({type: 'editData', data: 'news', calllback: (news) => {
                 const list = [...news]
                 const index= findIndex(list, (val: any) => {
@@ -682,7 +677,6 @@ export default {
                     id: '消息id'
                 }
             }
-            // yield put({type: 'editNewsData', payload: {}, data: {id, date}})
             yield put({type: 'editData', data: 'news', calllback: (news) => {
                 const list = [...news]
                 const index = findIndex(list, (val: any) => {
@@ -690,6 +684,7 @@ export default {
                     return id === user
                 })
                 if(index < 0) return news
+                
                 list[index]['list'].map((val: any) => {
                     const { time } = val
                     // if(time < date) {
@@ -2331,38 +2326,7 @@ export default {
 
         editData(state, { data, calllback }) {
             const _data = calllback(state[data])
-            return { ...state, [data]: [ state[data], ..._data ] }
-        },
-
-        editNewsData(state, { payload, data }) {
-            const { news } = state
-            const { id: user, date } = data
-            const list = [... news]
-            const index = findIndex(list, (val: any) => {
-                const { id } = val
-                return id == user
-            })
-            if(index < 0) return { ...state }
-            list[index]['list'].map((val: any) => {
-                const { time } = val
-                // if(time < date) {
-                    val.read = true
-                // }
-            })
-            return { ...state, news: [...list] }
-        },
-
-        deleteNewsData(state, { payload, data }) {
-            const { news } = state
-            const { id: user, date } = data
-            const list = [... news]
-            const index = findIndex(list, (val: any) => {
-                const { id } = val
-                return id == user
-            })
-            if(index < 0) return { ...state }
-            list.splice(index, 1)
-            return { ...state, news: [...list] }
-        }   
+            return { ...state, [data]: [ ..._data ] }
+        }
     }
 }

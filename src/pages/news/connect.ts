@@ -6,7 +6,7 @@ export const mapStateToProps = (_) => {
 }
   
 export const mapDispatchToProps = dispatch => ({   
-    getNews: (query, init) => dispatch({type: 'user/getNews', query, init}),
+    getNews: (id) => dispatch({type: 'user/getNews', id}),
     readNews: (id, date) => dispatch({type: 'user/readNews', id, date}),
     deleteNews: (id, date) => dispatch({type: 'user/deleteNews', id, date})
 })
