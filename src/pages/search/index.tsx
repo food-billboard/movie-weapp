@@ -244,6 +244,7 @@ export default class Index extends Component<any> {
                             control={this.showList}
                             hotShow={hotShow}
                         />
+                        
                     </View>
                 }
             >

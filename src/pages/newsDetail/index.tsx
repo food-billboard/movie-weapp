@@ -7,13 +7,15 @@ import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { connect } from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
-import { newsType, responseType } from '~utils'
+import { newsType, responseType, getStrLen } from '~utils'
 
 import './index.scss'
 
 let FIRST = true
 
 const type = Object.values(newsType)
+
+const INPUT_HEIGHT = 40
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any> {
@@ -35,7 +37,8 @@ export default class extends Component<any> {
   public state: any = {
     info: {},
     data: [],
-    inputDisabled: false
+    inputDisabled: false,
+    inputHeight: INPUT_HEIGHT
   }
 
   public componentDidShow = () => {
@@ -175,9 +178,25 @@ export default class extends Component<any> {
     }
   }
 
+  //处理文本域内容
+  public handleInputChange = (e) => {
+    this.inputRef.current!.handleChange(e)
+    const len = getStrLen(e.target.value)
+    const column = Math.ceil(len / 30)
+    let _col = column
+    if(column == 0) {
+      _col = 1
+    }else if(column > 5) {
+      _col = 5
+    }
+    this.setState({
+      inputHeight: INPUT_HEIGHT * _col
+    })
+  }
+
   public render() {
 
-    const { info, inputDisabled, data } = this.state
+    const { info, inputDisabled, data, inputHeight } = this.state
 
     this.setTitle()
 
@@ -214,7 +233,7 @@ export default class extends Component<any> {
                 onClick={this.handleAddAudio}
               ></View>
             </View>
-            <View className='input at-row at-row__align--center'>
+            <View className='input at-row at-row__align--end'>
               <View className='at-col at-col-9'>
                 <GInput
                   style={{
@@ -225,13 +244,19 @@ export default class extends Component<any> {
                   disabled={inputDisabled}
                   value={'在这里发消息'}
                   placeholder={'在这里发消息'}
+                  type={'textarea'}
+                  height={inputHeight}
+                  count={false}
+                  handleChange={this.handleInputChange}
                 ></GInput>
               </View>
               <View className='at-col at-col-3'>
                 <Button 
                   style={{
                     ...style.backgroundColor(inputDisabled ? 'bgColor' :'secondary'),
-                    borderRadius: 0
+                    borderRadius: 0,
+                    height: '40px',
+                    lineHeight: '40px'
                   }}
                   onClick={this.handleSend}
                 >发送</Button>

@@ -103,6 +103,8 @@ export default class extends Component<IProps, IState> {
 
   //收起
   public close = () => {
+    const { show } = this.state
+    if(!show) return
     this.setState({
       show: false
     })

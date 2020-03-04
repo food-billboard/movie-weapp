@@ -8,6 +8,7 @@
  *  disabled: 控制输入框禁止状态
  *  style: 样式
  *  handleChange: 自定义处理输入改变
+ *  height: 文本域的高度
  * }
  * 
  * state: {
@@ -21,10 +22,12 @@ export interface IProps {
   value?: string | false
   style: any
   type?: 'input' | 'textarea'
-  handleChange?: (() => any) | false
+  handleChange?: ((...args: any[]) => any) | false
   placeholder?: string | false
   inputType?:string
   disabled?: boolean
+  height?: number
+  count?: boolean
 }
 
 export interface IState {

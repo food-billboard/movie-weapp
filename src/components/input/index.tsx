@@ -75,7 +75,7 @@ export default class extends Component<IProps, IState> {
 
   public render() {
 
-    const { value, style, type, placeholder, inputType='text', disabled } = this.props
+    const { value, style, type, placeholder, inputType='text', disabled, height=100, count=true } = this.props
 
     //处理props第一次传值的问题
     if(this.FIRST) {
@@ -133,6 +133,8 @@ export default class extends Component<IProps, IState> {
             onChange={(e) => {this.props.handleChange ? this.props.handleChange.call(this, e) : this.handleChange.call(this, e)}}
             maxLength={300}
             placeholder={placeholder ? placeholder : ''}
+            height={height}
+            count={count}
           ></AtTextarea>
         }
       </View>
