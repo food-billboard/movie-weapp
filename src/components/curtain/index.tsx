@@ -40,11 +40,11 @@ export default class extends Component<IProps, IState> {
     return (
       <View 
         className='curtain'
+        onTouchMove={this.stopMove}
         style={{ display: isOpen ? 'block' : 'none' }}
       > 
         <View 
           className='shadow'
-          onTouchMove={this.stopMove}
           style={{...customeStyle.backgroundColor('primary'), ...(isObject(curtainStyle) ? curtainStyle : {})}}
           onClick={() => {cancel ? (this.props.handleCancel ? this.props.handleCancel.call(this) : this.handleCancel.call(this)) : this.emptyFn}}
         ></View>

@@ -397,3 +397,11 @@ export const getUserFans = (query) => {
 export const getNewsDetail = (query) => {
     return request('GET', '/api/user/newsdetail', { query })
 }
+
+/**
+ * 获取电影搜索关键字
+ * @param text 查询文字
+ */
+export const fetchSearchPoint = (text) => {
+    return request('GET', 'api/movie/fetchSearchPoint', { query: { text } })
+}

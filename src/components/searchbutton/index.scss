@@ -3,6 +3,17 @@
     .search{
        
     }
+    .point-list{
+        width:100%;
+        box-sizing: border-box;
+        padding:20px;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+        .point{
+            width:100%;
+            height:50px;
+        }
+    }
     .hotsearch{
         // margin:10px 0;
         overflow: hidden;

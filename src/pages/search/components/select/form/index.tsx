@@ -239,6 +239,13 @@ export default class Forms extends Component<IProps> {
     public render() {
         const { lang, open } = this.state
         const { feeOptions } = this.formDefault
+
+        const tagStyle = {
+            ...TAT_STYLE,
+            border: `1px dashed ${TypeColor['primary']}`, 
+            color: TypeColor['primary']
+        }
+
         return (
             <AtForm
                 onSubmit={this.onSubmit}
@@ -246,7 +253,7 @@ export default class Forms extends Component<IProps> {
             >
                 <View className='fee'>
                     <AtTag 
-                        customStyle={TAT_STYLE} 
+                        customStyle={tagStyle} 
                         type={'primary'}
                     >
                         价格选择
@@ -277,7 +284,7 @@ export default class Forms extends Component<IProps> {
                 </View>
                 <View className='type'>
                     <AtTag 
-                        customStyle={TAT_STYLE} 
+                        customStyle={tagStyle} 
                         type={'primary'}
                     >
                         分类
@@ -291,7 +298,7 @@ export default class Forms extends Component<IProps> {
                 </View>
                 <View className='time'>
                     <AtTag 
-                        customStyle={TAT_STYLE} 
+                        customStyle={tagStyle} 
                         type={'primary'}
                     >
                         时间选择
@@ -319,7 +326,7 @@ export default class Forms extends Component<IProps> {
                     open && <View className='other'>
                         <View className='actor'>
                             <AtTag 
-                                customStyle={TAT_STYLE} 
+                                customStyle={tagStyle} 
                                 type={'primary'}
                             >
                                 演员
@@ -332,7 +339,7 @@ export default class Forms extends Component<IProps> {
                         </View>
                         <View className='director'>
                             <AtTag 
-                                customStyle={TAT_STYLE} 
+                                customStyle={tagStyle} 
                                 type={'primary'}
                             >
                                 导演
@@ -345,7 +352,7 @@ export default class Forms extends Component<IProps> {
                         </View >
                         <View className='lang'>
                             <AtTag 
-                                customStyle={TAT_STYLE} 
+                                customStyle={tagStyle} 
                                 type={'primary'}
                             >
                                 语言
@@ -360,7 +367,7 @@ export default class Forms extends Component<IProps> {
                         </View>
                         <View className='area'>
                             <AtTag 
-                                customStyle={TAT_STYLE} 
+                                customStyle={tagStyle} 
                                 type={'primary'}
                             >
                                 地区

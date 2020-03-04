@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { Button, View } from '@tarojs/components'
+import { Button, View, Textarea } from '@tarojs/components'
 import MediaPicker from '../mediaPicker'
 import { IItem } from '../mediaPicker/index.d'
 import { IMAGE_CONFIG } from '~config'
@@ -124,6 +124,8 @@ export default class Comment extends Component<IProps>{
                                 maxLength={250}
                                 height={280}
                                 placeholder='说点什么吧...'
+                                fixed={true}
+                                textOverflowForbidden={true}
                             />
                             : null
                         }

@@ -18,7 +18,8 @@ import {
     getDirectorList,
     getActorList,
     getOrderList,
-    getSpecial
+    getSpecial,
+    fetchSearchPoint
 } from '~services'
 
 let a = 0
@@ -30,6 +31,39 @@ export default {
 
     },
     effects: {
+
+        //获取电影搜索关键字
+        * fetchSearchPoint({text}, {call, put}) {
+            let d = {
+                success: true,
+                data: {
+                    data: [
+                        {
+                            value: text
+                        },
+                        {
+                            value: text + 1
+                        },
+                        {
+                            value: text + 2
+                        },
+                        {
+                            value: text + 222
+                        },
+                        {
+                            value: text + 333
+                        },
+                        {
+                            value: text + 444
+                        }
+                    ]
+                }
+            }
+            return d.data
+
+            const response = yield call(fetchSearchPoint, text)
+            return response
+        },
 
         //获取专题电影列表
         * getSpecial({id}, {call, put}) {

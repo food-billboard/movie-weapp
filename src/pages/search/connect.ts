@@ -5,6 +5,6 @@ export const mapStateToProps = (_) => {
 }
   
 export const mapDispatchToProps = dispatch => ({   
-    getHot: (count=3) => dispatch({type: 'movie/getHot', count}),
-    factorySearch: (query: searchQuery) => dispatch({type: 'movie/factorySearch', factor: query})
+    factorySearch: (query: searchQuery) => dispatch({type: 'movie/factorySearch', factor: query}),
+    fetchSearchPoint: (text) => dispatch({type: 'movie/fetchSearchPoint', text})
 })

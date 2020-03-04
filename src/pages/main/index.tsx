@@ -24,7 +24,6 @@ export default class extends Component<any> {
   }
 
   public state: any = {
-    hot: [],
     swiper: [],
     type: [],
     daily: [],
@@ -57,8 +56,6 @@ export default class extends Component<any> {
 
   public fetchData = async () => {
     Taro.showLoading({ title: '加载中' })
-    //获取热搜
-    const hot = await this.props.getHot()
     //获取轮播图
     const swiper = await this.props.getSwiper()
     //获取分类
@@ -70,7 +67,6 @@ export default class extends Component<any> {
     //获取跑马灯内容
     const notice = await this.props.getNotice()
 
-    const _hot = hot.hot
     const _swiper = swiper.swiper
     const _type = type.switch
     const _daily = daily.daily
@@ -78,7 +74,6 @@ export default class extends Component<any> {
     const _notice = notice.data
 
     this.setState({
-      hot: _hot,
       swiper: _swiper,
       type: _type,
       daily: _daily,
@@ -107,7 +102,6 @@ export default class extends Component<any> {
         <View className='searchbar'>
           <SearchBar 
             disabled={true}
-            hot={hot}
           />
         </View>
         <View className='swiper'>

@@ -15,6 +15,8 @@ import './index.scss'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 
+const { screenWidth } = Taro.getSystemInfoSync()
+
 //初始化页码参数
 const INIT_PAGE = { currPage:1, pageSize: 10 }
 
@@ -30,7 +32,8 @@ export default class Index extends Component<any> {
     public config: Config = {
         navigationBarTitleText: "搜索",
         navigationBarTextStyle: "black",
-        navigationBarBackgroundColor: "#fff"
+        navigationBarBackgroundColor: "#fff",
+        enablePullDownRefresh: true
     }
 
     public searchBarRef = Taro.createRef<SearchBar>()
@@ -48,29 +51,12 @@ export default class Index extends Component<any> {
         await this.scrollRef.current!.handleToLower()
     }
 
-    public componentDidMount = async () => {
-        this.fetchHotData()
-    }
-
     public state = {
-        hot: [],
         hotShow: HOT_HEIGHT,
         showList: true,
         listShow: false,
         searchList: [],
         query: {...INIT_QUERY}
-    }
-
-    //获取热搜
-    public fetchHotData = async () => {
-        Taro.showLoading({mask: true, title: '加载中'})
-        const hot = await this.props.getHot()
-        const _hot = hot.hot
-        await this.setState({
-            searchList: [],
-            hot: _hot
-        })
-        Taro.hideLoading()
     }
 
     //数据获取
@@ -209,25 +195,14 @@ export default class Index extends Component<any> {
     }
 
     public render() {
-        const { showList, searchList, hot, listShow, hotShow } = this.state
+        const { showList, searchList, listShow, hotShow } = this.state
         return (
             <GScrollView
                 ref={this.scrollRef}
                 style={{...style.backgroundColor('bgColor'), overflowX: 'hidden'}}
                 autoFetch={false}
                 sourceType={'Scope'}
-                scrollWithAnimation={true}
                 renderContent={ <View className='search-main' style={{display: listShow && searchList.length ? 'block' : 'none'}}>
-                                    <View className='head'>
-                                        <Head screen={this.typeScreen} />
-                                    </View>
-                                    <View className='head-sub'>
-                                        <Sub 
-                                            sortScreen={this.sortScreen} 
-                                            showMethod={this.showMethod}
-                                            queryScreen={this.queryScreen}
-                                        />
-                                    </View>
                                     <View className='main'>
                                         {showList ? <List list={searchList} /> : <IconList list={searchList} />}
                                     </View>
@@ -235,16 +210,30 @@ export default class Index extends Component<any> {
                 fetch={this.throttleFetchData}
                 header={150}
                 renderHeader={
-                    <View style={{width: '375px'}}>
+                    <View className='search-head' style={{width: screenWidth + 'px'}}>
                         <SearchBar 
                             confirm={this.debounceConfirm} 
-                            hot={hot}
                             ref={this.searchBarRef}
                             focus={false}
                             control={this.showList}
                             hotShow={hotShow}
                         />
-                        
+                         <View 
+                            className='head'
+                            style={{display: listShow && searchList.length ? 'block' : 'none'}}
+                        >
+                            <Head screen={this.typeScreen} />
+                        </View>
+                        <View 
+                            className='head-sub' 
+                            style={{display: listShow && searchList.length ? 'block' : 'none'}}
+                        >
+                            <Sub 
+                                sortScreen={this.sortScreen} 
+                                showMethod={this.showMethod}
+                                queryScreen={this.queryScreen}
+                            />
+                        </View>
                     </View>
                 }
             >

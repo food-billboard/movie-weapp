@@ -248,6 +248,7 @@ export default class extends Component<any> {
                   height={inputHeight}
                   count={false}
                   handleChange={this.handleInputChange}
+                  textareaFixed={true}
                 ></GInput>
               </View>
               <View className='at-col at-col-3'>

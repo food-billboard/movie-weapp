@@ -75,7 +75,7 @@ export default class extends Component<IProps, IState> {
 
   public render() {
 
-    const { value, style, type, placeholder, inputType='text', disabled, height=100, count=true } = this.props
+    const { value, style, type, placeholder, inputType='text', disabled, height=100, count=true, textareaFixed=false } = this.props
 
     //处理props第一次传值的问题
     if(this.FIRST) {
@@ -135,6 +135,7 @@ export default class extends Component<IProps, IState> {
             placeholder={placeholder ? placeholder : ''}
             height={height}
             count={count}
+            fixed={textareaFixed}
           ></AtTextarea>
         }
       </View>

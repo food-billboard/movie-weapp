@@ -9,6 +9,7 @@
  *  style: 样式
  *  handleChange: 自定义处理输入改变
  *  height: 文本域的高度
+ *  textareaFixed: 控制文本域禁止滑动
  * }
  * 
  * state: {
@@ -28,6 +29,7 @@ export interface IProps {
   disabled?: boolean
   height?: number
   count?: boolean
+  textareaFixed?: boolean
 }
 
 export interface IState {
