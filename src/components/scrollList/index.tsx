@@ -5,7 +5,7 @@ import GDivider from '~components/divider'
 import Top from '../topbutton'
 import { IProps, IState } from './index.d'
 import { isObject, sourceTypeList } from '~utils'
-import { style as customStyle } from '~theme/global-style'
+import customStyle from '~theme/style'
 
 import './index.scss'
 

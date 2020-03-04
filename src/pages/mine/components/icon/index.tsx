@@ -3,7 +3,8 @@ import { View } from '@tarojs/components'
 import { AtGrid } from "taro-ui"
 import { router, routeAlias } from '~utils'
 import { IProps, List } from './index.d'
-import { style, TypeColor } from '~theme/global-style'
+import { TypeColor } from '~theme/color'
+import style from '~theme/style'
 
 import './index.scss'
 

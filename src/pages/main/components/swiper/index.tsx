@@ -2,7 +2,7 @@ import Taro, {Component} from '@tarojs/taro'
 import { Swiper, SwiperItem, Image, View } from '@tarojs/components'
 import { router, routeAlias, swiperRouteType } from '~utils'
 import { IProps } from './index.d'
-import { TypeColor } from '~theme/global-style'
+import { TypeColor } from '~theme/color'
 
 class Index extends Component<IProps>{
     public static defaultProps = {

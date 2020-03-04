@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { AtDivider } from 'taro-ui'
-import { TypeColor } from '~theme/global-style'
+import { TypeColor } from '~theme/color'
 import { IProps } from './index.d'
 
 import { isObject } from '~utils'

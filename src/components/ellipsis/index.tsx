@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import { IProps, IState } from './index.d'
-import { style } from '~theme/global-style'
+import style from '~theme/style'
 import { isObject } from '~utils'
 
 import './index.scss'

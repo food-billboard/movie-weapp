@@ -1,6 +1,6 @@
 import Taro, {Component} from '@tarojs/taro'
 import {View} from '@tarojs/components'
-import { style } from '~theme/global-style'
+import style from '~theme/style'
 import './index.scss'
 import { Toast } from '~components/toast'
 import { IProps, IState } from './index.d'

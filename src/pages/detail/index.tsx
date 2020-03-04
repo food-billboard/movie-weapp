@@ -8,7 +8,8 @@ import IconList from './components/iconList'
 import Comment from '~components/comment'
 import GTag from './components/tag'
 import Actor from './components/actor'
-import { style, colorStyleChange } from '~theme/global-style'
+import style from '~theme/style'
+import { colorStyleChange } from '~theme/color'
 
 import './index.scss'
 

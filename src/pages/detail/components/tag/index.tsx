@@ -3,7 +3,7 @@ import { View } from '@tarojs/components'
 import { AtTag } from 'taro-ui'
 import { isObject, ItypeList } from '~utils'
 import { IProps, IState } from './index.d'
-import { TypeColor } from '~theme/global-style'
+import { TypeColor } from '~theme/color'
 import './index.scss'
 
 const randomArea = () => {

@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { Text } from '@tarojs/components'
 import { AtFab } from 'taro-ui'
 import { IProps, IState } from './index.d'
-import { style } from '~theme/global-style'
+import style from '~theme/style'
 
 import './index.scss'
 

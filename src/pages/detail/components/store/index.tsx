@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { Text } from '@tarojs/components'
 import { IProps, IState } from './index.d'
-import { style } from '~theme/global-style'
+import style from '~theme/style'
 
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'

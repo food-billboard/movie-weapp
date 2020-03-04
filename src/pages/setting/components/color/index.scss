@@ -1,6 +1,13 @@
-@import "~taro-ui/dist/style/components/flex.scss";
+.list{
+  height:100px;
+  white-space: nowrap;
+  padding:0 10px;
+}
 .item{
   box-sizing:border-box;
+  display:inline-block;
+  width:100px;
+  height:100%;
   padding:10px;
 }
 .content{

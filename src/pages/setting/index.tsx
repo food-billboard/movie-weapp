@@ -5,8 +5,8 @@ import Model from '~components/model'
 import List from '~components/linearlist'
 import Comment from '~components/comment'
 import GColor from './components/color'
-import { TypeColor, colorChange, dateTypeList, colorStyleChange } from '~theme/global-style'
-import { router, styleChange, routeAlias } from '~utils'
+import { TypeColor, colorChange, colorStyleChange } from '~theme/color'
+import { router, routeAlias } from '~utils'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { Toast } from '~components/toast'
@@ -52,14 +52,6 @@ export default class Setting extends Component<any>{
 
     public componentDidShow = () => {
         colorStyleChange()
-    }
-
-    public componentDidMount = () => {
-        const { colorStyle } = this.props
-        const storage = getStyle()
-        this.setState({
-            colorStyle: storage ? storage : colorStyle
-        })
     }
 
     /**
@@ -182,20 +174,14 @@ export default class Setting extends Component<any>{
     //控制色调开启关闭
     public colorStyleChange = async (value: TOptionType) => {
         this.radioRef.current!.handleClick(value)
+        const data = this.colorRef.current!.state.active
         let status
         if(value === colorControl.on) {
-            status = false
-            const date = styleChange()
-            if(date) {
-                colorChange(dateTypeList.day)
-            }else {
-                colorChange(dateTypeList.night)
-            } 
+            status = true
         }else if(value === colorControl.off) {
-            const data = this.colorRef.current!.state.active
-            colorChange(false, data)
-            status = data
+            status = false
         }
+        colorChange(status, data, true)
         this.setState({
             colorStyle: status
         })
@@ -204,7 +190,8 @@ export default class Setting extends Component<any>{
     //颜色选择 
     public colorSelect = async (value) => {
         this.colorRef.current!.handleClick(value)
-        colorChange(false, value)
+        const { colorStyle } = this.state
+        colorChange(colorStyle, value, true)
         this.setState({})
     }
 
@@ -249,7 +236,7 @@ export default class Setting extends Component<any>{
             }
         },
         activeModel: {},
-        colorStyle: getStyle(),
+        colorStyle: getStyle().style,
     }
 
     /**
@@ -272,17 +259,6 @@ export default class Setting extends Component<any>{
         }
     }
 
-    /**
-     * 模态框状态关闭
-     */
-    // public modelClose = (info:object={}, name:string) => {
-    //     const {button} = this.state
-    //     button.model.isOpen = false
-    //     this.setState({
-    //         button
-    //     })
-    // }
-
     public render() {
 
         const {button, activeModel, about, colorStyle: color } = this.state
@@ -293,6 +269,8 @@ export default class Setting extends Component<any>{
         } = button
         const { iconInfo: feedbackInconInfo } = this.feedback
         const { iconInfo: aboutInconInfo } = about
+
+        const activeMode = this.colorStyle[color ? 0 : 1]['value']
 
         return (
             <View className='setting'>
@@ -307,12 +285,14 @@ export default class Setting extends Component<any>{
                         needHiddenList={false}
                         ref={this.radioRef}
                         radioboxOption={this.colorStyle}
-                        active={this.colorStyle[color ? 1 : 0]['value']}
+                        active={activeMode}
                         handleClick={this.colorStyleChange}
                     ></GRadio>
                     <GColor
                         ref={this.colorRef}
-                        style={{height: '48px', visibility: color ? 'visible' : 'hidden' }}
+                        style={{
+                            height: '48px'
+                        }}
                         handleClick={this.colorSelect}
                     ></GColor>
                 </View>

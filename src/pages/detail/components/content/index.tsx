@@ -6,7 +6,7 @@ import GStore from '../store'
 import Ellipsis from '~components/ellipsis'
 import { formatTime, formatNumber, ItypeList } from '~utils'
 import { IProps, IState } from './index.d'
-import { style } from '~theme/global-style'
+import style from '~theme/style'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 

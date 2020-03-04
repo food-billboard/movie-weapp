@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import { IProps, IState } from './index.d'
 import Ellipsis from '../ellipsis'
-import { style } from '~theme/global-style'
+import style from '~theme/style'
 import { router, routeAlias } from '~utils'
 
 import './index.scss'

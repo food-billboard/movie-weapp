@@ -1,6 +1,7 @@
 import Taro, {Component, Config} from '@tarojs/taro'
 import { AtList, AtListItem, AtSwipeAction } from "taro-ui"
-import { style, colorStyleChange } from '~theme/global-style'
+import { colorStyleChange } from '~theme/color'
+import style from '~theme/style'
 import { mapDispatchToProps, mapStateToProps } from './connect'
 import {connect} from '@tarojs/redux'
 import { router, routeAlias, infomationType, formatTime } from '~utils'

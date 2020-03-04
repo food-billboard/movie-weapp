@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import { IProps } from './index.d'
-import { style } from '~theme/global-style'
+import style from '~theme/style'
 import Ellipsis from '~components/ellipsis'
 
 import { router, routeAlias } from '~utils'

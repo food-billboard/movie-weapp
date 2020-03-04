@@ -6,13 +6,13 @@ import Itemize from './components/itemize'
 import News from './components/news'
 import Rank from './components/rank'
 import NoticeBar from '~components/noticeBar'
-import { style, TypeColor, colorStyleChange } from '~theme/global-style'
+import { TypeColor, colorStyleChange } from '~theme/color'
+import style from '~theme/style'
 import { createSocket } from '~utils'
-
-import './index.scss'
-
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
+
+import './index.scss'
 
 const INIT_RANK_QUERY = { currPage: 1, pageSize: 3 }
 
@@ -42,7 +42,6 @@ export default class extends Component<any> {
   }
 
   public componentDidMount = async () => {
-    colorStyleChange()
     this.fetchData()
     await this.getNews()
   }

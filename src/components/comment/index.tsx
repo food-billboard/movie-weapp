@@ -5,7 +5,7 @@ import { IItem } from '../mediaPicker/index.d'
 import { IMAGE_CONFIG } from '~config'
 import { AtTextarea } from "taro-ui"
 import { IProps, IState } from './index.d'
-import { style } from '~theme/global-style'
+import style from '~theme/style'
 import { mediaType } from '~utils'
 import Curtain from '../curtain'
 

@@ -1,7 +1,8 @@
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import { AtInput, AtForm, AtButton } from 'taro-ui'
-import { style, colorStyleChange } from '~theme/global-style'
+import { colorStyleChange } from '~theme/color'
+import style from '~theme/style'
 import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToProps } from './connect'
 

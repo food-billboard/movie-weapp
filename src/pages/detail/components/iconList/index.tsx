@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { ScrollView, View, Image } from '@tarojs/components'
 import './index.scss'
 import { router, routeAlias } from '~utils'
-import { style } from '~theme/global-style'
+import style from '~theme/style'
 import { IState, IProps } from './index.d'
 
 export default class extends Component<IProps, IState> {

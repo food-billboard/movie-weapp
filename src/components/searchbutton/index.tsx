@@ -3,7 +3,7 @@ import { View } from '@tarojs/components'
 import { AtSearchBar, AtTag } from 'taro-ui'
 import { router, routeAlias } from '~utils'
 import { IProps, IState } from './index.d'
-import { style } from '~theme/global-style'
+import style from '~theme/style'
 
 import './index.scss'
 

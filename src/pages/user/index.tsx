@@ -3,7 +3,7 @@ import { View } from '@tarojs/components'
 import IconHead from '~components/headicon'
 import List from '~components/linearlist'
 import GButton from '~components/button'
-import { TypeColor, colorStyleChange } from '~theme/global-style'
+import { TypeColor, colorStyleChange } from '~theme/color'
 import './index.scss'
 
 import {mapStateToProps, mapDispatchToProps} from './connect'

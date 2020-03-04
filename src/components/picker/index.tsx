@@ -5,7 +5,7 @@ import Rest from '~components/restFactor'
 import moment from 'moment'
 import { FORM_ERROR } from '~config'
 import { IProps, IState, modeList, fieldTypeList } from './index.d'
-import { style as customStyle } from '~theme/global-style'
+import customStyle from '~theme/style'
  
 const STYLE = {
   width:'100%',

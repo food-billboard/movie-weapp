@@ -1,7 +1,8 @@
 import Taro, { Component, Config } from '@tarojs/taro'
 import GScrollView from '~components/scrollList'
 import IconList from '~components/iconlist'
-import { style, colorStyleChange } from '~theme/global-style'
+import { colorStyleChange } from '~theme/color'
+import style from '~theme/style'
 import { throttle } from 'lodash'
 
 import { router, routeAlias } from '~utils'

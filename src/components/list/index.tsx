@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import Item from './item'
-import { style } from '~theme/global-style'
+import style from '~theme/style'
 import { router, formatTime, isObject, routeAlias } from '~utils'
 import {  IProps } from './index.d'
 

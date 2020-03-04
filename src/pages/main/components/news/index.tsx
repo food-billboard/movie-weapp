@@ -1,6 +1,7 @@
 import Taro, {Component} from '@tarojs/taro'
 import { ScrollView, View, Image, Text } from '@tarojs/components'
-import { style, TypeColor } from '~theme/global-style'
+import { TypeColor } from '~theme/color'
+import style from '~theme/style'
 import { IProps } from './index.d'
 import { router, routeAlias} from '~utils'
 

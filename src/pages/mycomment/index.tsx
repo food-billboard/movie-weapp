@@ -5,7 +5,8 @@ import GScrollView from '~components/scrollList'
 import Comment from '~components/comment'
 import Origin from './components/originComment'
 import { throttle } from 'lodash'
-import { style, colorStyleChange } from '~theme/global-style'
+import { colorStyleChange } from '~theme/color'
+import style from '~theme/style'
 
 import './index.scss'
 

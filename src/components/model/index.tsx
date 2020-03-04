@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import { AtModal, AtModalHeader, AtModalContent, AtModalAction, AtButton } from "taro-ui"
 import { IProps } from './index.d'
-import { style } from '~theme/global-style'
+import style from '~theme/style'
 
 import './index.scss'
 

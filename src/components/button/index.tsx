@@ -2,7 +2,7 @@ import { AtButton } from 'taro-ui'
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { IProps, IState } from './index.d'
-import { style } from '~theme/global-style'
+import style from '~theme/style'
 
 export default class Button extends Component<IProps, IState>{
 

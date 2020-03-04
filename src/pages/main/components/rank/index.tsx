@@ -4,7 +4,7 @@ import './index.scss'
 import RankIcon from './icon'
 import { IProps, IState } from './index.d'
 import { router, routeAlias } from '~utils'
-import { style } from '~theme/global-style'
+import style from '~theme/style'
 
 export default class Rank extends Component<IProps, IState>{
     public static defaultProps = {

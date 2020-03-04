@@ -5,7 +5,7 @@ import { AtButton } from 'taro-ui'
 import { isObject } from '~utils'
 import { FORM_ERROR } from '~config'
 import { IProps, IState } from './index.d'
-import { style } from '~theme/global-style'
+import style from '~theme/style'
 
 import './index.scss'
 

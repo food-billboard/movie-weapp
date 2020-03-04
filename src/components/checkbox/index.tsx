@@ -7,7 +7,7 @@ import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToProps } from './connect'
 import { FORM_ERROR } from '~config'
 import { IState, IProps, IOption, typeList } from './index.d'
-import { style as styleColor } from '~theme/global-style'
+import styleColor  from '~theme/style'
 
 import './index.scss'
 

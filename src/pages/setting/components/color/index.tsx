@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import { View, ScrollView } from '@tarojs/components'
 import { IProps, IState } from './index.d'
-import { Color } from '~theme/global-style'
+import { Color, defaultColor } from '~theme/color'
 import { isObject } from '~utils'
 import { getStyle } from '~config'
 
@@ -10,16 +10,15 @@ import './index.scss'
 export default class extends Component<IProps, IState> {
 
   public componentDidMount = () => {
-    const color = getStyle()
-    if(color) {
-      this.setState({
-        active: color
-      })
-    }
+    const _style = getStyle()
+    const { color } = _style
+    this.setState({
+      active: color
+    })
   }
 
   public state:IState = {
-    active: Color[0],
+    active: defaultColor,
     color: [ ...Color ]
   }
 
@@ -34,7 +33,8 @@ export default class extends Component<IProps, IState> {
     const { active, color } = this.state
     const { style={} } = this.props
     return (
-      <View className='at-row'
+      <ScrollView className='list'
+        scrollX={true}
         style={{...(isObject(style) ? style : {})}}
       >
         {
@@ -42,7 +42,7 @@ export default class extends Component<IProps, IState> {
             return (
               <View
                 key={val}
-                className='at-col item'
+                className='item'
                 style={{border: active === val ? `2px solid ${val}` : 'none' }}
                 onClick={(e) => {this.props.handleClick ? this.props.handleClick.call(this, val) : this.handleClick.call(this, val)}}
               >
@@ -51,7 +51,7 @@ export default class extends Component<IProps, IState> {
             )
           })
         }
-      </View> 
+      </ScrollView> 
     )
   }
 
