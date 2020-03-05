@@ -136,6 +136,7 @@ export default class extends Component<IProps, IState> {
             height={height}
             count={count}
             fixed={textareaFixed}
+            onLinechange={(e) => { this.props.handleLineChange ? this.props.handleLineChange.call(this, e) : null }}
           ></AtTextarea>
         }
       </View>

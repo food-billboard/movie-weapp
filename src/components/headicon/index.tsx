@@ -59,19 +59,19 @@ export default class IconHead extends Component<IProps>{
                     style={{...style.color('disabled')}}
                 >
                     <View className='at-col text'>
-                        粉丝: <Text className='count'
+                        <Text className='count'
                             style={{...style.color('primary')}}
-                        >{formatNumber(fans)}</Text>
-                    </View>
-                    <View className='at-col text'>
-                        关注: <Text className='count'
-                            style={{...style.color('primary')}}
-                        >{formatNumber(attention)}</Text>
+                        >{formatNumber(fans)}</Text> 粉丝
                     </View>
                     <View className='at-col text'>
                         <Text className='count'
                             style={{...style.color('primary')}}
-                        >{formatNumber(hot)}</Text>人觉得很赞
+                        >{formatNumber(attention)}</Text> 人关注
+                    </View>
+                    <View className='at-col text'>
+                        <Text className='count'
+                            style={{...style.color('primary')}}
+                        >{formatNumber(hot)}</Text> 人觉得很赞
                     </View>
                 </View>
             </View>

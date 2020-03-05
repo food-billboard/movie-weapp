@@ -7,7 +7,8 @@ import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { connect } from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
-import { newsType, responseType, getStrLen } from '~utils'
+import { newsType, responseType } from '~utils'
+import { IMAGE_CONFIG } from '~config'
 
 import './index.scss'
 
@@ -16,6 +17,10 @@ let FIRST = true
 const type = Object.values(newsType)
 
 const INPUT_HEIGHT = 40
+
+const MAX_COL_COUNT = 5
+
+const { count } = IMAGE_CONFIG
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any> {
@@ -38,7 +43,7 @@ export default class extends Component<any> {
     info: {},
     data: [],
     inputDisabled: false,
-    inputHeight: INPUT_HEIGHT
+    inputHeight: INPUT_HEIGHT,
   }
 
   public componentDidShow = () => {
@@ -91,25 +96,51 @@ export default class extends Component<any> {
   public handleAddImage = () => {
     const { inputDisabled } = this.state
     if(inputDisabled) return
-
+    Taro.chooseImage({
+      count: count, 
+      sizeType: ['original', 'compressed'], 
+      sourceType: ['album', 'camera'], 
+    }).then((res) => {
+      const { errMsg } = res
+      const [, msg] = errMsg.split(':')
+      if(msg === 'ok') {
+        const { tempFilePaths } = res //地址的字符串数组
+      }
+    })
   }
 
   //添加视频
   public handleAddVideo = () => {
     const { inputDisabled } = this.state
     if(inputDisabled) return
-
+    Taro.chooseVideo({
+      sourceType: ['album','camera'],
+      camera: 'back',
+    }).then((res: any) => {
+      const { errMsg } = res
+      const [, msg] = errMsg.split(':')
+      if(msg === 'ok') {
+        const { 
+          tempFilePath, 
+          thumbTempFilePath,
+          duration,
+          size,
+          width,
+          height
+        } = res
+      }
+    })
   }
 
   //添加音频
   public handleAddAudio = () => {
     const { inputDisabled } = this.state
     if(inputDisabled) return
-
+    
   }
 
   //发送消息
-  public handleSend = async () => {
+  public handleSendText = async () => {
     const { inputDisabled } = this.state
     if(inputDisabled) return 
     const data = await this.inputRef.current!.getData(false)
@@ -179,18 +210,11 @@ export default class extends Component<any> {
   }
 
   //处理文本域内容
-  public handleInputChange = (e) => {
-    this.inputRef.current!.handleChange(e)
-    const len = getStrLen(e.target.value)
-    const column = Math.ceil(len / 30)
-    let _col = column
-    if(column == 0) {
-      _col = 1
-    }else if(column > 5) {
-      _col = 5
-    }
+  public handleInputLineChange = (e) => {
+    const { detail } = e
+    const { lineCount } = detail
     this.setState({
-      inputHeight: INPUT_HEIGHT * _col
+      inputHeight: (lineCount >= MAX_COL_COUNT ? MAX_COL_COUNT : lineCount) * INPUT_HEIGHT
     })
   }
 
@@ -208,7 +232,8 @@ export default class extends Component<any> {
         query={{pageSize: 20}}
         style={{...style.backgroundColor('bgColor')}}
         renderContent={
-          <View></View>
+          <View>
+          </View>
         }
         bottom={0}
         renderBottom={
@@ -218,50 +243,44 @@ export default class extends Component<any> {
           >
             <View className='icon at-row at-row__justify--center'>
               <View 
-                className='at-col at-col-2 at-icon at-icon-image icon-content'
+                className='at-col at-col-3 at-icon at-icon-image icon-content'
                 style={{...(style.color(inputDisabled ? 'primary' : 'disabled'))}}
                 onClick={this.handleAddImage}
               ></View>
               <View 
-                className='at-col at-col-2 at-icon at-icon-video icon-content'
+                className='at-col at-col-3 at-icon at-icon-video icon-content'
                 style={{...(style.color(inputDisabled ? 'primary' : 'disabled'))}}
                 onClick={this.handleAddVideo}
               ></View>
               <View 
-                className='at-col at-col-2 at-icon at-icon-volume-plus icon-content'
+                className='at-col at-col-3 at-icon at-icon-volume-plus icon-content'
                 style={{...(style.color(inputDisabled ? 'primary' : 'disabled'))}}
                 onClick={this.handleAddAudio}
               ></View>
+              <View 
+                className='at-col at-col-3 at-icon at-icon-check icon-content'
+                style={{...(style.color(inputDisabled ? 'primary' : 'disabled'))}}
+                onClick={this.handleSendText}
+              ></View>
             </View>
-            <View className='input at-row at-row__align--end'>
-              <View className='at-col at-col-9'>
-                <GInput
-                  style={{
-                    ...style.backgroundColor('disabled'), 
-                    ...style.border(1, 'primary', 'solid', 'all')
-                  }}
-                  ref={this.inputRef}
-                  disabled={inputDisabled}
-                  value={'在这里发消息'}
-                  placeholder={'在这里发消息'}
-                  type={'textarea'}
-                  height={inputHeight}
-                  count={false}
-                  handleChange={this.handleInputChange}
-                  textareaFixed={true}
-                ></GInput>
-              </View>
-              <View className='at-col at-col-3'>
-                <Button 
-                  style={{
-                    ...style.backgroundColor(inputDisabled ? 'bgColor' :'secondary'),
-                    borderRadius: 0,
-                    height: '40px',
-                    lineHeight: '40px'
-                  }}
-                  onClick={this.handleSend}
-                >发送</Button>
-              </View>
+            <View 
+              className='input'
+            >
+              <GInput
+                style={{
+                  ...style.backgroundColor('disabled'), 
+                  ...style.border(1, 'primary', 'solid', 'all'),
+                }}
+                ref={this.inputRef}
+                disabled={inputDisabled}
+                value={'在这里发消息'}
+                placeholder={'在这里发消息'}
+                type={'textarea'}
+                height={inputHeight}
+                count={false}
+                textareaFixed={true}
+                handleLineChange={this.handleInputLineChange}
+              ></GInput>
             </View>
           </View>
         }
