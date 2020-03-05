@@ -34,10 +34,6 @@ export default class extends Component<any> {
     //用户id
     readonly id = this.$router.params.id
 
-    public state: any = {
-        list: {}
-    }
-
     public componentDidShow = () => {
         colorStyleChange()
         this.throttleFetchData()

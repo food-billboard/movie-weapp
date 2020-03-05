@@ -142,7 +142,6 @@ export default class extends Component<any> {
             <GScrollView
                 ref={this.scrollRef}
                 sourceType={'Scope'}
-                scrollWithAnimation={true}
                 query={{pageSize: 6}}
                 style={{...style.backgroundColor('bgColor')}}
                 renderContent={<View>

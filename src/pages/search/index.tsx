@@ -31,9 +31,7 @@ export default class Index extends Component<any> {
 
     public config: Config = {
         navigationBarTitleText: "搜索",
-        navigationBarTextStyle: "black",
-        navigationBarBackgroundColor: "#fff",
-        enablePullDownRefresh: true
+        // enablePullDownRefresh: true
     }
 
     public searchBarRef = Taro.createRef<SearchBar>()
@@ -199,26 +197,15 @@ export default class Index extends Component<any> {
         return (
             <GScrollView
                 ref={this.scrollRef}
-                style={{...style.backgroundColor('bgColor'), overflowX: 'hidden'}}
+                style={{...style.backgroundColor('bgColor')}}
                 autoFetch={false}
                 sourceType={'Scope'}
-                renderContent={ <View className='search-main' style={{display: listShow && searchList.length ? 'block' : 'none'}}>
-                                    <View className='main'>
-                                        {showList ? <List list={searchList} /> : <IconList list={searchList} />}
-                                    </View>
-                                </View>}
-                fetch={this.throttleFetchData}
-                header={150}
-                renderHeader={
-                    <View className='search-head' style={{width: screenWidth + 'px'}}>
-                        <SearchBar 
-                            confirm={this.debounceConfirm} 
-                            ref={this.searchBarRef}
-                            focus={false}
-                            control={this.showList}
-                            hotShow={hotShow}
-                        />
-                         <View 
+                renderContent={ 
+                    <View 
+                        className='search-main'
+                        style={{overflowX: 'hidden'}}
+                    >
+                        <View 
                             className='head'
                             style={{display: listShow && searchList.length ? 'block' : 'none'}}
                         >
@@ -234,6 +221,23 @@ export default class Index extends Component<any> {
                                 queryScreen={this.queryScreen}
                             />
                         </View>
+                        {showList ? <List list={searchList} /> : <IconList list={searchList} />}
+                    </View>
+                }
+                fetch={this.throttleFetchData}
+                header={150}
+                renderHeader={
+                    <View 
+                        className='search-head' 
+                        style={{width: screenWidth + 'px'}}
+                    >
+                        <SearchBar 
+                            confirm={this.debounceConfirm} 
+                            ref={this.searchBarRef}
+                            focus={false}
+                            control={this.showList}
+                            hotShow={hotShow}
+                        />
                     </View>
                 }
             >

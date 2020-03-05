@@ -3,7 +3,7 @@ import Taro, { Component, Config } from '@tarojs/taro'
 import { Provider } from '@tarojs/redux'
 import { dva, router, includes } from '~utils'
 
-import Index from './pages/main/index'
+import Index from './pages/news/index'
 import configure from './configure'
 
 import './app.scss'
@@ -67,13 +67,13 @@ class App extends Component {
 
   public config: Config = {
     pages: [
-      // 'pages/news/index',
+      'pages/news/index',
       'pages/main/index',
       'pages/mine/index',
       'pages/register/index',
       'pages/login/index',
       'pages/setting/index',
-      'pages/news/index',
+      // 'pages/news/index',
       'pages/mycomment/index',
       'pages/attention/index',
       'pages/record/index',
@@ -95,7 +95,7 @@ class App extends Component {
       backgroundTextStyle: 'dark',
       navigationBarTextStyle: 'black',
       navigationBarBackgroundColor: '#fff',
-      onReachBottomDistance: 50,
+      onReachBottomDistance: 25,
       enablePullDownRefresh: false
     },
     tabBar: {
