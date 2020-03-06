@@ -1,4 +1,4 @@
-import { FormData } from '../../../interface'
+import { FormData } from '../../interface'
 /**
  * 筛选表单
  * props: {

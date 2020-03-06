@@ -78,97 +78,113 @@ export default {
                             id: '电影id',
                             name: '电影名称',
                             detail: '电影描述',
-                            image: '电影海报'
+                            image: '电影海报',
+                            hot: 100
                         },
                         {
                             id: '电影id',
                             name: '电影名称',
                             detail: '电影描述',
-                            image: '电影海报'
+                            image: '电影海报',
+                            hot: 100
                         },
                         {
                             id: '电影id',
                             name: '电影名称',
                             detail: '电影描述',
-                            image: '电影海报'
+                            image: '电影海报',
+                            hot: 100
                         },
                         {
                             id: '电影id',
                             name: '电影名称',
                             detail: '电影描述',
-                            image: '电影海报'
+                            image: '电影海报',
+                            hot: 100
                         },
                         {
                             id: '电影id',
                             name: '电影名称',
                             detail: '电影描述',
-                            image: '电影海报'
+                            image: '电影海报',
+                            hot: 100
                         },
                         {
                             id: '电影id',
                             name: '电影名称',
                             detail: '电影描述',
-                            image: '电影海报'
+                            image: '电影海报',
+                            hot: 100
                         },
                         {
                             id: '电影id',
                             name: '电影名称',
                             detail: '电影描述',
-                            image: '电影海报'
+                            image: '电影海报',
+                            hot: 100
                         },
                         {
                             id: '电影id',
                             name: '电影名称',
                             detail: '电影描述',
-                            image: '电影海报'
+                            image: '电影海报',
+                            hot: 100
                         },
                         {
                             id: '电影id',
                             name: '电影名称',
                             detail: '电影描述',
-                            image: '电影海报'
+                            image: '电影海报',
+                            hot: 100
                         },
                         {
                             id: '电影id',
                             name: '电影名称',
                             detail: '电影描述',
-                            image: '电影海报'
+                            image: '电影海报',
+                            hot: 100
                         },
                         {
                             id: '电影id',
                             name: '电影名称',
                             detail: '电影描述',
-                            image: '电影海报'
+                            image: '电影海报',
+                            hot: 100
                         },
                         {
                             id: '电影id',
                             name: '电影名称',
                             detail: '电影描述',
-                            image: '电影海报'
+                            image: '电影海报',
+                            hot: 100
                         },
                         {
                             id: '电影id',
                             name: '电影名称',
                             detail: '电影描述',
-                            image: '电影海报'
+                            image: '电影海报',
+                            hot: 100
                         },
                         {
                             id: '电影id',
                             name: '电影名称',
                             detail: '电影描述',
-                            image: '电影海报'
+                            image: '电影海报',
+                            hot: 100
                         },
                         {
                             id: '电影id',
                             name: '电影名称',
                             detail: '电影描述',
-                            image: '电影海报'
+                            image: '电影海报',
+                            hot: 100
                         },
                         {
                             id: '电影id',
                             name: '电影名称',
                             detail: '电影描述',
-                            image: '电影海报'
+                            image: '电影海报',
+                            hot: 100
                         },
                     ]
                 }
@@ -183,19 +199,22 @@ export default {
                             id: '电影id',
                             name: '电影名称',
                             detail: '电影描述',
-                            image: '电影海报'
+                            image: '电影海报',
+                            hot: 100
                         },
                         {
                             id: '电影id',
                             name: '电影名称',
                             detail: '电影描述',
-                            image: '电影海报'
+                            image: '电影海报',
+                            hot: 100
                         },
                         {
                             id: '电影id',
                             name: '电影名称',
                             detail: '电影描述',
-                            image: '电影海报'
+                            image: '电影海报',
+                            hot: 100
                         },
                     ]
                 }

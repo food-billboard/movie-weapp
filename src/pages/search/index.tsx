@@ -1,11 +1,13 @@
 import Taro, { Component, Config } from '@tarojs/taro'
-import {View} from '@tarojs/components'
+import { View, Text } from '@tarojs/components'
 import SearchBar from '~components/searchbutton'
 import Head from './components/head'
-import Sub from './components/sub'
 import List from '~components/list'
 import IconList from '~components/iconlist'
 import GScrollView from '~components/scrollList'
+import RadioList from './components/radio'
+import Method from './components/method' 
+import Forms from './components/form'
 import { debounce, throttle } from 'lodash'
 import { FormData } from './interface'
 import { colorStyleChange } from '~theme/color'
@@ -14,6 +16,7 @@ import './index.scss'
 
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
+import { AtDrawer } from 'taro-ui'
 
 const { screenWidth } = Taro.getSystemInfoSync()
 
@@ -31,12 +34,13 @@ export default class Index extends Component<any> {
 
     public config: Config = {
         navigationBarTitleText: "搜索",
-        // enablePullDownRefresh: true
     }
 
     public searchBarRef = Taro.createRef<SearchBar>()
 
     public scrollRef = Taro.createRef<GScrollView>()
+
+    public selectRef = Taro.createRef<Select>()
 
     private scrollTop = 0
 
@@ -54,7 +58,8 @@ export default class Index extends Component<any> {
         showList: true,
         listShow: false,
         searchList: [],
-        query: {...INIT_QUERY}
+        query: {...INIT_QUERY},
+        selectShow: false
     }
 
     //数据获取
@@ -192,8 +197,26 @@ export default class Index extends Component<any> {
         }
     }
 
+    /**
+     * 筛选遮罩展示
+     */
+    public drawerOpen() {
+        this.setState({
+            selectShow: true
+        }) 
+    }
+
+    /**
+     * 关闭抽屉
+     */
+    public drawerClose = () => {
+        this.setState({
+            selectShow: false
+        })
+    }
+
     public render() {
-        const { showList, searchList, listShow, hotShow } = this.state
+        const { showList, searchList, listShow, hotShow, selectShow } = this.state
         return (
             <GScrollView
                 ref={this.scrollRef}
@@ -201,45 +224,81 @@ export default class Index extends Component<any> {
                 autoFetch={false}
                 sourceType={'Scope'}
                 renderContent={ 
+                    <View>
+                        <View 
+                            className='search-head' 
+                            style={{width: screenWidth + 'px'}}
+                        >
+                            <SearchBar 
+                                confirm={this.debounceConfirm} 
+                                ref={this.searchBarRef}
+                                focus={false}
+                                control={this.showList}
+                                hotShow={hotShow}
+                            />
+                    </View>
                     <View 
                         className='search-main'
-                        style={{overflowX: 'hidden'}}
+                        style={{
+                            display: listShow && searchList.length ? 'block' : 'none', 
+                            overflowX: 'hidden',
+                            paddingTop: 150 + 'rpx'
+                        }}
                     >
+                        <AtDrawer
+                            show={selectShow}
+                            mask
+                            right={true}
+                            onClose={this.drawerClose}
+                            width='300px'
+                            className='drawer'
+                        >
+                            <Forms screen={this.queryScreen} />     
+                        </AtDrawer>
                         <View 
                             className='head'
-                            style={{display: listShow && searchList.length ? 'block' : 'none'}}
                         >
                             <Head screen={this.typeScreen} />
                         </View>
                         <View 
                             className='head-sub' 
-                            style={{display: listShow && searchList.length ? 'block' : 'none'}}
                         >
-                            <Sub 
-                                sortScreen={this.sortScreen} 
-                                showMethod={this.showMethod}
-                                queryScreen={this.queryScreen}
-                            />
+                            <View className='at-row at-row__justify--around sub'>
+                                <View className='at-col at-col-5 select'>
+                                    <RadioList screen={this.sortScreen} />
+                                </View>
+                                <View className='at-col at-col-3 look'>
+                                    <Method
+                                        screen={this.showMethod}
+                                    />
+                                </View>
+                                <View className='at-col at-col-5 screen'>
+                                <Text 
+                                    className='text'
+                                    onClick={this.drawerOpen}>筛选</Text>
+                                </View>
+                            </View>
                         </View>
                         {showList ? <List list={searchList} /> : <IconList list={searchList} />}
                     </View>
-                }
-                fetch={this.throttleFetchData}
-                header={150}
-                renderHeader={
-                    <View 
-                        className='search-head' 
-                        style={{width: screenWidth + 'px'}}
-                    >
-                        <SearchBar 
-                            confirm={this.debounceConfirm} 
-                            ref={this.searchBarRef}
-                            focus={false}
-                            control={this.showList}
-                            hotShow={hotShow}
-                        />
                     </View>
                 }
+                fetch={this.throttleFetchData}
+                // header={150}
+                // renderHeader={
+                //     <View 
+                //         className='search-head' 
+                //         style={{width: screenWidth + 'px'}}
+                //     >
+                //         <SearchBar 
+                //             confirm={this.debounceConfirm} 
+                //             ref={this.searchBarRef}
+                //             focus={false}
+                //             control={this.showList}
+                //             hotShow={hotShow}
+                //         />
+                //     </View>
+                // }
             >
             </GScrollView>
         )

@@ -46,7 +46,7 @@ export default class Title extends Component<IProps>{
 
         return (
             <View className='title at-row at-row__justify--around'
-                style={{...style.border(1, 'thirdly', 'solid', 'bottom'), ...style.color('thirdly')}}
+                style={{...style.border(1, 'thirdly', 'solid', 'bottom')}}
             >
                 <View className='message at-col at-col-5'
                     onClick={() => {this.handleClick.call(this, config.store)}}

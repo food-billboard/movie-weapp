@@ -1,10 +1,33 @@
+@import "~taro-ui/dist/style/components/flex.scss";
 .search-head{
-    
-}
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:1;
+}   
 .search-main{
     box-sizing:border-box;
     padding:20px 10px 0 10px;
     .head{
         margin-bottom:-30px;
+    }
+    .sub{
+        margin-bottom:20px;
+        .select{
+            
+        }   
+        .look{
+            
+        }
+        .screen{
+        
+        }
+        .select,
+        .look,
+        .screen{
+            text-align:center;
+            height:60px;
+            line-height:60px;
+        }
     }
 }

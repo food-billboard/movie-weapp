@@ -117,7 +117,7 @@ const color = {
 
     //中性
     '#262626': {
-      'primay': '#262626',
+      'primary': '#262626',
       'secondary': '#8c8c8c',
       'thirdly': '#bfbfbf',
       'disabled': '#d9d9d9',
@@ -235,7 +235,7 @@ const color = {
 
     //中性
     '#262626': {
-      'primay': '#262626',
+      'primary': '#262626',
       'secondary': '#434343',
       'thirdly': '#595959',
       'disabled': '#bfbfbf',

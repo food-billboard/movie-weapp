@@ -1,22 +1,18 @@
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Button } from '@tarojs/components'
+import { View, Textarea } from '@tarojs/components'
 import Scroll from '~components/scrollList'
-import GInput from '~components/input'
 import { throttle } from 'lodash'
-import { colorStyleChange } from '~theme/color'
+import { colorStyleChange, TypeColor } from '~theme/color'
 import style from '~theme/style'
 import { connect } from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { newsType, responseType } from '~utils'
 import { IMAGE_CONFIG } from '~config'
+import Emoj from './components/emojSwiper'
 
 import './index.scss'
 
 let FIRST = true
-
-const type = Object.values(newsType)
-
-const INPUT_HEIGHT = 40
 
 const MAX_COL_COUNT = 5
 
@@ -31,7 +27,7 @@ export default class extends Component<any> {
 
   private scrollRef = Taro.createRef<Scroll>()
 
-  private inputRef = Taro.createRef<GInput>()
+  private EmojRef = Taro.createRef<Emoj>()
 
   //通知信息id
   private id = this.$router.params.id
@@ -43,7 +39,9 @@ export default class extends Component<any> {
     info: {},
     data: [],
     inputDisabled: false,
-    inputHeight: INPUT_HEIGHT,
+    inputValue: '',
+    autoHeight: true,
+    detailFunc: false
   }
 
   public componentDidShow = () => {
@@ -139,14 +137,32 @@ export default class extends Component<any> {
     
   }
 
+  //选择表情
+  public handleEmoj = () => {
+    const { inputDisabled } = this.state
+    if(inputDisabled) return
+
+    this.EmojRef.current!.controlShowHide()
+  }
+
+  //显示详细功能
+  public handleShowDetailFunc = () => {
+    const { detailFunc } = this.state
+    if(!!detailFunc) this.handleEmoj()
+    this.setState({
+      detailFunc: !detailFunc
+    })
+  }
+
   //发送消息
   public handleSendText = async () => {
-    const { inputDisabled } = this.state
+    const { inputDisabled, inputValue } = this.state
     if(inputDisabled) return 
-    const data = await this.inputRef.current!.getData(false)
-    if(typeof data === 'string' && data.length) {
-      await this.sendMediaInfo(newsType.text, data)
-      this.inputRef.current!.reset()
+    if(inputValue.length) {
+      await this.sendMediaInfo(newsType.text, inputValue)
+      this.setState({
+        inputValue: ''
+      })
     } 
   }
 
@@ -181,8 +197,6 @@ export default class extends Component<any> {
       image
     }
 
-    const dataIndex = data.length
-
     await this.setState({
       data: [
         ...list,
@@ -213,14 +227,81 @@ export default class extends Component<any> {
   public handleInputLineChange = (e) => {
     const { detail } = e
     const { lineCount } = detail
+    if(lineCount >= MAX_COL_COUNT) {
+      this.setState({
+        autoHeight: false
+      })
+    }else {
+      this.setState({
+        autoHeight: true
+      })
+    }
+  }
+
+  //文本内容修改
+  public handleInput = (e) => {
+    const { detail } = e
     this.setState({
-      inputHeight: (lineCount >= MAX_COL_COUNT ? MAX_COL_COUNT : lineCount) * INPUT_HEIGHT
+      inputValue: detail.value
     })
   }
 
+  //添加emoj表情
+  public handleAddEmoj = (value) => {
+    const { inputValue } = this.state
+    this.setState({
+      inputValue: inputValue + value
+    })
+  }
+
+  //基础功能按钮
+  readonly basicBtnFunc = [
+    {
+      iconInfo: {
+        value: 'image'
+      },
+      handle: this.handleAddImage
+    },
+    {
+      iconInfo: {
+        value: 'video'
+      },
+      handle: this.handleAddVideo
+    },
+    {
+      iconInfo: {
+        value: () => {return this.state.detailFunc ? 'close' : 'add'}
+      },
+      handle: this.handleShowDetailFunc
+    },
+    {
+      iconInfo: {
+        value: 'check'
+      },
+      handle: this.handleSendText
+    }
+  ]
+
+  //其他功能按钮
+  readonly detailBtnFunc = [
+    {
+      iconInfo: {
+        value: 'volume-plus',
+      },
+      handle: this.handleAddAudio
+    },
+    {
+      iconInfo: {
+        value: 'text-strikethrough'
+      },
+      handle: this.handleEmoj
+    }
+
+  ]
+
   public render() {
 
-    const { info, inputDisabled, data, inputHeight } = this.state
+    const { info, inputDisabled, data, inputValue, autoHeight, detailFunc } = this.state
 
     this.setTitle()
 
@@ -231,6 +312,7 @@ export default class extends Component<any> {
         fetch={this.throttleFetchData}
         query={{pageSize: 20}}
         style={{...style.backgroundColor('bgColor')}}
+        divider={false}
         renderContent={
           <View>
           </View>
@@ -239,48 +321,72 @@ export default class extends Component<any> {
         renderBottom={
           <View 
             className='bottom'
-            style={{...style.border(2, 'disabled', 'solid', 'top')}}
+            style={{...style.border(2, 'disabled', 'solid', 'top'), ...style.backgroundColor('thirdly')}}
           >
-            <View className='icon at-row at-row__justify--center'>
-              <View 
-                className='at-col at-col-3 at-icon at-icon-image icon-content'
-                style={{...(style.color(inputDisabled ? 'primary' : 'disabled'))}}
-                onClick={this.handleAddImage}
-              ></View>
-              <View 
-                className='at-col at-col-3 at-icon at-icon-video icon-content'
-                style={{...(style.color(inputDisabled ? 'primary' : 'disabled'))}}
-                onClick={this.handleAddVideo}
-              ></View>
-              <View 
-                className='at-col at-col-3 at-icon at-icon-volume-plus icon-content'
-                style={{...(style.color(inputDisabled ? 'primary' : 'disabled'))}}
-                onClick={this.handleAddAudio}
-              ></View>
-              <View 
-                className='at-col at-col-3 at-icon at-icon-check icon-content'
-                style={{...(style.color(inputDisabled ? 'primary' : 'disabled'))}}
-                onClick={this.handleSendText}
-              ></View>
+            <View className='icon at-row'>
+              {
+                this.basicBtnFunc.map((val: any) => {
+                  const { iconInfo, handle } = val
+                  const { value } = iconInfo
+                  return (
+                    <View 
+                      key={value}
+                      className={`at-col at-col-3 at-icon at-icon-${typeof value === 'string' ? value : value()} icon-content`}
+                      style={{...(style.color(inputDisabled ? 'primary' : 'disabled'))}}
+                      onClick={handle}
+                    ></View>
+                  )
+                })
+              }
             </View>
             <View 
               className='input'
             >
-              <GInput
+              <Textarea
                 style={{
-                  ...style.backgroundColor('disabled'), 
-                  ...style.border(1, 'primary', 'solid', 'all'),
+                  ...style.border(2, 'disabled', 'solid', 'all'),
+                  width:'100%',
+                  borderRadius: '5px',
+                  padding: '10px 0',
+                  boxShadow:'0 0 2px #333',
                 }}
-                ref={this.inputRef}
+                className='content'
                 disabled={inputDisabled}
-                value={'在这里发消息'}
+                value={inputValue}
                 placeholder={'在这里发消息'}
-                type={'textarea'}
-                height={inputHeight}
-                count={false}
-                textareaFixed={true}
-                handleLineChange={this.handleInputLineChange}
-              ></GInput>
+                autoHeight={autoHeight}
+                fixed={true}
+                onInput={this.handleInput}
+                onLineChange={this.handleInputLineChange}
+                maxlength={-1}
+              ></Textarea>
+            </View>
+            <View className='other-detail'>
+                <View className='emoj'>
+                  <Emoj
+                    ref={this.EmojRef}
+                    handleAddEmoj={this.handleAddEmoj}
+                  />
+                </View>
+            </View>
+            <View 
+              className='at-row at-row--wrap'
+              style={{display: detailFunc ? 'flex' : 'none'}}
+            > 
+              {
+                this.detailBtnFunc.map((val: any) => {
+                  const { iconInfo, handle } = val
+                  const { value } = iconInfo
+                  return (
+                    <View 
+                      key={value}
+                      className={`at-col at-col-3 at-icon at-icon-${typeof value === 'string' ? value : value()} icon-content`}
+                      style={{...(style.color(inputDisabled ? 'primary' : 'disabled'))}}
+                      onClick={handle}
+                    ></View>
+                  )
+                })  
+              }
             </View>
           </View>
         }

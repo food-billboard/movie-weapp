@@ -119,12 +119,16 @@ export default class extends Component<IProps, IState> {
           // ></AtInput> 
           :
           // <Textarea
+          //   onLinechange={(e) => { this.props.handleLineChange ? this.props.handleLineChange.call(this, e) : null }}
+          //   fixed={textareaFixed}
+          //   autoHeight
           //   disabled={stateDisabled ? stateDisabled : disabled}
           //   style={isObject(style) ? { ...style, ...errorStyle } : { ...errorStyle } }
           //   className='textarea'
           //   value={textValue}
           //   onInput={(e) => { this.props.handleChange ? this.props.handleChange.call(this, e.detail.value) : this.handleChange.call(this, e.detail.value)  }}
           //   placeholder={placeholder ? placeholder : ''}
+          //   maxlength={300}
           // />
           <AtTextarea
             disabled={stateDisabled ? stateDisabled : disabled}

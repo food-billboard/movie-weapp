@@ -10,6 +10,7 @@ import { sourceTypeList } from '~utils'
  *  renderContent: 内容渲染
  *  renderHeader: 头部渲染
  *  renderBottom: 底部渲染
+ *  divider: 是否需要分隔符
  * }
  * 
  * state: {
@@ -34,6 +35,7 @@ export interface IProps {
   renderContent?: any
   renderHeader?: any
   renderBottom?: any
+  divider?: boolean
 }
 
 export interface IState {

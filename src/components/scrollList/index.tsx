@@ -118,6 +118,7 @@ export default class List extends Component<IProps, IState> {
       style={},
     } = this.props
     const { empty, loading } = this.state
+    const { divider=true } = this.props
     const _header = typeof header === 'boolean'
     const _bottom = typeof bottom === 'boolean'
     return (
@@ -126,6 +127,16 @@ export default class List extends Component<IProps, IState> {
           style={isObject(style) ? style : {}}
           className='scroll-view'
         >
+          <View style={{...customStyle.backgroundColor('bgColor'), paddingTop: (header || 0) + 'rpx'}}
+          >
+            {this.props.renderContent}
+          </View>
+          {
+            empty && divider ? <GDivider other={{paddingBottom: (bottom ? bottom + 20 : 0) + 'rpx'}} /> : null
+          }
+          {/* <Top 
+            ref={this.topRef} 
+          /> */}
           {
             _header ? 
             null : 
@@ -135,16 +146,6 @@ export default class List extends Component<IProps, IState> {
               }
             </View>
           }
-          <View style={{...customStyle.backgroundColor('bgColor'), paddingTop: (header || 0) + 'rpx'}}
-          >
-            {this.props.renderContent}
-          </View>
-          {
-            empty ? <GDivider other={{paddingBottom: (bottom ? bottom + 20 : 0) + 'rpx'}} /> : null
-          }
-          {/* <Top 
-            ref={this.topRef} 
-          /> */}
           {_bottom ? null : this.props.renderBottom}
         </View>
         <View 

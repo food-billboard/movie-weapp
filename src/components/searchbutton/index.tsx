@@ -150,8 +150,10 @@ class SearchButton extends Component<IProps, IState>{
                     :
                     (<View 
                         className='at-row hotsearch at-row__align--center' 
-                        style={{height: hotShow ? hotShow + 'px' : '0', ...style.backgroundColor('bgColor')}}>
-                        <View className='at-col at-col-1 hotlist title'>热搜</View>
+                        style={{height: hotShow ? hotShow + 'px' : '0', ...style.backgroundColor('bgColor'), ...style.color('primary')}}>
+                        <View 
+                            className='at-col at-col-1 hotlist title'
+                        >热搜</View>
                         {
                             hot.map((value) => {
                                 const { name, id } = value
@@ -159,7 +161,7 @@ class SearchButton extends Component<IProps, IState>{
                                     <View className='at-col at-col-2 hotlist'
                                         key={id}>
                                         <AtTag 
-                                            customStyle={{...style.backgroundColor('disabled')}}
+                                            customStyle={{...style.backgroundColor('disabled'), ...style.color('primary')}}
                                             type={"primary"}
                                             size={"normal"}
                                             circle={true}

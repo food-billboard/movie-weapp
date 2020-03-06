@@ -27,7 +27,7 @@ export default class extends Component<any>{
 
   private scrollRef = Taro.createRef<Scroll>()
 
-  public colorStyleChange = () => {
+  public componentDidShow = () => {
     colorStyleChange()
   }
     
@@ -81,7 +81,7 @@ export default class extends Component<any>{
   public render() {
 
     const { list } = this.state
-
+console.log(list)
     this.setTitle()
 
     return (

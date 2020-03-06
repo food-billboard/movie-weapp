@@ -1,6 +1,6 @@
 import Taro, {Component} from '@tarojs/taro'
 import { ScrollView, View, Image, Text } from '@tarojs/components'
-import { TypeColor } from '~theme/color'
+import { TypeColor, colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { IProps } from './index.d'
 import { router, routeAlias} from '~utils'
@@ -13,6 +13,10 @@ class News extends Component<IProps>{
     public static defaultProps = {
         count: MAX_COUNT,
         list: []
+    }
+
+    public componentDidShow = () => {
+        colorStyleChange()
     }
     
     /**
