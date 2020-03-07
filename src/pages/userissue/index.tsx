@@ -4,8 +4,6 @@ import IconList from '~components/iconlist'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { throttle } from 'lodash'
-
-import { router, routeAlias } from '~utils'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 
@@ -19,7 +17,7 @@ export default class extends Component<any>{
 
   private scrollRef = Taro.createRef<GScrollView>()
 
-  public colorStyleChange = () => {
+  public componentDidShow = () => {
     colorStyleChange()
   }
 

@@ -250,6 +250,12 @@ export default class Forms extends Component<IProps> {
             <AtForm
                 onSubmit={this.onSubmit}
                 onReset={this.onReset}
+                customStyle={{
+                    ...style.backgroundColor('bgColor'),
+                    position:'absolute',
+                    left:0,
+                    top:0,
+                }}
             >
                 <View className='fee'>
                     <AtTag 
@@ -269,6 +275,7 @@ export default class Forms extends Component<IProps> {
                 <View className='price'>
                     <View className='low'>
                         <GInput
+                            style={{...style.backgroundColor('disabled'), marginBottom: '10px'}}
                             inputType={'number'}
                             placeholder={'最低价格'}
                             ref={this.minPriceRef}
@@ -276,6 +283,7 @@ export default class Forms extends Component<IProps> {
                     </View>
                     <View className='high'>
                         <GInput
+                            style={{...style.backgroundColor('disabled')}}
                             inputType={'number'}
                             placeholder={'最高价格'}
                             ref={this.maxPriceRef}
@@ -326,7 +334,7 @@ export default class Forms extends Component<IProps> {
                     open && <View className='other'>
                         <View className='actor'>
                             <AtTag 
-                                customStyle={tagStyle} 
+                                customStyle={{...tagStyle, marginTop: '20px'}} 
                                 type={'primary'}
                             >
                                 演员

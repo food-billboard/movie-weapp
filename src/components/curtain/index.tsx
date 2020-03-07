@@ -50,7 +50,11 @@ export default class extends Component<IProps, IState> {
         ></View>
         <View 
           className='main'
-          style={{...customeStyle.backgroundColor('bgColor'), ...(isObject(contentStyle) ? contentStyle : {})}}
+          style={{
+            ...customeStyle.backgroundColor('bgColor'), 
+            borderRadius: '6px',
+            ...(isObject(contentStyle) ? contentStyle : {})
+          }}
         >
           {
             title && 

@@ -6,6 +6,7 @@ import Curtain from '../curtain'
 import { Info } from '../model/index.d'
 import { router, formatTime, formatNumber, mediaType, routeAlias } from '~utils'
 import style from '~theme/style'
+import { TypeColor } from '~theme/color'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { IState, IProps, IMediaList } from './index.d'
@@ -278,8 +279,9 @@ class List extends Component<IProps, IState>{
                                     <View 
                                         className={`image-icon at-icon ${ICON_TYPE[type]}`}
                                         style={{
-                                            ...style.backgroundColor('bgColor'),
-                                            ...style.color('primary')
+                                            // ...style.backgroundColor('bgColor'),
+                                            ...style.color('primary'),
+                                            textShadow: `0 0 2px ${TypeColor['disabled']}`
                                         }}
                                     ></View>
                                     <Image

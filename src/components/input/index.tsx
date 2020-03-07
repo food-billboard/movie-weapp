@@ -106,6 +106,7 @@ export default class extends Component<IProps, IState> {
             onInput={(e) => {this.props.handleChange ? this.props.handleChange.call(this, e.detail.value) : this.handleChange.call(this, e.detail.value)}}
             type={'text'}
             placeholder={placeholder ? placeholder : ''}
+            onTouchMove={(e) => {e.stopPropagation()}}
           />
           // <AtInput
           //   disabled={stateDisabled ? stateDisabled : disabled}

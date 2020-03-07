@@ -24,7 +24,8 @@ const ICON_COLOR = 'primary'
 export default class extends Component<any>{
 
     public static config: Config = {
-        navigationBarTitleText: '我的'
+        navigationBarTitleText: '我的',
+        disableScroll: true
     }
 
     //设置

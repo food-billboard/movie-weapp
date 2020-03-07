@@ -104,6 +104,8 @@ export default class Index extends Component<any> {
 
     //改变当前页面路由
     public getTypeDetail = async(id: string) => {
+        const { typeShow } = this.state
+        if(typeShow) this.setState({typeShow: false})
         this.id = id
         this.scrollRef.current!.fetchData({INIT_QUERY}, true)
     }
@@ -230,7 +232,6 @@ export default class Index extends Component<any> {
                 renderBottom={ <View className="btn">
                                 <Fab value={listShow} change={this.listChange} />
                               </View>}
-                ref={this.scrollRef}
             >
             </GScrollView> 
         )

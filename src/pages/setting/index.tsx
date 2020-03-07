@@ -12,6 +12,7 @@ import {mapDispatchToProps, mapStateToProps} from './connect'
 import { Toast } from '~components/toast'
 import { Option } from 'taro-ui/@types/radio'
 import { getStyle } from '~config'
+import style from '~theme/style'
 
 import './index.scss'
 
@@ -38,7 +39,8 @@ const colorControl = {
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Setting extends Component<any>{
     public static config: Config = {
-        navigationBarTitleText: '设置'
+        navigationBarTitleText: '设置',
+        disableScroll: true
     }
 
     public commentRef = Taro.createRef<Comment>()
@@ -301,6 +303,7 @@ export default class Setting extends Component<any>{
                         type={type[index]}  
                         plain={true} 
                         onClick={this.handleButton.bind(this, index)} 
+                        style={{...style.backgroundColor('bgColor')}}
                     >
                         {value[index]}
                     </Button>

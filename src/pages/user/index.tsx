@@ -15,6 +15,7 @@ export default class User extends Component<any>{
     
     public static config: Config = {
         navigationBarTitleText: '用户',
+        disableScroll: true
     }
 
     public state: any = {

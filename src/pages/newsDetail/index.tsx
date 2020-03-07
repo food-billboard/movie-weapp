@@ -148,7 +148,7 @@ export default class extends Component<any> {
   //显示详细功能
   public handleShowDetailFunc = () => {
     const { detailFunc } = this.state
-    if(!!detailFunc) this.handleEmoj()
+    if(!!detailFunc) this.EmojRef.current!.handleClose()
     this.setState({
       detailFunc: !detailFunc
     })
@@ -343,6 +343,8 @@ export default class extends Component<any> {
               className='input'
             >
               <Textarea
+                adjust-position	={true}
+                cursor-spacing={25}
                 style={{
                   ...style.border(2, 'disabled', 'solid', 'all'),
                   width:'100%',

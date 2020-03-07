@@ -126,6 +126,7 @@ export default class Comment extends Component<IProps>{
                                 placeholder='说点什么吧...'
                                 fixed={true}
                                 textOverflowForbidden={true}
+                                customStyle={{...style.backgroundColor('disabled')}}
                             />
                             : null
                         }

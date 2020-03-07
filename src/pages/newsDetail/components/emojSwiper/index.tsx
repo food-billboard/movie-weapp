@@ -22,6 +22,13 @@ export default class extends Component<IProps, IState> {
     this.props.handleAddEmoj(value)
   }
 
+  //关闭
+  public handleClose = () => {
+    this.setState({
+      show: false
+    })
+  }
+
   //控制显示隐藏
   public controlShowHide = () => {
     const { show } = this.state
@@ -63,14 +70,13 @@ export default class extends Component<IProps, IState> {
                     <View className='at-row at-row--wrap'>
                       {
                         page.map((value: any) => {
-                          const { value: emojText, id: emojId } = value
                           return (
                             <View 
                               className='at-col at-col-1 icon-content'
-                              key={emojId}
-                              onClick={() => {this.handleClick.call(this, emojText)}}
+                              key={value}
+                              onClick={() => {this.handleClick.call(this, value)}}
                             >
-                              {emojText}
+                              {value}
                             </View>
                           )
                         })

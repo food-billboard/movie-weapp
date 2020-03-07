@@ -8,6 +8,7 @@ import IconList from './components/iconList'
 import Comment from '~components/comment'
 import GTag from './components/tag'
 import Actor from './components/actor'
+import Title from './components/title'
 import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
 
@@ -112,35 +113,39 @@ export default class extends Component<any> {
                     />
                 </View>
                 <View className='image'>
-                    <Text 
-                        style={{...style.color('primary')}}
-                        className='item-title'
-                    >截图</Text>
+                    <View className='title'>
+                        <Title
+                            title={'截图'}
+                        />
+                    </View>
                     <List 
                         list={image}
                     />
                 </View>
                 <View className='actor'>
-                    <Text 
-                        style={{...style.color('primary')}}
-                        className='item-title'    
-                    >演员</Text>
+                    <View className='title'>
+                        <Title
+                            title={'卡司'}
+                        />
+                    </View>
                     <Actor list={info ? info.actor : []} />
                 </View>
                 <View className='tag'> 
-                    <Text 
-                        style={{...style.color('primary')}}
-                        className='item-title'
-                    >大家都说</Text>
+                    <View className='title'>
+                        <Title
+                            title={'大家都说'}
+                        />
+                    </View>
                     <GTag
                         list={tag}
                     ></GTag>
                 </View>
                 <View className='comment'>
-                    <Text 
-                        style={{...style.color('primary')}}
-                        className='item-title'
-                    >评论用户</Text>
+                    <View className='title'>
+                        <Title
+                            title={'大家评论'}
+                        />
+                    </View>
                     <IconList
                         list={commentList}
                         id={this.id}        

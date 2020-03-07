@@ -18,7 +18,7 @@ import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { AtDrawer } from 'taro-ui'
 
-const { screenWidth } = Taro.getSystemInfoSync()
+const { screenWidth, screenHeight } = Taro.getSystemInfoSync()
 
 //初始化页码参数
 const INIT_PAGE = { currPage:1, pageSize: 10 }
@@ -34,13 +34,12 @@ export default class Index extends Component<any> {
 
     public config: Config = {
         navigationBarTitleText: "搜索",
+        
     }
 
     public searchBarRef = Taro.createRef<SearchBar>()
 
     public scrollRef = Taro.createRef<GScrollView>()
-
-    public selectRef = Taro.createRef<Select>()
 
     private scrollTop = 0
 
@@ -220,11 +219,34 @@ export default class Index extends Component<any> {
         return (
             <GScrollView
                 ref={this.scrollRef}
-                style={{...style.backgroundColor('bgColor')}}
+                style={{
+                    ...style.backgroundColor('bgColor')
+                }}
                 autoFetch={false}
                 sourceType={'Scope'}
                 renderContent={ 
                     <View>
+                        <AtDrawer
+                            show={selectShow}
+                            mask={false}
+                            right={true}
+                            width='300px'
+                            className='drawer'
+                        >
+                            <Forms screen={this.queryScreen} />     
+                        </AtDrawer>
+                        {
+                            selectShow ?
+                            <View 
+                                className='curtain' 
+                                onClick={this.drawerClose}
+                                style={{
+                                    opacity: selectShow ? '0.3' : '0',
+                                }}
+                                onTouchMove={(e) => {e.stopPropagation()}}
+                            ></View>
+                            : null
+                        }
                         <View 
                             className='search-head' 
                             style={{width: screenWidth + 'px'}}
@@ -236,51 +258,41 @@ export default class Index extends Component<any> {
                                 control={this.showList}
                                 hotShow={hotShow}
                             />
-                    </View>
-                    <View 
-                        className='search-main'
-                        style={{
-                            display: listShow && searchList.length ? 'block' : 'none', 
-                            overflowX: 'hidden',
-                            paddingTop: 150 + 'rpx'
-                        }}
-                    >
-                        <AtDrawer
-                            show={selectShow}
-                            mask
-                            right={true}
-                            onClose={this.drawerClose}
-                            width='300px'
-                            className='drawer'
-                        >
-                            <Forms screen={this.queryScreen} />     
-                        </AtDrawer>
-                        <View 
-                            className='head'
-                        >
-                            <Head screen={this.typeScreen} />
                         </View>
                         <View 
-                            className='head-sub' 
+                            className='search-main'
+                            style={{
+                                display: listShow && searchList.length ? 'block' : 'none', 
+                                overflowX: 'hidden',
+                                paddingTop: 150 + 'rpx',
+                            }}
                         >
-                            <View className='at-row at-row__justify--around sub'>
-                                <View className='at-col at-col-5 select'>
-                                    <RadioList screen={this.sortScreen} />
-                                </View>
-                                <View className='at-col at-col-3 look'>
-                                    <Method
-                                        screen={this.showMethod}
-                                    />
-                                </View>
-                                <View className='at-col at-col-5 screen'>
-                                <Text 
-                                    className='text'
-                                    onClick={this.drawerOpen}>筛选</Text>
+                            <View 
+                                className='head'
+                            >
+                                <Head screen={this.typeScreen} />
+                            </View>
+                            <View 
+                                className='head-sub' 
+                            >
+                                <View className='at-row at-row__justify--around sub'>
+                                    <View className='at-col at-col-5 select'>
+                                        <RadioList screen={this.sortScreen} />
+                                    </View>
+                                    <View className='at-col at-col-3 look'>
+                                        <Method
+                                            screen={this.showMethod}
+                                        />
+                                    </View>
+                                    <View className='at-col at-col-5 screen'>
+                                    <Text 
+                                        className='text'
+                                        onClick={this.drawerOpen}>筛选</Text>
+                                    </View>
                                 </View>
                             </View>
+                            {showList ? <List list={searchList} /> : <IconList list={searchList} />}
                         </View>
-                        {showList ? <List list={searchList} /> : <IconList list={searchList} />}
-                    </View>
                     </View>
                 }
                 fetch={this.throttleFetchData}
