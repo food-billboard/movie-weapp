@@ -250,9 +250,17 @@ export default class extends Component<any> {
   public handleRemove = () => {
     const { inputValue } = this.state
     if(!inputValue.length) return
-    this.setState({
-      inputValue: inputValue.slice(0, inputValue.length - 1)
-    })
+    if(inputValue.length == 1) {
+      this.setState({
+        inputValue: ''
+      })
+    }else {
+      const str = inputValue.slice(inputValue.length - 2, inputValue.length)
+      const isEmoji = this.EmojRef.current!.isEmojiCharacter(str)
+      this.setState({
+        inputValue: inputValue.slice(0, inputValue.length - (isEmoji ? 2 : 1))
+      })
+    }
   }
 
   //添加emoj表情

@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { Swiper, SwiperItem, View } from '@tarojs/components'
 import { TypeColor } from '~theme/color'
 import { IProps, IState } from './index.d'
-import { emoj } from '~theme/emoj'
+import { emoji } from '~theme/emoji'
 import style from '~theme/style'
 
 import './index.scss'
@@ -12,6 +12,42 @@ export default class extends Component<IProps, IState> {
   public state: IState = {
     show: false,
     mode: ''
+  }
+
+  //判断字符串是否为emoji表情
+  public isEmojiCharacter = (substring) => {
+    for ( var i = 0; i < substring.length; i++) {
+        const hs = substring.charCodeAt(i);
+        if (0xd800 <= hs && hs <= 0xdbff) {
+            if (substring.length > 1) {
+                const ls = substring.charCodeAt(i + 1);
+                const uc = ((hs - 0xd800) * 0x400) + (ls - 0xdc00) + 0x10000;
+                if (0x1d000 <= uc && uc <= 0x1f77f) {
+                    return true;
+                }
+            }
+        } else if (substring.length > 1) {
+            const ls = substring.charCodeAt(i + 1);
+            if (ls == 0x20e3) {
+                return true;
+            }
+        } else {
+            if (0x2100 <= hs && hs <= 0x27ff) {
+                return true;
+            } else if (0x2B05 <= hs && hs <= 0x2b07) {
+                return true;
+            } else if (0x2934 <= hs && hs <= 0x2935) {
+                return true;
+            } else if (0x3297 <= hs && hs <= 0x3299) {
+                return true;
+            } else if (hs == 0xa9 || hs == 0xae || hs == 0x303d || hs == 0x3030
+                    || hs == 0x2b55 || hs == 0x2b1c || hs == 0x2b1b
+                    || hs == 0x2b50) {
+                return true;
+            }
+        }
+    }
+    return false
   }
 
   //表情选择
@@ -61,8 +97,8 @@ export default class extends Component<IProps, IState> {
         autoplay={false}
         >
             {
-              emoj.map((val: any) => {
-                const { emoj: page, id } = val
+              emoji.map((val: any) => {
+                const { emoji: page, id } = val
                 return (
                   <SwiperItem
                     key={id}
