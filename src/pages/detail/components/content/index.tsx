@@ -9,6 +9,7 @@ import { IProps, IState } from './index.d'
 import style from '~theme/style'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
+import { SYSTEM_PAGE_SIZE } from '~config'
 
 import './index.scss'
 
@@ -83,13 +84,13 @@ export default class Content extends Component<IProps, IState>{
                         />
                     </View>
                     <View className='main-rate'>
-                        <View>楼主评分: </View>
+                        <View className='up-rate'>楼主评分: </View>
                         <View className='at-row at-row__align--center'>
                             <View className='at-col at-col-9'>
                                 <AtRate
                                     value={rateMine}
                                     max={10}
-                                    size={20}
+                                    size={SYSTEM_PAGE_SIZE(20)}
                                 ></AtRate>
                             </View>
                             <View className='at-col at-col-1 main-rate-number'>
@@ -171,7 +172,7 @@ export default class Content extends Component<IProps, IState>{
                             简介: 
                             <Ellipsis
                                 text={description}
-                                style={{lineHeight: '25px', ...style.color('primary')}}
+                                style={{lineHeight: SYSTEM_PAGE_SIZE(25) + 'px', ...style.color('primary')}}
                                 needPoint={true}
                             ></Ellipsis>
                         </View>
@@ -182,7 +183,7 @@ export default class Content extends Component<IProps, IState>{
                             楼主认为: 
                             <Ellipsis
                                 text={mine}
-                                style={{lineHeight: '25px', ...style.color('primary')}}
+                                style={{lineHeight: SYSTEM_PAGE_SIZE(25) + 'px', ...style.color('primary')}}
                                 needPoint={true}
                             ></Ellipsis>
                         </View>

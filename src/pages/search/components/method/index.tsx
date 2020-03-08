@@ -36,7 +36,7 @@ export default class Methods extends Component<IProps, IState>{
         return (
             <View className='method'
                 onClick={this.change}>
-                <Image className='active' style={{width:'20px', height: '20px'}} src={this.state.active ? list : icon}></Image>
+                <Image className='active' src={this.state.active ? list : icon}></Image>
             </View>
         )
     }

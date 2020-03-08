@@ -22,3 +22,9 @@ $height:202px;
     white-space: nowrap;
   }
 }
+
+@media screen and (min-width: 700px) {
+  .text{
+    font-size:32px;
+  }
+}

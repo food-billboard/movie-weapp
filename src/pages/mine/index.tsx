@@ -7,13 +7,11 @@ import IconHead from '~components/headicon'
 import { TypeColor, colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { IList } from '~components/linearlist/index.d'
-
-import './index.scss'
-
-import { router, routeAlias } from '~utils'
-
 import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToProps } from './connect'
+import { router, routeAlias } from '~utils'
+
+import './index.scss'
 
 type right = 'right'
 const arrow:right = 'right'
@@ -25,7 +23,6 @@ export default class extends Component<any>{
 
     public static config: Config = {
         navigationBarTitleText: '我的',
-        disableScroll: true
     }
 
     //设置
@@ -36,7 +33,6 @@ export default class extends Component<any>{
             arrow: arrow,
             iconInfo: {
                 value: 'share-2',
-                size: 14,
                 color: TypeColor[ICON_COLOR]
             },
             handle: () => {
@@ -51,7 +47,6 @@ export default class extends Component<any>{
             arrow: arrow,
             iconInfo: {
                 value: 'settings',
-                size: 14, 
                 color: TypeColor[ICON_COLOR]
             },
             handle: () => {

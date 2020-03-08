@@ -246,6 +246,15 @@ export default class extends Component<any> {
     })
   }
 
+  //文本内容删除
+  public handleRemove = () => {
+    const { inputValue } = this.state
+    if(!inputValue.length) return
+    this.setState({
+      inputValue: inputValue.slice(0, inputValue.length - 1)
+    })
+  }
+
   //添加emoj表情
   public handleAddEmoj = (value) => {
     const { inputValue } = this.state
@@ -368,6 +377,7 @@ export default class extends Component<any> {
                   <Emoj
                     ref={this.EmojRef}
                     handleAddEmoj={this.handleAddEmoj}
+                    handleRemoveEmoj={this.handleRemove}
                   />
                 </View>
             </View>

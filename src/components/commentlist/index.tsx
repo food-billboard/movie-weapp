@@ -10,6 +10,7 @@ import { TypeColor } from '~theme/color'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { IState, IProps, IMediaList } from './index.d'
+import { SYSTEM_PAGE_SIZE } from '~config'
 
 import './index.scss'
 
@@ -234,7 +235,7 @@ class List extends Component<IProps, IState>{
                     >
                         <View className={'up-text'}>
                             {formatNumber(hot)}
-                            <AtIcon value={isHot ? 'heart-2' : 'heart'} />
+                            <AtIcon value={isHot ? 'heart-2' : 'heart'} size={SYSTEM_PAGE_SIZE(14)} />
                         </View>
                     </View>
                     <View 
@@ -279,9 +280,9 @@ class List extends Component<IProps, IState>{
                                     <View 
                                         className={`image-icon at-icon ${ICON_TYPE[type]}`}
                                         style={{
-                                            // ...style.backgroundColor('bgColor'),
                                             ...style.color('primary'),
-                                            textShadow: `0 0 2px ${TypeColor['disabled']}`
+                                            textShadow: `0 0 2px ${TypeColor['disabled']}`,
+                                            fontSize: SYSTEM_PAGE_SIZE(16) + 'px'
                                         }}
                                     ></View>
                                     <Image

@@ -12,11 +12,12 @@ import { debounce, throttle } from 'lodash'
 import { FormData } from './interface'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
-import './index.scss'
-
+import { SYSTEM_PAGE_SIZE } from '~config'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { AtDrawer } from 'taro-ui'
+
+import './index.scss'
 
 const { screenWidth, screenHeight } = Taro.getSystemInfoSync()
 
@@ -27,7 +28,7 @@ const INIT_PAGE = { currPage:1, pageSize: 10 }
 const INIT_QUERY = { type: '', sort: '', query: {} }
 
 //初始hot高度
-const HOT_HEIGHT = 35
+const HOT_HEIGHT = SYSTEM_PAGE_SIZE(35)
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Index extends Component<any> {
@@ -230,7 +231,7 @@ export default class Index extends Component<any> {
                             show={selectShow}
                             mask={false}
                             right={true}
-                            width='300px'
+                            width={SYSTEM_PAGE_SIZE(300) + 'px'}
                             className='drawer'
                         >
                             <Forms screen={this.queryScreen} />     

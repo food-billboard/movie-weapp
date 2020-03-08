@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Image } from '@tarojs/components'
 import GVideo from '../video'
 import { IProps, IState, IItem } from './index.d'
-import { IMAGE_CONFIG } from '~config'
+import { IMAGE_CONFIG, SYSTEM_PAGE_SIZE } from '~config'
 import style from '~theme/style'
 import { findIndex } from 'lodash'
 import { Toast } from '~components/toast'
@@ -180,7 +180,7 @@ export default class extends Component<IProps, IState> {
               style={{...style.backgroundColor('disabled'), ...style.color('primary'), ...style.border(1, 'disabled', 'solid', 'all')}}
               onClick={this.handleImageChange.bind(this)}
             >
-              <View className='at-icon at-icon-image'></View>
+              <View className='at-icon at-icon-image' style={{fontSize: SYSTEM_PAGE_SIZE() + 'px'}}></View>
               <Text>图片选择</Text>
             </View>
           </View>
@@ -190,7 +190,7 @@ export default class extends Component<IProps, IState> {
               style={{...style.backgroundColor('disabled'), ...style.color('primary'), ...style.border(1, 'disabled', 'solid', 'all')}}
               onClick={this.handleVideoChange.bind(this)}
             >
-              <View className='at-icon at-icon-video'></View>
+              <View className='at-icon at-icon-video' style={{fontSize: SYSTEM_PAGE_SIZE() + 'px'}}></View>
               <Text>视频选择</Text>
             </View>
           </View>
@@ -208,7 +208,7 @@ export default class extends Component<IProps, IState> {
                   <View className='media-main'>
                     <View 
                       className='at-icon at-icon-close icon' 
-                      style={{...style.color('primary')}}
+                      style={{...style.color('primary'), fontSize: SYSTEM_PAGE_SIZE() + 'px'}}
                       onClick={(e) => {this.handleClose.call(this, url)}}
                     ></View>
                     {
@@ -249,8 +249,9 @@ export default class extends Component<IProps, IState> {
             close && 
             <View 
               className='at-icon at-icon-close video-icon' 
-              style={{...style.color('primary')}}
-              onClick={() => {this.videoClose.call(this)}}></View>
+              style={{...style.color('primary'), fontSize: SYSTEM_PAGE_SIZE(40) + 'px'}}
+              onClick={() => {this.videoClose.call(this)}}
+            ></View>
           }
           </View>
       </View>

@@ -154,7 +154,7 @@ export default class Setting extends Component<any>{
         arrow: arrow,
         iconInfo: {
             value: 'bell',
-            size: 16, 
+            // size: 16, 
             color: TypeColor[ICON_COLOR]
         },
         handle: this.showFeedback,
@@ -207,7 +207,7 @@ export default class Setting extends Component<any>{
             arrow: arrow,
             iconInfo: {
                 value: 'tag',
-                size: 16, 
+                // size: 16, 
                 color: TypeColor[ICON_COLOR]
             },
             handle: this.showAbout,

@@ -3,10 +3,11 @@ import { View, Text } from '@tarojs/components'
 import { AtRate } from 'taro-ui'
 import { IProps, IState } from './index.d'
 import style from '~theme/style'
-import './index.scss'
-
+import { SYSTEM_PAGE_SIZE } from '~config'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
+
+import './index.scss'
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class GTate extends Component<IProps, IState>{
@@ -63,14 +64,14 @@ export default class GTate extends Component<IProps, IState>{
                     readonly ? 
                     <AtRate
                         className='star'
-                        size={25}
+                        size={SYSTEM_PAGE_SIZE(25)}
                         max={10}
                         value={value}
                     /> 
                     :
                     <AtRate
                         className='star'
-                        size={25}
+                        size={SYSTEM_PAGE_SIZE(25)}
                         max={10}
                         value={value}
                         onChange={(value) => {this.handleChange.call(this, value)}}

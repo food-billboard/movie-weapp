@@ -11,9 +11,10 @@ import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToProps } from './connect'
 import { TypeColor, colorStyleChange } from '~theme/color'
 import style from '~theme/style'
+import { SYSTEM_PAGE_SIZE } from '~config'
+import { Toast } from '~components/toast'
 
 import './index.scss'
-import { Toast } from '~components/toast'
 
 const FORM_DATA: IFormData = {
   id: false,
@@ -27,7 +28,7 @@ const BUTTON_STYLE = {
   bottom:0,
   left:0,
   width: '100%',
-  height: '40px',
+  height: SYSTEM_PAGE_SIZE(40) + 'px',
   zIndex: 9
 }
 
@@ -39,8 +40,8 @@ const TAT_STYLE = {
 }
 
 const PICKER_STYLE = {
-  height: '46px',
-  lineHeight: '46px',
+  height: SYSTEM_PAGE_SIZE(46) + 'px',
+  lineHeight: SYSTEM_PAGE_SIZE(46) + 'px',
   marginBottom: '5px'
 }
 
@@ -440,7 +441,7 @@ export default class extends Component<any> {
           ></GImagePicker>
         </View>
         <AtButton type={'primary'} onClick={this.handleSubmit} customStyle={{ ...BUTTON_STYLE, ...style.backgroundColor('thirdly'), ...style.border(1, 'thirdly', 'solid', 'all') }}>提交</AtButton>
-        <AtButton type={'primary'} onClick={this.handleReset} customStyle={{ ...BUTTON_STYLE, bottom: '40px', ...style.backgroundColor('primary'), ...style.border(1, 'primary', 'solid', 'all') }}>重置</AtButton>
+        <AtButton type={'primary'} onClick={this.handleReset} customStyle={{ ...BUTTON_STYLE, bottom: SYSTEM_PAGE_SIZE(40) + 'px', ...style.backgroundColor('primary'), ...style.border(1, 'primary', 'solid', 'all') }}>重置</AtButton>
       </View>
     )
   }

@@ -3,15 +3,15 @@ import { View, Picker } from '@tarojs/components'
 import { isObject } from '~utils'
 import Rest from '~components/restFactor'
 import moment from 'moment'
-import { FORM_ERROR } from '~config'
+import { FORM_ERROR, SYSTEM_PAGE_SIZE } from '~config'
 import { IProps, IState, modeList, fieldTypeList } from './index.d'
 import customStyle from '~theme/style'
  
 const STYLE = {
   width:'100%',
-  height: '30px',
+  height: SYSTEM_PAGE_SIZE(30) + 'px',
   backgroundColor: 'rgba(0, 0, 0, 0.1)',
-  lineHeight: '30px',
+  lineHeight: SYSTEM_PAGE_SIZE(30) + 'px',
   boxSizing: 'border-box'
 }
 

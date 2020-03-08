@@ -14,6 +14,7 @@ import { TypeColor } from '~theme/color'
 import style from '~theme/style'
 import List from '~components/linearlist'
 import { IList } from '~components/linearlist/index.d'
+import { SYSTEM_PAGE_SIZE } from '~config'
 
 const TAT_STYLE = {
     boxSizing: 'border-box', 
@@ -328,7 +329,7 @@ export default class Forms extends Component<IProps> {
                 </View>
                 <List
                     list={[{...this.detailScreenBtn, arrow: open ? 'up' : 'down'}]}
-                    style={open ? {} : {paddingBottom: '92px'}}
+                    style={open ? {} : {paddingBottom: SYSTEM_PAGE_SIZE(92) + 'px'}}
                 ></List>
                 {
                     open && <View className='other'>

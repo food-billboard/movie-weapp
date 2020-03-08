@@ -4,12 +4,12 @@ import { AtRadio, AtButton } from 'taro-ui'
 import Rest from '~components/restFactor'
 import { IProps, IState } from './index.d'
 import { isObject } from '~utils'
-import { FORM_ERROR } from '~config'
+import { FORM_ERROR, SYSTEM_PAGE_SIZE } from '~config'
 
 import './index.scss'
 
 const BUTTON_STYLE = {
-  height:'40px'
+  height:SYSTEM_PAGE_SIZE(40) + 'px'
 }
 
 export default class extends Component<IProps, IState> {

@@ -42,3 +42,17 @@
     }
   }
 }
+
+@media screen and (min-width: 700px) {
+  .content-header{
+    height:160px;
+  }
+  .icon{
+    width:160px;
+    height:160px;
+  }
+  .user,
+  .time{
+    line-height:160px;
+  }
+}

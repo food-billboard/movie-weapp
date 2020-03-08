@@ -9,6 +9,7 @@ import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToPrps } from './connect'
+import { SYSTEM_PAGE_SIZE } from '~config'
 
 import './index.scss'
 
@@ -178,7 +179,7 @@ export default class Index extends Component<any> {
                     <View>
                         <View className='header-type' style={{
                             ...bgColor, 
-                            height: headerHeight / 2 + 'px'
+                            height: Number(SYSTEM_PAGE_SIZE(headerHeight)) / 2 + 'px'
                         }}
                         >
                             <Text className='text'

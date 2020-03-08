@@ -5,11 +5,12 @@ import { router, routeAlias } from '~utils'
 import { IProps, List } from './index.d'
 import { TypeColor } from '~theme/color'
 import style from '~theme/style'
+import { SYSTEM_PAGE_SIZE } from '~config'
 
 import './index.scss'
 
 const ICON_INFO = {
-    size: 28,
+    size: SYSTEM_PAGE_SIZE(28),
     color: TypeColor['thirdly']
 }
 

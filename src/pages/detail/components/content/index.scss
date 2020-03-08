@@ -95,3 +95,17 @@
         }
     }
 }
+
+@media screen and (min-width: 700px) {
+    .up-rate,
+    .actor,
+    .director,
+    .type,
+    .time-publish,
+    .area-lang,
+    .hot,
+    .look,
+    .description{
+        font-size:32px;
+    }
+}

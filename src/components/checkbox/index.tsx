@@ -5,14 +5,14 @@ import Rest from '~components/restFactor'
 import { isObject } from '~utils'
 import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToProps } from './connect'
-import { FORM_ERROR } from '~config'
+import { FORM_ERROR, SYSTEM_PAGE_SIZE } from '~config'
 import { IState, IProps, IOption, typeList } from './index.d'
 import styleColor  from '~theme/style'
 
 import './index.scss'
 
 const BUTTON_STYLE = {
-  height:'40px'
+  height:SYSTEM_PAGE_SIZE(40) + 'px'
 }
 
 @connect(mapStateToProps, mapDispatchToProps)

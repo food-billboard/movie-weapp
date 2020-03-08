@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { Button, View, Textarea } from '@tarojs/components'
 import MediaPicker from '../mediaPicker'
 import { IItem } from '../mediaPicker/index.d'
-import { IMAGE_CONFIG } from '~config'
+import { IMAGE_CONFIG, SYSTEM_PAGE_SIZE } from '~config'
 import { AtTextarea } from "taro-ui"
 import { IProps, IState } from './index.d'
 import style from '~theme/style'
@@ -112,9 +112,12 @@ export default class Comment extends Component<IProps>{
                 other={true}
                 handleClose={() => {this.close.call(this)}}
                 cancel={false}
-                contentStyle={{width: '300px'}}
+                contentStyle={{width: SYSTEM_PAGE_SIZE(300) + 'px'}}
                 renderMain={
-                    <View className='main'>
+                    <View 
+                        className='main'
+                        style={{width: SYSTEM_PAGE_SIZE(300) + 'px'}}
+                    >
                         {
                             isOpen ? 
                             <AtTextarea 

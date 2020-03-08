@@ -2,6 +2,7 @@
  * emoj组件
  * props: {
  *  handleAddEmoj: 添加表情到指定位置
+ *  handleRemoveEmoj: 删除表情
  * }
  * 
  * state: {
@@ -11,6 +12,7 @@
 
  export interface IProps {
   handleAddEmoj:(value: any) => any
+  handleRemoveEmoj: () => any
  }
 
  export interface IState {

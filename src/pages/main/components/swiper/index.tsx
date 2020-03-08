@@ -49,6 +49,7 @@ class Index extends Component<IProps>{
                 circular
                 indicatorDots
                 autoplay={false}
+                className='swiper'
             >
                 {swiper}
             </Swiper>

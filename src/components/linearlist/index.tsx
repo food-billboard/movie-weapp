@@ -3,6 +3,7 @@ import { View } from '@tarojs/components'
 import { AtList, AtListItem } from "taro-ui"
 import { IProps } from './index.d'
 import { isObject } from '~utils'
+import { SYSTEM_PAGE_SIZE } from '~config/media'
 
 import './index.scss'
 
@@ -23,6 +24,7 @@ export default class List extends Component<IProps>{
                 handle = () => {},
                 id
             } = value
+            const _iconInfo = { size: SYSTEM_PAGE_SIZE(24), ...iconInfo }
             return (
                 <AtListItem
                     key={id.toString()} 
@@ -31,7 +33,7 @@ export default class List extends Component<IProps>{
                     onClick={handle}
                     note={note}
                     arrow={arrow}
-                    iconInfo={{...iconInfo}}
+                    iconInfo={{..._iconInfo}}
                 />
             )
         })

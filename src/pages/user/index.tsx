@@ -4,18 +4,18 @@ import IconHead from '~components/headicon'
 import List from '~components/linearlist'
 import GButton from '~components/button'
 import { TypeColor, colorStyleChange } from '~theme/color'
-import './index.scss'
-
 import {mapStateToProps, mapDispatchToProps} from './connect'
 import { router, routeAlias } from '~utils'
 import {connect} from '@tarojs/redux'
+
+import './index.scss'
+import style from '~theme/style'
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class User extends Component<any>{
     
     public static config: Config = {
         navigationBarTitleText: '用户',
-        disableScroll: true
     }
 
     public state: any = {
@@ -100,7 +100,7 @@ export default class User extends Component<any>{
             title: 'Ta的收藏',
             iconInfo: {
                 value: 'heart', 
-                size: 32, 
+                // size: SYSTEM_PAGE_SIZE(14), 
                 color: TypeColor['primary']
             },
             handle:this.handleCheckStore,
@@ -110,7 +110,7 @@ export default class User extends Component<any>{
             title: 'Ta的关注',
             iconInfo: {
                 value: 'star', 
-                size: 32, 
+                // size: SYSTEM_PAGE_SIZE(14), 
                 color: TypeColor['primary']
             },
             handle:this.handleCheckAttention,
@@ -120,7 +120,7 @@ export default class User extends Component<any>{
             title: 'Ta的粉丝',
             iconInfo: {
                 value: 'user',
-                size: 32,
+                // size: SYSTEM_PAGE_SIZE(14), 
                 color: TypeColor['primary']
             },
             handle: this.handleCheckFans,
@@ -130,7 +130,7 @@ export default class User extends Component<any>{
             title: 'Ta的浏览记录',
             iconInfo: {
                 value: 'list',
-                size: 32,
+                // size: SYSTEM_PAGE_SIZE(14), 
                 color: TypeColor['primary']
             },
             handle: this.handleCheckRecord,
@@ -140,7 +140,7 @@ export default class User extends Component<any>{
             title: 'Ta的评论',
             iconInfo: {
                 value: 'bookmark',
-                size: 32,
+                // size: SYSTEM_PAGE_SIZE(14), 
                 color: TypeColor['primary']
             },
             handle: this.handleCheckComment,
@@ -150,7 +150,7 @@ export default class User extends Component<any>{
             title: 'Ta的电影',
             iconInfo: {
                 value: 'share-2',
-                size: 32,
+                // size: SYSTEM_PAGE_SIZE(14), 
                 color: TypeColor['primary']
             },
             handle: this.handleCheckIssue,
@@ -177,7 +177,7 @@ export default class User extends Component<any>{
                 </View>
                 <GButton
                     type={'secondary'}
-                    style={{width: '100%', height: 120, position: 'fixed', left: 0, bottom: 0}}
+                    style={{width: '100%', height: 120, position: 'fixed', left: 0, bottom: 0, ...style.backgroundColor('bgColor')}}
                     active={isAttention ? 1 : 0}
                     value={['关注', '取消关注']}
                     operate={this.attention}

@@ -119,3 +119,12 @@
         height:600px;
     }
 }
+
+@media screen and (min-width: 700px) {
+    .name,
+    .up,
+    .time,
+    .content{
+        font-size:30px;
+    }
+}

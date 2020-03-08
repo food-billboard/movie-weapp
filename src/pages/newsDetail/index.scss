@@ -33,3 +33,9 @@
     box-sizing:border-box;
   }
 }
+
+@media screen and (min-width: 700px) {
+  .input{
+    font-size:32px;
+  }
+}

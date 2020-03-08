@@ -3,9 +3,9 @@ import { Swiper, SwiperItem, View } from '@tarojs/components'
 import { TypeColor } from '~theme/color'
 import { IProps, IState } from './index.d'
 import { emoj } from '~theme/emoj'
+import style from '~theme/style'
 
 import './index.scss'
-import style from '~theme/style'
 
 export default class extends Component<IProps, IState> {
 
@@ -81,6 +81,13 @@ export default class extends Component<IProps, IState> {
                           )
                         })
                       }
+                      <View 
+                        className='at-col ato-col-1'
+                        style={{...style.color('primary'), marginLeft: '-5px', textAlign: 'center'}}
+                        onClick={this.props.handleRemoveEmoj}
+                      >
+                        <View className='at-icon at-icon-trash'></View>
+                      </View>
                     </View>
                   </SwiperItem>
                 )      

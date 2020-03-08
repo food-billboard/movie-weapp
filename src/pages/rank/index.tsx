@@ -10,6 +10,7 @@ import { throttle } from 'lodash'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { router, routeAlias } from '~utils'
+import { SYSTEM_PAGE_SIZE } from '~config'
 
 const COLUMN_COUNT = 4
 
@@ -23,13 +24,13 @@ const showType = {
 const SHOW_ICON = {
   value: 'chevron-right',
   color: '',
-  size: 32
+  size: SYSTEM_PAGE_SIZE(30)
 }
 
 const HIDE_ICON = {
   value: 'chevron-left',
   color: '',
-  size: 32
+  size: SYSTEM_PAGE_SIZE(30)
 }
 
 const SHOW_MORE_CONFIG = {

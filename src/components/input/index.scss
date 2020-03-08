@@ -7,3 +7,10 @@
   border:none;
   padding:12px 0;
 }
+
+@media screen and (min-width: 700px) {
+  .input,
+  .textarea{
+    font-size:32px;
+  }
+}

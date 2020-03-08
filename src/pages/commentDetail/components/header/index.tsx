@@ -6,6 +6,8 @@ import { router, formatTime, formatNumber, routeAlias } from '~utils'
 import { IProps, IState } from './index.d'
 import style from '~theme/style'
 import { TypeColor } from '~theme/color'
+import { SYSTEM_PAGE_SIZE } from '~config'
+
 import './index.scss'
 
 export default class extends Component<IProps, IState> {
@@ -97,7 +99,7 @@ export default class extends Component<IProps, IState> {
                 circle={true}
                 className='icon' 
                 text={'头像'}
-                customStyle={{width:'40px', height: '40px'}}
+                customStyle={{width:SYSTEM_PAGE_SIZE(40) + 'px', height: SYSTEM_PAGE_SIZE(40) + 'px'}}
               />
             </View>
             <View 
@@ -124,14 +126,14 @@ export default class extends Component<IProps, IState> {
           <View className='content-footer'>
               <View className='at-row at-row__align--center content-footer-main'>
                 <View className='at-col at-col-6 at-row at-row__align--center'>
-                  <AtIcon color={TypeColor['thirdly']} value={'message'} size={16} customStyle={{marginRight: '5px', display: 'inline-block'}} />
+                  <AtIcon color={TypeColor['thirdly']} value={'message'} size={SYSTEM_PAGE_SIZE(16)} customStyle={{marginRight: '5px', display: 'inline-block'}} />
                   <Text style={{...style.color('secondary')}}>{formatNumber(total)}</Text>
                 </View>
                 <View 
                   className='at-col at-col-6'
                   onClick={this.like.bind(this, userId, hot, isLike, id)}
                 >
-                  <AtIcon color={TypeColor['thirdly']} size={16} value={isLike ? 'heart-2' : 'heart'} customStyle={{marginRight: '5px', display: 'inline-block'}} />
+                  <AtIcon color={TypeColor['thirdly']} size={SYSTEM_PAGE_SIZE(16)} value={isLike ? 'heart-2' : 'heart'} customStyle={{marginRight: '5px', display: 'inline-block'}} />
                   <Text style={{...style.color('secondary')}}>{formatNumber(hot)}</Text>
                 </View>
               </View>

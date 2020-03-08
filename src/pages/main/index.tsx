@@ -11,10 +11,21 @@ import style from '~theme/style'
 import { createSocket } from '~utils'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
+import { SYSTEM_PAGE_SIZE } from '~config'
 
 import './index.scss'
 
 const INIT_RANK_QUERY = { currPage: 1, pageSize: 3 }
+
+function Del(props) {
+  return (
+    <View style={{
+      width:'100%',
+      height:'100%',
+      backgroundColor: 'red'
+    }}></View>
+  )
+}
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any> {

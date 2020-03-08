@@ -6,10 +6,11 @@ import { IProps, IState, IPoint } from './index.d'
 import style from '~theme/style'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
+import { SYSTEM_PAGE_SIZE } from '~config'
 
 import './index.scss'
 
-const HOT_HEIGHT = 35
+const HOT_HEIGHT = SYSTEM_PAGE_SIZE(35)
 
 @connect(mapStateToProps, mapDispatchToProps)
 class SearchButton extends Component<IProps, IState>{

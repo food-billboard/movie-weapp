@@ -81,7 +81,7 @@ export default class extends Component<any>{
   public render() {
 
     const { list } = this.state
-console.log(list)
+
     this.setTitle()
 
     return (
