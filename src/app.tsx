@@ -89,7 +89,7 @@ class App extends Component {
       'pages/userissue/index',
       'pages/special/index',
       'pages/fans/index',
-      // 'pages/newsdetail/index'
+      'pages/newsdetail/index'
     ],
     window: {
       backgroundTextStyle: 'dark',
