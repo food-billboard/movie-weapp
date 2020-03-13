@@ -671,11 +671,15 @@ export default {
 
         //发送消息
         * sendNews({data}, {call, put}) {
+            //data可能是数组也可能是单个值
+
             let d = {
                 success: true,
                 data: {
                     res: 'success',
-                    id: '消息id'
+                    data: Array.isArray(data) ? data.map((val) => {
+                        return {id: Symbol('')}
+                    }) : [{id: Symbol('')}]
                 }
             }
             return d.data
@@ -751,7 +755,12 @@ export default {
                         username: '用户名',
                         data: [
                             {
-                                content: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg',
+                                content: {
+                                    text: '文字内容',
+                                    video: '视频地址',
+                                    image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg',
+                                    audio: '音频地址'
+                                },
                                 type: 'image',
                                 time: 11111111111111,
                                 username: '用户',
@@ -759,7 +768,12 @@ export default {
                                 image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg'
                             },
                             {
-                                content: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg',
+                                content: {
+                                    text: '文字内容',
+                                    video: '视频地址',
+                                    image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg',
+                                    audio: '音频地址'
+                                },
                                 type: 'video',
                                 time: 11111111111111,
                                 username: '用户',
@@ -767,7 +781,12 @@ export default {
                                 image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg'
                             },
                             {
-                                content: '内容内容内容内容内容内容内容内容内容内容内容内容',
+                                content: {
+                                    text: '文字内容文字内容文字内容文字内容文字内容文字内容文字内容文字内容文字内容文字内容文字内容文字内容',
+                                    video: '视频地址',
+                                    image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg',
+                                    audio: '音频地址'
+                                },
                                 type: 'text',
                                 time: 11111111111111,
                                 username: '用户',
@@ -775,7 +794,12 @@ export default {
                                 image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg'
                             },
                             {
-                                content: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg',
+                                content: {
+                                    text: '文字内容文字内容文字内容文字内容文字内容文字内容文字内容文字内容文字内容文字内容文字内容文字内容',
+                                    video: '视频地址',
+                                    image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg',
+                                    audio: '音频地址'
+                                },
                                 type: 'audio',
                                 time: 11111111111111,
                                 username: '用户',
@@ -783,7 +807,12 @@ export default {
                                 image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg'
                             },
                             {
-                                content: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg',
+                                content: {
+                                    text: '文字内容文字内容文字内容文字内容文字内容文字内容文字内容文字内容文字内容文字内容文字内容文字内容',
+                                    video: '视频地址',
+                                    image: 'http://cdn.duitang.com/uploads/item/201610/26/20161026123307_Etf8L.jpeg',
+                                    audio: '音频地址'
+                                },                                
                                 type: 'image',
                                 time: 11111111111111,
                                 username: '用户',

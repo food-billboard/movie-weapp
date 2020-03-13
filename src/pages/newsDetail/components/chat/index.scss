@@ -1,0 +1,39 @@
+@import "~taro-ui/dist/style/components/flex.scss";
+.chat{
+  width:100%;
+  .chat-content{
+    width:100%;
+    margin-bottom:40px;
+    .time{
+      text-align:center;
+      font-size:32px;
+    }
+    .main{
+      .avator{
+      
+      }
+      .text{
+        max-width:66.7%;
+      }
+      .detail{
+        .username{
+          font-size:28px;
+          width:100%;
+          text-overflow: ellipsis;
+          overflow:hidden;
+          white-space:nowrap;
+        }
+        .content{
+          border-radius:20px;
+          box-sizing:border-box;
+          padding:10px;
+          white-space: normal;
+          word-break: break-all;
+        }
+        .half{
+          width:100%;
+        }
+      }
+    } 
+  }
+}

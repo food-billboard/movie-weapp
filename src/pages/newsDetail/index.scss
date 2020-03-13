@@ -1,41 +1,17 @@
-@import "~taro-ui/dist/style/components/icon.scss";
-@import "~taro-ui/dist/style/components/flex.scss";
-.bottom{
+.detail {
   width:100%;
-  min-height:100px;
-  position:fixed;
-  left:0;
-  bottom:0;
-  box-sizing:border-box;
-  padding-top:20px;
-  padding-bottom:40px;
-  .icon{
-    margin-bottom:20px;
-  }
-  .icon-content{
-    text-align:center;
-    font-size:46px;
-    text-shadow: 0 0 5px #333;
-  }
-  .input{
+  height:100%;
+}
+.content{
+  width:100%;
+  overflow:hidden;
+  .content-main{
     width:100%;
-    box-sizing:border-box;
-    padding:0 20px;
-    margin-bottom:20px;
-  }
-  .other{
-    width:100%;
-    padding-bottom:20px;
-    transition:display .3s;
-  }
-  .other-detail{
-    padding:0 20px;
-    box-sizing:border-box;
   }
 }
-
-@media screen and (min-width: 700px) {
-  .input{
-    font-size:32px;
-  }
+._bottom{
+  width: 100%;
+  position: fixed;
+  left:0;
+  bottom:0;
 }

@@ -1,33 +1,40 @@
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Textarea } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import Scroll from '~components/scrollList'
-import { throttle } from 'lodash'
-import { colorStyleChange, TypeColor } from '~theme/color'
+import Chat from './components/chat'
+import GInput from './components/input'
+import { IList, INewData } from './components/chat/index.d'
+import { throttle, last } from 'lodash'
+import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { connect } from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { newsType, responseType } from '~utils'
-import { IMAGE_CONFIG } from '~config'
-import Emoj from './components/emojSwiper'
 
 import './index.scss'
 
 let FIRST = true
 
-const MAX_COL_COUNT = 5
+const { windowHeight: WINDOW_HEIGHT } = Taro.getSystemInfoSync()
 
-const { count } = IMAGE_CONFIG
+interface IVideoType {
+  image: string,
+  video: string
+}
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any> {
 
   public static config:Config = {
-    enablePullDownRefresh: true
+    enablePullDownRefresh: true,
+    disableScroll: true
   }
 
   private scrollRef = Taro.createRef<Scroll>()
 
-  private EmojRef = Taro.createRef<Emoj>()
+  private inputRef = Taro.createRef<GInput>()
+
+  private chatRef = Taro.createRef<Chat>()
 
   //通知信息id
   private id = this.$router.params.id
@@ -35,16 +42,32 @@ export default class extends Component<any> {
   //用户id
   private userId = this.props.userInfo.id
 
+  //底部节点
+  readonly bottomNode: any = Taro.createSelectorQuery().select('#_bottom').boundingClientRect()
+
   public state: any = {
     info: {},
     data: [],
-    inputDisabled: false,
-    inputValue: '',
-    autoHeight: true,
-    detailFunc: false
+    bottomHeight: 0
   }
 
-  public componentDidShow = () => {
+  public componentDidMount = () => {
+    this.fetchBottomHeight()
+  }
+  
+  //获取底部聊天区域高度
+  public fetchBottomHeight = () => {
+    const node = this.bottomNode
+    node.exec(res => {
+      if(res.length) this.setState({
+        bottomHeight: res[0].height
+      }, () => {
+        this.chatRef.current!.handleReachToBottom()
+      })
+    })
+  }
+
+  public componentDidShow = async () => {
     colorStyleChange()
   }
 
@@ -73,16 +96,23 @@ export default class extends Component<any> {
     const {info} = data
     const { data: list, ...other } = info
     let newData
+    const scrollIdList = list.map((val: IList) => {
+      return {
+        ...val,
+        scrollId: this.chatRef.current!.createScrollId()
+      }
+    })
     if(isInit) {
-        newData = [ ...list ]
+        newData = [ ...scrollIdList ]
     }else {
-        newData = [ ...list, ...stateData ]
+        newData = [ ...scrollIdList, ...stateData ]
     }
     await this.setState({
         info: other,
-        data: newData
+        data: newData,
     })
-    return list
+
+    return scrollIdList
   }
 
   /**
@@ -90,87 +120,10 @@ export default class extends Component<any> {
    */
   public throttleFetchData = throttle(this.fetchData, 2000)
 
-  //添加图片
-  public handleAddImage = () => {
-    const { inputDisabled } = this.state
-    if(inputDisabled) return
-    Taro.chooseImage({
-      count: count, 
-      sizeType: ['original', 'compressed'], 
-      sourceType: ['album', 'camera'], 
-    }).then((res) => {
-      const { errMsg } = res
-      const [, msg] = errMsg.split(':')
-      if(msg === 'ok') {
-        const { tempFilePaths } = res //地址的字符串数组
-      }
-    })
-  }
-
-  //添加视频
-  public handleAddVideo = () => {
-    const { inputDisabled } = this.state
-    if(inputDisabled) return
-    Taro.chooseVideo({
-      sourceType: ['album','camera'],
-      camera: 'back',
-    }).then((res: any) => {
-      const { errMsg } = res
-      const [, msg] = errMsg.split(':')
-      if(msg === 'ok') {
-        const { 
-          tempFilePath, 
-          thumbTempFilePath,
-          duration,
-          size,
-          width,
-          height
-        } = res
-      }
-    })
-  }
-
-  //添加音频
-  public handleAddAudio = () => {
-    const { inputDisabled } = this.state
-    if(inputDisabled) return
-    
-  }
-
-  //选择表情
-  public handleEmoj = () => {
-    const { inputDisabled } = this.state
-    if(inputDisabled) return
-
-    this.EmojRef.current!.controlShowHide()
-  }
-
-  //显示详细功能
-  public handleShowDetailFunc = () => {
-    const { detailFunc } = this.state
-    if(!!detailFunc) this.EmojRef.current!.handleClose()
-    this.setState({
-      detailFunc: !detailFunc
-    })
-  }
-
-  //发送消息
-  public handleSendText = async () => {
-    const { inputDisabled, inputValue } = this.state
-    if(inputDisabled) return 
-    if(inputValue.length) {
-      await this.sendMediaInfo(newsType.text, inputValue)
-      this.setState({
-        inputValue: ''
-      })
-    } 
-  }
-
   //不同类型消息发送
-  public sendMediaInfo = async (type, data: any) => {
+  public sendMediaInfo = async (type, data: string | IVideoType| Array<string>) => {
     const { data: list } = this.state
-    const { userInfo } = this.props
-    const { id, username, image } = userInfo
+
     let infoType
     switch(type) {
       case newsType.audio:
@@ -187,29 +140,41 @@ export default class extends Component<any> {
         break
     }
 
-    const newData = {
+    //生成消息内容格式(可能是多条数据)
+    // const newData: IList  = this.createChatObject(infoType, data)
+    const newData: INewData  | Array<INewData> = Array.isArray(data) ? data.map((val: string) => {
+      return { 
+        //数据基础结构
+        ...this.inputRef.current!.createChatObject(infoType, val), 
+        //loading
+        loading: true,
+        //scroll_id
+        scrollId: this.chatRef.current!.createScrollId()
+      }
+    })
+    : 
+    {
+      ...this.inputRef.current!.createChatObject(infoType, data), 
       loading: true,
-      content: data,
-      type: infoType,
-      time: new Date().getTime(),
-      username,
-      id,
-      image
+      scrollId: this.chatRef.current!.createScrollId()
     }
 
     await this.setState({
-      data: [
-        ...list,
-        newData
-      ]
+      data: Array.prototype.concat.call(list, list, Array.isArray(newData) ? newData : [newData]) 
+    }, () => {
+      console.log(this.state.data.length)
+      // this.inputRef.current!.handleControlLifeStatus(false)
+      this.inputRef.current!.resetStatus()
+      this.chatRef.current!.handleReachToBottom()
     })
     
     //发送消息
-    const res = await this.props.sendNews()
-    const { res: response, id: newsId } = res
+    const res = await this.props.sendNews(newData)
+    const { res: response, data: resData, id: newsId } = res
 
-    //发送成功后处理消息的loading状态以及增加id
+    // 发送成功后处理消息的loading状态以及增加id
     if(response === responseType.success) {
+      
       await this.setState({
         data: [
           ...list,
@@ -223,102 +188,21 @@ export default class extends Component<any> {
     }
   }
 
-  //处理文本域内容
-  public handleInputLineChange = (e) => {
-    const { detail } = e
-    const { lineCount } = detail
-    if(lineCount >= MAX_COL_COUNT) {
-      this.setState({
-        autoHeight: false
-      })
-    }else {
-      this.setState({
-        autoHeight: true
-      })
-    }
+  //将消息列表滚动至最底部
+  public handleInputFocus = () => {
+    this.chatRef.current!.handleReachToBottom()
   }
 
-  //文本内容修改
-  public handleInput = (e) => {
-    const { detail } = e
-    this.setState({
-      inputValue: detail.value
-    })
+  //监听消息列表滚动
+  public handleScroll = (e) => {
+    // if(this.inputRef.current!.getLifeStatus()) this.inputRef.current!.handleControlLifeStatus(false)
   }
-
-  //文本内容删除
-  public handleRemove = () => {
-    const { inputValue } = this.state
-    if(!inputValue.length) return
-    if(inputValue.length == 1) {
-      this.setState({
-        inputValue: ''
-      })
-    }else {
-      const str = inputValue.slice(inputValue.length - 2, inputValue.length)
-      const isEmoji = this.EmojRef.current!.isEmojiCharacter(str)
-      this.setState({
-        inputValue: inputValue.slice(0, inputValue.length - (isEmoji ? 2 : 1))
-      })
-    }
-  }
-
-  //添加emoj表情
-  public handleAddEmoj = (value) => {
-    const { inputValue } = this.state
-    this.setState({
-      inputValue: inputValue + value
-    })
-  }
-
-  //基础功能按钮
-  readonly basicBtnFunc = [
-    {
-      iconInfo: {
-        value: 'image'
-      },
-      handle: this.handleAddImage
-    },
-    {
-      iconInfo: {
-        value: 'video'
-      },
-      handle: this.handleAddVideo
-    },
-    {
-      iconInfo: {
-        value: () => {return this.state.detailFunc ? 'close' : 'add'}
-      },
-      handle: this.handleShowDetailFunc
-    },
-    {
-      iconInfo: {
-        value: 'check'
-      },
-      handle: this.handleSendText
-    }
-  ]
-
-  //其他功能按钮
-  readonly detailBtnFunc = [
-    {
-      iconInfo: {
-        value: 'volume-plus',
-      },
-      handle: this.handleAddAudio
-    },
-    {
-      iconInfo: {
-        value: 'text-strikethrough'
-      },
-      handle: this.handleEmoj
-    }
-
-  ]
 
   public render() {
 
-    const { info, inputDisabled, data, inputValue, autoHeight, detailFunc } = this.state
+    const { userInfo } = this.props
+
+    const { info, data, bottomHeight, listAutoBottom } = this.state
 
     this.setTitle()
 
@@ -331,83 +215,31 @@ export default class extends Component<any> {
         style={{...style.backgroundColor('bgColor')}}
         divider={false}
         renderContent={
-          <View>
-          </View>
-        }
-        bottom={0}
-        renderBottom={
-          <View 
-            className='bottom'
-            style={{...style.border(2, 'disabled', 'solid', 'top'), ...style.backgroundColor('thirdly')}}
+          <View className='at-row detail'
+            style={{flexDirection: 'column'}}
           >
-            <View className='icon at-row'>
-              {
-                this.basicBtnFunc.map((val: any) => {
-                  const { iconInfo, handle } = val
-                  const { value } = iconInfo
-                  return (
-                    <View 
-                      key={value}
-                      className={`at-col at-col-3 at-icon at-icon-${typeof value === 'string' ? value : value()} icon-content`}
-                      style={{...(style.color(inputDisabled ? 'primary' : 'disabled'))}}
-                      onClick={handle}
-                    ></View>
-                  )
-                })
-              }
+
+            <View>
+              <Chat
+                ref={this.chatRef}
+                height={(WINDOW_HEIGHT - bottomHeight)}
+                list={data}
+                mine={userInfo.id}
+                onScroll={this.handleScroll}
+              ></Chat>
             </View>
-            <View 
-              className='input'
-            >
-              <Textarea
-                adjust-position	={true}
-                cursor-spacing={25}
-                style={{
-                  ...style.border(2, 'disabled', 'solid', 'all'),
-                  width:'100%',
-                  borderRadius: '5px',
-                  padding: '10px 0',
-                  boxShadow:'0 0 2px #333',
-                }}
-                className='content'
-                disabled={inputDisabled}
-                value={inputValue}
-                placeholder={'在这里发消息'}
-                autoHeight={autoHeight}
-                fixed={true}
-                onInput={this.handleInput}
-                onLineChange={this.handleInputLineChange}
-                maxlength={-1}
-              ></Textarea>
+            <View style={{width: '100%', height: bottomHeight + 'px'}}></View>
+
+            <View id='_bottom' className='_bottom'>
+              <GInput 
+                ref={this.inputRef}
+                userInfo={userInfo}
+                sendInfo={this.sendMediaInfo}
+                onHeightChange={this.fetchBottomHeight}
+                onFocus={this.handleInputFocus}
+              />
             </View>
-            <View className='other-detail'>
-                <View className='emoj'>
-                  <Emoj
-                    ref={this.EmojRef}
-                    handleAddEmoj={this.handleAddEmoj}
-                    handleRemoveEmoj={this.handleRemove}
-                  />
-                </View>
-            </View>
-            <View 
-              className='at-row at-row--wrap'
-              style={{display: detailFunc ? 'flex' : 'none'}}
-            > 
-              {
-                this.detailBtnFunc.map((val: any) => {
-                  const { iconInfo, handle } = val
-                  const { value } = iconInfo
-                  return (
-                    <View 
-                      key={value}
-                      className={`at-col at-col-3 at-icon at-icon-${typeof value === 'string' ? value : value()} icon-content`}
-                      style={{...(style.color(inputDisabled ? 'primary' : 'disabled'))}}
-                      onClick={handle}
-                    ></View>
-                  )
-                })  
-              }
-            </View>
+
           </View>
         }
       ></Scroll>

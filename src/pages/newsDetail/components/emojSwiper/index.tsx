@@ -66,10 +66,12 @@ export default class extends Component<IProps, IState> {
   }
 
   //控制显示隐藏
-  public controlShowHide = () => {
+  public controlShowHide = (callback?: (...args: any[]) => any) => {
     const { show } = this.state
     this.setState({
       show: !show
+    }, () => {
+      callback && callback()
     })
   }
 
@@ -118,11 +120,11 @@ export default class extends Component<IProps, IState> {
                         })
                       }
                       <View 
-                        className='at-col ato-col-1'
+                        className='at-col at-col-1'
                         style={{...style.color('primary'), marginLeft: '-5px', textAlign: 'center'}}
                         onClick={this.props.handleRemoveEmoj}
                       >
-                        <View className='at-icon at-icon-trash'></View>
+                        <View className='at-icon at-icon-trash' style={{textShadow: `0 0 2px ${TypeColor['bgColor']}`}}></View>
                       </View>
                     </View>
                   </SwiperItem>
