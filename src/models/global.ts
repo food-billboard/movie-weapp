@@ -7,9 +7,7 @@ import {
     logout,
     getNotice
 } from '~services'
-import { isAlipay, system } from '~utils';
-
-import { router } from '~utils';
+import { isAlipay, system, router } from '~utils';
 import { getCookie } from '~config'
 
 export default {
@@ -17,7 +15,6 @@ export default {
     state: {
         userInfo: {
             id: '伙食榜',
-            
         },
         appInfo: {}
     },

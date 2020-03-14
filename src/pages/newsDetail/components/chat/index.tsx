@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Image, ScrollView } from '@tarojs/components'
-import { AtAvatar } from 'taro-ui'
+import { AtAvatar, AtActivityIndicator } from 'taro-ui'
 import GVideo from '~components/video'
 import Curtain from '~components/curtain'
 import { IProps, IState, IList, IContent, INewData } from './index.d'
@@ -8,8 +8,10 @@ import { router, routeAlias } from '~utils'
 import style from '~theme/style'
 import { formatTime, newsType, isObject } from '~utils'
 import { last, noop } from 'lodash'
+import { SYSTEM_PAGE_SIZE } from '~config'
 
 import './index.scss'
+import { TypeColor } from '~theme/color'
 
 //scroll_id
 const SCROLL_ID_MAP = [ 
@@ -35,6 +37,13 @@ const TIME_SPACE = 60000
 //默认scroll-item的id
 const SCROLL_ID = 'SCROLL'
 
+//生成scrol_id
+export const createScrollId = () => {
+  return SCROLL_ID + SCROLL_ID_MAP.map((_: string) => {
+    return SCROLL_ID_MAP[Math.floor(Math.random() * SCROLL_ID_MAP_LENGTH)]
+  }).join('')
+}
+
 export default class extends Component<IProps, IState> {
 
   public componentWillReceiveProps = (props) => {
@@ -45,7 +54,8 @@ export default class extends Component<IProps, IState> {
     }).
     map((val: IList) => {
       const { content } = val
-      return content
+      const { image } = content
+      return image
     })
     this.setState({
       imgList: data
@@ -98,13 +108,6 @@ export default class extends Component<IProps, IState> {
   //查看当前用户详情
   public handleGetUser = (id: string) => {
     console.log('查看用户详情')
-  }
-
-  //生成scrol_id
-  public createScrollId = () => {
-    return SCROLL_ID + SCROLL_ID_MAP.map((_: string) => {
-      return SCROLL_ID_MAP[Math.floor(Math.random() * SCROLL_ID_MAP_LENGTH)]
-    }).join('')
   }
 
   //滚动至底部
@@ -196,6 +199,12 @@ export default class extends Component<IProps, IState> {
                     <View className={`content ${newsType.text === type ? '' : 'half'} ${direction && newsType.text !== type ? 'at-row at-row__justify--end' : ''}`}
                       style={type === newsType.text ? {...style.border(1, 'disabled', 'solid', 'all'), ...style.backgroundColor(direction ? 'secondary' : 'disabled')} : {}}
                     >
+                      <AtActivityIndicator 
+                        mode={'normal'} 
+                        size={SYSTEM_PAGE_SIZE(32)} 
+                        color={TypeColor['thirdly']} 
+                        customStyle={{}}
+                      />
                       {
                         newsType.text === type ?
                         <View 
@@ -209,7 +218,7 @@ export default class extends Component<IProps, IState> {
                         <Image 
                           src={content.image || ''} 
                           style={{maxWidth: '50%'}}
-                          onClick={() => { newsType.image === type ? this.handlePreviewImage.call(this, content) : this.handlePreviewVideo.call(this, content.video) }} 
+                          onClick={() => { newsType.image === type ? this.handlePreviewImage.call(this, content.image) : this.handlePreviewVideo.call(this, content.video) }} 
                         />
                         : null
                       }
@@ -257,6 +266,7 @@ export default class extends Component<IProps, IState> {
                     className='video'
                 >
                     <GVideo
+                        style={{position: 'static'}}
                         src={activeVideo}
                         controls={true}
                         loop={true}

@@ -39,7 +39,7 @@
   detailFunc: boolean
   inputValue: string
   autoHeight: boolean
-  lifeStatus: boolean
+  // lifeStatus: boolean
  }
 
  export interface IVideoType {

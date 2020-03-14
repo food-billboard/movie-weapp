@@ -1,7 +1,7 @@
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import Scroll from '~components/scrollList'
-import Chat from './components/chat'
+import Chat, { createScrollId } from './components/chat'
 import GInput from './components/input'
 import { IList, INewData } from './components/chat/index.d'
 import { throttle, last } from 'lodash'
@@ -45,6 +45,8 @@ export default class extends Component<any> {
   //底部节点
   readonly bottomNode: any = Taro.createSelectorQuery().select('#_bottom').boundingClientRect()
 
+  private windowHeight: number
+
   public state: any = {
     info: {},
     data: [],
@@ -53,6 +55,7 @@ export default class extends Component<any> {
 
   public componentDidMount = () => {
     this.fetchBottomHeight()
+    this.windowHeight = Taro.getSystemInfoSync().windowHeight
   }
   
   //获取底部聊天区域高度
@@ -99,7 +102,7 @@ export default class extends Component<any> {
     const scrollIdList = list.map((val: IList) => {
       return {
         ...val,
-        scrollId: this.chatRef.current!.createScrollId()
+        scrollId: createScrollId()
       }
     })
     if(isInit) {
@@ -149,20 +152,19 @@ export default class extends Component<any> {
         //loading
         loading: true,
         //scroll_id
-        scrollId: this.chatRef.current!.createScrollId()
+        scrollId: createScrollId()
       }
     })
     : 
     {
       ...this.inputRef.current!.createChatObject(infoType, data), 
       loading: true,
-      scrollId: this.chatRef.current!.createScrollId()
+      scrollId: createScrollId()
     }
 
     await this.setState({
-      data: Array.prototype.concat.call(list, list, Array.isArray(newData) ? newData : [newData]) 
+      data: [ ...list, ...(Array.isArray(newData) ? newData : [newData]) ] 
     }, () => {
-      console.log(this.state.data.length)
       // this.inputRef.current!.handleControlLifeStatus(false)
       this.inputRef.current!.resetStatus()
       this.chatRef.current!.handleReachToBottom()
@@ -175,16 +177,22 @@ export default class extends Component<any> {
     // 发送成功后处理消息的loading状态以及增加id
     if(response === responseType.success) {
       
-      await this.setState({
-        data: [
-          ...list,
-          {
-            ...newData,
-            news: newsId,
-            loading: false
-          }
-        ]
-      })
+      Array.isArray(newData) ? newData.map((val:INewData) => {
+        val.loading = false
+      }) 
+      : 
+      newData.loading = false
+
+      // await this.setState({
+      //   data: [
+      //     ...list,
+      //     {
+      //       ...newData,
+      //       news: newsId,
+      //       loading: false
+      //     }
+      //   ]
+      // })
     }
   }
 
@@ -202,7 +210,7 @@ export default class extends Component<any> {
 
     const { userInfo } = this.props
 
-    const { info, data, bottomHeight, listAutoBottom } = this.state
+    const { info, data, bottomHeight } = this.state
 
     this.setTitle()
 
@@ -219,17 +227,6 @@ export default class extends Component<any> {
             style={{flexDirection: 'column'}}
           >
 
-            <View>
-              <Chat
-                ref={this.chatRef}
-                height={(WINDOW_HEIGHT - bottomHeight)}
-                list={data}
-                mine={userInfo.id}
-                onScroll={this.handleScroll}
-              ></Chat>
-            </View>
-            <View style={{width: '100%', height: bottomHeight + 'px'}}></View>
-
             <View id='_bottom' className='_bottom'>
               <GInput 
                 ref={this.inputRef}
@@ -238,6 +235,16 @@ export default class extends Component<any> {
                 onHeightChange={this.fetchBottomHeight}
                 onFocus={this.handleInputFocus}
               />
+            </View>
+
+            <View>
+              <Chat
+                ref={this.chatRef}
+                height={(this.windowHeight - bottomHeight)}
+                list={data}
+                mine={userInfo.id}
+                onScroll={this.handleScroll}
+              ></Chat>
             </View>
 
           </View>

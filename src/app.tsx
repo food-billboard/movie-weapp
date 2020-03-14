@@ -3,7 +3,7 @@ import Taro, { Component, Config } from '@tarojs/taro'
 import { Provider } from '@tarojs/redux'
 import { dva, router, includes } from '~utils'
 
-import Index from './pages/main/index'
+import Index from './pages/newsdetail/index'
 import configure from './configure'
 
 import './app.scss'
@@ -67,7 +67,7 @@ class App extends Component {
 
   public config: Config = {
     pages: [
-      // 'pages/newsdetail/index',
+      'pages/newsdetail/index',
       'pages/main/index',
       'pages/mine/index',
       'pages/register/index',
@@ -89,7 +89,7 @@ class App extends Component {
       'pages/userissue/index',
       'pages/special/index',
       'pages/fans/index',
-      'pages/newsdetail/index'
+      // 'pages/newsdetail/index'
     ],
     window: {
       backgroundTextStyle: 'dark',

@@ -1,4 +1,4 @@
-import Taro, { Component, onKeyboardHeightChange } from '@tarojs/taro'
+import Taro, { Component } from '@tarojs/taro'
 import { View, Textarea } from '@tarojs/components'
 import Emoj from '../emojSwiper'
 import { IProps, IState, IVideoType } from './index.d'
@@ -23,7 +23,7 @@ export default class extends Component<IProps, IState> {
     detailFunc: false,
     inputValue: this.props.placeholder || '',
     autoHeight: true,
-    lifeStatus: false
+    // lifeStatus: false
   }
 
   private EmojRef = Taro.createRef<Emoj>()
@@ -173,7 +173,7 @@ export default class extends Component<IProps, IState> {
   public handleFocus = () => {
     // const { onFocus=noop } = this.props
     // onFocus()
-    this.resetStatus()
+    // this.resetStatus()
   }
 
   //处理文本域内容
@@ -299,9 +299,10 @@ export default class extends Component<IProps, IState> {
           </View>
           <View 
             className='input'
+            onClick={this.handleFocus}
           >
             <Textarea
-              onFocus={this.handleFocus}
+              // onFocus={this.handleFocus}
               adjust-position	={true}
               cursor-spacing={25}
               style={{
