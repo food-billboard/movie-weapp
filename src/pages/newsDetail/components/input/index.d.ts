@@ -8,6 +8,7 @@
  *  sendInfo: 发送消息
  *  onHeightChange: 监听高度变化
  *  onFocus: 监听输入框获取焦点
+ *  inputVisible: 控制输入框的显示隐藏
  * }
  * 
  * state: {
@@ -29,6 +30,7 @@
   userInfo: any
   disabled?: boolean
   placeholder?: string
+  inputVisible?: boolean
   sendInfo: (...args: any[]) => any
   onHeightChange?: (...args: any[]) => any
   onFocus?: (...args: any[]) => any

@@ -275,6 +275,8 @@ export default class extends Component<IProps, IState> {
 
     const { inputDisabled, inputValue, autoHeight, detailFunc } = this.state
 
+    const { inputVisible=false } = this.props
+
     return (
       <View 
           className='bottom at-col at-col-1 at-col--auto'
@@ -311,6 +313,7 @@ export default class extends Component<IProps, IState> {
                 borderRadius: '5px',
                 padding: '10px 0',
                 boxShadow:'0 0 2px #333',
+                display: inputVisible ? 'none' : 'block'
               }}
               className='content'
               disabled={inputDisabled}

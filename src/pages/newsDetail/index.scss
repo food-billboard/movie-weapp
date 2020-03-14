@@ -16,3 +16,11 @@
   bottom:0;
   z-index:1;
 }
+.bottom_shadow{
+  width:100%;
+  position:fixed;
+  left:0;
+  bottom:0;
+  z-index:2;
+  background-color:black;
+}

@@ -19,6 +19,7 @@ import { newsType } from '~utils'
  *  style: 样式
  *  onScroll: 监听滚动
  *  autoBottom: 是否自动滚动至底部
+ *  onPreview: 监听预览模式改变
  * }
  * 
  * state: {
@@ -58,6 +59,7 @@ import { newsType } from '~utils'
   style?: any
   onScroll?: (...args: any[]) => any
   autoBottom?: boolean
+  onPreview: (status: boolean) => void
  }
 
  export interface IState {

@@ -29,6 +29,18 @@
           padding:10px;
           white-space: normal;
           word-break: break-all;
+          position:relative;
+          left:0;
+          top:0;
+          .acitve-indicator{
+            height:100%;
+            position:absolute;
+            left:0;
+            top:0;
+            display:flex;
+            align-items: center;
+            transform:translateX(-200%);
+          }
         }
         .half{
           width:100%;

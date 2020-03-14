@@ -4,7 +4,7 @@ import Scroll from '~components/scrollList'
 import Chat, { createScrollId } from './components/chat'
 import GInput from './components/input'
 import { IList, INewData } from './components/chat/index.d'
-import { throttle, last } from 'lodash'
+import { throttle, last, noop } from 'lodash'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { connect } from '@tarojs/redux'
@@ -50,7 +50,8 @@ export default class extends Component<any> {
   public state: any = {
     info: {},
     data: [],
-    bottomHeight: 0
+    bottomHeight: 0,
+    previewStatus: false
   }
 
   public componentDidMount = () => {
@@ -177,11 +178,21 @@ export default class extends Component<any> {
     // 发送成功后处理消息的loading状态以及增加id
     if(response === responseType.success) {
       
-      Array.isArray(newData) ? newData.map((val:INewData) => {
-        val.loading = false
-      }) 
-      : 
-      newData.loading = false
+      let _newData: INewData | Array<INewData>
+      if(Array.isArray(newData)) {
+        _newData = newData.map((val: INewData) => {
+          return {
+            ...val,
+            loading: false
+          }
+        })
+      }else {
+        _newData = { ...newData, loading: false }
+      }
+
+      await this.setState({
+        data: [ ...list, ...(Array.isArray(_newData) ? _newData : [_newData]) ]
+      })
 
       // await this.setState({
       //   data: [
@@ -206,11 +217,18 @@ export default class extends Component<any> {
     // if(this.inputRef.current!.getLifeStatus()) this.inputRef.current!.handleControlLifeStatus(false)
   }
 
+  //监听预览模式改变
+  public handlePreview = (status: boolean) => {
+    this.setState({
+      previewStatus: status
+    })
+  }
+
   public render() {
 
     const { userInfo } = this.props
 
-    const { info, data, bottomHeight } = this.state
+    const { info, data, bottomHeight, previewStatus } = this.state
 
     this.setTitle()
 
@@ -227,16 +245,6 @@ export default class extends Component<any> {
             style={{flexDirection: 'column'}}
           >
 
-            <View id='_bottom' className='_bottom'>
-              <GInput 
-                ref={this.inputRef}
-                userInfo={userInfo}
-                sendInfo={this.sendMediaInfo}
-                onHeightChange={this.fetchBottomHeight}
-                onFocus={this.handleInputFocus}
-              />
-            </View>
-
             <View>
               <Chat
                 ref={this.chatRef}
@@ -244,7 +252,24 @@ export default class extends Component<any> {
                 list={data}
                 mine={userInfo.id}
                 onScroll={this.handleScroll}
+                onPreview={this.handlePreview}
               ></Chat>
+            </View>
+
+            <View className='bottom_shadow' style={{height: bottomHeight + 'px', display: previewStatus ? 'block' : 'none'}}></View>
+            <View 
+              id='_bottom' 
+              className='_bottom'
+              style={{ display: previewStatus ? 'none' : 'block' }}
+            >
+              <GInput 
+                ref={this.inputRef}
+                userInfo={userInfo}
+                inputVisible={previewStatus}
+                sendInfo={this.sendMediaInfo}
+                onHeightChange={this.fetchBottomHeight}
+                onFocus={this.handleInputFocus}
+              />
             </View>
 
           </View>

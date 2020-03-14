@@ -84,18 +84,22 @@ export default class extends Component<IProps, IState> {
 
   //查看视频
   public handlePreviewVideo = (src: string) => {
+    const { onPreview } = this.props
     this.setState({
       activeVideo: src,
       videoShow: true
     })
+    onPreview(true)
   }
 
   //关闭视频
   public handleCloseVideo = () => {
+    const { onPreview } = this.props
     this.setState({
       activeVideo: '',
       videoShow: false
     })
+    onPreview(false)
   }
 
   //查看文本
@@ -154,7 +158,7 @@ export default class extends Component<IProps, IState> {
               image='',
               news='',
               scrollId,
-              loading
+              loading=true
             } = val
             const direction = mine=== id
             const needTime = _time && (~~_time - ~~time > TIME_SPACE)
@@ -199,12 +203,17 @@ export default class extends Component<IProps, IState> {
                     <View className={`content ${newsType.text === type ? '' : 'half'} ${direction && newsType.text !== type ? 'at-row at-row__justify--end' : ''}`}
                       style={type === newsType.text ? {...style.border(1, 'disabled', 'solid', 'all'), ...style.backgroundColor(direction ? 'secondary' : 'disabled')} : {}}
                     >
-                      <AtActivityIndicator 
-                        mode={'normal'} 
-                        size={SYSTEM_PAGE_SIZE(32)} 
-                        color={TypeColor['thirdly']} 
-                        customStyle={{}}
-                      />
+                      {
+                        direction && loading ?
+                        <View className='acitve-indicator'>
+                          <AtActivityIndicator 
+                            mode={'normal'} 
+                            size={SYSTEM_PAGE_SIZE(32)} 
+                            color={TypeColor['thirdly']} 
+                          />
+                        </View>
+                        : null
+                      }
                       {
                         newsType.text === type ?
                         <View 
@@ -278,6 +287,7 @@ export default class extends Component<IProps, IState> {
             other={false}
             cancel={false}
         ></Curtain>
+
       </ScrollView>
     )
   }
