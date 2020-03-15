@@ -33,7 +33,8 @@ export default class Content extends Component<IProps, IState>{
             rate:0,
             rateMine: 0,
             store: false,
-            mine: ''
+            mine: '',
+            author: ''
         },
         sendRate: () => {},
         sendStore: () => {},
@@ -60,7 +61,8 @@ export default class Content extends Component<IProps, IState>{
             rate,
             rateMine,
             store,
-            mine
+            mine,
+            author
         } = info
         return (
             <View className='content'>
@@ -165,6 +167,13 @@ export default class Content extends Component<IProps, IState>{
                                 style={{...style.color('primary')}}
                             >{formatNumber(people)}</Text>
                             <Text className='look-text' style={{...style.color('thirdly')}}> 人看过</Text>
+                        </View>
+                        <View className='author'>
+                            作者: 
+                            <Text className={'text'}
+                                style={{...style.color('primary')}}
+                            >{author}</Text>
+                            <Text className='hot-text' style={{...style.color('thirdly')}}></Text>
                         </View>
                         <View className='description'
                             style={{...style.border(1, 'disabled', 'dashed', 'left_right'), marginBottom: '10px'}}

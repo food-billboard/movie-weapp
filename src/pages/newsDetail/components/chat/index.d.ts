@@ -27,6 +27,7 @@ import { newsType } from '~utils'
  *  videoShow: 控制视频组件的显示隐藏
  *  activeVideo: 当前播放的视频
  *  lastData: 最后一条数据的id
+ *  loadLoading: 加载数据loading
  * }
  */
 
@@ -67,4 +68,5 @@ import { newsType } from '~utils'
    videoShow: boolean
    activeVideo: string
    lastData: string
+   loadLoading: boolean
  }

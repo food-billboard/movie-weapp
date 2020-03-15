@@ -179,6 +179,7 @@ export default class extends Component<IProps, IState> {
   //处理文本域内容
   public handleInputLineChange = (e) => {
     const { detail } = e
+    const { onFocus=noop } = this.props
     const { lineCount } = detail
     if(lineCount >= MAX_COL_COUNT) {
       this.setState({
@@ -188,7 +189,8 @@ export default class extends Component<IProps, IState> {
       this.setState({
         autoHeight: true
       }, () => {
-        this.resetStatus()
+        // this.resetStatus()
+        onFocus()
       })
     }
   }

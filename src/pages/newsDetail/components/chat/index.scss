@@ -1,6 +1,11 @@
 @import "~taro-ui/dist/style/components/flex.scss";
+@import "~taro-ui/dist/style/components/icon.scss";
 .chat{
   width:100%;
+  .loading{
+    display:flex;
+    justify-content: center;
+  }
   .chat-content{
     width:100%;
     margin-bottom:40px;
@@ -32,6 +37,31 @@
           position:relative;
           left:0;
           top:0;
+          .temp-image{
+            max-width:50%;
+            position:relative;
+            left:0;
+            top:0;
+          }
+          .temp-video-poster{
+            width:50%;
+            height:160px;
+            position:relative;
+            left:0;
+            top:0;
+          }
+          .video-icon{
+            position:absolute;
+            left:50%;
+            top:50%;
+            transform: translateX(-50%) translateY(-50%);
+            font-size:50px;
+            font-weight:bold;
+            text-shadow:0 0 2px black;
+          }
+          .image-radius{
+            border-radius:5px;
+          }
           .acitve-indicator{
             height:100%;
             position:absolute;

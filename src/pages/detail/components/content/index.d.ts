@@ -58,6 +58,7 @@ interface Info {
   rateMine: number
   store: boolean
   mine: string
+  author: string
 }
 
 export interface IState {

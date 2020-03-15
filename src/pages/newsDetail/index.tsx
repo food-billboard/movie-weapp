@@ -15,8 +15,6 @@ import './index.scss'
 
 let FIRST = true
 
-const { windowHeight: WINDOW_HEIGHT } = Taro.getSystemInfoSync()
-
 interface IVideoType {
   image: string,
   video: string
@@ -27,7 +25,7 @@ export default class extends Component<any> {
 
   public static config:Config = {
     enablePullDownRefresh: true,
-    disableScroll: true
+    // disableScroll: true
   }
 
   private scrollRef = Taro.createRef<Scroll>()
@@ -77,8 +75,8 @@ export default class extends Component<any> {
 
   //下拉加载
   public onPullDownRefresh = async () => {
-    await this.scrollRef.current!.handleToLower()
-    Taro.stopPullDownRefresh()
+    // await this.scrollRef.current!.handleToLower()
+    // Taro.stopPullDownRefresh()
   }
 
   //设置标题
@@ -95,6 +93,9 @@ export default class extends Component<any> {
    * 获取数据
    */
   public fetchData = async (query: any, isInit=false) => {
+    const setLoading = this.chatRef.current ? this.chatRef.current!.setLoadLoading : noop
+    setLoading(true)
+
     const { data: stateData } = this.state
     const data = await this.props.getNewsDetail({id: this.id, user: this.userId, ...query})
     const {info} = data
@@ -114,6 +115,8 @@ export default class extends Component<any> {
     await this.setState({
         info: other,
         data: newData,
+    }, () => {
+      setLoading(false)
     })
 
     return scrollIdList
@@ -209,11 +212,17 @@ export default class extends Component<any> {
 
   //将消息列表滚动至最底部
   public handleInputFocus = () => {
-    this.chatRef.current!.handleReachToBottom()
+    // this.chatRef.current!.handleReachToBottom()
+    this.fetchBottomHeight()
   }
 
   //监听消息列表滚动
-  public handleScroll = (e) => {
+  public handleScroll = async(e) => {
+
+    const { detail } = e
+    const { scrollTop } = detail
+    if(scrollTop === 0) await this.scrollRef.current!.handleToLower()
+
     // if(this.inputRef.current!.getLifeStatus()) this.inputRef.current!.handleControlLifeStatus(false)
   }
 
@@ -237,7 +246,7 @@ export default class extends Component<any> {
         ref={this.scrollRef}
         sourceType={'Scope'}
         fetch={this.throttleFetchData}
-        query={{pageSize: 20}}
+        query={{pageSize: 5}}
         style={{...style.backgroundColor('bgColor')}}
         divider={false}
         renderContent={

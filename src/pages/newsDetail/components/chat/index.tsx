@@ -9,9 +9,9 @@ import style from '~theme/style'
 import { formatTime, newsType, isObject } from '~utils'
 import { last, noop } from 'lodash'
 import { SYSTEM_PAGE_SIZE } from '~config'
+import { TypeColor } from '~theme/color'
 
 import './index.scss'
-import { TypeColor } from '~theme/color'
 
 //scroll_id
 const SCROLL_ID_MAP = [ 
@@ -70,7 +70,14 @@ export default class extends Component<IProps, IState> {
     imgList: [],
     videoShow: false,
     activeVideo: '',
-    lastData: SCROLL_ID
+    lastData: SCROLL_ID,
+    loadLoading: false
+  }
+
+  public setLoadLoading = (status: boolean) => {
+    this.setState({
+      loadLoading: status
+    })
   }
 
   //查看图片
@@ -134,7 +141,7 @@ export default class extends Component<IProps, IState> {
 
     const { list=[], mine='', height, style: customStyle, onScroll=noop } = this.props
 
-    const { videoShow, activeVideo, lastData } = this.state
+    const { videoShow, activeVideo, lastData, loadLoading } = this.state
 
     let _time: any = true
 
@@ -147,6 +154,19 @@ export default class extends Component<IProps, IState> {
         scrollWithAnimation={true}
         style={{...(isObject(customStyle) ? customStyle : {}), ...(height ? {height: height + 'px'} : {})}}
       >
+
+        <View 
+          className='loading'
+          style={{visibility: loadLoading ? 'visible' : 'hidden'}}
+        >
+          <AtActivityIndicator 
+            mode={'normal'} 
+            size={SYSTEM_PAGE_SIZE(32)} 
+            color={TypeColor['thirdly']} 
+            content={'加载中'}
+          ></AtActivityIndicator>
+        </View>
+
         {
           list.map((val: INewData) => {
             const {
@@ -223,12 +243,44 @@ export default class extends Component<IProps, IState> {
                         : null
                       }
                       {
-                        (newsType.image === type || newsType.video === type) ?
+                        (newsType.image === type) ?
                         <Image 
+                          mode={'widthFix'}
                           src={content.image || ''} 
                           style={{maxWidth: '50%'}}
-                          onClick={() => { newsType.image === type ? this.handlePreviewImage.call(this, content.image) : this.handlePreviewVideo.call(this, content.video) }} 
+                          className='image-radius'
+                          onClick={() => { this.handlePreviewImage.call(this, content.image) }} 
                         />
+                        : null
+                      }
+                      {
+                        newsType.video === type ?
+                            (
+                              content.image ?
+                              <Image 
+                                  className='temp-image image-radius'
+                                  mode={'widthFix'}
+                                  src={content.image || ''} 
+                                  style={{maxWidth: '50%'}}
+                                  onClick={() => { this.handlePreviewVideo.call(this, content.video) }} 
+                                >
+                                  <View 
+                                    className='video-icon at-icon at-icon-video'
+                                    style={{...style.color('disabled')}}
+                                  ></View>
+                                </Image>
+                              :
+                              <View 
+                                onClick={() => { this.handlePreviewVideo.call(this, content.video) }} 
+                                className='temp-video-poster image-radius'
+                                style={{...style.backgroundColor('primary')}}
+                              >
+                                <View 
+                                  className='video-icon at-icon at-icon-video'
+                                  style={{...style.color('disabled')}}
+                                ></View>
+                              </View>
+                            )
                         : null
                       }
                       {
