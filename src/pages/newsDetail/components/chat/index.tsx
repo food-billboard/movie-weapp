@@ -46,17 +46,6 @@ export const createScrollId = () => {
 
 export default class extends Component<IProps, IState> {
 
-  //滚动至指定位置 ps: 预览视频全屏后退出会默认滚动至顶部
-  private _activeScrollItem: string
-
-  public set activeScrollItem(scrollId: string) {
-    this._activeScrollItem = scrollId
-  }
-
-  public get activeScrollItem() {
-    return this._activeScrollItem
-  }
-
   public componentWillReceiveProps = (props) => {
     const { list } = props
     const data = list.filter((val: IList) => {
@@ -74,7 +63,7 @@ export default class extends Component<IProps, IState> {
   }
 
   public componentDidMount = () => {
-    this.handleReactToLocation()
+    this.handleReachToLocation()
   }
 
   public state: IState = {
@@ -105,21 +94,23 @@ export default class extends Component<IProps, IState> {
     const { onPreview } = this.props
     this.setState({
       activeVideo: src,
-      videoShow: true
+      videoShow: true,
+      activeScrollItem: scrollId
     })
-    this.activeScrollItem = scrollId
-    console.log(this.activeScrollItem)
+    
     onPreview(true)
   }
 
   //关闭视频
   public handleCloseVideo = () => {
     const { onPreview } = this.props
+    const { activeScrollItem } = this.state
     this.setState({
       activeVideo: '',
       videoShow: false
     })
-    // this.handleReactToLocation({isLast: false, scrollId: this.activeScrollItem})
+
+    this.handleReachToLocation({isLast: false, scrollId: activeScrollItem})
     onPreview(false)
   }
 
@@ -136,31 +127,31 @@ export default class extends Component<IProps, IState> {
   }
 
   //滚动至指定位置
-  public handleReactToLocation = (
+  public handleReachToLocation = (
     item: {
       isLast: boolean
       scrollId?: string
     }={isLast: true},
     list: Array<any>=this.props.list
   ) => {
+
+    const { isLast, scrollId=SCROLL_ID } = item
+    let scrollItem = scrollId
+    // 滚动至最后一项
+    if(isLast) {
+      const lastData = last(list)
+      if(lastData && lastData.scrollId) scrollItem = lastData.scrollId
+    }
+
     this.setState({
       activeScrollItem: SCROLL_ID,
     }, () => {
       //延迟处理
       const timer = setTimeout(() => {
-        const { isLast, scrollId=SCROLL_ID } = item
-        let scrollItem = scrollId
-        // 滚动至最后一项
-        if(isLast) {
-          const lastData = last(list)
-          if(lastData && lastData.scrollId) scrollItem = lastData.scrollId
-        }
-        const lastData = last(list)
-        if(lastData && lastData.scrollId) scrollItem = lastData.scrollId
         this.setState({
           activeScrollItem: scrollItem
         })
-      }, 400)
+      }, 200)
     })
   }
 
@@ -184,7 +175,7 @@ export default class extends Component<IProps, IState> {
 
         <View 
           className='loading'
-          style={{visibility: loadLoading ? 'visible' : 'hidden'}}
+          style={{display: loadLoading ? 'block' : 'none'}}
         >
           <AtActivityIndicator 
             mode={'normal'} 

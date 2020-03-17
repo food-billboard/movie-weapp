@@ -115,7 +115,7 @@ export default class extends Component<IProps, IState> {
           {
             nearEmoji.map((val: string) => {
               return (
-                <View className='at-col at-col-1'>{val}</View>
+                <View className='at-col at-col-1' key={val}>{val}</View>
               )
             })
           }

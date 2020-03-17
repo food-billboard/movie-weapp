@@ -66,7 +66,7 @@ export default class extends Component<any> {
       if(res.length) this.setState({
         bottomHeight: res[0].height
       }, () => {
-        this.chatRef.current!.handleReactToLocation()
+        this.chatRef.current!.handleReachToLocation()
       })
     })
   }
@@ -173,7 +173,7 @@ export default class extends Component<any> {
     }, () => {
       // this.inputRef.current!.handleControlLifeStatus(false)
       this.inputRef.current!.resetStatus()
-      this.chatRef.current!.handleReactToLocation()
+      this.chatRef.current!.handleReachToLocation()
     })
     
     //发送消息
