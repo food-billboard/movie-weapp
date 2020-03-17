@@ -46,6 +46,17 @@ export const createScrollId = () => {
 
 export default class extends Component<IProps, IState> {
 
+  //滚动至指定位置 ps: 预览视频全屏后退出会默认滚动至顶部
+  private _activeScrollItem: string
+
+  public set activeScrollItem(scrollId: string) {
+    this._activeScrollItem = scrollId
+  }
+
+  public get activeScrollItem() {
+    return this._activeScrollItem
+  }
+
   public componentWillReceiveProps = (props) => {
     const { list } = props
     const data = list.filter((val: IList) => {
@@ -63,14 +74,14 @@ export default class extends Component<IProps, IState> {
   }
 
   public componentDidMount = () => {
-    this.handleReachToBottom()
+    this.handleReactToLocation()
   }
 
   public state: IState = {
     imgList: [],
     videoShow: false,
     activeVideo: '',
-    lastData: SCROLL_ID,
+    activeScrollItem: SCROLL_ID,
     loadLoading: false
   }
 
@@ -90,12 +101,14 @@ export default class extends Component<IProps, IState> {
   }
 
   //查看视频
-  public handlePreviewVideo = (src: string) => {
+  public handlePreviewVideo = (src: string, scrollId: string) => {
     const { onPreview } = this.props
     this.setState({
       activeVideo: src,
       videoShow: true
     })
+    this.activeScrollItem = scrollId
+    console.log(this.activeScrollItem)
     onPreview(true)
   }
 
@@ -106,6 +119,7 @@ export default class extends Component<IProps, IState> {
       activeVideo: '',
       videoShow: false
     })
+    // this.handleReactToLocation({isLast: false, scrollId: this.activeScrollItem})
     onPreview(false)
   }
 
@@ -121,19 +135,32 @@ export default class extends Component<IProps, IState> {
     console.log('查看用户详情')
   }
 
-  //滚动至底部
-  public handleReachToBottom = (otherList?:Array<any>) => {
+  //滚动至指定位置
+  public handleReactToLocation = (
+    item: {
+      isLast: boolean
+      scrollId?: string
+    }={isLast: true},
+    list: Array<any>=this.props.list
+  ) => {
     this.setState({
-      lastData: SCROLL_ID
+      activeScrollItem: SCROLL_ID,
     }, () => {
       //延迟处理
       const timer = setTimeout(() => {
-        const { list } = this.props
-        const lastData = last(otherList? otherList : list)
+        const { isLast, scrollId=SCROLL_ID } = item
+        let scrollItem = scrollId
+        // 滚动至最后一项
+        if(isLast) {
+          const lastData = last(list)
+          if(lastData && lastData.scrollId) scrollItem = lastData.scrollId
+        }
+        const lastData = last(list)
+        if(lastData && lastData.scrollId) scrollItem = lastData.scrollId
         this.setState({
-          lastData: lastData ? (lastData.scrollId ? lastData.scrollId : SCROLL_ID) : SCROLL_ID
+          activeScrollItem: scrollItem
         })
-      }, 200)
+      }, 400)
     })
   }
 
@@ -141,7 +168,7 @@ export default class extends Component<IProps, IState> {
 
     const { list=[], mine='', height, style: customStyle, onScroll=noop } = this.props
 
-    const { videoShow, activeVideo, lastData, loadLoading } = this.state
+    const { videoShow, activeVideo, activeScrollItem, loadLoading } = this.state
 
     let _time: any = true
 
@@ -150,7 +177,7 @@ export default class extends Component<IProps, IState> {
         onScroll={onScroll}
         className='chat'
         scrollY={true}
-        scrollIntoView={lastData}
+        scrollIntoView={activeScrollItem}
         scrollWithAnimation={true}
         style={{...(isObject(customStyle) ? customStyle : {}), ...(height ? {height: height + 'px'} : {})}}
       >
@@ -247,7 +274,7 @@ export default class extends Component<IProps, IState> {
                         <Image 
                           mode={'widthFix'}
                           src={content.image || ''} 
-                          style={{maxWidth: '50%'}}
+                          style={{maxWidth: '50%', ...style.backgroundColor('disabled')}}
                           className='image-radius'
                           onClick={() => { this.handlePreviewImage.call(this, content.image) }} 
                         />
@@ -261,8 +288,8 @@ export default class extends Component<IProps, IState> {
                                   className='temp-image image-radius'
                                   mode={'widthFix'}
                                   src={content.image || ''} 
-                                  style={{maxWidth: '50%'}}
-                                  onClick={() => { this.handlePreviewVideo.call(this, content.video) }} 
+                                  style={{maxWidth: '50%', ...style.backgroundColor('disabled')}}
+                                  onClick={() => { this.handlePreviewVideo.call(this, content.video, scrollId) }} 
                                 >
                                   <View 
                                     className='video-icon at-icon at-icon-video'
@@ -271,7 +298,7 @@ export default class extends Component<IProps, IState> {
                                 </Image>
                               :
                               <View 
-                                onClick={() => { this.handlePreviewVideo.call(this, content.video) }} 
+                                onClick={() => { this.handlePreviewVideo.call(this, content.video, scrollId) }} 
                                 className='temp-video-poster image-radius'
                                 style={{...style.backgroundColor('primary')}}
                               >

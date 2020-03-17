@@ -9,7 +9,7 @@ import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { connect } from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
-import { newsType, responseType } from '~utils'
+import { newsType, responseType, createSystemInfo } from '~utils'
 
 import './index.scss'
 
@@ -19,6 +19,8 @@ interface IVideoType {
   image: string,
   video: string
 }
+
+const systemInfo = createSystemInfo()
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any> {
@@ -54,7 +56,7 @@ export default class extends Component<any> {
 
   public componentDidMount = () => {
     this.fetchBottomHeight()
-    this.windowHeight = Taro.getSystemInfoSync().windowHeight
+    this.windowHeight = systemInfo.getScreenInfo().windowHeight
   }
   
   //获取底部聊天区域高度
@@ -64,7 +66,7 @@ export default class extends Component<any> {
       if(res.length) this.setState({
         bottomHeight: res[0].height
       }, () => {
-        this.chatRef.current!.handleReachToBottom()
+        this.chatRef.current!.handleReactToLocation()
       })
     })
   }
@@ -171,7 +173,7 @@ export default class extends Component<any> {
     }, () => {
       // this.inputRef.current!.handleControlLifeStatus(false)
       this.inputRef.current!.resetStatus()
-      this.chatRef.current!.handleReachToBottom()
+      this.chatRef.current!.handleReactToLocation()
     })
     
     //发送消息

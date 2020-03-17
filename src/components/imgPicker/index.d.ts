@@ -29,7 +29,7 @@ export interface IProps {
   mode?: 'scaleToFill'|'aspectFit'|'aspectFill'|'widthFix'|'top'|'bottom'|'center'|'left'|'right'|'top left'|'top right'|'bottom left'|'bottom right'
   multiple?: boolean
   length?: number
-  count?: number | false
+  count?: number
   handleChange?: (files: Array<any>, operationType: string, index: number) => any
 }
 
@@ -37,5 +37,5 @@ export interface IState {
   files: Array<IFiles>
   showAddBtn: boolean
   error: boolean
-  count: number
+  // count: number
 }

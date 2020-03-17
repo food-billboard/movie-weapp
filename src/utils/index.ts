@@ -7,6 +7,7 @@ export * from './format'
 export * from './platform'
 export * from './globalType'
 export * from './websocket'
+export * from './systemInfo'
 
 export const includes = (collection: any=[], value:any='') => {
     console.log(collection, value)

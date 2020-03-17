@@ -2,15 +2,16 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, ScrollView } from '@tarojs/components'
 import { IProps, IState } from './index.d'
 import { Color, defaultColor } from '~theme/color'
-import { isObject } from '~utils'
-import { getStyle } from '~config'
+import { isObject, createSystemInfo } from '~utils'
 
 import './index.scss'
+
+const systemInfo = createSystemInfo()
 
 export default class extends Component<IProps, IState> {
 
   public componentDidMount = () => {
-    const _style = getStyle()
+    const _style = systemInfo.getColorStyle()
     const { color } = _style
     this.setState({
       active: color

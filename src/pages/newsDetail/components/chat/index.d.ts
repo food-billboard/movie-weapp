@@ -26,7 +26,7 @@ import { newsType } from '~utils'
  *  imgList: 图片列表
  *  videoShow: 控制视频组件的显示隐藏
  *  activeVideo: 当前播放的视频
- *  lastData: 最后一条数据的id
+ *  activeScrollItem: 当前获取的消息的id
  *  loadLoading: 加载数据loading
  * }
  */
@@ -67,6 +67,6 @@ import { newsType } from '~utils'
    imgList:  Array<string>
    videoShow: boolean
    activeVideo: string
-   lastData: string
+   activeScrollItem: string
    loadLoading: boolean
  }

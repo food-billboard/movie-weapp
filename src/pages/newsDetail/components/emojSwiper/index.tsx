@@ -1,17 +1,31 @@
 import Taro, { Component } from '@tarojs/taro'
-import { Swiper, SwiperItem, View } from '@tarojs/components'
+import { Swiper, SwiperItem, View, Text } from '@tarojs/components'
 import { TypeColor } from '~theme/color'
 import { IProps, IState } from './index.d'
 import { emoji } from '~theme/emoji'
 import style from '~theme/style'
+import { createSystemInfo } from '~utils'
 
 import './index.scss'
+
+const systemInfo = createSystemInfo()
 
 export default class extends Component<IProps, IState> {
 
   public state: IState = {
     show: false,
     mode: ''
+  }
+
+  //记录最近使用的表情
+  public _nearlyEmoji = systemInfo.getEmojiInfo()
+
+  public get nearlyEmoji() {
+    return systemInfo.getEmojiInfo()
+  }
+
+  public set nearlyEmoji(emoji) {
+    systemInfo.setEmojiInfo(emoji)
   }
 
   //判断字符串是否为emoji表情
@@ -56,6 +70,7 @@ export default class extends Component<IProps, IState> {
       mode: value
     })
     this.props.handleAddEmoj(value)
+    this.nearlyEmoji = value
   }
 
   //关闭
@@ -85,19 +100,38 @@ export default class extends Component<IProps, IState> {
     
     const { show } = this.state
 
+    const nearEmoji = this.nearlyEmoji
+
     return (
-      <Swiper
+      <View 
+        className='swiper'
         style={{
           display: show ? 'block' : 'none',
           ...style.border(1, 'disabled', 'solid', 'all')
         }}
-        className='swiper'
-        indicatorColor={TypeColor['primary']}
-        indicatorActiveColor={TypeColor['disabled']}
-        circular={false}
-        indicatorDots
-        autoplay={false}
-        >
+      >
+        <View style={{...style.color('primary')}}>最近使用</View>
+        <View className='nearly at-row'>
+          {
+            nearEmoji.map((val: string) => {
+              return (
+                <View className='at-col at-col-1'>{val}</View>
+              )
+            })
+          }
+        </View>
+        <Text style={{...style.color('primary')}}>所有表情</Text>
+        <Swiper
+          style={{
+            ...style.border(1, 'disabled', 'solid', 'all')
+          }}
+          // className='swiper'
+          indicatorColor={TypeColor['primary']}
+          indicatorActiveColor={TypeColor['disabled']}
+          circular={false}
+          indicatorDots
+          autoplay={false}
+          >
             {
               emoji.map((val: any) => {
                 const { emoji: page, id } = val
@@ -132,6 +166,7 @@ export default class extends Component<IProps, IState> {
               })
             }
         </Swiper>
+      </View>
     )
   }
 

@@ -330,6 +330,7 @@ export default class extends Component<IProps, IState> {
           </View>
           <View className='other-detail'>
               <View className='emoj'>
+                
                 <Emoj
                   ref={this.EmojRef}
                   handleAddEmoj={this.handleAddEmoj}

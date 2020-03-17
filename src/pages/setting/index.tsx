@@ -6,12 +6,11 @@ import List from '~components/linearlist'
 import Comment from '~components/comment'
 import GColor from './components/color'
 import { TypeColor, colorChange, colorStyleChange } from '~theme/color'
-import { router, routeAlias } from '~utils'
+import { router, routeAlias, createSystemInfo } from '~utils'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { Toast } from '~components/toast'
 import { Option } from 'taro-ui/@types/radio'
-import { getStyle } from '~config'
 import style from '~theme/style'
 
 import './index.scss'
@@ -35,6 +34,8 @@ const colorControl = {
     on: 'on',
     off: 'off'
 }
+
+const systemInfo = createSystemInfo()
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Setting extends Component<any>{
@@ -207,7 +208,6 @@ export default class Setting extends Component<any>{
             arrow: arrow,
             iconInfo: {
                 value: 'tag',
-                // size: 16, 
                 color: TypeColor[ICON_COLOR]
             },
             handle: this.showAbout,
@@ -238,7 +238,7 @@ export default class Setting extends Component<any>{
             }
         },
         activeModel: {},
-        colorStyle: getStyle().style,
+        colorStyle: systemInfo.getColorStyle().style
     }
 
     /**

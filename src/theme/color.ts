@@ -1,6 +1,7 @@
-import { setStyle, getStyle } from '~config'
-import { styleChange } from '~utils'
 import Taro from '@tarojs/taro'
+import { styleChange, createSystemInfo } from '~utils'
+
+const systemInfo = createSystemInfo()
 
 const DAY = Symbol('day')
 const NIGHT = Symbol('night')
@@ -281,7 +282,7 @@ export const colorChange = (status: boolean, styleColor: string, needUpdateStora
     }else {   //色调关闭
       TypeColor = { ...TypeColor, ...color[DAY][styleColor] }
     }
-    setStyle({
+    systemInfo.setColorStyle({
       style: status,
       color: styleColor
     })
@@ -306,7 +307,7 @@ export const colorChange = (status: boolean, styleColor: string, needUpdateStora
 export const colorStyleChange = (isTab=false) => {
   let _status
     //查看缓存
-    const value = getStyle()
+    const value = systemInfo.getColorStyle()
     const { style, color: styleColor } = value
     _status = value
     colorChange(style, styleColor, true)
