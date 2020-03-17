@@ -110,7 +110,7 @@ export default class extends Component<IProps, IState> {
           ...style.border(1, 'disabled', 'solid', 'all')
         }}
       >
-        <View style={{...style.color('primary')}}>最近使用</View>
+        <View className='text' style={{...style.color('primary')}}>最近使用</View>
         <View className='nearly at-row'>
           {
             nearEmoji.map((val: string) => {
@@ -120,7 +120,7 @@ export default class extends Component<IProps, IState> {
             })
           }
         </View>
-        <Text style={{...style.color('primary')}}>所有表情</Text>
+        <Text className='text' style={{...style.color('primary')}}>所有表情</Text>
         <Swiper
           style={{
             ...style.border(1, 'disabled', 'solid', 'all')
