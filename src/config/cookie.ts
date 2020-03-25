@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import {find, findIndex} from '~lodash'
+import {find, findIndex} from 'lodash'
 import {cookieParse, isType} from '~utils'
 const COOKIE_ID = 'cookie'
 
@@ -14,7 +14,7 @@ export const setCookie = (store, data:any={}) => {
     const cookies = Taro.getStorageSync(COOKIE_ID) || []
     if(Object.prototype.toString.call(store) == "[object String]") {
         const name = store
-        const index = findIndex(cookies, {name})
+        const index = findIndex(cookies, {name}) 
         //判断原cookie中是否存在要设置的cookie
         if(index != -1) {
             const _cookie = find(cookies, index)

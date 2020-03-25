@@ -88,7 +88,7 @@ interface IList {
 
 export interface IProps {
   list: IList
-  id: string
+  // id: string
   commentId: string
   extra?: boolean
   renderExtra?: any

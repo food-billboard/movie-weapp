@@ -21,19 +21,9 @@ export interface IProps {
 
 export interface TabList {
   title: string,
-  id: symbol
+  id: string
 }
 
 export interface IState {
   current: number
-}
-
-export const all = Symbol('all')
-export const fee = Symbol('fee')
-export const free = Symbol('free')
-
-export const idList = {
-  [all]:'all',
-  [fee]: 'fee',
-  [free]: 'free'
 }

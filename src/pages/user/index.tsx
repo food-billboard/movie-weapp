@@ -10,6 +10,7 @@ import {connect} from '@tarojs/redux'
 
 import './index.scss'
 import style from '~theme/style'
+import { getCookie } from '~config'
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class User extends Component<any>{
@@ -27,7 +28,7 @@ export default class User extends Component<any>{
     readonly id = this.$router.params
 
     //我的id
-    readonly mineId = this.props.id
+    private mineId
 
     public componentDidShow = () => {
         colorStyleChange()
@@ -52,7 +53,14 @@ export default class User extends Component<any>{
 
     //关注/取消关注
     public attention = async () => {
-        await this.props.getUserInfo()
+        const userInfo = getCookie('user') || {}
+        if(!userInfo.id) {
+            await this.props.getUserInfo()
+            return
+        }
+        const { id } = userInfo
+        this.mineId = id
+
         const { isAttention } = this.state
         Taro.showLoading({mask: true, title: '操作中'})
         const data = await this.props.toAttention(this.id, this.mineId, isAttention)

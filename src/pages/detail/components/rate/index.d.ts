@@ -18,7 +18,7 @@ export interface IProps {
   sendRate: (rate: any, user: string, movie: string) => any
   getRate: (movie: string) => any
   movie: string
-  id: string
+  // id: string
   readonly?: boolean
 }
 

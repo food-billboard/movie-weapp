@@ -15,5 +15,20 @@
         .list{
             
         }
+        .login{
+            padding-top:20px;
+            height:600px;
+            text-align:center;
+            position:relative;
+            left:0;
+            top:0;
+            .button{
+                width:80%;
+                position:absolute;
+                left:50%;
+                transform:translateX(-50%);
+                bottom:20px;
+            }
+        }
     }   
 }

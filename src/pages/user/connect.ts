@@ -1,7 +1,7 @@
 export const mapStateToProps = (_) => {
     const {userInfo} = _.global
     return {
-        id: userInfo.id
+        // id: userInfo.id
     }
 }
 

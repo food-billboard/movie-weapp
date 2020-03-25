@@ -9,6 +9,7 @@ import {
 } from '~services'
 import { isAlipay, system, router } from '~utils';
 import { getCookie } from '~config'
+import Taro from '@tarojs/taro'
 
 export default {
     namespace: 'global',
@@ -20,30 +21,30 @@ export default {
     },
     effects: {
 
-        // 发送验证码
-        * sendSMS({ mobile }, { call }){
-            return yield call(sendSMS, { mobile })
-        },
+        // // 发送验证码
+        // * sendSMS({ mobile }, { call }){
+        //     return yield call(sendSMS, { mobile })
+        // },
 
         // 登陆
         * sendUserLogon ({data}, { call, put }){
 
-            const { username, password } = data
-            let d
-            if(username === 'admin' && password === '123456') {
-                d = {
-                    success: true,
-                    data: {
-                        id: 'admin'
-                    }
-                }
-            }else {
-                d = {
-                    success: false,
-                    data: {}
-                }
-            }
-            return d.success
+            // const { username, password } = data
+            // let d
+            // if(username === 'admin' && password === '123456') {
+            //     d = {
+            //         success: true,
+            //         data: {
+            //             id: 'admin'
+            //         }
+            //     }
+            // }else {
+            //     d = {
+            //         success: false,
+            //         data: {}
+            //     }
+            // }
+            // return d.success
 
             const userInfo = yield call(sendUserLogon, data)
             yield put({ type:'setData', payload: { userInfo } })
@@ -65,30 +66,53 @@ export default {
 
         // 获取用户详情
         * getUserInfo(_, { call, put}){
-            const tokens = getCookie('token')
-            let data = {
-                success: true,
-                data: {
-                    info: {
-                        id: 0,
-                        username: '用户名',
-                        hot: 10000,
-                        attention: 10000,
-                        fans: 10000,
-                        image: 'http://img4.imgtn.bdimg.com/it/u=2359617007,2446763239&fm=26&gp=0.jpg',
-                        isLike: false
-                    }
+
+            let isAuth = false
+
+            Taro.getSetting({
+                success: (res) => {
+                    const { authSetting } = res
+                    if(authSetting['scope.userInfo']) isAuth = true
                 }
+            })
+
+            if(!isAuth) {
+                Taro.showModal({
+                    title: '温馨提示',
+                    content: '你还没有登录，要不去登录一下?',
+                    success: (res) => {
+                        const { confirm } = res
+                        if(confirm) router.push('/mine', { login: false })
+                    }
+                })
             }
-            return data.data
 
+            return
 
-            const token = getCookie('token')
-            // if( !isAlipay && system.platform !=='Android' && (!token || !token.value) ){
-            //     return router.replace('/login');
+            // const tokens = getCookie('token')
+            // let data = {
+            //     success: true,
+            //     data: {
+            //         info: {
+            //             id: 0,
+            //             username: '用户名',
+            //             hot: 10000,
+            //             attention: 10000,
+            //             fans: 10000,
+            //             image: 'http://img4.imgtn.bdimg.com/it/u=2359617007,2446763239&fm=26&gp=0.jpg',
+            //             isLike: false
+            //         }
+            //     }
             // }
-            const userInfo = yield call(getUserInfo)
-            yield put({ type:'setData', payload: { userInfo } })
+            // return data.data
+
+
+            // const token = getCookie('token')
+            // // if( !isAlipay && system.platform !=='Android' && (!token || !token.value) ){
+            // //     return router.replace('/login');
+            // // }
+            // const userInfo = yield call(getUserInfo)
+            // yield put({ type:'setData', payload: { userInfo } })
             return userInfo
         },
 

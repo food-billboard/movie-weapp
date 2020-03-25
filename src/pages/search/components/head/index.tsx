@@ -1,7 +1,13 @@
 import Taro, { Component } from '@tarojs/taro'
 import { AtTabs, AtTabsPane } from 'taro-ui'
-import { IState, IProps, TabList, idList, all, free, fee } from './index.d'
+import { IState, IProps, TabList } from './index.d'
 import './index.scss'
+
+export const idList = {
+    all:'all',
+    fee: 'fee',
+    free: 'free'
+}
 
 export default class Head extends Component<IProps, IState>{
     public static defaultProps = {
@@ -11,15 +17,15 @@ export default class Head extends Component<IProps, IState>{
     readonly tabList: Array<TabList> = [
         {
             title: '全部',
-            id: all
+            id: idList.all
         },
         {
             title: '免费',
-            id: free
+            id: idList.free
         },
         {
             title: '付费',
-            id: fee
+            id: idList.fee
         }
     ]
 

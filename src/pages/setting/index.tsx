@@ -51,7 +51,7 @@ export default class Setting extends Component<any>{
     public colorRef = Taro.createRef<GColor>()
 
     //用户id
-    readonly id = this.props.id
+    readonly id = this.$router.params.id
 
     public componentDidShow = () => {
         colorStyleChange()

@@ -10,7 +10,7 @@ import { TypeColor } from '~theme/color'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { IState, IProps, IMediaList } from './index.d'
-import { SYSTEM_PAGE_SIZE } from '~config'
+import { SYSTEM_PAGE_SIZE, getCookie } from '~config'
 
 import './index.scss'
 
@@ -46,7 +46,6 @@ class List extends Component<IProps, IState>{
                 hasVideo: false
             }
         },
-        id: '',
         commentId: '',
         like: () => {},
         comment: () => {},
@@ -87,7 +86,15 @@ class List extends Component<IProps, IState>{
      * isHot: 是否为点赞状态
      */
     public like = async (id: string, hot: number = 0, isHot: boolean = false) => {
-        this.props.getUserInfo()
+
+        //获取个人信息缓存
+        const userInfo = getCookie('user') || {}
+        if(!userInfo.id) {
+            await this.props.getUserInfo()
+            return 
+        }
+        const { id: mineId } = userInfo
+
         const {list} = this.state
         if(!isHot) {
             list.user.hot ++
@@ -99,7 +106,7 @@ class List extends Component<IProps, IState>{
             list
         })
         Taro.showLoading({ mask: true, title: '等我一下' })
-        await this.props.like(this.commentId, id, this.props.id)   
+        await this.props.like(this.commentId, id, mineId)   
         Taro.hideLoading()
     }
 

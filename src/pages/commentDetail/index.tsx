@@ -10,6 +10,7 @@ import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
+import { getCookie } from '~config'
 
 const INIT_QUERY = { currPage:1, pageSize: 7 }
 let FIRST = true
@@ -35,7 +36,7 @@ export default class extends Component<any> {
   readonly id = this.$router.params.id
 
   //我的id
-  readonly mineId = this.props.id
+  private mineId
 
   public componentDidMount = async () => {
       this.setTitle()
@@ -113,8 +114,17 @@ export default class extends Component<any> {
    * user: 用户id
    * commentId: 评论id
    */
-  public publish = (isUserCll=true, user, commentId) => {
-    this.props.getUserInfo()
+  public publish = async (_, user, commentId) => {
+    
+    const userInfo = getCookie('user') || {}
+    if(!userInfo.id) {
+      await this.props.getUserInfo()
+      return
+    }
+
+    const { id } = userInfo
+    this.mineId = id
+
     this.commentRef.current!.open()
     const { commentHeader } = this.state
     const { userId } = commentHeader
@@ -159,19 +169,21 @@ export default class extends Component<any> {
         }
         fetch={this.throttleFetchData}
         bottom={92}
-                renderBottom={<View>
-                            <GButton 
-                                style={{width: '100%', height: '92', position: 'fixed', bottom: 0, left: 0, zIndex: '999'}}
-                                type={'secondary'}
-                                value={['发布评论', '发布评论']} 
-                                operate={this.publish}
-                            />
-                            <CommentCom
-                                buttonText={'写完了'}
-                                publishCom={this.publishComment}
-                                ref={this.commentRef}
-                            />
-                </View>}
+        renderBottom={
+          <View>
+            <GButton 
+                style={{width: '100%', height: '92', position: 'fixed', bottom: 0, left: 0, zIndex: '999'}}
+                type={'secondary'}
+                value={['发布评论', '发布评论']} 
+                operate={this.publish}
+            />
+            <CommentCom
+                buttonText={'写完了'}
+                publishCom={this.publishComment}
+                ref={this.commentRef}
+            />
+          </View>
+        }
       >
       </GScrollView>
     )

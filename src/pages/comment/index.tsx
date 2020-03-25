@@ -8,6 +8,7 @@ import GScrollView from '~components/scrollList'
 import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
 import { throttle } from 'lodash'
+import { getCookie } from '~config'
 
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
@@ -57,7 +58,7 @@ export default class extends Component<any> {
     readonly id = this.$router.params.id
 
     //我的id
-    readonly mineId = this.props.id
+    private mineId
 
     /**
      * 获取电影数据
@@ -118,7 +119,16 @@ export default class extends Component<any> {
      * commentId: 评论id
      */
     public publish = (isUserCall=false, user, commentId) => {
-        this.props.getUserInfo()
+
+        //获取个人信息缓存
+        const userInfo = getCookie('user') || {}
+        if(!userInfo.id) {
+            this.props.getUserInfo()
+            return 
+        }
+        const { id } = userInfo
+        this.mineId = id 
+
         this.commentRef.current!.open()
         if(isUserCall) {
             this.setState({
@@ -153,7 +163,7 @@ export default class extends Component<any> {
                                     comment={this.publish} 
                                     key={commentId}
                                     list={value}
-                                    id={commentId}
+                                    commentId={commentId}
                                 />
                             )
                         })

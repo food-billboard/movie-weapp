@@ -1,10 +1,11 @@
 import Taro, { Component } from '@tarojs/taro'
 import { Text } from '@tarojs/components'
 import { IProps, IState } from './index.d'
-import style from '~theme/style'
-
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
+import { getCookie } from '~config'
+
+import style from '~theme/style'
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<IProps, IState> {
@@ -15,7 +16,6 @@ export default class extends Component<IProps, IState> {
     getStore: () => {},
     getUserInfo: () => {},
     sendStore: () => {},
-    id: ''
   }
 
   public state: IState = {
@@ -26,10 +26,21 @@ export default class extends Component<IProps, IState> {
     this.fetchData()
   }
 
+  //用户id
+  private id
+
   //数据获取
   public fetchData = async () => {
-    if(!this.props.id) return 
-    const data = await this.props.getStore(this.props.movie, this.props.id) 
+
+    const userInfo = getCookie('user') || {}
+    if(!userInfo.id) {
+      return
+    }
+
+    const { id } = userInfo
+    this.id = id
+
+    const data = await this.props.getStore(this.props.movie, id) 
     const store = data.store
     this.setState({
       store
@@ -38,10 +49,15 @@ export default class extends Component<IProps, IState> {
 
   //收藏
   public sendStore = async () => {
-    this.props.getUserInfo()
+  
+    if(!this.id) {
+      this.props.getUserInfo()
+      return
+    }
+
     const { movie } = this.props
     Taro.showLoading({ mask: true, title: '联系收藏中' })
-    const data = await this.props.sendStore(this.props.id, movie)
+    const data = await this.props.sendStore(this.id, movie)
     Taro.hideLoading()
   }
 

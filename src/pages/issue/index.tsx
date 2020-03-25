@@ -11,12 +11,13 @@ import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToProps } from './connect'
 import { TypeColor, colorStyleChange } from '~theme/color'
 import style from '~theme/style'
-import { SYSTEM_PAGE_SIZE } from '~config'
+import { SYSTEM_PAGE_SIZE, getCookie } from '~config'
 import { Toast } from '~components/toast'
 
 import './index.scss'
 
 const FORM_DATA: IFormData = {
+  user: '',
   id: false,
   video: false,
   info: false,
@@ -68,6 +69,7 @@ export default class extends Component<any> {
   }
 
   public componentDidMount = async () => {
+
     this.fetchData()
   }
 
@@ -162,6 +164,14 @@ export default class extends Component<any> {
 
   //提交
   public handleSubmit = async (e) => {
+
+    const userInfo = getCookie('user') || {}
+    if(!userInfo.id) {
+      this.props.getUserInfo()
+      return
+    }
+    const { id } = userInfo
+
     const video = await this.videoRef.current!.getData()
     const name = await this.nameRef.current!.getData()
     const area = await this.areaRef.current!.getData()
@@ -206,6 +216,7 @@ export default class extends Component<any> {
     let _time = Array.isArray(time) ? time.join('') : time
 
     let data: IFormData = {  
+      user: id,
       id: isIssue ? movieId : false,
       video,
       info: {
@@ -224,6 +235,7 @@ export default class extends Component<any> {
         }
       })
     }
+    
     if(isIssue) {
       await this.props.setIssue({
         isIssue: false,

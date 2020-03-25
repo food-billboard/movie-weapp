@@ -37,7 +37,7 @@ interface IContent {
 export interface IProps {
   content: IContent
   like: (commentId: string, user: string, mine: string) => any
-  id: string
+  // id: string
   total: number
   getUserInfo: () => any
 }

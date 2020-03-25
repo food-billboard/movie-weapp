@@ -1,4 +1,5 @@
 export default interface formData {
+  user: string
   id: false | string
   video: {
       src: string

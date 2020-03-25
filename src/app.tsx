@@ -2,7 +2,6 @@ import '@tarojs/async-await'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { Provider } from '@tarojs/redux'
 import { dva, router, includes } from '~utils'
-
 import Index from './pages/main/index'
 import configure from './configure'
 

@@ -3,7 +3,7 @@ import { View, Text } from '@tarojs/components'
 import { AtRate } from 'taro-ui'
 import { IProps, IState } from './index.d'
 import style from '~theme/style'
-import { SYSTEM_PAGE_SIZE } from '~config'
+import { SYSTEM_PAGE_SIZE, getCookie } from '~config'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 
@@ -16,7 +16,6 @@ export default class GTate extends Component<IProps, IState>{
         sendRate: () => {},
         getRate: () => {},
         movie: '',
-        id: ''
     }
 
     public state: IState = {
@@ -38,10 +37,19 @@ export default class GTate extends Component<IProps, IState>{
 
     //评分
     public sendRate = async (value: string | number) => {
+
+        const userInfo = getCookie('user') || {}
+        if(!userInfo.id) {
+            this.props.getUserInfo()
+            return
+        }
+
+        const { id } = userInfo
+
         this.props.getUserInfo()
         const {movie} = this.props
         Taro.showLoading({mask: true, title: '评分中'})
-        await this.props.sendRate(value, this.props.id, movie)
+        await this.props.sendRate(value, id, movie)
         Taro.hideLoading()
     }
 

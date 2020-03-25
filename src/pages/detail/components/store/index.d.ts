@@ -19,7 +19,7 @@ export interface IProps {
   getStore: (movie: any, user: any) => any
   sendStore: (user: any, movie: any) => any
   movie: string
-  id: string
+  // id: string
   getUserInfo: () => any
 }
 

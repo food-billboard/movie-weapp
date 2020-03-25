@@ -11,6 +11,7 @@ import Actor from './components/actor'
 import Title from './components/title'
 import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
+import { getCookie } from '~config'
 
 import './index.scss'
 
@@ -41,7 +42,7 @@ export default class extends Component<any> {
     readonly id = this.$router.params.id
 
     //我的id
-    readonly mineId = this.props.id
+    private mineId
 
     public componentDidMount = async() => {
         this.fetchData()
@@ -72,15 +73,23 @@ export default class extends Component<any> {
 
     //打开评论界面
     public handleComment = () => {
-        this.props.getUserInfo()
+         //获取个人信息缓存
+         const userInfo = getCookie('user') || {}
+         if(!userInfo.id) {
+             this.props.getUserInfo()
+             return 
+         }
+         const { id } = userInfo
+         this.mineId = id 
+
         this.commentRef.current!.open()
     }
 
     //评论
     public comment = async (value: string) => {
-        const { id } = this.props
+
         Taro.showLoading({mask: true, title: '评论中...'})
-        await this.props.comment(value, this.id, id)
+        await this.props.comment(value, this.id, this.mineId)
         Taro.hideLoading()
     }
 

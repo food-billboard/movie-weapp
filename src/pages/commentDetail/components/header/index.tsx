@@ -6,10 +6,12 @@ import { router, formatTime, formatNumber, routeAlias } from '~utils'
 import { IProps, IState } from './index.d'
 import style from '~theme/style'
 import { TypeColor } from '~theme/color'
-import { SYSTEM_PAGE_SIZE } from '~config'
+import { SYSTEM_PAGE_SIZE, getCookie } from '~config'
+import { mapDispatchToProps, mapStateToProps } from './connect'
+import { connect } from '@tarojs/redux'
 
 import './index.scss'
-
+@connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<IProps, IState> {
 
   public static defaultProps: IProps = {
@@ -24,7 +26,6 @@ export default class extends Component<IProps, IState> {
       isLike: false
     },
     like: () => {},
-    id: '',
     total: 0,
     getUserInfo: () => {}
   }
@@ -55,7 +56,15 @@ export default class extends Component<IProps, IState> {
    * @param commentId: 评论id
    */ 
   public like = async (id: string, hot: number = 0, isLike: boolean = false, commentId: string) => {
-    this.props.getUserInfo()
+    
+    //获取个人信息缓存
+    const userInfo = getCookie('user') || {}
+    if(!userInfo.id) {
+      await this.props.getUserInfo()
+      return 
+    }
+    const { id: mineId } = userInfo
+
     const {content} = this.state
     if(!isLike) {
         content.hot ++
@@ -67,7 +76,7 @@ export default class extends Component<IProps, IState> {
       content
     })
     Taro.showLoading({ mask: true, title: '等我一下' })
-    await this.props.like(commentId, id, this.props.id)   
+    await this.props.like(commentId, id, mineId)   
     Taro.hideLoading()
   }
 
