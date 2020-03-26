@@ -4,7 +4,7 @@ import { AtIcon } from 'taro-ui'
 import GVideo from '../video'
 import Curtain from '../curtain'
 import { Info } from '../model/index.d'
-import { router, formatTime, formatNumber, mediaType, routeAlias } from '~utils'
+import { router, formatTime, formatNumber, mediaType, routeAlias, size } from '~utils'
 import style from '~theme/style'
 import { TypeColor } from '~theme/color'
 import {connect} from '@tarojs/redux'
@@ -89,7 +89,7 @@ class List extends Component<IProps, IState>{
 
         //获取个人信息缓存
         const userInfo = getCookie('user') || {}
-        if(!userInfo.id) {
+        if(!size(userInfo)) {
             await this.props.getUserInfo()
             return 
         }

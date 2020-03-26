@@ -128,14 +128,14 @@ class App extends Component {
     //   Taro.cloud.init({traceUser: true})
     // }
 
-    const dispatch = dva.getDispatch();
+    // const dispatch = dva.getDispatch();
 
-    await Taro.showLoading({mask: true, title: '加载中'})
-    if( !includes(['/my'], router.getOptions().alias) ) {
-       // 获取个人详情判断是否已经登录
-      await dispatch({ type: 'global/getUserInfo'});
-    }
-    await Taro.hideLoading();
+    // await Taro.showLoading({mask: true, title: '加载中'})
+    // if( !includes(['/my'], router.getOptions().alias) ) {
+    //    // 获取个人详情判断是否已经登录
+    //   await dispatch({ type: 'global/getUserInfo'});
+    // }
+    // await Taro.hideLoading();
   }
 
   public componentDidMount () {}

@@ -4,6 +4,7 @@ import { IProps, IState } from './index.d'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { getCookie } from '~config'
+import { size } from '~utils'
 
 import style from '~theme/style'
 
@@ -33,10 +34,10 @@ export default class extends Component<IProps, IState> {
   public fetchData = async () => {
 
     const userInfo = getCookie('user') || {}
-    if(!userInfo.id) {
+    if(!size(userInfo)) {
       return
     }
-
+console.log(userInfo)
     const { id } = userInfo
     this.id = id
 

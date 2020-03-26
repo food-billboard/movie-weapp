@@ -5,12 +5,12 @@ import List from '~components/linearlist'
 import GButton from '~components/button'
 import { TypeColor, colorStyleChange } from '~theme/color'
 import {mapStateToProps, mapDispatchToProps} from './connect'
-import { router, routeAlias } from '~utils'
+import { router, routeAlias, size } from '~utils'
 import {connect} from '@tarojs/redux'
-
-import './index.scss'
 import style from '~theme/style'
 import { getCookie } from '~config'
+
+import './index.scss'
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class User extends Component<any>{
@@ -54,7 +54,7 @@ export default class User extends Component<any>{
     //关注/取消关注
     public attention = async () => {
         const userInfo = getCookie('user') || {}
-        if(!userInfo.id) {
+        if(!size(userInfo)) {
             await this.props.getUserInfo()
             return
         }

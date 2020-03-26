@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Image, Text } from '@tarojs/components'
 import { AtIcon, AtAvatar } from 'taro-ui'
 import Ellipsis from '~components/ellipsis'
-import { router, formatTime, formatNumber, routeAlias } from '~utils'
+import { router, formatTime, formatNumber, routeAlias, size } from '~utils'
 import { IProps, IState } from './index.d'
 import style from '~theme/style'
 import { TypeColor } from '~theme/color'
@@ -59,11 +59,11 @@ export default class extends Component<IProps, IState> {
     
     //获取个人信息缓存
     const userInfo = getCookie('user') || {}
-    if(!userInfo.id) {
+    if(!size(userInfo)) {
       await this.props.getUserInfo()
       return 
     }
-    const { id: mineId } = userInfo
+    const { id: mineId } = JSON.parse(userInfo)
 
     const {content} = this.state
     if(!isLike) {

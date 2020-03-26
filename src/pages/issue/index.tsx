@@ -13,6 +13,7 @@ import { TypeColor, colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { SYSTEM_PAGE_SIZE, getCookie } from '~config'
 import { Toast } from '~components/toast'
+import { size } from '~utils'
 
 import './index.scss'
 
@@ -166,11 +167,11 @@ export default class extends Component<any> {
   public handleSubmit = async (e) => {
 
     const userInfo = getCookie('user') || {}
-    if(!userInfo.id) {
+    if(!size(userInfo)) {
       this.props.getUserInfo()
       return
     }
-    const { id } = userInfo
+    const { id } = JSON.parse(userInfo)
 
     const video = await this.videoRef.current!.getData()
     const name = await this.nameRef.current!.getData()

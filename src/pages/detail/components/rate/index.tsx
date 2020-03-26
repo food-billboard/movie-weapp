@@ -6,6 +6,7 @@ import style from '~theme/style'
 import { SYSTEM_PAGE_SIZE, getCookie } from '~config'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
+import { size } from '~utils'
 
 import './index.scss'
 
@@ -39,7 +40,7 @@ export default class GTate extends Component<IProps, IState>{
     public sendRate = async (value: string | number) => {
 
         const userInfo = getCookie('user') || {}
-        if(!userInfo.id) {
+        if(!size(userInfo)) {
             this.props.getUserInfo()
             return
         }

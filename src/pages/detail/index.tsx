@@ -12,11 +12,11 @@ import Title from './components/title'
 import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
 import { getCookie } from '~config'
-
-import './index.scss'
-
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
+import { size } from '~utils'
+
+import './index.scss'
 
 let FIRST = true
 
@@ -75,11 +75,11 @@ export default class extends Component<any> {
     public handleComment = () => {
          //获取个人信息缓存
          const userInfo = getCookie('user') || {}
-         if(!userInfo.id) {
+         if(!size(userInfo)) {
              this.props.getUserInfo()
              return 
          }
-         const { id } = userInfo
+         const { id } = JSON.parse(userInfo)
          this.mineId = id 
 
         this.commentRef.current!.open()

@@ -8,5 +8,6 @@ export const mapStateToProps = (_) => {
 }
   
 export const mapDispatchToProps = dispatch => ({   
-    getUserInfo: () => dispatch({type: 'global/getUserInfo' })
+    getUserInfo: () => dispatch({type: 'global/getUserInfo' }),
+    sendUserLogon: (data) => dispatch({type: 'global/sendUserLogon', data})
 })

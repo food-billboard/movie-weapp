@@ -21,30 +21,25 @@ export default {
     },
     effects: {
 
-        // // 发送验证码
-        // * sendSMS({ mobile }, { call }){
-        //     return yield call(sendSMS, { mobile })
-        // },
-
         // 登陆
         * sendUserLogon ({data}, { call, put }){
 
-            // const { username, password } = data
-            // let d
-            // if(username === 'admin' && password === '123456') {
-            //     d = {
-            //         success: true,
-            //         data: {
-            //             id: 'admin'
-            //         }
-            //     }
-            // }else {
-            //     d = {
-            //         success: false,
-            //         data: {}
-            //     }
-            // }
-            // return d.success
+            let d = {
+                success: true,
+                data: {
+                    info: {
+                        id: 0,
+                        username: data.userInfo.nickName,
+                        hot: 10000,
+                        attention: 10000,
+                        fans: 10000,
+                        image: data.userInfo.avatarUrl,
+                        isLike: false,
+                        gender: data.userInfo.gender
+                    }
+                }
+            }
+            return d.data
 
             const userInfo = yield call(sendUserLogon, data)
             yield put({ type:'setData', payload: { userInfo } })
@@ -67,13 +62,16 @@ export default {
         // 获取用户详情
         * getUserInfo(_, { call, put}){
 
-            let isAuth = false
-
-            Taro.getSetting({
-                success: (res) => {
-                    const { authSetting } = res
-                    if(authSetting['scope.userInfo']) isAuth = true
-                }
+            const isAuth = yield new Promise((resolve, reject) => {
+                Taro.getSetting({
+                    success: (res) => {
+                        const { authSetting } = res
+                        resolve(authSetting['scope.userInfo'])
+                    },
+                    fail: () => {
+                        reject(false)
+                    }
+                })
             })
 
             if(!isAuth) {
@@ -85,26 +83,28 @@ export default {
                         if(confirm) router.push('/mine', { login: false })
                     }
                 })
+            }else {
+
+                let data = {
+                    success: true,
+                    data: {
+                        info: {
+                            id: 0,
+                            username: '用户名',
+                            hot: 10000,
+                            attention: 10000,
+                            fans: 10000,
+                            image: 'http://img4.imgtn.bdimg.com/it/u=2359617007,2446763239&fm=26&gp=0.jpg',
+                            isLike: false
+                        }
+                    }
+                }
+                return data.data
+
+                const userInfo = yield call(getUserInfo)
+                return yield put({put: 'setData', payload: { userInfo }})
+
             }
-
-            return
-
-            // const tokens = getCookie('token')
-            // let data = {
-            //     success: true,
-            //     data: {
-            //         info: {
-            //             id: 0,
-            //             username: '用户名',
-            //             hot: 10000,
-            //             attention: 10000,
-            //             fans: 10000,
-            //             image: 'http://img4.imgtn.bdimg.com/it/u=2359617007,2446763239&fm=26&gp=0.jpg',
-            //             isLike: false
-            //         }
-            //     }
-            // }
-            // return data.data
 
 
             // const token = getCookie('token')
@@ -113,7 +113,6 @@ export default {
             // // }
             // const userInfo = yield call(getUserInfo)
             // yield put({ type:'setData', payload: { userInfo } })
-            return userInfo
         },
 
         //注册

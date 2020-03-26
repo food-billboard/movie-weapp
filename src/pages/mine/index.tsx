@@ -10,7 +10,7 @@ import style from '~theme/style'
 import { IList } from '~components/linearlist/index.d'
 import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToProps } from './connect'
-import { router, routeAlias } from '~utils'
+import { router, routeAlias, size } from '~utils'
 import { getCookie, setCookie } from '~config'
 
 import './index.scss'
@@ -64,20 +64,22 @@ export default class extends Component<any>{
     //是否登录
     private login: boolean = Boolean(this.$router.params.login).valueOf()
 
+    private code: string
+
     public state: any = {
         detail: {},
         typeColor: TypeColor
     }
 
     public componentDidMount = async () => {
-        if(this.login) await this.fetchData()
+        if(this.login == true) await this.fetchData()
     }
 
     //获取数据
     public fetchData = async () => {
         Taro.showLoading({ mask: true, title: '加载中' })
-        const detail = await this.props.getUserInfo()
-        const { info } = detail
+        const detail = await this.props.getUserInfo() || {}
+        const { info={} } = detail
         Taro.hideLoading()
         await this.setState({
             detail: info
@@ -88,39 +90,51 @@ export default class extends Component<any>{
 
         //缓存信息查看
         const userInfo = getCookie('user') || {}
-        if(!userInfo.id) {
+        if(!size(userInfo)) {
             this.login = false
         }else {
             const { id } = userInfo
             this.id = id
+            this.login = true
         }
 
         ////色调修改时重绘
         colorStyleChange(true)
-        const { typeColor } = this.state
-        if(typeColor == TypeColor) return
+        // const { typeColor } = this.state
+        // if(typeColor == TypeColor) return
         this.setState({typeColor: TypeColor})
     }
 
     //监听获取用户信息
     public handleGetUserInfo = async (res) => {
-        const { userInfo, rawData, signature, encryptedData, iv, cloudID } = res
-        console.log(res)
+        const { detail: { cloudID, encryptedData, signature, rawData, iv, userInfo } } = res
 
-        //在这里向后端请求开发者服务器上的用户数据
-        //然后等到后端返回数据后设置数据并且放到storage中(cookie的相关配置到时候再弄)，然后改变登录状态
-        // const data = await this.props.sendLogin()
-        //setCookit()
+        //登录
+        Taro.showLoading({mask:true, title: '稍等一下'})
+        const data = await this.props.sendUserLogon({
+            userInfo,
+            code : this.code
+        })
+        const { info } = data
+        Taro.hideLoading()
+
+        //改变登录状态
+        this.login = true
+
         this.setState({
-            detail: {}
+            detail: info
         }, () => {
-            this.login = true
+            //将个人信息放入缓存
+            setCookie('user', {
+                value: JSON.stringify(info),
+                expires: Date.now() + (24 * 7 * 60 * 60 * 60 * 1000)
+            })
         })
     }
 
     //登录获取session
     public handleLogin = async () => {
-        const data = await new Promise((resovle, reject) => {
+        const data: string = await new Promise((resovle, reject) => {
             Taro.login({
                 success: (res) => {
                     const { code } = res
@@ -131,12 +145,14 @@ export default class extends Component<any>{
                 }
             })
         })
-        // this.code = data
+        if(data) this.code = data
     }
 
     public render() {
+
         const { id, hasNews=false } = this.props
         const { detail } = this.state
+
         return (
             <View className='mine'>
                 <View className='head'>

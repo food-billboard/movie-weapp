@@ -9,7 +9,7 @@ import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
 import { throttle } from 'lodash'
 import { getCookie } from '~config'
-
+import { size } from '~utils'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 
@@ -122,7 +122,7 @@ export default class extends Component<any> {
 
         //获取个人信息缓存
         const userInfo = getCookie('user') || {}
-        if(!userInfo.id) {
+        if(!size(userInfo)) {
             this.props.getUserInfo()
             return 
         }
