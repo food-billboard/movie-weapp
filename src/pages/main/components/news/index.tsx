@@ -4,6 +4,7 @@ import { TypeColor, colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { IProps } from './index.d'
 import { router, routeAlias} from '~utils'
+import ImageLoading from '~components/imageLoading'
 
 import './index.scss'
 
@@ -46,9 +47,8 @@ class News extends Component<IProps>{
                                     className='news-title'
                                     style={{...style.color('primary'), textShadow: `0 0 2px ${TypeColor['disabled']}`}}
                                 >{title}</Text>
-                                <Image 
+                                <ImageLoading
                                     src={image}
-                                    className='news-img-main'
                                 />
                             </View>
                         )

@@ -1,3 +1,4 @@
+@import "~taro-ui/dist/style/components/flex.scss";
 .index {
   flex-direction: column;
   width: 100%;
@@ -18,6 +19,12 @@
     .news-title{
       margin-left:10px;
       font-weight:bold;
+    }
+    .news-title:nth-last-of-type(1) {
+      margin-left:0;
+      margin-right:10px;
+      text-align:right;
+      font-size:28px;
     }
   }
   .rank{

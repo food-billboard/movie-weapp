@@ -1,5 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text, Image } from '@tarojs/components'
+import { View, Text } from '@tarojs/components'
+import ImageLoading from '../imageLoading'
 import { IProps } from './index.d'
 import style from '~theme/style'
 import './index.scss'
@@ -43,7 +44,7 @@ export default class IconList extends Component<IProps>{
                                     className='img'
                                     onClick={(event) => {this.goTo.call(this, name, id, event)}}
                                 >             
-                                    <Image src={image} className='img-main' />
+                                    <ImageLoading src={image} />
                                 </View>
                                 <View>
                                     <View 

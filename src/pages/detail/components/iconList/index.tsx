@@ -1,5 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
-import { ScrollView, View, Image } from '@tarojs/components'
+import { ScrollView, View } from '@tarojs/components'
+import Imageloading from '~components/imageLoading'
 import './index.scss'
 import { router, routeAlias } from '~utils'
 import style from '~theme/style'
@@ -62,7 +63,7 @@ export default class extends Component<IProps, IState> {
                 <View className='icon'
                   onClick={this.handleClick.bind(this, content)}
                 >
-                  <Image src={image} style={{width:'100%', height:'100%'}}></Image>
+                  <Imageloading src={image} loadingProps={{content: ''}} />
                 </View>
               )
             })

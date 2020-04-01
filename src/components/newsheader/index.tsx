@@ -1,7 +1,8 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Image } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import { IProps, IState } from './index.d'
 import Ellipsis from '../ellipsis'
+import ImageLoading from '../imageLoading'
 import style from '~theme/style'
 import { router, routeAlias } from '~utils'
 
@@ -30,7 +31,7 @@ export default class NewsHead extends Component<IProps, IState>{
                 style={propsStyle}
                 onClick={this.handleClick.bind(this, id)}>
                 <View className='img'>
-                    <Image src={image} className='content'></Image>            
+                    <ImageLoading src={image} loadingProps={{content: ''}} />
                 </View>
                 <View className='detail'>
                     <View className='at-article'>

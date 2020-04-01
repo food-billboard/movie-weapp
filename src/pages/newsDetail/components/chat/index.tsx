@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Image, ScrollView } from '@tarojs/components'
+import { View, ScrollView, Image } from '@tarojs/components'
 import { AtAvatar, AtActivityIndicator } from 'taro-ui'
 import GVideo from '~components/video'
 import Curtain from '~components/curtain'

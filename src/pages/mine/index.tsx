@@ -200,7 +200,7 @@ export default class extends Component<any>{
                             >你还没有登录，可以点下面登录</AtTag>
                             <View style={{fontWeight: 'bolder', ...style.color('thirdly')}}>
                                 {
-                                    [ '|', '|', '|', '|', '|', '|', '|', '↓' ].map((val: string) => (<View>{val}</View>))
+                                    [ ...new Array(7).fill('|'), '↓' ].map((val: string) => (<View>{val}</View>))
                                 }
                             </View>
                             <Button 

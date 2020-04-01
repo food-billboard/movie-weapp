@@ -14,8 +14,8 @@ export const mediaType = {
 export const routeAlias = {
   main: '/main',
   mine: '/mine',
-  login: '/login',
-  register: '/register',
+  // login: '/login',
+  // register: '/register',
   comment: '/comment',
   news: '/news' ,
   attention: '/attention',
@@ -40,8 +40,8 @@ export const routeAlias = {
 export const routeConfig = [
   { path: 'pages/main/index', alias: routeAlias.main },
   { path: 'pages/mine/index', alias: routeAlias.mine },
-  { path: 'pages/login/index', alias: routeAlias.login},
-  { path: 'pages/register/index', alias: routeAlias.register},
+  // { path: 'pages/login/index', alias: routeAlias.login},
+  // { path: 'pages/register/index', alias: routeAlias.register},
   { path: 'pages/comment/index', alias: routeAlias.comment },
   { path: 'pages/news/index', alias: routeAlias.news },
   { path: 'pages/attention/index', alias: routeAlias.attention },

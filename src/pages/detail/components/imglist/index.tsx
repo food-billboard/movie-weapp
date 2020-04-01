@@ -1,5 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Image } from '@tarojs/components'
+import { View } from '@tarojs/components'
+import ImageLoading from '~components/imageLoading'
 import { IProps, IState, IList } from './index.d'
 import './index.scss'
 
@@ -36,10 +37,9 @@ export default class List extends Component<IProps, IState> {
                     key={id}
                     onClick={() => {this.handlePreviewImage.call(this, image)}}
                 >
-                    <Image 
-                        src={image} 
-                        className='main'
-                     />
+                    <ImageLoading  
+                        src={image}
+                    />
                 </View>
             )
         })

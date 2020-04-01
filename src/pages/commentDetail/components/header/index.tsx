@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Image, Text } from '@tarojs/components'
+import { View, Text } from '@tarojs/components'
 import { AtIcon, AtAvatar } from 'taro-ui'
 import Ellipsis from '~components/ellipsis'
 import { router, formatTime, formatNumber, routeAlias, size } from '~utils'

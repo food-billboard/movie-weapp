@@ -5,6 +5,7 @@ import RankIcon from './icon'
 import { IProps, IState } from './index.d'
 import { router, routeAlias } from '~utils'
 import style from '~theme/style'
+import ImageLoading from '~components/imageLoading'
 
 export default class Rank extends Component<IProps, IState>{
     public static defaultProps = {
@@ -31,8 +32,7 @@ export default class Rank extends Component<IProps, IState>{
                     key={id}
                     onClick={this.getDetail.bind(this, id)}
                 >
-                    <Image 
-                        className='rank-img'
+                    <ImageLoading
                         src={image}
                     />
                     <RankIcon rank={rank} />

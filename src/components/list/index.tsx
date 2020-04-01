@@ -1,5 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Image } from '@tarojs/components'
+import { View } from '@tarojs/components'
+import ImageLoading from '../imageLoading'
 import Item from './item'
 import style from '~theme/style'
 import { router, formatTime, isObject, routeAlias } from '~utils'
@@ -30,8 +31,7 @@ export default class List extends Component<IProps>{
                                 onClick={this.goTo.bind(this, id)}
                             >
                                 <View className='img'>  
-                                    <Image
-                                        className='img-content'
+                                    <ImageLoading
                                         src={image}
                                     />
                                 </View>

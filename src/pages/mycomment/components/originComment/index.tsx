@@ -1,5 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Image } from '@tarojs/components'
+import { View } from '@tarojs/components'
+import ImageLoading from '~components/imageLoading'
 import { IProps } from './index.d'
 import style from '~theme/style'
 import Ellipsis from '~components/ellipsis'
@@ -54,7 +55,7 @@ export default class extends Component<IProps> {
         {
           (image && image.length) ?
           <View className='at-col at-col-2'>
-            <Image src={image} className='image'></Image>
+            <ImageLoading src={image} loadingProps={{content: ''}} />
           </View>
           : null
         }
@@ -62,7 +63,6 @@ export default class extends Component<IProps> {
           <Ellipsis
             text={text}
             needPoint={false}
-            // style={{...style.color('thirdly')}}
             style={{color: 'gray'}}
           ></Ellipsis>
         </View>

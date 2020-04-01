@@ -1,5 +1,5 @@
 import Taro, {Component, Config} from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import GVideo from '~components/video'
 import List from './components/imglist'
 import Content from './components/content'

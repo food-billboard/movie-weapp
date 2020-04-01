@@ -1,6 +1,8 @@
 import Taro, { Component } from '@tarojs/taro'
-import { ScrollView, View, Image, Text } from '@tarojs/components'
+import { ScrollView, View, Text } from '@tarojs/components'
+import ImageLoading from '~components/imageLoading'
 import { IProps, IState, IList } from './index.d'
+import { SYSTEM_PAGE_SIZE } from '~config'
 
 import './index.scss'
 
@@ -36,7 +38,13 @@ export default class extends Component<IProps> {
                 onClick={() => {this.handlePreviewImage.call(this, image)}}
               >
                 <View className='image'>
-                  <Image className='image-item' src={image}/>
+                  <ImageLoading 
+                    src={image} 
+                    customStyle={{
+                      height: `${SYSTEM_PAGE_SIZE(85)}px`
+                    }} 
+                    loadingProps={{content: ''}}
+                  />
                 </View>
                 <View className='text'>
                   <Text>{value}</Text>

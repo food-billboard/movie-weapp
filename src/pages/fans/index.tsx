@@ -1,5 +1,6 @@
 import Taro, {Component, Config } from '@tarojs/taro'
-import { View, Image, Text } from '@tarojs/components'
+import { View, Text } from '@tarojs/components'
+import ImageLoading from '~components/imageLoading'
 import GScrollView from '~components/scrollList'
 import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
@@ -7,6 +8,7 @@ import { throttle } from 'lodash'
 import { router, routeAlias } from '~utils'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
+import { SYSTEM_PAGE_SIZE } from '~config'
 
 import './index.scss'
 
@@ -93,7 +95,21 @@ export default class extends Component<any>{
                                     key={id}
                                     onClick={this.getUser.bind(this, id)}    
                                 >
-                                    <Image src={image} className='img'></Image>
+                                    <ImageLoading 
+                                        src={image} 
+                                        customStyle={{
+                                            width:`${SYSTEM_PAGE_SIZE(45)}px`,
+                                            height:`${SYSTEM_PAGE_SIZE(45)}px`,
+                                            borderRadius: '50%',
+                                            overflow:'hidden',
+                                            marginTop:`${SYSTEM_PAGE_SIZE(2.5)}px`,
+                                            marginRight:`${SYSTEM_PAGE_SIZE(10)}px`,
+                                            float: 'left'
+                                        }}
+                                        loadingProps={{
+                                            content: ''
+                                        }}
+                                    />
                                     <View className={'username'} 
                                         style={{...style.color('primary')}}
                                     >

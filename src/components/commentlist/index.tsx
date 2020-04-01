@@ -1,8 +1,9 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Image, Text, ScrollView } from '@tarojs/components'
+import { View, Text, ScrollView } from '@tarojs/components'
 import { AtIcon } from 'taro-ui'
 import GVideo from '../video'
 import Curtain from '../curtain'
+import ImageLoading from '../imageLoading'
 import { Info } from '../model/index.d'
 import { router, formatTime, formatNumber, mediaType, routeAlias, size } from '~utils'
 import style from '~theme/style'
@@ -222,7 +223,7 @@ class List extends Component<IProps, IState>{
                     <View className='head-img'
                         onClick={this.getUser.bind(this, id)}
                     >
-                        <Image src={image} className='head-img-content'></Image>
+                        <ImageLoading src={image} loadingProps={{content: ''}} />
                     </View>
                     <View 
                         className={'name'}
@@ -292,12 +293,14 @@ class List extends Component<IProps, IState>{
                                             fontSize: SYSTEM_PAGE_SIZE(16) + 'px'
                                         }}
                                     ></View>
-                                    <Image
+                                    <ImageLoading
                                         src={imageSrc}
-                                        style={{...style.border(1, 'thirdly', 'dashed', 'all')}}
-                                        className={'image-content'}
-                                    >
-                                    </Image>
+                                        customStyle={{
+                                            ...style.border(1, 'thirdly', 'dashed', 'all'),
+                                            boxSizing: 'border-box',
+                                            padding: `${SYSTEM_PAGE_SIZE(1)}px`
+                                        }}
+                                    />
                                 </View>
                             )
                         })
@@ -318,7 +321,15 @@ class List extends Component<IProps, IState>{
                                     key={id}
                                     onClick={this.getUser.bind(this, id)}    
                                 >
-                                    <Image src={userIcon} className='footer-img-content'></Image>
+                                    <ImageLoading 
+                                        src={userIcon}  
+                                        loadingProps={{content: ''}}
+                                        customStyle={{
+                                            display: 'inline-block',
+                                            width: `${SYSTEM_PAGE_SIZE(25)}px`,
+                                            height: `${SYSTEM_PAGE_SIZE(25)}px`,
+                                        }}
+                                    />
                                 </View>
                             )
                         })

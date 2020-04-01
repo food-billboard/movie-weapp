@@ -11,6 +11,7 @@ import style from '~theme/style'
 import { createSocket } from '~utils'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
+import { throttle } from 'lodash'
 
 import './index.scss'
 
@@ -64,6 +65,20 @@ export default class extends Component<any> {
     })
   }
 
+  private getDaily = async () => {
+    const daily = await this.props.getDailyNew()
+    return daily
+  }
+
+  public hanleExchangeDaily = async () => {
+    Taro.showLoading({mask: true, title: '查找中'})
+    const daily = await this.throttleGetDaily()
+    Taro.hideLoading()
+    this.setState({daily: daily.daily})
+  }
+
+  public throttleGetDaily = throttle(this.getDaily, 2000)
+
   public fetchData = async () => {
     Taro.showLoading({ title: '加载中' })
     //获取轮播图
@@ -71,7 +86,7 @@ export default class extends Component<any> {
     //获取分类
     const type = await this.props.getSwitch()
     //获取每日上新
-    const daily = await this.props.getDailyNew()
+    const daily = await this.getDaily()
     //获取排行榜
     const rank = await this.props.getRank({ ...INIT_RANK_QUERY, id: 0 })
     //获取跑马灯内容
@@ -128,9 +143,15 @@ export default class extends Component<any> {
           />
         </View>
         <View className='news'>
-          <Text className='news-title'
-            style={{...secondaryColor}}
-          >每日上新</Text>
+          <View className='at-row at-row__justify--between at-row__align--center'>
+            <Text className='news-title at-col'
+              style={{...secondaryColor}}
+            >每日上新</Text>
+            <Text className='news-title at-col'
+              style={{...secondaryColor}}
+              onClick={this.hanleExchangeDaily}
+            >换一批</Text>
+          </View>
           <News 
             list={daily}
           />
