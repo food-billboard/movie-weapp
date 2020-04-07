@@ -9,6 +9,7 @@ import Comment from '~components/comment'
 import GTag from './components/tag'
 import Actor from './components/actor'
 import Title from './components/title'
+import Tab from './components/tab'
 import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
 import { getCookie } from '~config'
@@ -22,24 +23,27 @@ let FIRST = true
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any> {
-   
+
     public config: Config = {
         navigationBarTitleText: ""
     }
+
+      //电影id
+    private id = this.$router.params.id
 
     public componentDidShow = () => {
         colorStyleChange()
     }
 
-    public commentRef = Taro.createRef<Comment>()
+    private commentRef = Taro.createRef<Comment>()
+
+    private tabRef = Taro.createRef<Tab>()
 
     public state: any = {
-        detail: {},
+        detail: [],
+        tab: false,
         commentList: []
     }
-
-    //电影id
-    readonly id = this.$router.params.id
 
     //我的id
     private mineId
@@ -51,25 +55,37 @@ export default class extends Component<any> {
     //设置标题
     public setTitle = async () => {
         const { detail } = this.state
-        const { info } = detail
+        const current = this.tabRef.current ? this.tabRef.current.getCurrent() : 0
+        const { info={} } = detail[current] ? detail[current] : {}
+        const { name='' } = info
         if(info && FIRST) {
             FIRST = false
-            Taro.setNavigationBarTitle({title: info.name})
+            Taro.setNavigationBarTitle({title: name})
         }
     }
 
     //获取数据
     public fetchData = async () => {
+        const { tab } = this.state
+        let _tab = tab
         Taro.showLoading({ mask: true, title: '凶猛加载中' })
         const detail = await this.props.getDetail(this.id)
         const commentList = await this.props.getCommentSimple(this.id)
         const comment = commentList.comment
+        const {data, values} = detail
+        if(!_tab && values) {
+            _tab = data.map(val => {
+                const { info: {name} } = val
+                return name
+            })
+        }
         this.setState({
-            detail,
-            commentList: comment
+            detail: data,
+            commentList: comment,
+            tab: _tab
         })
         Taro.hideLoading()
-    }
+    } 
 
     //打开评论界面
     public handleComment = () => {
@@ -93,17 +109,36 @@ export default class extends Component<any> {
         Taro.hideLoading()
     }
 
+    //tab切换
+    public handleTabChange = (value) => {
+        const { detail } = this.state
+        const { id, info: {name} } = detail[value]
+        this.id = id
+        this.setState({})
+    }
+
     public render() {
-        const { detail, commentList=[] } = this.state
+        const { detail, commentList=[], tab } = this.state
+        let current = this.tabRef.current ? this.tabRef.current!.getCurrent() : 0
         const {
-            video,
-            info,
-            image,
-            tag
-        } = detail
+            video={},
+            info={},
+            image=[],
+            tag=[]
+        } = detail[current] ? detail[current] : {}
         this.setTitle()
         return (
             <View className='detail' style={{...style.backgroundColor('bgColor')}}>
+                {
+                    tab ?
+                    <Tab
+                        values={tab}
+                        handleClick={this.handleTabChange}
+                        ref={this.tabRef}
+                        tabToggle={1000}
+                    />
+                    : null
+                }
                 <View className='video'>
                     {
                         video ? <GVideo

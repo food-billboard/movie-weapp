@@ -2417,6 +2417,9 @@ export default {
             let data = {
                 success: true,
                 data: {
+                    values: true,
+                    data: [
+                        {
                 id: 0,
                 video: {
                     src: src,
@@ -2598,6 +2601,191 @@ export default {
                         value: '内容2222'
                     }
                 ]
+            },
+            {
+                id: 0,
+                video: {
+                    src: src,
+                    poster: 'http://images.china.cn/attachement/jpg/site1000/20140709/00e04c3600081526f96d2a.jpg',
+                    id: 0
+                },
+                info: {
+                    name: '这是另外一部电影搞清楚', 
+                    area: [
+                        {
+                            id: '0',
+                            value: '美国'
+                        }
+                    ], 
+                    people: 100, 
+                    director: [
+                        {
+                            id: '0', 
+                            value: '导演1号',
+                        },
+                        {
+                            id: '1',
+                            value: '导演2号'
+                        }, 
+                        {
+                            id: '2',
+                            value: '导演3号'
+                        }
+                    ], 
+                    actor: [
+                        {
+                            id: '0',
+                            value: '龙套1号',
+                            image: 'http://images.china.cn/attachement/jpg/site1000/20140709/00e04c3600081526f96d2a.jpg'
+                        },
+                        {
+                            id: '1',
+                            value: '龙套2号',
+                            image: 'http://images.china.cn/attachement/jpg/site1000/20140709/00e04c3600081526f96d2a.jpg'
+                        },
+                        {
+                            id: '2',
+                            value: '龙套3号',
+                            image: 'http://images.china.cn/attachement/jpg/site1000/20140709/00e04c3600081526f96d2a.jpg'
+                        },
+                        {
+                            id: '0',
+                            value: '龙套1号',
+                            image: 'http://images.china.cn/attachement/jpg/site1000/20140709/00e04c3600081526f96d2a.jpg'
+                        },
+                        {
+                            id: '1',
+                            value: '龙套2号',
+                            image: 'http://images.china.cn/attachement/jpg/site1000/20140709/00e04c3600081526f96d2a.jpg'
+                        },
+                        {
+                            id: '2',
+                            value: '龙套3号',
+                            image: 'http://images.china.cn/attachement/jpg/site1000/20140709/00e04c3600081526f96d2a.jpg'
+                        },
+                        {
+                            id: '0',
+                            value: '龙套1号',
+                            image: 'http://images.china.cn/attachement/jpg/site1000/20140709/00e04c3600081526f96d2a.jpg'
+                        },
+                        {
+                            id: '1',
+                            value: '龙套2号',
+                            image: 'http://images.china.cn/attachement/jpg/site1000/20140709/00e04c3600081526f96d2a.jpg'
+                        },
+                        {
+                            id: '2',
+                            value: '龙套3号',
+                            image: 'http://images.china.cn/attachement/jpg/site1000/20140709/00e04c3600081526f96d2a.jpg'
+                        }
+                    ], 
+                    type: [
+                        {
+                            id: '0',
+                            value: '惊悚'
+                        },
+                        {
+                            id: '1',
+                            value: '爱情'
+                        }
+                    ], 
+                    time: 10000000, 
+                    author: '我tm才是作者',
+                    publishTime: 1997, 
+                    description: '电影的详细描述，虽然你不想看，但是我还是会写在这里', 
+                    mine: '电影的详细描述，虽然你不想看，但是我还是会写在这里电影的详细描述，虽然你不想看，但是我还是会写在这里电影的详细描述，虽然你不想看，但是我还是会写在这里',
+                    language: '语言',
+                    hot: 100000, 
+                    rate: 8,
+                    rateMine: 8,
+                    store: true
+                },
+                image: [
+                    {
+                        id: 0,
+                        image: 'http://p3.pstatp.com/large/31ed00004f59a4e6f2ac'
+                    },
+                    {
+                        id: 1,
+                        image: 'http://img3.imgtn.bdimg.com/it/u=2155983538,3860699715&fm=26&gp=0.jpg'
+                    },
+                    {
+                        id: 2,
+                        image: 'http://big5.wallcoo.com/nature/Arctic_Nature/wallpapers/1680x1050/arctic3.jpg'
+                    },
+                    {
+                        id: 3,
+                        image: 'http://img3.imgtn.bdimg.com/it/u=2155983538,3860699715&fm=26&gp=0.jpg'
+                    },
+                    {
+                        id: 4,
+                        image: 'http://big5.wallcoo.com/nature/Arctic_Nature/wallpapers/1680x1050/arctic3.jpg'
+                    }
+                ],
+                tag: [
+                    {
+                        id: 0,
+                        value: '内容已'
+                    },
+                    {
+                        id: 1,
+                        value: '内容22222'
+                    },
+                    {
+                        id: 2,
+                        value: '内容22222'
+                    },
+                    {
+                        id: 3,
+                        value: '内容222222222222222222222'
+                    },
+                    {
+                        id: 4,
+                        value: '内容2222'
+                    },
+                    {
+                        id: 5,
+                        value: '内容已'
+                    },
+                    {
+                        id: 6,
+                        value: '内容22222'
+                    },
+                    {
+                        id: 7,
+                        value: '内容22222'
+                    },
+                    {
+                        id: 8,
+                        value: '内容222222222222222222222'
+                    },
+                    {
+                        id: 9,
+                        value: '内容2222'
+                    },
+                    {
+                        id: 10,
+                        value: '内容已'
+                    },
+                    {
+                        id: 11,
+                        value: '内容22222'
+                    },
+                    {
+                        id: 12,
+                        value: '内容22222'
+                    },
+                    {
+                        id: 13,
+                        value: '内容222222222222222222222'
+                    },
+                    {
+                        id: 14,
+                        value: '内容2222'
+                    }
+                ]
+            }
+        ]
             }
             }
             return data.data
