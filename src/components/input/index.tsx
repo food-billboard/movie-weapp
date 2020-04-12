@@ -1,21 +1,20 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Input, Textarea } from '@tarojs/components'
-import { AtTextarea, AtInput } from 'taro-ui'
+import { View, Input } from '@tarojs/components'
+import { AtTextarea } from 'taro-ui'
 import { isObject } from '~utils'
 import { FORM_ERROR } from '~config'
 import { IProps, IState } from './index.d'
+import { noop } from 'lodash'
 
 import './index.scss'
 
 export default class extends Component<IProps, IState> {
 
   public static defaultProps: IProps = {
-    value: false,
     style: false,
     type: 'input',
     inputType: 'text',
     placeholder: false,
-    handleChange: false,
     disabled: false
   }
 
@@ -25,9 +24,23 @@ export default class extends Component<IProps, IState> {
     disabled: false
   }
 
-  private FIRST = true
+  private initialValue:any = undefined
 
-  private initValue:any = false
+  //表单value
+  private _value
+
+  private get value() {
+    const { value:propsValue, initialValue } = this.props
+    const { value: stateValue } = this.state
+    if(typeof propsValue !== 'undefined') {
+      return propsValue
+    }else {
+      if(this.initialValue === undefined && typeof initialValue !== 'undefined') {
+        return initialValue
+      }
+      return stateValue
+    }
+  }
 
   //设置禁止状态
   public setDisabled = (state: boolean) => {
@@ -39,7 +52,7 @@ export default class extends Component<IProps, IState> {
   //重置
   public reset = () => {
     this.setState({
-      value: this.initValue ? this.initValue : '',
+      value: this.initialValue ? this.initialValue : '',
       error: false
     })
   }
@@ -61,37 +74,51 @@ export default class extends Component<IProps, IState> {
 
   public handleChange = (e) => {
     const { error } = this.state
+    const { handleChange=noop, initialValue, value:propsValue } = this.props
     let data
     if(e.target) {  //textarea
       data = e.target.value
     }else { //input
       data = e
     }
+    if(typeof propsValue !== 'undefined') {
+      handleChange(data)
+    }else {
+      if(this.initialValue === undefined && typeof initialValue !== 'undefined') this.initialValue = initialValue
+      this.setState({
+        value: data,
+        error: data.length ? false : error
+      })
+    }
+  }
+
+  //设置error
+  public setError = (state: boolean) => {
     this.setState({
-      value: data,
-      error: data.length ? false : error
+      error: state
     })
   }
 
   public render() {
 
-    const { value, style, type, placeholder, inputType='text', disabled, height=100, count=true, textareaFixed=false } = this.props
+    const { 
+      style, 
+      type, 
+      placeholder, 
+      inputType='text', 
+      disabled, 
+      height=100, 
+      count=true, 
+      textareaFixed=false, 
+      error:propsError=false 
+    } = this.props
 
-    //处理props第一次传值的问题
-    if(this.FIRST) {
-      if(value !== false && value !== undefined) {
-        this.FIRST = false
-        this.initValue = value
-        this.setState({
-          value
-        })
-      }
-    }
+    const { 
+      error, 
+      disabled: stateDisabled 
+    } = this.state
 
-    const { value: textValue, error, disabled: stateDisabled } = this.state
-
-    const errorStyle = error ? FORM_ERROR : {}
-
+    const errorStyle = (error || propsError) ? FORM_ERROR : {}
 
     return (
       <View>
@@ -102,40 +129,18 @@ export default class extends Component<IProps, IState> {
             style={isObject(style) ? { ...style, ...errorStyle } : { ...errorStyle } }
             name='name'
             className='input'
-            value={textValue}
-            onInput={(e) => {this.props.handleChange ? this.props.handleChange.call(this, e.detail.value) : this.handleChange.call(this, e.detail.value)}}
+            value={this.value}
+            onInput={(e) => {this.handleChange.call(this, e.detail.value)}}
             type={'text'}
             placeholder={placeholder ? placeholder : ''}
             onTouchMove={(e) => {e.stopPropagation()}}
           />
-          // <AtInput
-          //   disabled={stateDisabled ? stateDisabled : disabled}
-          //   customStyle={isObject(style) ? { ...style, ...errorStyle } : { ...errorStyle } }
-          //   border={false}
-          //   name='name'
-          //   value={textValue}
-          //   onChange={(e) => {this.props.handleChange ? this.props.handleChange.call(this, e) : this.handleChange.call(this, e)}}
-          //   type={inputType}
-          //   placeholder={placeholder ? placeholder : ''}
-          // ></AtInput> 
           :
-          // <Textarea
-          //   onLinechange={(e) => { this.props.handleLineChange ? this.props.handleLineChange.call(this, e) : null }}
-          //   fixed={textareaFixed}
-          //   autoHeight
-          //   disabled={stateDisabled ? stateDisabled : disabled}
-          //   style={isObject(style) ? { ...style, ...errorStyle } : { ...errorStyle } }
-          //   className='textarea'
-          //   value={textValue}
-          //   onInput={(e) => { this.props.handleChange ? this.props.handleChange.call(this, e.detail.value) : this.handleChange.call(this, e.detail.value)  }}
-          //   placeholder={placeholder ? placeholder : ''}
-          //   maxlength={300}
-          // />
           <AtTextarea
             disabled={stateDisabled ? stateDisabled : disabled}
             customStyle={isObject(style) ? { ...style, ...errorStyle } : { ...errorStyle } }
-            value={textValue}
-            onChange={(e) => {this.props.handleChange ? this.props.handleChange.call(this, e) : this.handleChange.call(this, e)}}
+            value={this.value}
+            onChange={(e) => {this.handleChange.call(this, e)}}
             maxLength={300}
             placeholder={placeholder ? placeholder : ''}
             height={height}

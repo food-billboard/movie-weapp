@@ -1,4 +1,5 @@
 import { Item } from 'taro-ui/@types/timeline'
+import { ICommonFormProps, ICommonFormState } from '~utils'
 /*
  * 额外内容的显示组件
  * props: {
@@ -51,17 +52,16 @@ export interface IStatusData {
   index: number
 }
 
-export interface IProps {
+export interface IProps extends ICommonFormProps {
   title: string | false
-  style?: any
-  item?: Array<Item> | false
+  value?: Array<Item>
+  initialValue?:  Array<Item>
   defaultItemStyle?: IDefaultItemStyle | false
   handleError: (status) => any
 }
 
-export interface IState {
-  item: Array<Item>
-  error: boolean
+export interface IState extends ICommonFormState {
+  value: Array<Item>
   disabled: boolean
   status: Array<TStatus>
   statusData: Array<IStatusData>

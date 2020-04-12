@@ -31,6 +31,8 @@
  * }
  */
 
+ import { ICommonFormProps, ICommonFormState } from '~utils'
+
 export interface IOption {
   value: string
   label: string
@@ -38,10 +40,10 @@ export interface IOption {
   disabled?: boolean
 }
 
-export interface IProps {
+export interface IProps extends ICommonFormProps {
+  value?: Array<string>
+  initialValue?: Array<string> 
   checkboxOption?: Array<IOption>
-  checkedList?: Array<string> | false
-  style?: any
   type: keyof typeof typeList
   needHiddenList?: boolean
   extraFactor?: boolean
@@ -51,20 +53,18 @@ export interface IProps {
   getActorList: (count?:number) => any
   getDirectorList: (count?:number) => any
   getCountryList: (count?:number) => any
-  handleChange?: (e: any) => any
 }
 
-export interface IState {
-  checkedList: Array<string>
+export interface IState extends ICommonFormState {
+  value: Array<string>
   show: boolean
   checkOption: Array<IOption>
-  error: boolean
 }
 
 export const typeList = {
-  type: Symbol('type'),
-  actor: Symbol('actor'),
-  area: Symbol('area'),
-  country: Symbol('country'),
-  director: Symbol('director')
+  type: 'type',
+  actor:'actor',
+  area: 'area',
+  country:'country',
+  director:'director'
 }

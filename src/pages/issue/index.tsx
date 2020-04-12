@@ -14,8 +14,16 @@ import style from '~theme/style'
 import { SYSTEM_PAGE_SIZE, getCookie } from '~config'
 import { Toast } from '~components/toast'
 import { size } from '~utils'
+import BaseForm from '~utils/wrapForm'
+import { createFieldsStore } from '~utils/wrapForm/createFieldsStore'
 
 import './index.scss'
+
+const fieldsStore = createFieldsStore('issue', {
+  getOnChangeValue(value) {
+    return value
+  }
+})
 
 const FORM_DATA: IFormData = {
   user: '',
@@ -69,40 +77,11 @@ export default class extends Component<any> {
     this.setState({typeColor: TypeColor})
   }
 
-  public componentDidMount = async () => {
+  readonly update = () => this.setState({})
 
+  public componentDidMount = async () => {
     this.fetchData()
   }
-
-  //视频及海报
-  public videoRef = Taro.createRef<GVideo>()
-
-  //电影名称
-  public nameRef = Taro.createRef<GDescription>()
-
-  //电影描述
-  public descriptionRef = Taro.createRef<GDescription>()
-
-  //图片选择
-  public imagePickerRef = Taro.createRef<GImagePicker>()
-
-  //地区选择
-  public areaRef = Taro.createRef<GCheckBox>()
-
-  //语言选择
-  public langRef = Taro.createRef<GPicker>()
-
-  //上映时间选择
-  public timeRef = Taro.createRef<GPicker>()
-
-  //演员选择
-  public actorRef = Taro.createRef<GCheckBox>()
-
-  //导演选择
-  public directorRef = Taro.createRef<GCheckBox>()
-
-  //类型选择
-  public typeRef = Taro.createRef<GCheckBox>()
 
   //获取数据
   public fetchData = async () => {
@@ -159,101 +138,87 @@ export default class extends Component<any> {
   }
 
   //修改数据
-  public editData = (form: IFormData) => {
-    this.props.editIssue(form)
+  public editData = async (form: IFormData) => {
+    await this.props.editIssue(form)
   }
 
   //提交
   public handleSubmit = async (e) => {
 
+    //登录状态验证
     const userInfo = getCookie('user') || {}
     if(!size(userInfo)) {
       this.props.getUserInfo()
       return
     }
-    const { id } = JSON.parse(userInfo)
+    const { id } = userInfo
 
-    const video = await this.videoRef.current!.getData()
-    const name = await this.nameRef.current!.getData()
-    const area = await this.areaRef.current!.getData()
-    const director = await this.directorRef.current!.getData()
-    const actor = await this.actorRef.current!.getData()
-    const type = await this.typeRef.current!.getData()
-    const time = await this.timeRef.current!.getData()
-    const lang = await this.langRef.current!.getData()
-    const description = await this.descriptionRef.current!.getData()
-    const images = await this.imagePickerRef.current!.getData()
-    if(!video || 
-      !name || 
-      !area ||
-      !director || 
-      !actor || 
-      !type ||
-      !time || 
-      !lang ||
-      !description) {
+    //验证
+    fieldsStore.validateFields(['name', 'description', 'area', 'director', 'actor', 'type', 'publishTime', 'language', 'image', 'video'], async (errors, values) => {
+      //处理所有有错的表单项
+      if(errors) {
         Toast({
           title: '信息好像没填对',
           icon: 'fail'
         })
+        // this.setState({})
         return
-    }
-    if(!images) {
-      Toast({
-        title: '截图数不对',
-        icon: 'fail'
-      })
-      return
-    }
-    const { issueSet } = this.props
-    const { isIssue, id: movieId } = issueSet
-    const { lang: language } = this.state
+      }
 
-    const _lang = language.filter((val: any) => {
-      const { id, vlaue } = val
-      return id === lang
+      const { 
+        image,
+        video,
+        time,
+        lang,
+        ...nextProps
+      } = values
+      const { issueSet } = this.props
+      const { isIssue, id: movieId } = issueSet
+      const { lang: language } = this.state
+      const _lang = language.filter((val: any) => {
+        const { id } = val
+        return id === lang
+      })
+
+      //生成模板数据
+      let data: IFormData = {  
+        user: id,
+        id: isIssue ? movieId : false,
+        video,
+        info: {
+          ...nextProps,
+          time: Array.isArray(time) ? time.join('') : time,
+          language: _lang.length ? _lang[0]['id'] : lang
+        },
+        image: image.map((val: any) => {
+          return {
+            image: val
+          }
+        })
+      }
+
+       //数据提交
+      if(isIssue) {
+        await this.props.setIssue({
+          isIssue: false,
+          movieId: ''
+        })
+        await this.editData(data)
+      }else {
+        await this.props.sendIssue(data)
+      }
+
+      Taro.showModal({
+        title: '提示',
+        content: '已经发送，不过需要审核'
+      }).then((res) => {
+        Taro.reLaunch({
+          url: '../main/index'
+        })
+      })
+
     })
 
-    let _time = Array.isArray(time) ? time.join('') : time
-
-    let data: IFormData = {  
-      user: id,
-      id: isIssue ? movieId : false,
-      video,
-      info: {
-        name,
-        area,
-        director,
-        actor,
-        type,
-        time: _time,
-        description,
-        language: _lang.length ? _lang[0]['id'] : lang
-      },
-      image: images.map((val: any) => {
-        return {
-          image: val
-        }
-      })
-    }
-    
-    if(isIssue) {
-      await this.props.setIssue({
-        isIssue: false,
-        movieId: ''
-      })
-      this.editData(data)
-    }else {
-      await this.props.sendIssue(data)
-    }
-    Taro.showModal({
-      title: '提示',
-      content: '已经发送，不过需要审核'
-    }).then((res) => {
-      Taro.reLaunch({
-        url: '../main/index'
-      })
-    })
   }
 
   //重置
@@ -264,16 +229,8 @@ export default class extends Component<any> {
     }).then((res) => {
       const { confirm } = res
       if(confirm) {
-        this.videoRef.current!.reset()
-        this.nameRef.current!.reset()
-        this.descriptionRef.current!.reset()
-        this.imagePickerRef.current!.reset()
-        this.areaRef.current!.reset()
-        this.langRef.current!.reset()
-        this.timeRef.current!.reset()
-        this.actorRef.current!.reset() 
-        this.directorRef.current!.reset()
-        this.typeRef.current!.reset()
+        fieldsStore.initializeFields()
+        this.setState({})
       }
     })
   }
@@ -297,6 +254,9 @@ export default class extends Component<any> {
     } = info
     return (
       <View className='issue' style={{...style.backgroundColor('bgColor')}}>
+        <BaseForm
+          name="issue"
+        >
         <View className='video'>
           <AtTag 
             customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
@@ -305,8 +265,16 @@ export default class extends Component<any> {
             介绍短片及海报
           </AtTag>
           <GVideo
-            ref={this.videoRef}
-            info={video}
+            handleOnChange={fieldsStore.getFieldProps('video', 'onChange', {
+              rules: [
+                {
+                  required: true
+                },
+              ],
+              initialValue: video
+            })}
+            info={fieldsStore.getFieldValue('video')}
+            error={!!size(fieldsStore.getFieldsError('video'))}
           ></GVideo>
         </View>
         <View className='name'>
@@ -317,9 +285,17 @@ export default class extends Component<any> {
             电影名
           </AtTag>
           <GDescription
-            ref={this.nameRef}
-            value={name}
             style={{marginBottom: '20px', marginLeft: 0, ...style.backgroundColor('disabled')}}
+            handleChange={fieldsStore.getFieldProps('name', 'onChange', {
+              rules: [
+                {
+                  required: true
+                }
+              ],
+              initialValue: name
+            })}
+            value={fieldsStore.getFieldValue('name')}
+            error={!!size(fieldsStore.getFieldsError('name'))}
           ></GDescription>
         </View>
         <View className='area'>
@@ -330,13 +306,28 @@ export default class extends Component<any> {
             地区
           </AtTag>
           <GCheckBox
-            ref={this.areaRef}
             style={{marginBottom: '20px'}}
-            checkedList={area.map((val: any) => {
-              const { id } = val
-              return id
-            })}
             type={'area'}
+            handleChange={
+              fieldsStore.getFieldProps('area', 'onChange', {
+                rules: [
+                  {
+                    required: true
+                  }
+                ],
+                initialValue:area.map((val: any) => {
+                  const { id } = val
+                  return id
+                }),
+                getOnChangeValue(value) {
+                  return value
+                }
+              })
+            }
+            checkedList={
+              fieldsStore.getFieldValue('area')
+            }
+            error={!!size(fieldsStore.getFieldsError('area'))}
           ></GCheckBox>
         </View>
         <View className='director'>
@@ -347,13 +338,28 @@ export default class extends Component<any> {
             导演
           </AtTag>
           <GCheckBox
-            ref={this.directorRef}
             style={{marginBottom: '20px'}}
-            checkedList={director.map((val: any) => {
-              const { id } = val
-              return id
-            })}
             type={'director'}
+            handleChange={
+              fieldsStore.getFieldProps('director', 'onChange', {
+                rules: [
+                  {
+                    required: true
+                  }
+                ],
+                initialValue:director.map((val: any) => {
+                  const { id } = val
+                  return id
+                }),
+                getOnChangeValue(value) {
+                  return value
+                }
+              })
+            }
+            checkedList={
+              fieldsStore.getFieldValue('director')
+            }
+            error={!!size(fieldsStore.getFieldsError('director'))}
           ></GCheckBox>
         </View>
         <View className='actor'>
@@ -364,13 +370,28 @@ export default class extends Component<any> {
             演员
           </AtTag>
           <GCheckBox
-            ref={this.actorRef}
             style={{marginBottom: '20px'}}
-            checkedList={actor.map((val: any) => {
-              const { id } = val
-              return id
-            })}
             type={'actor'}
+            handleChange={
+              fieldsStore.getFieldProps('actor', 'onChange', {
+                rules: [
+                  {
+                    required: true
+                  }
+                ],
+                initialValue:actor.map((val: any) => {
+                  const { id } = val
+                  return id
+                }),
+                getOnChangeValue(value) {
+                  return value
+                }
+              })
+            }
+            checkedList={
+              fieldsStore.getFieldValue('actor')
+            }
+            error={!!size(fieldsStore.getFieldsError('actor'))}
           ></GCheckBox>
         </View>
         <View className='type'>
@@ -381,13 +402,25 @@ export default class extends Component<any> {
             类型
           </AtTag>
           <GCheckBox
-            ref={this.typeRef}
             style={{marginBottom: '20px'}}
-            checkedList={type.map((val: any) => {
-              const { id } = val
-              return id
-            })}
             type={'type'}
+            handleChange={
+              fieldsStore.getFieldProps('type', 'onChange', {
+                rules: [
+                  {
+                    required: true
+                  }
+                ],
+                initialValue:type.map((val: any) => {
+                  const { id } = val
+                  return id
+                })
+              })
+            }
+            checkedList={
+              fieldsStore.getFieldValue('type')
+            }
+            error={!!size(fieldsStore.getFieldsError('type'))}
           ></GCheckBox>
         </View>
         <View className='publishTime'>
@@ -400,8 +433,18 @@ export default class extends Component<any> {
           <GPicker
             style={PICKER_STYLE}
             date={{}}
-            value={time}
-            ref={this.timeRef}
+            handleChange={
+              fieldsStore.getFieldProps('publishTime', 'onChange', {
+                rules: [
+                  {
+                    required: true
+                  }
+                ],
+                initialValue: time
+              })
+            }
+            value={fieldsStore.getFieldValue('publishTime')}
+            error={!!size(fieldsStore.getFieldsError('publishTime'))}
           ></GPicker>
         </View>
         <View className='language'>
@@ -412,14 +455,24 @@ export default class extends Component<any> {
             语言
           </AtTag>
           <GPicker
-            ref={this.langRef}
             style={PICKER_STYLE}
             extraFactor={true}
             selector={{range: lang.map((val: any) => {
               const { value } = val
               return value
             })}}
-            value={language}
+            handleChange={
+              fieldsStore.getFieldProps('language', 'onChange', {
+                rules: [
+                  {
+                    required: true
+                  }
+                ],
+                initialValue: language
+              })
+            }
+            value={fieldsStore.getFieldValue('language')}
+            error={!!size(fieldsStore.getFieldsError('language'))}
           ></GPicker>
         </View>
         <View className='description'>
@@ -428,10 +481,20 @@ export default class extends Component<any> {
             type={'primary'}
           >电影描述</AtTag>
           <GDescription
-            ref={this.descriptionRef}
             type={'textarea'}
-            value={description}
             style={style.backgroundColor('disabled')}
+            handleChange={
+              fieldsStore.getFieldProps('description', 'onChange', {
+                rules: [
+                  {
+                    required: true
+                  }
+                ],
+                initialValue: description
+              })
+            }
+            value={fieldsStore.getFieldValue('description')}
+            error={!!size(fieldsStore.getFieldsError('description'))}
           ></GDescription>
         </View>
         <View className='image'>
@@ -442,19 +505,26 @@ export default class extends Component<any> {
             电影截图选择
           </AtTag>
           <GImagePicker 
-            ref={this.imagePickerRef}
-            files={
-              image.map((val: any) => {
+            handleChange={fieldsStore.getFieldProps('image', 'onChange', {
+              rules: [
+                {
+                  required: true
+                },
+              ],
+              initialValue: image.map((val: any) => {
                 const { img } = val
                 return {
                   url: img
                 }
               })
-            }
+            })}
+            files={fieldsStore.getFieldValue('image')}
+            error={!!size(fieldsStore.getFieldsError('image'))}
           ></GImagePicker>
         </View>
         <AtButton type={'primary'} onClick={this.handleSubmit} customStyle={{ ...BUTTON_STYLE, ...style.backgroundColor('thirdly'), ...style.border(1, 'thirdly', 'solid', 'all') }}>提交</AtButton>
         <AtButton type={'primary'} onClick={this.handleReset} customStyle={{ ...BUTTON_STYLE, bottom: SYSTEM_PAGE_SIZE(40) + 'px', ...style.backgroundColor('primary'), ...style.border(1, 'primary', 'solid', 'all') }}>重置</AtButton>
+        </BaseForm>
       </View>
     )
   }

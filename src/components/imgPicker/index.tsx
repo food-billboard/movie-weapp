@@ -1,35 +1,46 @@
 import Taro, { Component } from '@tarojs/taro'
 import { AtImagePicker } from 'taro-ui'
-import { IMAGE_CONFIG } from '~config'
+import { IMAGE_CONFIG, FORM_ERROR } from '~config'
 import {Toast} from '../toast'
 import { IProps, IState, IFiles } from './index.d'
+import { noop } from 'lodash'
 
 const { count: defaultCount } = IMAGE_CONFIG
 
 export default class extends Component<IProps, IState> {
 
-  // //处理count变化
-  // public componentWillReceiveProps = (props) => {
-  //   if(props.count === false) return
-  //   this.setState({
-  //     count: props.count
-  //   })
-  // }
-
   public state: IState = {
-    files: [],
+    value: [],
     showAddBtn: true,
     error: false,
   }
 
-  private FIRST = true
+  private initialValue: any = undefined
 
-  private initValue: any = false
+  //表单value
+  private _value
+
+  private get value() {
+    const { value: propsValue, initialValue } = this.props
+    const { value:stateValue } = this.state
+    if(typeof propsValue !== 'undefined' ) {
+      return propsValue
+    }else {
+      if(this.initialValue === undefined && typeof initialValue !== 'undefined') {
+        return initialValue
+      }
+      return stateValue
+    }
+  }
 
   //图片选择/删除
   public handleChange = (files: Array<any>, operationType: string, index: number) => {
-    const { files: list } = this.state
-    const { count=defaultCount } = this.props
+    const { 
+      count=defaultCount, 
+      handleChange=noop,
+      initialValue,
+      value: propsValue 
+    } = this.props
     const fileLen = files.length
     if(operationType === 'add') {
       if(fileLen > count) {
@@ -41,7 +52,13 @@ export default class extends Component<IProps, IState> {
         return
       }
     } 
-    this.setImageItem(files)
+    if(typeof propsValue !== 'undefined') {
+      handleChange(files)
+    }else {
+      if(this.initialValue === undefined && typeof initialValue !== 'undefined') this.initialValue = initialValue
+      this.setImageItem(files)
+    }
+
     this.controlShowBtn(!(fileLen >= count))
     Toast({
       title: operationType === 'add' ? '添加成功' : '删除成功',
@@ -53,7 +70,7 @@ export default class extends Component<IProps, IState> {
   //设置图片
   public setImageItem = (files: Array<any>) => {
     this.setState({
-      files
+      value: files
     })
   }
 
@@ -66,7 +83,7 @@ export default class extends Component<IProps, IState> {
 
   //图片点击
   public handleClick = (index: number, file:IFiles ) => {
-    const { files } = this.state
+    const { value:files } = this.state
     Taro.previewImage({
       current: file.url,
       urls: files.map((val: IFiles) => {
@@ -80,14 +97,14 @@ export default class extends Component<IProps, IState> {
   public reset = () => {
     const { count=defaultCount } = this.props
     this.setState({
-      files: this.initValue ? this.initValue : [],
-      showAddBtn: this.initValue ? (this.initValue.length >= count ? false : true) : true
+      value: this.initialValue ? this.initialValue : [],
+      showAddBtn: this.initialValue ? (this.initialValue.length >= count ? false : true) : true
     })
   }
 
   //获取数据
   public getData = async (emptyCharge=true) => {
-    const { files } = this.state
+    const { value: files } = this.state
     if(!files.length && emptyCharge) {
       await this.setState({
         error: true
@@ -100,33 +117,38 @@ export default class extends Component<IProps, IState> {
     return files
   }
 
+  //设置error
+  public setError = (state: boolean) => {
+    this.setState({
+      error: state
+    })
+  }
+
   public render() {
 
-    const { mode, multiple=true, length=6, files=false, count=defaultCount } = this.props
+    const { 
+      mode, 
+      multiple=true, 
+      length=6,
+      count=defaultCount, 
+      error=false 
+    } = this.props
+    const style = error ? FORM_ERROR : {}
 
-    if(this.FIRST) {
-      if(Array.isArray(files) && files.length) {
-        this.FIRST = false
-        this.initValue = files
-        this.setState({
-          files
-        })
-      }
-    }
-
-    const { files: imageList, showAddBtn } = this.state
+    const { showAddBtn } = this.state
 
     return (
       <AtImagePicker
-        files={imageList}
+        files={this.value}
         mode={mode}
         showAddBtn={showAddBtn}
         multiple={multiple}
         count={count}
         sizeType={['100', '100']}
         length={length}
-        onChange={this.props.handleChange ? this.props.handleChange : this.handleChange}
+        onChange={this.handleChange}
         onImageClick={this.handleClick}
+        customStyle={style}
       ></AtImagePicker>
     )
   }

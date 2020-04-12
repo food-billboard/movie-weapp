@@ -52,6 +52,8 @@
  * fieldTypeList: date显示类型
  */
 
+ import { ICommonFormProps, ICommonFormState } from '~utils'
+
 interface ISelector {
   disabled?: boolean
   onCancel?: () => any
@@ -90,20 +92,19 @@ interface IDate {
   onCancel?: () => any
 }
 
-export interface IProps {
-  style?: any
+export interface IProps extends ICommonFormProps {
   selector?: ISelector | false
   multi?: IMulti | false
   time?: ITime | false
   date?: IDate | false
-  value?: string | Array<any> | false
+  value?: string | Array<any>
+  initialValue?: string | Array<any>
   title?: string
   extraFactor?: boolean
 }
 
-export interface IState {
+export interface IState extends ICommonFormState {
   value: string | Array<any>
-  error: boolean
   disabled: boolean
 }
 

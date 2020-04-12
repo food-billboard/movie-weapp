@@ -2377,7 +2377,11 @@ export default {
                 success: true,
                 data: {}
             }
-            return d.success
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve(d.success)
+                }, 3000)
+            })
 
             const data = yield call(sendIssue, value)
             return data

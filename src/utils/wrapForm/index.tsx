@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { Block } from '@tarojs/components'
 import { createFieldsStore, getAllFieldsStoreName, deleteFieldsStore } from './createFieldsStore'
 
-export default class extends Component {
+export default class extends Component<any> {
 
   fieldsStore
 
@@ -38,8 +38,3 @@ export default class extends Component {
 
 }
 
-export {
-  createFieldsStore, 
-  getAllFieldsStoreName, 
-  deleteFieldsStore
-}

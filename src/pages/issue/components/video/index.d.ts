@@ -3,6 +3,7 @@ import { IProps as IVideo } from '~components/video/index.d'
  * 视频选择表单组件
  * props: {
  *  info: 视频信息
+ *  handleOnChange: onChange
  * }
  * 
  * state: {
@@ -14,6 +15,8 @@ import { IProps as IVideo } from '~components/video/index.d'
 
 export interface IProps {
   info: IVideo
+  error?:boolean
+  handleOnChange?: (...args: any[]) => any
 }
 
 export interface IState {

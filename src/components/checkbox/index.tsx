@@ -8,6 +8,7 @@ import { mapStateToProps, mapDispatchToProps } from './connect'
 import { FORM_ERROR, SYSTEM_PAGE_SIZE } from '~config'
 import { IState, IProps, IOption, typeList } from './index.d'
 import styleColor  from '~theme/style'
+import { noop } from 'lodash'
 
 import './index.scss'
 
@@ -34,15 +35,29 @@ export default class extends Component<IProps, IState> {
   }
 
   public state: IState = {
-    checkedList: [],
+    value: [],
     show: false,
     checkOption: [],
     error: false
   }
 
-  private FIRST = true
+  private initialValue: any = undefined
 
-  private initValue: any = false
+  //表单value
+  private _value
+
+  private get value() {
+    const { initialValue, value:propsValue } = this.props
+    const { value: stateValue } = this.state
+    if(typeof propsValue !== 'undefined') {
+      return propsValue
+    }else {
+      if(this.initialValue === undefined && typeof initialValue !== 'undefined') {
+        return initialValue
+      }
+      return stateValue
+    }
+  }
 
   //额外内容
   public restRef = Taro.createRef<Rest>()
@@ -87,11 +102,26 @@ export default class extends Component<IProps, IState> {
 
   //处理选择
   public handleChange = (value: any) => {
-    const { error } = this.state
-    this.setState({
-      checkedList: value,
-      error: false
-    })
+    const { 
+      handleChange=noop,
+      initialValue,
+      value:propsValue
+    } = this.props
+    if(typeof propsValue !== 'undefined') {
+      handleChange(value)
+    }else {
+      if(this.initialValue === undefined && typeof initialValue !== 'undefined') this.initialValue = initialValue
+      this.setState({
+        value,
+        error: false
+      })
+    }
+  }
+
+  //额外内容change
+  public handleRestChange = (items: string[]) => {
+    const { handleChange } = this.props
+    handleChange && handleChange([...this.value, ...items])
   }
 
   //打开
@@ -114,7 +144,7 @@ export default class extends Component<IProps, IState> {
   public reset = () => {
     const { extraFactor=true } = this.props
     this.setState({
-      checkedList: this.initValue ? this.initValue : [],
+      value: this.initialValue ? this.initialValue : [],
       error: false
     })
     this.close()
@@ -123,10 +153,10 @@ export default class extends Component<IProps, IState> {
 
   //获取数据
   public getData = async (emptyCharge=true) => {
-    const { checkedList } = this.state
+    const { value } = this.state
     const { extraFactor=true } = this.props
     const data = extraFactor ? await this.restRef.current!.getData(false) : false
-    if(!checkedList.length && emptyCharge && !(Array.isArray(data) ? data.length : data)) {
+    if(!value.length && emptyCharge && !(Array.isArray(data) ? data.length : data)) {
       await this.setState({
         error: true
       })
@@ -135,30 +165,36 @@ export default class extends Component<IProps, IState> {
     await this.setState({
       error: false
     })
-    return [ ...checkedList, ...(data ? data : []) ]
+    return [ ...value, ...(data ? data : []) ]
+  }
+
+  //设置error
+  public setError = (state: boolean) => {
+    this.setState({
+      error: state
+    })
   }
 
   public render() {
-    const { checkboxOption=[], checkedList=false, style={}, needHiddenList, extraFactor=true } = this.props
+    const { 
+      checkboxOption=[], 
+      style={}, 
+      needHiddenList, 
+      extraFactor=true, 
+      error:propsError=false 
+    } = this.props
 
-    //处理props第一次传值的问题
-    if(this.FIRST) {
-      if(Array.isArray(checkedList) && checkedList.length) {
-        this.FIRST = false
-        this.initValue = checkedList
-        this.setState({
-          checkedList
-        })
-      }
-    }
-
-    const { show, checkedList: list, checkOption=[], error } = this.state
+    const { 
+      show, 
+      checkOption=[], 
+      error:stateError 
+    } = this.state
 
     const btnStyle = {
       ...BUTTON_STYLE, 
       ...styleColor.border(1, 'primary', 'solid', 'all'), 
       ...styleColor.color('primary'), 
-      ...(error ? FORM_ERROR : {})
+      ...((stateError || propsError) ? FORM_ERROR : {})
     }
 
     return (
@@ -168,7 +204,7 @@ export default class extends Component<IProps, IState> {
             {
               (checkOption.length ? checkOption : checkboxOption).filter((val:IOption) => {
                 const { value } = val
-                return list.indexOf(value) !== -1
+                return this.value.indexOf(value) !== -1
               })
               .map((val: IOption) => {
                 const { label, value } = val
@@ -198,8 +234,8 @@ export default class extends Component<IProps, IState> {
           (needHiddenList ? show : true) ? 
           <AtCheckbox
             options={checkOption.length ? checkOption : checkboxOption}
-            selectedList={list}
-            onChange={this.props.handleChange ? this.props.handleChange : this.handleChange}
+            selectedList={this.value}
+            onChange={this.handleChange}
           >
           </AtCheckbox>
           : null
@@ -211,6 +247,7 @@ export default class extends Component<IProps, IState> {
             ref={this.restRef}
             title={'上面找不到可以在下面手动添加'}
             style={{marginBottom: '5px', display: (needHiddenList ? show : true) ? 'block' : 'none'}}
+            handleChange={this.handleRestChange}
           ></Rest>
           : null
         }

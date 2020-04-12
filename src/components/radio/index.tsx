@@ -5,6 +5,7 @@ import Rest from '~components/restFactor'
 import { IProps, IState } from './index.d'
 import { isObject } from '~utils'
 import { FORM_ERROR, SYSTEM_PAGE_SIZE } from '~config'
+import { noop } from 'lodash'
 
 import './index.scss'
 
@@ -14,22 +15,63 @@ const BUTTON_STYLE = {
 
 export default class extends Component<IProps, IState> {
 
-  private FIRST = true
-
-  private initValue = ''
+  private initialValue:any = undefined
 
   //额外内容
   public restRef = Taro.createRef<Rest>()
 
   public state: IState = {
-    active: '',
+    value: 'on',
     show: false,
     error: false
   }
 
+  //表单value
+  private _value
+
+  private get value() {
+    const { initialValue, value:propsValue } = this.props
+    const { value: stateValue } = this.state
+    if(typeof propsValue !== 'undefined') {
+      return propsValue
+    }else {
+      if(this.initialValue === undefined && typeof initialValue !== 'undefined') {
+        return initialValue
+      }
+      return stateValue
+    }
+  }
+
   //选择值切换
-  public handleClick = (value) => {
-    this.setState({active: value})
+  public handleChange = (value) => {
+    const { 
+      handleChange=noop,
+      initialValue,
+      value:propsValue,
+      extraFactor=true
+    } = this.props
+
+    this.setState({
+      value,
+      error: false
+    }, async () => {
+      if(this.initialValue === undefined && typeof initialValue !== 'undefined') this.initialValue = initialValue
+
+      if(typeof propsValue !== 'undefined') {
+        //只有当rest中不存在值得情况才才会触发change
+        const data = (extraFactor) ? await this.restRef.current!.getData(false) : false
+        if(!data || (Array.isArray(data) && data.length == 0)) {
+          handleChange(value)
+        }
+      }
+    })
+  }
+
+  //
+  public handleRestChange = (items: string[]) => {
+    const { handleChange } = this.props
+    const item = items.pop()
+    handleChange && handleChange(item ? item : this.value)
   }
 
   //打开
@@ -50,7 +92,7 @@ export default class extends Component<IProps, IState> {
   public reset = () => {
     const { extraFactor=true } = this.props
     this.setState({
-      active: this.initValue ? this.initValue : ''
+      value: this.initialValue ? this.initialValue : ''
     })
     this.close()
     if(extraFactor) this.restRef.current!.reset()
@@ -58,10 +100,10 @@ export default class extends Component<IProps, IState> {
 
   //获取数据
   public getData = async (emptyCharge=true) => {
-    const { active } = this.state
+    const { value } = this.state
     const { extraFactor=true } = this.props
     const data = (extraFactor) ? await this.restRef.current!.getData(false) : false
-    if(!(active+'').length && emptyCharge && !(Array.isArray(data) ? data.length : data)) {
+    if(!(value+'').length && emptyCharge && !(Array.isArray(data) ? data.length : data)) {
       await this.setState({
         error: true
       })
@@ -70,37 +112,44 @@ export default class extends Component<IProps, IState> {
     await this.setState({
       error: false
     })
-    return data ? (data.length ? data.pop() : active) : active
+    return data ? (data.length ? data.pop() : value) : value
+  }
+
+  //设置error
+  public setError = (state: boolean) => {
+    this.setState({
+      error: state
+    })
   }
 
   public render() {
 
-    const { radioboxOption=[], active=false, style={}, needHiddenList=true, extraFactor=true } = this.props
+    const { 
+      radioboxOption=[], 
+      style={}, 
+      needHiddenList=true, 
+      extraFactor=true, 
+      error:propsError=false 
+    } = this.props
 
-    //处理props第一次传值的问题
-    if(this.FIRST) {
-      if(active && active.length) {
-        this.FIRST = false
-        this.initValue = active
-        this.setState({
-          active
-        })
-      }
+    const { show, error } = this.state
+
+    const commonStyle = {
+      ...BUTTON_STYLE, 
+      ...((error || propsError) ? FORM_ERROR : {}),
     }
-
-    const { show, active: activeMode='on', error } = this.state
 
     return (
       <View style={isObject(style) ? style : {}}>
         {
           (needHiddenList ? !show : false) ?
-          <AtButton type={'secondary'} onClick={this.open} customStyle={{ ...BUTTON_STYLE, ...(error ? FORM_ERROR : {}) }}>打开</AtButton>
+          <AtButton type={'secondary'} onClick={this.open} customStyle={commonStyle}>打开</AtButton>
           : null
         }
         <AtRadio
-          value={activeMode}
+          value={this.value}
           options={radioboxOption}
-          onClick={this.props.handleClick ? this.props.handleClick : this.handleClick}
+          onClick={this.handleChange}
         ></AtRadio>
         {
           extraFactor ? 
@@ -108,6 +157,7 @@ export default class extends Component<IProps, IState> {
             ref={this.restRef}
             title={'上面找不到可以手动添加, 但只添加一项'}
             style={{marginBottom: '5px', display: (needHiddenList ? show : true) ? 'block' : 'none'}}
+            handleChange={this.handleRestChange}
           ></Rest>
           : null
         }
@@ -115,7 +165,7 @@ export default class extends Component<IProps, IState> {
           <AtButton 
             type={'secondary'} 
             onClick={this.close} 
-            customStyle={{ ...BUTTON_STYLE, ...(error ? FORM_ERROR : {}), display: (needHiddenList ? show : false) ? 'block' : 'none' }}
+            customStyle={{ ...commonStyle, display: (needHiddenList ? show : false) ? 'block' : 'none' }}
           >
             收起
           </AtButton>

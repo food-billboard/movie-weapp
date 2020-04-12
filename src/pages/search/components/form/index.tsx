@@ -2,8 +2,9 @@ import Taro, {Component} from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import GPicker from '~components/picker'
 import GInput from '~components/input'
+import BaseForm from '~utils/wrapForm'
+import { createFieldsStore } from '~utils/wrapForm/createFieldsStore'
 import { AtForm, AtButton, AtAccordion, AtTag } from 'taro-ui'
-import './index.scss'
 import { connect } from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { Toast } from '~components/toast'
@@ -16,6 +17,8 @@ import List from '~components/linearlist'
 import { IList } from '~components/linearlist/index.d'
 import { SYSTEM_PAGE_SIZE } from '~config'
 
+import './index.scss'
+
 const TAT_STYLE = {
     boxSizing: 'border-box', 
     border: `1px dashed ${TypeColor['primary']}`, 
@@ -25,6 +28,12 @@ const TAT_STYLE = {
 }
 
 const ICON_COLOR = 'primary'
+
+const fieldsStore = createFieldsStore('search-select', {
+    getOnChangeValue(value) {
+      return value
+    }
+  })
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Forms extends Component<IProps> {
@@ -43,35 +52,35 @@ export default class Forms extends Component<IProps> {
         area: [],   //地区
     }
 
-    //付费免费
-    public feeRef = Taro.createRef<GCheckbox>()
+    // //付费免费
+    // public feeRef = Taro.createRef<GCheckbox>()
 
-    //最低价格
-    public minPriceRef = Taro.createRef<GInput>()
+    // //最低价格
+    // public minPriceRef = Taro.createRef<GInput>()
 
-    //最高价格
-    public maxPriceRef = Taro.createRef<GInput>()
+    // //最高价格
+    // public maxPriceRef = Taro.createRef<GInput>()
 
-    //类型
-    public typeRef = Taro.createRef<GCheckbox>()
+    // //类型
+    // public typeRef = Taro.createRef<GCheckbox>()
 
-    //起始时间
-    public startTimeRef = Taro.createRef<GPicker>()
+    // //起始时间
+    // public startTimeRef = Taro.createRef<GPicker>()
 
-    //结束时间
-    public endTimeRef = Taro.createRef<GPicker>()
+    // //结束时间
+    // public endTimeRef = Taro.createRef<GPicker>()
 
-    //导演
-    public directorRef = Taro.createRef<GCheckbox>()
+    // //导演
+    // public directorRef = Taro.createRef<GCheckbox>()
 
-    //演员
-    public actorRef = Taro.createRef<GCheckbox>()
+    // //演员
+    // public actorRef = Taro.createRef<GCheckbox>()
 
-    //地区
-    public areaRef = Taro.createRef<GCheckbox>()
+    // //地区
+    // public areaRef = Taro.createRef<GCheckbox>()
 
-    //语言
-    public langRef = Taro.createRef<GPicker>()
+    // //语言
+    // public langRef = Taro.createRef<GPicker>()
 
     public componentDidMount = () => {
         this.fetchTypeData()
@@ -266,11 +275,20 @@ export default class Forms extends Component<IProps> {
                         价格选择
                     </AtTag>
                     <GCheckbox
-                        ref={this.feeRef}
-                        handleChange={this.feeChange}
+                        // handleChange={this.feeChange}
                         checkboxOption={feeOptions}
                         needHiddenList={false}
                         extraFactor={false}
+                        handleChange={fieldsStore.getFieldProps('fee', 'onChange', {
+                            rules: [
+                                {
+                                    range: () => {
+                                        
+                                    }
+                                }
+                            ]
+                        })}
+                        checkedList={fieldsStore.getFieldValue}
                     ></GCheckbox>
                 </View>
                 <View className='price'>
@@ -279,7 +297,6 @@ export default class Forms extends Component<IProps> {
                             style={{...style.backgroundColor('disabled'), marginBottom: '10px'}}
                             inputType={'number'}
                             placeholder={'最低价格'}
-                            ref={this.minPriceRef}
                         ></GInput>
                     </View>
                     <View className='high'>
@@ -287,7 +304,6 @@ export default class Forms extends Component<IProps> {
                             style={{...style.backgroundColor('disabled')}}
                             inputType={'number'}
                             placeholder={'最高价格'}
-                            ref={this.maxPriceRef}
                         ></GInput>
                     </View>
                 </View>
@@ -299,10 +315,11 @@ export default class Forms extends Component<IProps> {
                         分类
                     </AtTag>
                     <GCheckbox
-                        ref={this.typeRef}
                         style={{marginBottom: '20px'}}
                         needHiddenList={false}
                         type={'type'}
+                        handleChange={fieldsStore.getFieldProps('type', 'onChange')}
+                        checkedList={fieldsStore.getFieldValue('type')}
                     ></GCheckbox>
                 </View>
                 <View className='time'>
@@ -316,14 +333,12 @@ export default class Forms extends Component<IProps> {
                         date={{fields: 'year'}}
                         title={'起始时间'}
                         style={{marginBottom: '5px'}}
-                        ref={this.startTimeRef}
                     >
                     </GPicker>
                     <GPicker
                         date={{fields: 'year'}}
                         title={'结束时间'}
                         style={{paddingBottom:'20px'}}
-                        ref={this.endTimeRef}
                     >
                     </GPicker>
                 </View>
@@ -341,9 +356,10 @@ export default class Forms extends Component<IProps> {
                                 演员
                             </AtTag>
                             <GCheckbox
-                                ref={this.actorRef}
                                 style={{marginBottom: '20px'}}
                                 type={'actor'}
+                                handleChange={fieldsStore.getFieldProps('actor', 'onChange')}
+                                checkedList={fieldsStore.getFieldValue('actor')}
                             ></GCheckbox>
                         </View>
                         <View className='director'>
@@ -354,9 +370,10 @@ export default class Forms extends Component<IProps> {
                                 导演
                             </AtTag>
                             <GCheckbox
-                                ref={this.directorRef}
                                 style={{marginBottom: '20px'}}
                                 type={'director'}
+                                handleChange={fieldsStore.getFieldProps('director', 'onChange')}
+                                checkedList={fieldsStore.getFieldValue('director')}
                             ></GCheckbox>
                         </View >
                         <View className='lang'>
@@ -367,11 +384,12 @@ export default class Forms extends Component<IProps> {
                                 语言
                             </AtTag>
                             <GPicker
-                                ref={this.langRef}
                                 selector={{range: lang.map((val: any) => {
                                 const { value } = val
                                 return value
                                 })}}
+                                handleChange={fieldsStore.getFieldProps('lang', 'onChange')}
+                                value={fieldsStore.getFieldValue('lang')}
                             ></GPicker>
                         </View>
                         <View className='area'>
@@ -382,9 +400,10 @@ export default class Forms extends Component<IProps> {
                                 地区
                             </AtTag>
                             <GCheckbox
-                                ref={this.areaRef}
                                 style={{marginBottom: '20px'}}
                                 type={'area'}
+                                handleChange={fieldsStore.getFieldProps('area', 'onChange')}
+                                checkedList={fieldsStore.getFieldValue('area')}
                             ></GCheckbox>
                         </View>
                     </View>

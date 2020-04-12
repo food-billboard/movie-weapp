@@ -6,6 +6,7 @@ import { isObject } from '~utils'
 import { FORM_ERROR } from '~config'
 import { IProps, IState } from './index.d'
 import style from '~theme/style'
+import { noop } from 'lodash'
 
 import './index.scss'
 
@@ -23,6 +24,7 @@ export default class extends Component<IProps, IState> {
 
   //添加海报
   public handleAddPoster = () => {
+    const { handleOnChange=noop } = this.props
     Taro.chooseImage({
       count: 1,
       sizeType: ['original', 'compressed'],
@@ -33,6 +35,8 @@ export default class extends Component<IProps, IState> {
         this.setState({
           info: { ...info, poster: tempFilePaths[0] },
           posterError: false
+        }, () => {
+          handleOnChange(this.state.info)
         })
       }
     })
@@ -40,6 +44,7 @@ export default class extends Component<IProps, IState> {
 
   //添加视频
   public handleAddMedia = () => {
+    const { handleOnChange=noop } = this.props
     Taro.chooseVideo({
       sourceType: ['album'],
       compressed: true,
@@ -49,6 +54,8 @@ export default class extends Component<IProps, IState> {
         this.setState({
           info: { ...info, src: file },
           srcError: false
+        }, () => {
+          handleOnChange(this.state.info)
         })
       }
     })
@@ -89,7 +96,7 @@ export default class extends Component<IProps, IState> {
 
   public render() {
 
-    const { info=false } = this.props
+    const { info=false, error=false } = this.props
 
     if(this.FIRST) {
       if(isObject(info)) {
@@ -108,6 +115,11 @@ export default class extends Component<IProps, IState> {
       src
     } = stateInfo
 
+    const commonStyle = {
+      ...style.border(1, 'primary', 'solid', 'all'), 
+      ...style.color('thirdly')
+    }
+
     return (
       <View>
         <GVideo
@@ -115,8 +127,8 @@ export default class extends Component<IProps, IState> {
           src={src}
         ></GVideo>
         <View className='at-row at-row__justify--between'>
-          <AtButton onClick={this.handleAddPoster} className='at-col' customStyle={{...style.border(1, 'primary', 'solid', 'all'), ...style.color('thirdly'), ...(posterError ? FORM_ERROR : {}) }} >添加海报</AtButton>
-          <AtButton onClick={this.handleAddMedia} className='at-col' customStyle={{...style.border(1, 'primary', 'solid', 'all'), ...style.color('thirdly'),  ...(srcError ? FORM_ERROR : {}) }} >添加视频</AtButton>
+          <AtButton onClick={this.handleAddPoster} className='at-col' customStyle={{...commonStyle, ...((posterError || error) ? FORM_ERROR : {}) }} >添加海报</AtButton>
+          <AtButton onClick={this.handleAddMedia} className='at-col' customStyle={{...commonStyle,  ...((srcError || error) ? FORM_ERROR : {}) }} >添加视频</AtButton>
         </View>
       </View>
     )

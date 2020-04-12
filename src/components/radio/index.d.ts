@@ -1,4 +1,5 @@
 import { Option } from 'taro-ui/@types/radio'
+import { ICommonFormProps, ICommonFormState } from '~utils'
 /**
  * 单选表单
  * props: {
@@ -17,17 +18,15 @@ import { Option } from 'taro-ui/@types/radio'
  * }
  */
 
- export interface IProps {
+ export interface IProps extends ICommonFormProps {
   radioboxOption: Array<Option<string>>, 
-  active?: false | string, 
-  style?: any, 
+  value?: string, 
+  initialValue?: string
   needHiddenList?: boolean, 
   extraFactor?: boolean
-  handleClick?: (...args: any[]) => any
  }
  
- export interface IState {
-    active: string,
+ export interface IState extends ICommonFormState {
+    value: string,
     show: boolean,
-    error: boolean
  }

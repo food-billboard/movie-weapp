@@ -68,8 +68,6 @@ class App extends Component {
     pages: [
       'pages/main/index',
       'pages/mine/index',
-      // 'pages/register/index',
-      // 'pages/login/index',
       'pages/setting/index',
       'pages/news/index',
       'pages/mycomment/index',

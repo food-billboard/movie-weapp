@@ -30,6 +30,8 @@
  * }
  */
 
+ import { ICommonFormProps, ICommonFormState } from '~utils'
+
  export type TType = 'video' | 'image'
 
 export interface IFile {
@@ -44,8 +46,9 @@ export interface IFile {
   poster?: string
  }
 
- export interface IProps {
-  files?: Array<IItem> | false
+ export interface IProps extends ICommonFormProps {
+  initialValue?: Array<IItem>
+  value?: Array<IItem>
   length?: number
   style?: any
   width?: number | false
@@ -53,10 +56,9 @@ export interface IFile {
   close?: boolean
 }
 
- export interface IState {
-   items: Array<IItem>
+ export interface IState extends ICommonFormState {
+   value: Array<IItem>
    maxCount: number
-   error: boolean
    activeVideo: string
    isVideo: boolean
  }

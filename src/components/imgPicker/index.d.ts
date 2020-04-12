@@ -20,22 +20,24 @@
  * }
  */
 
+ import { ICommonFormProps, ICommonFormState } from '~utils'
+
 export interface IFiles {
   url: string
 }
 
-export interface IProps {
-  files?: Array<IFiles> | false
+export interface IProps extends ICommonFormProps {
   mode?: 'scaleToFill'|'aspectFit'|'aspectFill'|'widthFix'|'top'|'bottom'|'center'|'left'|'right'|'top left'|'top right'|'bottom left'|'bottom right'
   multiple?: boolean
   length?: number
   count?: number
+  value?: Array<IFiles>
+  initialValue?: Array<IFiles>
   handleChange?: (files: Array<any>, operationType: string, index: number) => any
 }
 
-export interface IState {
-  files: Array<IFiles>
+export interface IState extends ICommonFormState {
+  value: Array<IFiles>
   showAddBtn: boolean
-  error: boolean
   // count: number
 }

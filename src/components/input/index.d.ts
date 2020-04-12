@@ -20,11 +20,12 @@
  * }
  */
 
-export interface IProps {
-  value?: string | false
-  style: any
+ import { ICommonFormState, ICommonFormProps } from '~utils'
+
+export interface IProps extends ICommonFormProps {
+  value?: string
+  initialValue?: string
   type?: 'input' | 'textarea'
-  handleChange?: ((...args: any[]) => any) | false
   placeholder?: string | false
   inputType?:string
   disabled?: boolean
@@ -34,8 +35,7 @@ export interface IProps {
   handleLineChange?: (e: any) => any
 }
 
-export interface IState {
+export interface IState extends ICommonFormState {
   value: string
-  error: boolean
   disabled: boolean
 }

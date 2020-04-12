@@ -1,3 +1,6 @@
+import { IFiles } from '~components/imgPicker/index.d'
+import { IItem } from '~components/mediaPicker/index.d'
+import { Item } from 'taro-ui/@types/timeline'
 export interface ItypeList {
   value: string
   id: string
@@ -14,8 +17,6 @@ export const mediaType = {
 export const routeAlias = {
   main: '/main',
   mine: '/mine',
-  // login: '/login',
-  // register: '/register',
   comment: '/comment',
   news: '/news' ,
   attention: '/attention',
@@ -40,8 +41,6 @@ export const routeAlias = {
 export const routeConfig = [
   { path: 'pages/main/index', alias: routeAlias.main },
   { path: 'pages/mine/index', alias: routeAlias.mine },
-  // { path: 'pages/login/index', alias: routeAlias.login},
-  // { path: 'pages/register/index', alias: routeAlias.register},
   { path: 'pages/comment/index', alias: routeAlias.comment },
   { path: 'pages/news/index', alias: routeAlias.news },
   { path: 'pages/attention/index', alias: routeAlias.attention },
@@ -93,4 +92,19 @@ export const newsType = {
 export const responseType = {
   success: 'success',
   fail: 'fail'
+}
+
+//表单通用state
+export interface ICommonFormState {
+  error:boolean
+  value: Array<string> | Array<IFiles> |  Array<IItem> | Array<Item> | string
+}
+
+//表单通用props
+export interface ICommonFormProps {
+  handleChange?: (...args: any[]) => any
+  error?:boolean
+  style?: any
+  value?: Array<string> | Array<IFiles> |  Array<IItem> | Array<Item> | string
+  initialValue?: Array<string> | Array<IFiles> |  Array<IItem> | Array<Item> | string
 }

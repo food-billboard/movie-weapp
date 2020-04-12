@@ -8,7 +8,8 @@ import { Item } from 'taro-ui/@types/timeline'
 import { isObject } from '~utils'
 import customStyle from '~theme/style'
 import { TypeColor } from '~theme/color'
-import { findIndex } from 'lodash'
+import { findIndex, noop } from 'lodash'
+import { FORM_ERROR } from '~config'
 
 import './index.scss'
 
@@ -46,21 +47,33 @@ export default class extends Component<IProps, IState> {
     title: false,
     style: false,
     defaultItemStyle: false,
-    item: false,
     handleError: () => {}
   }
 
   public state: IState = {
-    item: [],
+    value: [],
     error: false,
     disabled: true,
     status: [],
     statusData: []
   }
 
-  private FIRST = true
+  private initialValue: Array<Item> | undefined = undefined
 
-  private initValue: Array<Item> = []
+  private _value
+
+  private get value() {
+    const { initialValue, value:propsValue } = this.props
+    const { value: stateValue } = this.state
+    if(typeof propsValue !== 'undefined') {
+      return propsValue
+    }else {
+      if(this.initialValue === undefined && typeof initialValue !== 'undefined') {
+        return initialValue
+      }
+      return stateValue
+    }
+  }
 
   //输入框
   public inputRef = Taro.createRef<GInput>()
@@ -68,18 +81,20 @@ export default class extends Component<IProps, IState> {
   //重置
   public reset = () => {
     this.setState({
-      item: this.initValue ? this.initValue : [],
+      value: this.initialValue ? this.initialValue : [],
       error: false,
       statusData: [],
       status: []
+    }, () => {
+      this.handleChange(this.state.value.map( val => val.title))
     })
     this.inputRef.current!.reset()
   }
 
   //获取数据
   public getData = async (emptyCharge=true) => {
-    const { item } = this.state
-    if(!item.length && emptyCharge) {
+    const { value } = this.state
+    if(!value.length && emptyCharge) {
       await this.setState({
         error: true
       })
@@ -88,7 +103,7 @@ export default class extends Component<IProps, IState> {
     await this.setState({
       error: false
     })
-    return item.map((val: Item) => {
+    return value.map((val: Item) => {
       const { title } = val
       return title
     })
@@ -98,8 +113,8 @@ export default class extends Component<IProps, IState> {
   public handleAdd = async () => {
     const data = await this.inputRef.current!.getData()
     if(data) {
-      const { item, status, statusData } = this.state
-      const itemLen = item.length
+      const { value:stateValue, status, statusData } = this.state
+      const itemLen = stateValue.length
       const { defaultItemStyle } = this.props
       const _defaultItemStyle = defaultItemStyle ? defaultItemStyle : getDefaultItemStyle()
       const newItem = {
@@ -107,7 +122,7 @@ export default class extends Component<IProps, IState> {
         ..._defaultItemStyle
       }
       this.setState({
-        item: [ ...item, newItem],
+        value: [ ...stateValue, newItem],
         error: false,
         disabled: false,
         //记录最近操作
@@ -117,14 +132,17 @@ export default class extends Component<IProps, IState> {
             index: itemLen
           }
         ]
+      }, () => {
+        this.handleChange(this.state.value.map( val => val.title))
+        this.inputRef.current!.reset()
       }) 
+
       this.props.handleError(false)
       Toast({
         title: '成功~!',
         icon: 'success',
         duration: 500
       })
-      this.inputRef.current!.reset()
     }
   }
 
@@ -136,8 +154,8 @@ export default class extends Component<IProps, IState> {
     const data = await this.inputRef.current!.getData()
 
     if(data) {  //输入框中有内容
-      const { item, status, statusData } = this.state
-      const index = findIndex(item, (val: any) => {
+      const { value, status, statusData } = this.state
+      const index = findIndex(value, (val: any) => {
         const { title } = val
         return title === data
       })
@@ -148,10 +166,10 @@ export default class extends Component<IProps, IState> {
         config = {...config, title: '好像没有找到', icon: 'fail', duration: 1000}
       }else {
         config = { ...config, title: '操作成功', icon: 'fail', duration: 500 }
-        let arr = [...item]
+        let arr = [...value]
         const [deleteItem]: Array<Item> = arr.splice(index, 1)
         this.setState({
-          item: arr,
+          value: arr,
           error: false,
           disabled: arr.length ? false : true,
 
@@ -162,8 +180,10 @@ export default class extends Component<IProps, IState> {
               index: index
             } 
           ]
+        }, () => {
+          this.handleChange(arr.map( val => val.title))
+          this.inputRef.current!.reset()
         })
-        this.inputRef.current!.reset()
       }
 
       Toast(config)
@@ -176,7 +196,7 @@ export default class extends Component<IProps, IState> {
 
   //撤销
   public handleCancel = async () => {
-    const { item, disabled, status, statusData } = this.state
+    const { value:item, disabled, status, statusData } = this.state
     // if(disabled) return
     if(!status.length) return
     const arr = [...item]
@@ -194,39 +214,43 @@ export default class extends Component<IProps, IState> {
     }
 
     this.setState({
-      item: arr,
+      value: arr,
       disabled: arr.length ? false : true,
       error: false,
       status: status.length === _status.length ? status : _status,
       statusData: statusData.length === _statusData.length ? statusData : _statusData
+    }, () => {
+      this.handleChange(arr.map( val => val.title))
+      this.inputRef.current!.reset()
     })
-    
-    this.inputRef.current!.reset()
+  }
+
+  //change
+  public handleChange = (value) => {
+    const { handleChange, initialValue } = this.props
+    if(this.initialValue === undefined && typeof initialValue !== 'undefined') this.initialValue = initialValue
+    handleChange && handleChange(value)
   }
 
   public render() {
 
-    const { title, style, item: propsItem } = this.props
+    const { 
+      title, 
+      style, 
+      error:propsError=false 
+    } = this.props
 
-    //处理props第一次传值的问题
-    if(this.FIRST) {
-      if(Array.isArray(propsItem) && propsItem.length) {
-        this.FIRST = false
-        this.initValue = propsItem
-        this.setState({
-          item: propsItem,
-          disabled: false
-        })
-      }
+    const { error, disabled } = this.state
+
+    const _style = {
+      ...(isObject(style) ? style : {}),
+      ...((error || propsError) ? FORM_ERROR : {})
     }
 
-    const { item, error, disabled } = this.state
-
-    const errorStyle = error ? { border: '1px solid red' } : {}
-
     return (
-      <View className='rest'
-        style={isObject(style) ? {...style, ...errorStyle} : {...errorStyle}}
+      <View 
+        className='rest'
+        style={_style}
       >
         {
           title ? 
@@ -239,7 +263,7 @@ export default class extends Component<IProps, IState> {
           : null
         }
         <AtTimeline
-          items={item}
+          items={this.value}
         ></AtTimeline>
         <View className='input at-row'>
           <View className='at-col at-col-2'>

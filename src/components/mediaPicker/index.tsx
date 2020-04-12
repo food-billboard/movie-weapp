@@ -16,16 +16,30 @@ const FLEX_MAX_SIZE = 12
 
 export default class extends Component<IProps, IState> {
 
-  private FIRST = true
-
-  private initValue: Array<IItem> = []
+  private initialValue: Array<IItem> = []
 
   public state: IState = {
-    items: [],
+    value: [],
     maxCount: count,
     error: false,
     activeVideo: '',
     isVideo: false
+  }
+
+  //表单value
+  private _value
+
+  private get value() {
+    const { value:propsValue, initialValue } = this.props
+    const { value: stateValue } = this.state
+    if(typeof propsValue !== 'undefined') {
+      return propsValue
+    }else {
+      if(this.initialValue === undefined && typeof initialValue !== 'undefined') {
+        return initialValue
+      }
+      return stateValue
+    }
   }
 
   //媒体选择
@@ -51,8 +65,9 @@ export default class extends Component<IProps, IState> {
       return
     }
     const { tempFilePath, thumbTempFilePath } = response
-    const { items, maxCount } = this.state
-    const itemLen = items.length
+    const { value:stateValue, maxCount } = this.state
+    const { value:propsValue } = this.props
+    const itemLen = this.value.length
     if(maxCount < itemLen + 1) {
       Toast({
         title: '超出添加数量',
@@ -60,9 +75,8 @@ export default class extends Component<IProps, IState> {
       })
       return
     }
-    this.setState({
-      items: [ ...items, {url: tempFilePath, type: 'video', poster: thumbTempFilePath} ]
-    }) 
+
+    this.onChange([ ...stateValue, {url: tempFilePath, type: 'video', poster: thumbTempFilePath} ])
   }
 
   //图片选择
@@ -73,8 +87,9 @@ export default class extends Component<IProps, IState> {
       return
     }
     const { tempFiles=[] } = response
-    const { items, maxCount } = this.state
-    const itemLen = items.length
+    const { maxCount, value:stateValue } = this.state
+    const { value:propsValue } = this.props
+    const itemLen = this.value.length
     const tempLen = tempFiles.length
     if(maxCount < itemLen + tempLen) {
       Toast({
@@ -83,36 +98,43 @@ export default class extends Component<IProps, IState> {
       })
       return
     }
-    this.setState({
-      items: [ ...items, ...tempFiles.map((val: any) => {
-        const { path } = val
-        return {
-          url: path,
-          type: 'image'
-        }
-      })]
-    })     
+
+    this.onChange([ ...stateValue, ...tempFiles.map((val: any) => {
+      const { path } = val
+      return {
+        url: path,
+        type: 'image'
+      }
+    })])    
   }
 
   //删除
   public handleClose = (target: string) => {
-    const { items } = this.state
-    const index = findIndex(items, (val: any) => {
+    const index = findIndex(this.value, (val: any) => {
       const { url } = val
       return url === target
     })
     if(index < 0) return 
-    let data = [...items]
+    let data = [...this.value]
     data.splice(index, 1)
-    this.setState({
-      items: data
-    })
+    this.onChange(data)
+  }
+
+  //change
+  public onChange = (value) => {
+    const { handleChange, initialValue, value:propsValue } = this.props
+    if(this.initialValue === undefined && typeof initialValue !== 'undefined') this.initialValue = initialValue
+    if(typeof propsValue !== 'undefined') {
+      handleChange && handleChange(value)
+    }else {
+      this.setState({value})
+    }
   }
 
   //重置
   public reset = () => {
     this.setState({
-      items: this.initValue ? this.initValue : [],
+      value: this.initialValue ? this.initialValue : [],
       isVideo: false,
       activeVideo: ''
     })
@@ -136,7 +158,7 @@ export default class extends Component<IProps, IState> {
 
   //获取数据
   public getData = async (emptyCharge=true) => {
-    const { items } = this.state
+    const { value: items } = this.state
     if(!items.length  && emptyCharge) {
       await this.setState({
         error: true
@@ -154,26 +176,29 @@ export default class extends Component<IProps, IState> {
     this.setState({isVideo: false, activeVideo: ''})
   }
 
+  //设置error
+  public setError = (state: boolean) => {
+    this.setState({
+      error: state
+    })
+  }
+
   public render() {
 
-    const { files=false, length=3, style: customStyle={}, width, height, close=true } = this.props
+    const { 
+      length=3, 
+      style: customStyle={}, 
+      width, 
+      height, 
+      close=true, 
+      error=false 
+    } = this.props
 
-    //处理props数据
-    if(this.FIRST) {
-      if(Array.isArray(files) && files.length) {
-        this.FIRST = false
-        this.initValue = files
-        this.setState({
-          items: files
-        })
-      }
-    }
-
-    const { maxCount, items, activeVideo, isVideo } = this.state
+    const { maxCount, activeVideo, isVideo } = this.state
 
     return (
       <View className='media' style={isObject(customStyle) ? customStyle : {}}>
-        <View className='title at-row at-row__justify--between' style={{display: maxCount === items.length ? 'none' : 'flex'}}>
+        <View className='title at-row at-row__justify--between' style={{display: maxCount === this.value.length ? 'none' : 'flex'}}>
           <View className='image-title at-col at-col-5'>
             <View 
               className='at-row at-row__align--center at-row__justify--center btn' 
@@ -197,7 +222,7 @@ export default class extends Component<IProps, IState> {
         </View>
         <View className='main at-row at-row--wrap' style={{marginTop: '10px'}}>
           {
-            items.map((val: any) => {
+            this.value.map((val: any) => {
               const { url, type, poster='' } = val
               return (
                 <View 
