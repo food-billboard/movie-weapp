@@ -1,17 +1,9 @@
 import Taro, { Component } from '@tarojs/taro'
-import { Block, View } from '@tarojs/components'
-import { AtTag } from 'taro-ui'
+import { View } from '@tarojs/components'
 import GPicker from '~components/picker'
-import { TypeColor } from '~theme/color'
 import { IProps, IState } from './index.d'
-
-const TAT_STYLE = {
-  boxSizing: 'border-box', 
-  border: `1px dashed ${TypeColor['primary']}`, 
-  width:'100%', 
-  marginBottom: '5px', 
-  color: TypeColor['primary']
-}
+import { Toast } from '~components/toast'
+import './index.scss'
 
 export default class extends Component<IProps, IState> {
 
@@ -19,41 +11,82 @@ export default class extends Component<IProps, IState> {
     
   }
 
+  private startRef = Taro.createRef<GPicker>()
+  private endRef = Taro.createRef<GPicker>()
+
+  public startChange = async (value) => {
+    const { onChange, value: { end=new Date().getFullYear() }={} } = this.props
+    let data = value
+    if(~~value >= ~~end) {
+      data = end
+      Toast({
+        title: '时间错误会默认忽略',
+        icon: 'fail'
+      })
+    }
+    onChange && onChange({start: data})
+  }
+
+  public endChange = async (value) => {
+    const { onChange, value: { start=1970 }={} } = this.props
+    let data = value
+    if(~~value <= ~~start) {
+      data = start
+      Toast({
+        title: '时间错误会默认忽略',
+        icon: 'fail'
+      })
+    }
+    onChange && onChange({end: data})
+  }
+
+  // public getData = async (emptyCharge:boolean=true, time:'all' | 'start' | 'end'='all') => {
+  //   const start = await this.startRef!.current!.getData(emptyCharge)
+  //   const end = await this.endRef!.current!.getData(emptyCharge)
+  //   if(time === 'start') {
+  //     return {start}
+  //   }else if(time === 'end') {
+  //     return {end}
+  //   }
+  //   return {
+  //     start,
+  //     end
+  //   }
+  // }
+
   public render() {
 
-    const tagStyle = {
-      ...TAT_STYLE,
-      border: `1px dashed ${TypeColor['primary']}`, 
-      color: TypeColor['primary']
-    }
+    const { value: { start='', end='' }={} } = this.props
 
     return (
-      <Block>
-        <AtTag 
-          customStyle={tagStyle} 
-          type={'primary'}
-        >
-          时间选择
-        </AtTag>
-        <View className="at-row">
-          <View className="at-col">
-            <GPicker
-              date={{fields: 'year'}}
-              title={'起始时间'}
-              style={{marginBottom: '5px'}}
-            >
-            </GPicker>
-          </View>
-          <View className='at-col'>
-            <GPicker
-              date={{fields: 'year'}}
-              title={'结束时间'}
-              style={{paddingBottom:'20px'}}
-            >
-            </GPicker>
-          </View>
+      <View className="at-row">
+        <View className="at-col">
+          <GPicker
+            ref={this.startRef}
+            date={{
+              fields: 'year',
+            }}
+            title={'起始时间'}
+            style={{marginBottom: '5px'}}
+            handleChange={this.startChange}
+            value={start}
+          >
+          </GPicker>
         </View>
-      </Block>
+        <View className='at-col'>
+          <GPicker
+            ref={this.endRef}
+            date={{
+              fields: 'year'
+            }}
+            title={'结束时间'}
+            style={{paddingBottom:'20px'}}
+            handleChange={this.endChange}
+            value={end}
+          >
+          </GPicker>
+        </View>
+      </View>
     )
   }
 

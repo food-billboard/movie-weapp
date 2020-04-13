@@ -324,7 +324,7 @@ export default class extends Component<any> {
                 }
               })
             }
-            checkedList={
+            value={
               fieldsStore.getFieldValue('area')
             }
             error={!!size(fieldsStore.getFieldsError('area'))}
@@ -356,7 +356,7 @@ export default class extends Component<any> {
                 }
               })
             }
-            checkedList={
+            value={
               fieldsStore.getFieldValue('director')
             }
             error={!!size(fieldsStore.getFieldsError('director'))}
@@ -388,7 +388,7 @@ export default class extends Component<any> {
                 }
               })
             }
-            checkedList={
+            value={
               fieldsStore.getFieldValue('actor')
             }
             error={!!size(fieldsStore.getFieldsError('actor'))}
@@ -417,7 +417,7 @@ export default class extends Component<any> {
                 })
               })
             }
-            checkedList={
+            value={
               fieldsStore.getFieldValue('type')
             }
             error={!!size(fieldsStore.getFieldsError('type'))}
@@ -518,7 +518,7 @@ export default class extends Component<any> {
                 }
               })
             })}
-            files={fieldsStore.getFieldValue('image')}
+            value={fieldsStore.getFieldValue('image')}
             error={!!size(fieldsStore.getFieldsError('image'))}
           ></GImagePicker>
         </View>

@@ -111,7 +111,7 @@ class FieldsStore {
       name
     }
     if(!!!this.fields[name]) {
-      this.setFields({[name]: {name}})
+      this.setFields({[name]: {name, value: null}})
     }else {
       this.fields[name] = { ...this.fields[name], name }
     }
@@ -165,7 +165,7 @@ class FieldsStore {
   //获取字段的value
   getFieldValue = function(name) {
     this.fields[name] = this.fields[name] || {}
-    return this.fields[name].value ? this.fields[name].value : this.getFieldMeta(name).value
+    return this.fields[name].value ? this.fields[name].value : this.getFieldMeta(name).initialValue
   }
 
   //设置fields
