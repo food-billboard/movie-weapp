@@ -34,16 +34,16 @@ const itemStyleColorList = [
 const getDefaultItemStyle = () => {
   const iconLen = itemStyleIconList.length
   const colorLen = itemStyleColorList.length
-  const data = {
+  return {
     icon: itemStyleIconList[Math.floor(Math.random() * iconLen)],
     color: itemStyleColorList[Math.floor(Math.random() * colorLen)]
   }
-  return data
 }
 
 export default class extends Component<IProps, IState> {
 
   public static defaultProps: IProps = {
+    value: false,
     title: false,
     style: false,
     defaultItemStyle: false,
@@ -65,28 +65,47 @@ export default class extends Component<IProps, IState> {
   private get value() {
     const { initialValue, value:propsValue } = this.props
     const { value: stateValue } = this.state
-    if(typeof propsValue !== 'undefined') {
-      return propsValue
+    if(propsValue !== false) {
+      return this.normalizeData(propsValue)
     }else {
       if(this.initialValue === undefined && typeof initialValue !== 'undefined') {
-        return initialValue
+        return this.normalizeData(initialValue)
       }
-      return stateValue
+      return this.normalizeData(stateValue)
     }
   }
 
   //输入框
   public inputRef = Taro.createRef<GInput>()
 
+  //规范化数据
+  public normalizeData = (data) => {
+    if(Array.isArray(data) && data.length) {
+      if(typeof data[0] === 'string') {
+        const da = data.map(item => {
+          if(typeof item === 'object') return item
+          return {
+            ...getDefaultItemStyle(),
+            title: item
+          }
+        })
+        return da
+      } 
+      return data
+    }
+    return []
+  }
+
   //重置
   public reset = () => {
+    const value = this.initialValue ? this.initialValue : []
     this.setState({
-      value: this.initialValue ? this.initialValue : [],
+      value,
       error: false,
       statusData: [],
       status: []
     }, () => {
-      this.handleChange(this.state.value.map( val => val.title))
+      this.handleChange(value.map( val => val.title))
     })
     this.inputRef.current!.reset()
   }
@@ -114,15 +133,17 @@ export default class extends Component<IProps, IState> {
     const data = await this.inputRef.current!.getData()
     if(data) {
       const { value:stateValue, status, statusData } = this.state
-      const itemLen = stateValue.length
       const { defaultItemStyle } = this.props
+      const itemLen = stateValue.length
       const _defaultItemStyle = defaultItemStyle ? defaultItemStyle : getDefaultItemStyle()
       const newItem = {
         title: data,
         ..._defaultItemStyle
       }
+      //新数据
+      const value = [ ...stateValue, newItem]
       this.setState({
-        value: [ ...stateValue, newItem],
+        value,
         error: false,
         disabled: false,
         //记录最近操作
@@ -133,7 +154,7 @@ export default class extends Component<IProps, IState> {
           }
         ]
       }, () => {
-        this.handleChange(this.state.value.map( val => val.title))
+        this.handleChange(value.map( val => val.title))
         this.inputRef.current!.reset()
       }) 
 
@@ -228,7 +249,7 @@ export default class extends Component<IProps, IState> {
   //change
   public handleChange = (value) => {
     const { handleChange, initialValue } = this.props
-    if(this.initialValue === undefined && typeof initialValue !== 'undefined') this.initialValue = initialValue
+    if(this.initialValue === undefined && typeof initialValue !== 'undefined') this.initialValue = this.normalizeData(initialValue)
     handleChange && handleChange(value)
   }
 
@@ -255,7 +276,7 @@ export default class extends Component<IProps, IState> {
         {
           title ? 
           <AtTag 
-            customStyle={{...TAT_STYLE, ...customStyle.border(1, 'primary', 'dashed', 'all'), ...customStyle.color('primary')}} 
+            customStyle={{...TAT_STYLE, ...customStyle.border(1, 'primary', 'dashed', 'all'), ...customStyle.color('thirdly')}} 
             type={'primary'}
           >
             {title}

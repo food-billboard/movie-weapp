@@ -54,8 +54,8 @@ export interface IStatusData {
 
 export interface IProps extends ICommonFormProps {
   title: string | false
-  value?: Array<Item>
-  initialValue?:  Array<Item>
+  value?: Array<Item> | Array<string> | false
+  initialValue?:  Array<Item> | Array<string>
   defaultItemStyle?: IDefaultItemStyle | false
   handleError: (status) => any
 }

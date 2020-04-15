@@ -69,6 +69,8 @@ export default class extends Component<any> {
     typeColor: TypeColor
   }
 
+  private 
+
   //色调修改时重绘用
   public componentDidShow = () => {
     colorStyleChange(true)
@@ -77,9 +79,9 @@ export default class extends Component<any> {
     this.setState({typeColor: TypeColor})
   }
 
-  readonly update = () => this.setState({})
-
   public componentDidMount = async () => {
+    //强制刷新设置
+    fieldsStore.setUpdate(this.forceUpdate.bind(this))
     this.fetchData()
   }
 
@@ -156,12 +158,12 @@ export default class extends Component<any> {
     //验证
     fieldsStore.validateFields(['name', 'description', 'area', 'director', 'actor', 'type', 'publishTime', 'language', 'image', 'video'], async (errors, values) => {
       //处理所有有错的表单项
+      console.log(errors, values)
       if(errors) {
         Toast({
           title: '信息好像没填对',
           icon: 'fail'
         })
-        // this.setState({})
         return
       }
 
@@ -230,7 +232,6 @@ export default class extends Component<any> {
       const { confirm } = res
       if(confirm) {
         fieldsStore.initializeFields()
-        this.setState({})
       }
     })
   }
@@ -271,7 +272,7 @@ export default class extends Component<any> {
                   required: true
                 },
               ],
-              initialValue: video
+              initialValue: video || {poster: '', src: ''}
             })}
             info={fieldsStore.getFieldValue('video')}
             error={!!size(fieldsStore.getFieldsError('video'))}
@@ -440,7 +441,7 @@ export default class extends Component<any> {
                     required: true
                   }
                 ],
-                initialValue: time
+                initialValue: time || ''
               })
             }
             value={fieldsStore.getFieldValue('publishTime')}
@@ -468,7 +469,7 @@ export default class extends Component<any> {
                     required: true
                   }
                 ],
-                initialValue: language
+                initialValue: language || ''
               })
             }
             value={fieldsStore.getFieldValue('language')}

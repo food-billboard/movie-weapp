@@ -20,7 +20,7 @@ import { ICommonFormProps, ICommonFormState } from '~utils'
 
  export interface IProps extends ICommonFormProps {
   radioboxOption: Array<Option<string>>, 
-  value?: string, 
+  value?: string | false
   initialValue?: string
   needHiddenList?: boolean, 
   extraFactor?: boolean

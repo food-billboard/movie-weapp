@@ -24,7 +24,8 @@ export default class extends Component<IProps, IState> {
     multi: false,
     time: false,
     date: false,
-    extraFactor: false
+    extraFactor: false,
+    value: false
   }
 
   public state: IState = {
@@ -35,14 +36,33 @@ export default class extends Component<IProps, IState> {
 
   private initialValue: any = false
 
+  private _restValue: any = []
+
+  private get restValue() {
+    const { extraFactor } = this.props
+    if(extraFactor) return this._restValue
+    return false
+  }
+
+  private set restValue(items) {
+    this._restValue = items
+  }
+
   //表单value
   private _value
 
   private get value() {
-    const { value:propsValue, initialValue } = this.props
+    const { value:propsValue, initialValue, multi, extraFactor } = this.props
     const { value:stateValue } = this.state
-    if(typeof propsValue !== 'undefined') {
-      return propsValue
+    if(propsValue !== false) {
+      return propsValue 
+      || 
+      (() => {
+        if(extraFactor) {
+          this.restValue = []
+        }
+        return (multi ? [] : '' )
+      })()
     }else {
       if(this.initialValue === undefined && typeof initialValue !== 'undefined') {
         return initialValue
@@ -89,27 +109,33 @@ export default class extends Component<IProps, IState> {
   //额外内容
   public restRef = Taro.createRef<Rest>()
 
+  public componentWillReceiveProps = (props) => {
+    const { multi, value } = props
+    if(value !== false) {
+      this.setState({
+        value: value || (multi ? [] : ( '') )
+      })
+    }
+  }
+
   //处理change
   public handleChange = async (e: any, mode) => {
     const { 
-      handleChange=noop, 
+      handleChange, 
       multi, 
       selector, 
       extraFactor,
       initialValue,
-      value:propsValue
     } = this.props
     let _data
     const { value: newData } = e.detail
     const { error } = this.state
     if(mode === modeList.selector) {
-      const { selector } = this.props
       if(selector) {
         const { range } = selector
         _data = range[newData]
       } 
     }else if(mode === modeList.multiSelector) {
-      const { multi } = this.props
       if(multi) {
         const { range } = multi
         let data: any[] = []
@@ -124,32 +150,44 @@ export default class extends Component<IProps, IState> {
     }
     if(error) this.setState({error: false})
 
-    if(typeof propsValue !== 'undefined') {
-      //只有当rest中不存在值得情况才才会触发change
-      const data = (extraFactor && (multi || selector)) ? await this.restRef.current!.getData(false) : false
-      if(!data || (Array.isArray(data) && data.length == 0)) {
-        handleChange(_data)
+    if(this.initialValue === undefined && typeof initialValue !== 'undefined') this.initialValue = initialValue
+    this.setState({
+      value: _data
+    }, async () => {
+      //选择指定内容将清空额外内容
+      if(extraFactor) {
+        this.restRef!.current!.reset()
+        this.restValue = []
       }
-    }else {
-      if(this.initialValue === undefined && typeof initialValue !== 'undefined') this.initialValue = initialValue
-      this.setState({
-        value: _data
-      })
-    }
+    })
+
+    handleChange && handleChange(_data)
 
   }
 
   //额外内容change
   public handleRestChange = (items: string[]) => {
-    const { handleChange } = this.props
+    const { handleChange, multi } = this.props
+    this.restValue = [...items]
     const item = items.pop()
-    handleChange && handleChange(item ? item : this.value)
+    const data = item ? item : (multi ? [] : '')
+    this.setState({
+      value: data
+    })
+    handleChange && handleChange(data)
   }
 
   //重置
   public reset = () => {
-    const { multi, selector, extraFactor } = this.props
-    if(extraFactor && (multi || selector)) this.restRef.current!.reset()
+    const { 
+      multi, 
+      selector, 
+      extraFactor 
+    } = this.props
+    if(extraFactor && (multi || selector)) {
+      this.restRef.current!.reset()
+      this.restValue = []
+    }
     this.setState({
       value: this.initialValue ? this.initialValue : (this.props.multi ? [] : ''),
       error: false
@@ -159,9 +197,16 @@ export default class extends Component<IProps, IState> {
   //获取数据
   public getData = async (emptyCharge=true) => {
     const { value } = this.state
-    const { multi, selector, extraFactor } = this.props
+    const { 
+      multi, 
+      selector, 
+      extraFactor 
+    } = this.props
     const data = (extraFactor && (multi || selector)) ? await this.restRef.current!.getData(false) : false
-    if(!(value+'').length && emptyCharge && !(Array.isArray(data) ? data.length : data)) {
+    if(!(value+'').length 
+      && 
+      emptyCharge && !(Array.isArray(data) ? data.length : data)
+    ) {
       await this.setState({
         error: true
       })
@@ -302,6 +347,7 @@ export default class extends Component<IProps, IState> {
             ref={this.restRef}
             title={'找不到可手动添加, 但只上传最后一项'}
             handleChange={this.handleRestChange}
+            value={this.restValue}
           ></Rest>
           : null
         }

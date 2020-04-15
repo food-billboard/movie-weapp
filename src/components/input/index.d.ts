@@ -23,7 +23,7 @@
  import { ICommonFormState, ICommonFormProps } from '~utils'
 
 export interface IProps extends ICommonFormProps {
-  value?: string
+  value?: string | false
   initialValue?: string
   type?: 'input' | 'textarea'
   placeholder?: string | false

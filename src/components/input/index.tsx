@@ -4,7 +4,6 @@ import { AtTextarea } from 'taro-ui'
 import { isObject } from '~utils'
 import { FORM_ERROR } from '~config'
 import { IProps, IState } from './index.d'
-import { noop } from 'lodash'
 
 import './index.scss'
 
@@ -15,7 +14,8 @@ export default class extends Component<IProps, IState> {
     type: 'input',
     inputType: 'text',
     placeholder: false,
-    disabled: false
+    disabled: false,
+    value: false
   }
 
   public state: IState = {
@@ -32,13 +32,21 @@ export default class extends Component<IProps, IState> {
   private get value() {
     const { value:propsValue, initialValue } = this.props
     const { value: stateValue } = this.state
-    if(typeof propsValue !== 'undefined') {
-      return propsValue
+    if(propsValue !== false) {
+      return propsValue || ''
     }else {
       if(this.initialValue === undefined && typeof initialValue !== 'undefined') {
         return initialValue
       }
       return stateValue
+    }
+  }
+
+  public componentWillReceiveProps = (props) => {
+    if(props.value !== false) {
+      this.setState({
+        value: props.value || ''
+      })
     }
   }
 
@@ -74,22 +82,24 @@ export default class extends Component<IProps, IState> {
 
   public handleChange = (e) => {
     const { error } = this.state
-    const { handleChange=noop, initialValue, value:propsValue } = this.props
+    const { handleChange, initialValue, value:propsValue } = this.props
     let data
     if(e.target) {  //textarea
       data = e.target.value
     }else { //input
       data = e
     }
-    if(typeof propsValue !== 'undefined') {
-      handleChange(data)
-    }else {
-      if(this.initialValue === undefined && typeof initialValue !== 'undefined') this.initialValue = initialValue
-      this.setState({
-        value: data,
-        error: data.length ? false : error
-      })
+
+    if(this.initialValue === undefined && typeof initialValue !== 'undefined') {
+      this.initialValue = initialValue
     }
+
+    this.setState({
+      value: data,
+      error: data.length ? false : error
+    })
+
+    handleChange && handleChange(data)
   }
 
   //设置error

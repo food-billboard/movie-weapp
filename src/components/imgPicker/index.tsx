@@ -9,6 +9,10 @@ const { count: defaultCount } = IMAGE_CONFIG
 
 export default class extends Component<IProps, IState> {
 
+  public static defaultProps: IProps = {
+    value: false
+  }
+
   public state: IState = {
     value: [],
     showAddBtn: true,
@@ -21,10 +25,11 @@ export default class extends Component<IProps, IState> {
   private _value
 
   private get value() {
-    const { value: propsValue, initialValue } = this.props
+    const { value: propsValue, initialValue, count=defaultCount } = this.props
     const { value:stateValue } = this.state
-    if(typeof propsValue !== 'undefined' ) {
-      return propsValue
+    if(propsValue !== false ) {
+      const data = propsValue || []
+      return data
     }else {
       if(this.initialValue === undefined && typeof initialValue !== 'undefined') {
         return initialValue
@@ -37,9 +42,8 @@ export default class extends Component<IProps, IState> {
   public handleChange = (files: Array<any>, operationType: string, index: number) => {
     const { 
       count=defaultCount, 
-      handleChange=noop,
+      handleChange,
       initialValue,
-      value: propsValue 
     } = this.props
     const fileLen = files.length
     if(operationType === 'add') {
@@ -52,14 +56,10 @@ export default class extends Component<IProps, IState> {
         return
       }
     } 
-    if(typeof propsValue !== 'undefined') {
-      handleChange(files)
-    }else {
-      if(this.initialValue === undefined && typeof initialValue !== 'undefined') this.initialValue = initialValue
-      this.setImageItem(files)
-    }
+    if(this.initialValue === undefined && typeof initialValue !== 'undefined') this.initialValue = initialValue
+    this.setImageItem(files)
+    handleChange && handleChange(files, operationType, index)
 
-    this.controlShowBtn(!(fileLen >= count))
     Toast({
       title: operationType === 'add' ? '添加成功' : '删除成功',
       icon: 'success',
@@ -75,10 +75,9 @@ export default class extends Component<IProps, IState> {
   }
 
   //控制按钮的显示隐藏
-  public controlShowBtn = (status: boolean) => {
-    this.setState({
-      showAddBtn: status
-    })
+  public controlShowBtn = () => {
+    const { count=defaultCount } = this.props
+    return count > this.value.length
   }
 
   //图片点击
@@ -131,11 +130,12 @@ export default class extends Component<IProps, IState> {
       multiple=true, 
       length=6,
       count=defaultCount, 
-      error=false 
+      error:propsError=false 
     } = this.props
-    const style = error ? FORM_ERROR : {}
+    const { error:stateError } = this.state
+    const style = (propsError || stateError) ? FORM_ERROR : {}
 
-    const { showAddBtn } = this.state
+    const showAddBtn = this.controlShowBtn()
 
     return (
       <AtImagePicker

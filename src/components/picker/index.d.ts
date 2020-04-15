@@ -97,7 +97,7 @@ export interface IProps extends ICommonFormProps {
   multi?: IMulti | false
   time?: ITime | false
   date?: IDate | false
-  value?: string | Array<any>
+  value?: string | Array<any> | false
   initialValue?: string | Array<any>
   title?: string
   extraFactor?: boolean

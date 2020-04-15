@@ -82,3 +82,55 @@ export const coverPromise = (func) => {
         return Promise.resolve(ret)
     }
 }
+
+//报错处理
+export const withTry = (method) => {
+    return async (...args) => {
+        try{
+            const body = await method(...args)
+            return [null, body]
+        }catch(err) {
+            return [err, null]
+        }
+    }
+}
+
+
+//判断两个对象是否相等
+export const isEqualObj = (targetA, targetB) => {
+    var typeA = typeof targetA,
+        typeB = typeof targetB
+    var keysA,
+        keysB
+    if(typeA !== 'object' && typeB !== 'object') return targetA == targetB
+    typeA = Object.prototype.toString.call(targetA)
+    typeB = Object.prototype.toString.call(targetB)
+    if(typeA == '[object RegExp]' || typeB == '[object RegExp]') {
+        return targetA === targetB && typeA == typeB
+    }else if(typeA === '[object Null]' || typeB === '[object Null]') {
+        return targetA === targetB && typeA === typeB
+    }else if(typeA === '[object Array]' || typeB === '[object Array]') {
+        return targetA.toString() === targetB.toString() && typeA === typeB
+    }
+    keysA = Object.keys(targetA),
+    keysB = Object.keys(targetB)
+
+
+    //属性长度不同则不同
+    if(keysA.length !== keysB.length) return false
+    if(keysA.length == 0 && keysB.length == 0) return true
+    return keysA.some(key => {
+        typeA = Object.prototype.toString.call(targetA[key])
+        typeB = Object.prototype.toString.call(targetB[key])
+        //类型不同则不同
+        if(typeA != typeB) return false
+        //内部仍是对象则递归
+        if(typeA === '[object Object]') return isEqualObj(targetA[key], targetB[key])
+        //数字类型中的NaN
+        if(typeA === '[object number]' && (Number.isNaN(targetA[key]) || Number.isNaN(targetB[key]))) {
+            return Number.isNaN(targetA[key]) && Number.isNaN(targetB[key])
+        }
+        if(typeA === '[object Array]') return isEqualObj(targetA[key], targetB[key])
+        return targetB[key] === targetA[key]
+    })
+}

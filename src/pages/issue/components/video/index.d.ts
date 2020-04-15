@@ -14,7 +14,8 @@ import { IProps as IVideo } from '~components/video/index.d'
  */
 
 export interface IProps {
-  info: IVideo
+  info?: IVideo | false
+  initialValue?: IVideo
   error?:boolean
   handleOnChange?: (...args: any[]) => any
 }

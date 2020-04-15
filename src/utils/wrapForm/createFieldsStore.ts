@@ -110,16 +110,11 @@ class FieldsStore {
       ...options,
       name
     }
-    if(!!!this.fields[name]) {
-      this.setFields({[name]: {name, value: null}})
-    }else {
-      this.fields[name] = { ...this.fields[name], name }
-    }
+
+    this.fields[name] = { ...this.fields[name], name }
     
-    this.fieldsMeta[name] = { ...this.getFieldMeta(name), ...newFieldMeta }
-    if('initialValue' in newFieldMeta && !this.fields[name].value) {
-      this.setFieldsValue({[name]: newFieldMeta.initialValue})
-    }
+    this.setFieldMeta(name, { ...this.getFieldMeta(name), ...newFieldMeta })
+    
 
     //返回响应的配置属性
     const configProps = {
@@ -148,16 +143,10 @@ class FieldsStore {
 
   //获取fields的value
   getFieldsValue = function(ns) {
-    const { fields, fieldsMeta } = this
+    const { fields } = this
     const names = ns ? (Array.isArray(ns) ? ns : [ns]) : Object.keys(fields)
     return names.reduce((acc, name) => {
-      let value
-      if('value' in fields[name]) {
-        value = fields[name].value
-      }else {
-        value = fieldsMeta[name].initialValue
-      }
-      acc[name] = value
+      acc[name] = this.getFieldValue(name)
       return acc
     }, {})
   }
@@ -165,7 +154,11 @@ class FieldsStore {
   //获取字段的value
   getFieldValue = function(name) {
     this.fields[name] = this.fields[name] || {}
-    return this.fields[name].value ? this.fields[name].value : this.getFieldMeta(name).initialValue
+    let data = this.fields[name].value
+    if(data === undefined) {
+      data = this.getFieldMeta(name).initialValue
+    }
+    return data
   }
 
   //设置fields
@@ -198,7 +191,6 @@ class FieldsStore {
         this.fields
       )
     }
-
     this.update()
   }
 

@@ -9,7 +9,7 @@ export const IMAGE_CONFIG = {
 //表单提示样式
 export const FORM_ERROR = {
   border: '2px solid red',
-  boxSizing: '0 0 2px red'
+  boxShadow: '0 0 2px red'
 }
 
 //设置大小修改图标

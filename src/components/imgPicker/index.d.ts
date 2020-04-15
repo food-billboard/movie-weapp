@@ -31,7 +31,7 @@ export interface IProps extends ICommonFormProps {
   multiple?: boolean
   length?: number
   count?: number
-  value?: Array<IFiles>
+  value?: Array<IFiles> | false
   initialValue?: Array<IFiles>
   handleChange?: (files: Array<any>, operationType: string, index: number) => any
 }

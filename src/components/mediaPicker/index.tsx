@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Image } from '@tarojs/components'
 import GVideo from '../video'
 import { IProps, IState, IItem } from './index.d'
-import { IMAGE_CONFIG, SYSTEM_PAGE_SIZE } from '~config'
+import { IMAGE_CONFIG, SYSTEM_PAGE_SIZE, FORM_ERROR } from '~config'
 import style from '~theme/style'
 import { findIndex } from 'lodash'
 import { Toast } from '~components/toast'
@@ -124,11 +124,10 @@ export default class extends Component<IProps, IState> {
   public onChange = (value) => {
     const { handleChange, initialValue, value:propsValue } = this.props
     if(this.initialValue === undefined && typeof initialValue !== 'undefined') this.initialValue = initialValue
-    if(typeof propsValue !== 'undefined') {
-      handleChange && handleChange(value)
-    }else {
-      this.setState({value})
+    if(typeof propsValue === 'undefined') {
+      this.setState({value}) 
     }
+    handleChange && handleChange(value)
   }
 
   //重置
@@ -191,36 +190,58 @@ export default class extends Component<IProps, IState> {
       width, 
       height, 
       close=true, 
-      error=false 
+      error:propsError=false 
     } = this.props
 
-    const { maxCount, activeVideo, isVideo } = this.state
+    const { maxCount, activeVideo, isVideo, error: stateError } = this.state
+
+    const buttonStyle = {
+      ...style.backgroundColor('disabled'), 
+      ...style.color('primary'), 
+      ...style.border(1, 'disabled', 'solid', 'all'),
+      ...((propsError || stateError) ? FORM_ERROR : {})
+    }
 
     return (
-      <View className='media' style={isObject(customStyle) ? customStyle : {}}>
-        <View className='title at-row at-row__justify--between' style={{display: maxCount === this.value.length ? 'none' : 'flex'}}>
+      <View 
+        className='media' 
+        style={isObject(customStyle) ? customStyle : {}}
+      >
+        <View 
+          className='title at-row at-row__justify--between' 
+          style={{display: maxCount === this.value.length ? 'none' : 'flex'}}
+        >
           <View className='image-title at-col at-col-5'>
             <View 
               className='at-row at-row__align--center at-row__justify--center btn' 
-              style={{...style.backgroundColor('disabled'), ...style.color('primary'), ...style.border(1, 'disabled', 'solid', 'all')}}
+              style={{...buttonStyle}}
               onClick={this.handleImageChange.bind(this)}
             >
-              <View className='at-icon at-icon-image' style={{fontSize: SYSTEM_PAGE_SIZE() + 'px'}}></View>
+              <View 
+                className='at-icon at-icon-image' 
+                style={{fontSize: SYSTEM_PAGE_SIZE() + 'px'}}
+              ></View>
               <Text>图片选择</Text>
             </View>
           </View>
           <View className='video-title at-col at-col-5 at-col-offset-2'>
             <View 
               className='at-row at-row__align--center at-row__justify--center btn' 
-              style={{...style.backgroundColor('disabled'), ...style.color('primary'), ...style.border(1, 'disabled', 'solid', 'all')}}
+              style={buttonStyle}
               onClick={this.handleVideoChange.bind(this)}
             >
-              <View className='at-icon at-icon-video' style={{fontSize: SYSTEM_PAGE_SIZE() + 'px'}}></View>
+              <View 
+                className='at-icon at-icon-video' 
+                style={{fontSize: SYSTEM_PAGE_SIZE() + 'px'}}
+              ></View>
               <Text>视频选择</Text>
             </View>
           </View>
         </View>
-        <View className='main at-row at-row--wrap' style={{marginTop: '10px'}}>
+        <View 
+          className='main at-row at-row--wrap' 
+          style={{marginTop: '10px'}}
+        >
           {
             this.value.map((val: any) => {
               const { url, type, poster='' } = val

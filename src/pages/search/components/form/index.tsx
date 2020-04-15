@@ -57,6 +57,7 @@ export default class Forms extends Component<IProps> {
 
     public componentDidMount = () => {
         this.fetchTypeData()
+        // fieldsStore.setUpdate(this.forceUpdate.bind(this))
     }
 
     public state: IState = {
@@ -114,64 +115,32 @@ export default class Forms extends Component<IProps> {
     /**
      * 搜索条件数据检验
      */
-    public filterFactor = async() => {
-        // const fee = await this.feeRef.current!.getData(false)
-        // const startTime = await this.startTimeRef.current!.getData(false)
-        // const endTime = await this.endTimeRef.current!.getData(false)
-        // const minPrice = await this.minPriceRef.current!.getData(false)
-        // const maxPrice = await this.maxPriceRef.current!.getData(false)
-        // const type = await this.typeRef.current!.getData(false)
-        // const lang = await this.langRef.current!.getData(false)
-        // const area = await this.areaRef.current!.getData(false)
-        // const director = await this.directorRef.current!.getData(false)
-        // const actor = await this.actorRef.current!.getData(false)
-        // const isArray = (data, string=false) => {
-        //     return  Array.isArray(data) ? (string ? data.join('') : data) : (data ? data : '')
-        // }
-
-        // //日期检查
-        // if( startTime && endTime) {
-        //     if(startTime > endTime) {
-        //         Toast({
-        //             title: '起始时间有误',
-        //             icon: 'fail', 
-        //         })
-        //         return
-        //     }
-        // }
-        // //价格检查
-        // if(minPrice && maxPrice) {
-        //     if(minPrice > maxPrice) {
-        //         await Toast({
-        //             title: '价格不能为负数',
-        //             icon: 'fail',
-        //         })
-        //         return
-        //     }
-        // }
+    public filterFactor = () => {
         const values = fieldsStore.getFieldsValue()
-        // let data: FormData = {
-        //     maxPrice: '最大价格',
-        //     minPrice: '最小价格',
-        //     fee: [],
-        //     type: isArray(type),
-        //     startDate: isArray(startTime, true),
-        //     endDate: isArray(endTime, true),
-        //     lang: isArray(lang, true),
-        //     area: isArray(area),
-        //     director: isArray(director),
-        //     actor: isArray(actor)
-        // }
-        console.log(values)
-        // return {}
+        const {
+            price: {max, min},
+            time: {start, end},
+            ...nextProps
+        } = values
+        let data: FormData = {
+            maxPrice: max,
+            minPrice: min,
+            startDate: start,
+            endDate: end,
+            ...nextProps
+        }
+        return data
+
     }
 
     /**
      * 筛选提交
      */
     public onSubmit = async () => {
-        const data = await this.filterFactor()
+        const data = this.filterFactor()
+        Taro.showLoading({title: '稍等', mask: true})
         // await this.props.screen(data ? data : this.formData)
+        Taro.hideLoading()
     }
 
     /**
@@ -185,16 +154,6 @@ export default class Forms extends Component<IProps> {
         if(!confirm) {
             return
         }
-        // this.feeRef.current!.reset()
-        // this.maxPriceRef.current!.reset()
-        // this.minPriceRef.current!.reset()
-        // this.startTimeRef.current!.reset()
-        // this.endTimeRef.current!.reset()
-        // this.typeRef.current!.reset()
-        // this.areaRef.current!.reset()
-        // this.actorRef.current!.reset()
-        // this.directorRef.current!.reset()
-        // this.langRef.current!.reset()
         fieldsStore.resetFields()
         this.setState({
             open: false

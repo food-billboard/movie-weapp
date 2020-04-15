@@ -41,7 +41,7 @@ export interface IOption {
 }
 
 export interface IProps extends ICommonFormProps {
-  value?: Array<string>
+  value?: Array<string> | false
   initialValue?: Array<string> 
   checkboxOption?: Array<IOption>
   type: keyof typeof typeList

@@ -8,7 +8,6 @@ import { mapStateToProps, mapDispatchToProps } from './connect'
 import { FORM_ERROR, SYSTEM_PAGE_SIZE } from '~config'
 import { IState, IProps, IOption, typeList } from './index.d'
 import styleColor  from '~theme/style'
-import { noop } from 'lodash'
 
 import './index.scss'
 
@@ -22,6 +21,7 @@ export default class extends Component<IProps, IState> {
   public static defaultProps: IProps = {
     type: 'area',
     needHiddenList: true,
+    value: false,
     getSwitch: (count?:number) => {},
     getAreaList: (count?:number) => {},
     getLanguageList: (count?:number) => {},
@@ -32,6 +32,14 @@ export default class extends Component<IProps, IState> {
 
   public componentDidMount = async () => {
     this.fetchData()
+  }
+
+  public componentWillReceiveProps = (props) => {
+    if(props.value !== false) {
+      this.setState({
+        value: props.value || []
+      })
+    }
   }
 
   public state: IState = {
@@ -49,8 +57,8 @@ export default class extends Component<IProps, IState> {
   private get value() {
     const { initialValue, value:propsValue } = this.props
     const { value: stateValue } = this.state
-    if(typeof propsValue !== 'undefined') {
-      return propsValue
+    if(propsValue !== false) {
+      return propsValue || []
     }else {
       if(this.initialValue === undefined && typeof initialValue !== 'undefined') {
         return initialValue
@@ -103,25 +111,23 @@ export default class extends Component<IProps, IState> {
   //处理选择
   public handleChange = (value: any) => {
     const { 
-      handleChange=noop,
+      handleChange,
       initialValue,
       value:propsValue
     } = this.props
-    if(typeof propsValue !== 'undefined') {
-      handleChange(value)
-    }else {
-      if(this.initialValue === undefined && typeof initialValue !== 'undefined') this.initialValue = initialValue
-      this.setState({
-        value,
-        error: false
-      })
-    }
+    if(this.initialValue === undefined && typeof initialValue !== 'undefined') this.initialValue = initialValue
+    this.setState({
+      value,
+      error: false
+    })
+    handleChange && handleChange(value)
   }
 
   //额外内容change
   public handleRestChange = (items: string[]) => {
     const { handleChange } = this.props
-    handleChange && handleChange([...this.value, ...items])
+    let mainData = this.getPropsValue(this.value, 'main')
+    handleChange && handleChange([...mainData, ...items])
   }
 
   //打开
@@ -152,7 +158,7 @@ export default class extends Component<IProps, IState> {
   }
 
   //获取数据
-  public getData = async (emptyCharge=true) => {
+  public getData = async (emptyCharge=true, type:'all' | 'rest' | 'main'='all') => {
     const { value } = this.state
     const { extraFactor=true } = this.props
     const data = extraFactor ? await this.restRef.current!.getData(false) : false
@@ -165,8 +171,39 @@ export default class extends Component<IProps, IState> {
     await this.setState({
       error: false
     })
+    if(type === 'main') {
+      return value
+
+    }else if(type === 'rest') {
+      return data ? data : []
+    }
     return [ ...value, ...(data ? data : []) ]
   }
+
+  //获取内容内部
+  private getPropsValue = (targetValues, type:'all' | 'rest' | 'main'='all') => {
+    if(type === 'all') return targetValues
+    const { checkboxOption=[], value:propsValue } = this.props
+    const { checkOption=[] } = this.state
+    const activeCheckOption = checkOption.length ? checkOption : checkboxOption
+    const restValue:string[] = []
+    const mainValue:string[] = []
+    const checkValues = activeCheckOption.map(item => {
+      const { value } = item
+      return value
+    })
+    targetValues.forEach(item => {
+      if(!checkValues.includes(item)) {
+        restValue.push(item)
+      }else {
+        mainValue.push(item)
+      }
+    })
+    switch(type) {
+      case 'main': return mainValue
+      case 'rest': return (propsValue === false ? propsValue : restValue)
+    }
+  } 
 
   //设置error
   public setError = (state: boolean) => {
@@ -194,15 +231,21 @@ export default class extends Component<IProps, IState> {
       ...BUTTON_STYLE, 
       ...styleColor.border(1, 'primary', 'solid', 'all'), 
       ...styleColor.color('primary'), 
+    }
+
+    const globalStyle = {
+      ...(isObject(style) ? style : {}),
       ...((stateError || propsError) ? FORM_ERROR : {})
     }
 
+    const activeCheckOption = checkOption.length ? checkOption : checkboxOption
+
     return (
-      <View style={isObject(style) ? style : {}}>
+      <View style={globalStyle}>
         {
           needHiddenList ? <View className='at-row at-row__align--center at-row--wrap'>
             {
-              (checkOption.length ? checkOption : checkboxOption).filter((val:IOption) => {
+              activeCheckOption.filter((val:IOption) => {
                 const { value } = val
                 return this.value.indexOf(value) !== -1
               })
@@ -227,13 +270,16 @@ export default class extends Component<IProps, IState> {
           <AtButton 
             type={'secondary'} 
             onClick={this.open} 
-            customStyle={{...btnStyle}}>打开</AtButton>
+            customStyle={{
+              ...btnStyle,
+              ...((stateError || propsError) ? FORM_ERROR : {})
+            }}>打开</AtButton>
           : null
         }
         {
           (needHiddenList ? show : true) ? 
           <AtCheckbox
-            options={checkOption.length ? checkOption : checkboxOption}
+            options={activeCheckOption}
             selectedList={this.value}
             onChange={this.handleChange}
           >
@@ -248,6 +294,7 @@ export default class extends Component<IProps, IState> {
             title={'上面找不到可以在下面手动添加'}
             style={{marginBottom: '5px', display: (needHiddenList ? show : true) ? 'block' : 'none'}}
             handleChange={this.handleRestChange}
+            value={this.getPropsValue(this.value, 'rest')}
           ></Rest>
           : null
         }

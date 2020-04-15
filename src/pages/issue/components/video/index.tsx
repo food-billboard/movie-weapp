@@ -10,16 +10,35 @@ import { noop } from 'lodash'
 
 import './index.scss'
 
+const defaultInfo = {src: '', poster: ''}
+
 export default class extends Component<IProps, IState> {
 
-  private FIRST = true
+  public static defaultProps:IProps = {
+    info: false
+  }
 
-  private initValue:any = false
+  private initialValue:any = false
 
   public state: IState = {
-    info: {src: '', poster: ''},
+    info: {...defaultInfo},
     srcError: false,
     posterError: false
+  }
+
+  private _value
+
+  private get value() {
+    const { info:propsValue, initialValue } = this.props
+    const { info: stateValue } = this.state
+    if(propsValue !== false) {
+      return propsValue || {...defaultInfo}
+    }else {
+      if(this.initialValue === undefined && typeof initialValue !== 'undefined') {
+        return initialValue
+      }
+      return stateValue
+    }
   }
 
   //添加海报
@@ -36,7 +55,10 @@ export default class extends Component<IProps, IState> {
           info: { ...info, poster: tempFilePaths[0] },
           posterError: false
         }, () => {
-          handleOnChange(this.state.info)
+          handleOnChange({
+            ...this.value,
+            poster: tempFilePaths[0]
+          })
         })
       }
     })
@@ -55,7 +77,10 @@ export default class extends Component<IProps, IState> {
           info: { ...info, src: file },
           srcError: false
         }, () => {
-          handleOnChange(this.state.info)
+          handleOnChange({
+            ...this.value,
+            src: file
+          })
         })
       }
     })
@@ -64,7 +89,7 @@ export default class extends Component<IProps, IState> {
   //重置
   public reset = () => {
     this.setState({
-      info: this.initValue ? this.initValue : { src: '', poster: '' },
+      info: this.initialValue ? this.initialValue : { src: '', poster: '' },
       srcError: false,
       posterError: false
     })
@@ -96,24 +121,9 @@ export default class extends Component<IProps, IState> {
 
   public render() {
 
-    const { info=false, error=false } = this.props
+    const { error=false } = this.props
 
-    if(this.FIRST) {
-      if(isObject(info)) {
-        this.FIRST = false
-        const { info: defaultInfo } = this.state
-        this.initValue = { ...defaultInfo, ...info }
-        this.setState({
-          info: { ...defaultInfo, ...info }
-        })
-      }
-    }
-
-    const { info: stateInfo, srcError, posterError } = this.state
-    const { 
-      poster,
-      src
-    } = stateInfo
+    const { srcError, posterError } = this.state
 
     const commonStyle = {
       ...style.border(1, 'primary', 'solid', 'all'), 
@@ -123,8 +133,8 @@ export default class extends Component<IProps, IState> {
     return (
       <View>
         <GVideo
-          poster={poster}
-          src={src}
+          poster={this.value.poster || ''}
+          src={this.value.src || ''}
         ></GVideo>
         <View className='at-row at-row__justify--between'>
           <AtButton onClick={this.handleAddPoster} className='at-col' customStyle={{...commonStyle, ...((posterError || error) ? FORM_ERROR : {}) }} >添加海报</AtButton>
