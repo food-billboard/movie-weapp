@@ -13,7 +13,7 @@ import { TypeColor, colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { SYSTEM_PAGE_SIZE, getCookie } from '~config'
 import { Toast } from '~components/toast'
-import { size } from '~utils'
+import { size, withTry } from '~utils'
 import BaseForm from '~utils/wrapForm'
 import { createFieldsStore } from '~utils/wrapForm/createFieldsStore'
 
@@ -199,16 +199,18 @@ export default class extends Component<any> {
         })
       }
 
+      Taro.showLoading({mask: true, title: '提交中...'})
        //数据提交
       if(isIssue) {
         await this.props.setIssue({
           isIssue: false,
           movieId: ''
         })
-        await this.editData(data)
+        await withTry(this.editData)(data)
       }else {
-        await this.props.sendIssue(data)
+        await withTry(this.props.sendIssue)(data)
       }
+      Taro.hideLoading()
 
       Taro.showModal({
         title: '提示',

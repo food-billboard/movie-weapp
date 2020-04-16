@@ -6,7 +6,7 @@ import List from '~components/linearlist'
 import Comment from '~components/comment'
 import GColor from './components/color'
 import { TypeColor, colorChange, colorStyleChange } from '~theme/color'
-import { router, routeAlias, createSystemInfo } from '~utils'
+import { router, routeAlias, createSystemInfo, withTry } from '~utils'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { Toast } from '~components/toast'
@@ -64,7 +64,7 @@ export default class Setting extends Component<any>{
         const { about } = this.state
         about.model.isOpen = true
         Taro.showLoading({mask: true, title: '稍等...'})
-        await this.props.getAppInfo()
+        await withTry(this.props.getAppInfo)()
         Taro.hideLoading()
         about.model.content = this.props.appInfo.about || ''
         await this.setState({
@@ -87,12 +87,14 @@ export default class Setting extends Component<any>{
             button
         })
         Taro.showLoading({mask: true, title: '稍等一下'})
-        await this.props.logout(this.id)
+        const [,data] = await withTry(this.props.logout)(this.id)
         Taro.hideLoading()
-        Toast({
-            title: '好了',
-            icon: 'success'
-        })
+        if(data) {
+            Toast({
+                title: '好了',
+                icon: 'success'
+            })
+        }
     }
 
     /**
@@ -142,7 +144,7 @@ export default class Setting extends Component<any>{
     //反馈信息发送
     public handleFeedback = async (value: string) => {
         Taro.showLoading({mask: true, title: '提交中'})
-        await this.props.feedback(this.props.id, value)
+        await withTry(this.props.feedback)(this.props.id, value)
         Taro.hideLoading()
     }
 
@@ -176,7 +178,7 @@ export default class Setting extends Component<any>{
 
     //控制色调开启关闭
     public colorStyleChange = async (value: TOptionType) => {
-        this.radioRef.current!.handleClick(value)
+        this.radioRef.current!.handleChange(value)
         const data = this.colorRef.current!.state.active
         let status
         if(value === colorControl.on) {
@@ -254,10 +256,10 @@ export default class Setting extends Component<any>{
                 activeModel: button.model
             })
             Taro.showLoading({mask: true, title: '稍等一下...'})
-            await this.props.logout(this.id)
+            await withTry(this.props.logout)(this.id)
             Taro.hideLoading()
         }else {
-            router.push(routeAlias.login)
+            // router.push(routeAlias.login)
         }
     }
 

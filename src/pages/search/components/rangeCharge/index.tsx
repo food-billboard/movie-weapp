@@ -13,8 +13,9 @@ export default class extends Component<IProps, IState>{
   }
 
   public minChange = (value) => {
-    const { onChange, value: { max='' } = {} } = this.props
-    let data 
+    const { onChange, value: propsValue = {max:''} } = this.props
+    const { max='' } = propsValue
+    let data = value
     if(max.toString().length && ~~max <= value) {
       data = max
       Toast({
@@ -26,8 +27,9 @@ export default class extends Component<IProps, IState>{
   }
 
   public maxChange = (value) => {
-    const { onChange, value: { min='' } = {} } = this.props
-    let data
+    const { onChange, value:propsValue = {min:''} } = this.props
+    const { min='' } = propsValue
+    let data = value
     if(min.toString().length && ~~min >= value) {
       data = min
       Toast({
@@ -50,7 +52,6 @@ export default class extends Component<IProps, IState>{
     const { 
       value: { max='', min='' } = {}
     } = this.props
-
     const {  
       disabled
     } = this.state

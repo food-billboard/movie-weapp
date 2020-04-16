@@ -17,7 +17,7 @@ export default class extends Component<IProps, IState> {
   public startChange = async (value) => {
     const { onChange, value: { end=new Date().getFullYear() }={} } = this.props
     let data = value
-    if(~~value >= ~~end) {
+    if(end.toString().length && ~~value >= ~~end) {
       data = end
       Toast({
         title: '时间错误会默认忽略',
@@ -30,7 +30,7 @@ export default class extends Component<IProps, IState> {
   public endChange = async (value) => {
     const { onChange, value: { start=1970 }={} } = this.props
     let data = value
-    if(~~value <= ~~start) {
+    if(start.toString().length && ~~value <= ~~start) {
       data = start
       Toast({
         title: '时间错误会默认忽略',
@@ -39,20 +39,6 @@ export default class extends Component<IProps, IState> {
     }
     onChange && onChange({end: data})
   }
-
-  // public getData = async (emptyCharge:boolean=true, time:'all' | 'start' | 'end'='all') => {
-  //   const start = await this.startRef!.current!.getData(emptyCharge)
-  //   const end = await this.endRef!.current!.getData(emptyCharge)
-  //   if(time === 'start') {
-  //     return {start}
-  //   }else if(time === 'end') {
-  //     return {end}
-  //   }
-  //   return {
-  //     start,
-  //     end
-  //   }
-  // }
 
   public render() {
 

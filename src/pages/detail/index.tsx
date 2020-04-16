@@ -15,7 +15,7 @@ import { colorStyleChange } from '~theme/color'
 import { getCookie } from '~config'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
-import { size } from '~utils'
+import { size, withTry } from '~utils'
 
 import './index.scss'
 
@@ -105,7 +105,7 @@ export default class extends Component<any> {
     public comment = async (value: string) => {
 
         Taro.showLoading({mask: true, title: '评论中...'})
-        await this.props.comment(value, this.id, this.mineId)
+        await withTry(this.props.comment)(value, this.id, this.mineId)
         Taro.hideLoading()
     }
 

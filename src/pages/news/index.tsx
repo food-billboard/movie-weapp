@@ -4,7 +4,7 @@ import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { mapDispatchToProps, mapStateToProps } from './connect'
 import {connect} from '@tarojs/redux'
-import { router, routeAlias, infomationType, formatTime } from '~utils'
+import { router, routeAlias, infomationType, formatTime, withTry } from '~utils'
 import { throttle, findIndex } from 'lodash'
 
 import './index.scss'
@@ -86,7 +86,9 @@ export default class extends Component<any> {
 
     //删除消息
     public handleDeleteNews = async (id: string) => {
-        await this.props.deleteNews(id, new Date().getTime())
+        Taro.showLoading({mask: true, title: '删除中'})
+        await withTry(this.props.deleteNews)(id, new Date().getTime())
+        Taro.hideLoading()
         this.setState({})
     }
 

@@ -5,7 +5,7 @@ import GVideo from '../video'
 import Curtain from '../curtain'
 import ImageLoading from '../imageLoading'
 import { Info } from '../model/index.d'
-import { router, formatTime, formatNumber, mediaType, routeAlias, size } from '~utils'
+import { router, formatTime, formatNumber, mediaType, routeAlias, size, withTry } from '~utils'
 import style from '~theme/style'
 import { TypeColor } from '~theme/color'
 import {connect} from '@tarojs/redux'
@@ -107,7 +107,7 @@ class List extends Component<IProps, IState>{
             list
         })
         Taro.showLoading({ mask: true, title: '等我一下' })
-        await this.props.like(this.commentId, id, mineId)   
+        await withTry(this.props.like)(this.commentId, id, mineId)   
         Taro.hideLoading()
     }
 

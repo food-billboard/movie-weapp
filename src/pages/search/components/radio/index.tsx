@@ -5,6 +5,7 @@ import './index.scss'
 import { IProps, IState, List, IRadio } from './index.d'
 import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToProps } from './connect'
+import { withTry } from '~utils'
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class RadioList extends Component<IProps>{
@@ -23,18 +24,20 @@ export default class RadioList extends Component<IProps>{
     //数据获取
     public fetchData = async () => {
         Taro.showLoading({mask: true, title: '稍等一下'})
-        const data = await this.props.getOrderList()
-        const { data:_data } = data
-        this.setState({
-            radioList: _data.map((val:IRadio) => {
-                const { label } = val
-                return {
-                    ...val,
-                    value: label
-                }
-            })
-        })
+        const [,data] = await withTry(this.props.getOrderList)()
         Taro.hideLoading()
+        if(data) {
+            const { data:_data } = data
+            this.setState({
+                radioList: _data.map((val:IRadio) => {
+                    const { label } = val
+                    return {
+                        ...val,
+                        value: label
+                    }
+                })
+            })
+        }
     }
 
     /**

@@ -16,6 +16,7 @@ import { SYSTEM_PAGE_SIZE } from '~config'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { AtDrawer } from 'taro-ui'
+import { withTry } from '~utils'
 
 import './index.scss'
 
@@ -65,18 +66,23 @@ export default class Index extends Component<any> {
     //数据获取
     public fetchData = async (query: any, isInit=false) => {
         const { searchList } = this.state
-        const data = await this.props.factorySearch({...query})
-        const _data = data.data
-        let newData
-        if(isInit) {
-            newData = [ ..._data ]
-        }else {
-            newData = [ ...searchList, ..._data ]
+        Taro.showLoading({mask: true, title: '查询中'})
+        const [,data] = await withTry(this.props.factorySearch)({...query})
+        Taro.hideLoading()
+        if(data) {
+            const _data = data.data
+            let newData
+            if(isInit) {
+                newData = [ ..._data ]
+            }else {
+                newData = [ ...searchList, ..._data ]
+            }
+            await this.setState({
+                searchList: newData
+            })
+            return _data || []
         }
-        await this.setState({
-            searchList: newData
-        })
-        return _data || []
+        return []
     }
 
     /**
@@ -84,13 +90,15 @@ export default class Index extends Component<any> {
      */
     public confirm = async (value: string) => {
         Taro.showLoading({mask: true, title: '努力搜索中'})
-        const data = await this.props.factorySearch({ ...INIT_PAGE, query: { query: {}, field: value } })
-        const _data = data.data
-        await this.setState({
-            searchList: _data
-        })
+        const [,data] = await withTry(this.props.factorySearch)({ ...INIT_PAGE, query: { query: {}, field: value } })
         Taro.hideLoading()
-        this.showList(true)
+        if(data) {
+            const _data = data.data
+            await this.setState({
+                searchList: _data
+            })
+            this.showList(true)
+        }
     }
 
     /**
@@ -102,12 +110,14 @@ export default class Index extends Component<any> {
             query: { ...query, type }
         })
         Taro.showLoading({mask: true, title: '筛选中'})
-        const data = await this.props.factorySearch({ ...INIT_PAGE, query: { ...INIT_QUERY, ...query, type, field: this.searchBarRef.current!.state!.value || '' } })
-        const _data = data.data
-        await this.setState({
-            searchList: _data
-        })
+        const [,data] = await withTry(this.props.factorySearch)({ ...INIT_PAGE, query: { ...INIT_QUERY, ...query, type, field: this.searchBarRef.current!.state!.value || '' } })
         Taro.hideLoading()
+        if(data) {
+            const _data = data.data
+            await this.setState({
+                searchList: _data
+            })
+        }
     }
 
     /**
@@ -119,12 +129,14 @@ export default class Index extends Component<any> {
             query: { ...query, sort }
         })
         Taro.showLoading({mask: true, title: '努力搜索中'})
-        const data = await this.props.factorySearch({ ...INIT_PAGE, query: { ...INIT_QUERY, ...query, sort, field: this.searchBarRef.current!.state!.value || '' } })
-        const _data = data.data
-        await this.setState({
-            searchList: _data
-        })
+        const [,data] = await withTry(this.props.factorySearch)({ ...INIT_PAGE, query: { ...INIT_QUERY, ...query, sort, field: this.searchBarRef.current!.state!.value || '' } })
         Taro.hideLoading()
+        if(data) {
+            const _data = data.data
+            await this.setState({
+                searchList: _data
+            })
+        }
     }
 
     /**
@@ -136,12 +148,14 @@ export default class Index extends Component<any> {
             query: { ...query, query: formData }
         })
         Taro.showLoading({ mask: true, title: '努力筛选中' })
-        const data  = await this.props.factorySearch({ ...INIT_PAGE, query: { ...INIT_QUERY, ...query, query: formData, field: this.searchBarRef.current!.state.value || '' } })
-        const _data = data.data
-        await this.setState({
-            searchList: _data
-        })
-        Taro.hideLoading()
+        const [,data]  = await withTry(this.props.factorySearch)({ ...INIT_PAGE, query: { ...INIT_QUERY, ...query, query: formData, field: this.searchBarRef.current!.state.value || '' } })
+        Taro.hideLoading() 
+        if(data) {
+            const _data = data.data
+            await this.setState({
+                searchList: _data
+            })
+        }
     }
 
     /**

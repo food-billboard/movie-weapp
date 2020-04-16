@@ -11,7 +11,7 @@ import { colorStyleChange } from '~theme/color'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { getCookie } from '~config'
-import { size } from '~utils'
+import { size, withTry } from '~utils'
 
 const INIT_QUERY = { currPage:1, pageSize: 7 }
 let FIRST = true
@@ -103,7 +103,7 @@ export default class extends Component<any> {
     const { userId, commentId } = this.state
     Taro.showLoading({ mask: true, title: '发布中' })
     
-    await this.props.publishUserComment(commentId, value, userId, this.mineId)
+    await withTry(this.props.publishUserComment)(commentId, value, userId, this.mineId)
 
     Taro.hideLoading()
     await this.fetchData({...INIT_QUERY}, true)

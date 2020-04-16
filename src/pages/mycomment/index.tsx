@@ -7,6 +7,7 @@ import Origin from './components/originComment'
 import { throttle } from 'lodash'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
+import { withTry } from '~utils'
 
 import './index.scss'
 
@@ -97,7 +98,7 @@ export default class extends Component<any>{
     public publishComment = async (value) => {
         const { userId, commentId } = this.state
         Taro.showLoading({ mask: true, title: '发布中' })
-        await this.props.publishUserComment(commentId, value, userId, this.mineId)
+        await withTry(this.props.publishUserComment)(commentId, value, userId, this.mineId)
         Taro.hideLoading()
         await this.fetchData({...INIT_QUERY}, true)
     }

@@ -9,7 +9,7 @@ import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
 import { throttle } from 'lodash'
 import { getCookie } from '~config'
-import { size } from '~utils'
+import { size, withTry } from '~utils'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 
@@ -103,10 +103,10 @@ export default class extends Component<any> {
         Taro.showLoading({ mask: true, title: '发布中' })
         if(typeof userId === 'string' || 'number') {
             //评论用户
-            await this.props.publishUserComment(commentId, value, userId, this.mineId)
+            await withTry(this.props.publishUserComment)(commentId, value, userId, this.mineId)
         }else {
             //评论电影
-            this.props.publishComment(value, this.id, this.mineId)
+            await withTry(this.props.publishComment)(value, this.id, this.mineId)
         }
         Taro.hideLoading()
         await this.fetchData({...INIT_QUERY}, true)

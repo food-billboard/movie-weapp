@@ -6,7 +6,7 @@ import style from '~theme/style'
 import { SYSTEM_PAGE_SIZE, getCookie } from '~config'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
-import { size } from '~utils'
+import { size, withTry } from '~utils'
 
 import './index.scss'
 
@@ -47,10 +47,10 @@ export default class GTate extends Component<IProps, IState>{
 
         const { id } = userInfo
 
-        this.props.getUserInfo()
+        await this.props.getUserInfo()
         const {movie} = this.props
         Taro.showLoading({mask: true, title: '评分中'})
-        await this.props.sendRate(value, id, movie)
+        await withTry(this.props.sendRate)(value, id, movie)
         Taro.hideLoading()
     }
 

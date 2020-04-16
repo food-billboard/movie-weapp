@@ -5,7 +5,7 @@ import List from '~components/linearlist'
 import GButton from '~components/button'
 import { TypeColor, colorStyleChange } from '~theme/color'
 import {mapStateToProps, mapDispatchToProps} from './connect'
-import { router, routeAlias, size } from '~utils'
+import { router, routeAlias, size, withTry } from '~utils'
 import {connect} from '@tarojs/redux'
 import style from '~theme/style'
 import { getCookie } from '~config'
@@ -41,14 +41,16 @@ export default class User extends Component<any>{
     //数据获取
     public fetchData = async () => {
         Taro.showLoading({mask: true, title: '加载中'})
-        const userInfo = await this.props.getUserInfo()
-        const { info } = userInfo
-        const isLike = info.isLike
-        await this.setState({
-            userInfo: info,
-            isAttention: isLike
-        })
+        const [,userInfo] = await withTry(this.props.getUserInfo)()
         Taro.hideLoading()
+        if(userInfo) {
+            const { info } = userInfo
+            const isLike = info.isLike
+            await this.setState({
+                userInfo: info,
+                isAttention: isLike
+            })
+        }
     }
 
     //关注/取消关注
@@ -63,13 +65,13 @@ export default class User extends Component<any>{
 
         const { isAttention } = this.state
         Taro.showLoading({mask: true, title: '操作中'})
-        const data = await this.props.toAttention(this.id, this.mineId, isAttention)
+        const [,data] = await withTry(this.props.toAttention)(this.id, this.mineId, isAttention)
+        Taro.hideLoading()
         if(data) {
             await this.setState({
                 isAttention: !isAttention
             })
         }
-        Taro.hideLoading()
     }
 
     //查看收藏

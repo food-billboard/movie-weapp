@@ -10,7 +10,7 @@ import style from '~theme/style'
 import { IList } from '~components/linearlist/index.d'
 import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToProps } from './connect'
-import { router, routeAlias, size } from '~utils'
+import { router, routeAlias, size, withTry } from '~utils'
 import { getCookie, setCookie } from '~config'
 
 import './index.scss'
@@ -111,25 +111,26 @@ export default class extends Component<any>{
 
         //登录
         Taro.showLoading({mask:true, title: '稍等一下'})
-        const data = await this.props.sendUserLogon({
+        const [,data] = await withTry(this.props.sendUserLogon)({
             userInfo,
             code : this.code
         })
-        const { info } = data
         Taro.hideLoading()
+        if(data) {
+            const { info } = data
+            //改变登录状态
+            this.login = true
 
-        //改变登录状态
-        this.login = true
-
-        this.setState({
-            detail: info
-        }, () => {
-            //将个人信息放入缓存
-            setCookie('user', {
-                value: JSON.stringify(info),
-                expires: Date.now() + (24 * 7 * 60 * 60 * 60 * 1000)
+            this.setState({
+                detail: info
+            }, () => {
+                //将个人信息放入缓存
+                setCookie('user', {
+                    value: JSON.stringify(info),
+                    expires: Date.now() + (24 * 7 * 60 * 60 * 60 * 1000)
+                })
             })
-        })
+        }
     }
 
     //登录获取session

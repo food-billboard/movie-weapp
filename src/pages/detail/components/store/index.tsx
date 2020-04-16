@@ -4,7 +4,7 @@ import { IProps, IState } from './index.d'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { getCookie } from '~config'
-import { size } from '~utils'
+import { size, withTry } from '~utils'
 
 import style from '~theme/style'
 
@@ -40,12 +40,15 @@ export default class extends Component<IProps, IState> {
 console.log(userInfo)
     const { id } = userInfo
     this.id = id
-
-    const data = await this.props.getStore(this.props.movie, id) 
-    const store = data.store
-    this.setState({
-      store
-    })
+    Taro.showLoading({mask: true, title: '收藏中'})
+    const [,data] = await withTry(this.props.getStore)(this.props.movie, id) 
+    Taro.hideLoading()
+    if(data) {
+      const store = data.store
+      this.setState({
+        store
+      })
+    }
   }
 
   //收藏

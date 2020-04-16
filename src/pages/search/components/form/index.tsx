@@ -8,7 +8,6 @@ import { createFieldsStore } from '~utils/wrapForm/createFieldsStore'
 import { AtForm, AtButton, AtTag } from 'taro-ui'
 import { connect } from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
-import { Toast } from '~components/toast'
 import GCheckbox from '~components/checkbox'
 import { IState, IProps, FormDefault } from './index.d'
 import { FormData } from '../../interface'
@@ -17,6 +16,7 @@ import style from '~theme/style'
 import List from '~components/linearlist'
 import { IList } from '~components/linearlist/index.d'
 import { SYSTEM_PAGE_SIZE } from '~config'
+import { withTry } from '~utils'
 
 import './index.scss'
 
@@ -57,7 +57,7 @@ export default class Forms extends Component<IProps> {
 
     public componentDidMount = () => {
         this.fetchTypeData()
-        // fieldsStore.setUpdate(this.forceUpdate.bind(this))
+        fieldsStore.setUpdate(this.forceUpdate.bind(this))
     }
 
     public state: IState = {
@@ -70,12 +70,14 @@ export default class Forms extends Component<IProps> {
      */
     public fetchTypeData = async () => {
         Taro.showLoading({mask: true, title: '加载中'})
-        const language = await this.props.getLanguageList()
-        const lang = language.data
-        await this.setState({
-            lang
-        })
+        const [,language] = await withTry(this.props.getLanguageList)()
         Taro.hideLoading()
+        if(language) {
+            const lang = language.data
+            await this.setState({
+                lang
+            })
+        }
     }
 
     //表单默认属性
@@ -122,6 +124,7 @@ export default class Forms extends Component<IProps> {
             time: {start, end},
             ...nextProps
         } = values
+        console.log(values)
         let data: FormData = {
             maxPrice: max,
             minPrice: min,
@@ -139,7 +142,7 @@ export default class Forms extends Component<IProps> {
     public onSubmit = async () => {
         const data = this.filterFactor()
         Taro.showLoading({title: '稍等', mask: true})
-        // await this.props.screen(data ? data : this.formData)
+        await withTry(this.props.screen)(data ? data : this.formData)
         Taro.hideLoading()
     }
 
@@ -217,7 +220,8 @@ export default class Forms extends Component<IProps> {
                                 getOnChangeValue(value) {
                                     that.feeChange(value)
                                     return value
-                                }
+                                },
+                                initialValue: []
                             })}
                             value={fieldsStore.getFieldValue('fee')}
                         ></GCheckbox>
@@ -227,14 +231,15 @@ export default class Forms extends Component<IProps> {
                             ref={this.chargeRef}
                             onChange={fieldsStore.getFieldProps('price', 'onChange', {
                                 getOnChangeValue(value) {
-                                    const data = fieldsStore.getFieldsValue('price') || {}
+                                    const data = fieldsStore.getFieldValue('price') || {}
                                     return {
                                         ...data,
                                         ...value
                                     }
-                                }
+                                },
+                                initialValue: {max: '', min: ''}
                             })}
-                            value={fieldsStore.getFieldsValue('price')}
+                            value={fieldsStore.getFieldValue('price')}
                         />
                     </View>
                     <View className='type'>
@@ -248,7 +253,9 @@ export default class Forms extends Component<IProps> {
                             style={{marginBottom: '20px'}}
                             needHiddenList={false}
                             type={'type'}
-                            handleChange={fieldsStore.getFieldProps('type', 'onChange')}
+                            handleChange={fieldsStore.getFieldProps('type', 'onChange', {
+                                initialValue: []
+                            })}
                             value={fieldsStore.getFieldValue('type')}
                         ></GCheckbox>
                     </View>
@@ -267,7 +274,8 @@ export default class Forms extends Component<IProps> {
                                         ...data,
                                         ...value
                                     }
-                                }
+                                },
+                                initialValue: {start: '', end: ''}
                             })}
                             value={fieldsStore.getFieldValue('time')}
                         ></DateRangePicker>
@@ -288,7 +296,9 @@ export default class Forms extends Component<IProps> {
                                 <GCheckbox
                                     style={{marginBottom: '20px'}}
                                     type={'actor'}
-                                    handleChange={fieldsStore.getFieldProps('actor', 'onChange')}
+                                    handleChange={fieldsStore.getFieldProps('actor', 'onChange', {
+                                        initialValue: []
+                                    })}
                                     value={fieldsStore.getFieldValue('actor')}
                                 ></GCheckbox>
                             </View>
@@ -302,7 +312,9 @@ export default class Forms extends Component<IProps> {
                                 <GCheckbox
                                     style={{marginBottom: '20px'}}
                                     type={'director'}
-                                    handleChange={fieldsStore.getFieldProps('director', 'onChange')}
+                                    handleChange={fieldsStore.getFieldProps('director', 'onChange', {
+                                        initialValue: []
+                                    })}
                                     value={fieldsStore.getFieldValue('director')}
                                 ></GCheckbox>
                             </View >
@@ -318,7 +330,9 @@ export default class Forms extends Component<IProps> {
                                     const { value } = val
                                     return value
                                     })}}
-                                    handleChange={fieldsStore.getFieldProps('lang', 'onChange')}
+                                    handleChange={fieldsStore.getFieldProps('lang', 'onChange', {
+                                        initialValue: []
+                                    })}
                                     value={fieldsStore.getFieldValue('lang')}
                                 ></GPicker>
                             </View>
@@ -332,7 +346,9 @@ export default class Forms extends Component<IProps> {
                                 <GCheckbox
                                     style={{marginBottom: '20px'}}
                                     type={'area'}
-                                    handleChange={fieldsStore.getFieldProps('area', 'onChange')}
+                                    handleChange={fieldsStore.getFieldProps('area', 'onChange', {
+                                        initialValue: []
+                                    })}
                                     value={fieldsStore.getFieldValue('area')}
                                 ></GCheckbox>
                             </View>
