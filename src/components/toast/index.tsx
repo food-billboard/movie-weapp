@@ -25,7 +25,8 @@ const IMAGE = {
   success,
   fail: error,
   ask,
-  important
+  important,
+  none: null
 }
 
 export const Toast = (query: IQuery) => {

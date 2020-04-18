@@ -4,7 +4,7 @@ import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { mapDispatchToProps, mapStateToProps } from './connect'
 import {connect} from '@tarojs/redux'
-import { router, routeAlias, infomationType, formatTime, withTry } from '~utils'
+import { router, routeAlias, infomationType, formatTime, withTry, createWorker } from '~utils'
 import { throttle, findIndex } from 'lodash'
 
 import './index.scss'
@@ -34,6 +34,8 @@ export default class extends Component<any> {
     //用户id
     readonly id = this.$router.params.id
 
+    private worker: any
+
     public componentDidShow = () => {
         colorStyleChange()
         this.throttleFetchData()
@@ -43,6 +45,10 @@ export default class extends Component<any> {
     public onPullDownRefresh = async () => {
         await this.throttleFetchData()
         Taro.stopPullDownRefresh()
+    }
+
+    public state: any = {
+        sortList: this.props.news
     }
 
     //获取详细信息
@@ -68,6 +74,7 @@ export default class extends Component<any> {
     //获取数据
     public fetchData = async () => {
         await this.props.getNews(this.id)
+        this.sort()
     }   
 
     //处理消息操作按钮
@@ -79,8 +86,10 @@ export default class extends Component<any> {
         })
         if(index == 0) {
             await this.handleReadNews(id)
+            this.sort()
         }else if(index == 1) {
             await this.handleDeleteNews(id)
+            this.sort()
         }
     }
 
@@ -89,13 +98,13 @@ export default class extends Component<any> {
         Taro.showLoading({mask: true, title: '删除中'})
         await withTry(this.props.deleteNews)(id, new Date().getTime())
         Taro.hideLoading()
-        this.setState({})
+        this.sort()
     }
 
     //已读消息
     public handleReadNews = async (id: string) => {
         await this.props.readNews(id, new Date().getTime())
-        this.setState({})
+        this.sort()
     }
 
     /* 
@@ -106,48 +115,25 @@ export default class extends Component<any> {
     //对数据进行排序
     public sort = () => {
         const { news=[] } = this.props
-        const list = [ ...news ]
-        list.sort((a: any, b: any) => {
-            let aTime = 0
-            let aReadTime = 0
-            let bTime = 0
-            let bReadTime = 0
-            a.list.map((aVal: any) => {
-                const { time, read } = aVal
-                if(read) {
-                    if(time > aReadTime) aReadTime = time
-                }else {
-                    if(time > aTime) aTime = time
-                }
+        this.worker = createWorker('./compute.ts')
+        this.worker.onMessage((event) => {
+            const { data } = event
+            this.setState({
+                sortList: JSON.parse(data)
+            }, () => {
+                this.worker.close()
             })
-            b.list.map((bVal: any) => {
-                const { time, read } = bVal
-                if(read) {
-                    if(time > bReadTime) bReadTime = time
-                }else {
-                    if(time > bTime) bTime = time
-                }
-            })
-            if(aTime == 0 && bTime != 0) {
-                return 1
-            }else if(aTime != 0 && bTime == 0) {
-                return -1
-            }else if(aTime == 0 && bTime == 0) {
-                return bReadTime - aReadTime
-            }
-            return bTime - aTime
         })
-        return list
+        this.worker.postMessage(JSON.stringify(news))
     }
 
     public render() {
-        const { news=[] } = this.props
-        const list = this.sort()
+        const { sortList } = this.state
 
         return (
             <AtList>
                 {
-                    list.map((val: any) => {
+                    sortList.map((val: any) => {
                         const { image, id, username, list, type } = val
                         let nearTime = 0
                         let nearUnreadTime = 0
