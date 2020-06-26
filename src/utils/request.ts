@@ -80,7 +80,7 @@ const request = async function(method, path, settings:any={}) {
     }
     try {
         const response = await Taro.request(setting)
-        return errorHandler('REQUEST_SUCCESS', {response})
+        return errorHandler('REQUEST_SUCCESS', { response })
     }catch(err) {
         if(!err.origin && isAlipay) {
             return errorHandler("REQUEST_SUCCESS", {response: err})

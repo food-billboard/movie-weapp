@@ -15,8 +15,7 @@ export default (type, {response}) => {
         //成功状态码的情况
         if([200].indexOf(statusCode) >= 0) {
             const body = response.data
-            // if(body.success) return body.res
-            if(body.success) return body
+            if(body.success) return body.res.data
             throw {response, origin}
         }
 
