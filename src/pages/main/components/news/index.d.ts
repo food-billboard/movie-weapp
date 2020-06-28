@@ -13,9 +13,9 @@
  */
 
 interface List {
-  id: string,
-  title: string,
-  image: string
+  _id: string,
+  name: string,
+  poster: string
 }
 
 export interface IProps {

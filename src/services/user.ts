@@ -96,7 +96,7 @@ export const getUserMovieDetail = (id:string) => {
 }
 
 //简易评论(电影页面)
-export const getCommentSimple = ({ id, count=30 }: { id: string, count: number }) => {
+export const getCommentSimple = ({ id, count=30 }: { id: string, count?: number }) => {
   return request('GET', '/api/user/movie/detail/comment', {query: { _id: id, count }})
 }
 

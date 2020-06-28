@@ -11,16 +11,10 @@ class Itemize extends Component<IProps, IState>{
         list: []
     }
 
-    public state:IState = {
-       
-    }
-
-    /**
-     * 分类跳转
-     */
-    public goTo = (item: List, index: number) => {
+    //分类跳转
+    public goTo = (item: any, _: number) => {
         const { id } = item
-        return router.push(routeAlias.type, {id})
+        return router.push(routeAlias.type, { id })
     }
 
     public render() {
@@ -29,7 +23,14 @@ class Itemize extends Component<IProps, IState>{
             <AtGrid 
                 mode='square' 
                 hasBorder={false} 
-                data={list} 
+                data={list.map(item => {
+                    const { _id, poster, name } = item
+                    return {
+                        id: _id,
+                        image: poster,
+                        value: name
+                    }
+                })} 
                 columnNum={columnNum}	
                 onClick={this.goTo}
             />

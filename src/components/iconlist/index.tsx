@@ -3,8 +3,9 @@ import { View, Text } from '@tarojs/components'
 import ImageLoading from '../imageLoading'
 import { IProps } from './index.d'
 import style from '~theme/style'
-import './index.scss'
 import { router, formatNumber, routeAlias } from '~utils'
+
+import './index.scss'
 
 export default class IconList extends Component<IProps>{
     public static defaultProps: IProps = {
@@ -23,7 +24,7 @@ export default class IconList extends Component<IProps>{
     /**
      * 路由跳转
      */
-    public goTo = (name, id, event) => {
+    public goTo = (_, id, __) => {
         router.push(routeAlias.detail, {id})
     }
 

@@ -6,13 +6,11 @@ import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
 import { throttle } from 'lodash'
 import { router, routeAlias } from '~utils'
-import {connect} from '@tarojs/redux'
-import {mapDispatchToProps, mapStateToProps} from './connect'
 import { SYSTEM_PAGE_SIZE } from '~config'
+import { getCustomerFans, getUserFans } from '~services'
 
 import './index.scss'
 
-@connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any>{
 
     public state: any = {
@@ -49,18 +47,21 @@ export default class extends Component<any>{
      */
     public fetchData = async (query: any, isInit=false) => {
         const { fans } = this.state
-        const data = await this.props.getUserFans({id: this.id, ...query})
-        const _data = data.data
+        //根据是否传递id显示内容
+        const method = this.id ? getUserFans : getCustomerFans
+        const args = this.id ? { id: this.id } : {}
+        const data = await method({ ...args, ...query})
+
         let newData
         if(isInit) {
-            newData = [ ..._data ]
+            newData = [ ...data ]
         }else {
-            newData = [ ...fans, ..._data ]
+            newData = [ ...fans, ...data ]
         }
         await this.setState({
             fans: newData
         })
-        return _data
+        return data
     }
 
     /**
@@ -88,7 +89,7 @@ export default class extends Component<any>{
                 renderContent={<View>
                     {
                         fans.map((value) => {
-                            const {image, name, id} = value  
+                            const { avatar, username, _id:id } = value  
                             return (
                                 <View className={'list'}
                                     style={{...style.border(1, 'disabled', 'solid', 'bottom')}}
@@ -96,7 +97,7 @@ export default class extends Component<any>{
                                     onClick={this.getUser.bind(this, id)}    
                                 >
                                     <ImageLoading 
-                                        src={image} 
+                                        src={avatar} 
                                         customStyle={{
                                             width:`${SYSTEM_PAGE_SIZE(45)}px`,
                                             height:`${SYSTEM_PAGE_SIZE(45)}px`,
@@ -113,11 +114,11 @@ export default class extends Component<any>{
                                     <View className={'username'} 
                                         style={{...style.color('primary')}}
                                     >
-                                        {name}
+                                        {username}
                                     </View>
                                     <Text className={'enter'}
                                         style={{...style.color('thirdly')}}
-                                    >></Text>
+                                    >{'>'}</Text>
                                 </View>
                             )
                         })

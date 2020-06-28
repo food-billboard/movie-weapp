@@ -74,11 +74,11 @@ export default {
         return data
       },
 
-      //其他用户粉丝
-      * getUserFans({ id, currPage, pageSize }, { call }) {
-        const data = yield call(getUserFans, { id, currPage, pageSize })
-        return data
-      },
+      // //其他用户粉丝
+      // * getUserFans({ id, currPage, pageSize }, { call }) {
+      //   const data = yield call(getUserFans, { id, currPage, pageSize })
+      //   return data
+      // },
 
       //其他用户评论
       * getUserComment({ id, currPage, pageSize }, { call }) {
@@ -86,11 +86,11 @@ export default {
         return data
       },
 
-      //其他用户关注
-      * getUserAttention({ id, currPage, pageSize }, { call }) {
-        const data = yield call(getUserAttention, { id, currPage, pageSize })
-        return data
-      },
+      // //其他用户关注
+      // * getUserAttention({ id, currPage, pageSize }, { call }) {
+      //   const data = yield call(getUserAttention, { id, currPage, pageSize })
+      //   return data
+      // },
 
       //其他用户发布的电影
       * getUserMovie({ id, currPage, pageSize }, { call }) {
@@ -98,53 +98,53 @@ export default {
         return data
       },
 
-      //其他用户浏览记录
-      * getUserGlance({ id, currPage, pageSize }, { call }) {
-        const data = yield call(getUserGlance, { id, currPage, pageSize })
-        return data
-      },
+      // //其他用户浏览记录
+      // * getUserGlance({ id, currPage, pageSize }, { call }) {
+      //   const data = yield call(getUserGlance, { id, currPage, pageSize })
+      //   return data
+      // },
 
-      //其他用户收藏的电影
-      * getUserStore({ id, currPage, pageSize }, { call }) {
-        const data = yield call(getUserStore, { id, currPage, pageSize })
-        return data
-      },
+      // //其他用户收藏的电影
+      // * getUserStore({ id, currPage, pageSize }, { call }) {
+      //   const data = yield call(getUserStore, { id, currPage, pageSize })
+      //   return data
+      // },
 
-      //每日上新
-      * getDailyNew({ count }, { call }) {
-        const data = yield call(getDailyNew, count)
-        return data
-      },
+      // //每日上新
+      // * getDailyNew({ count }, { call }) {
+      //   const data = yield call(getDailyNew, count)
+      //   return data
+      // },
 
-      //热搜
-      * getHot({ count }, { call }) {
-        const data = yield call(getHot, count)
-        return data
-      },
+      // //热搜
+      // * getHot({ count }, { call }) {
+      //   const data = yield call(getHot, count)
+      //   return data
+      // },
 
-      //跑马灯
-      * getNotice(_, { call }) {
-        const data = yield call(getNotice)
-        return data
-      },
+      // //跑马灯
+      // * getNotice(_, { call }) {
+      //   const data = yield call(getNotice)
+      //   return data
+      // },
 
-      //排行榜(首页)
-      * getRank({ count }, { call }) {
-        const data = yield call(getRank, count)
-        return data
-      },
+      // //排行榜(首页)
+      // * getRank({ count }, { call }) {
+      //   const data = yield call(getRank, count)
+      //   return data
+      // },
 
-      //专题
-      * getSpecial({ id }, { call }) {
-        const data = yield call(getRank, id)
-        return data
-      },
+      // //专题
+      // * getSpecial({ id }, { call }) {
+      //   const data = yield call(getRank, id)
+      //   return data
+      // },
 
-      //轮播图
-      * getSwiper({ count }, { call }) {
-        const data = yield call(getRank, count)
-        return data
-      },
+      // //轮播图
+      // * getSwiper({ count }, { call }) {
+      //   const data = yield call(getRank, count)
+      //   return data
+      // },
       
       //登录
       * signin({ mobile, password, uid }, { call, put }) {
@@ -165,29 +165,29 @@ export default {
         yield call(signout)
       },
 
-      //分类(首页)
-      * getClassify({ count }, { call }) {
-        const data = yield call(getClassify, count)
-        return data
-      },
+      // //分类(首页)
+      // * getClassify({ count }, { call }) {
+      //   const data = yield call(getClassify, count)
+      //   return data
+      // },
 
-      //分类列表
-      * getClassifyList({ id, currPage, pageSize, sort }, { call }) {
-        const data = yield call(getClassifyList, { id, currPage, pageSize, sort })
-        return data
-      },
+      // //分类列表
+      // * getClassifyList({ id, currPage, pageSize, sort }, { call }) {
+      //   const data = yield call(getClassifyList, { id, currPage, pageSize, sort })
+      //   return data
+      // },
 
-      //电影详情
-      * getUserMovieDetail({ id }, { call }) {
-        const data = yield call(getUserMovieDetail, id)
-        return data
-      },
+      // //电影详情
+      // * getUserMovieDetail({ id }, { call }) {
+      //   const data = yield call(getUserMovieDetail, id)
+      //   return data
+      // },
 
-      //简易评论(电影页面)
-      * getCommentSimple({ id, count }, { call }) {
-        const data = yield call(getCommentSimple, { id, count })
-        return data
-      },
+      // //简易评论(电影页面)
+      // * getCommentSimple({ id, count }, { call }) {
+      //   const data = yield call(getCommentSimple, { id, count })
+      //   return data
+      // },
 
       //电影详情简易
       * getMovieDetailSimple({ id }, { call }) {
@@ -207,17 +207,17 @@ export default {
         return data
       },
 
-      //排行榜
-      * getRankList({ id, currPage, pageSize }, { call }) {
-        const data = yield call(getRankList, { id, currPage, pageSize })
-        return data
-      },
+      // //排行榜
+      // * getRankList({ id, currPage, pageSize }, { call }) {
+      //   const data = yield call(getRankList, { id, currPage, pageSize })
+      //   return data
+      // },
 
-      //排行榜列表
-      * getRankType({ count }, { call }) {
-        const data = yield call(getRankType, count)
-        return data
-      },
+      // //排行榜列表
+      // * getRankType({ count }, { call }) {
+      //   const data = yield call(getRankType, count)
+      //   return data
+      // },
 
       //小程序信息
       * getAppInfo(_, { call }) {

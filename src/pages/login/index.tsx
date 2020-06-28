@@ -64,13 +64,6 @@ export default class extends Component<any> {
     }
 
     /**
-     * 监听验证码输入
-     */
-    // handleCheck(event, value) {
-    //     console.log(value)
-    // }
-
-    /**
      * 信息提交
      */
     public submit = async (e) => {
@@ -126,17 +119,6 @@ export default class extends Component<any> {
                         value={this.state.password}
                         onChange={this.handlePass.bind(this)}
                     />
-                    {/* <AtInput
-                        clear
-                        name='check'
-                        title=''
-                        type='text'
-                        maxLength='4'
-                        placeholder='验证码'
-                        value={this.state.check}
-                        onChange={this.handleCheck.bind(this)}
-                        >
-                    </AtInput> */}
                     <AtButton 
                         formType='submit' 
                         type={'primary'} 

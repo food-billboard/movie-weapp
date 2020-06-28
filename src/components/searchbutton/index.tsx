@@ -4,15 +4,13 @@ import { AtSearchBar, AtTag } from 'taro-ui'
 import { router, routeAlias } from '~utils'
 import { IProps, IState, IPoint } from './index.d'
 import style from '~theme/style'
-import {connect} from '@tarojs/redux'
-import {mapDispatchToProps, mapStateToProps} from './connect'
 import { SYSTEM_PAGE_SIZE } from '~config'
+import { getHot } from '~services'
 
 import './index.scss'
 
 const HOT_HEIGHT = SYSTEM_PAGE_SIZE(35)
 
-@connect(mapStateToProps, mapDispatchToProps)
 class SearchButton extends Component<IProps, IState>{
     //默认数据
     public static defaultProps: IProps = {
@@ -37,10 +35,9 @@ class SearchButton extends Component<IProps, IState>{
 
     //获取热搜
     public fetchHotData = async () => {
-        const hot = await this.props.getHot()
-        const _hot = hot.hot
+        const hot = await getHot()
         await this.setState({
-            hot: _hot
+            hot
         })
     }
 
@@ -48,15 +45,15 @@ class SearchButton extends Component<IProps, IState>{
      * 监听输入框改变
      */
     public onChange = (value: string = '') => {
-        this.setState({
-            value: value,
-        }, async() => {
-            const pointList = await this.props.fetchSearchPoint(value)
-            const { data } = pointList
-            this.setState({
-                pointList: value.length ? data : []
-            })
-        })
+        // this.setState({
+        //     value: value,
+        // }, async() => {
+        //     const pointList = await this.props.fetchSearchPoint(value)
+        //     const { data } = pointList
+        //     this.setState({
+        //         pointList: value.length ? data : []
+        //     })
+        // })
     }
 
     /**
@@ -83,8 +80,8 @@ class SearchButton extends Component<IProps, IState>{
     /**
      * 获取热搜信息
      */
-    public getHot = (value: any, event: any) => {
-        router.push(routeAlias.detail, {id: value.id})
+    public getHot = (id: string, _: any) => {
+        router.push(routeAlias.detail, {id})
     }
 
     /**
@@ -111,9 +108,7 @@ class SearchButton extends Component<IProps, IState>{
         const { hot=[], pointList } = this.state
 
         return (
-            <View className="searchbutton"
-                // style={{...style.backgroundColor('bgColor')}}
-            >
+            <View className="searchbutton">
                 <View className="search" onClick={this.handleClick}>
                     <AtSearchBar
                         customStyle={{...style.backgroundColor('bgColor')}}
@@ -157,7 +152,7 @@ class SearchButton extends Component<IProps, IState>{
                         >热搜</View>
                         {
                             hot.map((value) => {
-                                const { name, id } = value
+                                const { key_word, _id: id } = value
                                 return (
                                     <View className='at-col at-col-2 hotlist'
                                         key={id}>
@@ -166,8 +161,8 @@ class SearchButton extends Component<IProps, IState>{
                                             type={"primary"}
                                             size={"normal"}
                                             circle={true}
-                                            onClick={(event) => {this.getHot(value, event)}}
-                                        >{name}</AtTag>
+                                            onClick={(event) => {this.getHot(id, event)}}
+                                        >{key_word}</AtTag>
                                     </View>
                                 )
                             })

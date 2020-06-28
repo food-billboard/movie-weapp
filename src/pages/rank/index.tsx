@@ -7,10 +7,9 @@ import List from '~components/list'
 import { TypeColor, colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { throttle } from 'lodash'
-import {connect} from '@tarojs/redux'
-import {mapDispatchToProps, mapStateToProps} from './connect'
 import { router, routeAlias } from '~utils'
 import { SYSTEM_PAGE_SIZE } from '~config'
+import { getRankList, getRankType } from '~services'
 
 const COLUMN_COUNT = 4
 
@@ -45,7 +44,6 @@ const HIDE_MORE_CONFIG = {
   iconInfo: {...HIDE_ICON}
 }
 
-@connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any> {
 
   public static config:Config = {
@@ -56,8 +54,6 @@ export default class extends Component<any> {
   public state: any = {
     rank: [],
     rankType: [],
-    title: '',
-    id: '',
     showMore: false
   }
 
@@ -73,10 +69,6 @@ export default class extends Component<any> {
   //排行榜id
   private _id = this.$router.params.id
 
-  private _title
-
-  public scrollRef = Taro.createRef<GScrollView>()
-
   public get id() {
     return this._id
   }
@@ -88,6 +80,10 @@ export default class extends Component<any> {
   public get title() {
     return this._title
   }
+
+  private _title
+
+  public scrollRef = Taro.createRef<GScrollView>()
 
   //下拉刷新
   public onPullDownRefresh = async () => {
@@ -108,41 +104,34 @@ export default class extends Component<any> {
   //数据获取
   public fetchData = async (query: any, isInit=false) => {
     const { rank } = this.state
-        const data = await this.props.getRank({id: this.id, ...query})
-        const _data = data.rank
-        if(_data.length) {
-          const { list, type, id } = _data.slice(0, 1)[0]
-          let newData
-          if(isInit) {
-              newData = [ ...list ]
-          }else {
-              newData = [ ...rank, ...list ]
-          }
-          await this.setState({
-            rank: newData,
-            title: type,
-            id
-          })
-          return list
-        }
-        return []
+    const data = await getRankList({id: this.id, ...query})
+    if(data.length) {
+      let newData
+      if(isInit) {
+          newData = [ ...data ]
+      }else {
+          newData = [ ...rank, ...data ]
+      }
+      await this.setState({
+        rank: newData,
+      })
+      return data
+    }
+    return []
   }
 
   //获取排行榜分类列表
   public fetchRankTypeData = async () => {
-    const data = await this.props.getRankType()
-    const _data = data.rank
-    
-    const rank = _data.map(val => {
-      const { id, type, image } = val
-      return {
-        id,
-        value: type,
-        image
-      }
-    })
-    await this.setState({
-      rankType: rank
+    const data = await getRankType(16)
+    this.setState({
+      rankType: data.map(val => {
+        const { _id: id, name, icon } = val
+        return {
+          id,
+          value: name,
+          image: icon
+        }
+      })
     })
   }
 
@@ -152,12 +141,12 @@ export default class extends Component<any> {
   public throttleFetchData = throttle(this.fetchData, 2000)
 
   //查看详细信息
-  public getDetail = async (id: string) => {
-    router.push(routeAlias.detail, {id})
+  public getDetail = async ( id: string ) => {
+    router.push(routeAlias.detail, { id })
   }
 
   //切换排行榜
-  public exchangeRank = async (item, index: number) => {
+  public exchangeRank = async (item, _: number) => {
     const { id, value } = item
     if(id === showType.HIDE_MORE || id === showType.SHOW_MORE) return this.handleControlRank(id)
     this.id = id

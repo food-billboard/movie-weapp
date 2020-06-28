@@ -7,9 +7,8 @@ import Fab from './components/fab'
 import { throttle } from 'lodash'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
-import { connect } from '@tarojs/redux'
-import { mapStateToProps, mapDispatchToPrps } from './connect'
 import { SYSTEM_PAGE_SIZE } from '~config'
+import { getClassifyList, getClassify } from '~services'
 
 import './index.scss'
 
@@ -27,7 +26,6 @@ const SHOW_TYPE = {
     HIDE_MORE: Symbol('hide_more')
 }
 
-@connect(mapStateToProps, mapDispatchToPrps)
 export default class Index extends Component<any> {
 
     public config:Config = {
@@ -75,8 +73,8 @@ export default class Index extends Component<any> {
 
     public componentDidMount = async () => {
         await this.fetchTypeData()
-        const {params} = this.$router
-        this.id = params.id || ''
+        const { params: { id } } = this.$router
+        this.id = id || ''
     }
 
     /**
@@ -84,18 +82,18 @@ export default class Index extends Component<any> {
      */
     public fetchData = async (query: any, isInit=false) => {
         const { typeDetail } = this.state
-        const data = await this.props.getTypeDetail({id: this.id, ...query})
-        const _data = data.detail
+        const data = await getClassifyList({ id: this.id, ...query })
+ 
         let newData
         if(isInit) {
-            newData = [ ..._data ]
+            newData = [ ...data ]
         }else {
-            newData = [ ...typeDetail, ..._data ]
+            newData = [ ...typeDetail, ...data ]
         }
         await this.setState({
             typeDetail: newData
         })
-        return _data
+        return data
     }
 
     /**
@@ -121,9 +119,8 @@ export default class Index extends Component<any> {
 
     //获取分类列表
     public fetchTypeData = async () => {
-        const type = await this.props.getSwitch()
-        const data = type.switch
-        await this.setState({
+        const data = await getClassify(16)
+        this.setState({
             type: data
         })
     }
@@ -131,11 +128,9 @@ export default class Index extends Component<any> {
     //设置标题
     public setTitle = (id: string) => {
         const { type } = this.state
-        const target: any = type.filter((val: any) => {
-            return val.id === id
-        })
-        const title = target.length ? target[0].value : '分类'
-        Taro.setNavigationBarTitle({title})
+        const [ target ]:any = type.filter((val: any) => { val._id === id })
+        const title = target ? target.name : '分类'
+        Taro.setNavigationBarTitle({ title })
     }
 
     //控制详细分类的显示隐藏
@@ -155,15 +150,15 @@ export default class Index extends Component<any> {
         const showType = type.length <= SCROLL_MAX_SHOW_COUNT
 
         const list = type.map((val: any) => {
-            const { value, id } = val
+            const { name, _id: id } = val
             return (
                 <View 
                     className={'header-list ' + (typeShow ? 'at-col at-col-2' : 'header-list-size')}
                     style={{...style.color('primary')}}
                     key={id}
-                    onClick={(e) => {this.getTypeDetail.call(this, id)}}
+                    onClick={(_) => {this.getTypeDetail.call(this, id)}}
                 >   
-                    {value}
+                    {name}
                 </View>
             )
         })
@@ -223,7 +218,24 @@ export default class Index extends Component<any> {
                         </View>
                         <View>
                             {
-                                listShow ? (<LinearList list={typeDetail} />) : (<IconList list={typeDetail} />)
+                                listShow ? (<LinearList list={typeDetail.map(item => {
+                                    const { _id: id, poster, name, hot } = item
+                                    return {
+                                        id,
+                                        image: poster,
+                                        name,
+                                        time: Date.now(),
+                                        hot
+                                    }
+                                })} />) : (<IconList list={typeDetail.map(item => {
+                                    const { _id: id, poster, name, hot } = item
+                                    return {
+                                        id,
+                                        image: poster,
+                                        name,
+                                        hot
+                                    }
+                                })} />)
                             }
                         </View>
                     </View>

@@ -5,10 +5,8 @@ import GScrollView from '~components/scrollList'
 import { throttle } from 'lodash'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
-import {mapDispatchToProps, mapStateToProps} from './connect'
-import {connect} from '@tarojs/redux'
+import { getUserStore, getCustomerStore } from '~services'
 
-@connect(mapStateToProps, mapDispatchToProps)
 export default class Index extends Component<any> {
     public static config: Config = {
         navigationBarTitleText: "收藏",
@@ -44,18 +42,19 @@ export default class Index extends Component<any> {
      */
     public fetchData = async (query: any, isInit=false) => {
         const { store } = this.state
-        const data = await this.props.getStore({id: this.id, ...query})
-        const _data = data.data
+        const method = this.id ? getUserStore : getCustomerStore
+        const args = this.id ? { id: this.id } : {}
+        const data = await method({ ...args, ...query })
         let newData
         if(isInit) {
-            newData = [ ..._data ]
+            newData = [ ...data ]
         }else {
-            newData = [ ...store, ..._data ]
+            newData = [ ...store, ...data ]
         }
         await this.setState({
             store: newData
         })
-        return _data
+        return data
     }
 
     /**
@@ -74,8 +73,13 @@ export default class Index extends Component<any> {
                 renderContent={<View>
                     {
                         store.map(val => {
-                            const { id } = val
-                            return <List content={val} key={id} />
+                            const { _id: id, poster, description, ...nextVal } = val
+                            return <List content={{
+                                ...nextVal,
+                                id,
+                                image: poster,
+                                detail: description,
+                            }} key={id} />
                         })
                     }
                 </View>}

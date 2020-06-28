@@ -23,7 +23,7 @@ import { ItypeList } from '~utils'
 interface IList {
   image: string, 
   name: string, 
-  type: Array<ItypeList>, 
+  type?: Array<ItypeList>, 
   time: string | number, 
   hot: number, 
   id: string

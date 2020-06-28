@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Image, Text } from '@tarojs/components'
+import { View, Text } from '@tarojs/components'
 import './index.scss'
 import RankIcon from './icon'
 import { IProps, IState } from './index.d'
@@ -24,21 +24,7 @@ export default class Rank extends Component<IProps, IState>{
 
     public render() {
         const { list, type, id, style:propsStyle={} } = this.props
-        const ranks = list.map((value) => {
-            const {rank, id, image, name} = value
-            return (
-                <View 
-                    className='rank-list'
-                    key={id}
-                    onClick={this.getDetail.bind(this, id)}
-                >
-                    <ImageLoading
-                        src={image}
-                    />
-                    <RankIcon rank={rank} />
-                </View>
-            )
-        })
+
         return (
             <View className='rank-main' style={propsStyle}>
                 <Text 
@@ -47,7 +33,23 @@ export default class Rank extends Component<IProps, IState>{
                     onClick={() => { router.push(routeAlias.rank, { id, type }) }}
                 >{type}</Text>
                 <View className='ran-content'>
-                    {ranks}
+                    {
+                        list.map(( value, index ) => {
+                            const { _id, poster } = value
+                            return (
+                                <View 
+                                    className='rank-list'
+                                    key={_id}
+                                    onClick={this.getDetail.bind(this, _id)}
+                                >
+                                    <ImageLoading
+                                        src={poster}
+                                    />
+                                    <RankIcon rank={index + 1} />
+                                </View>
+                            )
+                        })
+                    }
                 </View>
             </View>    
         )

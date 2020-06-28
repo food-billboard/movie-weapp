@@ -12,8 +12,8 @@ import { swiperRouteType } from '~utils'
  * }
  */
 interface List {
-  id: string,
-  image: string
+  _id: string,
+  poster: string
   type: keyof typeof swiperRouteType
 }
 

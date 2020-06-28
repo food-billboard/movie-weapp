@@ -7,13 +7,16 @@ import { colorStyleChange } from '~theme/color'
 import { throttle } from 'lodash'
 import { router, routeAlias } from '~utils'
 import { SYSTEM_PAGE_SIZE } from '~config'
-import {connect} from '@tarojs/redux'
-import {mapDispatchToProps, mapStateToProps} from './connect'
+import { getCustomerAttention, getUserAttention } from '~services'
 
 import './index.scss'
 
-@connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any>{
+
+    public static config: Config = {
+        navigationBarTitleText: '关注',
+        enablePullDownRefresh: true
+    }
 
     public state: any = {
         attention: []
@@ -26,11 +29,6 @@ export default class extends Component<any>{
 
     public componentDidShow = () => {
         colorStyleChange()
-    }
-
-    public static config: Config = {
-        navigationBarTitleText: '关注',
-        enablePullDownRefresh: true
     }
 
     //下拉刷新
@@ -49,18 +47,21 @@ export default class extends Component<any>{
      */
     public fetchData = async (query: any, isInit=false) => {
         const { attention } = this.state
-        const data = await this.props.getAttention({id: this.id, ...query})
-        const _data = data.data
+        const method = this.id ? getUserAttention : getCustomerAttention
+        const args = this.id ? { id: this.id } : {}
+        const data = await method({...args, ...query})
+
         let newData
         if(isInit) {
-            newData = [ ..._data ]
+            newData = [ ...data ]
         }else {
-            newData = [ ...attention, ..._data ]
+            newData = [ ...attention, ...data ]
         }
         await this.setState({
             attention: newData
         })
-        return _data
+
+        return data
     }
 
     /**
@@ -72,7 +73,7 @@ export default class extends Component<any>{
      * 获取用户信息
      */
     public getUser = (id: string) => {
-        router.push(routeAlias.user, {id})
+        router.push(routeAlias.user, { id })
     }
 
     public render() {
@@ -83,12 +84,12 @@ export default class extends Component<any>{
                 ref={this.scrollRef}
                 sourceType={'Scope'}
                 scrollWithAnimation={true}
-                query={{pageSize: 20}}
+                query={{ pageSize: 20 }}
                 style={{...style.backgroundColor('bgColor')}}
                 renderContent={<View>
                     {
                         attention.map((value) => {
-                            const {image, name, id} = value  
+                            const { avatar, username, _id: id } = value  
                             return (
                                 <View className={'list'}
                                     style={{...style.border(1, 'disabled', 'solid', 'bottom')}}
@@ -96,7 +97,7 @@ export default class extends Component<any>{
                                     onClick={this.getUser.bind(this, id)}    
                                 >
                                     <ImageLoading 
-                                        src={image} 
+                                        src={avatar} 
                                         loadingProps={{content: ''}}
                                         customStyle={{
                                             width:`${SYSTEM_PAGE_SIZE(45)}px`,
@@ -111,11 +112,11 @@ export default class extends Component<any>{
                                     <View className={'username'} 
                                         style={{...style.color('primary')}}
                                     >
-                                        {name}
+                                        {username}
                                     </View>
                                     <Text className={'enter'}
                                         style={{...style.color('thirdly')}}
-                                    >></Text>
+                                    >{'>'}</Text>
                                 </View>
                             )
                         })

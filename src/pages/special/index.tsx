@@ -5,17 +5,11 @@ import IconList from '~components/iconlist'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { router, routeAlias } from '~utils'
-import {connect} from '@tarojs/redux'
-import {mapDispatchToProps, mapStateToProps} from './connect'
+import { getSpecial } from '~services'
 
 let FIRST = true
 
-@connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any>{
-
-  public static config: Config = {
-   
-  }
 
   //专题id
   readonly id = this.$router.params.id
@@ -50,20 +44,19 @@ export default class extends Component<any>{
    */
   public fetchData = async (query: any, isInit=false) => {
     const { list } = this.state
-    const data = await this.props.getSpecial({id: this.id, ...query})
-    const _data = data.data
-    const title = data.title
+    const { name, movie } = await getSpecial({id: this.id, ...query})
+
     let newData
     if(isInit) {
-        newData = [ ..._data ]
+        newData = [ ...movie ]
     }else {
-        newData = [ ...list, ..._data ]
+        newData = [ ...list, ...movie ]
     }
     await this.setState({
         list: newData,
-        title
+        title: name
     })
-    return _data
+    return movie
   }
 
   /**
@@ -75,15 +68,13 @@ export default class extends Component<any>{
    * 获取电影详情
    */
   public getDetail = (id: string) => {
-    router.push(routeAlias.detail, {id})
+    router.push(routeAlias.detail, { id })
   }
 
   public render() {
 
     const { list } = this.state
-
     this.setTitle()
-
     return (
       <Scroll
         ref={this.scrollRef}
@@ -92,7 +83,14 @@ export default class extends Component<any>{
         sourceType={'Scope'}
         scrollWithAnimation={true}
         fetch={this.throttleFetchData}
-        renderContent={<IconList list={list}></IconList>}
+        renderContent={<IconList list={list.map(item => {
+          const { _id, poster, ...nextItem } = item
+          return {
+            ...nextItem,
+            id: _id,
+            image: poster,
+          }
+        })}></IconList>}
       ></Scroll>
     )
   }

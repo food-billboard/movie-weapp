@@ -1,5 +1,5 @@
 import Taro, {Component} from '@tarojs/taro'
-import { ScrollView, View, Image, Text } from '@tarojs/components'
+import { ScrollView, View, Text } from '@tarojs/components'
 import { TypeColor, colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { IProps } from './index.d'
@@ -24,7 +24,7 @@ class News extends Component<IProps>{
      * 路由跳转
      */
     public gotTo(id: string) {
-        router.push(routeAlias.detail, {id})
+        router.push(routeAlias.detail, { id })
     }
 
     public render() {
@@ -37,10 +37,10 @@ class News extends Component<IProps>{
             >
                 {
                     list.map((value) => {
-                        const { id, title, image } = value
+                        const { _id: id, name: title, poster: image } = value
                         return (
                             <View className='news-img'
-                                onClick={(event) => {this.gotTo.call(this, id)}}
+                                onClick={(_) => {this.gotTo.call(this, id)}}
                                 key={id}
                                 >
                                 <Text 

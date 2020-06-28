@@ -19,8 +19,8 @@
  */
 
 interface Hot {
-  name: string,
-  id: string
+  key_word: string,
+  _id: string
 }
 
 export interface IPoint {

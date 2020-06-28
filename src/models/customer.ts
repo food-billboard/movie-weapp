@@ -33,11 +33,11 @@ export default {
   },
   effects: {
 
-    //用户关注列表
-    * getCustomerAttention({ currPage, pageSize }, { call }) {
-      const data = yield call(getCustomerAttention, { currPage, pageSize })
-      return data
-    },
+    // //用户关注列表
+    // * getCustomerAttention({ currPage, pageSize }, { call }) {
+    //   const data = yield call(getCustomerAttention, { currPage, pageSize })
+    //   return data
+    // },
 
     //关注用户
     * toAttention({ id }, { call }) {
@@ -49,11 +49,11 @@ export default {
       yield call(cancelAttention, id)
     },
 
-    //粉丝列表
-    * getCustomerFans({ currPage, pageSize }, { call }) {
-      const data = yield call(getCustomerFans, { currPage, pageSize })
-      return data
-    },
+    // //粉丝列表
+    // * getCustomerFans({ currPage, pageSize }, { call }) {
+    //   const data = yield call(getCustomerFans, { currPage, pageSize })
+    //   return data
+    // },
 
     //评论列表
     * getCustomerComment({ currPage, pageSize }, { call }) {
@@ -77,11 +77,11 @@ export default {
       return data
     },
 
-    //收藏的电影列表
-    * getCustomerStore({ currPage, pageSize }, { call }) {
-      const data = yield call(getCustomerStore, { currPage, pageSize })
-      return data
-    },
+    // //收藏的电影列表
+    // * getCustomerStore({ currPage, pageSize }, { call }) {
+    //   const data = yield call(getCustomerStore, { currPage, pageSize })
+    //   return data
+    // },
 
     //电影修改的信息
     * getEditMovieInfo({ id }, { call }) {
@@ -89,11 +89,11 @@ export default {
       return data
     },
 
-    //浏览记录
-    * getCustomerGlance({ currPage, pageSize }, { call }) {
-      const data = yield call(getCustomerGlance, { currPage, pageSize })
-      return data
-    },
+    // //浏览记录
+    // * getCustomerGlance({ currPage, pageSize }, { call }) {
+    //   const data = yield call(getCustomerGlance, { currPage, pageSize })
+    //   return data
+    // },
 
     //反馈
     * feedback({ text='', image=[], video=[] }, { call }) {
@@ -116,11 +116,11 @@ export default {
       yield call(putAvatar, { value })
     },
 
-    //电影详情
-    * getCustomerMovieDetail({ id }, { call }) {
-      const data = yield call(getCustomerMovieDetail, id)
-      return data
-    },
+    // //电影详情
+    // * getCustomerMovieDetail({ id }, { call }) {
+    //   const data = yield call(getCustomerMovieDetail, id)
+    //   return data
+    // },
 
     //收藏电影
     * putStore({ id }, { call }) {

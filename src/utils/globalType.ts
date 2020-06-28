@@ -61,11 +61,11 @@ export const routeConfig = [
   { path: 'pages/newsdetail/index', alias: routeAlias.newsdetail },
 ]
 
-//轮播图路由跳转类型
+//轮播图路由跳转类型"MOVIE", "SPEICAL", "COMMENT"
 export const swiperRouteType = {
-  media: Symbol('media'),
-  comment: Symbol('comment'),
-  special: Symbol('special')
+  "MOVIE": "MOVIE",
+  "SPEICAL": "SPEICAL",
+  "COMMENT": "COMMENT"
 }
 
 //数据获取方式

@@ -5,10 +5,9 @@ import GScrollView from '~components/scrollList'
 import { throttle } from 'lodash'
 import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
-import {mapDispatchToProps, mapStateToProps} from './connect'
-import {connect} from '@tarojs/redux'
+import { getCustomerGlance, getUserGlance } from '~services'
+import detail from '~pages/detail'
 
-@connect(mapStateToProps, mapDispatchToProps)
 export default class Index extends Component<any> {
     public static config: Config = {
         navigationBarTitleText: "浏览记录",
@@ -44,18 +43,20 @@ export default class Index extends Component<any> {
      */
     public fetchData = async (query: any, isInit=false) => {
         const { record } = this.state
-        const data = await this.props.getRecord({id: this.id, ...query})
-        const _data = data.data
+        const method = this.id ? getUserGlance : getCustomerGlance
+        const args = this.id ? { id: this.id } : {}
+        const data = await method({ ...args, ...query })
+
         let newData
         if(isInit) {
-            newData = [ ..._data ]
+            newData = [ ...data ]
         }else {
-            newData = [ ...record, ..._data ]
+            newData = [ ...record, ...data ]
         }
-        await this.setState({
+        this.setState({
             record: newData
         })
-        return _data
+        return data
     }
 
     /**
@@ -74,8 +75,13 @@ export default class Index extends Component<any> {
                 renderContent={<View>
                     {
                         record.map(val => {
-                            const { id } = val
-                            return <List content={val} key={id} />
+                            const { _id, poster, name, description } = val
+                            return <List content={{
+                                name,
+                                detail: description,
+                                image: poster,
+                                id: _id
+                            }} key={_id} />
                         })
                     }
                 </View>}

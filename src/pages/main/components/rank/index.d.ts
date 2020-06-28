@@ -21,9 +21,9 @@
  */
 
 interface List {
-  rank: number,
-  id: string,
-  image: string,
+  // rank: number,
+  _id: string,
+  poster: string,
   name: string
 }
 

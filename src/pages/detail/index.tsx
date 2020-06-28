@@ -15,7 +15,8 @@ import { colorStyleChange } from '~theme/color'
 import { getCookie } from '~config'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
-import { size, withTry } from '~utils'
+import { size, withTry, router, routeAlias } from '~utils'
+import { getCustomerMovieDetail, getUserMovieDetail, getCommentSimple } from '~services'
 
 import './index.scss'
 
@@ -66,39 +67,59 @@ export default class extends Component<any> {
 
     //获取数据
     public fetchData = async () => {
-        const { tab } = this.state
-        let _tab = tab
+        // const { tab } = this.state
+        // let _tab = tab
         Taro.showLoading({ mask: true, title: '凶猛加载中' })
-        const detail = await this.props.getDetail(this.id)
-        const commentList = await this.props.getCommentSimple(this.id)
-        const comment = commentList.comment
-        const {data, values} = detail
-        if(!_tab && values) {
-            _tab = data.map(val => {
-                const { info: {name} } = val
-                return name
-            })
+        const userInfo = await this.props.getUserInfo()
+        let data, commentList
+        if(userInfo) {
+            data = await getCustomerMovieDetail(this.id)
+        }else {
+            data = await getUserMovieDetail(this.id)
         }
+        commentList = await getCommentSimple({ id: this.id })
+
+        // const {data, values} = detail
+        // if(!_tab && values) {
+        //     _tab = data.map(val => {
+        //         const { info: {name} } = val
+        //         return name
+        //     })
+        // }
+
         this.setState({
             detail: data,
-            commentList: comment,
-            tab: _tab
+            commentList,
+            // tab: _tab
         })
         Taro.hideLoading()
     } 
 
     //打开评论界面
-    public handleComment = () => {
+    public handleComment = async () => {
          //获取个人信息缓存
-         const userInfo = getCookie('user') || {}
-         if(!size(userInfo)) {
-             this.props.getUserInfo()
-             return 
-         }
-         const { id } = JSON.parse(userInfo)
-         this.mineId = id 
-
-        this.commentRef.current!.open()
+         const userInfo = await this.props.getUserInfo()
+        if(!userInfo) {
+            Taro.showModal({
+                title: '未登录',
+                content: '是否前往登录',
+                success: (res) => {
+                    if(res.confirm) {
+                        // router.push(routeAlias.user, { id })
+                        //跳转到登录
+                    }else {
+                        Taro.showToast({
+                            title: '登录才能评论',
+                            icon: 'none',
+                            duration: 1000
+                        })
+                    }
+                }
+            })
+            return
+        }else {
+            this.commentRef.current!.open()
+        }
     }
 
     //评论
