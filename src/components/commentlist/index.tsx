@@ -5,13 +5,11 @@ import GVideo from '../video'
 import Curtain from '../curtain'
 import ImageLoading from '../imageLoading'
 import { Info } from '../model/index.d'
-import { router, formatTime, formatNumber, mediaType, routeAlias, size, withTry } from '~utils'
+import { router, formatTime, formatNumber, mediaType, routeAlias } from '~utils'
 import style from '~theme/style'
 import { TypeColor } from '~theme/color'
-import {connect} from '@tarojs/redux'
-import {mapDispatchToProps, mapStateToProps} from './connect'
-import { IState, IProps, IMediaList } from './index.d'
-import { SYSTEM_PAGE_SIZE, getCookie } from '~config'
+import { IState, IProps } from './index.d'
+import { SYSTEM_PAGE_SIZE } from '~config'
 
 import './index.scss'
 
@@ -22,39 +20,26 @@ const ICON_TYPE = {
     action: 'at-icon-soung'
 }
 
-@connect(mapStateToProps, mapDispatchToProps)
 class List extends Component<IProps, IState>{
     public static defaultProps: IProps = {
         list: {
-            user: {
-                name: '',
-                time: '',
-                image: '',
-                id: '',
-                content:'',
-                hot: 0,
-                isHot: false
+            comment_users: [],
+            content: {},
+            createdAt: 0,
+            updatedAt: 0,
+            total_like: 0,
+            like: false,
+            user_info: {
+                avatar: null,
+                username: '',
+                _id: ''
             },
-            commentUsers: [],
-            id: '',
-            media: [],
-            info: {
-                id: '',
-                image: '',
-                content: '',
-                origin: false,
-                hasImage: false,
-                hasVideo: false
-            }
+            _id: ''
         },
-        commentId: '',
         like: () => {},
         comment: () => {},
         getUserInfo: () => {}
     }
-
-    //评论id
-    readonly commentId: string = this.props.commentId
 
     //视频modal配置
     readonly videoConfig:Info = {
@@ -81,76 +66,31 @@ class List extends Component<IProps, IState>{
     }
 
     /**
-     * 点赞
-     * id: 评论用户id
-     * hot: 点赞人数
-     * isHot: 是否为点赞状态
-     */
-    public like = async (id: string, hot: number = 0, isHot: boolean = false) => {
-
-        //获取个人信息缓存
-        const userInfo = getCookie('user') || {}
-        if(!size(userInfo)) {
-            await this.props.getUserInfo()
-            return 
-        }
-        const { id: mineId } = userInfo
-
-        const {list} = this.state
-        if(!isHot) {
-            list.user.hot ++
-        }else {
-            list.user.hot --
-        }
-        list.user.isHot = !list.user.isHot
-        this.setState({
-            list
-        })
-        Taro.showLoading({ mask: true, title: '等我一下' })
-        await withTry(this.props.like)(this.commentId, id, mineId)   
-        Taro.hideLoading()
-    }
-
-    /**
-     * 发布评论
-     * @param user: 用户id
-     * @param id: 我的id
-     */
-    public pushComment = (user: string) => {
-        this.props.comment(true, user, this.commentId)
-    }
-
-    /**
      * 查看详细评论
      */
     public getDetail = () => {
-        router.push(routeAlias.commentdetail, { id: this.commentId })
+        const { list: { _id } } = this.props
+        router.push(routeAlias.commentdetail, { id: _id })
     }
 
     /**
      * 获取用户信息
      */
     public getUser = (id: string) => {
-        router.push(routeAlias.user, {id})
+        router.push(routeAlias.user, { id })
     }
 
     /**
      * 预览媒体
      */
     public handlePreviewMedia = (src: string, type: keyof typeof mediaType, image: string='') => {
-        const { list } = this.props
-        const { media=[] } = list
-        if(!media.length) return
-        if(mediaType[type] === mediaType.image) {
-            this.handlePreviewImage(src, media.filter((val: IMediaList) => {
-                const { type } = val
-                return mediaType[type] === mediaType.image
-            }).map((val: IMediaList) => {
-                const { src } = val
-                return src
-            }))
+        const { list: { content: { image:originImage=[] } } } = this.props
+        if(type === mediaType.image) {
+            this.handlePreviewImage(src, originImage)
         }else if(mediaType[type] === mediaType.video) {
             this.handlePreviewVideo(src, image)
+        }else {
+            //ToDo
         }
     }
 
@@ -179,40 +119,36 @@ class List extends Component<IProps, IState>{
     public handleVideoClose = () => {
         this.setState({
             videoShow: false,
-            activeVideo: '',
-            activeVideoPoster: ''
+            activeVideo: null,
+            activeVideoPoster: null
         })
     }
 
     //获取视频地址
-    public getVideoSrc = () => {
-        const { activeVideo } = this.state
-        return activeVideo
-    }
+    public getVideoSrc = () => this.state.activeVideo
 
     //获取视频显示隐藏
-    public getVideoShowStatus = () => {
-        const { videoShow } = this.state
-        return videoShow
-    }
+    public getVideoShowStatus = () => this.state.videoShow
 
     public render() {
-        const { list, activeVideo, videoShow, activeVideoPoster } = this.state
+        const { list, activeVideoPoster } = this.state
         const {
-            user,
-            commentUsers,
-            id: commentId,
-            media=[]
+            comment_users,
+            content: {
+                text='',
+                image=[],
+                video=[]
+            },
+            createdAt,
+            total_like,
+            like,
+            user_info: {
+                avatar,
+                username,
+                _id:userId
+            },
+            _id
         } = list
-        const { 
-            name,
-            time,
-            content,
-            image,
-            id,
-            hot,
-            isHot
-        } = user
         const { extra=false } = this.props
         return (
             <View 
@@ -221,9 +157,9 @@ class List extends Component<IProps, IState>{
             >
                 <View className='head'>
                     <View className='head-img'
-                        onClick={this.getUser.bind(this, id)}
+                        onClick={this.getUser.bind(this, userId)}
                     >
-                        <ImageLoading src={image} loadingProps={{content: ''}} />
+                        <ImageLoading src={avatar || ''} loadingProps={{content: ''}} />
                     </View>
                     <View 
                         className={'name'}
@@ -231,50 +167,53 @@ class List extends Component<IProps, IState>{
                     >
                         <Text 
                             className={'name-user'}
-                            onClick={this.pushComment.bind(this, id)}
+                            onClick={this.props.comment.bind(this, true, userId, _id)}
                             style={{...style.color('primary')}}
-                        >{name.length <= 6 ? name : (name.slice(0, 6) + '...')}</Text>
+                        >{username.length <= 6 ? username : (username.slice(0, 6) + '...')}</Text>
                         <Text style={{display: 'inline-block'}}>说: </Text>
                     </View>
                     <View 
                         className={'up'}
-                        onClick={this.like.bind(this, id, hot, isHot)}
+                        onClick={this.props.like.bind(this, userId, like)}
                         style={{...style.color('thirdly')}}
                     >
                         <View className={'up-text'}>
-                            {formatNumber(hot)}
-                            <AtIcon value={isHot ? 'heart-2' : 'heart'} size={SYSTEM_PAGE_SIZE(14)} />
+                            {formatNumber(total_like)}
+                            <AtIcon value={like ? 'heart-2' : 'heart'} size={SYSTEM_PAGE_SIZE(14)} />
                         </View>
                     </View>
                     <View 
                         className={'time'}
                         style={{...style.color('thirdly')}}
                     >
-                        {formatTime(time)}
+                        {formatTime(createdAt)}
                     </View>
                 </View>
                 <View 
                     className='content'
                     style={{...style.color('primary')}}
-                    onClick={this.getDetail.bind(this)}
+                    onClick={this.getDetail}
                 >
-                    {content}
+                    {text}
                 </View>
                 <View className='image-list at-row at-row--wrap'>
                     {
-                        media.map((val: IMediaList, index: number) => {
-                            const { image, id, src, type } = val
+                        [
+                            ...video.map(src => ({ src, type: mediaType.video })),
+                            ...image.map(src => ({ src, type: mediaType.image }))   
+                        ].map((val: { src: string, type: keyof typeof mediaType }, index: number) => {
+                            const { src, type } = val
                             //处理不同类型的文件
                             let imageSrc,
                                 args
-                            switch(mediaType[type]) {
+                            switch(type) {
                                 case mediaType.video: 
-                                    imageSrc = image
-                                    args = [ src, 'video', image ]
+                                    imageSrc = src
+                                    args = [ src, mediaType.video, image ]
                                     break
                                 case mediaType.image:
                                     imageSrc = src
-                                    args = [ src, 'image' ]
+                                    args = [ src, mediaType.image ]
                                     break
                                 case mediaType.audio:
                                     break
@@ -282,7 +221,7 @@ class List extends Component<IProps, IState>{
                             return (
                                 <View 
                                     className={'at-col at-col-4 image'}
-                                    key={id}
+                                    key={src}
                                     onClick={() => { this.handlePreviewMedia.apply(this, args) }}
                                 >
                                     <View 
@@ -314,15 +253,15 @@ class List extends Component<IProps, IState>{
                     className='footer'
                 >
                     {
-                        commentUsers.map((value) => {
-                            const {image:userIcon, id} = value
+                        comment_users.map((value) => {
+                            const { avatar, _id:id } = value
                             return (
                                 <View className='footer-img'
                                     key={id}
                                     onClick={this.getUser.bind(this, id)}    
                                 >
                                     <ImageLoading 
-                                        src={userIcon}  
+                                        src={avatar || ''}  
                                         loadingProps={{content: ''}}
                                         customStyle={{
                                             display: 'inline-block',
@@ -337,7 +276,7 @@ class List extends Component<IProps, IState>{
                 </ScrollView>
                 <View 
                     className='video-preview'
-                    style={{display: videoShow ? 'block' : 'none'}}
+                    style={{display: this.getVideoShowStatus() ? 'block' : 'none'}}
                 >
                     <View className='shadow'></View>
                     <View className='main'>
@@ -345,7 +284,7 @@ class List extends Component<IProps, IState>{
                     </View>
                 </View>
                 <Curtain
-                    isOpen={videoShow}
+                    isOpen={this.getVideoShowStatus()}
                     handleClose={this.handleVideoClose}
                     title={false}
                     main={true}
@@ -356,11 +295,11 @@ class List extends Component<IProps, IState>{
                         >
                             <GVideo
                                 style={{width: '100%', height: '100%'}}
-                                src={activeVideo}
+                                src={this.getVideoSrc() || ''}
                                 controls={true}
                                 loop={true}
                                 autoplay={true}
-                                poster={activeVideoPoster}
+                                poster={activeVideoPoster || ''}
                             ></GVideo>
                         </View>
                     }

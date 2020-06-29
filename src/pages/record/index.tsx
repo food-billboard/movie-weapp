@@ -6,7 +6,6 @@ import { throttle } from 'lodash'
 import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
 import { getCustomerGlance, getUserGlance } from '~services'
-import detail from '~pages/detail'
 
 export default class Index extends Component<any> {
     public static config: Config = {

@@ -53,7 +53,7 @@ export default class NewsHead extends Component<IProps, IState>{
                 <View className={'enter'}
                     style={{color: 'rgb(193, 193, 193)'}}
                 >
-                    >
+                    {'>'}
                 </View>
             </View>
         )

@@ -30,11 +30,11 @@ export default class extends Component<IProps> {
       >
         {
           list.map((val: IList) => {
-            const { image, id, value } = val
+            const { image, name } = val
             return (
               <View 
                 className='item' 
-                key={id}
+                key={name}
                 onClick={() => {this.handlePreviewImage.call(this, image)}}
               >
                 <View className='image'>
@@ -47,7 +47,7 @@ export default class extends Component<IProps> {
                   />
                 </View>
                 <View className='text'>
-                  <Text>{value}</Text>
+                  <Text>{name}</Text>
                 </View>
               </View>
             )

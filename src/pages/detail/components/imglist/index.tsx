@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import ImageLoading from '~components/imageLoading'
-import { IProps, IState, IList } from './index.d'
+import { IProps, IState } from './index.d'
 import './index.scss'
 
 export default class List extends Component<IProps, IState> {
@@ -19,33 +19,30 @@ export default class List extends Component<IProps, IState> {
             const { list } = this.props
             Taro.previewImage({
                 current: image,
-                urls: list.map((val: IList) => {
-                    const { image } = val
-                    return image
-                })
+                urls: list
             })
         }
     }
     
     public render() {
         const {list} = this.props
-        const lists = list.map((value, index) => {
-            const { image, id } = value
-            return (
-                <View 
-                    className='content'
-                    key={id}
-                    onClick={() => {this.handlePreviewImage.call(this, image)}}
-                >
-                    <ImageLoading  
-                        src={image}
-                    />
-                </View>
-            )
-        })
         return (
             <View className='list'>
-                {lists}
+                {
+                    list.map((value, index) => {
+                        return (
+                            <View 
+                                className='content'
+                                key={index}
+                                onClick={() => {this.handlePreviewImage.call(this, value)}}
+                            >
+                                <ImageLoading  
+                                    src={value}
+                                />
+                            </View>
+                        )
+                    })
+                }
             </View>
         )
     }

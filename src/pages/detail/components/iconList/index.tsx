@@ -1,16 +1,15 @@
 import Taro, { Component } from '@tarojs/taro'
 import { ScrollView, View } from '@tarojs/components'
 import Imageloading from '~components/imageLoading'
-import './index.scss'
-import { router, routeAlias } from '~utils'
 import style from '~theme/style'
 import { IState, IProps } from './index.d'
+
+import './index.scss'
 
 export default class extends Component<IProps, IState> {
 
   public static defaultProps: IProps = {
     list: [],
-    id: ''
   }
 
   public timer
@@ -43,7 +42,7 @@ export default class extends Component<IProps, IState> {
         <View 
             className='content' 
             style={{visibility: activeShow ? 'visible' : 'hidden', ...style.backgroundColor('primary'), ...style.color('disabled')}}
-            onClick={() => {router.push(routeAlias.comment, {id: this.props.id})}}
+            onClick={() => { this.props.handleClick && this.props.handleClick() }}
           >
             {active}
             <View 

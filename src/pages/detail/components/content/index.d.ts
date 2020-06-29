@@ -34,30 +34,27 @@ import { ItypeList } from '~utils'
  */
 
 export interface IProps {
-  movie: string
-  id: string
   info: Info
-  sendRate: (value: any, user: any, movie: any) => any
-  sendStore: (user: any, movie: any) => any
-  getUserInfo: () => any
+  rate: (value: number) => any
+  store: (store: boolean) => any
 }
 
 interface Info {
   name: string
-  area: Array<ItypeList>
-  people: number
+  district: Array<ItypeList>
+  glance: number
   director: Array<ItypeList>
   actor: Array<ItypeList>
-  type: Array<ItypeList>
-  time: string
-  publishTime: string
+  classify: Array<ItypeList>
+  screen_time: string
+  createdAt: string
   language: string
   description: string
   hot: number
   rate:number
-  rateMine: number
+  author_rate: number
   store: boolean
-  mine: string
+  author_description: string
   author: string
 }
 

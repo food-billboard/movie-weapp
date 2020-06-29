@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { Button, View, Textarea } from '@tarojs/components'
+import { Button, View } from '@tarojs/components'
 import MediaPicker from '../mediaPicker'
 import { IItem } from '../mediaPicker/index.d'
 import { IMAGE_CONFIG, SYSTEM_PAGE_SIZE } from '~config'
@@ -58,8 +58,9 @@ export default class Comment extends Component<IProps>{
      * 监听数据改变
      */
     public handleChange = (event) => {
+        const { target: { value } } = event
         this.setState({
-            value: event.target.value
+            value
         })
     }
 
@@ -86,23 +87,26 @@ export default class Comment extends Component<IProps>{
         this.close(true)
         let image:Array<any> = [],
             video:Array<any> = []
+
+        //文件预先上传
         if(data) {
             data.map((val: IItem) => {
                 const { url, type } = val
                 if(mediaType[type] === mediaType.image) {
-                    image.push({url})
+                    image.push(url)
                 }else if(mediaType[type] === mediaType.video) {
-                    video.push({url})
+                    video.push(url)
                 }
             })
         }
         //评论发布
-        this.props.publishCom({value, images: image, videos: video })
+        this.props.publishCom({text: value, image, video })
     }
 
     public render() {
         const { isOpen } = this.state
         const { buttonText } = this.props
+        
         return (
             <Curtain
                 isOpen={isOpen}
@@ -110,7 +114,7 @@ export default class Comment extends Component<IProps>{
                 main={true}
                 action={true}
                 other={true}
-                handleClose={() => {this.close.call(this)}}
+                handleClose={() => { this.close.call(this) }}
                 cancel={false}
                 contentStyle={{width: SYSTEM_PAGE_SIZE(300) + 'px'}}
                 renderMain={

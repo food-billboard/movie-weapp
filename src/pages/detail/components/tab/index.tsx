@@ -36,9 +36,7 @@ export default class extends Component<IProps, IState> {
     })
   }
 
-  public getCurrent = () => {
-    return this.state.current
-  }
+  public getCurrent = () => this.state.current
 
   public render() {
 

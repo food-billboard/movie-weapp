@@ -1,6 +1,6 @@
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import {List} from '~components/commentlist'
+import { List } from '~components/commentlist'
 import GScrollView from '~components/scrollList'
 import Comment from '~components/comment'
 import Origin from './components/originComment'
@@ -8,11 +8,11 @@ import { throttle } from 'lodash'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { withTry } from '~utils'
+import { mapDispatchToProps, mapStateToProps } from './connect'
+import { connect } from '@tarojs/redux'
+import { getCustomerComment, getCustomerUserComment, getUserComment, postCommentToUser, cancelLike, putLike } from '~services'
 
 import './index.scss'
-
-import {mapDispatchToProps, mapStateToProps} from './connect'
-import {connect} from '@tarojs/redux'
 
 const INIT_QUERY = { currPage:1, pageSize: 10 }
 
@@ -30,9 +30,6 @@ export default class extends Component<any>{
 
     //用户id
     readonly id = this.$router.params.id
-
-    //我的id
-    readonly mineId = this.props.id
 
     public state: any = {
         comment: []
@@ -57,19 +54,30 @@ export default class extends Component<any>{
      * 获取数据
      */
     public fetchData = async (query: any, isInit=false) => {
+        let method
+        let params = {}
         const { comment } = this.state
-        const data = await this.props.getUserComment({id: this.id, ...query})
-        const _data = data.comment
+        if(!this.id) {
+            method = getCustomerComment
+        }else {
+            const isLogin = await this.props.getUserInfo()
+            .then(_ => true)
+            .catch(_ => false)
+            method = isLogin ? getCustomerUserComment : getUserComment
+            params = { ...params, id: this.id }
+        }
+        const data = await method({ ...params, ...query })
+
         let newData
         if(isInit) {
-            newData = [ ..._data ]
+            newData = [ ...data ]
         }else {
-            newData = [ ...comment, ..._data ]
+            newData = [ ...comment, ...data ]
         }
-        await this.setState({
+        this.setState({
             comment: newData
         })
-        return _data
+        return data
     }
 
     /**
@@ -83,28 +91,49 @@ export default class extends Component<any>{
      * user: 用户id
      * commentId: 评论id
      */
-    public publish = (isUserCall=true, user, commentId) => {
-        this.props.getUserInfo()
-        this.commentRef.current!.open()
-        this.setState({
-            userId: user,
-            commentId
+    public publish = async (_, commentId) => {
+        await this.props.getUserInfo()
+        .then(_ => {
+            this.commentRef.current!.open()
+            this.setState({
+                commentId
+            })
         })
+        .catch(err => err)   
     }
 
     /**
      * 发布评论
      */
-    public publishComment = async (value) => {
-        const { userId, commentId } = this.state
+    public publishComment = async (value: {
+        text: string,
+        image: Array<any>,
+        video: Array<any>
+    }) => {
+        const { commentId } = this.state
+        const { text='', image=[], video=[] } = value
         Taro.showLoading({ mask: true, title: '发布中' })
-        await withTry(this.props.publishUserComment)(commentId, value, userId, this.mineId)
+        await withTry(postCommentToUser)({ id: commentId, content: { text, image, video } })
         Taro.hideLoading()
-        await this.fetchData({...INIT_QUERY}, true)
+        await this.onPullDownRefresh()
+    }
+
+    //点赞
+    public like = async(id: string, like: boolean) => {
+        await this.props.getUserInfo()
+        .then(async (_) => {
+            const method = like ? cancelLike : putLike
+            Taro.showLoading({ mask: true, title: '操作中' })
+            await withTry(method)(id)
+            Taro.hideLoading()
+            //刷新
+            await this.onPullDownRefresh()
+        })
+        .catch(err => err)
     }
 
     public render() {
-        const {comment} = this.state
+        const { comment } = this.state
         return (
             <GScrollView 
                 ref={this.scrollRef}
@@ -114,18 +143,24 @@ export default class extends Component<any>{
                 scrollWithAnimation={true}
                 renderContent={
                     comment.map((value) => {
-                        const { id, origin } = value
+                        const { _id, source_type, source, ...nextValue } = value
                         return (
                             <View>
                                 <List 
                                     comment={this.publish} 
-                                    key={id}
-                                    list={value}
-                                    commentId={id}
+                                    key={_id}
+                                    like={this.like}
+                                    list={{
+                                        ...nextValue,
+                                        _id,
+                                    }}
                                     extra={true}
                                     renderExtra={
                                         <Origin
-                                            info={origin}
+                                            info={{
+                                                source,
+                                                source_type
+                                            }}
                                         />
                                     }
                                 />

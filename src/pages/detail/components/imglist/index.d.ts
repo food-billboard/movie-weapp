@@ -12,13 +12,13 @@
  *  imageList: 图片
  * }
  */
-export interface IList {
-  image: string,
-  id: string
-}
+// export interface IList {
+//   image: string,
+//   id: string
+// }
 
 export interface IProps {
-  list: Array<IList>
+  list: Array<string>
 }
 
 export interface IState {

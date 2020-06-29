@@ -7,61 +7,52 @@ import Ellipsis from '~components/ellipsis'
 import { formatTime, formatNumber, ItypeList } from '~utils'
 import { IProps, IState } from './index.d'
 import style from '~theme/style'
-import {connect} from '@tarojs/redux'
-import {mapDispatchToProps, mapStateToProps} from './connect'
 import { SYSTEM_PAGE_SIZE } from '~config'
 
 import './index.scss'
 
-@connect(mapStateToProps, mapDispatchToProps)
 export default class Content extends Component<IProps, IState>{
     public static defaultProps:IProps = {
-        movie: '',
-        id: '',
         info: {
             name: '',
-            area: [],
-            people: 0,
+            district: [],
+            glance: 0,
             director: [],
             actor: [],
-            type: [],
-            time: '',
-            publishTime: '',
+            classify: [],
+            screen_time: '',
+            createdAt: '',
             language: '',
             description: '',
             hot: 0,
             rate:0,
-            rateMine: 0,
+            author_rate: 0,
             store: false,
-            mine: '',
+            author_description: '',
             author: ''
         },
-        sendRate: () => {},
-        sendStore: () => {},
-        getUserInfo: () => {}
+        store: () => {},
+        rate: () => {},
     }   
-
-    //我的id
-    readonly id = this.props.id
     
     public render() {
-        const { info, movie } = this.props
+        const { info } = this.props
         const {
             name='',
-            area=[],
-            people=0,
+            district=[],
+            glance=0,
             director=[],
             actor=[],
-            type=[],
-            time=0,
-            publishTime=0,
+            classify=[],
+            screen_time=0,
+            createdAt=0,
             language='',
             description='',
             hot=0,
             rate,
-            rateMine,
+            author_rate,
             store,
-            mine,
+            author_description,
             author
         } = info
         return (
@@ -75,14 +66,18 @@ export default class Content extends Component<IProps, IState>{
                     </View>
                     <View className='title-store at-col at-col-2'>
                         <GStore
-                            movie={movie}
+                            movie={name}
+                            value={store}
+                            store={this.props.store}
                         />
                     </View>
                 </View>
                 <View className='main'>
                     <View className='main-rate'>
                         <GRate
-                            movie={movie}
+                            movie={name}
+                            value={rate}
+                            rate={this.props.rate}
                         />
                     </View>
                     <View className='main-rate'>
@@ -93,13 +88,13 @@ export default class Content extends Component<IProps, IState>{
                         <View className='at-row at-row__align--center'>
                             <View className='at-col at-col-9'>
                                 <AtRate
-                                    value={rateMine}
+                                    value={author_rate}
                                     max={10}
                                     size={SYSTEM_PAGE_SIZE(20)}
                                 ></AtRate>
                             </View>
                             <View className='at-col at-col-1 main-rate-number'>
-                                {rateMine}
+                                {author_rate}
                             </View>
                         </View>
                     </View>
@@ -128,7 +123,7 @@ export default class Content extends Component<IProps, IState>{
                             <View className='at-icon icon at-icon-tag'></View>
                             分类: <Text className={'text'}
                                 style={{...style.color('primary')}}
-                            >{type.map((val: ItypeList) => {
+                            >{classify.map((val: ItypeList) => {
                                 const { value } = val
                                 return value
                             }).join(' ')}</Text>
@@ -138,13 +133,13 @@ export default class Content extends Component<IProps, IState>{
                                 <View className='at-icon icon at-icon-tag'></View>
                                 时间: <Text className={'text'}
                                     style={{...style.color('primary')}}
-                                >{formatTime(publishTime)}</Text>
+                                >{formatTime(createdAt)}</Text>
                             </View>
                             <View className='at-col at-col-5 time'>
                                 <View className='at-icon icon at-icon-tag'></View>
                                 上映: <Text className={'text'}
                                     style={{...style.color('primary')}}
-                                >{formatTime(time)}</Text>
+                                >{formatTime(screen_time)}</Text>
                             </View>
                         </View>
                         <View className='at-row at-row__justify--between area-lang'>
@@ -158,7 +153,7 @@ export default class Content extends Component<IProps, IState>{
                                 <View className='at-icon icon at-icon-tag'></View>
                                 地区: <Text className={'text'}
                                     style={{...style.color('primary')}}
-                                >{area.map((val: ItypeList) => {
+                                >{district.map((val: ItypeList) => {
                                     const { value } = val
                                     return value
                                 }).join(' ')}</Text>
@@ -177,7 +172,7 @@ export default class Content extends Component<IProps, IState>{
                             浏览: 
                             <Text className={'text'}
                                 style={{...style.color('primary')}}
-                            >{formatNumber(people)}</Text>
+                            >{formatNumber(glance)}</Text>
                             <Text className='look-text' style={{...style.color('thirdly')}}> 人看过</Text>
                         </View>
                         <View className='author'>
@@ -206,7 +201,7 @@ export default class Content extends Component<IProps, IState>{
                             <View className='at-icon icon at-icon-tag'></View>
                             楼主认为: 
                             <Ellipsis
-                                text={mine}
+                                text={author_description}
                                 style={{lineHeight: SYSTEM_PAGE_SIZE(25) + 'px', ...style.color('primary')}}
                                 needPoint={true}
                             ></Ellipsis>

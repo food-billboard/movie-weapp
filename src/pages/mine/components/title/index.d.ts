@@ -7,6 +7,5 @@
  */
 
 export interface IProps {
-  id: string,
-  hasNews: boolean
+
 }

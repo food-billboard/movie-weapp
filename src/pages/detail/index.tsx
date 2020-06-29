@@ -12,11 +12,10 @@ import Title from './components/title'
 import Tab from './components/tab'
 import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
-import { getCookie } from '~config'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
-import { size, withTry, router, routeAlias } from '~utils'
-import { getCustomerMovieDetail, getUserMovieDetail, getCommentSimple } from '~services'
+import { withTry, router, routeAlias } from '~utils'
+import { getCustomerMovieDetail, getUserMovieDetail, getCommentSimple, postCommentToMovie, putStore, cancelStore, putRate } from '~services'
 
 import './index.scss'
 
@@ -42,12 +41,9 @@ export default class extends Component<any> {
 
     public state: any = {
         detail: [],
-        tab: false,
+        tab: [],
         commentList: []
     }
-
-    //我的id
-    private mineId
 
     public componentDidMount = async() => {
         this.fetchData()
@@ -55,42 +51,27 @@ export default class extends Component<any> {
 
     //设置标题
     public setTitle = async () => {
-        const { detail } = this.state
         const current = this.tabRef.current ? this.tabRef.current.getCurrent() : 0
-        const { info={} } = detail[current] ? detail[current] : {}
-        const { name='' } = info
-        if(info && FIRST) {
-            FIRST = false
-            Taro.setNavigationBarTitle({title: name})
-        }
+        const { tab } = this.state
+        Taro.setNavigationBarTitle({ title: tab[current].same_name })
     }
 
     //获取数据
     public fetchData = async () => {
-        // const { tab } = this.state
-        // let _tab = tab
+        const { userInfo } = this.props
         Taro.showLoading({ mask: true, title: '凶猛加载中' })
-        const userInfo = await this.props.getUserInfo()
-        let data, commentList
-        if(userInfo) {
-            data = await getCustomerMovieDetail(this.id)
-        }else {
-            data = await getUserMovieDetail(this.id)
-        }
-        commentList = await getCommentSimple({ id: this.id })
-
-        // const {data, values} = detail
-        // if(!_tab && values) {
-        //     _tab = data.map(val => {
-        //         const { info: {name} } = val
-        //         return name
-        //     })
-        // }
-
+        const method = userInfo ? getCustomerMovieDetail : getUserMovieDetail
+        const data = await method(this.id)
+        const { comment, same_film=[], name, _id } = data
+        const baseTab = [{
+            _id,
+            same_name: name,
+            type: 'NAMESAKE'
+        }]
         this.setState({
+            tab: same_film.length ? [ ...baseTab, ...same_film ] : [ ...baseTab ],
             detail: data,
-            commentList,
-            // tab: _tab
+            commentList: comment,
         })
         Taro.hideLoading()
     } 
@@ -98,62 +79,89 @@ export default class extends Component<any> {
     //打开评论界面
     public handleComment = async () => {
          //获取个人信息缓存
-         const userInfo = await this.props.getUserInfo()
-        if(!userInfo) {
-            Taro.showModal({
-                title: '未登录',
-                content: '是否前往登录',
-                success: (res) => {
-                    if(res.confirm) {
-                        // router.push(routeAlias.user, { id })
-                        //跳转到登录
-                    }else {
-                        Taro.showToast({
-                            title: '登录才能评论',
-                            icon: 'none',
-                            duration: 1000
-                        })
-                    }
-                }
-            })
-            return
-        }else {
+        await this.props.getUserInfo()
+        .then(_ => {
             this.commentRef.current!.open()
-        }
+        })
+        .catch(err => err)
     }
 
     //评论
-    public comment = async (value: string) => {
-
+    public comment = async (value: {
+        text?: string,
+        image?: Array<any>,
+        video?: Array<any>
+    }) => {
+        const { text='', image=[], video=[] } = value
         Taro.showLoading({mask: true, title: '评论中...'})
-        await withTry(this.props.comment)(value, this.id, this.mineId)
+        await withTry(postCommentToMovie)({ id: this.id, content: { text, image, video } })
         Taro.hideLoading()
     }
 
+    //收藏
+    public store = async(store: boolean) => {
+        await this.props.getUserInfo()
+        .then(async(_) => {
+            Taro.showLoading({ mask: true, title: '稍等一下' })
+            const method = store ? cancelStore : putStore
+            await withTry(method)(this.id)
+            Taro.hideLoading()
+        })
+        .catch(err => err)
+    }
+
+    //评分
+    public rate = async(value: number) => {
+        await this.props.getUserInfo()
+        .then(async(_) => {
+            Taro.showLoading({ mask: true, title: '稍等一下' })
+            await withTry(putRate)({ id: this.id, value })
+            Taro.hideLoading()
+        })
+        .catch(err => err)
+    }
+
     //tab切换
-    public handleTabChange = (value) => {
-        const { detail } = this.state
-        const { id, info: {name} } = detail[value]
-        this.id = id
-        this.setState({})
+    public handleTabChange = async (value: string) => {
+        const { tab } = this.state
+        const [ item ] = tab.filter(item => item.same_name === value)
+        const { _id } = item
+        this.id = _id
+        await this.fetchData()
     }
 
     public render() {
-        const { detail, commentList=[], tab } = this.state
-        let current = this.tabRef.current ? this.tabRef.current!.getCurrent() : 0
+        const { detail: {
+            video,
+            poster,
+            images=[],
+            info,
+            tag,
+            glance,
+            createdAt,
+            hot,
+            rate,
+            author_rate,
+            store,
+            author_description,
+            author: { user }
+        }, commentList=[], tab } = this.state
         const {
-            video={},
-            info={},
-            image=[],
-            tag=[]
-        } = detail[current] ? detail[current] : {}
+            actor,
+            district,
+            language,
+            director,
+            classify,
+            ...nextInfo
+        } = info
+
         this.setTitle()
         return (
             <View className='detail' style={{...style.backgroundColor('bgColor')}}>
                 {
-                    tab ?
+                    tab.length ?
                     <Tab
-                        values={tab}
+                        values={tab.map(item => item.same_name)}
                         handleClick={this.handleTabChange}
                         ref={this.tabRef}
                         tabToggle={1000}
@@ -164,8 +172,8 @@ export default class extends Component<any> {
                     {
                         video ? <GVideo
                         src={video.src}
-                        poster={video.poster}
-                        id={video.id}
+                        poster={poster}
+                        id={video}
                     /> : null
                     }
                 </View>
@@ -173,8 +181,24 @@ export default class extends Component<any> {
                     style={{...style.color('thirdly'), ...style.border(1, 'thirdly', 'solid', 'top')}}
                 >
                     <Content
-                        info={info}
-                        movie={this.id}
+                        store={this.store}
+                        rate={this.rate}
+                        info={{
+                            ...nextInfo,
+                            glance,
+                            district: district.map(item => ({ value: item.name })),
+                            director: director.map(item => ({ value: item.name })),
+                            actor: actor.map(item => ({ value: item.name })),
+                            classify: classify.map(item => ({ value: item.name })),
+                            language: language.map(item => ({ value: item.name })),
+                            createdAt,
+                            hot,
+                            rate,
+                            author_rate,
+                            store,
+                            author_description,
+                            author: user
+                        }}
                     />
                 </View>
                 <View className='image'>
@@ -184,7 +208,7 @@ export default class extends Component<any> {
                         />
                     </View>
                     <List 
-                        list={image}
+                        list={images}
                     />
                 </View>
                 <View className='actor'>
@@ -193,7 +217,13 @@ export default class extends Component<any> {
                             title={'卡司'}
                         />
                     </View>
-                    <Actor list={info ? info.actor : []} />
+                    <Actor list={actor ? actor.map(item => {
+                        const { name, other: { avatar } } = item
+                        return {
+                            name,
+                            image: avatar
+                        }
+                    }) : []} />
                 </View>
                 <View className='tag'> 
                     <View className='title'>
@@ -202,7 +232,12 @@ export default class extends Component<any> {
                         />
                     </View>
                     <GTag
-                        list={tag}
+                        list={tag.map(item => {
+                            const { text } = item
+                            return {
+                                value: text
+                            }
+                        })}
                     ></GTag>
                 </View>
                 <View className='comment'>
@@ -212,8 +247,15 @@ export default class extends Component<any> {
                         />
                     </View>
                     <IconList
-                        list={commentList}
-                        id={this.id}        
+                        list={commentList.map(comment => {
+                            const { content: { text }, _id, user_info: { avatar } } = comment
+                            return {
+                                id: _id,
+                                content: text || '[ 媒体 ]',
+                                image: avatar
+                            }   
+                        })}
+                        handleClick={() => router.push(routeAlias.comment, { id: this.id })}      
                     />
                 </View>
                 <View className='other'>

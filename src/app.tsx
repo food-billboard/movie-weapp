@@ -105,8 +105,8 @@ class App extends Component {
           "selectedIconPath": './assets/home-icon-active.png'
         },
         {
-          "pagePath": "pages/issue/index",
-          "text": "发布",
+          "pagePath": "pages/news/index",
+          "text": "消息",
           "iconPath": "./assets/issue-icon.png",
           "selectedIconPath": './assets/issue-icon-active.png'
         },

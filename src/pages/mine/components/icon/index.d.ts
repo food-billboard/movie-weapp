@@ -26,5 +26,5 @@ export interface List {
 }
 
 export interface IProps {
-  id: string
+  
 }

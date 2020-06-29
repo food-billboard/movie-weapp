@@ -1,6 +1,6 @@
 import Taro, {Component, Config} from '@tarojs/taro'
-import { View, Button } from '@tarojs/components'
-import { AtTag } from 'taro-ui'
+import { View } from '@tarojs/components'
+// import { AtTag } from 'taro-ui'
 import Title from './components/title'
 import IconList from './components/icon'
 import List from '~components/linearlist'
@@ -10,8 +10,7 @@ import style from '~theme/style'
 import { IList } from '~components/linearlist/index.d'
 import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToProps } from './connect'
-import { router, routeAlias, size, withTry } from '~utils'
-import { getCookie, setCookie } from '~config'
+import { router, routeAlias } from '~utils'
 
 import './index.scss'
 
@@ -38,7 +37,7 @@ export default class extends Component<any>{
                 color: TypeColor[ICON_COLOR]
             },
             handle: () => {
-                router.push(routeAlias.userissue, { id: this.id })
+                router.push(routeAlias.userissue)
             },
             id: Symbol('issue')
         },
@@ -52,131 +51,120 @@ export default class extends Component<any>{
                 color: TypeColor[ICON_COLOR]
             },
             handle: () => {
-                router.push(routeAlias.setting, { id: this.id })
+                router.push(routeAlias.setting)
             },
             id: Symbol('setting')
         }
     ] 
 
-    //用户id
-    private id: string
-
-    //是否登录
-    private login: boolean = Boolean(this.$router.params.login).valueOf()
-
-    private code: string
+    // private code: string
 
     public state: any = {
-        detail: {},
         typeColor: TypeColor
     }
 
     public componentDidMount = async () => {
-        if(this.login == true) await this.fetchData()
+        await this.fetchData()
     }
 
     //获取数据
     public fetchData = async () => {
         Taro.showLoading({ mask: true, title: '加载中' })
-        const detail = await this.props.getUserInfo() || {}
-        const { info={} } = detail
+        await this.props.getUserInfo() || {}
         Taro.hideLoading()
-        await this.setState({
-            detail: info
-        })
     }
 
-    public componentDidShow = () => {
-
-        //缓存信息查看
-        const userInfo = getCookie('user') || {}
-        if(!size(userInfo)) {
-            this.login = false
-        }else {
-            const { id } = userInfo
-            this.id = id
-            this.login = true
-        }
+    public componentDidShow = async () => {
 
         ////色调修改时重绘
         colorStyleChange(true)
         // const { typeColor } = this.state
         // if(typeColor == TypeColor) return
         this.setState({typeColor: TypeColor})
+
+        await this.props.getUserInfo()
+        .catch(err => err)
+
     }
 
-    //监听获取用户信息
-    public handleGetUserInfo = async (res) => {
-        const { detail: { cloudID, encryptedData, signature, rawData, iv, userInfo } } = res
+    // //监听获取用户信息
+    // public handleGetUserInfo = async (res) => {
+    //     const { detail: { cloudID, encryptedData, signature, rawData, iv, userInfo } } = res
 
-        //登录
-        Taro.showLoading({mask:true, title: '稍等一下'})
-        const [,data] = await withTry(this.props.sendUserLogon)({
-            userInfo,
-            code : this.code
-        })
-        Taro.hideLoading()
-        if(data) {
-            const { info } = data
-            //改变登录状态
-            this.login = true
+    //     //登录
+    //     Taro.showLoading({mask:true, title: '稍等一下'})
+    //     const [,data] = await withTry(this.props.sendUserLogon)({
+    //         userInfo,
+    //         code : this.code
+    //     })
+    //     Taro.hideLoading()
+    //     if(data) {
+    //         const { info } = data
+    //         //改变登录状态
+    //         this.login = true
 
-            this.setState({
-                detail: info
-            }, () => {
-                //将个人信息放入缓存
-                setCookie('user', {
-                    value: JSON.stringify(info),
-                    expires: Date.now() + (24 * 7 * 60 * 60 * 60 * 1000)
-                })
-            })
-        }
-    }
+    //         this.setState({
+    //             detail: info
+    //         }, () => {
+    //             //将个人信息放入缓存
+    //             setCookie('user', {
+    //                 value: JSON.stringify(info),
+    //                 expires: Date.now() + (24 * 7 * 60 * 60 * 60 * 1000)
+    //             })
+    //         })
+    //     }
+    // }
 
-    //登录获取session
-    public handleLogin = async () => {
-        const data: string = await new Promise((resovle, reject) => {
-            Taro.login({
-                success: (res) => {
-                    const { code } = res
-                    resovle(code)
-                },
-                fail: () => {
-                    reject(false)
-                }
-            })
-        })
-        if(data) this.code = data
-    }
+    // //登录获取session
+    // public handleLogin = async () => {
+    //     const data: string = await new Promise((resovle, reject) => {
+    //         Taro.login({
+    //             success: (res) => {
+    //                 const { code } = res
+    //                 resovle(code)
+    //             },
+    //             fail: () => {
+    //                 reject(false)
+    //             }
+    //         })
+    //     })
+    //     if(data) this.code = data
+    // }
 
     public render() {
 
-        const { id, hasNews=false } = this.props
-        const { detail } = this.state
+        const { userInfo: { 
+            username,
+            avatar,
+            hot,
+            fans,
+            attentions,
+        } } = this.props
 
         return (
             <View className='mine'>
                 <View className='head'>
                     <IconHead
-                        list={detail}
+                        list={{
+                            username,
+                            avatar,
+                            hot,
+                            fans,
+                            attentions,
+                        }}
                     />
                 </View>
                 <View className='main'
                     style={{...style.backgroundColor('disabled')}}
                 >
                     {
-                        this.login ?
+                        // this.login ?
                         <View>
                             <View className='title'>
-                                <Title 
-                                    hasNews={hasNews}
-                                    id={id}
-                                />
+                                <Title />
                             </View>
                             <View className='iconlist'>
-                                <IconList
-                                    id={id}
-                                />
+                                <IconList />
                             </View>
                             <View className='list'>
                                 <List
@@ -192,26 +180,27 @@ export default class extends Component<any>{
                                     })}
                                 />
                             </View>
-                        </View> :
-                        <View className='login'>
-                            <AtTag 
-                                customStyle={{
-                                    ...style.border(1, 'primary', 'solid', 'all')
-                                }}
-                            >你还没有登录，可以点下面登录</AtTag>
-                            <View style={{fontWeight: 'bolder', ...style.color('thirdly')}}>
-                                {
-                                    [ ...new Array(7).fill('|'), '↓' ].map((val: string) => (<View>{val}</View>))
-                                }
-                            </View>
-                            <Button 
-                                className='button'
-                                openType={'getUserInfo'}
-                                style={{...style.backgroundColor('secondary')}}
-                                onGetUserInfo={this.handleGetUserInfo}
-                                onClick={this.handleLogin}
-                            >点我登录</Button>
-                        </View>
+                        </View> 
+                        // :
+                        // <View className='login'>
+                        //     <AtTag 
+                        //         customStyle={{
+                        //             ...style.border(1, 'primary', 'solid', 'all')
+                        //         }}
+                        //     >你还没有登录，可以点下面登录</AtTag>
+                        //     <View style={{fontWeight: 'bolder', ...style.color('thirdly')}}>
+                        //         {
+                        //             [ ...new Array(7).fill('|'), '↓' ].map((val: string) => (<View>{val}</View>))
+                        //         }
+                        //     </View>
+                        //     <Button 
+                        //         className='button'
+                        //         openType={'getUserInfo'}
+                        //         style={{...style.backgroundColor('secondary')}}
+                        //         onGetUserInfo={this.handleGetUserInfo}
+                        //         onClick={this.handleLogin}
+                        //     >点我登录</Button>
+                        // </View>
                     }
                 </View>
             </View>

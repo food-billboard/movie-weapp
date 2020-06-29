@@ -3,8 +3,7 @@
  */
 
  export interface IList {
-  id: string
-  value: string
+  name: string
   image: string
  }
 

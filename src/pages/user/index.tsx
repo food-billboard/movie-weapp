@@ -5,10 +5,10 @@ import List from '~components/linearlist'
 import GButton from '~components/button'
 import { TypeColor, colorStyleChange } from '~theme/color'
 import {mapStateToProps, mapDispatchToProps} from './connect'
-import { router, routeAlias, size, withTry } from '~utils'
+import { router, routeAlias, withTry } from '~utils'
 import {connect} from '@tarojs/redux'
 import style from '~theme/style'
-import { getCookie } from '~config'
+import { getUserInfo, getCustomerAntoherUserInfo, toAttention, cancelAttention } from '~services'
 
 import './index.scss'
 
@@ -20,58 +20,46 @@ export default class User extends Component<any>{
     }
 
     public state: any = {
-        userInfo: {},
-        isAttention: false
+        userInfo: {}
     }
 
     //用户id
-    readonly id = this.$router.params
-
-    //我的id
-    private mineId
+    readonly id = this.$router.params.id
 
     public componentDidShow = () => {
         colorStyleChange()
     }
 
     public componentDidMount = async () => {
-        this.fetchData()
+        await this.refresh()
     }
+
+    public refresh = async () => await this.fetchData()
 
     //数据获取
     public fetchData = async () => {
+        const { userInfo } = this.props
         Taro.showLoading({mask: true, title: '加载中'})
-        const [,userInfo] = await withTry(this.props.getUserInfo)()
+        const method = userInfo ? getCustomerAntoherUserInfo : getUserInfo
+        const data = await method(this.id)
         Taro.hideLoading()
-        if(userInfo) {
-            const { info } = userInfo
-            const isLike = info.isLike
-            await this.setState({
-                userInfo: info,
-                isAttention: isLike
-            })
-        }
+        this.setState({
+            userInfo: data
+        })
     }
 
     //关注/取消关注
     public attention = async () => {
-        const userInfo = getCookie('user') || {}
-        if(!size(userInfo)) {
-            await this.props.getUserInfo()
-            return
-        }
-        const { id } = userInfo
-        this.mineId = id
-
-        const { isAttention } = this.state
-        Taro.showLoading({mask: true, title: '操作中'})
-        const [,data] = await withTry(this.props.toAttention)(this.id, this.mineId, isAttention)
-        Taro.hideLoading()
-        if(data) {
-            await this.setState({
-                isAttention: !isAttention
-            })
-        }
+        const { userInfo: { like } } = this.state
+        const method = like ? cancelAttention : toAttention
+        await this.props.getUserInfo()
+        .then(async(_) => {
+            Taro.showLoading({mask: true, title: '操作中'})
+            await withTry(method)(this.id)
+            Taro.hideLoading()
+            await this.refresh()
+        })
+        .catch(err => err)
     }
 
     //查看收藏
@@ -169,16 +157,16 @@ export default class User extends Component<any>{
     ]
 
     public render() {
-        const {isAttention, userInfo} = this.state
+        const { userInfo: { like, ...nextInfo } } = this.state
+
         return (
             <View className='user'>
                 <View className='icon'>
                     <IconHead
-                        list={userInfo}
+                        list={nextInfo}
                     />
                 </View>
                 <View className='list'
-                    // style={{...style.border(1, 'disabled', 'solid', 'bottom')}}
                     style={{borderBottom: '1px solid rgb(237, 243, 248)'}}
                 >
                     <List 
@@ -188,7 +176,7 @@ export default class User extends Component<any>{
                 <GButton
                     type={'secondary'}
                     style={{width: '100%', height: 120, position: 'fixed', left: 0, bottom: 0, ...style.backgroundColor('bgColor')}}
-                    active={isAttention ? 1 : 0}
+                    active={like ? 1 : 0}
                     value={['关注', '取消关注']}
                     operate={this.attention}
                 />

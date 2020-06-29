@@ -14,14 +14,12 @@
  * }
  */
 export interface IProps {
-  getUserInfo: () => any
-  sendRate: (rate: any, user: string, movie: string) => any
-  getRate: (movie: string) => any
+  rate: (value: number) => any
+  value: number
   movie: string
-  // id: string
   readonly?: boolean
 }
 
 export interface IState {
-  value: number
+  
 }

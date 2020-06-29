@@ -1,8 +1,8 @@
 //引入model
 const models = [
-    require('./global').default,
-    require('./movie').default,
-    require('./user').default
+    require('./chat').default,
+    require('./customer').default,
+    require('./upload').default
 ]
 
 export default (app, others = []) => {

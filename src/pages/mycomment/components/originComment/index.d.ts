@@ -1,4 +1,4 @@
-import { IInfo } from '~components/commentlist/index.d'
+import { source_type } from './index'
 /**
  * 原始评论简介
  * props: {
@@ -7,5 +7,11 @@ import { IInfo } from '~components/commentlist/index.d'
  */
 
  export interface IProps {
-  info: IInfo
+  info: {
+    source_type: keyof typeof source_type
+    source: {
+      _id: string
+      content: string | null
+    }
+  }
  }

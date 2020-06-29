@@ -12,6 +12,7 @@ import {mapDispatchToProps, mapStateToProps} from './connect'
 import { Toast } from '~components/toast'
 import { Option } from 'taro-ui/@types/radio'
 import style from '~theme/style'
+import { signout, getAppInfo, feedback, preCheckFeedback } from '~services'
 
 import './index.scss'
 
@@ -39,6 +40,7 @@ const systemInfo = createSystemInfo()
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Setting extends Component<any>{
+
     public static config: Config = {
         navigationBarTitleText: '设置',
         disableScroll: true
@@ -50,44 +52,40 @@ export default class Setting extends Component<any>{
 
     public colorRef = Taro.createRef<GColor>()
 
-    //用户id
-    readonly id = this.$router.params.id
-
     public componentDidShow = () => {
         colorStyleChange()
     }
 
-    /**
-     * 显示小程序信息
-     */
+    //显示小程序信息
     public showAbout = async () => {
-        const { about } = this.state
-        about.model.isOpen = true
+        const { about: { isOpen, model, ...nextAbout } } = this.state
         Taro.showLoading({mask: true, title: '稍等...'})
-        await withTry(this.props.getAppInfo)()
+        const { info="" } = await getAppInfo()
         Taro.hideLoading()
-        about.model.content = this.props.appInfo.about || ''
-        await this.setState({
-            about,
-            activeModel: about.model
+        this.setState({
+            about: {
+                ...nextAbout,
+                isOpen: true,
+                model,
+                content: info
+            },
+            activeModel: model
         })
     }
 
-    /**
-     * 监听退出登录确认
-     */
+    //监听退出登录确认
     public logConfirm = async () => {
         this.logClose()
-        const {button} = this.state
-        var {index} = button
-        index ++
-        index %= 2
-        button.index = index
+        const { button } = this.state
+        const { index, ...nextButton } = button
         this.setState({
-            button
+            button: {
+                ...nextButton,
+                index: ( index + 1 ) % 2
+            }
         })
         Taro.showLoading({mask: true, title: '稍等一下'})
-        const [,data] = await withTry(this.props.logout)(this.id)
+        const [ , data ] = await withTry(signout)()
         Taro.hideLoading()
         if(data) {
             Toast({
@@ -105,47 +103,53 @@ export default class Setting extends Component<any>{
         this.commentRef.current!.open()
     }
 
-     /**
-     * 监听关于信息退出
-     */
-    public aboutClose = () => {
-        const {about} = this.state
-        about.model.isOpen = false
+    public close = (prop) => {
+        const target = this.state[prop]
+        if(!target) return
         this.setState({
-            about
+            prop: {
+                ...target,
+                isOpen: false
+            }
         })
     }
+
+    public aboutClose = () => this.close('about')
 
     /**
      * 监听关于信息确认
      */
-    public aboutConfirm = () => {
-        this.aboutClose()
-    }
+    public aboutConfirm = () => this.aboutClose()
 
      /**
      * 监听退出登录状态退出
      */
-    public logClose = () => {
-        const {button} = this.state
-        button.model.isOpen = false
-        this.setState({
-            button
-        })
-    }
+    public logClose = () => this.close('button')
 
     /**
      * 监听退出登录取消
      */
-    public logCancel = () => {
-        this.logClose()
-    }
+    public logCancel = () => this.logClose()
 
     //反馈信息发送
     public handleFeedback = async (value: string) => {
-        Taro.showLoading({mask: true, title: '提交中'})
-        await withTry(this.props.feedback)(this.props.id, value)
-        Taro.hideLoading()
+        await this.props.getUserInfo()
+        Taro.showLoading({mask: true, title: '预检查中...'})
+        const data = await preCheckFeedback()
+        if(!data) {
+            Taro.showToast({
+                title: '已达到每日反馈上限',
+                icon: 'none',
+                duration: 1000
+            })
+            Taro.hideLoading()
+        }else {
+            Taro.hideLoading()
+            Taro.showLoading({ mask: true, title: '媒体上传中' })
+            
+            //用户反馈+媒体上传
+            Taro.hideLoading()
+        }
     }
 
     //反馈
@@ -227,7 +231,7 @@ export default class Setting extends Component<any>{
         button: {
             type:[warn, primary],
             value: ['退出登录', '账号登录'],
-            index: this.id ? 0 : 1,
+            index: this.props.userInfo ? 0 : 1,
             model: {
                 isOpen: false,
                 title: '提示',
@@ -249,17 +253,20 @@ export default class Setting extends Component<any>{
     public handleButton = async (index: number) => {
         //退出登录
         if(index == 0) {
-            const {button} = this.state
-            button.model.isOpen = true
+            const { button: { model, ...nextButton } } = this.state
             this.setState({
-                button,
-                activeModel: button.model
+                button: {
+                    ...nextButton,
+                    model,
+                    isOpen: true
+                },
+                activeModel: model
             })
             Taro.showLoading({mask: true, title: '稍等一下...'})
-            await withTry(this.props.logout)(this.id)
+            await withTry(signout)()
             Taro.hideLoading()
         }else {
-            // router.push(routeAlias.login)
+            router.push(routeAlias.login)
         }
     }
 

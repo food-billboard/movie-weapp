@@ -21,7 +21,7 @@ export const getUserAttention = ({ id, currPage=0, pageSize=30  }: { id: string,
 }
 
 //其他用户发布的电影
-export const getUserMovie = ({ id, currPage=0, pageSize=30  }: { id: string, currPage: number, pageSize: number }) => {
+export const getUserIssue = ({ id, currPage=0, pageSize=30  }: { id: string, currPage: number, pageSize: number }) => {
   return request('GET', '/api/user/customer/movie', { query: { _id: id, currPage, pageSize } })
 }
 
@@ -66,7 +66,7 @@ export const getSwiper = (count:number=6) => {
 }
 
 //登录
-export const signin = ({ mobile, password, uid }: { mobile: number, password: string, uid: string | undefined }) => {
+export const signin = ({ mobile, password, uid }: { mobile: string, password: string, uid?: string | undefined }) => {
   return request('POST', `/api/user/logon/signout`, { data: { password, mobile, uid } })
 }
 
@@ -111,7 +111,7 @@ export const getMovieCommentList = ({ id, currPage=0, pageSize=30 }: { id: strin
 }
 
 //电影评论详情
-export const getMovieCommentDetail = ({ id, currPage=0, pageSize=30 }: { id: string, currPage: number, pageSize: number }) => {
+export const getUserMovieCommentDetail = ({ id, currPage=0, pageSize=30 }: { id: string, currPage: number, pageSize: number }) => {
   return request('GET', '/api/user/movie/detail/comment/detail', { query: { _id: id, currPage, pageSize } })
 }
 

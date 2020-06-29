@@ -6,6 +6,8 @@ import style from '~theme/style'
 import { throttle } from 'lodash'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
+import { getCustomerIssue, getUserIssue } from '~services'
+import { router, routeAlias } from '~utils'
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any>{ 
@@ -44,18 +46,19 @@ export default class extends Component<any>{
    */
   public fetchData = async (query: any, isInit=false) => {
     const { list } = this.state
-    const data = await this.props.getIssue({id: this.id, ...query})
-    const _data = data.detail
+    const method = this.id ? getUserIssue : getCustomerIssue
+    const args = this.id ? { id: this.id } : {}
+    const data = await method({ ...args, ...query })
     let newData
     if(isInit) {
-        newData = [ ..._data ]
+        newData = [ ...data ]
     }else {
-        newData = [ ...list, ..._data ]
+        newData = [ ...list, ...data ]
     }
     await this.setState({
         list: newData
     })
-    return _data
+    return data
   }
 
   /**
@@ -67,10 +70,19 @@ export default class extends Component<any>{
    * 修改电影内容
    */
   public editMovie = async (id: string) => {
-    await this.props.setIssue({issueSet: true, id})
-    Taro.switchTab({
-      url: '../issue/index'
-    })
+    if(this.id) {
+      Taro.showToast({
+        title: '您没有修改权限',
+        icon: 'none',
+        duration: 1000
+      })
+    }else {
+      await this.props.getUserInfo()
+      .then(_ => {
+        router.push(routeAlias.issue, { id })
+      })
+      .catch(err => err)
+    }
   }
 
   public render() {
@@ -85,7 +97,14 @@ export default class extends Component<any>{
         sourceType={'Scope'}
         scrollWithAnimation={true}
         fetch={this.throttleFetchData}
-        renderContent={<IconList list={list} handleClick={this.editMovie}></IconList>}
+        renderContent={<IconList list={list.map(item => {
+          const { _id, poster, ...nextItem } = item
+          return {
+            ...nextItem,
+            id: _id,
+            image: poster,
+          }
+        })} handleClick={this.editMovie}></IconList>}
       >
       </GScrollView>
     )

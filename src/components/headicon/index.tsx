@@ -11,10 +11,10 @@ export default class IconHead extends Component<IProps>{
     public static defaultProps: IProps = {
         list: {
             username: '用户名',
-            image: '头像',
+            avatar: '头像',
             hot: 0,
             fans: 0,
-            attention: 0
+            attentions: 0
         }
     }
 
@@ -30,18 +30,18 @@ export default class IconHead extends Component<IProps>{
 
     public render() {
         const {list} = this.props
-        const {username='', image='', hot=0, fans, attention} = list
+        const { username='', avatar='', hot=0, fans, attentions=0 } = list
         return (
             <View className='head'
                 style={{...style.backgroundColor('thirdly')}}
             >
                 <View className='icon'>
                     <View className='content'
-                        onClick={this.previewImage.bind(this, image)}
+                        onClick={this.previewImage.bind(this, avatar)}
                     >
                         <View className='img'>
                             <AtAvatar
-                                image={image} 
+                                image={avatar} 
                                 text={'头像'}
                                 circle
                                 size={'large'}
@@ -66,7 +66,7 @@ export default class IconHead extends Component<IProps>{
                     <View className='at-col text'>
                         <Text className='count'
                             style={{...style.color('primary')}}
-                        >{formatNumber(attention)}</Text> 人关注
+                        >{formatNumber(attentions)}</Text> 人关注
                     </View>
                     <View className='at-col text'>
                         <Text className='count'

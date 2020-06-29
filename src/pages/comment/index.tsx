@@ -1,17 +1,17 @@
-import Taro, {Component, Config} from '@tarojs/taro'
+import Taro, { Component, Config } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import GButton from '~components/button'
 import Header from '~components/newsheader'
-import {List} from '~components/commentlist'
+import { List } from '~components/commentlist'
 import CommentCom from '~components/comment'
 import GScrollView from '~components/scrollList'
 import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
 import { throttle } from 'lodash'
-import { getCookie } from '~config'
-import { size, withTry } from '~utils'
-import {connect} from '@tarojs/redux'
-import {mapDispatchToProps, mapStateToProps} from './connect'
+import { withTry } from '~utils'
+import { connect } from '@tarojs/redux'
+import { mapDispatchToProps, mapStateToProps } from './connect'
+import { getCustomerMovieCommentList, getMovieCommentList, getMovieDetailSimple, postCommentToUser, postCommentToMovie, putLike, cancelLike } from '~services'
 
 const INIT_QUERY = { currPage: 1, pageSize: 10 }
 
@@ -47,8 +47,7 @@ export default class extends Component<any> {
         comment: [],
         commentId: false,
         userCall: false,
-        userId: false,
-        commentHeader: {name: '', detail: '', image: '', id: ''},
+        commentHeader: {},
     }
 
     //评论组件
@@ -57,15 +56,11 @@ export default class extends Component<any> {
     //电影id
     readonly id = this.$router.params.id
 
-    //我的id
-    private mineId
-
     /**
      * 获取电影数据
      */
     public fetchMovieData = async () => {
-        const commentHeader = await this.props.getCommentHeader(this.id)
-        const data = commentHeader.data
+        const data = await getMovieDetailSimple(this.id)
         this.setState({
             commentHeader: data
         })
@@ -76,18 +71,19 @@ export default class extends Component<any> {
      */
     public fetchData = async (query: any, isInit=false) => {
         const { comment } = this.state
-        const data = await this.props.getComment({commentId: this.id, userId: this.mineId, ...query})
-        const _data = data.comment
+        const { userInfo } = this.props
+        const method = userInfo ? getCustomerMovieCommentList : getMovieCommentList
+        const data = await method({ id: this.id, ...query })
         let newData
         if(isInit) {
-            newData = [ ..._data ]
+            newData = [ ...data ]
         }else {
-            newData = [ ...comment, ..._data ]
+            newData = [ ...comment, ...data ]
         }
         await this.setState({
             comment: newData
         })
-        return _data
+        return data
     }
 
     /**
@@ -98,18 +94,53 @@ export default class extends Component<any> {
     /**
      * 发布评论
      */
-    public publishComment = async (value) => {
+    public publishComment = async (value: {
+        text?: string,
+        image?: Array<any>,
+        video?: Array<any>
+    }) => {
         const { userId, commentId } = this.state
+        const { text='', image=[], video=[] } = value
+        let params:any = {
+            content: {
+                text,
+                image,
+                video
+            }
+        }
         Taro.showLoading({ mask: true, title: '发布中' })
         if(typeof userId === 'string' || 'number') {
             //评论用户
-            await withTry(this.props.publishUserComment)(commentId, value, userId, this.mineId)
+            params = {
+                ...params,
+                id: commentId,
+            }
+            await withTry(postCommentToUser)(params)
         }else {
             //评论电影
-            await withTry(this.props.publishComment)(value, this.id, this.mineId)
+            params = {
+                ...params,
+                id: this.id
+            }
+            await withTry(postCommentToMovie)(params)
         }
         Taro.hideLoading()
-        await this.fetchData({...INIT_QUERY}, true)
+        // await this.fetchData({ ...INIT_QUERY }, true)
+        await this.onPullDownRefresh()
+    }
+
+    //点赞/取消点赞
+    public like = async(id: string, like: boolean) => {
+        await this.props.getUserInfo()
+        .then(async (_) => {
+            const method = like ? cancelLike : putLike
+            Taro.showLoading({ mask: true, title: '操作中' })
+            await withTry(method)(id)
+            Taro.hideLoading()
+            //刷新
+            await this.onPullDownRefresh()
+        })
+        .catch(err => err)
     }
 
     /**
@@ -118,35 +149,28 @@ export default class extends Component<any> {
      * user: 用户id
      * commentId: 评论id
      */
-    public publish = (isUserCall=false, user, commentId) => {
+    public publish = async (isUserCall, commentId) => {
 
-        //获取个人信息缓存
-        const userInfo = getCookie('user') || {}
-        if(!size(userInfo)) {
-            this.props.getUserInfo()
-            return 
-        }
-        const { id } = userInfo
-        this.mineId = id 
-
-        this.commentRef.current!.open()
-        if(isUserCall) {
-            this.setState({
-                userCall: true,
-                userId: user,
-                commentId
-            })
-        }else {
-            this.setState({
-                userCall: false,
-                userId: false,
-                commentId: false
-            })
-        }
+        await this.props.getUserInfo()
+        .then(_ => {
+            this.commentRef.current!.open()
+            if(isUserCall) {
+                this.setState({
+                    userCall: true,
+                    commentId
+                })
+            }else {
+                this.setState({
+                    userCall: false,
+                    commentId: false
+                })
+            }
+        })
+        .catch(err => err)
     }
 
     public render() {
-        const { commentHeader, comment } = this.state
+        const { commentHeader: { description, _id, poster, ...nextCommentHeader }, comment } = this.state
 
         return (
             <GScrollView
@@ -157,13 +181,13 @@ export default class extends Component<any> {
                 renderContent={<View>
                     {
                         comment.map((value) => {
-                            const { commentId } = value
+                            const { _id } = value
                             return (
                                 <List 
                                     comment={this.publish} 
-                                    key={commentId}
+                                    key={_id}
                                     list={value}
-                                    commentId={commentId}
+                                    like={this.like}
                                 />
                             )
                         })
@@ -172,7 +196,12 @@ export default class extends Component<any> {
                 fetch={this.throttleFetchData}
                 header={200}
                 bottom={92}
-                renderHeader={<Header content={commentHeader}></Header>}
+                renderHeader={<Header content={{
+                    ...nextCommentHeader,
+                    detail: description,
+                    id: _id,
+                    image: poster,
+                }}></Header>}
                 renderBottom={<View>
                             <GButton 
                                 style={{width: '100%', height: '92', position: 'fixed', bottom: 0, left: 0, zIndex: '999'}}

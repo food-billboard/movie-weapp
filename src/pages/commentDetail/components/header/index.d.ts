@@ -23,25 +23,30 @@
  *  islike: 点赞状态
  * }
  */
+
 interface IContent {
-  id: string
-  user: string
-  userId: string
-  content: string
-  icon: string
-  hot: number
-  time: string
-  isLike: boolean
+  _id: string
+  user_info: {
+    avatar: string | null
+    username: string
+    _id: string
+  }
+  content: {
+    image?: Array<string>
+    text?: string
+    video?: Array<string>
+  }
+  comment_users: number
+  createdAt: string | number
+  like: boolean
+  total_like: number
 }
 
 export interface IProps {
   content: IContent
-  like: (commentId: string, user: string, mine: string) => any
-  // id: string
-  total: number
-  getUserInfo: () => any
+  like: (id: string, like: boolean) => any
 }
 
 export interface IState {
-  content: IContent
+
 }

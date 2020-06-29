@@ -78,28 +78,42 @@ export interface IInfo {
   hasVideo: boolean
 }
 
+interface ICommentUsers {
+  _id: string
+  avatar: string | null
+}
+
 interface IList {
-  id: string
-  user: IUser
-  commentUsers: Array<CommentUsers>
-  media: Array<IMediaList>
-  info: IInfo
+  comment_users: Array<ICommentUsers>
+  content: {
+    text?: string
+    image?: Array<string>
+    video?: Array<string>
+  }
+  createdAt: number | string
+  updatedAt: number | string
+  total_like: number
+  like: boolean
+  user_info: {
+    avatar: string | null
+    username: string
+    _id: string
+  },
+  _id: string
 }
 
 export interface IProps {
   list: IList
-  // id: string
-  commentId: string
   extra?: boolean
   renderExtra?: any
-  like: (...args: any) => any
+  like: (id: string, like: boolean) => any
   comment: (isUserCall: boolean, user: string, commentId: string) => any
   getUserInfo: () => any
 }
 
 export interface IState {
   list: IList
-  activeVideo: string
+  activeVideo: string | null
   videoShow: boolean
-  activeVideoPoster: string
+  activeVideoPoster: string | null
 }

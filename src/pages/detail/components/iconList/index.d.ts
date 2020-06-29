@@ -25,7 +25,7 @@ interface IList {
 
 export interface IProps {
   list: Array<IList>
-  id: string
+  handleClick?: () => any
 }
 
 export interface IState {

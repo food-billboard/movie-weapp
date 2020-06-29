@@ -1,5 +1,10 @@
 import {request} from '~utils'
 
+//用户信息
+export const getCustomerUserInfo = () => {
+  return request('GET', '/api/customer/manage')
+}
+
 //获取用户关注列表
 export const getCustomerAttention = ({ currPage=0, pageSize=30 }: { currPage: number, pageSize:number }) => {   
   return request('GET', '/api/customer/manage/attention', { query: { currPage, pageSize } })
@@ -95,6 +100,16 @@ export const putRate = (id: string, value: number) => {
   return request('PUT', '/api/customer/movie/detail/rate', {data: { _id: id, value }})
 }
 
+//电影评论列表
+export const getCustomerMovieCommentList = ({ id, currPage=0, pageSize=30 }: { id: string, currPage: number, pageSize: number }) => {
+  return request('GET', '/api/user/movie/detail/comment/list', { query: { _id: id, currPage, pageSize } })
+}
+
+//电影评论详情
+export const getCustomerMovieCommentDetail = ({ id, currPage=0, pageSize=30 }: { id: string, currPage: number, pageSize: number }) => {
+  return request('GET', '/api/user/movie/detail/comment/detail', { query: { _id: id, currPage, pageSize } })
+}
+
 //评论用户
 export const postCommentToUser = ({ id, content: { text='', image=[], video=[] } }: { id: string, content: { text: string, image: Array<string>, video: Array<string> } }) => {
   return request('POST', '/api/customer/movie/detail/comment', {data: { _id: id, content: { text, image, video } }})
@@ -116,7 +131,7 @@ export const cancelLike = (id: string) => {
 }
 
 //获取他人用户信息
-export const getCustomerUserInfo = (id: string) => {
+export const getCustomerAntoherUserInfo = (id: string) => {
   return request('GET', '/api/customer/user', { query: { _id: id } })
 }
 

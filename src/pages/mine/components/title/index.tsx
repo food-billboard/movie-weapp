@@ -9,14 +9,11 @@ import './index.scss'
 import { router, routeAlias } from '~utils'
 
 export default class Title extends Component<IProps>{
-    public static defaultProps = {
-        id: ''
-    }
 
     //标题
     readonly titleConfig = {
         store: '收藏',
-        news: '通知'
+        issue: '发布'
     }
 
     public componentDidShow = () => {
@@ -24,25 +21,22 @@ export default class Title extends Component<IProps>{
     }
 
     public handleClick = (value) => {
-        const {id} = this.props
         const { titleConfig } = this
         switch(value) {
             case titleConfig.store:
-                router.push(routeAlias.store, {id})
+                router.push(routeAlias.store)
                 break;
-            case titleConfig.news:
-                Taro.hideTabBarRedDot({
-                    index:2
-                })
-                router.push(routeAlias.news, {id})
+            case titleConfig.issue:
+                // Taro.hideTabBarRedDot({
+                //     index:2
+                // })
+                router.push(routeAlias.issue)
                 break;
         }
     }
 
     public render(){
-
         const { titleConfig: config } = this
-        const { hasNews=false } = this.props
 
         return (
             <View className='title at-row at-row__justify--around'
@@ -58,12 +52,12 @@ export default class Title extends Component<IProps>{
                     style={{...style.backgroundColor('thirdly')}}
                 ></View>
                 <View className='folder at-col at-col-5'
-                    onClick={() => {this.handleClick.call(this, config.news)}}
+                    onClick={() => {this.handleClick.call(this, config.issue)}}
                 >
-                    <AtBadge dot={hasNews}>
+                    {/* <AtBadge dot={hasNews}> */}
                         <AtIcon value='folder' size='30' color={TypeColor['secondary']}></AtIcon>
-                    </AtBadge>
-                    <Text className='text'>{this.titleConfig.news}</Text>
+                    {/* </AtBadge> */}
+                    <Text className='text'>{this.titleConfig.issue}</Text>
                 </View>
             </View>
         )

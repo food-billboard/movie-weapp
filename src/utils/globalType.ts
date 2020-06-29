@@ -3,14 +3,14 @@ import { IItem } from '~components/mediaPicker/index.d'
 import { Item } from 'taro-ui/@types/timeline'
 export interface ItypeList {
   value: string
-  id: string
+  id?: string
 }
 
 //媒体类型
 export const mediaType = {
-  video: Symbol('video'),
-  audio: Symbol('audio'),
-  image: Symbol('image')
+  video: 'video',
+  audio: 'audio',
+  image: 'image'
 }
 
 //路由简写
@@ -34,7 +34,9 @@ export const routeAlias = {
   userissue: '/userissue',
   special: '/special',
   fans: '/fans',
-  newsdetail: '/newsdetail'
+  newsdetail: '/newsdetail',
+  login: '/login',
+  register: '/register'
 }
 
 //路由配置
@@ -59,6 +61,8 @@ export const routeConfig = [
   { path: 'pages/special/index', alias: routeAlias.special },
   { path: 'pages/fans/index', alias: routeAlias.fans },
   { path: 'pages/newsdetail/index', alias: routeAlias.newsdetail },
+  { path: 'pages/login/index', alias: routeAlias.login },
+  { path: 'pages/register/index', alias: routeAlias.register },
 ]
 
 //轮播图路由跳转类型"MOVIE", "SPEICAL", "COMMENT"

@@ -66,22 +66,21 @@ export default class IconList extends Component<IProps>{
     ]
 
     //处理点击
-    public handleClick = (item: any, index: number) => {
-        const {value} = item
-        const {id} = this.props
+    public handleClick = (item: any, _: number) => {
+        const { value } = item
         const { titleConfig } = this
         switch(value) {
             case titleConfig.attention: 
-                router.push(routeAlias.attention, {id})
+                router.push(routeAlias.attention)
                 break;
             case titleConfig.comment: 
-                router.push(routeAlias.mycomment, {id})
+                router.push(routeAlias.mycomment)
                 break
             case titleConfig.record:
-                router.push(routeAlias.record, {id})
+                router.push(routeAlias.record)
                 break
             case titleConfig.fans:
-                router.push(routeAlias.fans, {id})
+                router.push(routeAlias.fans)
                 break
         }
     }

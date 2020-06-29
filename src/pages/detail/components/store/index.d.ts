@@ -16,13 +16,11 @@
 
 export interface IProps {
   text?: string
-  getStore: (movie: any, user: any) => any
-  sendStore: (user: any, movie: any) => any
   movie: string
-  // id: string
-  getUserInfo: () => any
+  store: (store: boolean) => any
+  value: boolean
 }
 
 export interface IState {
-  store: boolean
+ 
 }

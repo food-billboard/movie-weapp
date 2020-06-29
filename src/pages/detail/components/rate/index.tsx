@@ -3,70 +3,26 @@ import { View, Text } from '@tarojs/components'
 import { AtRate } from 'taro-ui'
 import { IProps, IState } from './index.d'
 import style from '~theme/style'
-import { SYSTEM_PAGE_SIZE, getCookie } from '~config'
-import {connect} from '@tarojs/redux'
-import {mapDispatchToProps, mapStateToProps} from './connect'
-import { size, withTry } from '~utils'
+import { SYSTEM_PAGE_SIZE } from '~config'
 
 import './index.scss'
 
-@connect(mapStateToProps, mapDispatchToProps)
 export default class GTate extends Component<IProps, IState>{
     public static defaultProps: IProps = {
-        getUserInfo: () => {},
-        sendRate: () => {},
-        getRate: () => {},
+        value: 0,
+        rate: () => {},
         movie: '',
-    }
-
-    public state: IState = {
-        value: 0
-    }
-
-    public componentDidMount = async () => {
-        this.fetchData()
-    }
-
-    //数据获取
-    public fetchData = async () => {
-        const rate = await this.props.getRate(this.props.movie)
-        const data = rate.rate
-        this.setState({
-            value: data
-        })
-    }
-
-    //评分
-    public sendRate = async (value: string | number) => {
-
-        const userInfo = getCookie('user') || {}
-        if(!size(userInfo)) {
-            this.props.getUserInfo()
-            return
-        }
-
-        const { id } = userInfo
-
-        await this.props.getUserInfo()
-        const {movie} = this.props
-        Taro.showLoading({mask: true, title: '评分中'})
-        await withTry(this.props.sendRate)(value, id, movie)
-        Taro.hideLoading()
     }
 
     /**
      * 监听分数变化
      */
     public handleChange = async (value: number) => {
-        await this.setState({
-            value
-        })
-        await this.sendRate(value)
+        await this.props.rate(value)
     }
 
     public render() {
-        const { value } = this.state
-        const { readonly=false } = this.props
+        const { readonly=false, value } = this.props
         return (
             <View className='rate'>
                 {

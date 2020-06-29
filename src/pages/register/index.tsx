@@ -1,21 +1,20 @@
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtInput, AtForm, AtButton } from 'taro-ui'
-import Time from './components/time'
+// import Time from './components/time'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
-import './index.scss'
-
-import {router} from '~utils'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { connect } from '@tarojs/redux'
 import { Toast } from '~components/toast'
 
+import './index.scss'
+
 interface IState {
     username: string
     password: string
-    phone: string
-    check: string
+    mobile: string
+    // check: string
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -27,20 +26,8 @@ export default class extends Component<any>{
     public state: IState = {
         username: '',
         password: '',
-        phone: '',
-        check: ''
-    }
-
-    public constructor() {
-        super(...arguments)
-
-        this.handleUser = this.handleUser.bind(this)
-        this.handlePass = this.handlePass.bind(this)
-        this.handlePhone = this.handlePhone.bind(this)
-        this.handleCheck = this.handleCheck.bind(this)
-        this.submit = this.submit.bind(this)
-        this.reset = this.reset.bind(this)
-        this.getData = this.getData.bind(this)
+        mobile: '',
+        // check: ''
     }
 
     public componentDidShow = () => {
@@ -50,7 +37,7 @@ export default class extends Component<any>{
     /**
      * 监听用户名输入
      */
-    public handleUser(value, event) {
+    public handleUser = (value, _) => {
         this.setState({
             username: value
         })
@@ -59,7 +46,7 @@ export default class extends Component<any>{
     /**
      * 监听密码输入
      */
-    public handlePass(value, event) {
+    public handlePass = (value, event) => {
         const {type} = event
         if(type == 'blur' && value.length < 6) {
             Taro.showModal({
@@ -81,27 +68,27 @@ export default class extends Component<any>{
     /**
      * 监听手机号输入
      */
-    public handlePhone(value) {
+    public handlePhone = (value) => {
         this.setState({
             phone: value
         })
     }
 
-    /**
-     * 监听验证码输入
-     */
-    public handleCheck(value) {
-        this.setState({
-            check: value
-        })
-    }
+    // /**
+    //  * 监听验证码输入
+    //  */
+    // public handleCheck(value) {
+    //     this.setState({
+    //         check: value
+    //     })
+    // }
 
     /**
      * 信息提交
      */
-    public submit = async (e) => {
-        const {username, password, phone, check} = this.state
-        if(username.length < 4 || password.length < 6 || !/^\d{6}$/g.test(check)) {
+    public submit = async (_) => {
+        const { username, password, mobile } = this.state
+        if(username.length < 4 || password.length < 6 || !/^1[345678][0-9]{9}$/g.test(mobile)) {
             Toast({
                 title: '请输入用户名和密码',
                 icon: 'fail'
@@ -109,9 +96,19 @@ export default class extends Component<any>{
             return
         }
         Taro.showLoading({mask: true, title: '正在验证...'})
-        const data = await this.props.sendNewUser({username, password, phone, code: check})
+        const data = await this.props.sendNewUser({ username, password, mobile })
         Taro.hideLoading()
-        if(data.success) router.replace('/login', { password, username })
+        if(data) {
+            Taro.switchTab({
+                url: '../main'
+            })
+        }else {
+            Taro.showToast({
+                title: '好像有错误',
+                icon: 'none',
+                duration: 1000
+            })
+        }
     }
 
     /**
@@ -134,23 +131,23 @@ export default class extends Component<any>{
                 username: '',
                 phone: '',
                 password: '',
-                check: ''
+                // check: ''
             })
         })
     }
 
-    /**
-     * 获取验证码
-     */
-    public getData = async () => {
-        const {phone} = this.state
-        await Taro.showLoading({ mask: true, title: '加载中' });
-        await this.props.sendSMS(phone)
-        await Taro.hideLoading()
-    }
+    // /**
+    //  * 获取验证码
+    //  */
+    // public getData = async () => {
+    //     const {phone} = this.state
+    //     await Taro.showLoading({ mask: true, title: '加载中' });
+    //     await this.props.sendSMS(phone)
+    //     await Taro.hideLoading()
+    // }
 
     public render() {
-        const { phone } = this.state
+        const { mobile, username, password } = this.state
         return (
             <View className='register' style={{...style.backgroundColor('bgColor')}}>
                 <AtForm
@@ -162,7 +159,7 @@ export default class extends Component<any>{
                     title='用户名'
                     type='text'
                     placeholder='想个名字吧'
-                    value={this.state.username}
+                    value={username}
                     onChange={this.handleUser}
                 />
                 <AtInput
@@ -170,7 +167,7 @@ export default class extends Component<any>{
                     title='手机号'
                     type='phone'
                     placeholder='手机号码'
-                    value={this.state.phone}
+                    value={mobile}
                     onChange={this.handlePhone}
                 />
                     <AtInput
@@ -178,10 +175,10 @@ export default class extends Component<any>{
                         title='密码'
                         type='password'
                         placeholder='密码不能少于10位数'
-                        value={this.state.password}
+                        value={password}
                         onChange={this.handlePass}
                     />
-                    <AtInput
+                    {/* <AtInput
                         clear
                         name='check'
                         title=''
@@ -195,7 +192,7 @@ export default class extends Component<any>{
                                 getData={this.getData} 
                                 phone={phone}    
                             />
-                    </AtInput>
+                    </AtInput> */}
                     <AtButton 
                         formType='submit' 
                         type={'primary'} 
