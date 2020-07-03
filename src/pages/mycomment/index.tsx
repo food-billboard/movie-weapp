@@ -144,23 +144,25 @@ export default class extends Component<any>{
                 renderContent={
                     comment.map((value) => {
                         const { _id, source_type, source, ...nextValue } = value
+                        const list = {
+                            ...nextValue,
+                            _id
+                        }
+                        const info = {
+                            source,
+                            source_type
+                        }
                         return (
                             <View>
                                 <List 
                                     comment={this.publish} 
                                     key={_id}
                                     like={this.like}
-                                    list={{
-                                        ...nextValue,
-                                        _id,
-                                    }}
+                                    list={list}
                                     extra={true}
                                     renderExtra={
                                         <Origin
-                                            info={{
-                                                source,
-                                                source_type
-                                            }}
+                                            info={info}
                                         />
                                     }
                                 />

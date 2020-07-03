@@ -33,7 +33,7 @@ export default class List extends Component<IProps, IState> {
                         return (
                             <View 
                                 className='content'
-                                key={index}
+                                key={value}
                                 onClick={() => {this.handlePreviewImage.call(this, value)}}
                             >
                                 <ImageLoading  

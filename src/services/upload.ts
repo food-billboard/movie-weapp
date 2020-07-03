@@ -1,8 +1,8 @@
 import {request} from '~utils'
 
 //普通文件上传
-export const uploadFile = ({ auth="PUBLIC", ...nextFiles }) => {
-  return request('POST', '/api/customer/upload', { data: { auth, ...nextFiles } })
+export const uploadFile = (data) => {
+  return request('POST', '/api/customer/upload', { data })
 }
 
 //分片上传预查
@@ -11,8 +11,8 @@ export const uploadChunkFileCheck = (query) => {
 }
 
 //分片上传
-export const uploadChunkFile = ({ name, index, file }) => {
-  return request('POST', '/api/customer/upload/chunk', { data: { name, index, file } })
+export const uploadChunkFile = (data) => {
+  return request('POST', '/api/customer/upload/chunk', { data })
 }
 
 //分片上传完成

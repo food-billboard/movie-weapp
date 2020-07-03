@@ -40,7 +40,7 @@ export default class extends Component<any> {
     private tabRef = Taro.createRef<Tab>()
 
     public state: any = {
-        detail: [],
+        detail: {},
         tab: [],
         commentList: []
     }
@@ -53,7 +53,7 @@ export default class extends Component<any> {
     public setTitle = async () => {
         const current = this.tabRef.current ? this.tabRef.current.getCurrent() : 0
         const { tab } = this.state
-        Taro.setNavigationBarTitle({ title: tab[current].same_name })
+        Taro.setNavigationBarTitle({ title: tab[current] ? tab[current].same_name : '电影' })
     }
 
     //获取数据
@@ -94,7 +94,7 @@ export default class extends Component<any> {
     }) => {
         const { text='', image=[], video=[] } = value
         Taro.showLoading({mask: true, title: '评论中...'})
-        await withTry(postCommentToMovie)({ id: this.id, content: { text, image, video } })
+        await withTry(postCommentToMovie)({ _id: this.id, content: { text, image, video } })
         Taro.hideLoading()
     }
 
@@ -115,7 +115,7 @@ export default class extends Component<any> {
         await this.props.getUserInfo()
         .then(async(_) => {
             Taro.showLoading({ mask: true, title: '稍等一下' })
-            await withTry(putRate)({ id: this.id, value })
+            await withTry(putRate)({ _id: this.id, value })
             Taro.hideLoading()
         })
         .catch(err => err)
@@ -135,7 +135,7 @@ export default class extends Component<any> {
             video,
             poster,
             images=[],
-            info,
+            info={},
             tag,
             glance,
             createdAt,
@@ -144,7 +144,7 @@ export default class extends Component<any> {
             author_rate,
             store,
             author_description,
-            author: { user }
+            author
         }, commentList=[], tab } = this.state
         const {
             actor,
@@ -186,18 +186,18 @@ export default class extends Component<any> {
                         info={{
                             ...nextInfo,
                             glance,
-                            district: district.map(item => ({ value: item.name })),
-                            director: director.map(item => ({ value: item.name })),
-                            actor: actor.map(item => ({ value: item.name })),
-                            classify: classify.map(item => ({ value: item.name })),
-                            language: language.map(item => ({ value: item.name })),
+                            district: district ? district.map(item => ({ value: item.name })) : [],
+                            director: director ? director.map(item => ({ value: item.name })) : [],
+                            actor: actor ? actor.map(item => ({ value: item.name })) : [],
+                            classify: classify ? classify.map(item => ({ value: item.name })) : [],
+                            language: language ? language.map(item => ({ value: item.name })) : [],
                             createdAt,
                             hot,
                             rate,
                             author_rate,
                             store,
                             author_description,
-                            author: user
+                            author: author ? author.user : ''
                         }}
                     />
                 </View>
@@ -232,12 +232,12 @@ export default class extends Component<any> {
                         />
                     </View>
                     <GTag
-                        list={tag.map(item => {
+                        list={tag ? tag.map(item => {
                             const { text } = item
                             return {
                                 value: text
                             }
-                        })}
+                        }) : []}
                     ></GTag>
                 </View>
                 <View className='comment'>

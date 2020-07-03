@@ -3,10 +3,9 @@ import { View, ScrollView, Image } from '@tarojs/components'
 import { AtAvatar, AtActivityIndicator } from 'taro-ui'
 import GVideo from '~components/video'
 import Curtain from '~components/curtain'
-import { IProps, IState, IList, IContent, INewData } from './index.d'
-import { router, routeAlias } from '~utils'
+import { IProps, IState, IList, INewData } from './index.d'
 import style from '~theme/style'
-import { formatTime, newsType, isObject } from '~utils'
+import { formatTime, isObject, mediaType, valueOf, router, routeAlias } from '~utils'
 import { last, noop } from 'lodash'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import { TypeColor } from '~theme/color'
@@ -46,28 +45,11 @@ export const createScrollId = () => {
 
 export default class extends Component<IProps, IState> {
 
-  public componentWillReceiveProps = (props) => {
-    const { list } = props
-    const data = list.filter((val: IList) => {
-      const { type } = val
-      return type === newsType.image
-    }).
-    map((val: IList) => {
-      const { content } = val
-      const { image } = content
-      return image
-    })
-    this.setState({
-      imgList: data
-    })
-  }
-
   public componentDidMount = () => {
     this.handleReachToLocation()
   }
 
   public state: IState = {
-    imgList: [],
     videoShow: false,
     activeVideo: '',
     activeScrollItem: SCROLL_ID,
@@ -82,10 +64,10 @@ export default class extends Component<IProps, IState> {
 
   //查看图片
   public handlePreviewImage = (src: string) => {
-    const { imgList } = this.state
+    const { list } = this.props
     Taro.previewImage({
       current: src, 
-      urls: [...imgList] 
+      urls: [...list.filter((item: IList) => item.type === mediaType.IMAGE).map((item: IList) => item.content)] 
     })
   }
 
@@ -98,7 +80,7 @@ export default class extends Component<IProps, IState> {
       activeScrollItem: scrollId
     })
     
-    onPreview(true)
+    onPreview && onPreview(true)
   }
 
   //关闭视频
@@ -111,7 +93,7 @@ export default class extends Component<IProps, IState> {
     })
 
     this.handleReachToLocation({isLast: false, scrollId: activeScrollItem})
-    onPreview(false)
+    onPreview && onPreview(false)
   }
 
   //查看文本
@@ -123,7 +105,7 @@ export default class extends Component<IProps, IState> {
 
   //查看当前用户详情
   public handleGetUser = (id: string) => {
-    console.log('查看用户详情')
+    router.push(routeAlias.user, { id })
   }
 
   //滚动至指定位置
@@ -157,7 +139,7 @@ export default class extends Component<IProps, IState> {
 
   public render() {
 
-    const { list=[], mine='', height, style: customStyle, onScroll=noop } = this.props
+    const { list=[], height, style: customStyle, onScroll=noop } = this.props
 
     const { videoShow, activeVideo, activeScrollItem, loadLoading } = this.state
 
@@ -177,12 +159,12 @@ export default class extends Component<IProps, IState> {
           className='loading'
           style={{display: loadLoading ? 'block' : 'none'}}
         >
-          <AtActivityIndicator 
+          {/* <AtActivityIndicator 
             mode={'normal'} 
             size={SYSTEM_PAGE_SIZE(32)} 
             color={TypeColor['thirdly']} 
             content={'加载中'}
-          ></AtActivityIndicator>
+          ></AtActivityIndicator> */}
         </View>
 
         {
@@ -190,20 +172,23 @@ export default class extends Component<IProps, IState> {
             const {
               content,
               type,
-              time='',
-              username='',
-              id='',
-              image='',
-              news='',
+              origin: {
+                username,
+                avatar,
+                _id:userId,
+                isMine
+              },
+              createdAt='',
+              _id:messageId,
               scrollId,
               loading=true
             } = val
-            const direction = mine=== id
-            const needTime = _time && (~~_time - ~~time > TIME_SPACE)
-            _time = time
+            const direction = isMine
+            const needTime = _time && (valueOf(createdAt) - valueOf(createdAt) > TIME_SPACE)
+            _time = createdAt
             return (
               <View className='chat-content'
-                key={news}
+                key={messageId}
                 id={scrollId}
               >
                 {
@@ -211,7 +196,7 @@ export default class extends Component<IProps, IState> {
                   <View 
                     className='time'
                     style={{...style.color('secondary')}}
-                  >{formatTime(time)}</View>
+                  >{formatTime(createdAt)}</View>
                   : null
                 }
                 <View className={`main at-row ${ direction ? 'at-row__justify--end' : '' }`}>
@@ -220,67 +205,67 @@ export default class extends Component<IProps, IState> {
                     !direction ?
                     <View 
                       className='avator at-col at-col-2'
-                      onClick={() => {this.handleGetUser.call(this, id)}}
+                      onClick={() => {this.handleGetUser.call(this, userId, isMine)}}
                     >
-                      <AtAvatar
+                      {/* <AtAvatar
                         size={'small'}
                         circle
-                        image={image}
+                        image={avatar}
                         text={'头像'}
-                      ></AtAvatar>
+                      ></AtAvatar> */}
                     </View>
                     : null
                   }
-                  <View className={`detail ${newsType.text !== type ? 'at-col at-col-8' : 'text'}`}>
+                  <View className={`detail ${mediaType.TEXT !== type ? 'at-col at-col-8' : 'text'}`}>
                     <View 
                       className='username'
                       style={{...style.color('thirdly'), textAlign: direction ? 'right' : 'left'}}
                     >
                       {username}
                     </View>
-                    <View className={`content ${newsType.text === type ? '' : 'half'} ${direction && newsType.text !== type ? 'at-row at-row__justify--end' : ''}`}
-                      style={type === newsType.text ? {...style.border(1, 'disabled', 'solid', 'all'), ...style.backgroundColor(direction ? 'secondary' : 'disabled')} : {}}
+                    <View className={`content ${mediaType.TEXT === type ? '' : 'half'} ${direction && mediaType.TEXT !== type ? 'at-row at-row__justify--end' : ''}`}
+                      style={type === mediaType.TEXT ? {...style.border(1, 'disabled', 'solid', 'all'), ...style.backgroundColor(direction ? 'secondary' : 'disabled')} : {}}
                     >
                       {
                         direction && loading ?
                         <View className='acitve-indicator'>
-                          <AtActivityIndicator 
+                          {/* <AtActivityIndicator 
                             mode={'normal'} 
                             size={SYSTEM_PAGE_SIZE(32)} 
                             color={TypeColor['thirdly']} 
-                          />
+                          /> */}
                         </View>
                         : null
                       }
                       {
-                        newsType.text === type ?
+                        mediaType.TEXT === type ?
                         <View 
                           style={{whiteSpace: 'normal'}} 
-                          onClick={() => this.handlePreviewText.call(this, content.text)}
-                        >{content.text}</View>
+                          onClick={() => this.handlePreviewText.call(this, content)}
+                        >{content}</View>
                         : null
                       }
                       {
-                        (newsType.image === type) ?
+                        (mediaType.IMAGE === type) ?
                         <Image 
                           mode={'widthFix'}
-                          src={content.image || ''} 
+                          src={content || ''} 
                           style={{maxWidth: '50%', ...style.backgroundColor('disabled')}}
                           className='image-radius'
-                          onClick={() => { this.handlePreviewImage.call(this, content.image) }} 
+                          onClick={() => { this.handlePreviewImage.call(this, content) }} 
                         />
                         : null
                       }
                       {
-                        newsType.video === type ?
+                        mediaType.VIDEO === type ?
                             (
-                              content.image ?
+                              !content ?
                               <Image 
                                   className='temp-image image-radius'
                                   mode={'widthFix'}
-                                  src={content.image || ''} 
+                                  src={content || ''} 
                                   style={{maxWidth: '50%', ...style.backgroundColor('disabled')}}
-                                  onClick={() => { this.handlePreviewVideo.call(this, content.video, scrollId) }} 
+                                  onClick={() => { this.handlePreviewVideo.call(this, content, scrollId) }} 
                                 >
                                   <View 
                                     className='video-icon at-icon at-icon-video'
@@ -289,7 +274,7 @@ export default class extends Component<IProps, IState> {
                                 </Image>
                               :
                               <View 
-                                onClick={() => { this.handlePreviewVideo.call(this, content.video, scrollId) }} 
+                                onClick={() => { this.handlePreviewVideo.call(this, content, scrollId) }} 
                                 className='temp-video-poster image-radius'
                                 style={{...style.backgroundColor('primary')}}
                               >
@@ -302,8 +287,8 @@ export default class extends Component<IProps, IState> {
                         : null
                       }
                       {
-                        newsType.audio === type ?
-                        content.audio
+                        mediaType.AUDIO === type ?
+                        content
                         : null
                       }
                     </View>
@@ -315,15 +300,15 @@ export default class extends Component<IProps, IState> {
                     <View 
                       className='avator at-col at-col-2'
                       style={{position: 'relative', left: 0, top:0}}
-                      onClick={() => {this.handleGetUser.call(this, id)}}
+                      // onClick={() => {this.handleGetUser.call(this, userId, isMine)}}
                     >
-                      <AtAvatar
+                      {/* <AtAvatar
                         customStyle={{position: 'absolute', right: 0, top: 0}}
                         size={'small'}
                         circle
-                        image={image}
+                        image={avatar}
                         text={'头像'}
-                      ></AtAvatar>
+                      ></AtAvatar> */}
                     </View> 
                     : null
                   }

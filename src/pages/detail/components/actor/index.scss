@@ -1,11 +1,9 @@
-$width:130px;
-$height:202px;
 .actor{
   white-space: nowrap;
   .item{
     display:inline-block;
-    width:$width;
-    height:$height;
+    width:130px;
+    height:202px;
     margin-left:20px;
   }
   .text{

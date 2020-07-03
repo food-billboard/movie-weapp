@@ -151,6 +151,8 @@ export const formatTime = (date: any, type: string = 'YYYY-MM-DD', before: numbe
     return moment(date).format(type)
 }
 
+export const valueOf = (time) => moment(time).valueOf()
+
 export const formatNumber = (data: number) => {
     if(data > 9999) {
         return Math.round(data / 10000) + 'w'
@@ -167,8 +169,4 @@ export const styleChange = () => {
     const date = new Date().getHours()
     const {start, end} = dateStyleConfig
     return date > start && date < end
-}
-
-export class a {
-    
 }

@@ -6,11 +6,25 @@ export interface ItypeList {
   id?: string
 }
 
+//权限类型
+export const AuthType = {
+  PUBLIC: 'PUBLIC',
+  PRIVATE: 'PRIVATE'
+}
+
+//房间类型
+export const RoomType = {
+  CHAT: 'CHAT',
+  GROUP_CHAT: 'GROUP_CHAT',
+  SYSTEM: 'SYSTEM'
+}
+
 //媒体类型
 export const mediaType = {
-  video: 'video',
-  audio: 'audio',
-  image: 'image'
+  VIDEO: 'VIDEO',
+  AUDIO: 'AUDIO',
+  IMAGE: 'IMAGE',
+  TEXT: 'IMAGE'
 }
 
 //路由简写

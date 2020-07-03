@@ -85,9 +85,9 @@ class List extends Component<IProps, IState>{
      */
     public handlePreviewMedia = (src: string, type: keyof typeof mediaType, image: string='') => {
         const { list: { content: { image:originImage=[] } } } = this.props
-        if(type === mediaType.image) {
+        if(type === mediaType.IMAGE) {
             this.handlePreviewImage(src, originImage)
-        }else if(mediaType[type] === mediaType.video) {
+        }else if(mediaType[type] === mediaType.VIDEO) {
             this.handlePreviewVideo(src, image)
         }else {
             //ToDo
@@ -199,23 +199,23 @@ class List extends Component<IProps, IState>{
                 <View className='image-list at-row at-row--wrap'>
                     {
                         [
-                            ...video.map(src => ({ src, type: mediaType.video })),
-                            ...image.map(src => ({ src, type: mediaType.image }))   
-                        ].map((val: { src: string, type: keyof typeof mediaType }, index: number) => {
+                            ...video.map(src => ({ src, type: mediaType.VIDEO })),
+                            ...image.map(src => ({ src, type: mediaType.IMAGE }))   
+                        ].map((val: { src: string, type: keyof typeof mediaType }, _: number) => {
                             const { src, type } = val
                             //处理不同类型的文件
                             let imageSrc,
                                 args
                             switch(type) {
-                                case mediaType.video: 
+                                case mediaType.VIDEO: 
                                     imageSrc = src
-                                    args = [ src, mediaType.video, image ]
+                                    args = [ src, mediaType.VIDEO, image ]
                                     break
-                                case mediaType.image:
+                                case mediaType.IMAGE:
                                     imageSrc = src
-                                    args = [ src, mediaType.image ]
+                                    args = [ src, mediaType.IMAGE ]
                                     break
-                                case mediaType.audio:
+                                case mediaType.AUDIO:
                                     break
                             }
                             return (

@@ -135,13 +135,13 @@ export default class extends Component<IProps, IState> {
     const { error:stateError } = this.state
     const style = (propsError || stateError) ? FORM_ERROR : {}
 
-    const showAddBtn = this.controlShowBtn()
+    const _showAddBtn = this.controlShowBtn()
 
     return (
       <AtImagePicker
         files={this.value}
         mode={mode}
-        showAddBtn={showAddBtn}
+        showAddBtn={_showAddBtn}
         multiple={multiple}
         count={count}
         sizeType={['100', '100']}

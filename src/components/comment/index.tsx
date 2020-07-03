@@ -92,13 +92,17 @@ export default class Comment extends Component<IProps>{
         if(data) {
             data.map((val: IItem) => {
                 const { url, type } = val
-                if(mediaType[type] === mediaType.image) {
+                if(mediaType[type] === mediaType.IMAGE) {
                     image.push(url)
-                }else if(mediaType[type] === mediaType.video) {
+                }else if(mediaType[type] === mediaType.VIDEO) {
                     video.push(url)
                 }
             })
         }
+
+        const fileManager = Taro.getFileSystemManager()
+        console.log(fileManager.readFileSync(image[0]))
+
         //评论发布
         this.props.publishCom({text: value, image, video })
     }

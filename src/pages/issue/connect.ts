@@ -1,9 +1,9 @@
 export const mapStateToProps = (state) => {
   const { userInfo } = state.global
-  const { issueSet } = state.user
+  // const { issueSet } = state.user
   return {
     // id: userInfo.id,
-    issueSet
+    // issueSet
   }
 }
 

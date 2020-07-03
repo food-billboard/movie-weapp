@@ -133,7 +133,6 @@ export default class Setting extends Component<any>{
 
     //反馈信息发送
     public handleFeedback = async (value: string) => {
-        await this.props.getUserInfo()
         Taro.showLoading({mask: true, title: '预检查中...'})
         const data = await preCheckFeedback()
         if(!data) {
@@ -282,6 +281,7 @@ export default class Setting extends Component<any>{
         const { iconInfo: aboutInconInfo } = about
 
         const activeMode = this.colorStyle[color ? 0 : 1]['value']
+        console.log(activeMode)
 
         return (
             <View className='setting'>
@@ -296,8 +296,8 @@ export default class Setting extends Component<any>{
                         needHiddenList={false}
                         ref={this.radioRef}
                         radioboxOption={this.colorStyle}
-                        active={activeMode}
-                        handleClick={this.colorStyleChange}
+                        value={activeMode}
+                        handleChange={this.colorStyleChange}
                     ></GRadio>
                     <GColor
                         ref={this.colorRef}

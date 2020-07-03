@@ -1,10 +1,9 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Textarea } from '@tarojs/components'
 import Emoj from '../emojSwiper'
-import { IProps, IState, IVideoType } from './index.d'
+import { IProps, IState } from './index.d'
 import style from '~theme/style'
-import { newsType } from '~utils'
-import { IList } from '../chat/index.d'
+import {  mediaType } from '~utils'
 import { IMAGE_CONFIG } from '~config'
 import { noop } from 'lodash'
 
@@ -28,38 +27,6 @@ export default class extends Component<IProps, IState> {
 
   private EmojRef = Taro.createRef<Emoj>()
 
-  //生成聊天信息结构
-  public createChatObject = (type: keyof typeof newsType , content: string | IVideoType) => {
-
-    const { userInfo } = this.props
-    const { id='', username='', image='' } = userInfo
-
-    const _content: any = {
-      text: null,
-      image: null,
-      audio: null,
-      video: null
-    }
-
-    if(type === newsType.video) {
-      _content[newsType.video] = typeof content === 'string' ? content : content.video
-      _content[newsType.image] = typeof content === 'string' ? content : content.image
-    }else {
-      _content[type] = content
-    }
-
-    const object: IList = {
-      content: { ..._content },
-      type,
-      time: Date.now(),
-      username: username,
-      id: id,
-      image: image,
-    }
-
-    return object
-  } 
-
   //重置状态
   public resetStatus = (status?) => {
     this.handleShowDetailFunc(false)
@@ -81,8 +48,9 @@ export default class extends Component<IProps, IState> {
       const [, msg] = errMsg.split(':')
       if(msg === 'ok') {
         const { tempFilePaths } = res //地址的字符串数组
-
-        this.props.sendInfo(newsType.image, tempFilePaths)
+        //文件上传
+        const data = 'tempFilePaths'
+        this.props.sendInfo(mediaType.IMAGE, data)
 
         // Promise.all(tempFilePaths.map(async (val: string) => {
         //   let type: any = newsType.image
@@ -115,9 +83,12 @@ export default class extends Component<IProps, IState> {
           width,
           height
         } = res
-        this.props.sendInfo(newsType.video, {
-          image: thumbTempFilePath,
-          video: tempFilePath
+        //文件上传
+        const imageData = 'thumbTempFilePath'
+        const videoData = 'tempFilePath'
+        this.props.sendInfo(mediaType.VIDEO, {
+          image: imageData,
+          video: videoData
         })
       }
     })
@@ -154,12 +125,12 @@ export default class extends Component<IProps, IState> {
     })
   }
 
-  //发送消息
+  //发送文本消息
   public handleSendText = async () => {
     const { inputDisabled, inputValue } = this.state
     if(inputDisabled) return 
     if(inputValue.length) {
-      await this.props.sendInfo(newsType.text, inputValue)
+      await this.props.sendInfo(mediaType.TEXT, inputValue)
       
       this.setState({
         inputValue: ''

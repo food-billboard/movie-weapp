@@ -1,12 +1,12 @@
 export const mapStateToProps = (_) => {
-    const { news } = _.user
+    const { chat: { simpleList } } = _
     return {
-        news
+        list: simpleList
     }
 }
   
 export const mapDispatchToProps = dispatch => ({   
-    getNews: (id) => dispatch({type: 'user/getNews', id}),
-    readNews: (id, date) => dispatch({type: 'user/readNews', id, date}),
-    deleteNews: (id, date) => dispatch({type: 'user/deleteNews', id, date})
+    getMessageList: () => dispatch({ type: 'chat/getMessageList' }),
+    readMessage: (id) => dispatch({ type: 'chat/readMessage', id }),
+    deleteMessage: (id) => dispatch({ type: 'chat/deleteNews', id })
 })

@@ -44,13 +44,13 @@ export default class extends Component<IProps, IState> {
 
   //媒体选择
   public handleSelect = (type:keyof typeof mediaType) => {
-    if(mediaType[type] === mediaType.image) {
+    if(mediaType[type] === mediaType.IMAGE) {
       return Taro.chooseImage({
         count: IMAGE_CONFIG.count, 
         sizeType: ['original', 'compressed'],
         sourceType: ['album', 'camera'],
       })
-    }else if(mediaType[type] === mediaType.video) {
+    }else if(mediaType[type] === mediaType.VIDEO) {
       return Taro.chooseVideo({
         sourceType: ['album']
       })
@@ -59,7 +59,7 @@ export default class extends Component<IProps, IState> {
 
   //视频选择
   public handleVideoChange = async () => {
-    const response: any = await this.handleSelect('video')
+    const response: any = await this.handleSelect('VIDEO')
     const { errMsg } = response
     if(errMsg.split(':')[1] !== 'ok') {
       return
@@ -76,12 +76,12 @@ export default class extends Component<IProps, IState> {
       return
     }
 
-    this.onChange([ ...stateValue, {url: tempFilePath, type: 'video', poster: thumbTempFilePath} ])
+    this.onChange([ ...stateValue, {url: tempFilePath, type: 'VIDEO', poster: thumbTempFilePath} ])
   }
 
   //图片选择
   public handleImageChange = async () => {
-    const response: any = await this.handleSelect('image')
+    const response: any = await this.handleSelect('IMAGE')
     const { errMsg } = response
     if(errMsg.split(':')[1] !== 'ok') {
       return
@@ -103,7 +103,7 @@ export default class extends Component<IProps, IState> {
       const { path } = val
       return {
         url: path,
-        type: 'image'
+        type: 'IMAGE'
       }
     })])    
   }

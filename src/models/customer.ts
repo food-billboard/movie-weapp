@@ -8,6 +8,9 @@ import {
 
 export default {
   namespace: 'customer',
+  state: {
+
+  },
   effects: {
 
     //发布电影

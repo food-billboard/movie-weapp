@@ -133,13 +133,16 @@ export default class extends Component<any>{
 
     public render() {
 
-        const { userInfo: { 
+        const { userInfo } = this.props
+
+        if(!userInfo) return null 
+        const { 
             username,
             avatar,
             hot,
             fans,
             attentions,
-        } } = this.props
+        } = userInfo
 
         return (
             <View className='mine'>

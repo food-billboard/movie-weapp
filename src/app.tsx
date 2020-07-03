@@ -1,10 +1,10 @@
-import '@tarojs/async-await'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { Provider } from '@tarojs/redux'
 import { dva, router, includes } from '~utils'
 import Index from './pages/main/index'
 import configure from './configure'
 
+// import 'taro-ui/dist/style/index.scss'
 import './app.scss'
 
 // 如果需要在 h5 环境中开启 React Devtools
@@ -85,7 +85,9 @@ class App extends Component {
       'pages/userissue/index',
       'pages/special/index',
       'pages/fans/index',
-      'pages/newsdetail/index'
+      'pages/newsdetail/index',
+      'pages/login/index',
+      'pages/register/index'
     ],
     window: {
       backgroundTextStyle: 'dark',
@@ -125,12 +127,12 @@ class App extends Component {
     //   Taro.cloud.init({traceUser: true})
     // }
 
-    // const dispatch = dva.getDispatch();
+    // const dispatch = dva.getDispatch()
 
     // await Taro.showLoading({mask: true, title: '加载中'})
-    // if( !includes(['/my'], router.getOptions().alias) ) {
+    // if( includes(['/mine', '/news', '/issue'], router.getOptions().alias) ) {
     //    // 获取个人详情判断是否已经登录
-    //   await dispatch({ type: 'global/getUserInfo'});
+    //   await dispatch({ type: 'global/getUserInfo'})
     // }
     // await Taro.hideLoading();
   }

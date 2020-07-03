@@ -1,11 +1,13 @@
 import Taro, {Component, Config} from '@tarojs/taro'
 import { AtList, AtListItem, AtSwipeAction } from "taro-ui"
 import { colorStyleChange } from '~theme/color'
+import Result from '~components/result'
 import style from '~theme/style'
 import { mapDispatchToProps, mapStateToProps } from './connect'
 import {connect} from '@tarojs/redux'
-import { router, routeAlias, infomationType, formatTime, withTry, createWorker } from '~utils'
-import { throttle, findIndex } from 'lodash'
+import { router, routeAlias, formatTime, withTry, valueOf } from '~utils'
+import { throttle } from 'lodash'
+import { SwipeActionOption } from 'taro-ui/types/swipe-action'
 
 import './index.scss'
 
@@ -14,12 +16,24 @@ const BUTTON_STYLE = [
         text: '已读',
         style: {
             backgroundColor: '#6190E8'
+        },
+        action: async (id: string) => {
+            //读消息
+            Taro.showLoading({mask: true, title: '稍等'})
+            await withTry(this.props.readMessage)(id)
+            Taro.hideLoading()
         }
     },
     {
         text: '删除',
         style: {
-        backgroundColor: '#FF4949'
+            backgroundColor: '#FF4949'
+        },
+        action: async (id: string) => {
+            //删除消息
+            Taro.showLoading({mask: true, title: '删除中'})
+            await withTry(this.props.deleteMessage)(id)
+            Taro.hideLoading()
         }
     }
 ]
@@ -30,9 +44,6 @@ export default class extends Component<any> {
         navigationBarTitleText: "通知",
         enablePullDownRefresh: true
     }
-
-    //用户id
-    readonly id = this.$router.params.id
 
     private worker: any
 
@@ -48,62 +59,27 @@ export default class extends Component<any> {
     }
 
     public state: any = {
-        sortList: this.props.news
+        list: this.props.list
     }
 
     //获取详细信息
-    public getDetail = async (id: string, type: string) => {
-        await this.handleReadNews(id)
-        switch(infomationType[type]) {
-            case infomationType.attention: 
-                Taro.showModal({
-                    title: '提示',
-                    content: '有人关注了你，要不要去看看',
-                    success: (res) => {
-                        const { confirm } = res
-                        if(confirm) router.push(routeAlias.user, {id})
-                    }
-                })
-                break
-            case infomationType.app:
-                router.push(routeAlias.newsdetail, {id})
-                break
-        }
+    public getDetail = async (id: string, _: string) => {
+        //读取消息
+        withTry(this.props.readMessage)(id)
+        router.push(routeAlias.newsdetail, { id })
     }
 
     //获取数据
     public fetchData = async () => {
-        await this.props.getNews(this.id)
+        //消息列表获取
+        await this.props.getMessageList()
         this.sort()
     }   
 
     //处理消息操作按钮
-    public handleOperate = async (target: any, id: string) => {
-        const index = findIndex(BUTTON_STYLE, (val) => {
-            const { text } = val
-            const { text: targetText } = target
-            return text === targetText
-        })
-        if(index == 0) {
-            await this.handleReadNews(id)
-            this.sort()
-        }else if(index == 1) {
-            await this.handleDeleteNews(id)
-            this.sort()
-        }
-    }
-
-    //删除消息
-    public handleDeleteNews = async (id: string) => {
-        Taro.showLoading({mask: true, title: '删除中'})
-        await withTry(this.props.deleteNews)(id, new Date().getTime())
-        Taro.hideLoading()
-        this.sort()
-    }
-
-    //已读消息
-    public handleReadNews = async (id: string) => {
-        await this.props.readNews(id, new Date().getTime())
+    public handleOperate = async (target: SwipeActionOption, id: string) => {
+        const index = BUTTON_STYLE.findIndex(val => val.text === target.text)
+        BUTTON_STYLE[index] && await BUTTON_STYLE[index].action(id)
         this.sort()
     }
 
@@ -112,68 +88,63 @@ export default class extends Component<any> {
     */
     public throttleFetchData = throttle(this.fetchData, 2000)
 
+    sortMethod = list => {
+        return [ ...list ].sort(function(a, b) {
+            const { message: { count: Acount, time: Atime } } = a
+            const { message: { count: Bcount, time: Btime } } = b
+            if(Acount === 0 && Bcount === 0) {
+                return valueOf(Atime) - valueOf(Btime)
+            }else if(Acount === 0) {
+                return -1
+            }else if(Bcount === 0){
+                return 1
+            }else {
+                return valueOf(Atime) - valueOf(Btime)
+            }
+        })
+    }
+
     //对数据进行排序
     public sort = () => {
-        const { news=[] } = this.props
-        this.worker = createWorker('./compute.ts')
-        this.worker.onMessage((event) => {
-            const { data } = event
-            this.setState({
-                sortList: JSON.parse(data)
-            }, () => {
-                this.worker.close()
-            })
+        const { list=[] } = this.props
+        this.setState({
+            list: this.sortMethod(list)
         })
-        this.worker.postMessage(JSON.stringify(news))
     }
 
     public render() {
-        const { sortList } = this.state
-
+        const { list } = this.state
+    
         return (
-            <AtList>
-                {
-                    sortList.map((val: any) => {
-                        const { image, id, username, list, type } = val
-                        let nearTime = 0
-                        let nearUnreadTime = 0
-                        let length = 0
-                        //筛选未读信息
-                        list.map((value: any) => {
-                            const { read, time: date } = value
-                            if(date > nearTime) {   //最近消息时间获取
-                                nearTime = date
-                            }
-                            if(!read) {
-                                if(date > nearUnreadTime) {     //未读最近消息时间
-                                    nearUnreadTime = date
-                                }
-                                length ++   //未读消息数量累计
-                            }
+            <Result isEmpty={!list.length}>
+                <AtList>
+                    {
+                        list.map((val: any) => {
+                            const { _id, type, info: { avatar, name, description }, message: { count, lastData, time } } = val
+                            
+                            return (
+                                <AtSwipeAction
+                                    key={_id}
+                                    onClick={(target) => { this.handleOperate.call(this, target, _id) }}
+                                    options={BUTTON_STYLE}
+                                    autoClose={true}
+                                >
+                                    <AtListItem
+                                        className='list'
+                                        customStyle={{...style.backgroundColor('disabled')}}
+                                        title={name}
+                                        arrow='right'
+                                        thumb={avatar}
+                                        extraText={formatTime(time)}
+                                        note={length > 0 ? (`${count}条新消息`) : '无新消息'}
+                                        onClick={() => {this.getDetail.call(this, _id, type)}}
+                                    />
+                                </AtSwipeAction>
+                            )
                         })
-                        
-                        return (
-                            <AtSwipeAction
-                                key={id}
-                                onClick={(target) => { this.handleOperate.call(this, target, id) }}
-                                options={BUTTON_STYLE}
-                                autoClose={true}
-                            >
-                                <AtListItem
-                                    className='list'
-                                    customStyle={{...style.backgroundColor('disabled')}}
-                                    title={username}
-                                    arrow='right'
-                                    thumb={image}
-                                    extraText={formatTime(length > 0 ? nearUnreadTime : nearTime)}
-                                    note={length > 0 ? (`${length}条新消息`) : '无新消息'}
-                                    onClick={() => {this.getDetail.call(this, id, type)}}
-                                />
-                            </AtSwipeAction>
-                        )
-                    })
-                }
-            </AtList>
+                    }
+                </AtList>
+            </Result>
         )
     }
 }

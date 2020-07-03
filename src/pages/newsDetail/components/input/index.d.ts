@@ -27,7 +27,6 @@
  */
 
  export interface IProps {
-  userInfo: any
   disabled?: boolean
   placeholder?: string
   inputVisible?: boolean
@@ -42,9 +41,4 @@
   inputValue: string
   autoHeight: boolean
   // lifeStatus: boolean
- }
-
- export interface IVideoType {
-  image: string,
-  video: string
  }

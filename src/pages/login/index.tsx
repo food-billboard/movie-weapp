@@ -1,4 +1,4 @@
-import Taro, { Component, Config } from '@tarojs/taro'
+ import Taro, { Component, Config } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtInput, AtForm, AtButton } from 'taro-ui'
 import { colorStyleChange } from '~theme/color'
@@ -21,21 +21,21 @@ export default class extends Component<any> {
         navigationBarTitleText: '登录'
     }
 
-    public componentDidMount = async () => {
-        const { password='', username='' } = this.$router.params
-        if(password.length && username.length) {
-            this.setState({
-                password,
-                username
-            })
-            return
-        }
-        await this.props.getUserInfo()
-    }
+    // public componentDidMount = async () => {
+    //     const { password='', username='' } = this.$router.params
+    //     if(password.length && username.length) {
+    //         this.setState({
+    //             password,
+    //             username
+    //         })
+    //         return
+    //     }
+    //     await this.props.getUserInfo()
+    // }
 
     public componentDidShow = () => {
         colorStyleChange()
-    }
+    }                 
 
     public state: IState = {
         mobile: '',
@@ -127,7 +127,7 @@ export default class extends Component<any> {
                         className='submit'
                         customStyle={{...style.border(1, 'primary', 'solid', 'all'), ...style.backgroundColor('primary')}}
                     >
-                        提交
+                        登录
                     </AtButton>
                     <AtButton 
                         onClick={this.register}

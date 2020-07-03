@@ -1,5 +1,6 @@
 import { router, routeAlias } from '~utils'
 import { signin, register, signout } from '~services'
+import Taro from '@tarojs/taro'
 
 export default {
   namespace: 'global',
@@ -11,6 +12,7 @@ export default {
       return new Promise((resolve, reject) => {
         //未登录
         if(true) {
+          Taro.hideLoading()
           Taro.showModal({
             title: '您还未登录',
             content: "是否前往登录"

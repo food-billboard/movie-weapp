@@ -1,8 +1,9 @@
 //引入model
 const models = [
-    require('./chat').default,
+    require('./chat.ts').default,
     require('./customer').default,
-    require('./upload').default
+    require('./upload').default,
+    require('./global').default
 ]
 
 export default (app, others = []) => {
