@@ -74,8 +74,6 @@ class FieldsStore {
     this.update = callback
   }
 
-  emptyFn(){}
-
   /**
    * 为表单字段添加onChange和value属性
    */
@@ -114,7 +112,6 @@ class FieldsStore {
     this.fields[name] = { ...this.fields[name], name }
     
     this.setFieldMeta(name, { ...this.getFieldMeta(name), ...newFieldMeta })
-    
 
     //返回响应的配置属性
     const configProps = {
@@ -155,7 +152,7 @@ class FieldsStore {
   getFieldValue = function(name) {
     this.fields[name] = this.fields[name] || {}
     let data = this.fields[name].value
-    if(data === undefined) {
+    if(data === undefined || data === null) {
       data = this.getFieldMeta(name).initialValue
     }
     return data
@@ -191,6 +188,7 @@ class FieldsStore {
         this.fields
       )
     }
+
     this.update()
   }
 
@@ -208,6 +206,7 @@ class FieldsStore {
       }
       return acc
     }, {})
+
     this.setFields(newFields)
 
     //存在options value发生改变
@@ -242,7 +241,7 @@ class FieldsStore {
   }
 
   //初始化表单字段
-  initializeFields = function(ns, callback) {
+  initializeFields = function(ns) {
     const { fields } = this
     const names = ns ? ns : Object.keys(fields)
     const values = names.reduce((acc, name) => {
@@ -287,7 +286,7 @@ class FieldsStore {
     this.setFields(allFields)
 
     //验证
-    const validator: any = new AsyncValidator(allRules)
+    const validator = new AsyncValidator(allRules)
 
     if (this.options.validateMessages) {
       validator.messages(this.options.validateMessages);
@@ -357,13 +356,15 @@ class FieldsStore {
       const fieldNames = names ?
         names:
         Object.keys(this.fields)
+
       const fields = fieldNames.filter(name => {
         return this.hasRules(name)
       }).map(name => {
         return this.fields[name]
       })
-      if(!fields.length) callback(null, this.getFieldsValue(fieldNames))
 
+      if(!fields.length) callback(null, this.getFieldsValue(fieldNames))
+  
       this.validateFieldsInternal(
         fields,
         {
@@ -416,7 +417,6 @@ class FieldsStore {
     //获取单个错误
     else {
       const names = Array.isArray(nes) ? nes : [ nes ]
-      
       return names.filter(name => {
         return fields[name] && !!fields[name].errors
       }).reduce((acc, name) => {
@@ -464,7 +464,7 @@ class FieldsStore {
 
 const instance = {}
 
-export function createFieldsStore(name, options, fields) {
+export function createFieldsStore(name, options?, fields?) {
   if(typeof name !== 'string') throw new Error('必须给定一个名字与表单一一对应')
   if(!!!instance[name]) {
     instance[name] = new FieldsStore(name, options, fields)

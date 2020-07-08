@@ -1,21 +1,24 @@
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtButton, AtTag } from 'taro-ui'
-import GCheckBox from '~components/checkbox'
+import GCommentPicker from '~components/picker'
+import GCheckBox from './components/checkbox'
 import GVideo from './components/video'
-import GPicker from '~components/picker'
 import GDescription from '~components/input'
 import GImagePicker from '~components/imgPicker'
-import { IFormData } from './interface'
-import { connect } from '@tarojs/redux'
-import { mapStateToProps, mapDispatchToProps } from './connect'
+import BaseForm from '~components/wrapForm'
+import Alias from '~components/restFactor'
+import { createFieldsStore } from '~components/wrapForm/fieldsStore'
+import Indexes from './components/indexes'
+import Rate from '../detail/components/rate'
+import TagList from '~components/tagList'
+import { IFormData, TIndexesType } from './interface'
+import { Item } from '~components/indexes/index.d'
 import { TypeColor, colorStyleChange } from '~theme/color'
+import { size, withTry, upload } from '~utils'
+import { SYSTEM_PAGE_SIZE } from '~config'
 import style from '~theme/style'
-import { SYSTEM_PAGE_SIZE, getCookie } from '~config'
-import { Toast } from '~components/toast'
-import { size, withTry } from '~utils'
-import BaseForm from '~utils/wrapForm'
-import { createFieldsStore } from '~utils/wrapForm/createFieldsStore'
+import { getEditMovieInfo, editIssue, sendIssue } from '~services'
 
 import './index.scss'
 
@@ -24,14 +27,6 @@ const fieldsStore = createFieldsStore('issue', {
     return value
   }
 })
-
-const FORM_DATA: IFormData = {
-  user: '',
-  id: false,
-  video: false,
-  info: false,
-  image: []
-}
 
 const BUTTON_STYLE = {
   position: 'fixed',
@@ -55,7 +50,6 @@ const PICKER_STYLE = {
   marginBottom: '5px'
 }
 
-@connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any> {
   
   public static config: Config = {
@@ -63,20 +57,25 @@ export default class extends Component<any> {
   }
 
   public state: any = {
-    detai: {},
-    formData: { ...FORM_DATA },
+    detail: {},
+    formData: {},
     lang: [],
-    typeColor: TypeColor
+    indexesVisible: false,
   }
 
-  private 
+  private id = this.$router.params.id
+
+  private actorRef = Taro.createRef<TagList>()
+
+  private directorRef = Taro.createRef<TagList>()
+
+  private districtRef = Taro.createRef<TagList>()
+
+  private indexesRef = Taro.createRef<Indexes>()
 
   //色调修改时重绘用
   public componentDidShow = () => {
-    colorStyleChange(true)
-    const { typeColor } = this.state
-    if(typeColor == TypeColor) return
-    this.setState({typeColor: TypeColor})
+    colorStyleChange()
   }
 
   public componentDidMount = async () => {
@@ -87,138 +86,117 @@ export default class extends Component<any> {
 
   //获取数据
   public fetchData = async () => {
-    const { issueSet } = this.props
-    const { isIssue, id: movieId } = issueSet
-    const language = await this.props.getLanguageList()
-    const lang = language.data
-    await this.setState({
-      lang
-    })
-    if(!isIssue) return
-    const detail = await this.props.getDetail(movieId) 
-    await this.setState({
-      detail
-    })
-    this.handleData(detail)
-  }
-
-  //处理表单数据
-  public handleData = (info: any) => {
-    const { formData } = this.state
-    const {
-      video,
-      info: inmformation,
-      image
-    } = info
-    const {
-      name,
-      area, 
-      director,
-      actor,
-      type,
-      time,
-      language,
-      description,
-    } = inmformation
-    this.setState({
-      formData: { 
-        ...formData,
-        video,
-        info: {
-          name,
-          area, 
-          director,
-          actor,
-          type,
-          time,
-          description,
-          language
-        },
-        image
-      }
-    })
-  }
-
-  //修改数据
-  public editData = async (form: IFormData) => {
-    await this.props.editIssue(form)
+    if(this.id) {
+       const data = await getEditMovieInfo(this.id)
+       this.setState({
+         detail: data
+       })
+    }
   }
 
   //提交
-  public handleSubmit = async (e) => {
-
-    //登录状态验证
-    const userInfo = getCookie('user') || {}
-    if(!size(userInfo)) {
-      this.props.getUserInfo()
-      return
-    }
-    const { id } = userInfo
-
+  public handleSubmit = async (_) => {
     //验证
-    fieldsStore.validateFields(['name', 'description', 'area', 'director', 'actor', 'type', 'publishTime', 'language', 'image', 'video'], async (errors, values) => {
+    fieldsStore.validateFields(['video', 'district', 'name', 'classify', 'director', 'actor', 'screen_time', 'description', 'author_description', 'author_rate', 'image', 'language', 'alias'], async (errors, values) => {
       //处理所有有错的表单项
       console.log(errors, values)
       if(errors) {
-        Toast({
+        Taro.showToast({
+          mask: false,
           title: '信息好像没填对',
-          icon: 'fail'
+          icon: 'none',
+          duration: 1500
         })
         return
       }
 
       const { 
         image,
-        video,
-        time,
-        lang,
-        ...nextProps
+        video: {
+          poster,
+          src
+        },
+        actor,
+        author_description,
+        author_rate,
+        alias,
+        director,
+        district,
+        ...nextValues
       } = values
-      const { issueSet } = this.props
-      const { isIssue, id: movieId } = issueSet
-      const { lang: language } = this.state
-      const _lang = language.filter((val: any) => {
-        const { id } = val
-        return id === lang
+
+      const [, newPoster] = await Taro.getFileInfo({
+        filePath: poster
       })
+      .then((data: any) => {
+        const { type } = data
+        return upload({
+            file: poster,
+            mime: type
+        })
+      })
+      const [, newSrc] = await Taro.getFileInfo({
+        filePath: src
+      })
+      .then((data: any) => {
+        const { type } = data
+        return upload({
+            file: src,
+            mime: type
+        })
+      })
+      withTry(upload)(src)
+      const newImage:Array<any> = await Promise.all(image.map(item => {
+        return Taro.getFileInfo({
+            filePath: item
+        })
+        .then((data:any) => {
+            const { type } = data
+            return upload({
+                file: item,
+                mime: type
+            })
+        })
+    }))
 
       //生成模板数据
       let data: IFormData = {  
-        user: id,
-        id: isIssue ? movieId : false,
-        video,
-        info: {
-          ...nextProps,
-          time: Array.isArray(time) ? time.join('') : time,
-          language: _lang.length ? _lang[0]['id'] : lang
+        ...(this.id ? { _id: this.id } : {}),
+        video: {
+          poster: newPoster,
+          src: newSrc
         },
-        image: image.map((val: any) => {
-          return {
-            image: val
-          }
-        })
+        info: {
+          ...nextValues,
+          ...(author_description ? { author_description } : {}),
+          ...(author_rate ? { author_rate } : {}),
+          ...(alias.length ? { alias: alias.map(item => item.title) } : {}),
+          director: director.map(item => item.key),
+          actor: actor.map(item => item.key),
+          district: district.map(item => item.key)
+        },
+        images: newImage
       }
 
       Taro.showLoading({mask: true, title: '提交中...'})
        //数据提交
-      if(isIssue) {
-        await this.props.setIssue({
-          isIssue: false,
-          movieId: ''
-        })
-        await withTry(this.editData)(data)
+      if(this.id) {
+        await withTry(editIssue)(data)
       }else {
-        await withTry(this.props.sendIssue)(data)
+        await withTry(sendIssue)(data)
       }
       Taro.hideLoading()
 
       Taro.showModal({
         title: '提示',
-        content: '已经发送，不过需要审核'
+        content: '已经发送，是否继续发布'
       }).then((res) => {
-        Taro.reLaunch({
-          url: '../main/index'
-        })
+        const { confirm } = res
+        if(!confirm) {
+          Taro.reLaunch({
+            url: '../main/index'
+          })
+        }
       })
 
     })
@@ -226,7 +204,7 @@ export default class extends Component<any> {
   }
 
   //重置
-  public handleReset = async (e) => {
+  public handleReset = async (_) => {
     Taro.showModal({
       title: '提示',
       content: '是否确定重置数据'
@@ -238,296 +216,411 @@ export default class extends Component<any> {
     })
   }
 
+  //indexes展示
+  public handleIndexesShow = (config: {
+    visible: boolean,
+    type: TIndexesType
+  }) => {
+    const { visible, type } = config
+    this.setState({
+      indexesVisible: visible
+    }, () => {
+      setTimeout(() => {
+        this.indexesRef.current!.indexesVisible(type)
+      }, 0)
+    })
+  }
+
+  //indexes选择
+  public handleSelectIndexes = (item: Item, type: TIndexesType) => {
+    const { key, name } = item
+    //隐藏索引
+    this.setState({
+      indexesVisible: false
+    }, () => {
+      setTimeout(() => {
+        let ref
+        //触发onChange
+        switch(type) {
+          case 'DIRECTOR': ref = this.directorRef; break;
+          case 'ACTOR': ref = this.actorRef;break;
+          case 'DISTRICT': ref = this.districtRef; break;
+        }
+        ref.current!.handleAppend({ name, key })
+      }, 0)
+    })
+  }
+
   public render() {
-    const { formData, lang } = this.state
-    const {
+    const { detail, indexesVisible } = this.state
+    const { 
+      author_description='',
+      author_rate,
+      images=[],
+      info: {
+        actor=[],
+        another_name='',
+        classify=[],
+        description='',
+        director=[],
+        district=[],
+        language=[],
+        name='',
+        screen_time=Date.now(),
+      }={},
       video,
-      info,
-      image
-    } = formData
-    const {  
-      name,
-      area=[],
-      director=[],
-      actor=[],
-      type=[],
-      time,
-      description,
-      language
-    } = info
+      poster,
+    } = detail
     return (
       <View className='issue' style={{...style.backgroundColor('bgColor')}}>
-        <BaseForm
-          name="issue"
-        >
-        <View className='video'>
-          <AtTag 
-            customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
-            type={'primary'}
+        {
+          indexesVisible ?
+          <View style={{height: '100vh'}}>
+            <Indexes
+              handleClick={this.handleSelectIndexes}
+              ref={this.indexesRef}
+            ></Indexes>
+          </View>
+          :
+          <BaseForm
+            name="issue"
           >
-            介绍短片及海报
-          </AtTag>
-          <GVideo
-            handleOnChange={fieldsStore.getFieldProps('video', 'onChange', {
-              rules: [
-                {
-                  required: true
-                },
-              ],
-              initialValue: video || {poster: '', src: ''}
-            })}
-            info={fieldsStore.getFieldValue('video')}
-            error={!!size(fieldsStore.getFieldsError('video'))}
-          ></GVideo>
-        </View>
-        <View className='name'>
-          <AtTag 
-            customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
-            type={'primary'}
-          >
-            电影名
-          </AtTag>
-          <GDescription
-            style={{marginBottom: '20px', marginLeft: 0, ...style.backgroundColor('disabled')}}
-            handleChange={fieldsStore.getFieldProps('name', 'onChange', {
-              rules: [
-                {
-                  required: true
+            <View className='video'>
+              <AtTag 
+                customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
+                type={'primary'}
+              >
+                介绍短片及海报
+              </AtTag>
+              <GVideo
+                handleOnChange={fieldsStore.getFieldProps('video', 'onChange', {
+                  rules: [
+                    {
+                      required: true
+                    },
+                  ],
+                  initialValue: video ? { src: video, poster } : { poster: '', src: '' }
+                })}
+                info={fieldsStore.getFieldValue('video')}
+                error={!!size(fieldsStore.getFieldsError('video'))}
+              ></GVideo>
+            </View>
+            <View className='name'>
+              <AtTag 
+                customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
+                type={'primary'}
+              >
+                电影名
+              </AtTag>
+              <GDescription
+                style={{marginBottom: '20px', marginLeft: 0, ...style.backgroundColor('disabled')}}
+                handleChange={fieldsStore.getFieldProps('name', 'onChange', {
+                  rules: [
+                    {
+                      required: true
+                    }
+                  ],
+                  initialValue: name || ''
+                })}
+                value={fieldsStore.getFieldValue('name')}
+                error={!!size(fieldsStore.getFieldsError('name'))}
+              ></GDescription>
+            </View>
+            <View className='district'>
+              <AtTag 
+                onClick={this.handleIndexesShow.bind(this, { visible: true, type: 'DISTRICT' })}
+                customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
+                type={'primary'}
+              >
+                地区
+              </AtTag>
+              <TagList
+                ref={this.districtRef}
+                style={{marginBottom: '20px'}}
+                list={fieldsStore.getFieldValue('district')}
+                handleChange={
+                  fieldsStore.getFieldProps('district', 'onChange', {
+                    rules: [
+                      {
+                        required: true
+                      }
+                    ],
+                    initialValue:district.map((val: any) => {
+                      const { _id, name } = val
+                      return {
+                        name,
+                        key: _id
+                      }
+                    }),
+                    getOnChangeValue(value) {
+                      return value
+                    }
+                  })
                 }
-              ],
-              initialValue: name
-            })}
-            value={fieldsStore.getFieldValue('name')}
-            error={!!size(fieldsStore.getFieldsError('name'))}
-          ></GDescription>
-        </View>
-        <View className='area'>
-          <AtTag 
-            customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
-            type={'primary'}
-          >
-            地区
-          </AtTag>
-          <GCheckBox
-            style={{marginBottom: '20px'}}
-            type={'area'}
-            handleChange={
-              fieldsStore.getFieldProps('area', 'onChange', {
-                rules: [
-                  {
-                    required: true
-                  }
-                ],
-                initialValue:area.map((val: any) => {
-                  const { id } = val
-                  return id
-                }),
-                getOnChangeValue(value) {
-                  return value
+                error={!!size(fieldsStore.getFieldsError('district'))}
+              ></TagList>
+            </View>
+            <View className='director'>
+              <AtTag 
+                onClick={this.handleIndexesShow.bind(this, { visible: true, type: 'DIRECTOR' })}
+                customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
+                type={'primary'}
+              >
+                导演
+              </AtTag>
+              <TagList
+                ref={this.directorRef}
+                style={{marginBottom: '20px'}}
+                list={fieldsStore.getFieldValue('director')}
+                handleChange={
+                  fieldsStore.getFieldProps('director', 'onChange', {
+                    rules: [
+                      {
+                        required: true
+                      }
+                    ],
+                    initialValue:director.map((val: any) => {
+                      const { _id, name } = val
+                      return {
+                        name,
+                        key: _id
+                      }
+                    }),
+                    getOnChangeValue(value) {
+                      return value
+                    }
+                  })
                 }
-              })
-            }
-            value={
-              fieldsStore.getFieldValue('area')
-            }
-            error={!!size(fieldsStore.getFieldsError('area'))}
-          ></GCheckBox>
-        </View>
-        <View className='director'>
-          <AtTag 
-            customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
-            type={'primary'}
-          >
-            导演
-          </AtTag>
-          <GCheckBox
-            style={{marginBottom: '20px'}}
-            type={'director'}
-            handleChange={
-              fieldsStore.getFieldProps('director', 'onChange', {
-                rules: [
-                  {
-                    required: true
-                  }
-                ],
-                initialValue:director.map((val: any) => {
-                  const { id } = val
-                  return id
-                }),
-                getOnChangeValue(value) {
-                  return value
+                error={!!size(fieldsStore.getFieldsError('director'))}
+              ></TagList>
+            </View>
+            <View className='actor'>
+              <AtTag 
+                onClick={this.handleIndexesShow.bind(this, { visible: true, type: 'ACTOR' })}
+                customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
+                type={'primary'}
+              >
+                演员
+              </AtTag>
+              <TagList
+                ref={this.actorRef}
+                style={{marginBottom: '20px'}}
+                list={fieldsStore.getFieldValue('actor')}
+                handleChange={
+                  fieldsStore.getFieldProps('actor', 'onChange', {
+                    rules: [
+                      {
+                        required: true
+                      }
+                    ],
+                    initialValue:actor.map((val: any) => {
+                      const { _id, name } = val
+                      return {
+                        name,
+                        key: _id
+                      }
+                    }),
+                    getOnChangeValue(value) {
+                      return value
+                    }
+                  })
                 }
-              })
-            }
-            value={
-              fieldsStore.getFieldValue('director')
-            }
-            error={!!size(fieldsStore.getFieldsError('director'))}
-          ></GCheckBox>
-        </View>
-        <View className='actor'>
-          <AtTag 
-            customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
-            type={'primary'}
-          >
-            演员
-          </AtTag>
-          <GCheckBox
-            style={{marginBottom: '20px'}}
-            type={'actor'}
-            handleChange={
-              fieldsStore.getFieldProps('actor', 'onChange', {
-                rules: [
-                  {
-                    required: true
-                  }
-                ],
-                initialValue:actor.map((val: any) => {
-                  const { id } = val
-                  return id
-                }),
-                getOnChangeValue(value) {
-                  return value
+                error={!!size(fieldsStore.getFieldsError('actor'))}
+              ></TagList>
+            </View>
+            <View className='classify'>
+              <AtTag 
+                customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
+                type={'primary'}
+              >
+                类型
+              </AtTag>
+              <GCheckBox
+                type={'CLASSIFY'}
+                handleChange={
+                  fieldsStore.getFieldProps('classify', 'onChange', {
+                    rules: [
+                      {
+                        required: true
+                      }
+                    ],
+                    initialValue:classify.map((val: any) => val._id)
+                  })
                 }
-              })
-            }
-            value={
-              fieldsStore.getFieldValue('actor')
-            }
-            error={!!size(fieldsStore.getFieldsError('actor'))}
-          ></GCheckBox>
-        </View>
-        <View className='type'>
-          <AtTag 
-            customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
-            type={'primary'}
-          >
-            类型
-          </AtTag>
-          <GCheckBox
-            style={{marginBottom: '20px'}}
-            type={'type'}
-            handleChange={
-              fieldsStore.getFieldProps('type', 'onChange', {
-                rules: [
-                  {
-                    required: true
-                  }
-                ],
-                initialValue:type.map((val: any) => {
-                  const { id } = val
-                  return id
-                })
-              })
-            }
-            value={
-              fieldsStore.getFieldValue('type')
-            }
-            error={!!size(fieldsStore.getFieldsError('type'))}
-          ></GCheckBox>
-        </View>
-        <View className='publishTime'>
-          <AtTag 
-            customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
-            type={'primary'}
-          >
-            上映时间
-          </AtTag>
-          <GPicker
-            style={PICKER_STYLE}
-            date={{}}
-            handleChange={
-              fieldsStore.getFieldProps('publishTime', 'onChange', {
-                rules: [
-                  {
-                    required: true
-                  }
-                ],
-                initialValue: time || ''
-              })
-            }
-            value={fieldsStore.getFieldValue('publishTime')}
-            error={!!size(fieldsStore.getFieldsError('publishTime'))}
-          ></GPicker>
-        </View>
-        <View className='language'>
-          <AtTag 
-            customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
-            type={'primary'}
-          >
-            语言
-          </AtTag>
-          <GPicker
-            style={PICKER_STYLE}
-            extraFactor={true}
-            selector={{range: lang.map((val: any) => {
-              const { value } = val
-              return value
-            })}}
-            handleChange={
-              fieldsStore.getFieldProps('language', 'onChange', {
-                rules: [
-                  {
-                    required: true
-                  }
-                ],
-                initialValue: language || ''
-              })
-            }
-            value={fieldsStore.getFieldValue('language')}
-            error={!!size(fieldsStore.getFieldsError('language'))}
-          ></GPicker>
-        </View>
-        <View className='description'>
-          <AtTag
-            customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
-            type={'primary'}
-          >电影描述</AtTag>
-          <GDescription
-            type={'textarea'}
-            style={style.backgroundColor('disabled')}
-            handleChange={
-              fieldsStore.getFieldProps('description', 'onChange', {
-                rules: [
-                  {
-                    required: true
-                  }
-                ],
-                initialValue: description
-              })
-            }
-            value={fieldsStore.getFieldValue('description')}
-            error={!!size(fieldsStore.getFieldsError('description'))}
-          ></GDescription>
-        </View>
-        <View className='image'>
-          <AtTag
-            customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
-            type={'primary'}
-          >
-            电影截图选择
-          </AtTag>
-          <GImagePicker 
-            handleChange={fieldsStore.getFieldProps('image', 'onChange', {
-              rules: [
-                {
-                  required: true
-                },
-              ],
-              initialValue: image.map((val: any) => {
-                const { img } = val
-                return {
-                  url: img
+                value={
+                  fieldsStore.getFieldValue('classify')
                 }
-              })
-            })}
-            value={fieldsStore.getFieldValue('image')}
-            error={!!size(fieldsStore.getFieldsError('image'))}
-          ></GImagePicker>
-        </View>
-        <AtButton type={'primary'} onClick={this.handleSubmit} customStyle={{ ...BUTTON_STYLE, ...style.backgroundColor('thirdly'), ...style.border(1, 'thirdly', 'solid', 'all') }}>提交</AtButton>
-        <AtButton type={'primary'} onClick={this.handleReset} customStyle={{ ...BUTTON_STYLE, bottom: SYSTEM_PAGE_SIZE(40) + 'px', ...style.backgroundColor('primary'), ...style.border(1, 'primary', 'solid', 'all') }}>重置</AtButton>
-        </BaseForm>
+                error={!!size(fieldsStore.getFieldsError('classify'))}
+              ></GCheckBox>
+            </View>
+            <View className='screen_time'>
+              <AtTag 
+                customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
+                type={'primary'}
+              >
+                上映时间
+              </AtTag>
+              <GCommentPicker
+                style={PICKER_STYLE}
+                date={{}}
+                handleChange={
+                  fieldsStore.getFieldProps('screen_time', 'onChange', {
+                    rules: [
+                      {
+                        required: true
+                      }
+                    ],
+                    initialValue: screen_time || ''
+                  })
+                }
+                value={fieldsStore.getFieldValue('screen_time')}
+                error={!!size(fieldsStore.getFieldsError('screen_time'))}
+              ></GCommentPicker>
+            </View>
+            <View className='language'>
+              <AtTag 
+                customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
+                type={'primary'}
+              >
+                语言
+              </AtTag>
+              <GCheckBox
+                type={'LANGUAGE'}
+                handleChange={
+                  fieldsStore.getFieldProps('language', 'onChange', {
+                    rules: [
+                      {
+                        required: true
+                      }
+                    ],
+                    initialValue:language.map((val: any) => val._id)
+                  })
+                }
+                value={
+                  fieldsStore.getFieldValue('language')
+                }
+                error={!!size(fieldsStore.getFieldsError('language'))}
+              ></GCheckBox>
+            </View>
+            <View className='description'>
+              <AtTag
+                customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
+                type={'primary'}
+              >电影描述</AtTag>
+              <GDescription
+                type={'textarea'}
+                style={{...style.backgroundColor('disabled'), marginBottom: '20px'}}
+                handleChange={
+                  fieldsStore.getFieldProps('description', 'onChange', {
+                    rules: [
+                      {
+                        required: true
+                      }
+                    ],
+                    initialValue: description
+                  })
+                }
+                value={fieldsStore.getFieldValue('description')}
+                error={!!size(fieldsStore.getFieldsError('description'))}
+              ></GDescription>
+            </View>
+            <View className="author_description">
+              <AtTag
+                customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
+                type={'primary'}
+              >
+                你的看法（可不填）
+              </AtTag>
+              <GDescription
+                type={'textarea'}
+                style={{...style.backgroundColor('disabled'), marginBottom: '20px'}}
+                handleChange={
+                  fieldsStore.getFieldProps('author_description', 'onChange', {
+                    rules: [
+                      {
+                        required: false
+                      }
+                    ],
+                    initialValue: author_description
+                  })
+                }
+                value={fieldsStore.getFieldValue('author_description')}
+                error={!!size(fieldsStore.getFieldsError('author_description'))}
+              ></GDescription>
+            </View>
+            <View className="author_rate">
+              <AtTag
+                customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
+                type={'primary'}
+              >
+                你的评分（可不填
+              </AtTag>
+              <Rate
+                style={{marginBottom: '20px'}}
+                rate={
+                  fieldsStore.getFieldProps('author_rate', 'onChange', {
+                    rules: [
+                      {
+                        required: false
+                      }
+                    ],
+                    initialValue: author_rate || 0
+                  })
+                }
+                value={fieldsStore.getFieldValue('author_rate')}
+              ></Rate>
+            </View>
+            <View className="alias">
+              <AtTag
+                customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
+                type={'primary'}
+              >
+                电影别名 (可不填)
+              </AtTag>
+              <Alias
+                style={{marginBottom: '20px'}}
+                handleChange={
+                  fieldsStore.getFieldProps('alias', 'onChange', {
+                    rules: [
+                      {
+                        required: false
+                      }
+                    ],
+                    initialValue: another_name || []
+                  })
+                }
+                value={fieldsStore.getFieldValue('alias')}
+              ></Alias>
+            </View>
+            <View className='image'>
+              <AtTag
+                customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
+                type={'primary'}
+              >
+                电影截图选择
+              </AtTag>
+              <GImagePicker 
+                handleChange={fieldsStore.getFieldProps('image', 'onChange', {
+                  rules: [
+                    {
+                      required: true
+                    },
+                  ],
+                  initialValue: images.map((val: any) => {
+                    const { img } = val
+                    return {
+                      url: img
+                    }
+                  })
+                })}
+                value={fieldsStore.getFieldValue('image')}
+                error={!!size(fieldsStore.getFieldsError('image'))}
+              ></GImagePicker>
+            </View>
+            <AtButton type={'primary'} onClick={this.handleSubmit} customStyle={{ ...BUTTON_STYLE, ...style.backgroundColor('thirdly'), ...style.border(1, 'thirdly', 'solid', 'all') }}>提交</AtButton>
+            <AtButton type={'primary'} onClick={this.handleReset} customStyle={{ ...BUTTON_STYLE, bottom: SYSTEM_PAGE_SIZE(40) + 'px', ...style.backgroundColor('primary'), ...style.border(1, 'primary', 'solid', 'all') }}>重置</AtButton>
+          </BaseForm>
+        }
       </View>
     )
   }

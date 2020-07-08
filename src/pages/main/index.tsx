@@ -1,6 +1,6 @@
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
-import SearchBar from '~components/searchbutton'
+import SearchBar from './components/searchButton'
 import Swipers from './components/swiper'
 import Itemize from './components/itemize'
 import News from './components/news'
@@ -8,15 +8,11 @@ import Rank from './components/rank'
 import NoticeBar from '~components/noticeBar'
 import { TypeColor, colorStyleChange } from '~theme/color'
 import style from '~theme/style'
-// import { createSocket } from '~utils'
-// import {connect} from '@tarojs/redux'
-// import {mapDispatchToProps, mapStateToProps} from './connect'
 import { throttle } from 'lodash'
 import { getDailyNew, getNotice, getRank, getSwiper, getClassify } from '~services'
 
 import './index.scss'
 
-// @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any> {
 
   public config: Config = {
@@ -42,17 +38,7 @@ export default class extends Component<any> {
 
   public componentDidMount = async () => {
     this.fetchData()
-    // await this.getNews()
   }
-
-  // public getNews = async () => {
-  //   createSocket((response) => {
-  //     const { data } = response
-  //     if(!data.data.length) return
-  //     Taro.showTabBarRedDot({index: 2})
-  //     this.props.getNews(data.data)
-  //   })
-  // }
 
   private getDaily = async () => {
     const daily = await getDailyNew()
@@ -75,6 +61,7 @@ export default class extends Component<any> {
     const swiper = await getSwiper()
     //获取分类
     const classify = await getClassify(16)
+    console.log(classify)
     //获取每日上新
     const daily = await this.getDaily()
     //获取排行榜
@@ -136,7 +123,7 @@ export default class extends Component<any> {
             style={{...secondaryColor}}
           >排行榜</Text>
           {
-            rank.map(value => {
+            rank.filter(item => !!item.match.length).map(value => {
               const { match, name, _id } = value
               return (
                 <Rank 

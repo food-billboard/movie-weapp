@@ -7,6 +7,6 @@ export interface FormData {
   endDate: number | string,
   actor: Array<string>
   director: Array<string>
-  area: Array<string>
-  lang: string
+  district: Array<string>
+  language: Array<string>
 }

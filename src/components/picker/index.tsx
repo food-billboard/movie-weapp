@@ -1,10 +1,9 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Picker } from '@tarojs/components'
 import { isObject } from '~utils'
-import Rest from '~components/restFactor'
 import moment from 'moment'
 import { FORM_ERROR, SYSTEM_PAGE_SIZE } from '~config'
-import { IProps, IState, modeList, fieldTypeList } from './index.d'
+import { IProps, IState, fieldTypeList } from './index.d'
 import customStyle from '~theme/style'
 import { noop } from 'lodash'
  
@@ -16,59 +15,17 @@ const STYLE = {
   boxSizing: 'border-box'
 }
 
+const modeList = {
+  selector: 'selector',
+  time: 'time',
+  date: 'date',
+  multiSelector: 'multiSelector'
+}
+
 export default class extends Component<IProps, IState> {
 
-  public static defaultProps: IProps = {
-    style: {},
-    selector: false,
-    multi: false,
-    time: false,
-    date: false,
-    extraFactor: false,
-    value: false
-  }
-
   public state: IState = {
-    value: this.props.multi ? [] : '',
-    error: false,
     disabled: false
-  }
-
-  private initialValue: any = false
-
-  private _restValue: any = []
-
-  private get restValue() {
-    const { extraFactor } = this.props
-    if(extraFactor) return this._restValue
-    return false
-  }
-
-  private set restValue(items) {
-    this._restValue = items
-  }
-
-  //表单value
-  private _value
-
-  private get value() {
-    const { value:propsValue, initialValue, multi, extraFactor } = this.props
-    const { value:stateValue } = this.state
-    if(propsValue !== false) {
-      return propsValue 
-      || 
-      (() => {
-        if(extraFactor) {
-          this.restValue = []
-        }
-        return (multi ? [] : '' )
-      })()
-    }else {
-      if(this.initialValue === undefined && typeof initialValue !== 'undefined') {
-        return initialValue
-      }
-      return stateValue
-    }
   }
 
   //picker默认参数配置
@@ -106,30 +63,15 @@ export default class extends Component<IProps, IState> {
     time: 'mm:ss'
   }
 
-  //额外内容
-  public restRef = Taro.createRef<Rest>()
-
-  public componentWillReceiveProps = (props) => {
-    const { multi, value } = props
-    if(value !== false) {
-      this.setState({
-        value: value || (multi ? [] : ( '') )
-      })
-    }
-  }
-
   //处理change
   public handleChange = async (e: any, mode) => {
     const { 
       handleChange, 
       multi, 
       selector, 
-      extraFactor,
-      initialValue,
     } = this.props
     let _data
     const { value: newData } = e.detail
-    const { error } = this.state
     if(mode === modeList.selector) {
       if(selector) {
         const { range } = selector
@@ -148,74 +90,9 @@ export default class extends Component<IProps, IState> {
     }else if(mode === modeList.date || mode === modeList.time) {
       _data = newData
     }
-    if(error) this.setState({error: false})
-
-    if(this.initialValue === undefined && typeof initialValue !== 'undefined') this.initialValue = initialValue
-    this.setState({
-      value: _data
-    }, async () => {
-      //选择指定内容将清空额外内容
-      if(extraFactor) {
-        this.restRef!.current!.reset()
-        this.restValue = []
-      }
-    })
 
     handleChange && handleChange(_data)
 
-  }
-
-  //额外内容change
-  public handleRestChange = (items: string[]) => {
-    const { handleChange, multi } = this.props
-    this.restValue = [...items]
-    const item = items.pop()
-    const data = item ? item : (multi ? [] : '')
-    this.setState({
-      value: data
-    })
-    handleChange && handleChange(data)
-  }
-
-  //重置
-  public reset = () => {
-    const { 
-      multi, 
-      selector, 
-      extraFactor 
-    } = this.props
-    if(extraFactor && (multi || selector)) {
-      this.restRef.current!.reset()
-      this.restValue = []
-    }
-    this.setState({
-      value: this.initialValue ? this.initialValue : (this.props.multi ? [] : ''),
-      error: false
-    })
-  }
-
-  //获取数据
-  public getData = async (emptyCharge=true) => {
-    const { value } = this.state
-    const { 
-      multi, 
-      selector, 
-      extraFactor 
-    } = this.props
-    const data = (extraFactor && (multi || selector)) ? await this.restRef.current!.getData(false) : false
-    if(!(value+'').length 
-      && 
-      emptyCharge && !(Array.isArray(data) ? data.length : data)
-    ) {
-      await this.setState({
-        error: true
-      })
-      return false
-    }
-    await this.setState({
-      error: false
-    })
-    return data ? (data.length ? data.pop() : value) : value
   }
 
   //设置禁止状态
@@ -225,24 +102,17 @@ export default class extends Component<IProps, IState> {
     })
   }
 
-  //设置error
-  public setError = (state: boolean) => {
-    this.setState({
-      error: state
-    })
-  }
-
   public render() {
 
     const { 
-      style, 
-      selector, 
-      multi, 
-      time, 
-      date, 
+      style={}, 
+      selector=false, 
+      multi=false, 
+      time=false, 
+      date=false, 
       title='选择', 
-      extraFactor, 
-      error:propsError=false 
+      error=false,
+      value
     } = this.props
 
     let dateShow
@@ -250,13 +120,13 @@ export default class extends Component<IProps, IState> {
       dateShow = fieldTypeList[date.fields='year']
     }
 
-    const { error, disabled } = this.state
+    const { disabled } = this.state
 
     const _style = {
       ...STYLE, 
       ...customStyle.backgroundColor('disabled'), 
       ...(isObject(style) ? style : {}),
-      ...((error || propsError) ? FORM_ERROR : {})
+      ...(error ? FORM_ERROR : {})
     }
 
     return (
@@ -270,12 +140,12 @@ export default class extends Component<IProps, IState> {
             rangeKey={selector.rangeKey || this.defaultConfig.rangeKey.selector}
             mode={'selector'}
             onChange={(e) => {this.handleChange.call(this, e, modeList.selector)}}
-            value={this.value}
+            value={value}
           >
             <View className='picker'
               style={{..._style }}
             >
-              {title}: {this.value}
+              {title}: {value}
             </View>
           </Picker>
           : null
@@ -286,7 +156,7 @@ export default class extends Component<IProps, IState> {
             mode={'multiSelector'}
             range={multi.range || this.defaultConfig.range.multi}
             rangeKey={multi.rangeKey || this.defaultConfig.rangeKey.multi}
-            value={this.value}
+            value={value}
             onChange={(e) => {this.handleChange.call(this, e, modeList.multiSelector)}}
             onColumnChange={multi.onColumnChange || noop}
             disabled={disabled ? disabled : (multi.disabled || false)}
@@ -295,7 +165,7 @@ export default class extends Component<IProps, IState> {
             <View className='picker'
               style={{..._style}}
             >
-              {title}: {Array.isArray(this.value) ? this.value.join(' & ') : this.value}
+              {title}: {Array.isArray(value) ? value.join(' & ') : value}
             </View>
           </Picker>
           : null
@@ -306,7 +176,7 @@ export default class extends Component<IProps, IState> {
             {...date}
             mode={'date'}
             onChange={(e) => {this.handleChange.call(this, e, modeList.date)}}
-            value={this.value}
+            value={value}
             start={date.start || this.defaultConfig.start.date}
             end={date.end || moment(new Date().getTime()).format(dateShow)}
             fields={date.fields || this.defaultConfig.fields.date}
@@ -316,7 +186,7 @@ export default class extends Component<IProps, IState> {
             <View className='picker'
               style={{..._style}}
             >
-              {title}: {(this.value+'').length ? moment(this.value).format(dateShow) : ''}
+              {title}: {(value+'').length ? moment(value).format(dateShow) : ''}
             </View>
           </Picker>
           : null
@@ -325,7 +195,7 @@ export default class extends Component<IProps, IState> {
           time ? 
           <Picker
             mode={'time'}
-            value={this.value}
+            value={value}
             onChange={(e) => {this.handleChange.call(this, e, modeList.time)}}
             onCancel={time.onCancel || noop}
             start={time.start || this.defaultConfig.start.time}
@@ -335,20 +205,9 @@ export default class extends Component<IProps, IState> {
             <View className='picker'
               style={{..._style}}
             >
-              {title}: {(this.value + '').length ? moment(this.value).format(this.defaultConfig.time) : ''}
+              {title}: {(value + '').length ? moment(value).format(this.defaultConfig.time) : ''}
             </View>
           </Picker>
-          : null
-        }
-        {
-          (extraFactor && (selector || multi)) ?
-          <Rest
-            handleError={(status) => {this.setState({error: status})}}
-            ref={this.restRef}
-            title={'找不到可手动添加, 但只上传最后一项'}
-            handleChange={this.handleRestChange}
-            value={this.restValue}
-          ></Rest>
           : null
         }
       </View>

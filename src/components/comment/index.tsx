@@ -6,7 +6,7 @@ import { IMAGE_CONFIG, SYSTEM_PAGE_SIZE } from '~config'
 import { AtTextarea } from "taro-ui"
 import { IProps, IState } from './index.d'
 import style from '~theme/style'
-import { mediaType } from '~utils'
+import { mediaType, upload, getTemplatePathMime } from '~utils'
 import Curtain from '../curtain'
 
 import './index.scss'
@@ -100,11 +100,23 @@ export default class Comment extends Component<IProps>{
             })
         }
 
-        const fileManager = Taro.getFileSystemManager()
-        console.log(fileManager.readFileSync(image[0]))
+        const imageList = await Promise.all(image.map(item => {
+            const mime = getTemplatePathMime(item)
+            return upload({
+                file: item,
+                mime
+            })
+        }))
+        const videoList = await Promise.all(video.map(item => {
+            const mime = getTemplatePathMime(item)
+            return upload({
+                file: item,
+                mime
+            })
+        }))
 
         //评论发布
-        this.props.publishCom({text: value, image, video })
+        this.props.publishCom({text: value, image: imageList, video: videoList })
     }
 
     public render() {

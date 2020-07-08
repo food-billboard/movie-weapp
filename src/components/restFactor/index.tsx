@@ -8,7 +8,7 @@ import { Item } from 'taro-ui/@types/timeline'
 import { isObject } from '~utils'
 import customStyle from '~theme/style'
 import { TypeColor } from '~theme/color'
-import { findIndex, noop } from 'lodash'
+import { findIndex } from 'lodash'
 import { FORM_ERROR } from '~config'
 
 import './index.scss'
@@ -40,111 +40,32 @@ const getDefaultItemStyle = () => {
   }
 }
 
-export default class extends Component<IProps, IState> {
-
-  public static defaultProps: IProps = {
-    value: false,
-    title: false,
-    style: false,
-    defaultItemStyle: false,
-    handleError: () => {}
-  }
+class Rest extends Component<IProps, IState> {
 
   public state: IState = {
-    value: [],
-    error: false,
     disabled: true,
     status: [],
     statusData: []
   }
 
-  private initialValue: Array<Item> | undefined = undefined
-
-  private _value
-
-  private get value() {
-    const { initialValue, value:propsValue } = this.props
-    const { value: stateValue } = this.state
-    if(propsValue !== false) {
-      return this.normalizeData(propsValue)
-    }else {
-      if(this.initialValue === undefined && typeof initialValue !== 'undefined') {
-        return this.normalizeData(initialValue)
-      }
-      return this.normalizeData(stateValue)
-    }
-  }
-
   //输入框
   public inputRef = Taro.createRef<GInput>()
-
-  //规范化数据
-  public normalizeData = (data) => {
-    if(Array.isArray(data) && data.length) {
-      if(typeof data[0] === 'string') {
-        const da = data.map(item => {
-          if(typeof item === 'object') return item
-          return {
-            ...getDefaultItemStyle(),
-            title: item
-          }
-        })
-        return da
-      } 
-      return data
-    }
-    return []
-  }
-
-  //重置
-  public reset = () => {
-    const value = this.initialValue ? this.initialValue : []
-    this.setState({
-      value,
-      error: false,
-      statusData: [],
-      status: []
-    }, () => {
-      this.handleChange(value.map( val => val.title))
-    })
-    this.inputRef.current!.reset()
-  }
-
-  //获取数据
-  public getData = async (emptyCharge=true) => {
-    const { value } = this.state
-    if(!value.length && emptyCharge) {
-      await this.setState({
-        error: true
-      })
-      return false
-    }
-    await this.setState({
-      error: false
-    })
-    return value.map((val: Item) => {
-      const { title } = val
-      return title
-    })
-  }
 
   //添加
   public handleAdd = async () => {
     const data = await this.inputRef.current!.getData()
     if(data) {
-      const { value:stateValue, status, statusData } = this.state
-      const { defaultItemStyle } = this.props
-      const itemLen = stateValue.length
+      const { status, statusData } = this.state
+      const { defaultItemStyle, value } = this.props
+      const itemLen = value.length
       const _defaultItemStyle = defaultItemStyle ? defaultItemStyle : getDefaultItemStyle()
       const newItem = {
         title: data,
         ..._defaultItemStyle
       }
       //新数据
-      const value = [ ...stateValue, newItem]
+      const newValue = [ ...value, newItem]
       this.setState({
-        value,
-        error: false,
         disabled: false,
         //记录最近操作
         status: [ ...status, operateType.add ],
@@ -154,15 +75,16 @@ export default class extends Component<IProps, IState> {
           }
         ]
       }, () => {
-        this.handleChange(value.map( val => val.title))
+        this.props.handleChange && this.props.handleChange(newValue)
         this.inputRef.current!.reset()
       }) 
 
-      this.props.handleError(false)
-      Toast({
-        title: '成功~!',
-        icon: 'success',
-        duration: 500
+      this.props.handleError && this.props.handleError(false)
+      Taro.showToast({
+        title: '成功~',
+        icon: 'none',
+        duration: 500,
+        mask: false
       })
     }
   }
@@ -175,25 +97,23 @@ export default class extends Component<IProps, IState> {
     const data = await this.inputRef.current!.getData()
 
     if(data) {  //输入框中有内容
-      const { value, status, statusData } = this.state
+      const { status, statusData } = this.state
+      const { value } = this.props
       const index = findIndex(value, (val: any) => {
         const { title } = val
         return title === data
       })
-      let config: IQuery = {title: ''}
+      let config: IQuery = { title: '' }
 
       //查看输入框内容是否在timeline中存在
       if(index < 0) {
-        config = {...config, title: '好像没有找到', icon: 'fail', duration: 1000}
+        config = {...config, title: '好像没有找到', icon: 'none', duration: 500}
       }else {
-        config = { ...config, title: '操作成功', icon: 'fail', duration: 500 }
-        let arr = [...value]
-        const [deleteItem]: Array<Item> = arr.splice(index, 1)
+        config = { ...config, title: '操作成功', icon: 'none', duration: 500 }
+        let newValue = [...value]
+        const [ deleteItem ]: Array<Item> = newValue.splice(index, 1)
         this.setState({
-          value: arr,
-          error: false,
-          disabled: arr.length ? false : true,
-
+          disabled: newValue.length ? false : true,
           //记录最近操作
           status: [ ...status, operateType.cancel ],
           statusData: [ ...statusData, {
@@ -202,55 +122,43 @@ export default class extends Component<IProps, IState> {
             } 
           ]
         }, () => {
-          this.handleChange(arr.map( val => val.title))
+          this.props.handleChange && this.props.handleChange(newValue)
           this.inputRef.current!.reset()
         })
       }
 
       Toast(config)
-    }else { //输入框中无内容
-      this.setState({
-        error: true
-      })
     }
   }
 
   //撤销
   public handleCancel = async () => {
-    const { value:item, disabled, status, statusData } = this.state
-    // if(disabled) return
+    const { disabled, status, statusData } = this.state
+    const { value } = this.props
+    if(disabled) return
     if(!status.length) return
-    const arr = [...item]
+    let newValue = [...value]
     const _status = [...status]
     const _statusData = [...statusData]
     const [__status]:Array<TStatus> = _status.splice(_status.length - 1, 1)
     const [__statusData]: Array<IStatusData> = _statusData.splice(_statusData.length - 1)
 
     //判断需要撤销的操作
-    const { value, index } = __statusData
+    const { value: prevOp, index } = __statusData
     if(__status === operateType.add) {
-      arr.splice(index, 1)
+      newValue.splice(index, 1)
     }else if(__status === operateType.cancel) {
-      arr.splice(index, 0, value)
+      newValue.splice(index, 0, prevOp)
     }
 
     this.setState({
-      value: arr,
-      disabled: arr.length ? false : true,
-      error: false,
+      disabled: newValue.length ? false : true,
       status: status.length === _status.length ? status : _status,
       statusData: statusData.length === _statusData.length ? statusData : _statusData
     }, () => {
-      this.handleChange(arr.map( val => val.title))
+      this.props.handleChange && this.props.handleChange(newValue)
       this.inputRef.current!.reset()
     })
-  }
-
-  //change
-  public handleChange = (value) => {
-    const { handleChange, initialValue } = this.props
-    if(this.initialValue === undefined && typeof initialValue !== 'undefined') this.initialValue = this.normalizeData(initialValue)
-    handleChange && handleChange(value)
   }
 
   public render() {
@@ -258,14 +166,15 @@ export default class extends Component<IProps, IState> {
     const { 
       title, 
       style, 
-      error:propsError=false 
+      error=false,
+      value
     } = this.props
 
-    const { error, disabled } = this.state
+    const { disabled } = this.state
 
     const _style = {
       ...(isObject(style) ? style : {}),
-      ...((error || propsError) ? FORM_ERROR : {})
+      ...(error ? FORM_ERROR : {})
     }
 
     return (
@@ -284,7 +193,7 @@ export default class extends Component<IProps, IState> {
           : null
         }
         <AtTimeline
-          items={this.value}
+          items={value}
         ></AtTimeline>
         <View className='input at-row'>
           <View className='at-col at-col-2'>
@@ -320,3 +229,22 @@ export default class extends Component<IProps, IState> {
   }
 
 }
+
+Rest.normalizeData = (data) => {
+  if(Array.isArray(data) && data.length) {
+    if(typeof data[0] === 'string') {
+      const da = data.map(item => {
+        if(typeof item === 'object') return item
+        return {
+          ...getDefaultItemStyle(),
+          title: item
+        }
+      })
+      return da
+    } 
+    return data
+  }
+  return []
+}
+
+export default Rest

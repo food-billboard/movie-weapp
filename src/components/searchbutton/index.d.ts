@@ -18,11 +18,6 @@
  * }
  */
 
-interface Hot {
-  key_word: string,
-  _id: string
-}
-
 export interface IPoint {
   value: string
 }
@@ -33,15 +28,11 @@ export interface IProps {
   confirm: any
   focus?: boolean
   control?: (op: boolean) => any
-  hotShow?: false | number
   handleChange?: (...args: any[]) => any
-  getHot: (...args: any[]) => any
-  fetchSearchPoint: (...args: any[]) => any
 }
 
 export interface IState {
   focus: boolean
   value?: string
-  hot: Array<Hot>
   pointList: Array<IPoint>
 }

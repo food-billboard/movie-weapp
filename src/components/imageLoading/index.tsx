@@ -80,12 +80,12 @@ export default class extends Component<IProps, IState> {
         onClick={this.handleClick}
         style={contentStyle}
       >
-        {
+        {/* {
           loading ?
           <View className='avatar'>图</View>
           :
           null
-        }
+        } */}
         {
           loading ?
           <AtActivityIndicator 

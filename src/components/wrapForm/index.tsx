@@ -1,6 +1,6 @@
-import Taro, { Component } from '@tarojs/taro'
-import { Block } from '@tarojs/components'
-import { createFieldsStore, getAllFieldsStoreName, deleteFieldsStore } from './createFieldsStore'
+import { Component } from '@tarojs/taro'
+import { View } from '@tarojs/components'
+import { createFieldsStore } from './fieldsStore'
 
 export default class extends Component<any> {
 
@@ -19,22 +19,20 @@ export default class extends Component<any> {
   }
 
   init() {
-    const { name } = this.props
-    if(!name) return
-    this.fieldsStore = createFieldsStore(name, undefined, undefined)
+    if(!this.props.name) return
+    this.fieldsStore = createFieldsStore(this.props.name)
     this.fieldsStore.setProps(this.props)
   }
 
   render() {
 
     return (
-      <Block>
+      <View>
         {
           this.props.children
         }
-      </Block>
+      </View>
     )
   }
 
 }
-

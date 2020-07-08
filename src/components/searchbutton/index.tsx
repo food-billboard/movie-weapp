@@ -1,15 +1,11 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import { AtSearchBar, AtTag } from 'taro-ui'
+import { AtSearchBar } from 'taro-ui'
 import { router, routeAlias } from '~utils'
 import { IProps, IState, IPoint } from './index.d'
 import style from '~theme/style'
-import { SYSTEM_PAGE_SIZE } from '~config'
-import { getHot } from '~services'
 
 import './index.scss'
-
-const HOT_HEIGHT = SYSTEM_PAGE_SIZE(35)
 
 class SearchButton extends Component<IProps, IState>{
     //默认数据
@@ -19,26 +15,11 @@ class SearchButton extends Component<IProps, IState>{
         confirm: () => {},
         focus: false,
         control: () => {},
-        getHot: () => {},
-        fetchSearchPoint: () => {}
     }
 
     public state: IState = {
         focus: false,
-        hot: [],
         pointList: []
-    }
-
-    public componentDidMount = async () => {
-        await this.fetchHotData()
-    }
-
-    //获取热搜
-    public fetchHotData = async () => {
-        const hot = await getHot()
-        await this.setState({
-            hot
-        })
     }
 
     /**
@@ -78,18 +59,11 @@ class SearchButton extends Component<IProps, IState>{
     }
 
     /**
-     * 获取热搜信息
-     */
-    public getHot = (id: string, _: any) => {
-        router.push(routeAlias.detail, {id})
-    }
-
-    /**
      * 搜索
      */
     public confirm = () => {
         const {value} = this.props
-        this.props.confirm(value)
+        this.props.confirm && this.props.confirm(value)
         this.setState({
             pointList: []
         })
@@ -104,8 +78,8 @@ class SearchButton extends Component<IProps, IState>{
 
     public render() {
         //获取热搜信息列表
-        const { focus, hotShow=HOT_HEIGHT, disabled=false } = this.props
-        const { hot=[], pointList } = this.state
+        const { focus, disabled=false } = this.props
+        const { pointList } = this.state
 
         return (
             <View className="searchbutton">
@@ -144,30 +118,7 @@ class SearchButton extends Component<IProps, IState>{
                         }
                     </View>)
                     :
-                    (<View 
-                        className='at-row hotsearch at-row__align--center' 
-                        style={{height: hotShow ? hotShow + 'px' : '0', ...style.backgroundColor('bgColor'), ...style.color('primary')}}>
-                        <View 
-                            className='at-col at-col-1 hotlist title'
-                        >热搜</View>
-                        {
-                            hot.map((value) => {
-                                const { key_word, _id: id } = value
-                                return (
-                                    <View className='at-col at-col-2 hotlist'
-                                        key={id}>
-                                        <AtTag 
-                                            customStyle={{...style.backgroundColor('disabled'), ...style.color('primary')}}
-                                            type={"primary"}
-                                            size={"normal"}
-                                            circle={true}
-                                            onClick={(event) => {this.getHot(id, event)}}
-                                        >{key_word}</AtTag>
-                                    </View>
-                                )
-                            })
-                        }
-                    </View>)
+                    null
                 }
             </View>
         )

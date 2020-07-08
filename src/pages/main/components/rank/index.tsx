@@ -1,11 +1,12 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
-import './index.scss'
+import { View, Text, Swiper, SwiperItem } from '@tarojs/components'
 import RankIcon from './icon'
-import { IProps, IState } from './index.d'
+import { IProps, IState, List } from './index.d'
 import { router, routeAlias } from '~utils'
 import style from '~theme/style'
 import ImageLoading from '~components/imageLoading'
+
+import './index.scss'
 
 export default class Rank extends Component<IProps, IState>{
     public static defaultProps = {
@@ -22,8 +23,31 @@ export default class Rank extends Component<IProps, IState>{
         router.push(routeAlias.detail, {id})
     }
 
+    public classify = () => {
+        const { list=[] } = this.props
+        let newList:Array<any> = []
+        const len = (i) => {
+            if(i == 0) return 1
+            if(i == 1) return 4
+            return len(i - 1) * 4
+        }
+        let i = 0
+        list.forEach((item: List) => {
+            if(!Array.isArray(newList[i])) newList[i] = []
+            if(newList[i].length < len(i)) {
+                newList[i].push(item)
+            }else {
+                i ++
+                if(!Array.isArray(newList[i])) newList[i] = []
+                newList[i].push(item)
+            }
+        })
+        return newList.slice(0, 3)
+    }
+
     public render() {
-        const { list, type, id, style:propsStyle={} } = this.props
+        const { type, id, style:propsStyle={} } = this.props
+        const list = this.classify()
 
         return (
             <View className='rank-main' style={propsStyle}>
@@ -32,25 +56,36 @@ export default class Rank extends Component<IProps, IState>{
                     style={{...style.backgroundColor('secondary'), ...style.color('disabled')}}
                     onClick={() => { router.push(routeAlias.rank, { id, type }) }}
                 >{type}</Text>
-                <View className='ran-content'>
+                <Swiper className="rank-content">
                     {
-                        list.map(( value, index ) => {
-                            const { _id, poster } = value
+                        list.map((value: Array<List>, index: number) => {
                             return (
-                                <View 
-                                    className='rank-list'
-                                    key={_id}
-                                    onClick={this.getDetail.bind(this, _id)}
+                                <SwiperItem
+                                    key={value.length}
                                 >
-                                    <ImageLoading
-                                        src={poster}
-                                    />
-                                    <RankIcon rank={index + 1} />
-                                </View>
+                                    {
+                                        value.map((item: List) => {
+                                            const { _id, poster } = item
+                                            return (
+                                                <View 
+                                                    className='rank-list'
+                                                    style={{ width:  `${100 / Math.pow(2, index) - 1}%`, height: `${100 / Math.pow(2, index) - 1}%`}}
+                                                    key={_id}
+                                                    onClick={this.getDetail.bind(this, _id)}
+                                                >
+                                                    <ImageLoading
+                                                        src={poster}
+                                                    />
+                                                    <RankIcon rank={index + 1} />
+                                                </View>
+                                            )
+                                        })
+                                    }
+                                </SwiperItem>
                             )
                         })
                     }
-                </View>
+                </Swiper>
             </View>    
         )
     }

@@ -2,13 +2,13 @@ import Taro, {Component} from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import GPicker from '~components/picker'
 import ChargePicker from '../rangeCharge'
-import BaseForm from '~utils/wrapForm'
+import BaseForm from '~components/wrapForm'
 import DateRangePicker from '../rangeDatePicker'
-import { createFieldsStore } from '~utils/wrapForm/createFieldsStore'
+import TagList from '~components/tagList'
 import { AtForm, AtButton, AtTag } from 'taro-ui'
-import { connect } from '@tarojs/redux'
-import {mapDispatchToProps, mapStateToProps} from './connect'
-import GCheckbox from '~components/checkbox'
+import { createFieldsStore } from '~components/wrapForm/fieldsStore'
+import ComponentCheckbox from '~components/checkbox'
+import GCheckbox from '../../../issue/components/checkbox'
 import { IState, IProps, FormDefault } from './index.d'
 import { FormData } from '../../interface'
 import { TypeColor } from '~theme/color'
@@ -17,6 +17,8 @@ import List from '~components/linearlist'
 import { IList } from '~components/linearlist/index.d'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import { withTry } from '~utils'
+import { Item } from '~components/indexes/index.d'
+import { TIndexesType } from '../../../issue/interface'
 
 import './index.scss'
 
@@ -30,13 +32,12 @@ const TAT_STYLE = {
 
 const ICON_COLOR = 'primary'
 
-const fieldsStore = createFieldsStore('search-select', {
+const fieldsStore = createFieldsStore('issue', {
     getOnChangeValue(value) {
-      return value
+        return value
     }
-  })
+})
 
-@connect(mapStateToProps, mapDispatchToProps)
 export default class Forms extends Component<IProps> {
 
     //表单格式
@@ -49,35 +50,24 @@ export default class Forms extends Component<IProps> {
         endDate: '',    //结束时间,
         actor: [],   //演员
         director: [],   //导演
-        lang: '',   //语言
-        area: [],   //地区
+        language: [],   //语言
+        district: [],   //地区
     }
 
     private chargeRef = Taro.createRef<ChargePicker>()
 
+    private actorRef = Taro.createRef<TagList>()
+
+    private directorRef = Taro.createRef<TagList>()
+
+    private districtRef = Taro.createRef<TagList>()
+
     public componentDidMount = () => {
-        this.fetchTypeData()
         fieldsStore.setUpdate(this.forceUpdate.bind(this))
     }
 
     public state: IState = {
-        lang: [],
         open: false
-    }
-
-    /**
-     * 类型数据获取
-     */
-    public fetchTypeData = async () => {
-        Taro.showLoading({mask: true, title: '加载中'})
-        const [,language] = await withTry(this.props.getLanguageList)()
-        Taro.hideLoading()
-        if(language) {
-            const lang = language.data
-            await this.setState({
-                lang
-            })
-        }
     }
 
     //表单默认属性
@@ -122,6 +112,9 @@ export default class Forms extends Component<IProps> {
         const {
             price: {max, min},
             time: {start, end},
+            director,
+            actor,
+            district,
             ...nextProps
         } = values
         console.log(values)
@@ -130,6 +123,9 @@ export default class Forms extends Component<IProps> {
             minPrice: min,
             startDate: start,
             endDate: end,
+            director: director.map(item => item.key),
+            actor: actor.map(item => item.key),
+            district: district.map(item => item.key),
             ...nextProps
         }
         return data
@@ -181,8 +177,20 @@ export default class Forms extends Component<IProps> {
         })
     }
 
+    //索引选择
+    public handleIndexesAppend = (item: Item, type:TIndexesType) => {
+        const { key, name } = item 
+        let ref
+        switch(type) {
+            case 'ACTOR': ref = this.actorRef; break;
+            case 'DIRECTOR': ref = this.directorRef; break;
+            case 'DISTRICT': ref = this.districtRef; break;
+        }
+        ref.current!.handleAppend({ name, key })
+    }
+
     public render() {
-        const { lang, open } = this.state
+        const { open } = this.state
         const { feeOptions } = this.formDefault
 
         const tagStyle = {
@@ -212,10 +220,9 @@ export default class Forms extends Component<IProps> {
                         >
                             价格选择
                         </AtTag>
-                        <GCheckbox
+                        <ComponentCheckbox
                             checkboxOption={feeOptions}
                             needHiddenList={false}
-                            extraFactor={false}
                             handleChange={fieldsStore.getFieldProps('fee', 'onChange', {
                                 getOnChangeValue(value) {
                                     that.feeChange(value)
@@ -224,7 +231,7 @@ export default class Forms extends Component<IProps> {
                                 initialValue: []
                             })}
                             value={fieldsStore.getFieldValue('fee')}
-                        ></GCheckbox>
+                        ></ComponentCheckbox>
                     </View>
                     <View className='price'>
                         <ChargePicker
@@ -242,7 +249,7 @@ export default class Forms extends Component<IProps> {
                             value={fieldsStore.getFieldValue('price')}
                         />
                     </View>
-                    <View className='type'>
+                    <View className='classify'>
                         <AtTag 
                             customStyle={tagStyle} 
                             type={'primary'}
@@ -250,13 +257,11 @@ export default class Forms extends Component<IProps> {
                             分类
                         </AtTag>
                         <GCheckbox
-                            style={{marginBottom: '20px'}}
-                            needHiddenList={false}
-                            type={'type'}
-                            handleChange={fieldsStore.getFieldProps('type', 'onChange', {
+                            type={'CLASSIFY'}
+                            handleChange={fieldsStore.getFieldProps('classify', 'onChange', {
                                 initialValue: []
                             })}
-                            value={fieldsStore.getFieldValue('type')}
+                            value={fieldsStore.getFieldValue('classify')}
                         ></GCheckbox>
                     </View>
                     <View className='time'>
@@ -288,43 +293,72 @@ export default class Forms extends Component<IProps> {
                         open && <View className='other'>
                             <View className='actor'>
                                 <AtTag 
+                                    onClick={this.props.indexesShow.bind(this, { visible: true, type: 'ACTOR' })}
                                     customStyle={{...tagStyle, marginTop: '20px'}} 
                                     type={'primary'}
                                 >
                                     演员
                                 </AtTag>
-                                <GCheckbox
+                                <TagList
+                                    ref={this.actorRef}
                                     style={{marginBottom: '20px'}}
-                                    type={'actor'}
-                                    handleChange={fieldsStore.getFieldProps('actor', 'onChange', {
-                                        initialValue: []
-                                    })}
-                                    value={fieldsStore.getFieldValue('actor')}
-                                ></GCheckbox>
+                                    list={fieldsStore.getFieldValue('actor')}
+                                    handleChange={
+                                    fieldsStore.getFieldProps('actor', 'onChange', {
+                                        rules: [
+                                        {
+                                            required: true
+                                        }
+                                        ],
+                                        initialValue: [],
+                                        getOnChangeValue(value) {
+                                            return value
+                                        }
+                                    })
+                                    }
+                                ></TagList>
                             </View>
                             <View className='director'>
                                 <AtTag 
+                                    onClick={this.props.indexesShow.bind(this, { visible: true, type: 'DIRECTOR' })}
                                     customStyle={tagStyle} 
                                     type={'primary'}
                                 >
                                     导演
                                 </AtTag>
-                                <GCheckbox
+                                <TagList
+                                    ref={this.directorRef}
                                     style={{marginBottom: '20px'}}
-                                    type={'director'}
-                                    handleChange={fieldsStore.getFieldProps('director', 'onChange', {
-                                        initialValue: []
-                                    })}
-                                    value={fieldsStore.getFieldValue('director')}
-                                ></GCheckbox>
+                                    list={fieldsStore.getFieldValue('director')}
+                                    handleChange={
+                                    fieldsStore.getFieldProps('director', 'onChange', {
+                                        rules: [
+                                        {
+                                            required: true
+                                        }
+                                        ],
+                                        initialValue: [],
+                                        getOnChangeValue(value) {
+                                            return value
+                                        }
+                                    })
+                                    }
+                                ></TagList>
                             </View >
-                            <View className='lang'>
+                            <View className='language'>
                                 <AtTag 
                                     customStyle={tagStyle} 
                                     type={'primary'}
                                 >
                                     语言
                                 </AtTag>
+                                <GCheckbox
+                                    type={'LANGUAGE'}
+                                    handleChange={fieldsStore.getFieldProps('language', 'onChange', {
+                                        initialValue: []
+                                    })}
+                                    value={fieldsStore.getFieldValue('language')}
+                                ></GCheckbox>
                                 <GPicker
                                     selector={{range: lang.map((val: any) => {
                                     const { value } = val
@@ -343,14 +377,24 @@ export default class Forms extends Component<IProps> {
                                 >
                                     地区
                                 </AtTag>
-                                <GCheckbox
+                                <TagList
+                                    ref={this.districtRef}
                                     style={{marginBottom: '20px'}}
-                                    type={'area'}
-                                    handleChange={fieldsStore.getFieldProps('area', 'onChange', {
-                                        initialValue: []
-                                    })}
-                                    value={fieldsStore.getFieldValue('area')}
-                                ></GCheckbox>
+                                    list={fieldsStore.getFieldValue('district')}
+                                    handleChange={
+                                    fieldsStore.getFieldProps('district', 'onChange', {
+                                        rules: [
+                                        {
+                                            required: true
+                                        }
+                                        ],
+                                        initialValue: [],
+                                        getOnChangeValue(value) {
+                                            return value
+                                        }
+                                    })
+                                    }
+                                ></TagList>
                             </View>
                         </View>
                     }

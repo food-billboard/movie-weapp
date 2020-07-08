@@ -16,8 +16,8 @@
 export interface IProps {
   rate: (value: number) => any
   value: number
-  movie: string
   readonly?: boolean
+  style?: any
 }
 
 export interface IState {

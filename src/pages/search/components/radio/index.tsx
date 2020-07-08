@@ -3,16 +3,14 @@ import { View, Text } from '@tarojs/components'
 import { AtActionSheet, AtActionSheetItem  } from 'taro-ui'
 import './index.scss'
 import { IProps, IState, List, IRadio } from './index.d'
-import { connect } from '@tarojs/redux'
-import { mapStateToProps, mapDispatchToProps } from './connect'
 import { withTry } from '~utils'
+import { getOrderList } from '~services'
 
-@connect(mapStateToProps, mapDispatchToProps)
 export default class RadioList extends Component<IProps>{
 
     public state:IState = {
-        value: '综合',
-        text: '综合',
+        value: '',
+        text: '',
         show: false,
         radioList: []
     }
@@ -24,16 +22,15 @@ export default class RadioList extends Component<IProps>{
     //数据获取
     public fetchData = async () => {
         Taro.showLoading({mask: true, title: '稍等一下'})
-        const [,data] = await withTry(this.props.getOrderList)()
+        const [, data] = await withTry(getOrderList)()
         Taro.hideLoading()
         if(data) {
-            const { data:_data } = data
             this.setState({
-                radioList: _data.map((val:IRadio) => {
-                    const { label } = val
+                radioList: data.map((val:any) => {
+                    const { name, _id } = val
                     return {
-                        ...val,
-                        value: label
+                        value: _id,
+                        label: name,
                     }
                 })
             })
@@ -43,20 +40,20 @@ export default class RadioList extends Component<IProps>{
     /**
      * 条件选择
      */
-    public handleChange = (id: string, value: string) => {
+    public handleChange = (label: string, value: string) => {
         this.setState({
-            value: id,
-            text: value,
+            value: value,
+            text: label,
         })
         this.handleClose()
-        this.props.screen(id)
+        this.props.screen(value)
     }
 
     /**
      * 列表显示控制
      */
     public showList = () => {
-        const {show} = this.state
+        const { show } = this.state
         this.setState({
             show: !show
         })
@@ -88,11 +85,11 @@ export default class RadioList extends Component<IProps>{
                 >
                     {
                         radioList.map((val: List) => {
-                            const { id, label, value } = val
+                            const { label, value } = val
                             return (
                                 <AtActionSheetItem 
-                                    key={id}
-                                    onClick={ () => {this.handleChange.call(this, id, value)} }
+                                    key={value}
+                                    onClick={ () => {this.handleChange.call(this, label, value)} }
                                 >
                                     {label}
                                 </AtActionSheetItem>

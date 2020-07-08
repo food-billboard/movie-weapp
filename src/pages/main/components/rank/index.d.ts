@@ -20,7 +20,7 @@
  * }
  */
 
-interface List {
+export interface List {
   // rank: number,
   _id: string,
   poster: string,

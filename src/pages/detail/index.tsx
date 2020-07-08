@@ -161,7 +161,7 @@ export default class extends Component<any> {
                 {
                     tab.length ?
                     <Tab
-                        values={tab.map(item => item.same_name)}
+                        values={tab.map(item => item.name)}
                         handleClick={this.handleTabChange}
                         ref={this.tabRef}
                         tabToggle={1000}
@@ -193,7 +193,7 @@ export default class extends Component<any> {
                             language: language ? language.map(item => ({ value: item.name })) : [],
                             createdAt,
                             hot,
-                            rate,
+                            rate: rate || 0,
                             author_rate,
                             store,
                             author_description,

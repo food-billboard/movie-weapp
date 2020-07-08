@@ -40,31 +40,15 @@ export interface IOption {
   disabled?: boolean
 }
 
-export interface IProps extends ICommonFormProps {
-  value?: Array<string> | false
-  initialValue?: Array<string> 
-  checkboxOption?: Array<IOption>
-  type: keyof typeof typeList
-  needHiddenList?: boolean
-  extraFactor?: boolean
-  getSwitch: (count?:number) => any
-  getAreaList: (count?:number) => any
-  getLanguageList: (count?:number) => any
-  getActorList: (count?:number) => any
-  getDirectorList: (count?:number) => any
-  getCountryList: (count?:number) => any
-}
-
-export interface IState extends ICommonFormState {
+export interface IProps {
+  style?: any
   value: Array<string>
-  show: boolean
-  checkOption: Array<IOption>
+  checkboxOption?: Array<IOption>
+  needHiddenList?: boolean
+  handleChange?:(...args: Array<any>) => any
+  error?: boolean
 }
 
-export const typeList = {
-  type: 'type',
-  actor:'actor',
-  area: 'area',
-  country:'country',
-  director:'director'
+export interface IState {
+  show: boolean
 }

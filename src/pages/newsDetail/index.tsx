@@ -136,7 +136,6 @@ export default class extends Component<any> {
       type: mediaType[type],
       _id: this.id,
       loading: true,
-
     }
 
     //生成消息内容格式(可能是多条数据)

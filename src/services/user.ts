@@ -81,7 +81,7 @@ export const signout = () => {
 }
 
 //分类(首页)
-export const getClassify = (count:number) => {
+export const getClassify = (count?:number) => {
   return request('GET', '/api/user/movie/classify/specDropList', {query: { count }})
 }
 
@@ -129,3 +129,28 @@ export const getRankType = (count: number) => {
 export const getAppInfo = () => {
   return request('GET', '/api/user/setting/info')
 } 
+
+//语言列表
+export const getLanguageList = (count:number=-1) => {
+  return request('GET', '/api/user/movie/language', { query: { count } })
+}
+
+//地区列表
+export const getDistrictList = (count:number=-1) => {
+  return request('GET', '/api/user/movie/district', { query: { count } })
+}
+
+//导演列表
+export const getDirectorList = (count:number=-1) => {
+  return request('GET', '/api/user/movie/director', { query: { count } })
+}
+
+//演员列表
+export const getActorList = (count: number = -1) => {
+  return request('GET', '/api/user/movie/actor', { query: { count } })
+}
+
+//排序列表
+export const getOrderList = () => {
+  return request('GET', '/api/user/movie/order/list')
+}

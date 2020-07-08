@@ -7,8 +7,6 @@ import Comment from '~components/comment'
 import GColor from './components/color'
 import { TypeColor, colorChange, colorStyleChange } from '~theme/color'
 import { router, routeAlias, createSystemInfo, withTry } from '~utils'
-import {connect} from '@tarojs/redux'
-import {mapDispatchToProps, mapStateToProps} from './connect'
 import { Toast } from '~components/toast'
 import { Option } from 'taro-ui/@types/radio'
 import style from '~theme/style'
@@ -38,7 +36,6 @@ const colorControl = {
 
 const systemInfo = createSystemInfo()
 
-@connect(mapStateToProps, mapDispatchToProps)
 export default class Setting extends Component<any>{
 
     public static config: Config = {
@@ -99,7 +96,6 @@ export default class Setting extends Component<any>{
      * 显示反馈组件
      */
     public showFeedback = async () => {
-        await this.props.getUserInfo()
         this.commentRef.current!.open()
     }
 
@@ -132,7 +128,11 @@ export default class Setting extends Component<any>{
     public logCancel = () => this.logClose()
 
     //反馈信息发送
-    public handleFeedback = async (value: string) => {
+    public handleFeedback = async (value: {
+        text?: string
+        image?: Array<string>
+        video?: Array<string>
+    }) => {
         Taro.showLoading({mask: true, title: '预检查中...'})
         const data = await preCheckFeedback()
         if(!data) {
@@ -143,11 +143,10 @@ export default class Setting extends Component<any>{
             })
             Taro.hideLoading()
         }else {
+            const { text='', image=[], video=[] } = value
+            await withTry(feedback)({ text, image, video })
             Taro.hideLoading()
-            Taro.showLoading({ mask: true, title: '媒体上传中' })
-            
-            //用户反馈+媒体上传
-            Taro.hideLoading()
+            Taro.showToast({ mask: false, icon: 'none', title: 'success~', duration: 500 })
         }
     }
 
@@ -230,7 +229,7 @@ export default class Setting extends Component<any>{
         button: {
             type:[warn, primary],
             value: ['退出登录', '账号登录'],
-            index: this.props.userInfo ? 0 : 1,
+            index: 0,
             model: {
                 isOpen: false,
                 title: '提示',

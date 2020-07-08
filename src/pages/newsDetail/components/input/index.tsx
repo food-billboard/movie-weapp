@@ -3,7 +3,7 @@ import { View, Textarea } from '@tarojs/components'
 import Emoj from '../emojSwiper'
 import { IProps, IState } from './index.d'
 import style from '~theme/style'
-import {  mediaType } from '~utils'
+import {  mediaType, upload, getTemplatePathMime } from '~utils'
 import { IMAGE_CONFIG } from '~config'
 import { noop } from 'lodash'
 
@@ -71,7 +71,7 @@ export default class extends Component<IProps, IState> {
     Taro.chooseVideo({
       sourceType: ['album','camera'],
       camera: 'back',
-    }).then((res: any) => {
+    }).then(async (res: any) => {
       const { errMsg } = res
       const [, msg] = errMsg.split(':')
       if(msg === 'ok') {
@@ -84,8 +84,28 @@ export default class extends Component<IProps, IState> {
           height
         } = res
         //文件上传
-        const imageData = 'thumbTempFilePath'
-        const videoData = 'tempFilePath'
+        const imageData = await new Promise((resolve, reject) => {
+          const mime = getTemplatePathMime(thumbTempFilePath)
+          resolve({
+            mime,
+            file: thumbTempFilePath
+          })
+        })
+        .then((task: any) => upload(task))
+        .catch(err => {
+          console.log(err)
+        })
+        const videoData = await new Promise((resolve, reject) => {
+          const mime = getTemplatePathMime(tempFilePath)
+          resolve({
+            mime,
+            file: thumbTempFilePath
+          })
+        })
+        .then((task: any) => upload(task))
+        .catch(err => {
+          console.log(err)
+        })
         this.props.sendInfo(mediaType.VIDEO, {
           image: imageData,
           video: videoData

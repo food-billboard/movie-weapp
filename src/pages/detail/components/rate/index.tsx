@@ -11,7 +11,6 @@ export default class GTate extends Component<IProps, IState>{
     public static defaultProps: IProps = {
         value: 0,
         rate: () => {},
-        movie: '',
     }
 
     /**
@@ -22,9 +21,11 @@ export default class GTate extends Component<IProps, IState>{
     }
 
     public render() {
-        const { readonly=false, value } = this.props
+        const { readonly=false, value, style:customerStyle={} } = this.props
         return (
-            <View className='rate'>
+            <View className='rate'
+                style={{...customerStyle}}
+            >
                 {
                     readonly ? 
                     <AtRate

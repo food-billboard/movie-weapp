@@ -61,13 +61,6 @@ interface ISelector {
   rangeKey?: string
 }
 
-export const modeList = {
-  selector: Symbol('selector'),
-  time: Symbol('time'),
-  date: Symbol('date'),
-  multiSelector: Symbol('multiSelector')
-}
-
 interface IMulti {
   range: Array<string[]> | Array<number[]> | Array<Object[]>
   rangeKey?: string
@@ -97,14 +90,13 @@ export interface IProps extends ICommonFormProps {
   multi?: IMulti | false
   time?: ITime | false
   date?: IDate | false
-  value?: string | Array<any> | false
-  initialValue?: string | Array<any>
+  value: string | Array<any>
+  // initialValue?: string | Array<any>
   title?: string
-  extraFactor?: boolean
+  // extraFactor?: boolean
 }
 
-export interface IState extends ICommonFormState {
-  value: string | Array<any>
+export interface IState {
   disabled: boolean
 }
 

@@ -1,4 +1,3 @@
-@import "~taro-ui/dist/style/components/flex.scss";
 .searchbutton{
     .search{
        
@@ -12,19 +11,6 @@
         .point{
             width:100%;
             height:50px;
-        }
-    }
-    .hotsearch{
-        // margin:10px 0;
-        overflow: hidden;
-        transition:.3s;
-        .title{
-            margin-top:5px;
-            margin-left:15px;
-            font-size:30px;
-        }
-        .hotlist{
-            margin-right:20px;
         }
     }
 }

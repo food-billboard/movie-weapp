@@ -1,27 +1,15 @@
-import { upload as Upload } from 'chunk-file-upload'
+import { Upload  } from 'chunk-file-upload'
 import { uploadFile, uploadChunkFileCheck, uploadChunkFile, uploadChunkFileComplete } from '~services'
 import Taro from '@tarojs/taro'
 import { AuthType } from './globalType'
 
 const uploadTarget = new Upload()
 const fileManager = Taro.getFileSystemManager()
+const MAX_FILE_SIZE = 1024 * 1024 * 5
 
 //读取临时文件地址获取文件
-const readFile = async (...tempPath) => {
-  let chunkList = []
-  let miniList = []
-  tempPath.forEach(path => {
-    const data = fileManager.readFileSync(path, /**编码方式 */)
-    const fileInfo = fileManager.getFileInfo({ filePath: path, success: () =>  })
-    return {
-      info: fileInfo,
-      data
-    }
-  })
-
-  const miniData = await miniFileUpload(miniList)
-  const chunkData = await upload(chunkList)
-
+const readFile = (tempPath) => {
+  return fileManager.readFileSync(tempPath)
 }
 
 const exitDataFn = (data: { suffix: string, chunksLength: number, size: number, auth: keyof typeof AuthType }) => {
@@ -43,29 +31,43 @@ const callback = (err, rest) => {
   return true
 }
 
-const miniFileUpload = async (data) => {
-  return uploadFile(data)
+interface ITask {
+  file: string,
+  mime: string
 }
 
-const upload = (...files) => {
+const miniFileUpload = (task: ITask) => {
+  const { file, mime } = task
+  const blob = new Blob([file], { type: mime })
+  const formData = new FormData()
+  formData.append(file, blob)
+  return uploadFile(formData)
+}
+
+const largeFileUpload = (task: ITask) => {
   const baseConfig = {
-    exitDataFn: this.exitDataFn,
-    uploadFn: this.uploadFn,
-    completeFn: this.completeFn,
-    callback: this.callback
+    exitDataFn: exitDataFn,
+    uploadFn: uploadFn,
+    completeFn: completeFn,
+    callback: callback
   }
-  return uploadTarget.upload(files.map(file => ({
+  const { file, mime } = task
+  return uploadTarget.upload({
     ...baseConfig,
-    file
-  })))
-  .then(_ => ({
-    
-  }))
+    file,
+    mime,
+  })
 }
 
-upload.prototype.exitDataFn = exitDataFn
-upload.prototype.uploadFn = uploadFn
-upload.prototype.completeFn = completeFn
-upload.prototype.callback = callback
+const upload = (task:ITask) => {
+  const { file } = task
+  const realFile = readFile(file)
+  const len = realFile instanceof ArrayBuffer ? realFile.byteLength : realFile.length
+  if(len > MAX_FILE_SIZE) {
+    return miniFileUpload(task)
+  }else {
+    return largeFileUpload(task)
+  }
+}
 
 export default upload

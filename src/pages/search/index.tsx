@@ -1,22 +1,27 @@
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
-import SearchBar from '~components/searchbutton'
+import SearchBar from '../main/components/searchButton'
 import Head from './components/head'
 import List from '~components/list'
+import Indexes from '../issue/components/indexes'
 import IconList from '~components/iconlist'
 import GScrollView from '~components/scrollList'
 import RadioList from './components/radio'
 import Method from './components/method' 
 import Forms from './components/form'
 import { debounce, throttle } from 'lodash'
-import { FormData } from './interface'
+import { FormData, searchQuery } from './interface'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { SYSTEM_PAGE_SIZE } from '~config'
-import {connect} from '@tarojs/redux'
-import {mapDispatchToProps, mapStateToProps} from './connect'
 import { AtDrawer } from 'taro-ui'
+import { Item } from '~components/indexes/index.d'
+import { TIndexesType } from '../issue/interface'
 import { withTry } from '~utils'
+import {  } from '~services'
+
+//这个是没用的
+const factorySearch = () => {}
 
 import './index.scss'
 
@@ -31,7 +36,6 @@ const INIT_QUERY = { type: '', sort: '', query: {} }
 //初始hot高度
 const HOT_HEIGHT = SYSTEM_PAGE_SIZE(35)
 
-@connect(mapStateToProps, mapDispatchToProps)
 export default class Index extends Component<any> {
 
     public config: Config = {
@@ -42,6 +46,10 @@ export default class Index extends Component<any> {
     public searchBarRef = Taro.createRef<SearchBar>()
 
     public scrollRef = Taro.createRef<GScrollView>()
+
+    private indexesRef = Taro.createRef<Indexes>()
+
+    private formRef = Taro.createRef<Forms>()
 
     private scrollTop = 0
 
@@ -60,14 +68,15 @@ export default class Index extends Component<any> {
         listShow: false,
         searchList: [],
         query: {...INIT_QUERY},
-        selectShow: false
+        selectShow: false,
+        indexesVisible: false
     }
 
     //数据获取
     public fetchData = async (query: any, isInit=false) => {
         const { searchList } = this.state
         Taro.showLoading({mask: true, title: '查询中'})
-        const [,data] = await withTry(this.props.factorySearch)({...query})
+        const [,data] = await withTry(factorySearch)({...query})
         Taro.hideLoading()
         if(data) {
             const _data = data.data
@@ -90,7 +99,7 @@ export default class Index extends Component<any> {
      */
     public confirm = async (value: string) => {
         Taro.showLoading({mask: true, title: '努力搜索中'})
-        const [,data] = await withTry(this.props.factorySearch)({ ...INIT_PAGE, query: { query: {}, field: value } })
+        const [,data] = await withTry(factorySearch)({ ...INIT_PAGE, query: { query: {}, field: value } })
         Taro.hideLoading()
         if(data) {
             const _data = data.data
@@ -110,7 +119,7 @@ export default class Index extends Component<any> {
             query: { ...query, type }
         })
         Taro.showLoading({mask: true, title: '筛选中'})
-        const [,data] = await withTry(this.props.factorySearch)({ ...INIT_PAGE, query: { ...INIT_QUERY, ...query, type, field: this.searchBarRef.current!.state!.value || '' } })
+        const [,data] = await withTry(factorySearch)({ ...INIT_PAGE, query: { ...INIT_QUERY, ...query, type, field: this.searchBarRef.current!.searchBarRef.current!.state!.value || '' } })
         Taro.hideLoading()
         if(data) {
             const _data = data.data
@@ -129,7 +138,7 @@ export default class Index extends Component<any> {
             query: { ...query, sort }
         })
         Taro.showLoading({mask: true, title: '努力搜索中'})
-        const [,data] = await withTry(this.props.factorySearch)({ ...INIT_PAGE, query: { ...INIT_QUERY, ...query, sort, field: this.searchBarRef.current!.state!.value || '' } })
+        const [,data] = await withTry(factorySearch)({ ...INIT_PAGE, query: { ...INIT_QUERY, ...query, sort, field: this.searchBarRef.current!.searchBarRef.current!.state!.value || '' } })
         Taro.hideLoading()
         if(data) {
             const _data = data.data
@@ -148,7 +157,7 @@ export default class Index extends Component<any> {
             query: { ...query, query: formData }
         })
         Taro.showLoading({ mask: true, title: '努力筛选中' })
-        const [,data]  = await withTry(this.props.factorySearch)({ ...INIT_PAGE, query: { ...INIT_QUERY, ...query, query: formData, field: this.searchBarRef.current!.state.value || '' } })
+        const [,data]  = await withTry(factorySearch)({ ...INIT_PAGE, query: { ...INIT_QUERY, ...query, query: formData, field: this.searchBarRef.current!.searchBarRef.current!.state.value || '' } })
         Taro.hideLoading() 
         if(data) {
             const _data = data.data
@@ -182,7 +191,7 @@ export default class Index extends Component<any> {
     public getSearchBarStatus = () => {
         const { current } = this.searchBarRef
         if(!current) return false
-        return !current!.state.focus
+        return !current!.searchBarRef.current!.state.focus
     }
 
     //是否显示列表
@@ -229,8 +238,31 @@ export default class Index extends Component<any> {
         })
     }
 
+    //索引显示隐藏
+    public handleIndexesShow = ({ visible, type }) => {
+        this.setState({
+            indexesVisible: visible
+        }, () => {
+        setTimeout(() => {
+            this.indexesRef.current!.indexesVisible(type)
+        }, 0)
+        })
+    }
+
+    //索引选择
+    public handleSelectIndexes = (item: Item, type: TIndexesType) => {
+        //隐藏索引
+        this.setState({
+            indexesVisible: false
+        }, () => {
+        setTimeout(() => {
+            this.formRef.current!.handleIndexesAppend(item, type)
+        }, 0)
+        })
+    }
+
     public render() {
-        const { showList, searchList, listShow, hotShow, selectShow } = this.state
+        const { showList, searchList, listShow, hotShow, selectShow, indexesVisible } = this.state
         return (
             <GScrollView
                 ref={this.scrollRef}
@@ -240,6 +272,12 @@ export default class Index extends Component<any> {
                 autoFetch={false}
                 sourceType={'Scope'}
                 renderContent={ 
+                    !indexesVisible ?
+                    <Indexes
+                        handleClick={this.handleSelectIndexes}
+                        ref={this.indexesRef}
+                    ></Indexes>
+                    :
                     <View>
                         <AtDrawer
                             show={selectShow}
@@ -248,7 +286,11 @@ export default class Index extends Component<any> {
                             width={SYSTEM_PAGE_SIZE(300) + 'px'}
                             className='drawer'
                         >
-                            <Forms screen={this.queryScreen} />     
+                            <Forms 
+                                ref={this.formRef}
+                                screen={this.queryScreen} 
+                                indexesShow={this.handleIndexesShow}
+                            />     
                         </AtDrawer>
                         {
                             selectShow ?
@@ -272,6 +314,7 @@ export default class Index extends Component<any> {
                                 focus={false}
                                 control={this.showList}
                                 hotShow={hotShow}
+                                disabled={false}
                             />
                         </View>
                         <View 
