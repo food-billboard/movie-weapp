@@ -82,10 +82,12 @@ export default class extends Component<any> {
         await Taro.showLoading({ mask: true, title: '加载中' })
         const userInfo = await this.props.signin(formData)
         await Taro.hideLoading()
-        if(userInfo) return
+        if(!userInfo) return
         //回到上一路由
         const { target }: any = this.$router.params
-        if( target ) return router.replace(target)
+        if( target ) {
+            return router.replace(target)
+        }
         Taro.switchTab({url: '../main/index'})
     }
 

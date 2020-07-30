@@ -40,7 +40,7 @@ export default class extends Component<IProps, IState> {
     this.resetStatus()
 
     Taro.chooseImage({
-      count: count, 
+      count: 1, 
       sizeType: ['original', 'compressed'], 
       sourceType: ['album', 'camera'], 
     }).then((res) => {
@@ -49,15 +49,29 @@ export default class extends Component<IProps, IState> {
       if(msg === 'ok') {
         const { tempFilePaths } = res //地址的字符串数组
         //文件上传
-        const data = 'tempFilePaths'
-        this.props.sendInfo(mediaType.IMAGE, data)
-
-        // Promise.all(tempFilePaths.map(async (val: string) => {
-        //   let type: any = newsType.image
-        //   await this.sendMediaInfo(type, val)
-        // }));
-
+        return Promise.all((Array.isArray(tempFilePaths) ? tempFilePaths : [tempFilePaths]).map((tempPath: string) => {
+          const mime = getTemplatePathMime(tempPath)
+          return upload(tempPath)
+        }))
+      }else {
+        return Promise.reject()
       }
+    })
+    .then(data => {
+      let realData 
+      if(Array.isArray(data)) {
+        realData = data[0]
+      }else {
+        realData = data
+      }
+      if(!realData._id) {
+        Taro.showToast({ mask: false, title: '出错了，请重试', duration: 500 })
+        return
+      }
+      this.props.sendInfo(mediaType.IMAGE, realData._id)
+    })
+    .catch(_ => {
+      Taro.showToast({ mask: false, title: '未知错误，请重试', duration: 500 })
     })
   }
 
@@ -84,33 +98,36 @@ export default class extends Component<IProps, IState> {
           height
         } = res
         //文件上传
-        const imageData = await new Promise((resolve, reject) => {
-          const mime = getTemplatePathMime(thumbTempFilePath)
-          resolve({
-            mime,
-            file: thumbTempFilePath
-          })
-        })
-        .then((task: any) => upload(task))
-        .catch(err => {
-          console.log(err)
-        })
-        const videoData = await new Promise((resolve, reject) => {
-          const mime = getTemplatePathMime(tempFilePath)
-          resolve({
-            mime,
-            file: thumbTempFilePath
-          })
-        })
-        .then((task: any) => upload(task))
-        .catch(err => {
-          console.log(err)
-        })
-        this.props.sendInfo(mediaType.VIDEO, {
-          image: imageData,
-          video: videoData
-        })
+        return Promise.all([
+          upload(thumbTempFilePath),
+          upload(tempFilePath)
+        ])
       }
+    })
+    .then((data: any) => {
+      const realVideoInfo = data.map(d => {
+        let realData
+        if(Array.isArray(d)) {
+          realData = d[0]
+        }else {
+          realData = d
+        }
+        if(!realData._id) {
+          Taro.showToast({ mask: false, title: '出错了，请重试', duration: 500 })
+          return
+        }
+        return realData._id
+      })
+      let realImage = realVideoInfo[0]
+      let realVideo = realVideoInfo[1]
+      this.props.sendInfo(mediaType.VIDEO, {
+        image: realImage,
+        video: realVideo
+      })
+    })
+    .catch(_ => {
+      console.log(_)
+      Taro.showToast({ mask: false, title: 'unknown error', duration: 500 })
     })
   }
 
@@ -321,7 +338,6 @@ export default class extends Component<IProps, IState> {
           </View>
           <View className='other-detail'>
               <View className='emoj'>
-                
                 <Emoj
                   ref={this.EmojRef}
                   handleAddEmoj={this.handleAddEmoj}

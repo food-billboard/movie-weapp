@@ -48,6 +48,18 @@ export default class extends Component<any> {
     private worker: any
 
     public componentDidShow = () => {
+
+        //TODO
+        Taro.showModal({
+            title: '温馨提示',
+            content: '功能还在完善中...',
+            success: function (res) {
+                Taro.switchTab({
+                    url: '../main'
+                })
+            }
+        })
+        //
         colorStyleChange()
         this.throttleFetchData()
     }

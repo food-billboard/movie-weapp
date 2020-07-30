@@ -20,6 +20,8 @@ interface IVideoType {
   video: string
 }
 
+type TBaseData = Exclude<INewData, 'content' | 'scrollId'> 
+
 const systemInfo = createSystemInfo()
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -132,7 +134,7 @@ export default class extends Component<any> {
   public sendMediaInfo = async (type, data: string | IVideoType| Array<string>) => {
     const { data: list } = this.state
     //特指暂时不用
-    let baseData: {} extends Exclude<INewData, 'content' | 'scrollId'> = {
+    let baseData: TBaseData = {
       type: mediaType[type],
       _id: this.id,
       loading: true,

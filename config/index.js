@@ -35,7 +35,8 @@ const config = {
     ]
   },
   plugins: [
-    '@tarojs/plugin-sass'
+    '@tarojs/plugin-sass',
+    "@tarojs/plugin-uglify"
   ],
   // defineConstants: {
   // },

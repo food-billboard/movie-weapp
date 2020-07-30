@@ -22,22 +22,23 @@ const app = dva.createDva({
     const response = e.response
     if(response){
       const { statusCode } = response
+      let toast: Taro.showToast.Option
       if( statusCode === 404 ){
-        let toast = { title: '404 调用错误，无此接口', icon: 'none' };
+        toast = { title: '404 调用错误，无此接口', icon: 'none' };
         Taro.showToast(toast);
       }else if (statusCode >= 500) {
-        let toast = { title: '当前网络异常，请稍后重试', icon: 'none' };
+        toast = { title: '当前网络异常，请稍后重试', icon: 'none' };
         if (response.data && response.data.err) {
           toast.title = response.data.err;
         }
         Taro.showToast(toast);
       }else if( statusCode === 401 ){
-        const toast = { title: '未登录', icon: 'none' };
+        toast = { title: '未登录', icon: 'none' };
         Taro.showToast(toast);
         router.replace('/login')
       }else if( statusCode === 200 ){
         const body = response.data
-        const toast = { title: body.err.msg || '当前网络异常，请稍后重试', icon: 'none' };
+        toast = { title: body.err.msg || '当前网络异常，请稍后重试', icon: 'none' };
         Taro.showToast(toast);
         if( body.err && includes(['401'], body.err.code) ){
           router.replace('/login')
@@ -48,7 +49,7 @@ const app = dva.createDva({
       }
       return
     }
-    const toast = { title: '当前网络异常，请稍后重试', icon: 'none' };
+    const toast:Taro.showToast.Option = { title: '当前网络异常，请稍后重试', icon: 'none' };
     Taro.showToast(toast);
   },
   initialState: {}

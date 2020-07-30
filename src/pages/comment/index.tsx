@@ -151,6 +151,15 @@ export default class extends Component<any> {
      */
     public publish = async (isUserCall, commentId) => {
 
+        //TODo
+        Taro.showToast({
+            title: '功能完善中...',
+            icon: 'none',
+            duration: 1000
+        })
+        return
+        //
+
         await this.props.getUserInfo()
         .then(_ => {
             this.commentRef.current!.open()

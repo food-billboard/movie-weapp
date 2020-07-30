@@ -30,6 +30,14 @@ export default class Title extends Component<IProps>{
                 // Taro.hideTabBarRedDot({
                 //     index:2
                 // })
+
+                //TODO
+                Taro.showToast({
+                    title: '功能完善中...',
+                    icon: 'none',
+                    duration: 1000
+                })
+                //
                 router.push(routeAlias.issue)
                 break;
         }

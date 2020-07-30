@@ -1,4 +1,4 @@
-import {request} from '~utils'
+import { request, getToken } from '~utils'
 
 //其他用户信息
 export const getUserInfo = (id: string) => {
@@ -67,7 +67,7 @@ export const getSwiper = (count:number=6) => {
 
 //登录
 export const signin = ({ mobile, password, uid }: { mobile: string, password: string, uid?: string | undefined }) => {
-  return request('POST', `/api/user/logon/signout`, { data: { password, mobile, uid } })
+  return request('POST', `/api/user/logon/account`, { data: { password, mobile, uid } })
 }
 
 //注册
@@ -77,7 +77,7 @@ export const register = ({ mobile, password, uid }: { mobile: number, password: 
 
 //退出
 export const signout = () => {
-  return request('POST', '/api/user/logon/signout')
+  return request('POST', '/api/user/logon/signout', { header: getToken(true) })
 }
 
 //分类(首页)

@@ -11,6 +11,7 @@ import { IList } from '~components/linearlist/index.d'
 import { connect } from '@tarojs/redux'
 import { mapStateToProps, mapDispatchToProps } from './connect'
 import { router, routeAlias } from '~utils'
+import { getCustomerUserInfo } from '~services'
 
 import './index.scss'
 
@@ -60,17 +61,14 @@ export default class extends Component<any>{
     // private code: string
 
     public state: any = {
-        typeColor: TypeColor
-    }
-
-    public componentDidMount = async () => {
-        await this.fetchData()
+        typeColor: TypeColor,
     }
 
     //获取数据
     public fetchData = async () => {
         Taro.showLoading({ mask: true, title: '加载中' })
-        await this.props.getUserInfo() || {}
+        await this.props.getUserInfo()
+        .catch(_ => Taro.switchTab({ url: '../main/index' }))
         Taro.hideLoading()
     }
 
@@ -82,8 +80,8 @@ export default class extends Component<any>{
         // if(typeColor == TypeColor) return
         this.setState({typeColor: TypeColor})
 
-        await this.props.getUserInfo()
-        .catch(err => err)
+        //刷新数据
+        await this.fetchData()
 
     }
 

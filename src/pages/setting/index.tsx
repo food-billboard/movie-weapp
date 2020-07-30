@@ -6,7 +6,7 @@ import List from '~components/linearlist'
 import Comment from '~components/comment'
 import GColor from './components/color'
 import { TypeColor, colorChange, colorStyleChange } from '~theme/color'
-import { router, routeAlias, createSystemInfo, withTry } from '~utils'
+import { router, routeAlias, createSystemInfo, withTry, clearToken } from '~utils'
 import { Toast } from '~components/toast'
 import { Option } from 'taro-ui/@types/radio'
 import style from '~theme/style'
@@ -75,6 +75,7 @@ export default class Setting extends Component<any>{
         this.logClose()
         const { button } = this.state
         const { index, ...nextButton } = button
+        console.log(index, (index + 1) % 2)
         this.setState({
             button: {
                 ...nextButton,
@@ -85,6 +86,7 @@ export default class Setting extends Component<any>{
         const [ , data ] = await withTry(signout)()
         Taro.hideLoading()
         if(data) {
+            clearToken()
             Toast({
                 title: '好了',
                 icon: 'success'
@@ -96,6 +98,14 @@ export default class Setting extends Component<any>{
      * 显示反馈组件
      */
     public showFeedback = async () => {
+        //TODO
+        Taro.showToast({
+            title: '功能完善中...',
+            icon: 'none',
+            duration: 1000
+        })
+        return
+        //
         this.commentRef.current!.open()
     }
 
@@ -251,18 +261,21 @@ export default class Setting extends Component<any>{
     public handleButton = async (index: number) => {
         //退出登录
         if(index == 0) {
-            const { button: { model, ...nextButton } } = this.state
+            const { button: { model, index, ...nextButton } } = this.state
             this.setState({
                 button: {
                     ...nextButton,
                     model,
+                    index: (index + 1) % 2,
                     isOpen: true
                 },
-                activeModel: model
+                activeModel: model,
             })
             Taro.showLoading({mask: true, title: '稍等一下...'})
             await withTry(signout)()
+            clearToken()
             Taro.hideLoading()
+            Taro.switchTab({ url: '../main/index' })
         }else {
             router.push(routeAlias.login)
         }
@@ -280,7 +293,6 @@ export default class Setting extends Component<any>{
         const { iconInfo: aboutInconInfo } = about
 
         const activeMode = this.colorStyle[color ? 0 : 1]['value']
-        console.log(activeMode)
 
         return (
             <View className='setting'>

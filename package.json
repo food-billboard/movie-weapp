@@ -31,7 +31,7 @@
 	"dependencies": {
 		"@tarojs/components": "2.2.8",
 		"@tarojs/redux": "2.2.8",
-		"@tarojs/router": "2.2.8",
+		"@tarojs/router": "^3.0.6",
 		"@tarojs/taro": "2.2.8",
 		"@tarojs/taro-alipay": "2.2.8",
 		"@tarojs/taro-h5": "2.2.8",
@@ -41,7 +41,6 @@
 		"@tarojs/taro-tt": "2.2.8",
 		"@tarojs/taro-weapp": "2.2.8",
 		"babel-runtime": "^6.26.0",
-		"chunk-file-upload": "^1.0.1",
 		"dva": "^2.4.1",
 		"dva-core": "^2.0.2",
 		"dva-loading": "^3.0.20",
@@ -59,6 +58,7 @@
 		"@tarojs/plugin-babel": "2.2.8",
 		"@tarojs/plugin-csso": "2.2.8",
 		"@tarojs/plugin-sass": "2.2.8",
+		"@tarojs/plugin-uglify": "^2.2.10",
 		"@tarojs/plugin-uglifyjs": "2.0.0",
 		"@tarojs/webpack-runner": "2.2.8",
 		"@types/react": "^16.4.6",
@@ -78,7 +78,7 @@
 		"eslint-plugin-react": "^7.8.2",
 		"eslint-plugin-react-hooks": "^1.6.1",
 		"eslint-plugin-taro": "2.2.8",
-		"stylelint": "9.3.0",
+		"stylelint": "^13.6.1",
 		"stylelint-config-taro-rn": "2.2.8",
 		"stylelint-taro-rn": "2.2.8",
 		"typescript": "^3.6.5"

@@ -6,7 +6,7 @@ import { IMAGE_CONFIG, SYSTEM_PAGE_SIZE } from '~config'
 import { AtTextarea } from "taro-ui"
 import { IProps, IState } from './index.d'
 import style from '~theme/style'
-import { mediaType, upload, getTemplatePathMime } from '~utils'
+import { mediaType, upload } from '~utils'
 import Curtain from '../curtain'
 
 import './index.scss'
@@ -65,9 +65,7 @@ export default class Comment extends Component<IProps>{
     }
 
     //阻止手指滑动
-    public handleStopMove = (e) => {
-        e.stopPropagation()
-    }   
+    public handleStopMove = e => e.stopPropagation()
 
     //重置
     public reset = () => {
@@ -83,8 +81,15 @@ export default class Comment extends Component<IProps>{
      */
     public publish = async () => {
         const { value } = this.state
+        const ref = this.mediaPickerRef.current
+        if(!ref) {
+            Taro.showToast({
+                title: '请重试',
+                duration: 500,
+                mask: false
+            })
+        }
         const data = await this.mediaPickerRef.current!.getData(false)
-        this.close(true)
         let image:Array<any> = [],
             video:Array<any> = []
 
@@ -100,20 +105,48 @@ export default class Comment extends Component<IProps>{
             })
         }
 
+        let count = 0
+
         const imageList = await Promise.all(image.map(item => {
-            const mime = getTemplatePathMime(item)
-            return upload({
-                file: item,
-                mime
+            return upload(item)
+            .then(data => {
+                let realData 
+                if(Array.isArray(data)) {
+                    realData = data[0]
+                }else {
+                    realData = data
+                }
+                if(!realData._id) {
+                    count ++
+                    return null
+                }
+                return realData._id
             })
         }))
         const videoList = await Promise.all(video.map(item => {
-            const mime = getTemplatePathMime(item)
-            return upload({
-                file: item,
-                mime
+            return upload(item)
+            .then(data => {
+                let realData 
+                if(Array.isArray(data)) {
+                    realData = data[0]
+                }else {
+                    realData = data
+                }
+                if(!realData._id) {
+                    count ++
+                    return null
+                }
+                return realData._id
             })
         }))
+
+        if(count > 0) {
+            Taro.showToast({ mask: true, title: '有文件上传未成功, 请重试', duration: 500 })
+            return 
+        }
+
+        this.close(true)
+
 
         //评论发布
         this.props.publishCom({text: value, image: imageList, video: videoList })

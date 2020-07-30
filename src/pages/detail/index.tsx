@@ -15,11 +15,9 @@ import { colorStyleChange } from '~theme/color'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { withTry, router, routeAlias } from '~utils'
-import { getCustomerMovieDetail, getUserMovieDetail, getCommentSimple, postCommentToMovie, putStore, cancelStore, putRate } from '~services'
+import { getCustomerMovieDetail, getUserMovieDetail, postCommentToMovie, putStore, cancelStore, putRate } from '~services'
 
 import './index.scss'
-
-let FIRST = true
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any> {
@@ -78,6 +76,15 @@ export default class extends Component<any> {
 
     //打开评论界面
     public handleComment = async () => {
+        //TODO
+        Taro.showToast({
+            title: '功能完善中...',
+            icon: 'none',
+            duration: 1000
+        })
+        return
+        //
+
          //获取个人信息缓存
         await this.props.getUserInfo()
         .then(_ => {
@@ -124,8 +131,8 @@ export default class extends Component<any> {
     //tab切换
     public handleTabChange = async (value: string) => {
         const { tab } = this.state
-        const [ item ] = tab.filter(item => item.same_name === value)
-        const { _id } = item
+        // const [ item ] = tab.filter(item => item.name === value)
+        const { _id } = tab[value]
         this.id = _id
         await this.fetchData()
     }

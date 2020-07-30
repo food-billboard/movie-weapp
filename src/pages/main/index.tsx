@@ -61,7 +61,6 @@ export default class extends Component<any> {
     const swiper = await getSwiper()
     //获取分类
     const classify = await getClassify(16)
-    console.log(classify)
     //获取每日上新
     const daily = await this.getDaily()
     //获取排行榜

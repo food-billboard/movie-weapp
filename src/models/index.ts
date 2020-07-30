@@ -2,7 +2,6 @@
 const models = [
     require('./chat.ts').default,
     require('./customer').default,
-    require('./upload').default,
     require('./global').default
 ]
 

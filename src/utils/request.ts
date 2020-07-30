@@ -66,7 +66,8 @@ const request = async function(method, path, settings:any={}) {
     //参数配置
     const setting: any = {
         url: joinUrl(path, defaultHost, query),
-        method
+        method,
+        data
     }
     
     extend(true, setting, defaultOptions, options)
