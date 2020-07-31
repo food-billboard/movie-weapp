@@ -21,232 +21,232 @@ const SCROLL_MAX_SHOW_COUNT = 10
 const SHOW_MORE = 'SHOW_MORE'
 const HIDE_MORE = 'HIDE_MORE'
 
-const SHOW_TYPE = {
-    SHOW_MORE: Symbol('show_more'),
-    HIDE_MORE: Symbol('hide_more')
+enum SHOW_TYPE {
+  SHOW_MORE,
+  HIDE_MORE
 }
 
 export default class Index extends Component<any> {
 
-    public config:Config = {
-        navigationBarTitleText: "",
-        enablePullDownRefresh: true
+  public config: Config = {
+    navigationBarTitleText: "",
+    enablePullDownRefresh: true
+  }
+
+  public componentDidShow = () => {
+    colorStyleChange()
+  }
+
+  //下拉刷新
+  public onPullDownRefresh = async () => {
+    await this.scrollRef.current!.handleToUpper()
+    Taro.stopPullDownRefresh()
+  }
+
+  //上拉加载
+  public onReachBottom = async () => {
+    await this.scrollRef.current!.handleToLower()
+  }
+
+  public state = {
+    typeDetail: [],
+    type: [],
+    listShow: true,
+    typeShow: false
+  }
+
+  //电影分类id
+  private _id
+
+  public get id() {
+    return this._id || ''
+  }
+
+  public set id(id: string) {
+    this._id = id
+    this.setTitle(id)
+  }
+
+  public scrollRef = Taro.createRef<GScrollView>()
+
+  public fabRef = Taro.createRef<Fab>()
+
+  public componentDidMount = async () => {
+    await this.fetchTypeData()
+    const { params: { id } } = this.$router
+    this.id = id || ''
+  }
+
+  /**
+   * 获取数据
+   */
+  public fetchData = async (query: any, isInit = false) => {
+    const { typeDetail } = this.state
+    const data = await getClassifyList({ id: this.id, ...query })
+
+    let newData
+    if (isInit) {
+      newData = [...data]
+    } else {
+      newData = [...typeDetail, ...data]
     }
+    await this.setState({
+      typeDetail: newData
+    })
+    return data
+  }
 
-    public componentDidShow = () => {
-        colorStyleChange()
-    }
+  /**
+   * 节流数据获取
+   */
+  public throttleFetchData = throttle(this.fetchData, 2000)
 
-    //下拉刷新
-    public onPullDownRefresh = async () => {
-        await this.scrollRef.current!.handleToUpper()
-        Taro.stopPullDownRefresh()
-    }
-    
-    //上拉加载
-    public onReachBottom = async () => {
-        await this.scrollRef.current!.handleToLower()
-    }
+  //改变当前页面路由
+  public getTypeDetail = async (id: string) => {
+    const { typeShow } = this.state
+    if (typeShow) this.setState({ typeShow: false })
+    this.id = id
+    this.scrollRef.current!.fetchData({ INIT_QUERY }, true)
+  }
 
-    public state = {
-        typeDetail: [],
-        type: [],
-        listShow: true,
-        typeShow: false
-    }
+  //获取查看方式
+  public listChange = () => {
+    const { listShow } = this.state
+    this.setState({
+      listShow: !listShow
+    })
+  }
 
-    //电影分类id
-    private _id
+  //获取分类列表
+  public fetchTypeData = async () => {
+    const data = await getClassify(16)
+    this.setState({
+      type: data
+    })
+  }
 
-    public get id() {
-        return this._id || ''
-    }
+  //设置标题
+  public setTitle = (id: string) => {
+    const { type } = this.state
+    const [target]: any = type.filter((val: any) => { val._id === id })
+    const title = target ? target.name : '分类'
+    Taro.setNavigationBarTitle({ title })
+  }
 
-    public set id(id: string) {
-        this._id = id
-        this.setTitle(id)
-    }
+  //控制详细分类的显示隐藏
+  public handleControlTypeDetail = (type: SHOW_TYPE) => {
+    let status = false
+    if (type === SHOW_TYPE.SHOW_MORE) status = true
+    this.setState({
+      typeShow: status
+    })
+  }
 
-    public scrollRef = Taro.createRef<GScrollView>()
+  public render() {
+    const { typeDetail, listShow, type, typeShow } = this.state
 
-    public fabRef = Taro.createRef<Fab>()
+    const bgColor = style.backgroundColor('bgColor')
 
-    public componentDidMount = async () => {
-        await this.fetchTypeData()
-        const { params: { id } } = this.$router
-        this.id = id || ''
-    }
+    const showType = type.length <= SCROLL_MAX_SHOW_COUNT
 
-    /**
-     * 获取数据
-     */
-    public fetchData = async (query: any, isInit=false) => {
-        const { typeDetail } = this.state
-        const data = await getClassifyList({ id: this.id, ...query })
- 
-        let newData
-        if(isInit) {
-            newData = [ ...data ]
-        }else {
-            newData = [ ...typeDetail, ...data ]
-        }
-        await this.setState({
-            typeDetail: newData
-        })
-        return data
-    }
+    const list = type.map((val: any) => {
+      const { name, _id: id } = val
+      return (
+        <View
+          className={'header-list ' + (typeShow ? 'at-col at-col-2' : 'header-list-size')}
+          style={{ ...style.color('primary') }}
+          key={id}
+          onClick={(_) => { this.getTypeDetail.call(this, id) }}
+        >
+          {name}
+        </View>
+      )
+    })
 
-    /**
-     * 节流数据获取
-     */
-    public throttleFetchData = throttle(this.fetchData, 2000)
-
-    //改变当前页面路由
-    public getTypeDetail = async(id: string) => {
-        const { typeShow } = this.state
-        if(typeShow) this.setState({typeShow: false})
-        this.id = id
-        this.scrollRef.current!.fetchData({INIT_QUERY}, true)
-    }
-
-    //获取查看方式
-    public listChange = () => {
-        const { listShow } = this.state
-        this.setState({
-            listShow: !listShow
-        })
-    }
-
-    //获取分类列表
-    public fetchTypeData = async () => {
-        const data = await getClassify(16)
-        this.setState({
-            type: data
-        })
-    }
-
-    //设置标题
-    public setTitle = (id: string) => {
-        const { type } = this.state
-        const [ target ]:any = type.filter((val: any) => { val._id === id })
-        const title = target ? target.name : '分类'
-        Taro.setNavigationBarTitle({ title })
-    }
-
-    //控制详细分类的显示隐藏
-    public handleControlTypeDetail = (type: keyof typeof SHOW_TYPE) => {
-        let status = false
-        if(SHOW_TYPE[type] === SHOW_TYPE.SHOW_MORE) status = true
-        this.setState({
-            typeShow: status
-        })
-    }
-
-    public render() {
-        const { typeDetail, listShow, type, typeShow } = this.state
-
-        const bgColor = style.backgroundColor('bgColor')
-
-        const showType = type.length <= SCROLL_MAX_SHOW_COUNT
-
-        const list = type.map((val: any) => {
-            const { name, _id: id } = val
-            return (
-                <View 
-                    className={'header-list ' + (typeShow ? 'at-col at-col-2' : 'header-list-size')}
-                    style={{...style.color('primary')}}
-                    key={id}
-                    onClick={(_) => {this.getTypeDetail.call(this, id)}}
-                >   
-                    {name}
-                </View>
-            )
-        })
-
-        const headerHeight = (showType || !typeShow) ? SINGLE_HEADER_HEIGHT : SINGLE_HEADER_HEIGHT * (Math.ceil((type.length + 2) / 6))
-        return (
-            <GScrollView
-                ref={this.scrollRef}
-                style={{...bgColor}}
-                sourceType={'Scope'}
-                scrollWithAnimation={true}
-                renderContent={
-                    <View>
-                        <View className='header-type' style={{
-                            ...bgColor, 
-                            height: Number(SYSTEM_PAGE_SIZE(headerHeight)) / 2 + 'px'
-                        }}
-                        >
-                            <Text className='text'
-                                style={{...style.color('thirdly'), ...bgColor}}
-                            >分类: </Text>
-                            {
-                                showType || !typeShow ?
-                                <ScrollView 
-                                    scrollX={true}
-                                    className='header'
-                                    style={{...bgColor}}
-                                >
-                                    {
-                                        !showType ?
-                                        <View 
-                                            className={'header-list header-list-size'}
-                                            style={{...style.color('primary'), fontWeight: 'normal'}}
-                                            onClick={(e) => {this.handleControlTypeDetail.call(this, SHOW_MORE)}}
-                                        >   
-                                            展开
-                                        </View>
-                                        : null
-                                    }
-                                    {list}
-                                </ScrollView>
-                                    :
-                                <View 
-                                    className='header-type-detail at-row at-row--wrap'
-                                    style={{...bgColor}}
-                                >
-                                    {list}
-                                    <View 
-                                        className={'header-list at-col at-col-2'}
-                                        style={{...style.color('primary'), fontWeight: 'normal'}}
-                                        onClick={(e) => {this.handleControlTypeDetail.call(this, HIDE_MORE)}}
-                                    >   
-                                        收起
-                                    </View>
-                                </View>
-                            }
-                        </View>
-                        <View>
-                            {
-                                listShow ? (<LinearList list={typeDetail.map(item => {
-                                    const { _id: id, poster, name, hot } = item
-                                    return {
-                                        id,
-                                        image: poster,
-                                        name,
-                                        time: Date.now(),
-                                        hot
-                                    }
-                                })} />) : (<IconList list={typeDetail.map(item => {
-                                    const { _id: id, poster, name, hot } = item
-                                    return {
-                                        id,
-                                        image: poster,
-                                        name,
-                                        hot
-                                    }
-                                })} />)
-                            }
-                        </View>
-                    </View>
-                }
-                fetch={this.throttleFetchData}
-                bottom={80}
-                renderBottom={ <View className="btn">
-                                <Fab value={listShow} change={this.listChange} />
-                              </View>}
+    const headerHeight = (showType || !typeShow) ? SINGLE_HEADER_HEIGHT : SINGLE_HEADER_HEIGHT * (Math.ceil((type.length + 2) / 6))
+    return (
+      <GScrollView
+        ref={this.scrollRef}
+        style={{ ...bgColor }}
+        sourceType={'Scope'}
+        scrollWithAnimation={true}
+        renderContent={
+          <View>
+            <View className='header-type' style={{
+              ...bgColor,
+              height: Number(SYSTEM_PAGE_SIZE(headerHeight)) / 2 + 'px'
+            }}
             >
-            </GScrollView> 
-        )
-    }
+              <Text className='text'
+                style={{ ...style.color('thirdly'), ...bgColor }}
+              >分类: </Text>
+              {
+                showType || !typeShow ?
+                  <ScrollView
+                    scrollX={true}
+                    className='header'
+                    style={{ ...bgColor }}
+                  >
+                    {
+                      !showType ?
+                        <View
+                          className={'header-list header-list-size'}
+                          style={{ ...style.color('primary'), fontWeight: 'normal' }}
+                          onClick={(e) => { this.handleControlTypeDetail.call(this, SHOW_MORE) }}
+                        >
+                          展开
+                                        </View>
+                        : null
+                    }
+                    {list}
+                  </ScrollView>
+                  :
+                  <View
+                    className='header-type-detail at-row at-row--wrap'
+                    style={{ ...bgColor }}
+                  >
+                    {list}
+                    <View
+                      className={'header-list at-col at-col-2'}
+                      style={{ ...style.color('primary'), fontWeight: 'normal' }}
+                      onClick={(e) => { this.handleControlTypeDetail.call(this, HIDE_MORE) }}
+                    >
+                      收起
+                                    </View>
+                  </View>
+              }
+            </View>
+            <View>
+              {
+                listShow ? (<LinearList list={typeDetail.map(item => {
+                  const { _id: id, poster, name, hot } = item
+                  return {
+                    id,
+                    image: poster,
+                    name,
+                    time: Date.now(),
+                    hot
+                  }
+                })} />) : (<IconList list={typeDetail.map(item => {
+                  const { _id: id, poster, name, hot } = item
+                  return {
+                    id,
+                    image: poster,
+                    name,
+                    hot
+                  }
+                })} />)
+              }
+            </View>
+          </View>
+        }
+        fetch={this.throttleFetchData}
+        bottom={80}
+        renderBottom={<View className="btn">
+          <Fab value={listShow} change={this.listChange} />
+        </View>}
+      >
+      </GScrollView>
+    )
+  }
 }

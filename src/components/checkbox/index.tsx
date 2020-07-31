@@ -2,12 +2,31 @@ import Taro, { Component } from '@tarojs/taro'
 import { AtCheckbox, AtButton } from 'taro-ui'
 import { View } from '@tarojs/components'
 import TagList from '../tagList'
-import { isObject } from '~utils'
+import { isObject, ICommonFormProps, ICommonFormState } from '~utils'
 import { FORM_ERROR, SYSTEM_PAGE_SIZE } from '~config'
-import { IState, IProps } from './index.d'
 import styleColor  from '~theme/style'
 
 import './index.scss'
+
+export interface IOption {
+  value: string
+  label: string
+  desc?: string
+  disabled?: boolean
+}
+
+export interface IProps {
+  style?: any
+  value: Array<string>
+  checkboxOption?: Array<IOption>
+  needHiddenList?: boolean
+  handleChange?:(...args: Array<any>) => any
+  error?: boolean
+}
+
+export interface IState {
+  show: boolean
+}
 
 const BUTTON_STYLE = {
   height:SYSTEM_PAGE_SIZE(40) + 'px'

@@ -1,6 +1,11 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import { IProps } from './index.d'
+
+export interface IProps {
+  isEmpty: (() => boolean) | boolean
+}
+
+export interface IState {} 
 
 export default class extends Component<IProps> {
 

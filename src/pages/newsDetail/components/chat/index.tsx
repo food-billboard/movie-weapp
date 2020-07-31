@@ -3,14 +3,54 @@ import { View, ScrollView, Image } from '@tarojs/components'
 import { AtAvatar, AtActivityIndicator } from 'taro-ui'
 import GVideo from '~components/video'
 import Curtain from '~components/curtain'
-import { IProps, IState, IList, INewData } from './index.d'
 import style from '~theme/style'
-import { formatTime, isObject, mediaType, valueOf, router, routeAlias } from '~utils'
+import { formatTime, isObject, EMediaType, valueOf, router, routeAlias } from '~utils'
 import { last, noop } from 'lodash'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import { TypeColor } from '~theme/color'
 
 import './index.scss'
+
+export interface IContent<T> {
+  text: T 
+  image: T 
+  video: T 
+  audio: T 
+}
+
+export interface IList {
+ type: EMediaType
+ content: string
+ createdAt: string
+ _id: string
+ origin: {
+   _id: string
+   username: string
+   avatar: string
+   isMine: boolean
+ }
+}
+
+export interface INewData extends Exclude<IList, 'createdAt' | 'origin'> {
+ loading: boolean
+ scrollId?: string
+}
+
+export interface IProps {
+ list: Array<INewData>
+ height?: number
+ style?: any
+ onScroll?: (...args: any[]) => any
+ autoBottom?: boolean
+ onPreview: (status: boolean) => void
+}
+
+export interface IState {
+  videoShow: boolean
+  activeVideo: string
+  activeScrollItem: string
+  loadLoading: boolean
+}
 
 //scroll_id
 const SCROLL_ID_MAP = [ 
@@ -67,7 +107,7 @@ export default class extends Component<IProps, IState> {
     const { list } = this.props
     Taro.previewImage({
       current: src, 
-      urls: [...list.filter((item: IList) => item.type === mediaType.IMAGE).map((item: IList) => item.content)] 
+      urls: [...list.filter((item: IList) => item.type === EMediaType.IMAGE).map((item: IList) => item.content)] 
     })
   }
 
@@ -104,9 +144,7 @@ export default class extends Component<IProps, IState> {
   }
 
   //查看当前用户详情
-  public handleGetUser = (id: string) => {
-    router.push(routeAlias.user, { id })
-  }
+  public handleGetUser = (id: string) => router.push(routeAlias.user, { id })
 
   //滚动至指定位置
   public handleReachToLocation = (
@@ -216,15 +254,15 @@ export default class extends Component<IProps, IState> {
                     </View>
                     : null
                   }
-                  <View className={`detail ${mediaType.TEXT !== type ? 'at-col at-col-8' : 'text'}`}>
+                  <View className={`detail ${EMediaType.TEXT !== type ? 'at-col at-col-8' : 'text'}`}>
                     <View 
                       className='username'
                       style={{...style.color('thirdly'), textAlign: direction ? 'right' : 'left'}}
                     >
                       {username}
                     </View>
-                    <View className={`content ${mediaType.TEXT === type ? '' : 'half'} ${direction && mediaType.TEXT !== type ? 'at-row at-row__justify--end' : ''}`}
-                      style={type === mediaType.TEXT ? {...style.border(1, 'disabled', 'solid', 'all'), ...style.backgroundColor(direction ? 'secondary' : 'disabled')} : {}}
+                    <View className={`content ${EMediaType.TEXT === type ? '' : 'half'} ${direction && EMediaType.TEXT !== type ? 'at-row at-row__justify--end' : ''}`}
+                      style={type === EMediaType.TEXT ? {...style.border(1, 'disabled', 'solid', 'all'), ...style.backgroundColor(direction ? 'secondary' : 'disabled')} : {}}
                     >
                       {
                         direction && loading ?
@@ -238,7 +276,7 @@ export default class extends Component<IProps, IState> {
                         : null
                       }
                       {
-                        mediaType.TEXT === type ?
+                        EMediaType.TEXT === type ?
                         <View 
                           style={{whiteSpace: 'normal'}} 
                           onClick={() => this.handlePreviewText.call(this, content)}
@@ -246,7 +284,7 @@ export default class extends Component<IProps, IState> {
                         : null
                       }
                       {
-                        (mediaType.IMAGE === type) ?
+                        (EMediaType.IMAGE === type) ?
                         <Image 
                           mode={'widthFix'}
                           src={content || ''} 
@@ -257,7 +295,7 @@ export default class extends Component<IProps, IState> {
                         : null
                       }
                       {
-                        mediaType.VIDEO === type ?
+                        EMediaType.VIDEO === type ?
                             (
                               !content ?
                               <Image 
@@ -287,7 +325,7 @@ export default class extends Component<IProps, IState> {
                         : null
                       }
                       {
-                        mediaType.AUDIO === type ?
+                        EMediaType.AUDIO === type ?
                         content
                         : null
                       }

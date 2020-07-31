@@ -1,6 +1,6 @@
 import { uploadFile, uploadChunkFileCheck, uploadChunkFile, uploadChunkFileComplete } from '~services'
 import Taro from '@tarojs/taro'
-import { AuthType, mediaType } from './globalType'
+import { EAuthType, EMediaType } from './globalType'
 import SparkMd5 from 'spark-md5'
 import { getTemplatePathMime } from './tool'
 
@@ -48,7 +48,7 @@ const getFileInfo = (tempPath) => {
   .catch(_ => false)
 }
 
-const exitDataFn = (data: { suffix: string, chunksLength: number, size: number, auth: keyof typeof AuthType }) => {
+const exitDataFn = (data: { suffix: string, chunksLength: number, size: number, auth: EAuthType }) => {
   return uploadChunkFileCheck(data)
 }
 
@@ -91,7 +91,7 @@ const miniFileUpload = async (task: ITask) => {
 
 const largeFileUpload = async (task: ITask) => {
   const { file, mime, md5, size } = task
-  const exit = await exitDataFn({ suffix: mime, chunksLength: file.length, size, auth: 'PUBLIC' })
+  const exit = await exitDataFn({ suffix: mime, chunksLength: file.length, size, auth: EAuthType.PUBLIC })
   //上传完成
   if(typeof exit == 'string') {
     return exit

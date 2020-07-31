@@ -13,7 +13,6 @@ import {mapDispatchToProps, mapStateToProps} from './connect'
 import { withTry } from '~utils'
 import { cancelLike, putLike, getCustomerMovieCommentDetail, getUserMovieCommentDetail, postCommentToUser } from '~services'
 
-// const INIT_QUERY = { currPage:1, pageSize: 7 }
 let FIRST = true
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -31,14 +30,14 @@ export default class extends Component<any> {
   private scrollRef = Taro.createRef<GScrollView>()
 
   //评论组件
-  public commentRef = Taro.createRef<CommentCom>()
+  private commentRef = Taro.createRef<CommentCom>()
 
   //评论id
   readonly id = this.$router.params.id
 
   public state: any = {
-    commentHeader: {},
-    comment: [],
+    headerData: {},
+    data: [],
   }
 
   public componentDidMount = async () => {
@@ -58,50 +57,39 @@ export default class extends Component<any> {
 
   //设置标题
   public setTitle = async () => {
-      const { commentHeader } = this.state
-      if(commentHeader.user && FIRST) {
+      const { headerData } = this.state
+      if(headerData.user && FIRST) {
         FIRST = false
-        Taro.setNavigationBarTitle({title: `${commentHeader.user}的评论`})
+        Taro.setNavigationBarTitle({title: `${headerData.user}的评论`})
       }
   }
 
-   /**
-   * 获取评论数据
-   */
+   //获取评论数据
   public fetchData = async (query: any, isInit=false) => {
-    const { comment } = this.state
+    const { data } = this.state
     const isLogin = await this.props.getUserInfo()
     .then(_ => true)
     .catch(_ => false)
     const method = isLogin ? getCustomerMovieCommentDetail : getUserMovieCommentDetail
     const { comment:main={}, sub={} } = await method({id: this.id,  ...query})
-    let newData
-    if(isInit) {
-        newData = [ ...sub ]
-    }else {
-        newData = [ ...comment, ...sub ]
-    }
-    await this.setState({
-        comment: newData,
-        commentHeader: main
+
+    this.setState({
+        comment: [ ...(isInit ? [] : [...data]), ...sub ],
+        headerData: main
     })
     return sub
   }
 
-  /**
-   * 节流数据获取
-   */
   public throttleFetchData = throttle(this.fetchData, 2000)
 
-  /**
-   * 发布评论
-   */
+  //发布评论
   public publishComment = async (value: { 
     text?: string,
     image?: Array<any>,
     video?: Array<any>
   }) => {
     const { text='', image=[], video=[] } = value
+
     Taro.showLoading({ mask: true, title: '发布中' })
     await withTry(postCommentToUser)({ id: this.id, content: { text, image, video } })
     Taro.hideLoading()
@@ -113,6 +101,7 @@ export default class extends Component<any> {
     await this.props.getUserInfo()
     .then(async (_) => {
         const method = like ? cancelLike : putLike
+
         Taro.showLoading({ mask: true, title: '操作中' })
         await withTry(method)(id)
         Taro.hideLoading()
@@ -124,8 +113,6 @@ export default class extends Component<any> {
 
   /**
    * 展示评论组件
-   * isUserCall: 是否为回复
-   * user: 用户id
    * commentId: 评论id
    */
   public publish = async (_, commentId) => {
@@ -143,7 +130,7 @@ export default class extends Component<any> {
     .then(_ => {
       this.commentRef.current!.open()
       this.setState({
-          commentId: commentId ? commentId : this.id
+          commentId: !!commentId ? commentId : this.id
       })
     })
     .catch(err => err)
@@ -151,7 +138,7 @@ export default class extends Component<any> {
 
   public render() {
 
-    const { commentHeader, comment } = this.state
+    const { headerData, data } = this.state
 
     this.setTitle()
 
@@ -164,11 +151,11 @@ export default class extends Component<any> {
         query={{pageSize: 7}}
         renderContent={
           <View>
-            <Header content={commentHeader}
+            <Header content={headerData}
             like={this.like}
             ></Header>
             {
-              comment.map((value) => {
+              data.map((value) => {
                 const { _id } = value
                 return (
                   <View>

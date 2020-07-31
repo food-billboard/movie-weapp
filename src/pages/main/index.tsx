@@ -33,24 +33,19 @@ export default class extends Component<any> {
     colorStyleChange(true)
     const { typeColor } = this.state
     if(typeColor == TypeColor) return
-    this.setState({typeColor: TypeColor})
+    this.setState({ typeColor: TypeColor })
   }
 
-  public componentDidMount = async () => {
-    this.fetchData()
-  }
+  public componentDidMount = async () => await this.fetchData()
 
-  private getDaily = async () => {
-    const daily = await getDailyNew()
-    return daily
-  }
+  private getDaily = async () => await getDailyNew()
 
   //重新加载每日上新
   public hanleExchangeDaily = async () => {
-    Taro.showLoading({mask: true, title: '查找中'})
+    Taro.showLoading({ mask: true, title: '查找中' })
     const daily = await this.throttleGetDaily()
     Taro.hideLoading()
-    this.setState({daily: daily.daily})
+    this.setState({ daily: daily.daily })
   }
 
   public throttleGetDaily = throttle(this.getDaily, 2000)
@@ -129,7 +124,7 @@ export default class extends Component<any> {
                   id={_id}
                   key={_id}
                   type={name} 
-                  list={match.length >= 3 ? match.slice(0, 3) : match}
+                  list={match}
                 />
               )
             })

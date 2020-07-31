@@ -1,8 +1,16 @@
 import Taro, { Component } from '@tarojs/taro'
 import { Text } from '@tarojs/components'
-import { IProps, IState } from './index.d'
 
 import style from '~theme/style'
+
+export interface IProps {
+  text?: string
+  movie: string
+  store: (store: boolean) => any
+  value: boolean
+}
+
+export interface IState {}
 
 export default class extends Component<IProps, IState> {
   
@@ -14,7 +22,9 @@ export default class extends Component<IProps, IState> {
   }
 
   public render() {
+    
     const { text, value } = this.props
+
     return (
       <Text
         style={{...style.color(value ? 'primary' : 'thirdly')}}

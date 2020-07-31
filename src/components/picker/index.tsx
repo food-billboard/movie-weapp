@@ -1,14 +1,71 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Picker } from '@tarojs/components'
-import { isObject } from '~utils'
-import moment from 'moment'
+import Day from 'dayjs'
 import { FORM_ERROR, SYSTEM_PAGE_SIZE } from '~config'
-import { IProps, IState, fieldTypeList } from './index.d'
 import customStyle from '~theme/style'
 import { noop } from 'lodash'
- 
+import { ICommonFormProps, ICommonFormState, isObject } from '~utils'
+
+interface ISelector {
+  disabled?: boolean
+  onCancel?: () => any
+  range: Array<any>
+  rangeKey?: string
+}
+
+interface IMulti {
+  range: Array<string[]> | Array<number[]> | Array<Object[]>
+  rangeKey?: string
+  value?: number[] | string[] | Object[]
+  onColumnChange?: () => any
+  disabled?: boolean
+  onCancel?: () => any
+}
+
+interface ITime {
+  start?: string
+  end?: string
+  onCancel?: () => any
+  disabled?: boolean
+}
+
+interface IDate {
+  start?: string
+  end?: string
+  fields?: keyof typeof fieldTypeList
+  disabled?: boolean
+  onCancel?: () => any
+}
+
+export interface IProps extends ICommonFormProps {
+  selector?: ISelector | false
+  multi?: IMulti | false
+  time?: ITime | false
+  date?: IDate | false
+  value: string | Array<any>
+  // initialValue?: string | Array<any>
+  title?: string
+  // extraFactor?: boolean
+}
+
+export interface IState {
+  disabled: boolean
+}
+
+export const fieldTypeList = {
+  year: 'YYYY',
+  month: 'YYYY-MM',
+  day: 'YYYY-MM-DD'
+}
+
+export const fieldTypeSymbol = {
+  year: Symbol('year'),
+  month: Symbol('month'),
+  day: Symbol('day')
+}
+
 const STYLE = {
-  width:'100%',
+  width: '100%',
   height: SYSTEM_PAGE_SIZE(30) + 'px',
   backgroundColor: 'rgba(0, 0, 0, 0.1)',
   lineHeight: SYSTEM_PAGE_SIZE(30) + 'px',
@@ -65,20 +122,20 @@ export default class extends Component<IProps, IState> {
 
   //处理change
   public handleChange = async (e: any, mode) => {
-    const { 
-      handleChange, 
-      multi, 
-      selector, 
+    const {
+      handleChange,
+      multi,
+      selector,
     } = this.props
     let _data
     const { value: newData } = e.detail
-    if(mode === modeList.selector) {
-      if(selector) {
+    if (mode === modeList.selector) {
+      if (selector) {
         const { range } = selector
         _data = range[newData]
-      } 
-    }else if(mode === modeList.multiSelector) {
-      if(multi) {
+      }
+    } else if (mode === modeList.multiSelector) {
+      if (multi) {
         const { range } = multi
         let data: any[] = []
         newData.map((val, index) => {
@@ -86,8 +143,8 @@ export default class extends Component<IProps, IState> {
           data.push(_arr[val])
         })
         _data = data
-      } 
-    }else if(mode === modeList.date || mode === modeList.time) {
+      }
+    } else if (mode === modeList.date || mode === modeList.time) {
       _data = newData
     }
 
@@ -104,27 +161,27 @@ export default class extends Component<IProps, IState> {
 
   public render() {
 
-    const { 
-      style={}, 
-      selector=false, 
-      multi=false, 
-      time=false, 
-      date=false, 
-      title='选择', 
-      error=false,
+    const {
+      style = {},
+      selector = false,
+      multi = false,
+      time = false,
+      date = false,
+      title = '选择',
+      error = false,
       value
     } = this.props
 
     let dateShow
-    if(date) {
-      dateShow = fieldTypeList[date.fields='year']
+    if (date) {
+      dateShow = fieldTypeList[date.fields = 'year']
     }
 
     const { disabled } = this.state
 
     const _style = {
-      ...STYLE, 
-      ...customStyle.backgroundColor('disabled'), 
+      ...STYLE,
+      ...customStyle.backgroundColor('disabled'),
       ...(isObject(style) ? style : {}),
       ...(error ? FORM_ERROR : {})
     }
@@ -132,83 +189,83 @@ export default class extends Component<IProps, IState> {
     return (
       <View>
         {
-          selector ? 
-          <Picker
-            disabled={disabled ? disabled : (selector.disabled || false)}
-            onCancel={selector.onCancel || noop}
-            range={selector.range || this.defaultConfig.range.selector}
-            rangeKey={selector.rangeKey || this.defaultConfig.rangeKey.selector}
-            mode={'selector'}
-            onChange={(e) => {this.handleChange.call(this, e, modeList.selector)}}
-            value={value}
-          >
-            <View className='picker'
-              style={{..._style }}
+          selector ?
+            <Picker
+              disabled={disabled ? disabled : (selector.disabled || false)}
+              onCancel={selector.onCancel || noop}
+              range={selector.range || this.defaultConfig.range.selector}
+              rangeKey={selector.rangeKey || this.defaultConfig.rangeKey.selector}
+              mode={'selector'}
+              onChange={(e) => { this.handleChange.call(this, e, modeList.selector) }}
+              value={value}
             >
-              {title}: {value}
-            </View>
-          </Picker>
-          : null
+              <View className='picker'
+                style={{ ..._style }}
+              >
+                {title}: {value}
+              </View>
+            </Picker>
+            : null
         }
         {
-          multi ? 
-          <Picker
-            mode={'multiSelector'}
-            range={multi.range || this.defaultConfig.range.multi}
-            rangeKey={multi.rangeKey || this.defaultConfig.rangeKey.multi}
-            value={value}
-            onChange={(e) => {this.handleChange.call(this, e, modeList.multiSelector)}}
-            onColumnChange={multi.onColumnChange || noop}
-            disabled={disabled ? disabled : (multi.disabled || false)}
-            onCancel={multi.onCancel || noop}
-          >
-            <View className='picker'
-              style={{..._style}}
+          multi ?
+            <Picker
+              mode={'multiSelector'}
+              range={multi.range || this.defaultConfig.range.multi}
+              rangeKey={multi.rangeKey || this.defaultConfig.rangeKey.multi}
+              value={value}
+              onChange={(e) => { this.handleChange.call(this, e, modeList.multiSelector) }}
+              onColumnChange={multi.onColumnChange || noop}
+              disabled={disabled ? disabled : (multi.disabled || false)}
+              onCancel={multi.onCancel || noop}
             >
-              {title}: {Array.isArray(value) ? value.join(' & ') : value}
-            </View>
-          </Picker>
-          : null
+              <View className='picker'
+                style={{ ..._style }}
+              >
+                {title}: {Array.isArray(value) ? value.join(' & ') : value}
+              </View>
+            </Picker>
+            : null
         }
         {
-          date ? 
-          <Picker
-            {...date}
-            mode={'date'}
-            onChange={(e) => {this.handleChange.call(this, e, modeList.date)}}
-            value={value}
-            start={date.start || this.defaultConfig.start.date}
-            end={date.end || moment(new Date().getTime()).format(dateShow)}
-            fields={date.fields || this.defaultConfig.fields.date}
-            disabled={disabled ? disabled : (date.disabled || false)}
-            onCancel={date.onCancel || noop}
-          >
-            <View className='picker'
-              style={{..._style}}
+          date ?
+            <Picker
+              {...date}
+              mode={'date'}
+              onChange={(e) => { this.handleChange.call(this, e, modeList.date) }}
+              value={value}
+              start={date.start || this.defaultConfig.start.date}
+              end={date.end || Day(new Date().getTime()).format(dateShow)}
+              fields={date.fields || this.defaultConfig.fields.date}
+              disabled={disabled ? disabled : (date.disabled || false)}
+              onCancel={date.onCancel || noop}
             >
-              {title}: {(value+'').length ? moment(value).format(dateShow) : ''}
-            </View>
-          </Picker>
-          : null
+              <View className='picker'
+                style={{ ..._style }}
+              >
+                {title}: {(value + '').length ? Day(value).format(dateShow) : ''}
+              </View>
+            </Picker>
+            : null
         }
         {
-          time ? 
-          <Picker
-            mode={'time'}
-            value={value}
-            onChange={(e) => {this.handleChange.call(this, e, modeList.time)}}
-            onCancel={time.onCancel || noop}
-            start={time.start || this.defaultConfig.start.time}
-            end={time.end || this.defaultConfig.end.time}
-            disabled={disabled ? disabled : (time.disabled || false)}
-          >
-            <View className='picker'
-              style={{..._style}}
+          time ?
+            <Picker
+              mode={'time'}
+              value={value}
+              onChange={(e) => { this.handleChange.call(this, e, modeList.time) }}
+              onCancel={time.onCancel || noop}
+              start={time.start || this.defaultConfig.start.time}
+              end={time.end || this.defaultConfig.end.time}
+              disabled={disabled ? disabled : (time.disabled || false)}
             >
-              {title}: {(value + '').length ? moment(value).format(this.defaultConfig.time) : ''}
-            </View>
-          </Picker>
-          : null
+              <View className='picker'
+                style={{ ..._style }}
+              >
+                {title}: {(value + '').length ? Day(value).format(this.defaultConfig.time) : ''}
+              </View>
+            </Picker>
+            : null
         }
       </View>
     )

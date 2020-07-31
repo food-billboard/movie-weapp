@@ -1,4 +1,4 @@
-import moment from 'moment'
+import Day from 'dayjs'
 
 const momentConfig: any = {
     months: '一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月'.split('_'),
@@ -96,7 +96,7 @@ const momentConfig: any = {
     }
 }
 
-moment.locale('zh-cn', momentConfig)
+// moment.locale('zh-cn', momentConfig)
 
 export const formatDate = (date:any, type='Y-M-D h:m:s') => {
     let timestamp = parseInt(date, 10)
@@ -142,16 +142,16 @@ export const getHourMinute = (minutes = 0) => {
 }
 
 export const formatTime = (date: any, type: string = 'YYYY-MM-DD', before: number = 1296000000) => {
-    moment.locale('zh-cn');
+    // moment.locale('zh-cn');
     const now = new Date().getTime()
-    const beforeDate = moment(date).valueOf()
+    const beforeDate = Day(date).valueOf()
     if(beforeDate + before > date) {
-        return moment(now).locale('zh-cn').toNow()
+        return Day(now).toNow()
     }
-    return moment(date).format(type)
+    return Day(date).format(type)
 }
 
-export const valueOf = (time) => moment(time).valueOf()
+export const valueOf = (time) => Day(time).valueOf()
 
 export const formatNumber = (data: number) => {
     if(data > 9999) {

@@ -23,7 +23,7 @@ interface IProps {
   hotShow?: false | number
   control?: (...args: Array<any>) => any
   confirm?: (...args: Array<any>) => any
-} 
+}
 
 interface IState {
   hot: Array<Hot>
@@ -37,29 +37,25 @@ export default class extends Component<IProps, IState> {
 
   public searchBarRef = Taro.createRef<SearchButton>()
 
-  public componentDidMount = async () => {
-    await this.fetchData()
-  }
+  public componentDidMount = async () => await this.fetchData()
 
   public fetchData = async () => {
     const hot = await getHot()
     this.setState({
-        hot
+      hot
     })
   }
 
   //获取热搜信息
-  public getHot = (id: string, _: any) => {
-      router.push(routeAlias.detail, {id})
-  }
+  public getHot = (id: string, _: any) => router.push(routeAlias.detail, { id })
 
   render() {
-    const { hotShow=HOT_HEIGHT, disabled, confirm=noop, control=noop, focus=false } = this.props
+    const { hotShow = HOT_HEIGHT, disabled, confirm = noop, control = noop, focus = false } = this.props
     const { hot } = this.state
 
     return (
       <View>
-        <SearchButton 
+        <SearchButton
           ref={this.searchBarRef}
           disabled={disabled}
           confirm={confirm}
@@ -67,32 +63,32 @@ export default class extends Component<IProps, IState> {
           control={control}
         />
         {
-          hot.length ? 
-          <View 
-            className='at-row hotsearch at-row__align--center' 
-            style={{height: hotShow ? hotShow + 'px' : '0', ...style.backgroundColor('bgColor'), ...style.color('primary')}}>
-            <View 
-              className='at-col at-col-1 hotlist title'
-            >热搜</View>
-            {
+          hot.length ?
+            <View
+              className='at-row hotsearch at-row__align--center'
+              style={{ height: hotShow ? hotShow + 'px' : '0', ...style.backgroundColor('bgColor'), ...style.color('primary') }}>
+              <View
+                className='at-col at-col-1 hotlist title'
+              >热搜</View>
+              {
                 hot.map((value) => {
-                    const { key_word, _id: id } = value
-                    return (
-                        <View className='at-col at-col-2 hotlist'
-                            key={id}>
-                            <AtTag 
-                                customStyle={{...style.backgroundColor('disabled'), ...style.color('primary')}}
-                                type={"primary"}
-                                size={"normal"}
-                                circle={true}
-                                onClick={(event) => {this.getHot(id, event)}}
-                            >{key_word}</AtTag>
-                        </View>
-                    )
+                  const { key_word, _id: id } = value
+                  return (
+                    <View className='at-col at-col-2 hotlist'
+                      key={id}>
+                      <AtTag
+                        customStyle={{ ...style.backgroundColor('disabled'), ...style.color('primary') }}
+                        type={"primary"}
+                        size={"normal"}
+                        circle={true}
+                        onClick={(event) => { this.getHot(id, event) }}
+                      >{key_word}</AtTag>
+                    </View>
+                  )
                 })
-            }
-          </View>
-          : null
+              }
+            </View>
+            : null
         }
       </View>
     )

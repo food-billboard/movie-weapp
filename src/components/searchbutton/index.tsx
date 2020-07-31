@@ -2,19 +2,37 @@ import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtSearchBar } from 'taro-ui'
 import { router, routeAlias } from '~utils'
-import { IProps, IState, IPoint } from './index.d'
 import style from '~theme/style'
 
 import './index.scss'
+
+export interface IPoint {
+    value: string
+}
+
+export interface IProps {
+    value: string,
+    disabled: boolean,
+    confirm: any
+    focus?: boolean
+    control?: (op: boolean) => any
+    handleChange?: (...args: any[]) => any
+}
+
+export interface IState {
+    focus: boolean
+    value?: string
+    pointList: Array<IPoint>
+}
 
 class SearchButton extends Component<IProps, IState>{
     //默认数据
     public static defaultProps: IProps = {
         value: '',
         disabled: false,
-        confirm: () => {},
+        confirm: () => { },
         focus: false,
-        control: () => {},
+        control: () => { },
     }
 
     public state: IState = {
@@ -45,14 +63,14 @@ class SearchButton extends Component<IProps, IState>{
             focus: false,
             pointList: []
         })
-        if(this.props.control) this.props.control(true)
+        if (this.props.control) this.props.control(true)
     }
 
     /**
      * 监听获取焦点
      */
     public onFocus = () => {
-        if(this.props.control) this.props.control(false)
+        if (this.props.control) this.props.control(false)
         this.setState({
             focus: true
         })
@@ -62,7 +80,7 @@ class SearchButton extends Component<IProps, IState>{
      * 搜索
      */
     public confirm = () => {
-        const {value} = this.props
+        const { value } = this.props
         this.props.confirm && this.props.confirm(value)
         this.setState({
             pointList: []
@@ -72,24 +90,24 @@ class SearchButton extends Component<IProps, IState>{
     //处理点击搜索栏
     public handleClick = () => {
         const { disabled } = this.props
-        if(!disabled) return
+        if (!disabled) return
         router.push(routeAlias.search)
     }
 
     public render() {
         //获取热搜信息列表
-        const { focus, disabled=false } = this.props
+        const { focus, disabled = false } = this.props
         const { pointList } = this.state
 
         return (
             <View className="searchbutton">
                 <View className="search" onClick={this.handleClick}>
                     <AtSearchBar
-                        customStyle={{...style.backgroundColor('bgColor')}}
+                        customStyle={{ ...style.backgroundColor('bgColor') }}
                         onActionClick={this.confirm}
-                        value={this.props.value} 
+                        value={this.props.value}
                         onChange={this.props.handleChange ? this.props.handleChange : this.onChange}
-                        actionName={"找一找"} 
+                        actionName={"找一找"}
                         onBlur={this.onBlur}
                         onFocus={this.onFocus}
                         focus={focus}
@@ -98,27 +116,27 @@ class SearchButton extends Component<IProps, IState>{
                 </View>
                 {
                     pointList.length ?
-                    (<View 
-                        className='point-list'
-                        style={{...style.backgroundColor('disabled')}}
-                    >
-                        {
-                            pointList.map((val: IPoint) => {
-                                const { value: point } = val
-                                return (
-                                    <View 
-                                        className='point'
-                                        key={point}
-                                        style={{...style.border(1, 'bgColor', 'dashed', 'bottom')}}
-                                    >
-                                        {point}
-                                    </View>
-                                )
-                            })
-                        }
-                    </View>)
-                    :
-                    null
+                        (<View
+                            className='point-list'
+                            style={{ ...style.backgroundColor('disabled') }}
+                        >
+                            {
+                                pointList.map((val: IPoint) => {
+                                    const { value: point } = val
+                                    return (
+                                        <View
+                                            className='point'
+                                            key={point}
+                                            style={{ ...style.border(1, 'bgColor', 'dashed', 'bottom') }}
+                                        >
+                                            {point}
+                                        </View>
+                                    )
+                                })
+                            }
+                        </View>)
+                        :
+                        null
                 }
             </View>
         )

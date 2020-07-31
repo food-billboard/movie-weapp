@@ -3,12 +3,37 @@ import { View, Text } from '@tarojs/components'
 import { AtIcon, AtAvatar } from 'taro-ui'
 import Ellipsis from '~components/ellipsis'
 import { router, formatTime, formatNumber, routeAlias } from '~utils'
-import { IProps, IState } from './index.d'
 import style from '~theme/style'
 import { TypeColor } from '~theme/color'
 import { SYSTEM_PAGE_SIZE } from '~config'
+import { noop } from 'lodash'
 
 import './index.scss'
+
+interface IContent {
+  _id: string
+  user_info: {
+    avatar: string | null
+    username: string
+    _id: string
+  }
+  content: {
+    image?: Array<string>
+    text?: string
+    video?: Array<string>
+  }
+  comment_users: number
+  createdAt: string | number
+  like: boolean
+  total_like: number
+}
+
+export interface IProps {
+  content: IContent
+  like: (id: string, like: boolean) => any
+}
+
+export interface IState {}
 
 export default class extends Component<IProps, IState> {
 
@@ -26,18 +51,13 @@ export default class extends Component<IProps, IState> {
       like: false,
       total_like: 0
     },
-    like: () => {},
+    like: noop,
   }
 
-  /**
-   * 查看用户详情
-   * @param id 用户id
-   */
-  public getUser = (id: string) => {
-    router.push(routeAlias.user, { id })
-  }
+  public getUser = (id: string) => router.push(routeAlias.user, { id })
 
   public render() {
+    
     const { 
       content: {
         _id:commentId,
@@ -108,7 +128,12 @@ export default class extends Component<IProps, IState> {
                   className='at-col at-col-6'
                   onClick={this.props.like.bind(this, userId, commentId)}
                 >
-                  <AtIcon color={TypeColor['thirdly']} size={SYSTEM_PAGE_SIZE(16)} value={like ? 'heart-2' : 'heart'} customStyle={{marginRight: '5px', display: 'inline-block'}} />
+                  <AtIcon 
+                    color={TypeColor['thirdly']} 
+                    size={SYSTEM_PAGE_SIZE(16)} 
+                    value={like ? 'heart-2' : 'heart'} 
+                    customStyle={{marginRight: '5px', display: 'inline-block'}} 
+                  />
                   <Text style={{...style.color('secondary')}}>{formatNumber(total_like)}</Text>
                 </View>
               </View>

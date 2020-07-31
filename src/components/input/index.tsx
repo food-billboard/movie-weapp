@@ -1,11 +1,28 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Input } from '@tarojs/components'
 import { AtTextarea } from 'taro-ui'
-import { isObject } from '~utils'
+import { isObject, ICommonFormState, ICommonFormProps } from '~utils'
 import { FORM_ERROR } from '~config'
-import { IProps, IState } from './index.d'
 
 import './index.scss'
+
+export interface IProps extends ICommonFormProps {
+  value?: string | false
+  initialValue?: string
+  type?: 'input' | 'textarea'
+  placeholder?: string | false
+  inputType?:string
+  disabled?: boolean
+  height?: number
+  count?: boolean
+  textareaFixed?: boolean
+  handleLineChange?: (e: any) => any
+}
+
+export interface IState extends ICommonFormState {
+  value: string
+  disabled: boolean
+}
 
 export default class extends Component<IProps, IState> {
 

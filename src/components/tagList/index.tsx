@@ -1,11 +1,25 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtTag } from 'taro-ui'
-import { IProps, IState, Item } from './index.d'
 import { FORM_ERROR } from '~config'
 import style from '~theme/style'
+import { AtTagProps } from 'taro-ui/@types/tag'
 
 import './index.scss'
+
+export interface Item {
+  name:string
+  key: string
+}
+
+export interface IProps extends AtTagProps {
+  list: Array<Item>
+  error?: boolean
+  style?: any
+  handleChange: (items: Array<Item>) => any
+}
+
+export interface IState {}
 
 export default class extends Component<IProps, IState> {
 

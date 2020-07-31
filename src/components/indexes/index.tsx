@@ -1,6 +1,30 @@
 import Taro, { Component } from '@tarojs/taro'
 import { AtIndexes } from 'taro-ui'
-import { IProps, IState, Item } from './index.d'
+
+export interface Item {
+  name: string
+
+  [propName: string]: any
+}
+
+interface ListItem {
+  title: string
+
+  key: string
+
+  items: Array<Item>
+}
+
+export interface IProps {
+  animation?: boolean
+  isVibrate?: boolean
+  isShowToast?: boolean
+  list: Array<ListItem>
+  topKey?: string
+  handleClick?: (item: Item) => void
+}
+
+export interface IState {}
 
 export default class extends Component<IProps, IState> {
 
@@ -10,10 +34,7 @@ export default class extends Component<IProps, IState> {
     isShowToast: true,
   }
 
-  public handleClick = (item: Item) => {
-
-    this.props.handleClick && this.props.handleClick(item)
-  }
+  public handleClick = (item: Item) => this.props.handleClick && this.props.handleClick(item)
 
   public render() {
 

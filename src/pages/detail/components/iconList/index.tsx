@@ -2,9 +2,24 @@ import Taro, { Component } from '@tarojs/taro'
 import { ScrollView, View } from '@tarojs/components'
 import Imageloading from '~components/imageLoading'
 import style from '~theme/style'
-import { IState, IProps } from './index.d'
 
 import './index.scss'
+
+interface IList {
+  image: string
+  id: string
+  content: string
+}
+
+export interface IProps {
+  list: Array<IList>
+  handleClick?: () => any
+}
+
+export interface IState {
+  activeShow: boolean
+  active: string
+}
 
 export default class extends Component<IProps, IState> {
 
@@ -34,9 +49,11 @@ export default class extends Component<IProps, IState> {
   }
 
   public render() {
+    
     const { list } = this.props
     const { activeShow, active } = this.state
     const showList = list.length > 30 ? list.slice(0, 30) : list
+
     return (
       <View className='icon-list'>
         <View 

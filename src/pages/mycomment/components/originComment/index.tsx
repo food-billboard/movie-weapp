@@ -1,7 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 // import ImageLoading from '~components/imageLoading'
-import { IProps } from './index.d'
 import style from '~theme/style'
 import Ellipsis from '~components/ellipsis'
 
@@ -9,16 +8,26 @@ import { router, routeAlias } from '~utils'
 
 import './index.scss'
 
-export const source_type = {
-  MOVIE: 'MOVIE',
-  USER: 'USER'
+export interface IProps {
+  info: {
+    source_type: ESourceType
+    source: {
+      _id: string
+      content: string | null
+    }
+  }
+ }
+
+export enum ESourceType {
+  MOVIE,
+  USER
 }
 
 export default class extends Component<IProps> {
 
   public static defaultProps: IProps = {
     info: {
-      source_type: 'MOVIE',
+      source_type: ESourceType.MOVIE,
       source: {
         _id: '',
         content: ''
@@ -26,8 +35,8 @@ export default class extends Component<IProps> {
     }
   }
 
-  public handleClick = (id: string, origin: keyof typeof source_type) => {
-    if(origin === source_type.MOVIE) {
+  public handleClick = (id: string, origin: ESourceType) => {
+    if(origin === ESourceType.MOVIE) {
       router.push(routeAlias.comment, { id })
     }else {
       router.push(routeAlias.commentdetail, { id })

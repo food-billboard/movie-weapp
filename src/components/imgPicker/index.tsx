@@ -1,9 +1,30 @@
 import Taro, { Component } from '@tarojs/taro'
 import { AtImagePicker } from 'taro-ui'
 import { IMAGE_CONFIG, FORM_ERROR } from '~config'
-import {Toast} from '../toast'
-import { IProps, IState, IFiles } from './index.d'
+import { Toast } from '../toast'
 import { noop } from 'lodash'
+
+import { ICommonFormProps, ICommonFormState } from '~utils'
+
+export interface IFiles {
+  url: string
+}
+
+export interface IProps extends ICommonFormProps {
+  mode?: 'scaleToFill' | 'aspectFit' | 'aspectFill' | 'widthFix' | 'top' | 'bottom' | 'center' | 'left' | 'right' | 'top left' | 'top right' | 'bottom left' | 'bottom right'
+  multiple?: boolean
+  length?: number
+  count?: number
+  value?: Array<IFiles> | false
+  initialValue?: Array<IFiles>
+  handleChange?: (files: Array<any>, operationType: string, index: number) => any
+}
+
+export interface IState extends ICommonFormState {
+  value: Array<IFiles>
+  showAddBtn: boolean
+  // count: number
+}
 
 const { count: defaultCount } = IMAGE_CONFIG
 
@@ -25,13 +46,13 @@ export default class extends Component<IProps, IState> {
   private _value
 
   private get value() {
-    const { value: propsValue, initialValue, count=defaultCount } = this.props
-    const { value:stateValue } = this.state
-    if(propsValue !== false ) {
+    const { value: propsValue, initialValue, count = defaultCount } = this.props
+    const { value: stateValue } = this.state
+    if (propsValue !== false) {
       const data = propsValue || []
       return data
-    }else {
-      if(this.initialValue === undefined && typeof initialValue !== 'undefined') {
+    } else {
+      if (this.initialValue === undefined && typeof initialValue !== 'undefined') {
         return initialValue
       }
       return stateValue
@@ -40,14 +61,14 @@ export default class extends Component<IProps, IState> {
 
   //图片选择/删除
   public handleChange = (files: Array<any>, operationType: string, index: number) => {
-    const { 
-      count=defaultCount, 
+    const {
+      count = defaultCount,
       handleChange,
       initialValue,
     } = this.props
     const fileLen = files.length
-    if(operationType === 'add') {
-      if(fileLen > count) {
+    if (operationType === 'add') {
+      if (fileLen > count) {
         Toast({
           title: '超出图片增加数',
           icon: 'fail',
@@ -55,8 +76,8 @@ export default class extends Component<IProps, IState> {
         })
         return
       }
-    } 
-    if(this.initialValue === undefined && typeof initialValue !== 'undefined') this.initialValue = initialValue
+    }
+    if (this.initialValue === undefined && typeof initialValue !== 'undefined') this.initialValue = initialValue
     this.setImageItem(files)
     handleChange && handleChange(files, operationType, index)
 
@@ -76,13 +97,13 @@ export default class extends Component<IProps, IState> {
 
   //控制按钮的显示隐藏
   public controlShowBtn = () => {
-    const { count=defaultCount } = this.props
+    const { count = defaultCount } = this.props
     return count > this.value.length
   }
 
   //图片点击
-  public handleClick = (index: number, file:IFiles ) => {
-    const { value:files } = this.state
+  public handleClick = (index: number, file: IFiles) => {
+    const { value: files } = this.state
     Taro.previewImage({
       current: file.url,
       urls: files.map((val: IFiles) => {
@@ -94,7 +115,7 @@ export default class extends Component<IProps, IState> {
 
   //重置
   public reset = () => {
-    const { count=defaultCount } = this.props
+    const { count = defaultCount } = this.props
     this.setState({
       value: this.initialValue ? this.initialValue : [],
       showAddBtn: this.initialValue ? (this.initialValue.length >= count ? false : true) : true
@@ -102,9 +123,9 @@ export default class extends Component<IProps, IState> {
   }
 
   //获取数据
-  public getData = async (emptyCharge=true) => {
+  public getData = async (emptyCharge = true) => {
     const { value: files } = this.state
-    if(!files.length && emptyCharge) {
+    if (!files.length && emptyCharge) {
       await this.setState({
         error: true
       })
@@ -125,14 +146,14 @@ export default class extends Component<IProps, IState> {
 
   public render() {
 
-    const { 
-      mode, 
-      multiple=true, 
-      length=6,
-      count=defaultCount, 
-      error:propsError=false 
+    const {
+      mode,
+      multiple = true,
+      length = 6,
+      count = defaultCount,
+      error: propsError = false
     } = this.props
-    const { error:stateError } = this.state
+    const { error: stateError } = this.state
     const style = (propsError || stateError) ? FORM_ERROR : {}
 
     const _showAddBtn = this.controlShowBtn()

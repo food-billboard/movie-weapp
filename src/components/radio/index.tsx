@@ -2,15 +2,28 @@ import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtRadio, AtButton } from 'taro-ui'
 import Rest from '~components/restFactor'
-import { IProps, IState } from './index.d'
-import { isObject } from '~utils'
+import { isObject, ICommonFormProps, ICommonFormState } from '~utils'
 import { FORM_ERROR, SYSTEM_PAGE_SIZE } from '~config'
 import customeStyle from '~theme/style'
+import { Option } from 'taro-ui/@types/radio'
 
 import './index.scss'
 
+export interface IProps extends ICommonFormProps {
+  radioboxOption: Array<Option<string>>,
+  value?: string | false
+  initialValue?: string
+  needHiddenList?: boolean,
+  extraFactor?: boolean
+}
+
+export interface IState extends ICommonFormState {
+  value: string,
+  show: boolean,
+}
+
 const BUTTON_STYLE = {
-  height:SYSTEM_PAGE_SIZE(40) + 'px'
+  height: SYSTEM_PAGE_SIZE(40) + 'px'
 }
 
 export default class extends Component<IProps, IState> {
@@ -21,13 +34,13 @@ export default class extends Component<IProps, IState> {
     needHiddenList: true,
   }
 
-  private initialValue:any = undefined
+  private initialValue: any = undefined
 
   private _restValue: any = []
 
   private get restValue() {
     const { extraFactor } = this.props
-    if(extraFactor) return this._restValue
+    if (extraFactor) return this._restValue
     return false
   }
 
@@ -48,17 +61,17 @@ export default class extends Component<IProps, IState> {
   private _value
 
   private get value() {
-    const { initialValue, value:propsValue } = this.props
+    const { initialValue, value: propsValue } = this.props
     const { value: stateValue } = this.state
-    if(propsValue !== false) {
+    if (propsValue !== false) {
       return propsValue
-      ||
-      (() => {
-       this.restValue = []
-       return ''
-     })()
-    }else {
-      if(this.initialValue === undefined && typeof initialValue !== 'undefined') {
+        ||
+        (() => {
+          this.restValue = []
+          return ''
+        })()
+    } else {
+      if (this.initialValue === undefined && typeof initialValue !== 'undefined') {
         return initialValue
       }
       return stateValue
@@ -67,7 +80,7 @@ export default class extends Component<IProps, IState> {
 
   public componentWillReceiveProps = (props) => {
     const { value } = props
-    if(value !== false) {
+    if (value !== false) {
       this.setState({
         value: value || ''
       })
@@ -76,7 +89,7 @@ export default class extends Component<IProps, IState> {
 
   //选择值切换
   public handleChange = (value) => {
-    const { 
+    const {
       handleChange,
       initialValue,
       extraFactor
@@ -85,8 +98,8 @@ export default class extends Component<IProps, IState> {
       value,
       error: false
     })
-    if(this.initialValue === undefined && typeof initialValue !== 'undefined') this.initialValue = initialValue
-    if(extraFactor) {
+    if (this.initialValue === undefined && typeof initialValue !== 'undefined') this.initialValue = initialValue
+    if (extraFactor) {
       this.restRef!.current!.reset()
       this.restValue = []
     }
@@ -95,10 +108,10 @@ export default class extends Component<IProps, IState> {
 
   //处理额外内容change
   public handleRestChange = (items: string[]) => {
-    const { handleChange, radioboxOption=[] } = this.props
+    const { handleChange, radioboxOption = [] } = this.props
     this.restValue = [...items]
     let item = items.pop()
-    if( item || (!item && !radioboxOption.some(item => item.value == this.value)) ) {
+    if (item || (!item && !radioboxOption.some(item => item.value == this.value))) {
       this.setState({
         value: item || ''
       })
@@ -127,18 +140,18 @@ export default class extends Component<IProps, IState> {
       value: this.initialValue ? this.initialValue : ''
     })
     this.close()
-    if(extraFactor) {
+    if (extraFactor) {
       this.restRef.current!.reset()
       this.restValue = []
     }
   }
 
   //获取数据
-  public getData = async (emptyCharge=true) => {
+  public getData = async (emptyCharge = true) => {
     const { value } = this.state
-    const { extraFactor=true } = this.props
+    const { extraFactor = true } = this.props
     const data = (extraFactor) ? await this.restRef.current!.getData(false) : false
-    if(!(value+'').length && emptyCharge && !(Array.isArray(data) ? data.length : data)) {
+    if (!(value + '').length && emptyCharge && !(Array.isArray(data) ? data.length : data)) {
       await this.setState({
         error: true
       })
@@ -159,26 +172,26 @@ export default class extends Component<IProps, IState> {
 
   public render() {
 
-    const { 
-      radioboxOption=[], 
-      style={}, 
-      needHiddenList=true, 
-      extraFactor=true, 
-      error:propsError=false 
+    const {
+      radioboxOption = [],
+      style = {},
+      needHiddenList = true,
+      extraFactor = true,
+      error: propsError = false
     } = this.props
 
     const { show, error } = this.state
 
     const commonStyle = {
-      ...BUTTON_STYLE, 
+      ...BUTTON_STYLE,
       ...((error || propsError) ? FORM_ERROR : {}),
     }
     return (
       <View style={isObject(style) ? style : {}}>
-        <View 
+        <View
           className="title"
           style={{
-            ...customeStyle.backgroundColor('thirdly'), 
+            ...customeStyle.backgroundColor('thirdly'),
             ...customeStyle.border(1, 'primary', 'solid', 'all'),
             display: extraFactor ? 'block' : 'none'
           }}
@@ -187,33 +200,33 @@ export default class extends Component<IProps, IState> {
         </View>
         {
           (needHiddenList ? !show : false) ?
-          <AtButton type={'secondary'} onClick={this.open} customStyle={commonStyle}>打开</AtButton>
-          : null
+            <AtButton type={'secondary'} onClick={this.open} customStyle={commonStyle}>打开</AtButton>
+            : null
         }
         {
-          (needHiddenList ? show : true) ? 
-          <AtRadio
-            value={this.value}
-            options={radioboxOption}
-            onClick={this.handleChange}
-          ></AtRadio>
-          : null
+          (needHiddenList ? show : true) ?
+            <AtRadio
+              value={this.value}
+              options={radioboxOption}
+              onClick={this.handleChange}
+            ></AtRadio>
+            : null
         }
         {
-          extraFactor ? 
-          <Rest
-            ref={this.restRef}
-            title={'上面找不到可以手动添加, 但只添加一项'}
-            style={{marginBottom: '5px', display: (needHiddenList ? show : true) ? 'block' : 'none'}}
-            handleChange={this.handleRestChange}
-            value={this.restValue}
-          ></Rest>
-          : null
+          extraFactor ?
+            <Rest
+              ref={this.restRef}
+              title={'上面找不到可以手动添加, 但只添加一项'}
+              style={{ marginBottom: '5px', display: (needHiddenList ? show : true) ? 'block' : 'none' }}
+              handleChange={this.handleRestChange}
+              value={this.restValue}
+            ></Rest>
+            : null
         }
         {
-          <AtButton 
-            type={'secondary'} 
-            onClick={this.close} 
+          <AtButton
+            type={'secondary'}
+            onClick={this.close}
             customStyle={{ ...commonStyle, display: (needHiddenList ? show : false) ? 'block' : 'none' }}
           >
             收起

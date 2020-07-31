@@ -3,13 +3,13 @@ import { View } from '@tarojs/components'
 import Scroll from '~components/scrollList'
 import Chat, { createScrollId } from './components/chat'
 import GInput from './components/input'
-import { INewData } from './components/chat/index.d'
+import { INewData } from './components/chat'
 import { throttle, noop } from 'lodash'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { connect } from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
-import { createSystemInfo, mediaType, withTry } from '~utils'
+import { createSystemInfo, EMediaType, withTry } from '~utils'
 
 import './index.scss'
 
@@ -135,7 +135,7 @@ export default class extends Component<any> {
     const { data: list } = this.state
     //特指暂时不用
     let baseData: TBaseData = {
-      type: mediaType[type],
+      type: EMediaType[type],
       _id: this.id,
       loading: true,
     }

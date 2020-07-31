@@ -52,7 +52,7 @@ export default class extends Component<any> {
   }
 
   public state: any = {
-    rank: [],
+    data: [],
     rankType: [],
     showMore: false
   }
@@ -103,21 +103,12 @@ export default class extends Component<any> {
 
   //数据获取
   public fetchData = async (query: any, isInit=false) => {
-    const { rank } = this.state
-    const data = await getRankList({id: this.id, ...query})
-    if(data.length) {
-      let newData
-      if(isInit) {
-          newData = [ ...data ]
-      }else {
-          newData = [ ...rank, ...data ]
-      }
-      await this.setState({
-        rank: newData,
-      })
-      return data
-    }
-    return []
+    const { data } = this.state
+    const resData = await getRankList({id: this.id, ...query})
+    this.setState({
+      data: resData.length ? [ ...(isInit ? [] : data), ...resData ] : data
+    })
+    return resData || [] 
   }
 
   //获取排行榜分类列表
@@ -135,15 +126,10 @@ export default class extends Component<any> {
     })
   }
 
-  /* 
-  * 节流数据获取
-  */
   public throttleFetchData = throttle(this.fetchData, 2000)
 
   //查看详细信息
-  public getDetail = async ( id: string ) => {
-    router.push(routeAlias.detail, { id })
-  }
+  public getDetail = async ( id: string ) => router.push(routeAlias.detail, { id })
 
   //切换排行榜
   public exchangeRank = async (item, _: number) => {
@@ -165,9 +151,9 @@ export default class extends Component<any> {
   }
 
   public render() {
-    const { rank, rankType, showMore } = this.state
-    const data = rank.slice(0, 3)
-    const detail = rank.slice(3)
+    const { data, rankType, showMore } = this.state
+    const realData = data.slice(0, 3)
+    const detail = data.slice(3)
 
     const color = { color: TypeColor['primary'] }
     const hideConfig = { ...HIDE_MORE_CONFIG, iconInfo: { ...HIDE_ICON, ...color } }
@@ -183,7 +169,7 @@ export default class extends Component<any> {
             <Rank
               style={{padding: '0 20px', boxSizing: 'border-box'}}
               type={''}
-              list={data}
+              list={realData}
             />
             <AtGrid
               hasBorder={false}

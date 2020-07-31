@@ -1,30 +1,31 @@
-import { IFiles } from '~components/imgPicker/index.d'
-import { IItem } from '~components/mediaPicker/index.d'
+import { IFiles } from '~components/imgPicker'
+import { IItem } from '~components/mediaPicker'
 import { Item } from 'taro-ui/@types/timeline'
+
 export interface ItypeList {
   value: string
   id?: string
 }
 
 //权限类型
-export const AuthType = {
-  PUBLIC: 'PUBLIC',
-  PRIVATE: 'PRIVATE'
+export enum EAuthType {
+  PUBLIC = 'PUBLIC',
+  PRIVATE = 'PRIVATE'
 }
 
 //房间类型
-export const RoomType = {
-  CHAT: 'CHAT',
-  GROUP_CHAT: 'GROUP_CHAT',
-  SYSTEM: 'SYSTEM'
+export enum ERoomType {
+  CHAT = 'CHAT',
+  GROUP_CHAT = 'GROUP_CHAT',
+  SYSTEM = 'SYSTEM'
 }
 
 //媒体类型
-export const mediaType = {
-  VIDEO: 'VIDEO',
-  AUDIO: 'AUDIO',
-  IMAGE: 'IMAGE',
-  TEXT: 'IMAGE'
+export enum EMediaType {
+  VIDEO = 'VIDEO',
+  AUDIO = 'AUDIO',
+  IMAGE = 'IMAGE',
+  TEXT = 'TEXT'
 }
 
 //路由简写
@@ -80,30 +81,22 @@ export const routeConfig = [
 ]
 
 //轮播图路由跳转类型"MOVIE", "SPEICAL", "COMMENT"
-export const swiperRouteType = {
-  "MOVIE": "MOVIE",
-  "SPEICAL": "SPEICAL",
-  "COMMENT": "COMMENT"
+export enum ESwiperRouteType {
+  MOVIE = "MOVIE",
+  SPECIAL = "SPEICAL",
+  COMMENT = "COMMENT"
 }
 
 //数据获取方式
-export const sourceTypeList = {
-  Dva: Symbol('dva'),
-  Scope: Symbol('scrope')
+export enum ESourceTypeList {
+  Dva = 'Dva',
+  Scope = 'Scope'
 }
 
 //通知消息类型
-export const infomationType = {
-  attention: Symbol('attention'),
-  app: Symbol('app')
-}
-
-//详细消息类型
-export const newsType = {
-  image: 'image',
-  audio:'audio',
-  video: 'video',
-  text: 'text',
+export enum infomationType {
+  ATTENTION = 'ATTENTION',
+  APP = 'APP'
 }
 
 //响应类型

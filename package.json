@@ -44,7 +44,7 @@
 		"dva": "^2.4.1",
 		"dva-core": "^2.0.2",
 		"dva-loading": "^3.0.20",
-		"moment": "^2.24.0",
+		"dayjs": "^1.8.31",
 		"nerv-devtools": "^1.5.7",
 		"nervjs": "^1.5.7",
 		"redux": "^4.0.5",

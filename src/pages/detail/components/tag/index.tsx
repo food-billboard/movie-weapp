@@ -2,9 +2,15 @@ import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtTag } from 'taro-ui'
 import { isObject, ItypeList } from '~utils'
-import { IProps, IState } from './index.d'
 import { TypeColor } from '~theme/color'
 import './index.scss'
+
+export interface IProps {
+  list: Array<ItypeList>
+  style?: any
+}
+
+export interface IState {}
 
 const randomArea = () => {
   return Math.ceil(Math.random() * 20) + 'px'

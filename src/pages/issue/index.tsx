@@ -74,9 +74,7 @@ export default class extends Component<any> {
   private indexesRef = Taro.createRef<Indexes>()
 
   //色调修改时重绘用
-  public componentDidShow = () => {
-    colorStyleChange()
-  }
+  public componentDidShow = () => colorStyleChange()
 
   public componentDidMount = async () => {
     //强制刷新设置
@@ -99,7 +97,6 @@ export default class extends Component<any> {
     //验证
     fieldsStore.validateFields(['video', 'district', 'name', 'classify', 'director', 'actor', 'screen_time', 'description', 'author_description', 'author_rate', 'image', 'language', 'alias'], async (errors, values) => {
       //处理所有有错的表单项
-      console.log(errors, values)
       if(errors) {
         Taro.showToast({
           mask: false,

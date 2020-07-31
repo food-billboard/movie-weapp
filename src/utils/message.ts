@@ -1,6 +1,7 @@
 import IO from 'socket.io-client'   
+import Taro from '@tarojs/taro'
 import dva from './dva'         
-import { RoomType, mediaType, getToken } from '~utils'
+import { ERoomType, EMediaType, getToken } from '~utils'
 import router from './router'
 import { routeAlias } from './globalType'
 
@@ -47,7 +48,11 @@ socket
 // //退出聊天室
 // .on('quit_room', () => {})
 
-type TMessageType = 'CHAT' | 'GROUP_CHAT' | 'SYSTEM'
+enum TMessageType{
+  CHAT = 'CHAT',
+  GROUP_CHAT = 'GROUP_CHAT',
+  SYSTEM = 'SYSTEM'
+}
 
 export interface IGetMessageDetail {
   _id: string
@@ -57,7 +62,7 @@ export interface IGetMessageDetail {
 }
 
 export interface IGetMessageDetailResponse {
-  type: keyof typeof mediaType
+  type: EMediaType
   content: string
   createdAt: string | number
   _id: string
@@ -97,7 +102,7 @@ export interface IDeleteMessage {
 export interface IPostMessage {
   _id: string
   content: string
-  type: keyof typeof mediaType
+  type: EMediaType
   point_to?: string
 }
 

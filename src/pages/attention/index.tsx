@@ -1,4 +1,4 @@
-import Taro, {Component, Config } from '@tarojs/taro'
+import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import GScrollView from '~components/scrollList'
 import ImageLoading from '~components/imageLoading'
@@ -13,117 +13,102 @@ import './index.scss'
 
 export default class extends Component<any>{
 
-    public static config: Config = {
-        navigationBarTitleText: '关注',
-        enablePullDownRefresh: true
-    }
+  public static config: Config = {
+    navigationBarTitleText: '关注',
+    enablePullDownRefresh: true
+  }
 
-    public state: any = {
-        attention: []
-    }
+  public state: any = {
+    data: []
+  }
 
-    //用户id
-    readonly id = this.$router.params.id
+  //用户id
+  readonly id = this.$router.params.id
 
-    private scrollRef = Taro.createRef<GScrollView>()
+  private scrollRef = Taro.createRef<GScrollView>()
 
-    public componentDidShow = () => {
-        colorStyleChange()
-    }
+  public componentDidShow = () => {
+    colorStyleChange()
+  }
 
-    //下拉刷新
-    public onPullDownRefresh = async () => {
-        await this.scrollRef.current!.handleToUpper()
-        Taro.stopPullDownRefresh()
-    }
-    
-    //上拉加载
-    public onReachBottom = async () => {
-        await this.scrollRef.current!.handleToLower()
-    }
+  //下拉刷新
+  public onPullDownRefresh = async () => {
+    await this.scrollRef.current!.handleToUpper()
+    Taro.stopPullDownRefresh()
+  }
 
-    /**
-     * 获取数据
-     */
-    public fetchData = async (query: any, isInit=false) => {
-        const { attention } = this.state
-        const method = this.id ? getUserAttention : getCustomerAttention
-        const args = this.id ? { id: this.id } : {}
-        const data = await method({...args, ...query})
+  //上拉加载
+  public onReachBottom = async () => {
+    await this.scrollRef.current!.handleToLower()
+  }
 
-        let newData
-        if(isInit) {
-            newData = [ ...data ]
-        }else {
-            newData = [ ...attention, ...data ]
+  //获取数据
+  public fetchData = async (query: any, isInit = false) => {
+    const { data } = this.state
+    const method = this.id ? getUserAttention : getCustomerAttention
+    const args = this.id ? { id: this.id } : {}
+    const resData = await method({ ...args, ...query })
+
+    this.setState({
+      data: [...(isInit ? [] : data), ...resData]
+    })
+    return resData
+  }
+
+  public throttleFetchData = throttle(this.fetchData, 2000)
+
+  private getUser = (id: string) => router.push(routeAlias.user, { id })
+
+  public render() {
+
+    const { data } = this.state
+
+    return (
+      <GScrollView
+        ref={this.scrollRef}
+        sourceType={'Scope'}
+        scrollWithAnimation={true}
+        query={{ pageSize: 20 }}
+        style={{ ...style.backgroundColor('bgColor') }}
+        fetch={this.throttleFetchData}
+        renderContent={
+          <View>
+            {
+              data.map(({ avatar, username, _id: id }) => {
+                return (
+                  <View className={'list'}
+                    style={{ ...style.border(1, 'disabled', 'solid', 'bottom') }}
+                    key={id}
+                    onClick={this.getUser.bind(this, id)}
+                  >
+                    <ImageLoading
+                      src={avatar}
+                      loadingProps={{ content: '' }}
+                      customStyle={{
+                        width: `${SYSTEM_PAGE_SIZE(45)}px`,
+                        height: `${SYSTEM_PAGE_SIZE(45)}px`,
+                        borderRadius: '50%',
+                        overflow: 'hidden',
+                        marginTop: `${SYSTEM_PAGE_SIZE(2.5)}px`,
+                        marginRight: `${SYSTEM_PAGE_SIZE(10)}px`,
+                        float: 'left'
+                      }}
+                    />
+                    <View className={'username'}
+                      style={{ ...style.color('primary') }}
+                    >
+                      {username}
+                    </View>
+                    <Text className={'enter'}
+                      style={{ ...style.color('thirdly') }}
+                    >{'>'}</Text>
+                  </View>
+                )
+              })
+            }
+          </View>
         }
-        await this.setState({
-            attention: newData
-        })
-
-        return data
-    }
-
-    /**
-     * 节流数据获取
-     */
-    public throttleFetchData = throttle(this.fetchData, 2000)
-
-    /**
-     * 获取用户信息
-     */
-    public getUser = (id: string) => {
-        router.push(routeAlias.user, { id })
-    }
-
-    public render() {
-        const { attention } = this.state
-
-        return (
-            <GScrollView 
-                ref={this.scrollRef}
-                sourceType={'Scope'}
-                scrollWithAnimation={true}
-                query={{ pageSize: 20 }}
-                style={{...style.backgroundColor('bgColor')}}
-                renderContent={<View>
-                    {
-                        attention.map((value) => {
-                            const { avatar, username, _id: id } = value  
-                            return (
-                                <View className={'list'}
-                                    style={{...style.border(1, 'disabled', 'solid', 'bottom')}}
-                                    key={id}
-                                    onClick={this.getUser.bind(this, id)}    
-                                >
-                                    <ImageLoading 
-                                        src={avatar} 
-                                        loadingProps={{content: ''}}
-                                        customStyle={{
-                                            width:`${SYSTEM_PAGE_SIZE(45)}px`,
-                                            height:`${SYSTEM_PAGE_SIZE(45)}px`,
-                                            borderRadius: '50%',
-                                            overflow:'hidden',
-                                            marginTop:`${SYSTEM_PAGE_SIZE(2.5)}px`,
-                                            marginRight:`${SYSTEM_PAGE_SIZE(10)}px`,
-                                            float:'left'
-                                        }}
-                                    />
-                                    <View className={'username'} 
-                                        style={{...style.color('primary')}}
-                                    >
-                                        {username}
-                                    </View>
-                                    <Text className={'enter'}
-                                        style={{...style.color('thirdly')}}
-                                    >{'>'}</Text>
-                                </View>
-                            )
-                        })
-                    }
-                </View>}
-                fetch={this.throttleFetchData}
-            ></GScrollView>
-        )
-    }
+      ></GScrollView>
+    )
+  }
 }

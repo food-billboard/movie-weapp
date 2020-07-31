@@ -1,12 +1,22 @@
 import Taro, { Component } from '@tarojs/taro'
 import { ScrollView, View, Text } from '@tarojs/components'
 import ImageLoading from '~components/imageLoading'
-import { IProps, IState, IList } from './index.d'
 import { SYSTEM_PAGE_SIZE } from '~config'
 
 import './index.scss'
 
-export default class extends Component<IProps> {
+export interface IList {
+  name: string
+  image: string
+ }
+
+ export interface IProps {
+  list: Array<IList>
+ }
+
+ export interface IState {}
+
+export default class extends Component<IProps, IState> {
 
   public handlePreviewImage = (image: string) => {
     const { list } = this.props

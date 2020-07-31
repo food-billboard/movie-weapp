@@ -15,7 +15,7 @@ export default class extends Component<any>{
   readonly id = this.$router.params.id
 
   public state: any = {
-    list: [],
+    data: [],
     title: false
   }
 
@@ -43,38 +43,27 @@ export default class extends Component<any>{
    * 获取数据
    */
   public fetchData = async (query: any, isInit=false) => {
-    const { list } = this.state
+    const { data } = this.state
     const { name, movie } = await getSpecial({id: this.id, ...query})
 
-    let newData
-    if(isInit) {
-        newData = [ ...movie ]
-    }else {
-        newData = [ ...list, ...movie ]
-    }
     await this.setState({
-        list: newData,
+        data: [ ...(isInit ? [] : data), ...movie ],
         title: name
     })
     return movie
   }
 
-  /**
-   * 节流数据获取
-   */
   public throttleFetchData = throttle(this.fetchData, 2000)
 
-  /**
-   * 获取电影详情
-   */
-  public getDetail = (id: string) => {
-    router.push(routeAlias.detail, { id })
-  }
+  //获取电影详情
+  public getDetail = (id: string) => router.push(routeAlias.detail, { id })
 
   public render() {
 
-    const { list } = this.state
+    const { data } = this.state
+
     this.setTitle()
+    
     return (
       <Scroll
         ref={this.scrollRef}
@@ -83,7 +72,7 @@ export default class extends Component<any>{
         sourceType={'Scope'}
         scrollWithAnimation={true}
         fetch={this.throttleFetchData}
-        renderContent={<IconList list={list.map(item => {
+        renderContent={<IconList list={data.map(item => {
           const { _id, poster, ...nextItem } = item
           return {
             ...nextItem,
