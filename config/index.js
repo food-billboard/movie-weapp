@@ -19,27 +19,28 @@ const config = {
   },
   sourceRoot: 'src',
   outputRoot: 'dist',
-  babel: {
-    sourceMap: true,
-    presets: [['env', { modules: false }]],
-    plugins: [
-      'transform-decorators-legacy',
-      'transform-class-properties',
-      'transform-object-rest-spread',
-      ['transform-runtime', {
-        "helpers": false,
-        "polyfill": false,
-        "regenerator": true,
-        "moduleName": 'babel-runtime'
-      }]
-    ]
-  },
+  // babel: {
+  //   sourceMap: true,
+  //   presets: [['env', { modules: false }]],
+  //   plugins: [
+  //     'transform-decorators-legacy',
+  //     'transform-class-properties',
+  //     'transform-object-rest-spread',
+  //     ['transform-runtime', {
+  //       "helpers": false,
+  //       "polyfill": false,
+  //       "regenerator": true,
+  //       "moduleName": 'babel-runtime'
+  //     }]
+  //   ]
+  // },
   plugins: [
     '@tarojs/plugin-sass',
     "@tarojs/plugin-uglify"
   ],
   // defineConstants: {
   // },
+  framework: 'react',
   copy: {
     patterns: [
     ],
