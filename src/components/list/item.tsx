@@ -1,6 +1,7 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
+import { ItypeList } from '~utils'
 
 import './index.scss'
 

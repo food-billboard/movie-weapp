@@ -13,7 +13,7 @@ export interface IProps {
   active: number
   type: primary | secondary | undefined
   operate?: (...args: any) => any
-  style?: any
+  style?: React.CSSProperties
 }
 
 export interface IState {

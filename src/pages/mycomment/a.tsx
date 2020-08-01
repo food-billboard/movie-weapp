@@ -10,7 +10,7 @@ import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { withTry } from '~utils'
 import { mapDispatchToProps, mapStateToProps } from './connect'
-import { connect } from '@tarojs/redux'
+import { connect } from 'react-redux'
 import { getCustomerComment, getCustomerUserComment, getUserComment, postCommentToUser, cancelLike, putLike } from '~services'
 
 import './index.scss'

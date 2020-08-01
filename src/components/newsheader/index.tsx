@@ -1,7 +1,6 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
-import { IProps, IState } from './index.d'
 import Ellipsis from '../ellipsis'
 import ImageLoading from '../imageLoading'
 import style from '~theme/style'
@@ -18,7 +17,7 @@ interface IContent {
 
 export interface IProps {
   content: IContent
-  style?: {} | object
+  style?: React.CSSProperties
 }
 
 export interface IState {

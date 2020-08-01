@@ -8,8 +8,8 @@ import { noop } from '~lodash'
 import './index.scss'
 
 export interface IProps {
-  contentStyle?: any
-  curtainStyle?: any
+  contentStyle?: React.CSSProperties
+  curtainStyle?: React.CSSProperties
   title: boolean
   main: boolean
   action: boolean

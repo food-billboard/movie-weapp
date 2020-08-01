@@ -17,7 +17,7 @@ export interface IOption {
 }
 
 export interface IProps {
-  style?: any
+  style?: React.CSSProperties
   value: Array<string>
   checkboxOption?: Array<IOption>
   needHiddenList?: boolean

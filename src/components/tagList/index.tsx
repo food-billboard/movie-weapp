@@ -16,7 +16,7 @@ export interface Item {
 export interface IProps extends AtTagProps {
   list: Array<Item>
   error?: boolean
-  style?: any
+  style?: React.CSSProperties
   handleChange: (items: Array<Item>) => any
 }
 

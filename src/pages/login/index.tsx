@@ -4,7 +4,7 @@ import { View } from '@tarojs/components'
 import { AtInput, AtForm, AtButton } from 'taro-ui'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
-import { connect } from '@tarojs/redux'
+import { connect } from 'react-redux'
 import { mapStateToProps, mapDispatchToProps } from './connect'
 import { router, routeAlias, withTry } from '~utils'
 

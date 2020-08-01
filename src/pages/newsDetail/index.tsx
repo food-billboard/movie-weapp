@@ -8,7 +8,7 @@ import { INewData } from './components/chat'
 import { throttle, noop } from 'lodash'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
-import { connect } from '@tarojs/redux'
+import { connect } from 'react-redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
 import { createSystemInfo, EMediaType, withTry } from '~utils'
 

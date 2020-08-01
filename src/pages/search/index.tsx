@@ -10,14 +10,14 @@ import GScrollView from '~components/scrollList'
 import RadioList from './components/radio'
 import Method from './components/method'
 import Forms from './components/form'
-import { debounce, throttle } from 'lodash'
+import { debounce, throttle } from '~lodash'
 import { FormData, searchQuery } from './interface'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import { AtDrawer } from 'taro-ui'
-import { Item } from '~components/indexes/index.d'
-import { TIndexesType } from '../issue/interface'
+import { Item } from '~components/indexes'
+import { EIndexesType } from '../issue/interface'
 import { withTry } from '~utils'
 import { } from '~services'
 
@@ -243,7 +243,7 @@ export default class Index extends Component<any> {
   }
 
   //索引选择
-  public handleSelectIndexes = (item: Item, type: TIndexesType) => {
+  public handleSelectIndexes = (item: Item, type: EIndexesType) => {
     //隐藏索引
     this.setState({
       indexesVisible: false

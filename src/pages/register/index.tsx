@@ -6,7 +6,7 @@ import { AtInput, AtForm, AtButton } from 'taro-ui'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { mapDispatchToProps, mapStateToProps } from './connect'
-import { connect } from '@tarojs/redux'
+import { connect } from 'react-redux'
 import { Toast } from '~components/toast'
 
 import './index.scss'

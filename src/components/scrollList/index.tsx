@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { View, ScrollView, Text } from '@tarojs/components'
 import { AtActivityIndicator } from 'taro-ui'
 import GDivider from '~components/divider'
-import GResult from '~component/result'
+import GResult from '~components/result'
 import Top from '../topbutton'
 import { isObject, ESourceTypeList } from '~utils'
 import customStyle from '~theme/style'
@@ -12,7 +12,7 @@ import './index.scss'
 
 export interface IProps {
   sourceType: ESourceTypeList
-  style?: any
+  style?: React.CSSProperties
   autoFetch?: boolean
   query?: any
   fetch: (...args: any[]) => any
@@ -57,8 +57,8 @@ export default class List extends Component<IProps, IState> {
     loading: false,
   }
 
-  public constructor() {
-    super(...arguments)
+  public constructor(props) {
+    super(props)
     this.state.query = { ...INIT_QUERY, ...this.props.query }
   }
 

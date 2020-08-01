@@ -1,6 +1,6 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
-import { Provider } from '@tarojs/redux'
+import { Provider } from 'react-redux'
 import { dva, router, includes } from '~utils'
 import Index from './pages/main/index'
 import configure from './configure'
@@ -61,7 +61,6 @@ const app = dva.createDva({
 
 //获取store
 const store = app.getStore()
-
 
 class App extends Component {
 

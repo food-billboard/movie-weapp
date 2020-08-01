@@ -14,7 +14,7 @@ export interface IProps {
   id?: string,
   loop?: boolean,
   muted?: boolean,
-  style?: any
+  style?: React.CSSProperties
 }
 
 export default class Media extends Component<IProps>{

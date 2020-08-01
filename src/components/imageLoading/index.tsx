@@ -15,8 +15,8 @@ import './index.scss'
 export interface IProps extends ImageProps {
   loadingProps?: AtActivityIndicatorProps
   border?: false | string
-  customStyle?: false | any
-  imageStyle?: false | any
+  customStyle?: React.CSSProperties
+  imageStyle?: React.CSSProperties
   handleClick?: (...args: any[]) => any
 }
 

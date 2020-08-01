@@ -7,7 +7,7 @@ import GButton from '~components/button'
 import { TypeColor, colorStyleChange } from '~theme/color'
 import { mapStateToProps, mapDispatchToProps } from './connect'
 import { router, routeAlias, withTry } from '~utils'
-import { connect } from '@tarojs/redux'
+import { connect } from 'react-redux'
 import style from '~theme/style'
 import { getUserInfo, getCustomerAntoherUserInfo, toAttention, cancelAttention } from '~services'
 

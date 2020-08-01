@@ -9,7 +9,7 @@ import './index.scss'
 export interface IProps {
   text: string
   needPoint?: boolean
-  style?: any
+  style?: React.CSSProperties
 }
 
 export interface IState {

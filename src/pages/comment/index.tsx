@@ -10,7 +10,7 @@ import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
 import { throttle } from 'lodash'
 import { withTry } from '~utils'
-import { connect } from '@tarojs/redux'
+import { connect } from 'react-redux'
 import { mapDispatchToProps, mapStateToProps } from './connect'
 import { getCustomerMovieCommentList, getMovieCommentList, getMovieDetailSimple, postCommentToUser, postCommentToMovie, putLike, cancelLike } from '~services'
 

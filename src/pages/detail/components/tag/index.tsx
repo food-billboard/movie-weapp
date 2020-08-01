@@ -8,7 +8,7 @@ import './index.scss'
 
 export interface IProps {
   list: Array<ItypeList>
-  style?: any
+  style?: React.CSSProperties
 }
 
 export interface IState {}

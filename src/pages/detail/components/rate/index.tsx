@@ -12,7 +12,7 @@ export interface IProps {
   rate: (value: number) => any
   value: number
   readonly?: boolean
-  style?: any
+  style?: React.CSSProperties
 }
 
 export interface IState {}
