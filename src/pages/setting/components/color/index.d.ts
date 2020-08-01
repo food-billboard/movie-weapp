@@ -1,4 +1,4 @@
-import { Color } from '~theme/global-style'
+
 /**
  * 色调选择
  * props: {

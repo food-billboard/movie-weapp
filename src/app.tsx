@@ -1,4 +1,3 @@
-import '@tarojs/async-await'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { Provider } from '@tarojs/redux'
 import { dva, router, includes } from '~utils'
@@ -23,22 +22,23 @@ const app = dva.createDva({
     const response = e.response
     if(response){
       const { statusCode } = response
+      let toast: Taro.showToast.Option
       if( statusCode === 404 ){
-        let toast = { title: '404 调用错误，无此接口', icon: 'none' };
+        toast = { title: '404 调用错误，无此接口', icon: 'none' };
         Taro.showToast(toast);
       }else if (statusCode >= 500) {
-        let toast = { title: '当前网络异常，请稍后重试', icon: 'none' };
+        toast = { title: '当前网络异常，请稍后重试', icon: 'none' };
         if (response.data && response.data.err) {
           toast.title = response.data.err;
         }
         Taro.showToast(toast);
       }else if( statusCode === 401 ){
-        const toast = { title: '未登录', icon: 'none' };
+        toast = { title: '未登录', icon: 'none' };
         Taro.showToast(toast);
         router.replace('/login')
       }else if( statusCode === 200 ){
         const body = response.data
-        const toast = { title: body.err.msg || '当前网络异常，请稍后重试', icon: 'none' };
+        toast = { title: body.err.msg || '当前网络异常，请稍后重试', icon: 'none' };
         Taro.showToast(toast);
         if( body.err && includes(['401'], body.err.code) ){
           router.replace('/login')
@@ -49,7 +49,7 @@ const app = dva.createDva({
       }
       return
     }
-    const toast = { title: '当前网络异常，请稍后重试', icon: 'none' };
+    const toast:Taro.showToast.Option = { title: '当前网络异常，请稍后重试', icon: 'none' };
     Taro.showToast(toast);
   },
   initialState: {}
@@ -64,75 +64,19 @@ const store = app.getStore()
 
 class App extends Component {
 
-  public config: Config = {
-    pages: [
-      'pages/main/index',
-      'pages/mine/index',
-      'pages/setting/index',
-      'pages/news/index',
-      'pages/mycomment/index',
-      'pages/attention/index',
-      'pages/record/index',
-      'pages/detail/index',
-      'pages/comment/index',
-      'pages/user/index',
-      'pages/search/index',
-      'pages/type/index',
-      'pages/rank/index',
-      'pages/store/index',
-      'pages/commentdetail/index',
-      'pages/issue/index',
-      'pages/userissue/index',
-      'pages/special/index',
-      'pages/fans/index',
-      'pages/newsdetail/index'
-    ],
-    window: {
-      backgroundTextStyle: 'dark',
-      navigationBarTextStyle: 'black',
-      navigationBarBackgroundColor: '#fff',
-      onReachBottomDistance: 25,
-      enablePullDownRefresh: false
-    },
-    tabBar: {
-      "color": "black",
-      "selectedColor": "#ff6600",
-      "list": [
-        {
-          "pagePath": "pages/main/index",
-          "text": "首页",
-          "iconPath": "./assets/home-icon.png",
-          "selectedIconPath": './assets/home-icon-active.png'
-        },
-        {
-          "pagePath": "pages/issue/index",
-          "text": "发布",
-          "iconPath": "./assets/issue-icon.png",
-          "selectedIconPath": './assets/issue-icon-active.png'
-        },
-        {
-          "pagePath": "pages/mine/index",
-          "text": "我的",
-          "iconPath": "./assets/mine-icon.png",
-          "selectedIconPath": './assets/mine-icon.png'
-        }
-      ]
-    },
-  }
-
   public componentWillMount = async () => {
     // if( process.env.TARO_ENV === 'weapp' ){
     //   Taro.cloud.init({traceUser: true})
     // }
 
-    // const dispatch = dva.getDispatch();
+    const dispatch = dva.getDispatch()
 
-    // await Taro.showLoading({mask: true, title: '加载中'})
-    // if( !includes(['/my'], router.getOptions().alias) ) {
-    //    // 获取个人详情判断是否已经登录
-    //   await dispatch({ type: 'global/getUserInfo'});
-    // }
-    // await Taro.hideLoading();
+    await Taro.showLoading({mask: true, title: '加载中'})
+    if( includes(['/mine', '/news', '/issue'], router.getOptions().alias) ) {
+       // 获取个人详情判断是否已经登录
+      await dispatch({ type: 'global/getUserInfo'})
+    }
+    await Taro.hideLoading();
   }
 
   public componentDidMount () {}

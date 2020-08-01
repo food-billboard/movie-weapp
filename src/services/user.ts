@@ -1,4 +1,4 @@
-import {request} from '~utils'
+import { request, getToken } from '~utils'
 
 //其他用户信息
 export const getUserInfo = (id: string) => {
@@ -21,7 +21,7 @@ export const getUserAttention = ({ id, currPage=0, pageSize=30  }: { id: string,
 }
 
 //其他用户发布的电影
-export const getUserMovie = ({ id, currPage=0, pageSize=30  }: { id: string, currPage: number, pageSize: number }) => {
+export const getUserIssue = ({ id, currPage=0, pageSize=30  }: { id: string, currPage: number, pageSize: number }) => {
   return request('GET', '/api/user/customer/movie', { query: { _id: id, currPage, pageSize } })
 }
 
@@ -66,8 +66,8 @@ export const getSwiper = (count:number=6) => {
 }
 
 //登录
-export const signin = ({ mobile, password, uid }: { mobile: number, password: string, uid: string | undefined }) => {
-  return request('POST', `/api/user/logon/signout`, { data: { password, mobile, uid } })
+export const signin = ({ mobile, password, uid }: { mobile: string, password: string, uid?: string | undefined }) => {
+  return request('POST', `/api/user/logon/account`, { data: { password, mobile, uid } })
 }
 
 //注册
@@ -77,11 +77,11 @@ export const register = ({ mobile, password, uid }: { mobile: number, password: 
 
 //退出
 export const signout = () => {
-  return request('POST', '/api/user/logon/signout')
+  return request('POST', '/api/user/logon/signout', { header: getToken(true) })
 }
 
 //分类(首页)
-export const getClassify = (count:number) => {
+export const getClassify = (count?:number) => {
   return request('GET', '/api/user/movie/classify/specDropList', {query: { count }})
 }
 
@@ -96,7 +96,7 @@ export const getUserMovieDetail = (id:string) => {
 }
 
 //简易评论(电影页面)
-export const getCommentSimple = ({ id, count=30 }: { id: string, count: number }) => {
+export const getCommentSimple = ({ id, count=30 }: { id: string, count?: number }) => {
   return request('GET', '/api/user/movie/detail/comment', {query: { _id: id, count }})
 }
 
@@ -111,7 +111,7 @@ export const getMovieCommentList = ({ id, currPage=0, pageSize=30 }: { id: strin
 }
 
 //电影评论详情
-export const getMovieCommentDetail = ({ id, currPage=0, pageSize=30 }: { id: string, currPage: number, pageSize: number }) => {
+export const getUserMovieCommentDetail = ({ id, currPage=0, pageSize=30 }: { id: string, currPage: number, pageSize: number }) => {
   return request('GET', '/api/user/movie/detail/comment/detail', { query: { _id: id, currPage, pageSize } })
 }
 
@@ -129,3 +129,28 @@ export const getRankType = (count: number) => {
 export const getAppInfo = () => {
   return request('GET', '/api/user/setting/info')
 } 
+
+//语言列表
+export const getLanguageList = (count:number=-1) => {
+  return request('GET', '/api/user/movie/language', { query: { count } })
+}
+
+//地区列表
+export const getDistrictList = (count:number=-1) => {
+  return request('GET', '/api/user/movie/district', { query: { count } })
+}
+
+//导演列表
+export const getDirectorList = (count:number=-1) => {
+  return request('GET', '/api/user/movie/director', { query: { count } })
+}
+
+//演员列表
+export const getActorList = (count: number = -1) => {
+  return request('GET', '/api/user/movie/actor', { query: { count } })
+}
+
+//排序列表
+export const getOrderList = () => {
+  return request('GET', '/api/user/movie/order/list')
+}

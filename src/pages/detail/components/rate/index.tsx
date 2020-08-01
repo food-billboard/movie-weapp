@@ -1,96 +1,61 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import { AtRate } from 'taro-ui'
-import { IProps, IState } from './index.d'
 import style from '~theme/style'
-import { SYSTEM_PAGE_SIZE, getCookie } from '~config'
-import {connect} from '@tarojs/redux'
-import {mapDispatchToProps, mapStateToProps} from './connect'
-import { size, withTry } from '~utils'
+import { SYSTEM_PAGE_SIZE } from '~config'
+import { noop } from 'lodash'
 
 import './index.scss'
 
-@connect(mapStateToProps, mapDispatchToProps)
+export interface IProps {
+  rate: (value: number) => any
+  value: number
+  readonly?: boolean
+  style?: any
+}
+
+export interface IState {}
+
 export default class GTate extends Component<IProps, IState>{
-    public static defaultProps: IProps = {
-        getUserInfo: () => {},
-        sendRate: () => {},
-        getRate: () => {},
-        movie: '',
-    }
 
-    public state: IState = {
-        value: 0
-    }
+  public static defaultProps: IProps = {
+    value: 0,
+    rate: noop,
+  }
 
-    public componentDidMount = async () => {
-        this.fetchData()
-    }
+  //监听分数变化
+  public handleChange = async (value: number) => await this.props.rate(value)
 
-    //数据获取
-    public fetchData = async () => {
-        const rate = await this.props.getRate(this.props.movie)
-        const data = rate.rate
-        this.setState({
-            value: data
-        })
-    }
+  public render() {
+    
+    const { readonly = false, value, style: customerStyle = {} } = this.props
 
-    //评分
-    public sendRate = async (value: string | number) => {
-
-        const userInfo = getCookie('user') || {}
-        if(!size(userInfo)) {
-            this.props.getUserInfo()
-            return
+    return (
+      <View className='rate'
+        style={{ ...customerStyle }}
+      >
+        {
+          readonly ?
+            <AtRate
+              className='star'
+              size={SYSTEM_PAGE_SIZE(25)}
+              max={10}
+              value={value}
+            />
+            :
+            <AtRate
+              className='star'
+              size={SYSTEM_PAGE_SIZE(25)}
+              max={10}
+              value={value}
+              onChange={(value) => { this.handleChange.call(this, value) }}
+            />
         }
-
-        const { id } = userInfo
-
-        await this.props.getUserInfo()
-        const {movie} = this.props
-        Taro.showLoading({mask: true, title: '评分中'})
-        await withTry(this.props.sendRate)(value, id, movie)
-        Taro.hideLoading()
-    }
-
-    /**
-     * 监听分数变化
-     */
-    public handleChange = async (value: number) => {
-        await this.setState({
-            value
-        })
-        await this.sendRate(value)
-    }
-
-    public render() {
-        const { value } = this.state
-        const { readonly=false } = this.props
-        return (
-            <View className='rate'>
-                {
-                    readonly ? 
-                    <AtRate
-                        className='star'
-                        size={SYSTEM_PAGE_SIZE(25)}
-                        max={10}
-                        value={value}
-                    /> 
-                    :
-                    <AtRate
-                        className='star'
-                        size={SYSTEM_PAGE_SIZE(25)}
-                        max={10}
-                        value={value}
-                        onChange={(value) => {this.handleChange.call(this, value)}}
-                    /> 
-                }
-                <Text 
-                    className='number'
-                    style={{...style.color('secondary')}}
-                >{value}</Text>
-            </View>
-        )
-    }
+        <Text
+          className='number'
+          style={{ ...style.color('secondary') }}
+        >{value}</Text>
+      </View>
+    )
+  }
 }

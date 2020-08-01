@@ -27,15 +27,10 @@ import { FormData } from '../../interface'
  *  feeOption: 价格配置
  * }
  */
-interface ILang {
-  id: string,
-  value: string,
-  image: string
-}
 
 export interface IProps {
   screen: (formData: FormData) => void
-  getLanguageList: () => any
+  indexesShow: (...args: Array<any>) => any
 }
 
 interface FeeOption {
@@ -49,6 +44,5 @@ export interface FormDefault {
 }
 
 export interface IState {
-  lang: Array<ILang>
   open: boolean
 }

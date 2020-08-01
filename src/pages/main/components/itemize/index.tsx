@@ -1,40 +1,52 @@
-import Taro, {Component} from '@tarojs/taro'
+import Taro, { Component } from '@tarojs/taro'
 import { AtGrid } from 'taro-ui'
 import { router, routeAlias } from '~utils'
-import { IProps, IState, List } from './index.d'
+
+export interface List {
+  _id: string,
+  name: string,
+  poster: string
+}
+
+export interface IProps {
+  columnNum: number,
+  list: Array<List>
+}
+
+export interface IState {}
 
 const COLUMN_COUNT = 4
 
 class Itemize extends Component<IProps, IState>{
-    public static defaultProps = {
-        columnNum: COLUMN_COUNT,
-        list: []
-    }
+  public static defaultProps:IProps = {
+    columnNum: COLUMN_COUNT,
+    list: []
+  }
 
-    public state:IState = {
-       
-    }
+  //分类跳转
+  public goTo = (item: any, _: number) => router.push(routeAlias.type, { id: item.id })
 
-    /**
-     * 分类跳转
-     */
-    public goTo = (item: List, index: number) => {
-        const { id } = item
-        return router.push(routeAlias.type, {id})
-    }
+  public render() {
 
-    public render() {
-        const { list, columnNum } = this.props
-        return (
-            <AtGrid 
-                mode='square' 
-                hasBorder={false} 
-                data={list} 
-                columnNum={columnNum}	
-                onClick={this.goTo}
-            />
-        )
-    }
-}   
+    const { list, columnNum } = this.props
+    
+    return (
+      <AtGrid
+        mode='square'
+        hasBorder={false}
+        data={list.map(item => {
+          const { _id, poster, name } = item
+          return {
+            id: _id,
+            image: poster,
+            value: name
+          }
+        })}
+        columnNum={columnNum}
+        onClick={this.goTo}
+      />
+    )
+  }
+}
 
 export default Itemize

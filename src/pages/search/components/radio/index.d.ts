@@ -20,7 +20,6 @@
 
 export interface IProps {
   screen: (value: string) => void
-  getOrderList: () => any
 }
 
 export interface IRadio {

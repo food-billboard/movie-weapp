@@ -3,13 +3,13 @@ import { View } from '@tarojs/components'
 import Scroll from '~components/scrollList'
 import Chat, { createScrollId } from './components/chat'
 import GInput from './components/input'
-import { IList, INewData } from './components/chat/index.d'
+import { INewData } from './components/chat'
 import { throttle, noop } from 'lodash'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { connect } from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
-import { newsType, responseType, createSystemInfo } from '~utils'
+import { createSystemInfo, EMediaType, withTry } from '~utils'
 
 import './index.scss'
 
@@ -19,6 +19,8 @@ interface IVideoType {
   image: string,
   video: string
 }
+
+type TBaseData = Exclude<INewData, 'content' | 'scrollId'> 
 
 const systemInfo = createSystemInfo()
 
@@ -39,9 +41,6 @@ export default class extends Component<any> {
   //通知信息id
   private id = this.$router.params.id
 
-  //用户id
-  private userId = this.props.userInfo.id
-
   //底部节点
   readonly bottomNode: any = Taro.createSelectorQuery().select('#_bottom').boundingClientRect()
 
@@ -57,6 +56,10 @@ export default class extends Component<any> {
   public componentDidMount = () => {
     this.fetchBottomHeight()
     this.windowHeight = systemInfo.getScreenInfo().windowHeight
+  }
+
+  public componentWillUnmount = async () => {
+    await this.props.leaveRoom(this.id)
   }
   
   //获取底部聊天区域高度
@@ -83,10 +86,11 @@ export default class extends Component<any> {
 
   //设置标题
   public setTitle = async () => {
-    const { info } = this.state
-    if(info && FIRST) {
+    const { simpleList } = this.props
+    if(simpleList && FIRST) {
         FIRST = false
-        const { username='' } = info
+        const [ info ] = simpleList.filter(item => item._id === this.id)
+        const { info: { username } } = info
         Taro.setNavigationBarTitle({title: username})
     }
   }
@@ -99,27 +103,24 @@ export default class extends Component<any> {
     setLoading(true)
 
     const { data: stateData } = this.state
-    const data = await this.props.getNewsDetail({id: this.id, user: this.userId, ...query})
-    const {info} = data
-    const { data: list, ...other } = info
-    let newData
-    const scrollIdList = list.map((val: IList) => {
+    const data = await this.props.getMessageDetail({ id: this.id, ...query })
+    let newData = [ ...stateData ]
+    const scrollIdList = data.map(val => {
       return {
         ...val,
         scrollId: createScrollId()
       }
     })
-    if(isInit) {
-        newData = [ ...scrollIdList ]
-    }else {
-        newData = [ ...scrollIdList, ...stateData ]
+
+    if(!isInit) {
+      newData = [ ...scrollIdList, ...newData ]
     }
-    await this.setState({
-        info: other,
-        data: newData,
-    }, () => {
-      setLoading(false)
+
+    this.setState({
+      data: newData
     })
+
+    setLoading(false)
 
     return scrollIdList
   }
@@ -132,39 +133,26 @@ export default class extends Component<any> {
   //不同类型消息发送
   public sendMediaInfo = async (type, data: string | IVideoType| Array<string>) => {
     const { data: list } = this.state
-
-    let infoType
-    switch(type) {
-      case newsType.audio:
-        infoType = newsType.audio
-        break
-      case newsType.image:
-        infoType = newsType.image
-        break
-      case newsType.text:
-        infoType = newsType.text
-        break
-      case newsType.video:
-        infoType = newsType.video
-        break
+    //特指暂时不用
+    let baseData: TBaseData = {
+      type: EMediaType[type],
+      _id: this.id,
+      loading: true,
     }
 
     //生成消息内容格式(可能是多条数据)
-    // const newData: IList  = this.createChatObject(infoType, data)
     const newData: INewData  | Array<INewData> = Array.isArray(data) ? data.map((val: string) => {
       return { 
-        //数据基础结构
-        ...this.inputRef.current!.createChatObject(infoType, val), 
-        //loading
-        loading: true,
+        ...baseData,
+        content: val,
         //scroll_id
         scrollId: createScrollId()
       }
     })
     : 
     {
-      ...this.inputRef.current!.createChatObject(infoType, data), 
-      loading: true,
+      ...baseData,
+      content: data,
       scrollId: createScrollId()
     }
 
@@ -177,39 +165,30 @@ export default class extends Component<any> {
     })
     
     //发送消息
-    const res = await this.props.sendNews(newData)
-    const { res: response, data: resData, id: newsId } = res
+    await withTry(this.props.postMessage)(newData)
 
-    // 发送成功后处理消息的loading状态以及增加id
-    if(response === responseType.success) {
+    await this.scrollRef.current!.handleToUpper()
+
+    // // 发送成功后处理消息的loading状态以及增加id
+    // if(response === responseType.success) {
       
-      let _newData: INewData | Array<INewData>
-      if(Array.isArray(newData)) {
-        _newData = newData.map((val: INewData) => {
-          return {
-            ...val,
-            loading: false
-          }
-        })
-      }else {
-        _newData = { ...newData, loading: false }
-      }
+    //   let _newData: INewData | Array<INewData>
+    //   if(Array.isArray(newData)) {
+    //     _newData = newData.map((val: INewData) => {
+    //       return {
+    //         ...val,
+    //         loading: false
+    //       }
+    //     })
+    //   }else {
+    //     _newData = { ...newData, loading: false }
+    //   }
 
-      await this.setState({
-        data: [ ...list, ...(Array.isArray(_newData) ? _newData : [_newData]) ]
-      })
+    //   await this.setState({
+    //     data: [ ...list, ...(Array.isArray(_newData) ? _newData : [_newData]) ]
+    //   })
 
-      // await this.setState({
-      //   data: [
-      //     ...list,
-      //     {
-      //       ...newData,
-      //       news: newsId,
-      //       loading: false
-      //     }
-      //   ]
-      // })
-    }
+    // }
   }
 
   //将消息列表滚动至最底部
@@ -239,7 +218,7 @@ export default class extends Component<any> {
 
     const { userInfo } = this.props
 
-    const { info, data, bottomHeight, previewStatus } = this.state
+    const { data, bottomHeight, previewStatus } = this.state
 
     this.setTitle()
 
@@ -255,13 +234,11 @@ export default class extends Component<any> {
           <View className='at-row detail'
             style={{flexDirection: 'column'}}
           >
-
             <View>
               <Chat
                 ref={this.chatRef}
                 height={(this.windowHeight - bottomHeight)}
                 list={data}
-                mine={userInfo.id}
                 onScroll={this.handleScroll}
                 onPreview={this.handlePreview}
               ></Chat>
@@ -275,7 +252,6 @@ export default class extends Component<any> {
             >
               <GInput 
                 ref={this.inputRef}
-                userInfo={userInfo}
                 inputVisible={previewStatus}
                 sendInfo={this.sendMediaInfo}
                 onHeightChange={this.fetchBottomHeight}

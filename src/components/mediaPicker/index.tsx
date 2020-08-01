@@ -1,14 +1,47 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Image } from '@tarojs/components'
 import GVideo from '../video'
-import { IProps, IState, IItem } from './index.d'
 import { IMAGE_CONFIG, SYSTEM_PAGE_SIZE, FORM_ERROR } from '~config'
 import style from '~theme/style'
 import { findIndex } from 'lodash'
 import { Toast } from '~components/toast'
-import { isObject, mediaType } from '~utils'
+import { isObject, EMediaType, ICommonFormProps, ICommonFormState } from '~utils'
 
 import './index.scss'
+
+export enum EType {
+  VIDEO,
+  IMAGE
+}
+
+export interface IFile {
+ path: string,
+ size: number
+}
+
+export interface IItem {
+ url: string
+ file?: IFile
+ type: EType
+ poster?: string
+}
+
+export interface IProps extends ICommonFormProps {
+ initialValue?: Array<IItem>
+ value?: Array<IItem>
+ length?: number
+ style?: any
+ width?: number | false
+ height?:number | false
+ close?: boolean
+}
+
+export interface IState extends ICommonFormState {
+  value: Array<IItem>
+  maxCount: number
+  activeVideo: string
+  isVideo: boolean
+}
 
 const { count } = IMAGE_CONFIG
 
@@ -43,14 +76,14 @@ export default class extends Component<IProps, IState> {
   }
 
   //媒体选择
-  public handleSelect = (type:keyof typeof mediaType) => {
-    if(mediaType[type] === mediaType.image) {
+  public handleSelect = (type:EMediaType) => {
+    if(type === EMediaType.IMAGE) {
       return Taro.chooseImage({
         count: IMAGE_CONFIG.count, 
         sizeType: ['original', 'compressed'],
         sourceType: ['album', 'camera'],
       })
-    }else if(mediaType[type] === mediaType.video) {
+    }else if(type === EMediaType.VIDEO) {
       return Taro.chooseVideo({
         sourceType: ['album']
       })
@@ -59,7 +92,7 @@ export default class extends Component<IProps, IState> {
 
   //视频选择
   public handleVideoChange = async () => {
-    const response: any = await this.handleSelect('video')
+    const response: any = await this.handleSelect(EMediaType.VIDEO)
     const { errMsg } = response
     if(errMsg.split(':')[1] !== 'ok') {
       return
@@ -76,12 +109,12 @@ export default class extends Component<IProps, IState> {
       return
     }
 
-    this.onChange([ ...stateValue, {url: tempFilePath, type: 'video', poster: thumbTempFilePath} ])
+    this.onChange([ ...stateValue, {url: tempFilePath, type: EMediaType.VIDEO, poster: thumbTempFilePath} ])
   }
 
   //图片选择
   public handleImageChange = async () => {
-    const response: any = await this.handleSelect('image')
+    const response: any = await this.handleSelect(EMediaType.IMAGE)
     const { errMsg } = response
     if(errMsg.split(':')[1] !== 'ok') {
       return
@@ -103,7 +136,7 @@ export default class extends Component<IProps, IState> {
       const { path } = val
       return {
         url: path,
-        type: 'image'
+        type: 'IMAGE'
       }
     })])    
   }
@@ -258,22 +291,20 @@ export default class extends Component<IProps, IState> {
                       onClick={(e) => {this.handleClose.call(this, url)}}
                     ></View>
                     {
-                      type === 'image' ?
+                      type === EType.IMAGE &&
                       <Image
                         onClick={() => {this.handlePreviewImage.call(this, url)}}
                         className='image'
                         src={url}
                       ></Image>
-                      : null
                     }
                     {
-                      type === 'video' ?
+                      type === EType.VIDEO &&
                       <Image 
                         onClick={() => {this.handlePreviewVideo.call(this, url)}}
                         src={poster}
                         className='video'
                       ></Image>
-                      : null
                     }
                   </View>
                 </View>

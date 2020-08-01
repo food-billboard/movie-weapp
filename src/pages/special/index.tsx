@@ -5,23 +5,17 @@ import IconList from '~components/iconlist'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { router, routeAlias } from '~utils'
-import {connect} from '@tarojs/redux'
-import {mapDispatchToProps, mapStateToProps} from './connect'
+import { getSpecial } from '~services'
 
 let FIRST = true
 
-@connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any>{
-
-  public static config: Config = {
-   
-  }
 
   //专题id
   readonly id = this.$router.params.id
 
   public state: any = {
-    list: [],
+    data: [],
     title: false
   }
 
@@ -49,41 +43,27 @@ export default class extends Component<any>{
    * 获取数据
    */
   public fetchData = async (query: any, isInit=false) => {
-    const { list } = this.state
-    const data = await this.props.getSpecial({id: this.id, ...query})
-    const _data = data.data
-    const title = data.title
-    let newData
-    if(isInit) {
-        newData = [ ..._data ]
-    }else {
-        newData = [ ...list, ..._data ]
-    }
+    const { data } = this.state
+    const { name, movie } = await getSpecial({id: this.id, ...query})
+
     await this.setState({
-        list: newData,
-        title
+        data: [ ...(isInit ? [] : data), ...movie ],
+        title: name
     })
-    return _data
+    return movie
   }
 
-  /**
-   * 节流数据获取
-   */
   public throttleFetchData = throttle(this.fetchData, 2000)
 
-  /**
-   * 获取电影详情
-   */
-  public getDetail = (id: string) => {
-    router.push(routeAlias.detail, {id})
-  }
+  //获取电影详情
+  public getDetail = (id: string) => router.push(routeAlias.detail, { id })
 
   public render() {
 
-    const { list } = this.state
+    const { data } = this.state
 
     this.setTitle()
-
+    
     return (
       <Scroll
         ref={this.scrollRef}
@@ -92,7 +72,14 @@ export default class extends Component<any>{
         sourceType={'Scope'}
         scrollWithAnimation={true}
         fetch={this.throttleFetchData}
-        renderContent={<IconList list={list}></IconList>}
+        renderContent={<IconList list={data.map(item => {
+          const { _id, poster, ...nextItem } = item
+          return {
+            ...nextItem,
+            id: _id,
+            image: poster,
+          }
+        })}></IconList>}
       ></Scroll>
     )
   }

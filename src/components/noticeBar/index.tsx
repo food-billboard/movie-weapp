@@ -2,7 +2,18 @@ import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import Modal from '../model'
 import { AtNoticebar } from 'taro-ui'
-import { IProps, IState } from './index.d'
+import { AtNoticeBarProps } from 'taro-ui/@types/noticebar'
+
+export interface IProps extends AtNoticeBarProps {
+  text: string
+  handleClose?: () => any
+  handleMore?: () => any
+}
+
+export interface IState {
+  show: boolean
+  modalShow: boolean
+}
 
 export default class extends Component<IProps, IState> {
 
@@ -25,15 +36,15 @@ export default class extends Component<IProps, IState> {
 
   public render() {
 
-    const { 
+    const {
       text,
-      moreText='查看详情',
-      close=true,
-      single=true,
-      marquee=true,
-      speed=100,
-      showMore=false,
-      icon='bell'
+      moreText = '查看详情',
+      close = true,
+      single = true,
+      marquee = true,
+      speed = 100,
+      showMore = false,
+      icon = 'bell'
     } = this.props
 
     const { show, modalShow } = this.state
@@ -41,38 +52,38 @@ export default class extends Component<IProps, IState> {
     return (
       <View>
         {
-          text ? 
-          <AtNoticebar
-            customStyle={{visibility: show ? 'visible' : 'hidden'}}
-            moreText={moreText}
-            close={close}
-            single={single}
-            marquee={marquee}
-            speed={speed}
-            showMore={showMore}
-            icon={icon}
-            onClose={this.props.handleClose ? this.props.handleClose : this.handleClose}
-            onGotoMore={this.props.handleMore ? this.props.handleMore : this.handleMore}
-          >{text}</AtNoticebar>
-          : null
+          text ?
+            <AtNoticebar
+              customStyle={{ visibility: show ? 'visible' : 'hidden' }}
+              moreText={moreText}
+              close={close}
+              single={single}
+              marquee={marquee}
+              speed={speed}
+              showMore={showMore}
+              icon={icon}
+              onClose={this.props.handleClose ? this.props.handleClose : this.handleClose}
+              onGotoMore={this.props.handleMore ? this.props.handleMore : this.handleMore}
+            >{text}</AtNoticebar>
+            : null
         }
         {
-          showMore ? 
-          <Modal
-            info={
-              {
-                isOpen: modalShow,
-                title: '跑马灯',
-                cancelText: '',
-                confirmText: '知道了',
-                onClose: () => {this.setState({modalShow: false})},
-                onCancel: () => {this.setState({modalShow: false})},
-                onConfirm: () => {this.setState({modalShow: false})},
-                content: text
+          showMore ?
+            <Modal
+              info={
+                {
+                  isOpen: modalShow,
+                  title: '跑马灯',
+                  cancelText: '',
+                  confirmText: '知道了',
+                  onClose: () => { this.setState({ modalShow: false }) },
+                  onCancel: () => { this.setState({ modalShow: false }) },
+                  onConfirm: () => { this.setState({ modalShow: false }) },
+                  content: text
+                }
               }
-            }
-          ></Modal>
-          : null
+            ></Modal>
+            : null
         }
       </View>
     )

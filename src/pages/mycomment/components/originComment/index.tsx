@@ -1,7 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import ImageLoading from '~components/imageLoading'
-import { IProps } from './index.d'
+// import ImageLoading from '~components/imageLoading'
 import style from '~theme/style'
 import Ellipsis from '~components/ellipsis'
 
@@ -9,21 +8,35 @@ import { router, routeAlias } from '~utils'
 
 import './index.scss'
 
+export interface IProps {
+  info: {
+    source_type: ESourceType
+    source: {
+      _id: string
+      content: string | null
+    }
+  }
+ }
+
+export enum ESourceType {
+  MOVIE,
+  USER
+}
+
 export default class extends Component<IProps> {
 
   public static defaultProps: IProps = {
     info: {
-      id: '',
-      image: '',
-      origin: true,
-      content: '',
-      hasImage: false,
-      hasVideo: false
+      source_type: ESourceType.MOVIE,
+      source: {
+        _id: '',
+        content: ''
+      }
     }
   }
 
-  public handleClick = (id, origin) => {
-    if(origin) {
+  public handleClick = (id: string, origin: ESourceType) => {
+    if(origin === ESourceType.MOVIE) {
       router.push(routeAlias.comment, { id })
     }else {
       router.push(routeAlias.commentdetail, { id })
@@ -32,36 +45,30 @@ export default class extends Component<IProps> {
 
   public render() {
 
-    const { info } = this.props
-    const {
-      id='',
-      image='',
-      origin=false,
-      content='',
-      hasImage=false,
-      hasVideo=false
-    } = info
-    let text = content
-    if(hasVideo) {
-      text = '[视频]' + text
-    }else if(hasImage) {
-      text = '[图片]' + text
-    }
+    const { info: {
+      source_type,
+      source: {
+        _id,
+        content
+      }
+    } } = this.props
+
+    
     return(
       <View className='origin at-row'
         style={{...style.border(1, 'thirdly', 'dashed', 'all')}}
-        onClick={() => {this.handleClick.call(this, id, origin)}}
+        onClick={() => {this.handleClick.call(this, _id, source_type)}}
       >
-        {
+        {/* {
           (image && image.length) ?
           <View className='at-col at-col-2'>
             <ImageLoading src={image} loadingProps={{content: ''}} />
           </View>
           : null
-        }
-        <View className={(image && image.length) ? 'at-col-10' : 'at-col-12'}>
+        } */}
+        <View className={(false) ? 'at-col-10' : 'at-col-12'}>
           <Ellipsis
-            text={text}
+            text={content ? content : '[媒体]'}
             needPoint={false}
             style={{color: 'gray'}}
           ></Ellipsis>

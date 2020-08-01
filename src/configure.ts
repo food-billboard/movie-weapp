@@ -28,7 +28,6 @@ const configs: IConfig = [
     request.init({
       taro: Taro,
       host: 'http://localhost:3000',
-      // host: 'http://frp.bsrnykj.com:8088',
       error: requestError,
       options: {
         header: {

@@ -4,6 +4,17 @@ import { SYSTEM_PAGE_SIZE } from '~config'
 import { TypeColor } from '~theme/color'
 import { noop } from 'lodash'
 import { IProps, IState } from './index.d'
+import { AtSegmentedControlProps } from 'taro-ui/@types/segmented-control'
+
+export interface IProps extends Pick<AtSegmentedControlProps, 'color' | 'selectedColor' | 'fontSize' | 'disabled' | 'values'>{
+  handleClick?: (value: any) => void
+  current?: number
+  tabToggle?: false | number
+}
+
+export interface IState {
+  current: number
+} 
 
 export default class extends Component<IProps, IState> {
 
@@ -19,26 +30,29 @@ export default class extends Component<IProps, IState> {
   public handleChangeTab = (value) => {
     const { tabToggle } = this.props
     const { current } = this.state
+
     if(current == value) return
     if(tabToggle) {
       if(this.isLoading) return
       this.isLoading = true
       Taro.showLoading({mask: true, title: '加载中...'})
     }
+
     let timer = setTimeout(() => {
       Taro.hideLoading()
       this.isLoading = false
+      clearTimeout(timer)
     }, typeof this.tabToggle === 'number' ? this.tabToggle : this.toggle)
-    const { handleClick=noop } = this.props
-    handleClick(value)
+
+    const { handleClick } = this.props
+    handleClick && handleClick(value)
+    
     this.setState({
       current: value
     })
   }
 
-  public getCurrent = () => {
-    return this.state.current
-  }
+  public getCurrent = () => this.state.current
 
   public render() {
 

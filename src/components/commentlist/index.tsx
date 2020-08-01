@@ -4,375 +4,385 @@ import { AtIcon } from 'taro-ui'
 import GVideo from '../video'
 import Curtain from '../curtain'
 import ImageLoading from '../imageLoading'
-import { Info } from '../model/index.d'
-import { router, formatTime, formatNumber, mediaType, routeAlias, size, withTry } from '~utils'
+import { Info } from '../model'
+import { router, formatTime, formatNumber, EMediaType, routeAlias } from '~utils'
 import style from '~theme/style'
 import { TypeColor } from '~theme/color'
-import {connect} from '@tarojs/redux'
-import {mapDispatchToProps, mapStateToProps} from './connect'
-import { IState, IProps, IMediaList } from './index.d'
-import { SYSTEM_PAGE_SIZE, getCookie } from '~config'
+import { SYSTEM_PAGE_SIZE } from '~config'
+import { noop } from 'lodash'
 
 import './index.scss'
 
-//媒体的图标类型
-const ICON_TYPE = {
-    video: 'at-icon-video',
-    image: 'at-icon-image',
-    action: 'at-icon-soung'
+interface IUser {
+  name: string,
+  time: string,
+  image: string,
+  id: string,
+  content: string,
+  hot: number,
+  isHot: boolean
 }
 
-@connect(mapStateToProps, mapDispatchToProps)
+interface CommentUsers {
+  image: string,
+  id: string
+}
+
+export interface IMediaList {
+  image: string
+  id: string
+  type: EMediaType
+  src: string
+}
+
+export interface IInfo {
+  origin: boolean
+  image: string | null
+  id: string
+  content: string
+  hasImage: boolean
+  hasVideo: boolean
+}
+
+interface ICommentUsers {
+  _id: string
+  avatar: string | null
+}
+
+interface IList {
+  comment_users: Array<ICommentUsers>
+  content: {
+    text?: string
+    image?: Array<string>
+    video?: Array<string>
+  }
+  createdAt: number | string
+  updatedAt: number | string
+  total_like: number
+  like: boolean
+  user_info: {
+    avatar: string | null
+    username: string
+    _id: string
+  },
+  _id: string
+}
+
+export interface IProps {
+  list: IList
+  extra?: boolean
+  renderExtra?: any
+  like: (id: string, like: boolean) => any
+  comment: (isUserCall: boolean, user: string, commentId: string) => any
+  getUserInfo: () => any
+}
+
+export interface IState {
+  list: IList
+  activeVideo: string | null
+  videoShow: boolean
+  activeVideoPoster: string | null
+}
+
+//媒体的图标类型
+const ICON_TYPE = {
+  video: 'at-icon-video',
+  image: 'at-icon-image',
+  action: 'at-icon-soung'
+}
+
 class List extends Component<IProps, IState>{
-    public static defaultProps: IProps = {
-        list: {
-            user: {
-                name: '',
-                time: '',
-                image: '',
-                id: '',
-                content:'',
-                hot: 0,
-                isHot: false
-            },
-            commentUsers: [],
-            id: '',
-            media: [],
-            info: {
-                id: '',
-                image: '',
-                content: '',
-                origin: false,
-                hasImage: false,
-                hasVideo: false
-            }
-        },
-        commentId: '',
-        like: () => {},
-        comment: () => {},
-        getUserInfo: () => {}
-    }
+  public static defaultProps: IProps = {
+    list: {
+      comment_users: [],
+      content: {},
+      createdAt: 0,
+      updatedAt: 0,
+      total_like: 0,
+      like: false,
+      user_info: {
+        avatar: null,
+        username: '',
+        _id: ''
+      },
+      _id: ''
+    },
+    like: noop,
+    comment: noop,
+    getUserInfo: noop
+  }
 
-    //评论id
-    readonly commentId: string = this.props.commentId
-
-    //视频modal配置
-    readonly videoConfig:Info = {
-        isOpen: false,
-        title: '',
-        cancelText:'',
-        confirmText: '',
-        onCancel: () => {
-            this.setState({
-                videoShow: false,
-                activeVideo: ''
-            })
-        },
-        onConfirm: () => {},
-        onClose: () => {},
-        content: ''
-    }
-
-    public state: IState = {
-        list: this.props.list,
+  //视频modal配置
+  readonly videoConfig: Info = {
+    isOpen: false,
+    title: '',
+    cancelText: '',
+    confirmText: '',
+    onCancel: () => {
+      this.setState({
         videoShow: false,
-        activeVideo: '',
-        activeVideoPoster: ''
+        activeVideo: ''
+      })
+    },
+    onConfirm: noop,
+    onClose: noop,
+    content: ''
+  }
+
+  public state: IState = {
+    list: this.props.list,
+    videoShow: false,
+    activeVideo: '',
+    activeVideoPoster: ''
+  }
+
+  /**
+   * 查看详细评论
+   */
+  public getDetail = () => {
+    const { list: { _id } } = this.props
+    router.push(routeAlias.commentdetail, { id: _id })
+  }
+
+  /**
+   * 获取用户信息
+   */
+  public getUser = (id: string) => {
+    router.push(routeAlias.user, { id })
+  }
+
+  /**
+   * 预览媒体
+   */
+  public handlePreviewMedia = (src: string, type: EMediaType, image: string = '') => {
+    const { list: { content: { image: originImage = [] } } } = this.props
+    if (type === EMediaType.IMAGE) {
+      this.handlePreviewImage(src, originImage)
+    } else if (type === EMediaType.VIDEO) {
+      this.handlePreviewVideo(src, image)
+    } else {
+      //ToDo
     }
+  }
 
-    /**
-     * 点赞
-     * id: 评论用户id
-     * hot: 点赞人数
-     * isHot: 是否为点赞状态
-     */
-    public like = async (id: string, hot: number = 0, isHot: boolean = false) => {
+  /**
+   * 查看图片
+   */
+  public handlePreviewImage = (target: string, list: Array<string>) => {
+    Taro.previewImage({
+      urls: list,
+      current: target
+    })
+  }
 
-        //获取个人信息缓存
-        const userInfo = getCookie('user') || {}
-        if(!size(userInfo)) {
-            await this.props.getUserInfo()
-            return 
-        }
-        const { id: mineId } = userInfo
+  /**
+   * 查看视频
+   */
+  public handlePreviewVideo = (target: string, poster: string) => {
+    this.setState({
+      activeVideo: target,
+      videoShow: true,
+      activeVideoPoster: poster
+    })
+  }
 
-        const {list} = this.state
-        if(!isHot) {
-            list.user.hot ++
-        }else {
-            list.user.hot --
-        }
-        list.user.isHot = !list.user.isHot
-        this.setState({
-            list
-        })
-        Taro.showLoading({ mask: true, title: '等我一下' })
-        await withTry(this.props.like)(this.commentId, id, mineId)   
-        Taro.hideLoading()
-    }
+  //监听视频关闭
+  public handleVideoClose = () => {
+    this.setState({
+      videoShow: false,
+      activeVideo: null,
+      activeVideoPoster: null
+    })
+  }
 
-    /**
-     * 发布评论
-     * @param user: 用户id
-     * @param id: 我的id
-     */
-    public pushComment = (user: string) => {
-        this.props.comment(true, user, this.commentId)
-    }
+  //获取视频地址
+  public getVideoSrc = () => this.state.activeVideo
 
-    /**
-     * 查看详细评论
-     */
-    public getDetail = () => {
-        router.push(routeAlias.commentdetail, { id: this.commentId })
-    }
+  //获取视频显示隐藏
+  public getVideoShowStatus = () => this.state.videoShow
 
-    /**
-     * 获取用户信息
-     */
-    public getUser = (id: string) => {
-        router.push(routeAlias.user, {id})
-    }
-
-    /**
-     * 预览媒体
-     */
-    public handlePreviewMedia = (src: string, type: keyof typeof mediaType, image: string='') => {
-        const { list } = this.props
-        const { media=[] } = list
-        if(!media.length) return
-        if(mediaType[type] === mediaType.image) {
-            this.handlePreviewImage(src, media.filter((val: IMediaList) => {
-                const { type } = val
-                return mediaType[type] === mediaType.image
-            }).map((val: IMediaList) => {
-                const { src } = val
-                return src
-            }))
-        }else if(mediaType[type] === mediaType.video) {
-            this.handlePreviewVideo(src, image)
-        }
-    }
-
-    /**
-     * 查看图片
-     */
-    public handlePreviewImage = (target: string, list: Array<string>) => {
-        Taro.previewImage({
-            urls: list,
-            current: target
-        })
-    }
-
-    /**
-     * 查看视频
-     */
-    public handlePreviewVideo = (target: string, poster: string) => {
-        this.setState({
-            activeVideo: target,
-            videoShow: true,
-            activeVideoPoster: poster
-        })
-    }
-
-    //监听视频关闭
-    public handleVideoClose = () => {
-        this.setState({
-            videoShow: false,
-            activeVideo: '',
-            activeVideoPoster: ''
-        })
-    }
-
-    //获取视频地址
-    public getVideoSrc = () => {
-        const { activeVideo } = this.state
-        return activeVideo
-    }
-
-    //获取视频显示隐藏
-    public getVideoShowStatus = () => {
-        const { videoShow } = this.state
-        return videoShow
-    }
-
-    public render() {
-        const { list, activeVideo, videoShow, activeVideoPoster } = this.state
-        const {
-            user,
-            commentUsers,
-            id: commentId,
-            media=[]
-        } = list
-        const { 
-            name,
-            time,
-            content,
-            image,
-            id,
-            hot,
-            isHot
-        } = user
-        const { extra=false } = this.props
-        return (
-            <View 
-                className={'list'}
-                style={{...style.backgroundColor('disabled')}}
-            >
-                <View className='head'>
-                    <View className='head-img'
-                        onClick={this.getUser.bind(this, id)}
-                    >
-                        <ImageLoading src={image} loadingProps={{content: ''}} />
-                    </View>
-                    <View 
-                        className={'name'}
-                        style={{...style.color('thirdly')}}
-                    >
-                        <Text 
-                            className={'name-user'}
-                            onClick={this.pushComment.bind(this, id)}
-                            style={{...style.color('primary')}}
-                        >{name.length <= 6 ? name : (name.slice(0, 6) + '...')}</Text>
-                        <Text style={{display: 'inline-block'}}>说: </Text>
-                    </View>
-                    <View 
-                        className={'up'}
-                        onClick={this.like.bind(this, id, hot, isHot)}
-                        style={{...style.color('thirdly')}}
-                    >
-                        <View className={'up-text'}>
-                            {formatNumber(hot)}
-                            <AtIcon value={isHot ? 'heart-2' : 'heart'} size={SYSTEM_PAGE_SIZE(14)} />
-                        </View>
-                    </View>
-                    <View 
-                        className={'time'}
-                        style={{...style.color('thirdly')}}
-                    >
-                        {formatTime(time)}
-                    </View>
-                </View>
-                <View 
-                    className='content'
-                    style={{...style.color('primary')}}
-                    onClick={this.getDetail.bind(this)}
-                >
-                    {content}
-                </View>
-                <View className='image-list at-row at-row--wrap'>
-                    {
-                        media.map((val: IMediaList, index: number) => {
-                            const { image, id, src, type } = val
-                            //处理不同类型的文件
-                            let imageSrc,
-                                args
-                            switch(mediaType[type]) {
-                                case mediaType.video: 
-                                    imageSrc = image
-                                    args = [ src, 'video', image ]
-                                    break
-                                case mediaType.image:
-                                    imageSrc = src
-                                    args = [ src, 'image' ]
-                                    break
-                                case mediaType.audio:
-                                    break
-                            }
-                            return (
-                                <View 
-                                    className={'at-col at-col-4 image'}
-                                    key={id}
-                                    onClick={() => { this.handlePreviewMedia.apply(this, args) }}
-                                >
-                                    <View 
-                                        className={`image-icon at-icon ${ICON_TYPE[type]}`}
-                                        style={{
-                                            ...style.color('primary'),
-                                            textShadow: `0 0 2px ${TypeColor['disabled']}`,
-                                            fontSize: SYSTEM_PAGE_SIZE(16) + 'px'
-                                        }}
-                                    ></View>
-                                    <ImageLoading
-                                        src={imageSrc}
-                                        customStyle={{
-                                            ...style.border(1, 'thirdly', 'dashed', 'all'),
-                                            boxSizing: 'border-box',
-                                            padding: `${SYSTEM_PAGE_SIZE(1)}px`
-                                        }}
-                                    />
-                                </View>
-                            )
-                        })
-                    }
-                </View>
-                {
-                    extra ? this.props.renderExtra : null
-                }
-                <ScrollView
-                    scrollX
-                    className='footer'
-                >
-                    {
-                        commentUsers.map((value) => {
-                            const {image:userIcon, id} = value
-                            return (
-                                <View className='footer-img'
-                                    key={id}
-                                    onClick={this.getUser.bind(this, id)}    
-                                >
-                                    <ImageLoading 
-                                        src={userIcon}  
-                                        loadingProps={{content: ''}}
-                                        customStyle={{
-                                            display: 'inline-block',
-                                            width: `${SYSTEM_PAGE_SIZE(25)}px`,
-                                            height: `${SYSTEM_PAGE_SIZE(25)}px`,
-                                        }}
-                                    />
-                                </View>
-                            )
-                        })
-                    }
-                </ScrollView>
-                <View 
-                    className='video-preview'
-                    style={{display: videoShow ? 'block' : 'none'}}
-                >
-                    <View className='shadow'></View>
-                    <View className='main'>
-
-                    </View>
-                </View>
-                <Curtain
-                    isOpen={videoShow}
-                    handleClose={this.handleVideoClose}
-                    title={false}
-                    main={true}
-                    curtainStyle={{backgroundColor:'#000', opacity: 1}}
-                    renderMain={
-                        <View 
-                            className='video'
-                        >
-                            <GVideo
-                                style={{width: '100%', height: '100%'}}
-                                src={activeVideo}
-                                controls={true}
-                                loop={true}
-                                autoplay={true}
-                                poster={activeVideoPoster}
-                            ></GVideo>
-                        </View>
-                    }
-                    action={false}
-                    other={false}
-                    cancel={false}
-                ></Curtain>
+  public render() {
+    const { list, activeVideoPoster } = this.state
+    const {
+      comment_users,
+      content: {
+        text = '',
+        image = [],
+        video = []
+      },
+      createdAt,
+      total_like,
+      like,
+      user_info: {
+        avatar,
+        username,
+        _id: userId
+      },
+      _id
+    } = list
+    const { extra = false } = this.props
+    return (
+      <View
+        className={'list'}
+        style={{ ...style.backgroundColor('disabled') }}
+      >
+        <View className='head'>
+          <View className='head-img'
+            onClick={this.getUser.bind(this, userId)}
+          >
+            <ImageLoading src={avatar || ''} loadingProps={{ content: '' }} />
+          </View>
+          <View
+            className={'name'}
+            style={{ ...style.color('thirdly') }}
+          >
+            <Text
+              className={'name-user'}
+              onClick={this.props.comment.bind(this, true, userId, _id)}
+              style={{ ...style.color('primary') }}
+            >{username.length <= 6 ? username : (username.slice(0, 6) + '...')}</Text>
+            <Text style={{ display: 'inline-block' }}>说: </Text>
+          </View>
+          <View
+            className={'up'}
+            onClick={this.props.like.bind(this, userId, like)}
+            style={{ ...style.color('thirdly') }}
+          >
+            <View className={'up-text'}>
+              {formatNumber(total_like)}
+              <AtIcon value={like ? 'heart-2' : 'heart'} size={SYSTEM_PAGE_SIZE(14)} />
             </View>
-        )
-    }
+          </View>
+          <View
+            className={'time'}
+            style={{ ...style.color('thirdly') }}
+          >
+            {formatTime(createdAt)}
+          </View>
+        </View>
+        <View
+          className='content'
+          style={{ ...style.color('primary') }}
+          onClick={this.getDetail}
+        >
+          {text}
+        </View>
+        <View className='image-list at-row at-row--wrap'>
+          {
+            [
+              ...video.map(src => ({ src, type: EMediaType.VIDEO })),
+              ...image.map(src => ({ src, type: EMediaType.IMAGE }))
+            ].map((val: { src: string, type: EMediaType }, _: number) => {
+              const { src, type } = val
+              //处理不同类型的文件
+              let imageSrc,
+                args
+              switch (type) {
+                case EMediaType.VIDEO:
+                  imageSrc = src
+                  args = [src, EMediaType.VIDEO, image]
+                  break
+                case EMediaType.IMAGE:
+                  imageSrc = src
+                  args = [src, EMediaType.IMAGE]
+                  break
+                case EMediaType.AUDIO:
+                  break
+              }
+              return (
+                <View
+                  className={'at-col at-col-4 image'}
+                  key={src}
+                  onClick={() => { this.handlePreviewMedia.apply(this, args) }}
+                >
+                  <View
+                    className={`image-icon at-icon ${ICON_TYPE[type]}`}
+                    style={{
+                      ...style.color('primary'),
+                      textShadow: `0 0 2px ${TypeColor['disabled']}`,
+                      fontSize: SYSTEM_PAGE_SIZE(16) + 'px'
+                    }}
+                  ></View>
+                  <ImageLoading
+                    src={imageSrc}
+                    customStyle={{
+                      ...style.border(1, 'thirdly', 'dashed', 'all'),
+                      boxSizing: 'border-box',
+                      padding: `${SYSTEM_PAGE_SIZE(1)}px`
+                    }}
+                  />
+                </View>
+              )
+            })
+          }
+        </View>
+        {
+          extra ? this.props.renderExtra : null
+        }
+        <ScrollView
+          scrollX
+          className='footer'
+        >
+          {
+            comment_users.map((value) => {
+              const { avatar, _id: id } = value
+              return (
+                <View className='footer-img'
+                  key={id}
+                  onClick={this.getUser.bind(this, id)}
+                >
+                  <ImageLoading
+                    src={avatar || ''}
+                    loadingProps={{ content: '' }}
+                    customStyle={{
+                      display: 'inline-block',
+                      width: `${SYSTEM_PAGE_SIZE(25)}px`,
+                      height: `${SYSTEM_PAGE_SIZE(25)}px`,
+                    }}
+                  />
+                </View>
+              )
+            })
+          }
+        </ScrollView>
+        <View
+          className='video-preview'
+          style={{ display: this.getVideoShowStatus() ? 'block' : 'none' }}
+        >
+          <View className='shadow'></View>
+          <View className='main'>
+
+          </View>
+        </View>
+        <Curtain
+          isOpen={this.getVideoShowStatus()}
+          handleClose={this.handleVideoClose}
+          title={false}
+          main={true}
+          curtainStyle={{ backgroundColor: '#000', opacity: 1 }}
+          renderMain={
+            <View
+              className='video'
+            >
+              <GVideo
+                style={{ width: '100%', height: '100%' }}
+                src={this.getVideoSrc() || ''}
+                controls={true}
+                loop={true}
+                autoplay={true}
+                poster={activeVideoPoster || ''}
+              ></GVideo>
+            </View>
+          }
+          action={false}
+          other={false}
+          cancel={false}
+        ></Curtain>
+      </View>
+    )
+  }
 }
 
 export {
-    List
+  List
 }

@@ -1,25 +1,21 @@
 export default interface formData {
-  user: string
-  id: false | string
+  _id?: string
   video: {
-      src: string
-      poster: string
-      id?: string
-  } | false
+    poster: string
+    src: string
+  }
   info: {
-      name: string
-      area: Array<string>
-      director: Array<string>
-      actor: Array<string>
-      type: Array<string>
-      time: string | number
-      description: string
-      language: string
-  } | false
-  image: Array<IImageList>
-}
-
-interface IImageList {
-  image: string,
-  id?: string
+    name: string
+    district: Array<string>
+    director: Array<string>
+    actor: Array<string>
+    classify: Array<string>
+    screen_time: string | number
+    description: string
+    language: Array<string>
+    author_rate?: number
+    alias?: Array<string>
+    author_description?: string
+  }
+  images: Array<string>
 }

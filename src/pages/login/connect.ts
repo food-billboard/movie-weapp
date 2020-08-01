@@ -1,9 +1,6 @@
-export const mapStateToProps = (_) => {
-    return {}
-}
+export const mapStateToProps = (_) => ({})
   
 export const mapDispatchToProps = dispatch => ({
-    sendSMS: (mobile) => dispatch({type: 'global/sendSMS', mobile }),   
-    sendUserLogon: (data) => dispatch({type: 'global/sendUserLogon', data }),  
-    getUserInfo: () => dispatch({type: 'global/getUserInfo'}) 
+    // sendSMS: (mobile) => dispatch({type: 'global/sendSMS', mobile }),   
+    signin: ( { mobile, password, uid } ) => dispatch({ type: 'global/signin', mobile, password, uid } )
 })

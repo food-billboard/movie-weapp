@@ -1,4 +1,4 @@
-import { newsType } from '~utils'
+import { mediaType } from '~utils'
 /**
  * 聊天消息界面
  * 
@@ -31,6 +31,7 @@ import { newsType } from '~utils'
  * }
  */
 
+
  export interface IContent<T> {
    text: T 
    image: T 
@@ -39,23 +40,25 @@ import { newsType } from '~utils'
  }
 
  export interface IList {
-  content: IContent<string | undefined>,
-  type: keyof typeof newsType,
-  time: string | number,
-  username: string,
-  id: string,
-  image: string,
-  news?: string
+  type: keyof typeof mediaType
+  content: string
+  createdAt: string
+  _id: string
+  origin: {
+    _id: string
+    username: string
+    avatar: string
+    isMine: boolean
+  }
  }
 
- export interface INewData extends IList {
+ export interface INewData extends Exclude<IList, 'createdAt' | 'origin'> {
   loading: boolean
   scrollId?: string
 }
 
  export interface IProps {
   list: Array<INewData>
-  mine: string
   height?: number
   style?: any
   onScroll?: (...args: any[]) => any
@@ -64,7 +67,6 @@ import { newsType } from '~utils'
  }
 
  export interface IState {
-   imgList:  Array<string>
    videoShow: boolean
    activeVideo: string
    activeScrollItem: string

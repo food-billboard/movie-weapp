@@ -1,14 +1,27 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import { AtActivityIndicator } from 'taro-ui'
-import { IProps, IState } from './index.d'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import { TypeColor } from '~theme/color'
 import style from '~theme/style'
 import { noop } from 'lodash'
 import { isObject } from '~utils'
+import { ImageProps } from '@tarojs/components/types/Image'
+import { AtActivityIndicatorProps } from 'taro-ui/@types/activity-indicator'
 
 import './index.scss'
+
+export interface IProps extends ImageProps {
+  loadingProps?: AtActivityIndicatorProps
+  border?: false | string
+  customStyle?: false | any
+  imageStyle?: false | any
+  handleClick?: (...args: any[]) => any
+}
+
+export interface IState {
+  loading: boolean
+}
 
 export default class extends Component<IProps, IState> {
 
@@ -18,7 +31,7 @@ export default class extends Component<IProps, IState> {
 
   public handleLoad = (event) => {
     const { onLoad } = this.props
-    if(onLoad) onLoad(event) 
+    if (onLoad) onLoad(event)
     this.setState({
       loading: false
     })
@@ -26,78 +39,79 @@ export default class extends Component<IProps, IState> {
 
   public handleError = (e) => {
     const { onError } = this.props
-    if(onError) onError(e)
+    if (onError) onError(e)
   }
 
   public handleClick = (e) => {
     const { handleClick } = this.props
-    if(handleClick) handleClick(e)
+    if (handleClick) handleClick(e)
   }
 
   public render() {
 
-    const { 
+    const {
       //img
       src,
-      webp=false,
-      mode='scaleToFill',
-      lazyLoad=true,
-      showMenuByLongpress=false,
+      webp = false,
+      mode = 'scaleToFill',
+      lazyLoad = true,
+      showMenuByLongpress = false,
       //loading
-      loadingProps={},
-      customStyle=false,
-      border=false,
-      imageStyle=false,
+      loadingProps = {},
+      customStyle = false,
+      border = false,
+      imageStyle = false,
     } = this.props
+    
     const {
-      size=32,
-      mode: loadingMode='center',
-      color=TypeColor.primary,
-      content='加载中...'
+      size = 32,
+      mode: loadingMode = 'center',
+      color = TypeColor.primary,
+      content = '加载中...'
     } = loadingProps
     const { loading } = this.state
-    const contentStyle = { 
-      width:'100%',
-      height:'100%',
+    const contentStyle = {
+      width: '100%',
+      height: '100%',
       ...(loading ? style.backgroundColor('disabled') : {}),
-      ...( 
-          typeof border === 'string' ? 
-          { border } 
-          : 
+      ...(
+        typeof border === 'string' ?
+          { border }
+          :
           {}
-        ),
+      ),
       ...(
         isObject(customStyle) ?
-        customStyle
-        : 
-        {}
+          customStyle
+          :
+          {}
       )
     }
 
     return (
-      <View 
+      <View
         className='loading'
         onClick={this.handleClick}
         style={contentStyle}
       >
-        {
+        {/* {
           loading ?
           <View className='avatar'>图</View>
           :
           null
-        }
+        } */}
         {
           loading ?
-          <AtActivityIndicator 
-            content={content} 
-            color={color} 
-            mode={loadingMode} 
-            size={SYSTEM_PAGE_SIZE(size)}
-          ></AtActivityIndicator>
-          : null
+            <AtActivityIndicator
+              content={content}
+              color={color}
+              mode={loadingMode}
+              size={SYSTEM_PAGE_SIZE(size)}
+            ></AtActivityIndicator>
+            : null
         }
-        <Image 
-          style={{visibility: loading ? 'hidden' : 'visible', width: '100%', height: '100%', ...(isObject(imageStyle) ? imageStyle : {})}}
+        <Image
+          style={{ visibility: loading ? 'hidden' : 'visible', width: '100%', height: '100%', ...(isObject(imageStyle) ? imageStyle : {}) }}
           src={src}
           webp={webp}
           mode={mode}

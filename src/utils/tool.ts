@@ -38,6 +38,12 @@ export const isTrue = val => val === true
 
 export const isFalse = val => val === false
 
+export const isFile = is('File')
+
+export const isBlob = is('Blob')
+
+export const isArrayBuffer = is('ArrayBuffer')
+
 //合并对象
 export const merge = (...args) => {
     return Object.assign({}, ...args)
@@ -45,7 +51,7 @@ export const merge = (...args) => {
 
 //类型判断
 export const isType = (detect, type) => {
-    const types = ['String', 'Object', 'Number', 'Array', 'Undefined', 'Fucntion', 'Null', 'Symbol']
+    const types = ['String', 'Object', 'Number', 'Array', 'Undefined', 'Fucntion', 'Null', 'Symbol', 'File', 'Blob', 'ArrauBuffer']
     const prototype = Object.prototype.toString.call(detect)
     if(!prototype) return false
     const detectType = prototype.replace(/^\[object\s([A-Za-z]+)\]$/, '$1')
@@ -133,4 +139,9 @@ export const isEqualObj = (targetA, targetB) => {
         if(typeA === '[object Array]') return isEqualObj(targetA[key], targetB[key])
         return targetB[key] === targetA[key]
     })
+}
+
+export const getTemplatePathMime = (url: string) => {
+    const list = url.split('.')
+    return list[list.length - 1]
 }

@@ -1,71 +1,73 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import { AtIcon, AtBadge } from 'taro-ui'
-import { IProps } from './index.d'
+import { router, routeAlias } from '~utils'
 import { TypeColor } from '~theme/color'
 import style from '~theme/style'
 import './index.scss'
 
-import { router, routeAlias } from '~utils'
+export interface IProps {}
 
 export default class Title extends Component<IProps>{
-    public static defaultProps = {
-        id: ''
+
+  //标题
+  readonly titleConfig = {
+    store: '收藏',
+    issue: '发布'
+  }
+
+  public componentDidShow = () => {
+    this.forceUpdate()
+  }
+
+  public handleClick = (value) => {
+    const { titleConfig } = this
+    switch (value) {
+      case titleConfig.store:
+        router.push(routeAlias.store)
+        break;
+      case titleConfig.issue:
+        // Taro.hideTabBarRedDot({
+        //     index:2
+        // })
+
+        //TODO
+        Taro.showToast({
+          title: '功能完善中...',
+          icon: 'none',
+          duration: 1000
+        })
+        //
+        router.push(routeAlias.issue)
+        break;
     }
+  }
 
-    //标题
-    readonly titleConfig = {
-        store: '收藏',
-        news: '通知'
-    }
+  public render() {
+    const { titleConfig: config } = this
 
-    public componentDidShow = () => {
-        this.setState({})
-    }
-
-    public handleClick = (value) => {
-        const {id} = this.props
-        const { titleConfig } = this
-        switch(value) {
-            case titleConfig.store:
-                router.push(routeAlias.store, {id})
-                break;
-            case titleConfig.news:
-                Taro.hideTabBarRedDot({
-                    index:2
-                })
-                router.push(routeAlias.news, {id})
-                break;
-        }
-    }
-
-    public render(){
-
-        const { titleConfig: config } = this
-        const { hasNews=false } = this.props
-
-        return (
-            <View className='title at-row at-row__justify--around'
-                style={{...style.border(1, 'thirdly', 'solid', 'bottom')}}
-            >
-                <View className='message at-col at-col-5'
-                    onClick={() => {this.handleClick.call(this, config.store)}}
-                >
-                    <AtIcon value='message' size='30' color={TypeColor['secondary']}></AtIcon>
-                    <Text className='text'>{this.titleConfig.store}</Text>
-                </View>
-                <View className='separate'
-                    style={{...style.backgroundColor('thirdly')}}
-                ></View>
-                <View className='folder at-col at-col-5'
-                    onClick={() => {this.handleClick.call(this, config.news)}}
-                >
-                    <AtBadge dot={hasNews}>
-                        <AtIcon value='folder' size='30' color={TypeColor['secondary']}></AtIcon>
-                    </AtBadge>
-                    <Text className='text'>{this.titleConfig.news}</Text>
-                </View>
-            </View>
-        )
-    }
+    return (
+      <View className='title at-row at-row__justify--around'
+        style={{ ...style.border(1, 'thirdly', 'solid', 'bottom') }}
+      >
+        <View className='message at-col at-col-5'
+          onClick={() => { this.handleClick.call(this, config.store) }}
+        >
+          <AtIcon value='message' size='30' color={TypeColor['secondary']}></AtIcon>
+          <Text className='text'>{this.titleConfig.store}</Text>
+        </View>
+        <View className='separate'
+          style={{ ...style.backgroundColor('thirdly') }}
+        ></View>
+        <View className='folder at-col at-col-5'
+          onClick={() => { this.handleClick.call(this, config.issue) }}
+        >
+          {/* <AtBadge dot={hasNews}> */}
+          <AtIcon value='folder' size='30' color={TypeColor['secondary']}></AtIcon>
+          {/* </AtBadge> */}
+          <Text className='text'>{this.titleConfig.issue}</Text>
+        </View>
+      </View>
+    )
+  }
 }

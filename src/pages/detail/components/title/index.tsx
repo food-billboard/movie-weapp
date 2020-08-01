@@ -1,11 +1,17 @@
 import Taro, { Component } from '@tarojs/taro'
 import { AtTag } from 'taro-ui'
 import { View, Text } from '@tarojs/components'
-import { IProps } from './index.d'
 import style from '~theme/style'
 import { isObject } from '~utils'
 
 import './index.scss'
+
+export interface IProps {
+  title: string
+  fontStyle?: any
+  dividerStyle?: any
+  arrowText?: string
+}
 
 export default class extends Component<IProps> {
 

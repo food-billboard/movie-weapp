@@ -1,16 +1,31 @@
-import { IFiles } from '~components/imgPicker/index.d'
-import { IItem } from '~components/mediaPicker/index.d'
+import { IFiles } from '~components/imgPicker'
+import { IItem } from '~components/mediaPicker'
 import { Item } from 'taro-ui/@types/timeline'
+
 export interface ItypeList {
   value: string
-  id: string
+  id?: string
+}
+
+//权限类型
+export enum EAuthType {
+  PUBLIC = 'PUBLIC',
+  PRIVATE = 'PRIVATE'
+}
+
+//房间类型
+export enum ERoomType {
+  CHAT = 'CHAT',
+  GROUP_CHAT = 'GROUP_CHAT',
+  SYSTEM = 'SYSTEM'
 }
 
 //媒体类型
-export const mediaType = {
-  video: Symbol('video'),
-  audio: Symbol('audio'),
-  image: Symbol('image')
+export enum EMediaType {
+  VIDEO = 'VIDEO',
+  AUDIO = 'AUDIO',
+  IMAGE = 'IMAGE',
+  TEXT = 'TEXT'
 }
 
 //路由简写
@@ -34,7 +49,9 @@ export const routeAlias = {
   userissue: '/userissue',
   special: '/special',
   fans: '/fans',
-  newsdetail: '/newsdetail'
+  newsdetail: '/newsdetail',
+  login: '/login',
+  register: '/register'
 }
 
 //路由配置
@@ -59,33 +76,27 @@ export const routeConfig = [
   { path: 'pages/special/index', alias: routeAlias.special },
   { path: 'pages/fans/index', alias: routeAlias.fans },
   { path: 'pages/newsdetail/index', alias: routeAlias.newsdetail },
+  { path: 'pages/login/index', alias: routeAlias.login },
+  { path: 'pages/register/index', alias: routeAlias.register },
 ]
 
-//轮播图路由跳转类型
-export const swiperRouteType = {
-  media: Symbol('media'),
-  comment: Symbol('comment'),
-  special: Symbol('special')
+//轮播图路由跳转类型"MOVIE", "SPEICAL", "COMMENT"
+export enum ESwiperRouteType {
+  MOVIE = "MOVIE",
+  SPECIAL = "SPEICAL",
+  COMMENT = "COMMENT"
 }
 
 //数据获取方式
-export const sourceTypeList = {
-  Dva: Symbol('dva'),
-  Scope: Symbol('scrope')
+export enum ESourceTypeList {
+  Dva = 'Dva',
+  Scope = 'Scope'
 }
 
 //通知消息类型
-export const infomationType = {
-  attention: Symbol('attention'),
-  app: Symbol('app')
-}
-
-//详细消息类型
-export const newsType = {
-  image: 'image',
-  audio:'audio',
-  video: 'video',
-  text: 'text',
+export enum infomationType {
+  ATTENTION = 'ATTENTION',
+  APP = 'APP'
 }
 
 //响应类型

@@ -1,11 +1,14 @@
+import { mediaType, RoomType } from '~utils'
 export const mapStateToProps = (_) => {
-  const { userInfo } = _.global
+  const { chat: { simpleList } } = _
   return {
-    userInfo
+    list: simpleList
   }
 }
 
 export const mapDispatchToProps = dispatch => ({   
-  getNewsDetail: (query) => dispatch({type: 'user/getNewsDetail', query}),
-  sendNews: (data) => dispatch({type: 'user/sendNews', data})
+  getMessageDetail: (data: {id: string, startTime?: any, pageSize?:number, messaeId?: string }) => dispatch({type: 'chat/getNewsDetail', data}),
+  joinOrCreateRoom: (data: { type: keyof typeof RoomType, id: string, members: Array<string> }) => dispatch({ type: 'chat/joinOrCreateRoom', data }),
+  postMessage: (data: { id: string, content: string, type: keyof typeof mediaType, point_to?: string }) => dispatch({type: 'chat/postMessage', data}),
+  leaveRoom: (id) => dispatch({ type: 'chat/leaveRoom', id })
 })

@@ -1,5 +1,5 @@
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import CommentCom from '~components/comment'
 import GScrollView from '~components/scrollList'
 import {List} from '~components/commentlist'
@@ -10,10 +10,9 @@ import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
 import {connect} from '@tarojs/redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
-import { getCookie } from '~config'
-import { size, withTry } from '~utils'
+import { withTry } from '~utils'
+import { cancelLike, putLike, getCustomerMovieCommentDetail, getUserMovieCommentDetail, postCommentToUser } from '~services'
 
-const INIT_QUERY = { currPage:1, pageSize: 7 }
 let FIRST = true
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -31,13 +30,15 @@ export default class extends Component<any> {
   private scrollRef = Taro.createRef<GScrollView>()
 
   //评论组件
-  public commentRef = Taro.createRef<CommentCom>()
+  private commentRef = Taro.createRef<CommentCom>()
 
   //评论id
   readonly id = this.$router.params.id
 
-  //我的id
-  private mineId
+  public state: any = {
+    headerData: {},
+    data: [],
+  }
 
   public componentDidMount = async () => {
       this.setTitle()
@@ -56,88 +57,88 @@ export default class extends Component<any> {
 
   //设置标题
   public setTitle = async () => {
-      const { commentHeader } = this.state
-      if(commentHeader.user && FIRST) {
+      const { headerData } = this.state
+      if(headerData.user && FIRST) {
         FIRST = false
-        Taro.setNavigationBarTitle({title: `${commentHeader.user}的评论`})
+        Taro.setNavigationBarTitle({title: `${headerData.user}的评论`})
       }
   }
 
-  public state: any = {
-    commentHeader: {},
-    comment: [],
-    commentId: '',
-    userId: ''
-  }
-
-   /**
-   * 获取评论数据
-   */
+   //获取评论数据
   public fetchData = async (query: any, isInit=false) => {
-    const { comment } = this.state
-    const data = await this.props.getCommentDetail({commentId: this.id, userId: this.mineId,  ...query})
-    const commentList = data.comment
-    const header = data.header
-    let newData
-    if(isInit) {
-        newData = [ ...commentList ]
-    }else {
-        newData = [ ...comment, ...commentList ]
-    }
-    await this.setState({
-        comment: newData,
-        commentHeader: header
+    const { data } = this.state
+    const isLogin = await this.props.getUserInfo()
+    .then(_ => true)
+    .catch(_ => false)
+    const method = isLogin ? getCustomerMovieCommentDetail : getUserMovieCommentDetail
+    const { comment:main={}, sub={} } = await method({id: this.id,  ...query})
+
+    this.setState({
+        comment: [ ...(isInit ? [] : [...data]), ...sub ],
+        headerData: main
     })
-    return commentList
+    return sub
   }
 
-  /**
-   * 节流数据获取
-   */
   public throttleFetchData = throttle(this.fetchData, 2000)
 
-  /**
-   * 发布评论
-   */
-  public publishComment = async (value) => {
-    const { userId, commentId } = this.state
-    Taro.showLoading({ mask: true, title: '发布中' })
-    
-    await withTry(this.props.publishUserComment)(commentId, value, userId, this.mineId)
+  //发布评论
+  public publishComment = async (value: { 
+    text?: string,
+    image?: Array<any>,
+    video?: Array<any>
+  }) => {
+    const { text='', image=[], video=[] } = value
 
+    Taro.showLoading({ mask: true, title: '发布中' })
+    await withTry(postCommentToUser)({ id: this.id, content: { text, image, video } })
     Taro.hideLoading()
-    await this.fetchData({...INIT_QUERY}, true)
+    await this.onPullDownRefresh()
+  }
+
+  //点赞
+  public like = async(id: string, like: boolean) => {
+    await this.props.getUserInfo()
+    .then(async (_) => {
+        const method = like ? cancelLike : putLike
+
+        Taro.showLoading({ mask: true, title: '操作中' })
+        await withTry(method)(id)
+        Taro.hideLoading()
+        //刷新
+        await this.onPullDownRefresh()
+    })
+    .catch(err => err)
   }
 
   /**
    * 展示评论组件
-   * isUserCall: 是否为回复
-   * user: 用户id
    * commentId: 评论id
    */
-  public publish = async (_, user, commentId) => {
-    
-    const userInfo = getCookie('user') || {}
-    if(!size(userInfo)) {
-      await this.props.getUserInfo()
-      return
-    }
+  public publish = async (_, commentId) => {
 
-    const { id } = userInfo
-    this.mineId = id
-
-    this.commentRef.current!.open()
-    const { commentHeader } = this.state
-    const { userId } = commentHeader
-    this.setState({
-        userId: user ? user : userId,
-        commentId: commentId ? commentId : this.id
+    //TODO
+    Taro.showToast({
+      title: '功能完善中...',
+      icon: 'none',
+      duration: 1000
     })
+    return
+    //
+
+    await this.props.getUserInfo()
+    .then(_ => {
+      this.commentRef.current!.open()
+      this.setState({
+          commentId: !!commentId ? commentId : this.id
+      })
+    })
+    .catch(err => err)
   }
 
   public render() {
 
-    const { commentHeader, comment } = this.state
+    const { headerData, data } = this.state
 
     this.setTitle()
 
@@ -150,17 +151,19 @@ export default class extends Component<any> {
         query={{pageSize: 7}}
         renderContent={
           <View>
-            <Header content={commentHeader}></Header>
+            <Header content={headerData}
+            like={this.like}
+            ></Header>
             {
-              comment.map((value) => {
-                const { id } = value
+              data.map((value) => {
+                const { _id } = value
                 return (
                   <View>
                     <List 
                       comment={this.publish} 
-                      key={id}
+                      key={_id}
                       list={value}
-                      commentId={id}
+                      like={this.like}
                     />
                   </View>
                 )
