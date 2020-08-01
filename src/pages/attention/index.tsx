@@ -1,4 +1,5 @@
-import Taro, { Component, Config } from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
 import GScrollView from '~components/scrollList'
 import ImageLoading from '~components/imageLoading'
@@ -13,23 +14,16 @@ import './index.scss'
 
 export default class extends Component<any>{
 
-  public static config: Config = {
-    navigationBarTitleText: '关注',
-    enablePullDownRefresh: true
-  }
-
   public state: any = {
     data: []
   }
 
   //用户id
-  readonly id = this.$router.params.id
+  readonly id = getCurrentInstance().router.params.id
 
-  private scrollRef = Taro.createRef<GScrollView>()
+  private scrollRef = React.createRef<GScrollView>()
 
-  public componentDidShow = () => {
-    colorStyleChange()
-  }
+  public componentDidShow = () => colorStyleChange()
 
   //下拉刷新
   public onPullDownRefresh = async () => {

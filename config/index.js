@@ -1,4 +1,5 @@
 const path = require('path')
+const dirname = path.resolve(__dirname, '../src')
 
 const config = {
   projectName: 'movie',
@@ -10,36 +11,19 @@ const config = {
     '828': 1.81 / 2
   },
   alias: {
-    '~components': 'src/components',
-    '~lodash': 'src/lib/lodash',
-    '~utils': 'src/utils',
-    '~config': 'src/config',
-    '~services': 'src/services',
-    '~theme': 'src/theme'
+    '~components': path.resolve(dirname, 'components'),
+    '~lodash': path.resolve(dirname, 'lib/lodash'),
+    '~utils': path.resolve(dirname, 'utils'),
+    '~config': path.resolve(dirname, 'config'),
+    '~services': path.resolve(dirname, 'services'),
+    '~theme': path.resolve(dirname, 'theme'),
   },
   sourceRoot: 'src',
   outputRoot: 'dist',
-  // babel: {
-  //   sourceMap: true,
-  //   presets: [['env', { modules: false }]],
-  //   plugins: [
-  //     'transform-decorators-legacy',
-  //     'transform-class-properties',
-  //     'transform-object-rest-spread',
-  //     ['transform-runtime', {
-  //       "helpers": false,
-  //       "polyfill": false,
-  //       "regenerator": true,
-  //       "moduleName": 'babel-runtime'
-  //     }]
-  //   ]
-  // },
-  plugins: [
-    '@tarojs/plugin-sass',
-    "@tarojs/plugin-uglify"
-  ],
-  // defineConstants: {
-  // },
+  // plugins: [
+  //   '@tarojs/plugin-sass',
+  //   "@tarojs/plugin-uglify"
+  // ],
   framework: 'react',
   copy: {
     patterns: [
@@ -48,8 +32,6 @@ const config = {
     }
   },
   mini: {
-    webpackChain (chain, webpack) {},
-    cssLoaderOption: {},
     postcss: {
       pxtransform: {
         enable: true,
@@ -59,6 +41,13 @@ const config = {
         enable: true,
         config: {
           limit: 10240 // 设定转换尺寸上限
+        }
+      },
+      cssModules: {
+        enable: false,
+        config: {
+          naningPattern: 'module',
+          generateScopedName: '[name]__[local]___[hash:base64:5]'
         }
       }
     }

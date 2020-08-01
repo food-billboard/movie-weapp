@@ -1,4 +1,5 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View, Text, Image } from '@tarojs/components'
 import GVideo from '../video'
 import { IMAGE_CONFIG, SYSTEM_PAGE_SIZE, FORM_ERROR } from '~config'
@@ -10,8 +11,8 @@ import { isObject, EMediaType, ICommonFormProps, ICommonFormState } from '~utils
 import './index.scss'
 
 export enum EType {
-  VIDEO,
-  IMAGE
+  VIDEO = "VIDEO",
+  IMAGE = "IMAGE"
 }
 
 export interface IFile {

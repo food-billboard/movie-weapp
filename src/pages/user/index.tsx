@@ -1,4 +1,5 @@
-import Taro, { Component, Config } from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import IconHead from '~components/headicon'
 import List from '~components/linearlist'
@@ -15,16 +16,12 @@ import './index.scss'
 @connect(mapStateToProps, mapDispatchToProps)
 export default class User extends Component<any>{
 
-  public static config: Config = {
-    navigationBarTitleText: '用户',
-  }
-
   public state: any = {
     data: {}
   }
 
   //用户id
-  readonly id = this.$router.params.id
+  readonly id = getCurrentInstance().router.params.id
 
   public componentDidShow = () => {
     colorStyleChange()

@@ -1,4 +1,5 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { Swiper, SwiperItem, View, Text } from '@tarojs/components'
 import { TypeColor } from '~theme/color'
 import { emoji } from '~theme/emoji'

@@ -1,4 +1,5 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { AtImagePicker } from 'taro-ui'
 import { IMAGE_CONFIG, FORM_ERROR } from '~config'
 import { Toast } from '../toast'

@@ -1,4 +1,5 @@
-import Taro, { Component, Config } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { AtInput, AtForm, AtButton } from 'taro-ui'
 import { colorStyleChange } from '~theme/color'
@@ -16,9 +17,6 @@ interface IState {
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any> {
-  public static config: Config = {
-    navigationBarTitleText: '登录'
-  }
 
   // public componentDidMount = async () => {
   //     const { password='', username='' } = this.$router.params
@@ -32,9 +30,7 @@ export default class extends Component<any> {
   //     await this.props.getUserInfo()
   // }
 
-  public componentDidShow = () => {
-    colorStyleChange()
-  }
+  public componentDidShow = () => colorStyleChange()
 
   public state: IState = {
     mobile: '',
@@ -42,9 +38,7 @@ export default class extends Component<any> {
     // check: ''
   }
 
-  /**
-   * 监听用户名输入
-   */
+  //监听用户名输入
   public handleUser = (value: string, _) => {
     this.setState({
       mobile: value
@@ -60,9 +54,7 @@ export default class extends Component<any> {
     })
   }
 
-  /**
-   * 信息提交
-   */
+  //信息提交
   public submit = async (_) => {
     const { mobile, password } = this.state
 

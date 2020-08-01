@@ -1,5 +1,6 @@
 import { AtButton } from 'taro-ui'
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import style from '~theme/style'
 import { noop } from 'lodash'

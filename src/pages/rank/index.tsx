@@ -1,4 +1,5 @@
-import Taro, { Component, Config } from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { AtGrid } from "taro-ui"
 import GScrollView from '~components/scrollList'
@@ -46,11 +47,6 @@ const HIDE_MORE_CONFIG = {
 
 export default class extends Component<any> {
 
-  public static config:Config = {
-    navigationBarTitleText: '排行榜',
-    enablePullDownRefresh: true
-  }
-
   public state: any = {
     data: [],
     rankType: [],
@@ -63,11 +59,13 @@ export default class extends Component<any> {
 
   public componentDidMount = async () => {
     this.fetchRankTypeData()
-    this.title = this.$router.params.type || '排行榜'
+    this.title = this.current.params.type || '排行榜'
   }
 
+  readonly current = getCurrentInstance().router
+
   //排行榜id
-  private _id = this.$router.params.id
+  private _id = this.current.params.id
 
   public get id() {
     return this._id
@@ -83,7 +81,7 @@ export default class extends Component<any> {
 
   private _title
 
-  public scrollRef = Taro.createRef<GScrollView>()
+  public scrollRef = React.createRef<GScrollView>()
 
   //下拉刷新
   public onPullDownRefresh = async () => {

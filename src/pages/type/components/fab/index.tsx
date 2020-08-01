@@ -1,4 +1,5 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { Text } from '@tarojs/components'
 import { AtFab } from 'taro-ui'
 import style from '~theme/style'

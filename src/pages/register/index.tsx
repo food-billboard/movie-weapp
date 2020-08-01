@@ -1,4 +1,5 @@
-import Taro, { Component, Config } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { AtInput, AtForm, AtButton } from 'taro-ui'
 // import Time from './components/time'
@@ -19,9 +20,6 @@ interface IState {
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any>{
-  public static config: Config = {
-    navigationBarTitleText: '注册'
-  }
 
   public state: IState = {
     username: '',

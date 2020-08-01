@@ -1,4 +1,5 @@
-import Taro, { Component, Config } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View, ScrollView, Text } from '@tarojs/components'
 import IconList from '~components/iconlist'
 import LinearList from '~components/list'
@@ -18,20 +19,12 @@ const SINGLE_HEADER_HEIGHT = 80
 
 const SCROLL_MAX_SHOW_COUNT = 10
 
-const SHOW_MORE = 'SHOW_MORE'
-const HIDE_MORE = 'HIDE_MORE'
-
 enum SHOW_TYPE {
-  SHOW_MORE,
-  HIDE_MORE
+  SHOW_MORE = 'SHOW_MORE'
+  HIDE_MORE = 'HIDE_MORE'
 }
 
 export default class Index extends Component<any> {
-
-  public config: Config = {
-    navigationBarTitleText: "",
-    enablePullDownRefresh: true
-  }
 
   public componentDidShow = () => {
     colorStyleChange()
@@ -67,9 +60,9 @@ export default class Index extends Component<any> {
     this.setTitle(id)
   }
 
-  public scrollRef = Taro.createRef<GScrollView>()
+  public scrollRef = React.createRef<GScrollView>()
 
-  public fabRef = Taro.createRef<Fab>()
+  public fabRef = React.createRef<Fab>()
 
   public componentDidMount = async () => {
     await this.fetchTypeData()
@@ -96,9 +89,6 @@ export default class Index extends Component<any> {
     return data
   }
 
-  /**
-   * 节流数据获取
-   */
   public throttleFetchData = throttle(this.fetchData, 2000)
 
   //改变当前页面路由

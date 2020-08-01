@@ -1,7 +1,24 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import GCheckbox from '~components/checkbox'
 import { getLanguageList, getClassify } from '~services'
-import { IProps, IState } from './index.d'
+import { Option } from 'taro-ui/@types/checkbox'
+
+enum EDataType {
+  LANGUAGE = 'LANGUAGE',
+  CLASSIFY = 'CLASSIFY'
+}
+
+export interface IProps {
+   value: Array<string>
+   error?: boolean
+   handleChange: (...args: Array<any>) => any
+   type: EDataType
+}
+
+export interface IState {
+  list: Array<Option<string>>
+}
 
 export default class extends Component<IProps> {
 
@@ -9,16 +26,14 @@ export default class extends Component<IProps> {
     list: []
   }
 
-  public componentDidMount = async () => {
-    await this.fetchData()
-  }
+  public componentDidMount = async () => await this.fetchData()
 
   public fetchData = async() => {
     const { type } = this.props
     let method
-    if(type === 'CLASSIFY') {
+    if(type === EDataType.CLASSIFY) {
       method = getClassify
-    }else if(type === 'LANGUAGE') {
+    }else if(type === EDataType.LANGUAGE) {
       method = getLanguageList
     }
     const data = await method()

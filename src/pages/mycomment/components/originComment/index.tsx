@@ -1,9 +1,9 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 // import ImageLoading from '~components/imageLoading'
 import style from '~theme/style'
 import Ellipsis from '~components/ellipsis'
-
 import { router, routeAlias } from '~utils'
 
 import './index.scss'
@@ -19,8 +19,8 @@ export interface IProps {
  }
 
 export enum ESourceType {
-  MOVIE,
-  USER
+  MOVIE = "MOVIE",
+  USER = "USER"
 }
 
 export default class extends Component<IProps> {

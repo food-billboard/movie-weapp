@@ -4,11 +4,24 @@ import GVideo from '~components/video'
 import { AtButton } from 'taro-ui'
 import { isObject } from '~utils'
 import { FORM_ERROR } from '~config'
-import { IProps, IState } from './index.d'
 import style from '~theme/style'
 import { noop } from 'lodash'
+import { IProps as IVideo } from '~components/video/index.d'
 
 import './index.scss'
+
+export interface IProps {
+  info?: IVideo | false
+  initialValue?: IVideo
+  error?:boolean
+  handleOnChange?: (...args: any[]) => any
+}
+
+export interface IState {
+  info: IVideo
+  srcError: boolean
+  posterError: boolean
+}
 
 const defaultInfo = {src: '', poster: ''}
 

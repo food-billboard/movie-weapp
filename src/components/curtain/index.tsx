@@ -1,7 +1,9 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { isObject } from '~utils'
 import customeStyle from '~theme/style'
+import { noop } from '~lodash'
 
 import './index.scss'
 
@@ -25,12 +27,6 @@ export interface IProps {
 export interface IState { }
 
 export default class extends Component<IProps, IState> {
-
-  public state: IState = {
-
-  }
-
-  public emptyFn = () => { }
 
   //取消
   public handleCancel = () => {
@@ -62,7 +58,7 @@ export default class extends Component<IProps, IState> {
         <View
           className='shadow'
           style={{ ...customeStyle.backgroundColor('primary'), ...(isObject(curtainStyle) ? curtainStyle : {}) }}
-          onClick={() => { cancel ? (this.props.handleCancel ? this.props.handleCancel.call(this) : this.handleCancel.call(this)) : this.emptyFn }}
+          onClick={() => { cancel ? (this.props.handleCancel ? this.props.handleCancel.call(this) : this.handleCancel.call(this)) : noop }}
         ></View>
         <View
           className='main'

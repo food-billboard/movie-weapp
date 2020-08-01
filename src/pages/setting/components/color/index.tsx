@@ -1,4 +1,5 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View, ScrollView } from '@tarojs/components'
 import { Color, defaultColor } from '~theme/color'
 import { isObject, createSystemInfo } from '~utils'

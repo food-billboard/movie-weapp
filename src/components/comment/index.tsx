@@ -1,4 +1,5 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { Button, View } from '@tarojs/components'
 import MediaPicker from '../mediaPicker'
 import { IItem, EType } from '../mediaPicker'
@@ -27,7 +28,7 @@ export default class Comment extends Component<IProps>{
         publishCom: noop
     }
 
-    readonly mediaPickerRef = Taro.createRef<MediaPicker>()
+    readonly mediaPickerRef = React.createRef<MediaPicker>()
 
     //图片提交的配置
     readonly imageConfig = {

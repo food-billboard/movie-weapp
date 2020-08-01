@@ -1,4 +1,5 @@
-import Taro, { Component, Config } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View, Button } from '@tarojs/components'
 import GRadio from '~components/radio'
 import Model from '~components/model'
@@ -38,16 +39,11 @@ const systemInfo = createSystemInfo()
 
 export default class Setting extends Component<any>{
 
-  public static config: Config = {
-    navigationBarTitleText: '设置',
-    disableScroll: true
-  }
+  public commentRef = React.createRef<Comment>()
 
-  public commentRef = Taro.createRef<Comment>()
+  public radioRef = React.createRef<GRadio>()
 
-  public radioRef = Taro.createRef<GRadio>()
-
-  public colorRef = Taro.createRef<GColor>()
+  public colorRef = React.createRef<GColor>()
 
   public componentDidShow = () => {
     colorStyleChange()

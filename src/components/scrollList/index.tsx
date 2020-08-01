@@ -1,9 +1,10 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View, ScrollView, Text } from '@tarojs/components'
 import { AtActivityIndicator } from 'taro-ui'
-import GDivider from '~components/divider/a'
+import GDivider from '~components/divider'
+import GResult from '~component/result'
 import Top from '../topbutton'
-import { IProps, IState } from './index.d'
 import { isObject, ESourceTypeList } from '~utils'
 import customStyle from '~theme/style'
 
@@ -96,19 +97,13 @@ export default class List extends Component<IProps, IState> {
         this.setState({ empty: false })
       }
 
-      let nextData
-      //判断是否为初始化前端数据
-      if (isInit) {
-        nextData = [...newData]
-      } else {
-        nextData = [...data, ...newData]
-      }
-      this.setState({ data: nextData, loading: false })
-      return
+      this.setState({ 
+        data: [ ...(isInit ? [] : data), newData ], 
+        loading: false 
+      })
     } else if (sourceType === ESourceTypeList.Dva) {
       await fetch(query, isInit)
       await this.setState({ loading: false })
-      return
     }
   }
 
@@ -129,9 +124,6 @@ export default class List extends Component<IProps, IState> {
     await this.fetchData(nextQuery, true)
   }
 
-  //空函数
-  public defaultFn = () => { }
-
   public render() {
     const {
       header,
@@ -143,43 +135,46 @@ export default class List extends Component<IProps, IState> {
     const _header = typeof header === 'boolean'
     const _bottom = typeof bottom === 'boolean'
     return (
-      <View className='list'>
-        <View
-          style={isObject(style) ? style : {}}
-          className='scroll-view'
-        >
-          <View style={{ ...customStyle.backgroundColor('bgColor'), paddingTop: (header || 0) + 'rpx' }}
+      <GResult
+        isEmpty={!this.data.length}
+      >
+        <View className='list'>
+          <View
+            style={isObject(style) ? style : {}}
+            className='scroll-view'
           >
-            {this.props.renderContent}
+            <View style={{ ...customStyle.backgroundColor('bgColor'), paddingTop: (header || 0) + 'rpx' }}
+            >
+              {this.props.renderContent}
+            </View>
+            {
+              empty && divider && <GDivider other={{ paddingBottom: (bottom ? bottom + 20 : 0) + 'rpx' }} />
+            }
+            {/* <Top 
+              ref={this.topRef} 
+            /> */}
+            {
+              !!_header &&
+                <View className='header' style={{ ...customStyle.backgroundColor('disabled') }}>
+                  {
+                    this.props.renderHeader
+                  }
+                </View>
+            }
+            { !_bottom && this.props.renderBottom}
           </View>
-          {
-            empty && divider ? <GDivider other={{ paddingBottom: (bottom ? bottom + 20 : 0) + 'rpx' }} /> : null
-          }
-          {/* <Top 
-            ref={this.topRef} 
-          /> */}
-          {
-            _header ?
-              null :
-              <View className='header' style={{ ...customStyle.backgroundColor('disabled') }}>
-                {
-                  this.props.renderHeader
-                }
-              </View>
-          }
-          {_bottom ? null : this.props.renderBottom}
+          <View
+            className='active'
+          >
+            {loading &&
+              <AtActivityIndicator
+                size={100}
+                content={'玩命加载中...'}
+              />
+            }
+          </View>
         </View>
-        <View
-          className='active'
-        >
-          {loading &&
-            <AtActivityIndicator
-              size={100}
-              content={'玩命加载中...'}
-            />
-          }
-        </View>
-      </View>
+      </GResult>
     )
   }
 }

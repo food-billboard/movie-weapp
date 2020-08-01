@@ -1,8 +1,12 @@
 import IFormData from './formData'
 
-type TIndexesType = 'DIRECTOR' | 'ACTOR' | 'DISTRICT'
+enum EIndexesType {
+  DIRECTOR = 'DIRECTOR',
+  ACTOR = 'ACTOR',
+  DISTRICT = 'DISTRICT'
+}
 
 export {
   IFormData,
-  TIndexesType
+  EIndexesType
 }

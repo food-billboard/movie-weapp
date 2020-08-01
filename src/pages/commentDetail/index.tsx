@@ -1,4 +1,5 @@
-import Taro, { Component, Config } from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import CommentCom from '~components/comment'
 import GScrollView from '~components/scrollList'
@@ -18,31 +19,22 @@ let FIRST = true
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any> {
 
-  public static config: Config = {
-      navigationBarTitleText: "评论",
-      enablePullDownRefresh: true
-  }
+  public componentDidShow = () => colorStyleChange()
 
-  public componentDidShow = () => {
-    colorStyleChange()
-  }
-
-  private scrollRef = Taro.createRef<GScrollView>()
+  private scrollRef = React.createRef<GScrollView>()
 
   //评论组件
-  private commentRef = Taro.createRef<CommentCom>()
+  private commentRef = React.createRef<CommentCom>()
 
   //评论id
-  readonly id = this.$router.params.id
+  readonly id = getCurrentInstance().router.params.id
 
   public state: any = {
     headerData: {},
     data: [],
   }
 
-  public componentDidMount = async () => {
-      this.setTitle()
-  }
+  public componentDidMount = async () => this.setTitle()
 
   //下拉刷新
   public onPullDownRefresh = async () => {
@@ -52,16 +44,16 @@ export default class extends Component<any> {
   
   //上拉加载
   public onReachBottom = async () => {
-      await this.scrollRef.current!.handleToLower()
+    await this.scrollRef.current!.handleToLower()
   }
 
   //设置标题
   public setTitle = async () => {
-      const { headerData } = this.state
-      if(headerData.user && FIRST) {
-        FIRST = false
-        Taro.setNavigationBarTitle({title: `${headerData.user}的评论`})
-      }
+    const { headerData } = this.state
+    if(headerData.user && FIRST) {
+      FIRST = false
+      Taro.setNavigationBarTitle({title: `${headerData.user}的评论`})
+    }
   }
 
    //获取评论数据

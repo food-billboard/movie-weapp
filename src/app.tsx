@@ -1,4 +1,5 @@
-import Taro, { Component, Config } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { Provider } from '@tarojs/redux'
 import { dva, router, includes } from '~utils'
 import Index from './pages/main/index'
@@ -98,4 +99,4 @@ class App extends Component {
   }
 }
 
-Taro.render(<App />, document.getElementById('app'))
+export default App

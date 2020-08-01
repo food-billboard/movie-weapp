@@ -1,4 +1,5 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View, Text, Swiper, SwiperItem } from '@tarojs/components'
 import RankIcon from './icon'
 import { router, routeAlias } from '~utils'
@@ -40,9 +41,7 @@ export default class Rank extends Component<IProps, IState>{
   /**
    * 获取详细信息
    */
-  public getDetail = (id: string) => {
-    router.push(routeAlias.detail, { id })
-  }
+  public getDetail = (id: string) => router.push(routeAlias.detail, { id })
 
   public classify = () => {
     const { list = [] } = this.props

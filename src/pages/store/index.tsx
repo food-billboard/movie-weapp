@@ -1,4 +1,5 @@
-import Taro, { Component, Config } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import List from '~components/newsheader'
 import GScrollView from '~components/scrollList'
@@ -8,16 +9,12 @@ import style from '~theme/style'
 import { getUserStore, getCustomerStore } from '~services'
 
 export default class Index extends Component<any> {
-  public static config: Config = {
-    navigationBarTitleText: "收藏",
-    enablePullDownRefresh: true
-  }
 
   public state: any = {
     data: []
   }
 
-  private scrollRef = Taro.createRef<GScrollView>()
+  private scrollRef = React.createRef<GScrollView>()
 
   public componentDidShow = () => colorStyleChange()
 

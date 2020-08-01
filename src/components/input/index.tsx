@@ -1,4 +1,5 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View, Input } from '@tarojs/components'
 import { AtTextarea } from 'taro-ui'
 import { isObject, ICommonFormState, ICommonFormProps } from '~utils'

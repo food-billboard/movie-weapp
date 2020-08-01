@@ -1,6 +1,7 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import Indexes from '~components/indexes'
-import { TIndexesType } from '../../interface'
+import { EIndexesType } from '../../interface'
 import { getDirectorList, getActorList, getDistrictList } from '~services'
 
 export default class extends Component<any> {
@@ -28,13 +29,13 @@ export default class extends Component<any> {
     })
   }
 
-  public indexesVisible = async (type: TIndexesType) => {
+  public indexesVisible = async (type: EIndexesType) => {
     let active
     const { director, actor, district } = this.state
     switch(type) {
-      case 'ACTOR': active = [...actor]; break;
-      case 'DIRECTOR': active = [...director]; break;
-      case 'DISTRICT': active = [...district]; break;
+      case EIndexesType.ACTOR: active = [...actor]; break;
+      case EIndexesType.DIRECTOR: active = [...director]; break;
+      case EIndexesType.DISTRICT: active = [...district]; break;
     }
     this.setState({
       list: active,

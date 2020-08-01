@@ -1,4 +1,5 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { ScrollView, View } from '@tarojs/components'
 import Imageloading from '~components/imageLoading'
 import style from '~theme/style'

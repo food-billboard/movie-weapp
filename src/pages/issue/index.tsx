@@ -1,4 +1,5 @@
-import Taro, { Component, Config } from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { AtButton, AtTag } from 'taro-ui'
 import GCommentPicker from '~components/picker'
@@ -51,10 +52,6 @@ const PICKER_STYLE = {
 }
 
 export default class extends Component<any> {
-  
-  public static config: Config = {
-    navigationBarTitleText: '电影发布'
-  }
 
   public state: any = {
     detail: {},
@@ -63,15 +60,15 @@ export default class extends Component<any> {
     indexesVisible: false,
   }
 
-  private id = this.$router.params.id
+  private id = getCurrentInstance().router.params.id
 
-  private actorRef = Taro.createRef<TagList>()
+  private actorRef = React.createRef<TagList>()
 
-  private directorRef = Taro.createRef<TagList>()
+  private directorRef = React.createRef<TagList>()
 
-  private districtRef = Taro.createRef<TagList>()
+  private districtRef = React.createRef<TagList>()
 
-  private indexesRef = Taro.createRef<Indexes>()
+  private indexesRef = React.createRef<Indexes>()
 
   //色调修改时重绘用
   public componentDidShow = () => colorStyleChange()

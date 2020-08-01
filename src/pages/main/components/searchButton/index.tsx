@@ -1,4 +1,5 @@
-import Taro, { Component } from "@tarojs/taro"
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { AtTag } from 'taro-ui'
 import SearchButton from '~components/searchbutton'
@@ -35,7 +36,7 @@ export default class extends Component<IProps, IState> {
     hot: []
   }
 
-  public searchBarRef = Taro.createRef<SearchButton>()
+  public searchBarRef = React.createRef<SearchButton>()
 
   public componentDidMount = async () => await this.fetchData()
 

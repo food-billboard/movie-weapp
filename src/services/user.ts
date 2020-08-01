@@ -1,4 +1,4 @@
-import { request, getToken } from '~utils'
+import { request, getToken, createUserAuth } from '~utils'
 
 //其他用户信息
 export const getUserInfo = (id: string) => {
@@ -67,12 +67,12 @@ export const getSwiper = (count:number=6) => {
 
 //登录
 export const signin = ({ mobile, password, uid }: { mobile: string, password: string, uid?: string | undefined }) => {
-  return request('POST', `/api/user/logon/account`, { data: { password, mobile, uid } })
+  return request('POST', `/api/user/logon/account`, { data: { uid }, header: createUserAuth({ mobile, password }) })
 }
 
 //注册
 export const register = ({ mobile, password, uid }: { mobile: number, password: string, uid: string | undefined }) => {
-  return request('POST', '/api/user/logon/register', {data: { mobile, password, uid }})
+  return request('POST', '/api/user/logon/register', { data: { uid }, header: createUserAuth({ mobile, password }) })
 }
 
 //退出

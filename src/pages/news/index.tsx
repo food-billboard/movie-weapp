@@ -1,4 +1,5 @@
-import Taro, { Component, Config } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { AtList, AtListItem, AtSwipeAction } from "taro-ui"
 import { colorStyleChange } from '~theme/color'
 import Result from '~components/result'
@@ -40,10 +41,6 @@ const BUTTON_STYLE = [
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any> {
-  public static config: Config = {
-    navigationBarTitleText: "通知",
-    enablePullDownRefresh: true
-  }
 
   private worker: any
 

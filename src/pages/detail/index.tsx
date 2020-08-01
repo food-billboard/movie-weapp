@@ -1,4 +1,5 @@
-import Taro, { Component, Config } from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import GVideo from '~components/video'
 import GButton from '~components/button'
@@ -23,13 +24,13 @@ import './index.scss'
 export default class extends Component<any> {
 
   //电影id
-  private id = this.$router.params.id
+  private id = getCurrentInstance().router.params.id
 
   public componentDidShow = () => colorStyleChange()
 
-  private commentRef = Taro.createRef<Comment>()
+  private commentRef = React.createRef<Comment>()
 
-  private tabRef = Taro.createRef<Tab>()
+  private tabRef = React.createRef<Tab>()
 
   public state: any = {
     data: {},
@@ -37,7 +38,7 @@ export default class extends Component<any> {
     commentData: []
   }
 
-  public componentDidMount = async () => this.fetchData()
+  public componentDidMount = async () => await this.fetchData()
 
   //设置标题
   public setTitle = async () => {

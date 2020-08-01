@@ -1,4 +1,5 @@
-import Taro, { Component, Config } from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
+import React, { Component } from 'react'
 import Scroll from '~components/scrollList'
 import { throttle } from 'lodash'
 import IconList from '~components/iconlist'
@@ -12,14 +13,14 @@ let FIRST = true
 export default class extends Component<any>{
 
   //专题id
-  readonly id = this.$router.params.id
+  readonly id = getCurrentInstance.params.id
 
   public state: any = {
     data: [],
     title: false
   }
 
-  private scrollRef = Taro.createRef<Scroll>()
+  private scrollRef = React.createRef<Scroll>()
 
   public componentDidShow = () => {
     colorStyleChange()

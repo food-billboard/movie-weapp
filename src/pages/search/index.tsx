@@ -1,4 +1,5 @@
-import Taro, { Component, Config } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
 import SearchBar from '../main/components/searchButton'
 import Head from './components/head'
@@ -35,18 +36,13 @@ const HOT_HEIGHT = SYSTEM_PAGE_SIZE(35)
 
 export default class Index extends Component<any> {
 
-  public config: Config = {
-    navigationBarTitleText: "搜索",
+  public searchBarRef = React.createRef<SearchBar>()
 
-  }
+  public scrollRef = React.createRef<GScrollView>()
 
-  public searchBarRef = Taro.createRef<SearchBar>()
+  private indexesRef = React.createRef<Indexes>()
 
-  public scrollRef = Taro.createRef<GScrollView>()
-
-  private indexesRef = Taro.createRef<Indexes>()
-
-  private formRef = Taro.createRef<Forms>()
+  private formRef = React.createRef<Forms>()
 
   private scrollTop = 0
 

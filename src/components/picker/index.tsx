@@ -1,4 +1,5 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View, Picker } from '@tarojs/components'
 import Day from 'dayjs'
 import { FORM_ERROR, SYSTEM_PAGE_SIZE } from '~config'

@@ -1,9 +1,10 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
 import { AtRate } from 'taro-ui'
 import style from '~theme/style'
 import { SYSTEM_PAGE_SIZE } from '~config'
-import { noop } from 'lodash'
+import { noop } from '~lodash'
 
 import './index.scss'
 

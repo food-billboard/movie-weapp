@@ -1,4 +1,5 @@
-import Taro, { Component, Config } from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import GButton from '~components/button'
 import Header from '~components/newsheader'
@@ -15,20 +16,18 @@ import { getCustomerMovieCommentList, getMovieCommentList, getMovieDetailSimple,
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any> {
-  public static config: Config = {
-    navigationBarTitleText: "评论",
-    enablePullDownRefresh: true
-  }
 
-  public componentDidMount = async () => {
-    this.fetchMovieData()
-  }
+  public componentDidMount = async () => await this.fetchMovieData()
 
-  public componentDidShow = () => {
-    colorStyleChange()
-  }
+  public componentDidShow = () => colorStyleChange()
 
-  private scrollRef = Taro.createRef<GScrollView>()
+  private scrollRef = React.createRef<GScrollView>()
+
+  //评论组件
+  private commentRef = React.createRef<CommentCom>()
+
+  //电影id
+  readonly id = getCurrentInstance().router.params.id
 
   //下拉刷新
   public onPullDownRefresh = async () => {
@@ -47,12 +46,6 @@ export default class extends Component<any> {
     userCall: false,
     headerData: {},
   }
-
-  //评论组件
-  public commentRef = Taro.createRef<CommentCom>()
-
-  //电影id
-  readonly id = this.$router.params.id
 
   //获取电影数据
   public fetchMovieData = async () => {

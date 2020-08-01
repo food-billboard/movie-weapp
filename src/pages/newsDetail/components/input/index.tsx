@@ -1,4 +1,5 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View, Textarea } from '@tarojs/components'
 import Emoj from '../emojSwiper'
 import { IProps, IState } from './index.d'
@@ -39,7 +40,7 @@ export default class extends Component<IProps, IState> {
     // lifeStatus: false
   }
 
-  private EmojRef = Taro.createRef<Emoj>()
+  private EmojRef = React.createRef<Emoj>()
 
   //重置状态
   public resetStatus = (status?) => this.handleShowDetailFunc(false)

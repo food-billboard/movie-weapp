@@ -1,4 +1,5 @@
-import Taro, { Component, Config } from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import Scroll from '~components/scrollList'
 import Chat, { createScrollId } from './components/chat'
@@ -27,19 +28,14 @@ const systemInfo = createSystemInfo()
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any> {
 
-  public static config:Config = {
-    enablePullDownRefresh: true,
-    // disableScroll: true
-  }
+  private scrollRef = React.createRef<Scroll>()
 
-  private scrollRef = Taro.createRef<Scroll>()
+  private inputRef = React.createRef<GInput>()
 
-  private inputRef = Taro.createRef<GInput>()
-
-  private chatRef = Taro.createRef<Chat>()
+  private chatRef = React.createRef<Chat>()
 
   //通知信息id
-  private id = this.$router.params.id
+  private id = getCurrentInstance().router.params.id
 
   //底部节点
   readonly bottomNode: any = Taro.createSelectorQuery().select('#_bottom').boundingClientRect()

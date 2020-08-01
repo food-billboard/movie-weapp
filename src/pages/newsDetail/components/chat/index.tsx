@@ -1,4 +1,5 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View, ScrollView, Image } from '@tarojs/components'
 import { AtAvatar, AtActivityIndicator } from 'taro-ui'
 import GVideo from '~components/video'
@@ -10,6 +11,47 @@ import { SYSTEM_PAGE_SIZE } from '~config'
 import { TypeColor } from '~theme/color'
 
 import './index.scss'
+
+export interface IContent<T> {
+  text: T 
+  image: T 
+  video: T 
+  audio: T 
+}
+
+export interface IList {
+ type: keyof typeof mediaType
+ content: string
+ createdAt: string
+ _id: string
+ origin: {
+   _id: string
+   username: string
+   avatar: string
+   isMine: boolean
+ }
+}
+
+export interface INewData extends Exclude<IList, 'createdAt' | 'origin'> {
+ loading: boolean
+ scrollId?: string
+}
+
+export interface IProps {
+ list: Array<INewData>
+ height?: number
+ style?: any
+ onScroll?: (...args: any[]) => any
+ autoBottom?: boolean
+ onPreview: (status: boolean) => void
+}
+
+export interface IState {
+  videoShow: boolean
+  activeVideo: string
+  activeScrollItem: string
+  loadLoading: boolean
+}
 
 export interface IContent<T> {
   text: T 
