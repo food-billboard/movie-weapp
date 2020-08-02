@@ -2,7 +2,6 @@ import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { Provider } from 'react-redux'
 import { dva, router, includes } from '~utils'
-import Index from './pages/main/index'
 import configure from './configure'
 
 import './app.scss'
@@ -87,12 +86,10 @@ class App extends Component {
 
   public componentDidCatchError () {}
 
-  // 在 App 类中的 render() 函数没有实际作用
-  // 请勿修改此函数
   public render () {
     return (
       <Provider store={store}>
-        <Index />
+        {this.props.children}
       </Provider>
     )
   }

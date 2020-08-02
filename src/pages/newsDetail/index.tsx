@@ -10,7 +10,7 @@ import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { connect } from 'react-redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
-import { createSystemInfo, EMediaType, withTry } from '~utils'
+import { createSystemInfo, EMediaType, withTry, ESourceTypeList } from '~utils'
 
 import './index.scss'
 
@@ -35,7 +35,7 @@ export default class extends Component<any> {
   private chatRef = React.createRef<Chat>()
 
   //通知信息id
-  private id = getCurrentInstance().router.params.id
+  private id = getCurrentInstance().router?.params.id
 
   //底部节点
   readonly bottomNode: any = Taro.createSelectorQuery().select('#_bottom').boundingClientRect()
@@ -129,6 +129,14 @@ export default class extends Component<any> {
   //不同类型消息发送
   public sendMediaInfo = async (type, data: string | IVideoType| Array<string>) => {
     const { data: list } = this.state
+    if(!this.id) {
+      Taro.showToast({
+        title: '网络错误，请重试',
+        icon: 'none',
+        duration: 1000
+      })
+      return
+    }
     //特指暂时不用
     let baseData: TBaseData = {
       type: EMediaType[type],
@@ -221,7 +229,7 @@ export default class extends Component<any> {
     return (
       <Scroll
         ref={this.scrollRef}
-        sourceType={'Scope'}
+        sourceType={ESourceTypeList.Scope}
         fetch={this.throttleFetchData}
         query={{pageSize: 5}}
         style={{...style.backgroundColor('bgColor')}}

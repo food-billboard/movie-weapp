@@ -4,7 +4,7 @@ export default {
     'pages/mine/index',
     // 'pages/setting/index',
     // 'pages/news/index',
-    'pages/mycomment/index',
+    // 'pages/mycom/index',
     // 'pages/attention/index',
     // 'pages/record/index',
     // 'pages/detail/index',
@@ -15,13 +15,14 @@ export default {
     // 'pages/rank/index',
     // 'pages/store/index',
     // 'pages/commentdetail/index',
-    // 'pages/issue/index',
+    'pages/issue/index',
     // 'pages/userissue/index',
     // 'pages/special/index',
     // 'pages/fans/index',
     // 'pages/newsdetail/index',
     // 'pages/login/index',
     // 'pages/register/index'
+    'pages/tocomment/index'
   ],
   window: {
     backgroundTextStyle: 'dark',
@@ -41,7 +42,7 @@ export default {
         "selectedIconPath": './assets/home-icon-active.png'
       },
       {
-        "pagePath": "pages/mycomment/index",
+        "pagePath": "pages/issue/index",
         "text": "消息",
         "iconPath": "./assets/issue-icon.png",
         "selectedIconPath": './assets/issue-icon-active.png'

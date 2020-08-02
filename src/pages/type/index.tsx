@@ -1,4 +1,4 @@
-import Taro from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, ScrollView, Text } from '@tarojs/components'
 import IconList from '~components/iconlist'
@@ -10,6 +10,7 @@ import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import { getClassifyList, getClassify } from '~services'
+import { ESourceTypeList } from '~utils'
 
 import './index.scss'
 
@@ -20,7 +21,7 @@ const SINGLE_HEADER_HEIGHT = 80
 const SCROLL_MAX_SHOW_COUNT = 10
 
 enum SHOW_TYPE {
-  SHOW_MORE = 'SHOW_MORE'
+  SHOW_MORE = 'SHOW_MORE',
   HIDE_MORE = 'HIDE_MORE'
 }
 
@@ -66,7 +67,7 @@ export default class Index extends Component<any> {
 
   public componentDidMount = async () => {
     await this.fetchTypeData()
-    const { params: { id } } = this.$router
+    const { params: { id=null }={} } = getCurrentInstance().router || {}
     this.id = id || ''
   }
 
@@ -158,7 +159,7 @@ export default class Index extends Component<any> {
       <GScrollView
         ref={this.scrollRef}
         style={{ ...bgColor }}
-        sourceType={'Scope'}
+        sourceType={ESourceTypeList.Scope}
         scrollWithAnimation={true}
         renderContent={
           <View>
@@ -182,7 +183,7 @@ export default class Index extends Component<any> {
                         <View
                           className={'header-list header-list-size'}
                           style={{ ...style.color('primary'), fontWeight: 'normal' }}
-                          onClick={(e) => { this.handleControlTypeDetail.call(this, SHOW_MORE) }}
+                          onClick={(e) => { this.handleControlTypeDetail.call(this, SHOW_TYPE.SHOW_MORE) }}
                         >
                           展开
                                         </View>
@@ -199,7 +200,7 @@ export default class Index extends Component<any> {
                     <View
                       className={'header-list at-col at-col-2'}
                       style={{ ...style.color('primary'), fontWeight: 'normal' }}
-                      onClick={(e) => { this.handleControlTypeDetail.call(this, HIDE_MORE) }}
+                      onClick={(e) => { this.handleControlTypeDetail.call(this, SHOW_TYPE.HIDE_MORE) }}
                     >
                       收起
                                     </View>

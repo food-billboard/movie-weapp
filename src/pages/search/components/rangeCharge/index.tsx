@@ -1,10 +1,22 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import GInput from '~components/input'
-import { IProps, IState } from './index.d'
 import style from '~theme/style'
 import { Toast } from '~components/toast'
 import './index.scss'
+
+export interface IProps {
+  value: {
+    max: string
+    min: string
+  }
+  onChange: (...args: any[]) => any
+ }
+
+ export interface IState {
+  disabled: boolean
+ }
 
 export default class extends Component<IProps, IState>{ 
 

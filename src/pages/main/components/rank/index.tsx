@@ -20,7 +20,7 @@ export interface IProps {
   type: string
   list: Array<List>
   id: string
-  style?: any
+  style?: React.CSSProperties
 }
 
 export interface IIconProps {

@@ -141,10 +141,11 @@ export const getHourMinute = (minutes = 0) => {
     return ret
 }
 
+export const format = (date:Date, type:string="YYYY-MM-DD") => Day(date).format(type)
+
 export const formatTime = (date: any, type: string = 'YYYY-MM-DD', before: number = 1296000000) => {
-    // moment.locale('zh-cn');
     const now = new Date().getTime()
-    const beforeDate = Day(date).valueOf()
+    const beforeDate = valueOf(date)
     if(beforeDate + before > date) {
         return Day(now).toNow()
     }

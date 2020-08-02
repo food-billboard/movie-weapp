@@ -1,11 +1,10 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, Picker } from '@tarojs/components'
-import Day from 'dayjs'
 import { FORM_ERROR, SYSTEM_PAGE_SIZE } from '~config'
 import customStyle from '~theme/style'
 import { noop } from 'lodash'
-import { ICommonFormProps, ICommonFormState, isObject } from '~utils'
+import { ICommonFormProps, ICommonFormState, isObject, format } from '~utils'
 
 interface ISelector {
   disabled?: boolean
@@ -236,7 +235,7 @@ export default class extends Component<IProps, IState> {
               onChange={(e) => { this.handleChange.call(this, e, modeList.date) }}
               value={value}
               start={date.start || this.defaultConfig.start.date}
-              end={date.end || Day(new Date().getTime()).format(dateShow)}
+              end={date.end || format(new Date(), dateShow)}
               fields={date.fields || this.defaultConfig.fields.date}
               disabled={disabled ? disabled : (date.disabled || false)}
               onCancel={date.onCancel || noop}
@@ -244,7 +243,7 @@ export default class extends Component<IProps, IState> {
               <View className='picker'
                 style={{ ..._style }}
               >
-                {title}: {(value + '').length ? Day(value).format(dateShow) : ''}
+                {title}: {(value + '').length ? format(value, dateShow) : ''}
               </View>
             </Picker>
             : null
@@ -263,7 +262,7 @@ export default class extends Component<IProps, IState> {
               <View className='picker'
                 style={{ ..._style }}
               >
-                {title}: {(value + '').length ? Day(value).format(this.defaultConfig.time) : ''}
+                {title}: {(value + '').length ? format(value, this.defaultConfig.time) : ''}
               </View>
             </Picker>
             : null

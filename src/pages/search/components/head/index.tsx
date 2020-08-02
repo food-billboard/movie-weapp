@@ -1,7 +1,21 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { AtTabs, AtTabsPane } from 'taro-ui'
-import { IState, IProps, TabList } from './index.d'
+
 import './index.scss'
+
+export interface IProps {
+    screen: (value: string) => any
+  }
+  
+  export interface TabList {
+    title: string,
+    id: string
+  }
+  
+  export interface IState {
+    current: number
+  }
 
 export const idList = {
     all:'all',

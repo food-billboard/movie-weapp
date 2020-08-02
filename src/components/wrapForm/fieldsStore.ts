@@ -289,7 +289,7 @@ class FieldsStore {
     const validator = new AsyncValidator(allRules)
 
     if (this.options.validateMessages) {
-      validator.messages(this.options.validateMessages);
+      validator.message(this.options.validateMessages);
     }
 
     validator.validate(allValues, options, errors => {

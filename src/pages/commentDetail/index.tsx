@@ -5,14 +5,15 @@ import CommentCom from '~components/comment'
 import GScrollView from '~components/scrollList'
 import {List} from '~components/commentlist'
 import GButton from '~components/button'
-import { throttle } from 'lodash'
+import { EAction, IParams } from '../userComment'
+import { throttle } from '~lodash'
 import Header from './components/header'
 import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
 import { connect } from 'react-redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
-import { withTry } from '~utils'
-import { cancelLike, putLike, getCustomerMovieCommentDetail, getUserMovieCommentDetail, postCommentToUser } from '~services'
+import { withTry, ESourceTypeList, router, routeAlias } from '~utils'
+import { cancelLike, putLike, getCustomerMovieCommentDetail, getUserMovieCommentDetail } from '~services'
 
 let FIRST = true
 
@@ -27,7 +28,7 @@ export default class extends Component<any> {
   private commentRef = React.createRef<CommentCom>()
 
   //评论id
-  readonly id = getCurrentInstance().router.params.id
+  readonly id = getCurrentInstance().router?.params.id
 
   public state: any = {
     headerData: {},
@@ -74,19 +75,19 @@ export default class extends Component<any> {
 
   public throttleFetchData = throttle(this.fetchData, 2000)
 
-  //发布评论
-  public publishComment = async (value: { 
-    text?: string,
-    image?: Array<any>,
-    video?: Array<any>
-  }) => {
-    const { text='', image=[], video=[] } = value
+  // //发布评论
+  // public publishComment = async (value: { 
+  //   text?: string,
+  //   image?: Array<any>,
+  //   video?: Array<any>
+  // }) => {
+  //   const { text='', image=[], video=[] } = value
 
-    Taro.showLoading({ mask: true, title: '发布中' })
-    await withTry(postCommentToUser)({ id: this.id, content: { text, image, video } })
-    Taro.hideLoading()
-    await this.onPullDownRefresh()
-  }
+  //   Taro.showLoading({ mask: true, title: '发布中' })
+  //   await withTry(postCommentToUser)({ id: this.id, content: { text, image, video } })
+  //   Taro.hideLoading()
+  //   await this.onPullDownRefresh()
+  // }
 
   //点赞
   public like = async(id: string, like: boolean) => {
@@ -118,14 +119,20 @@ export default class extends Component<any> {
     return
     //
 
-    await this.props.getUserInfo()
-    .then(_ => {
-      this.commentRef.current!.open()
-      this.setState({
-          commentId: !!commentId ? commentId : this.id
-      })
-    })
-    .catch(err => err)
+    let param: IParams = {
+      action: EAction.COMMENT_USER,
+      postInfo: commentId
+    }
+    router.push(routeAlias.toComment, param)
+
+    // await this.props.getUserInfo()
+    // .then(_ => {
+    //   this.commentRef.current!.open()
+    //   this.setState({
+    //       commentId: !!commentId ? commentId : this.id
+    //   })
+    // })
+    // .catch(err => err)
   }
 
   public render() {
@@ -138,7 +145,7 @@ export default class extends Component<any> {
       <GScrollView
         ref={this.scrollRef}
         style={{...style.backgroundColor('bgColor')}}
-        sourceType={'Scope'}
+        sourceType={ESourceTypeList.Scope}
         scrollWithAnimation={true}
         query={{pageSize: 7}}
         renderContent={
@@ -168,16 +175,16 @@ export default class extends Component<any> {
         renderBottom={
           <View>
             <GButton 
-                style={{width: '100%', height: '92', position: 'fixed', bottom: 0, left: 0, zIndex: '999'}}
+                style={{width: '100%', height: '92', position: 'fixed', bottom: 0, left: 0, zIndex: 999}}
                 type={'secondary'}
                 value={['发布评论', '发布评论']} 
                 operate={this.publish}
             />
-            <CommentCom
+            {/* <CommentCom
                 buttonText={'写完了'}
                 publishCom={this.publishComment}
                 ref={this.commentRef}
-            />
+            /> */}
           </View>
         }
       >

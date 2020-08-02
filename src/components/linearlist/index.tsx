@@ -4,7 +4,7 @@ import { View } from '@tarojs/components'
 import { AtList, AtListItem } from "taro-ui"
 import { isObject } from '~utils'
 import { SYSTEM_PAGE_SIZE } from '~config/media'
-import { AtIconBaseProps } from 'taro-ui/@types/base'
+import { AtIconBaseProps } from 'taro-ui/types/base'
 
 import './index.scss'
 
@@ -33,7 +33,7 @@ export interface IList {
 
 export interface IProps {
   list: Array<IList>
-  style?: any
+  style?: React.CSSProperties
 }
 
 export default class List extends Component<IProps>{

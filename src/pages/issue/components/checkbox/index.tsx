@@ -2,9 +2,9 @@ import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import GCheckbox from '~components/checkbox'
 import { getLanguageList, getClassify } from '~services'
-import { Option } from 'taro-ui/@types/checkbox'
+import { CheckboxOption } from 'taro-ui/types/checkbox'
 
-enum EDataType {
+export enum EDataType {
   LANGUAGE = 'LANGUAGE',
   CLASSIFY = 'CLASSIFY'
 }
@@ -17,7 +17,7 @@ export interface IProps {
 }
 
 export interface IState {
-  list: Array<Option<string>>
+  list: Array<CheckboxOption<string>>
 }
 
 export default class extends Component<IProps> {

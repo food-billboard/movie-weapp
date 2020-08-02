@@ -8,7 +8,7 @@ import List from '~components/list'
 import { TypeColor, colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { throttle } from 'lodash'
-import { router, routeAlias } from '~utils'
+import { router, routeAlias, ESourceTypeList } from '~utils'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import { getRankList, getRankType } from '~services'
 
@@ -59,13 +59,13 @@ export default class extends Component<any> {
 
   public componentDidMount = async () => {
     this.fetchRankTypeData()
-    this.title = this.current.params.type || '排行榜'
+    this.title = this.current?.params.type || '排行榜'
   }
 
   readonly current = getCurrentInstance().router
 
   //排行榜id
-  private _id = this.current.params.id
+  private _id = this.current?.params.id
 
   public get id() {
     return this._id
@@ -160,7 +160,7 @@ export default class extends Component<any> {
       <GScrollView
         style={{...style.backgroundColor('bgColor')}}
         ref={this.scrollRef}
-        sourceType={'Scope'}
+        sourceType={ESourceTypeList.Scope}
         query={{pageSize: 8}}
         renderContent={
           <View>

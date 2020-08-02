@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
 import { AtModal, AtModalHeader, AtModalContent, AtModalAction, AtButton } from "taro-ui"
 import style from '~theme/style'
-import { noop } from 'lodash'
+import { noop } from '~lodash'
 
 import './index.scss'
 

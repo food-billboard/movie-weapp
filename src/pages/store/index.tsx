@@ -1,4 +1,4 @@
-import Taro from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import List from '~components/newsheader'
@@ -7,6 +7,7 @@ import { throttle } from 'lodash'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { getUserStore, getCustomerStore } from '~services'
+import { ESourceTypeList } from '~utils'
 
 export default class Index extends Component<any> {
 
@@ -28,7 +29,7 @@ export default class Index extends Component<any> {
   public onReachBottom = async () => await this.scrollRef.current!.handleToLower()
 
   //用户id
-  readonly id = this.$router.params.id
+  readonly id = getCurrentInstance().router?.params.id
 
   //获取数据
   public fetchData = async (query: any, isInit = false) => {
@@ -53,7 +54,7 @@ export default class Index extends Component<any> {
       <GScrollView
         ref={this.scrollRef}
         style={{ ...style.backgroundColor('bgColor') }}
-        sourceType={'Scope'}
+        sourceType={ESourceTypeList.Scope}
         scrollWithAnimation={true}
         renderContent={<View>
           {

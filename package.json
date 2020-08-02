@@ -43,7 +43,6 @@
 		"@tarojs/runtime": "^3.0.6",
 		"@tarojs/taro": "3.0.6",
 		"dayjs": "^1.8.31",
-		"dva": "^2.4.1",
 		"dva-core": "^2.0.2",
 		"dva-loading": "^3.0.20",
 		"react": "^16.13.1",

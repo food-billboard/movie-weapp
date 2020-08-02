@@ -18,7 +18,7 @@ import { SYSTEM_PAGE_SIZE } from '~config'
 import { AtDrawer } from 'taro-ui'
 import { Item } from '~components/indexes'
 import { EIndexesType } from '../issue/interface'
-import { withTry } from '~utils'
+import { withTry, ESourceTypeList } from '~utils'
 import { } from '~services'
 
 import './index.scss'
@@ -263,7 +263,7 @@ export default class Index extends Component<any> {
           ...style.backgroundColor('bgColor')
         }}
         autoFetch={false}
-        sourceType={'Scope'}
+        sourceType={ESourceTypeList.Scope}
         renderContent={
           !indexesVisible ?
             <Indexes

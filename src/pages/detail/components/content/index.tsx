@@ -6,7 +6,6 @@ import GRate from '../rate'
 import GStore from '../store'
 import Ellipsis from '~components/ellipsis'
 import { formatTime, formatNumber, ItypeList } from '~utils'
-import { IProps, IState } from './index.d'
 import style from '~theme/style'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import { noop } from 'lodash'
@@ -106,7 +105,6 @@ export default class Content extends Component<IProps, IState>{
         <View className='main'>
           <View className='main-rate'>
             <GRate
-              movie={name}
               value={rate}
               rate={this.props.rate}
             />

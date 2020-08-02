@@ -1,6 +1,6 @@
 import createLoading from 'dva-loading'
 import * as core from 'dva-core'
-import {createLogger} from 'redux-logger'
+import { createLogger } from 'redux-logger'
 
 const isProduction = process.env.NODE_ENV === 'production'
 
@@ -15,6 +15,8 @@ const createDva : any = (options: any = {}, callback : any = () => {}) => {
     }
     //创建dva实例
     app = core.create(options)
+
+    console.log(app)
 
     //使用Loading
     app.use(createLoading({effects: true}))

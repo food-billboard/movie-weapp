@@ -4,8 +4,7 @@ import { AtSegmentedControl } from 'taro-ui'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import { TypeColor } from '~theme/color'
 import { noop } from 'lodash'
-import { IProps, IState } from './index.d'
-import { AtSegmentedControlProps } from 'taro-ui/@types/segmented-control'
+import { AtSegmentedControlProps } from 'taro-ui/types/segmented-control'
 
 export interface IProps extends Pick<AtSegmentedControlProps, 'color' | 'selectedColor' | 'fontSize' | 'disabled' | 'values'>{
   handleClick?: (value: any) => void

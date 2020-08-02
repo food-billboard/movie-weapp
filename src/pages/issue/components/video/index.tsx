@@ -1,12 +1,11 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
-import GVideo from '~components/video'
+import GVideo, { IProps as IVideo } from '~components/video'
 import { AtButton } from 'taro-ui'
-import { isObject } from '~utils'
 import { FORM_ERROR } from '~config'
 import style from '~theme/style'
-import { noop } from 'lodash'
-import { IProps as IVideo } from '~components/video/index.d'
+import { noop } from '~lodash'
 
 import './index.scss'
 

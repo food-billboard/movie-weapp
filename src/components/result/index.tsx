@@ -8,21 +8,25 @@ export interface IProps {
 
 export interface IState {} 
 
-function Result({ props }: { props: IProps }) {
-  const { isEmpty } = props
-  return (
-    <View className="result">
-      {
-        ( typeof isEmpty === 'function' ? isEmpty() : isEmpty ) ?
-        <View className="at-row result-point at-row__justify--center at-row__align--center">
-          <Text className="at-col at-col-12">暂时没有数据，去看看其他的吧</Text>
-          <View className="at-col at-col-12 at-icon at-icon-alert-circle"></View>
-        </View>
-        :
-        this.props.children
-      }
-    </View>
-  )
-}
+export default class extends Component<IProps, IState> {
+  
+  public render() {
 
-export default Result
+    const { isEmpty } = this.props
+
+    return (
+      <View className="result"> 
+        {
+          ( typeof isEmpty === 'function' ? isEmpty() : isEmpty ) ?
+          <View className="at-row result-point at-row__justify--center at-row__align--center">
+            <Text className="at-col at-col-12">暂时没有数据，去看看其他的吧</Text>
+            <View className="at-col at-col-12 at-icon at-icon-alert-circle"></View>
+          </View>
+          :
+          this.props.children
+        }
+      </View>
+    )
+  }
+
+}

@@ -1,4 +1,5 @@
-import Taro, {Component} from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import GPicker from '~components/picker'
 import ChargePicker from '../rangeCharge'
@@ -9,18 +10,36 @@ import { AtForm, AtButton, AtTag } from 'taro-ui'
 import { createFieldsStore } from '~components/wrapForm/fieldsStore'
 import ComponentCheckbox from '~components/checkbox'
 import GCheckbox from '../../../issue/components/checkbox'
-import { IState, IProps, FormDefault } from './index.d'
 import { FormData } from '../../interface'
 import { TypeColor } from '~theme/color'
 import style from '~theme/style'
 import List from '~components/linearlist'
-import { IList } from '~components/linearlist/index.d'
+import { IList } from '~components/linearlist'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import { withTry } from '~utils'
-import { Item } from '~components/indexes/index.d'
-import { TIndexesType } from '../../../issue/interface'
+import { Item } from '~components/indexes'
+import { EIndexesType } from '../../../issue/interface'
 
 import './index.scss'
+
+export interface IProps {
+    screen: (formData: FormData) => void
+    indexesShow: (...args: Array<any>) => any
+  }
+  
+  interface FeeOption {
+    value: string,
+    label: string,
+    disabled: boolean
+  }
+  
+  export interface FormDefault {
+    feeOptions: Array<FeeOption>
+  }
+  
+  export interface IState {
+    open: boolean
+  }
 
 const TAT_STYLE = {
     boxSizing: 'border-box', 
@@ -54,13 +73,13 @@ export default class Forms extends Component<IProps> {
         district: [],   //地区
     }
 
-    private chargeRef = Taro.createRef<ChargePicker>()
+    private chargeRef = React.createRef<ChargePicker>()
 
-    private actorRef = Taro.createRef<TagList>()
+    private actorRef = React.createRef<TagList>()
 
-    private directorRef = Taro.createRef<TagList>()
+    private directorRef = React.createRef<TagList>()
 
-    private districtRef = Taro.createRef<TagList>()
+    private districtRef = React.createRef<TagList>()
 
     public componentDidMount = () => {
         fieldsStore.setUpdate(this.forceUpdate.bind(this))
@@ -178,7 +197,7 @@ export default class Forms extends Component<IProps> {
     }
 
     //索引选择
-    public handleIndexesAppend = (item: Item, type:TIndexesType) => {
+    public handleIndexesAppend = (item: Item, type:EIndexesType) => {
         const { key, name } = item 
         let ref
         switch(type) {
@@ -193,7 +212,7 @@ export default class Forms extends Component<IProps> {
         const { open } = this.state
         const { feeOptions } = this.formDefault
 
-        const tagStyle = {
+        const tagStyle: any = {
             ...TAT_STYLE,
             border: `1px dashed ${TypeColor['primary']}`, 
             color: TypeColor['primary']

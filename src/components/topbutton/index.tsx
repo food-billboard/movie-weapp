@@ -49,8 +49,8 @@ export default class Top extends Component<ITopProps> {
         size: small
     }
 
-    public constructor() {
-        super(...arguments)
+    public constructor(props) {
+        super(props)
 
         this.handlerClick = this.handlerClick.bind(this)
         this.throttleClick = this.throttleClick.bind(this)

@@ -6,7 +6,7 @@ import { router, routeAlias } from '~utils'
 import { TypeColor } from '~theme/color'
 import style from '~theme/style'
 import { SYSTEM_PAGE_SIZE } from '~config'
-import { AtIconBaseProps } from 'taro-ui/@types/base'
+import { AtIconBaseProps } from 'taro-ui/types/base'
 
 import './index.scss'
 

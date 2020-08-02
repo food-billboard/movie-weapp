@@ -20,7 +20,7 @@ export interface IContent<T> {
 }
 
 export interface IList {
- type: keyof typeof mediaType
+ type: EMediaType
  content: string
  createdAt: string
  _id: string
@@ -81,7 +81,7 @@ export interface INewData extends Exclude<IList, 'createdAt' | 'origin'> {
 export interface IProps {
  list: Array<INewData>
  height?: number
- style?: any
+ style?: React.CSSProperties
  onScroll?: (...args: any[]) => any
  autoBottom?: boolean
  onPreview: (status: boolean) => void

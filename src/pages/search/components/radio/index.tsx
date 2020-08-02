@@ -1,10 +1,32 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro  from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
 import { AtActionSheet, AtActionSheetItem  } from 'taro-ui'
 import './index.scss'
-import { IProps, IState, List, IRadio } from './index.d'
 import { withTry } from '~utils'
 import { getOrderList } from '~services'
+
+export interface IProps {
+    screen: (value: string) => void
+  }
+  
+  export interface IRadio {
+    id: string
+    label: string
+  }
+  
+  export interface List {
+    label: string,
+    value: string,
+    id: string
+  }
+  
+  export interface IState {
+    value: string,
+    text: string,
+    show: boolean,
+    radioList: Array<List>
+  }
 
 export default class RadioList extends Component<IProps>{
 

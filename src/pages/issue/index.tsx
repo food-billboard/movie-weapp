@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { AtButton, AtTag } from 'taro-ui'
 import GCommentPicker from '~components/picker'
-import GCheckBox from './components/checkbox'
+import GCheckBox, { EDataType } from './components/checkbox'
 import GVideo from './components/video'
 import GDescription from '~components/input'
 import GImagePicker from '~components/imgPicker'
@@ -13,8 +13,8 @@ import { createFieldsStore } from '~components/wrapForm/fieldsStore'
 import Indexes from './components/indexes'
 import Rate from '../detail/components/rate'
 import TagList from '~components/tagList'
-import { IFormData, TIndexesType } from './interface'
-import { Item } from '~components/indexes/index.d'
+import { IFormData, EIndexesType } from './interface'
+import { Item } from '~components/indexes'
 import { TypeColor, colorStyleChange } from '~theme/color'
 import { size, withTry, upload } from '~utils'
 import { SYSTEM_PAGE_SIZE } from '~config'
@@ -29,7 +29,7 @@ const fieldsStore = createFieldsStore('issue', {
   }
 })
 
-const BUTTON_STYLE = {
+const BUTTON_STYLE:any = {
   position: 'fixed',
   bottom:0,
   left:0,
@@ -38,14 +38,14 @@ const BUTTON_STYLE = {
   zIndex: 9
 }
 
-const TAT_STYLE = {
+const TAT_STYLE: any = {
   boxSizing: 'border-box', 
   width:'100%', 
   marginBottom: '5px', 
   ...style.border(1, 'primary', 'dashed', 'all')
 }
 
-const PICKER_STYLE = {
+const PICKER_STYLE: any = {
   height: SYSTEM_PAGE_SIZE(46) + 'px',
   lineHeight: SYSTEM_PAGE_SIZE(46) + 'px',
   marginBottom: '5px'
@@ -60,7 +60,9 @@ export default class extends Component<any> {
     indexesVisible: false,
   }
 
-  private id = getCurrentInstance().router.params.id
+  router = getCurrentInstance().router
+
+  private id = this.router?.params.id
 
   private actorRef = React.createRef<TagList>()
 
@@ -213,7 +215,7 @@ export default class extends Component<any> {
   //indexes展示
   public handleIndexesShow = (config: {
     visible: boolean,
-    type: TIndexesType
+    type: EIndexesType
   }) => {
     const { visible, type } = config
     this.setState({
@@ -226,7 +228,7 @@ export default class extends Component<any> {
   }
 
   //indexes选择
-  public handleSelectIndexes = (item: Item, type: TIndexesType) => {
+  public handleSelectIndexes = (item: Item, type: EIndexesType) => {
     const { key, name } = item
     //隐藏索引
     this.setState({
@@ -430,7 +432,7 @@ export default class extends Component<any> {
                 类型
               </AtTag>
               <GCheckBox
-                type={'CLASSIFY'}
+                type={EDataType.CLASSIFY}
                 handleChange={
                   fieldsStore.getFieldProps('classify', 'onChange', {
                     rules: [
@@ -479,7 +481,7 @@ export default class extends Component<any> {
                 语言
               </AtTag>
               <GCheckBox
-                type={'LANGUAGE'}
+                type={EDataType.LANGUAGE}
                 handleChange={
                   fieldsStore.getFieldProps('language', 'onChange', {
                     rules: [

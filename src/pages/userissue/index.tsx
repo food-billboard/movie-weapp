@@ -8,7 +8,7 @@ import { throttle } from 'lodash'
 import { connect } from 'react-redux'
 import { mapDispatchToProps, mapStateToProps } from './connect'
 import { getCustomerIssue, getUserIssue } from '~services'
-import { router, routeAlias } from '~utils'
+import { router, routeAlias, ESourceTypeList } from '~utils'
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any>{
@@ -31,7 +31,7 @@ export default class extends Component<any>{
   }
 
   //用户id
-  readonly id = getCurrentInstance().router.params.id
+  readonly id = getCurrentInstance().router?.params.id
 
   //获取数据
   public fetchData = async (query: any, isInit = false) => {
@@ -74,7 +74,7 @@ export default class extends Component<any>{
         ref={this.scrollRef}
         query={{ pageSize: 16 }}
         style={{ ...style.backgroundColor('bgColor') }}
-        sourceType={'Scope'}
+        sourceType={ESourceTypeList.Scope}
         scrollWithAnimation={true}
         fetch={this.throttleFetchData}
         renderContent={<IconList list={data.map(item => {

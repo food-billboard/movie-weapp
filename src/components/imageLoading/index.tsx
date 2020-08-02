@@ -8,7 +8,7 @@ import style from '~theme/style'
 import { noop } from 'lodash'
 import { isObject } from '~utils'
 import { ImageProps } from '@tarojs/components/types/Image'
-import { AtActivityIndicatorProps } from 'taro-ui/@types/activity-indicator'
+import { AtActivityIndicatorProps } from 'taro-ui/types/activity-indicator'
 
 import './index.scss'
 

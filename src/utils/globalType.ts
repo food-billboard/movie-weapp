@@ -32,18 +32,18 @@ export enum EMediaType {
 export const routeAlias = {
   main: '/main',
   mine: '/mine',
-  comment: '/comment',
+  comment: '/moviecom',
   news: '/news' ,
   attention: '/attention',
   detail: '/detail',
-  mycomment: '/mycomment',
+  mycomment: '/mycom',
   record: '/record',
   search: '/search',
   setting: '/setting',
   type: '/type',
   user: '/user',
   rank: '/rank',
-  commentdetail: '/commentdetail',
+  commentdetail: '/comdetail',
   store: '/store',
   issue: '/issue',
   userissue: '/userissue',
@@ -51,25 +51,26 @@ export const routeAlias = {
   fans: '/fans',
   newsdetail: '/newsdetail',
   login: '/login',
-  register: '/register'
+  register: '/register',
+  toComment: '/comment'
 }
 
 //路由配置
 export const routeConfig = [
   { path: 'pages/main/index', alias: routeAlias.main },
   { path: 'pages/mine/index', alias: routeAlias.mine },
-  { path: 'pages/comment/index', alias: routeAlias.comment },
+  { path: 'pages/moviecom/index', alias: routeAlias.comment },
   { path: 'pages/news/index', alias: routeAlias.news },
   { path: 'pages/attention/index', alias: routeAlias.attention },
   { path: 'pages/detail/index', alias: routeAlias.detail },
-  { path: 'pages/mycomment/index', alias: routeAlias.mycomment},
+  { path: 'pages/mycom/index', alias: routeAlias.mycomment},
   { path: 'pages/record/index', alias: routeAlias.record},
   { path: 'pages/search/index', alias: routeAlias.search},
   { path: 'pages/setting/index', alias: routeAlias.setting},
   { path: 'pages/type/index', alias: routeAlias.type},
   { path: 'pages/user/index', alias: routeAlias.user},
   { path: 'pages/rank/index', alias: routeAlias.rank},
-  { path: 'pages/commentdetail/index', alias: routeAlias.commentdetail },
+  { path: 'pages/comdetail/index', alias: routeAlias.commentdetail },
   { path: 'pages/store/index', alias: routeAlias.store },
   { path: 'pages/issue/index', alias: routeAlias.issue },
   { path: 'pages/userissue/index', alias: routeAlias.userissue },
@@ -78,6 +79,7 @@ export const routeConfig = [
   { path: 'pages/newsdetail/index', alias: routeAlias.newsdetail },
   { path: 'pages/login/index', alias: routeAlias.login },
   { path: 'pages/register/index', alias: routeAlias.register },
+  { path: 'pages/comment/index', alias: routeAlias.comment }
 ]
 
 //轮播图路由跳转类型"MOVIE", "SPEICAL", "COMMENT"

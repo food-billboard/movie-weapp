@@ -1,4 +1,4 @@
-import { Component } from '@tarojs/taro'
+import { Component } from 'react'
 import { View } from '@tarojs/components'
 import { createFieldsStore } from './fieldsStore'
 
@@ -6,8 +6,8 @@ export default class extends Component<any> {
 
   fieldsStore
 
-  constructor() {
-    super(...arguments)
+  constructor(props) {
+    super(props)
     this.init()
   }
 

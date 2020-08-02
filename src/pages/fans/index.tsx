@@ -6,7 +6,7 @@ import GScrollView from '~components/scrollList'
 import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
 import { throttle } from 'lodash'
-import { router, routeAlias } from '~utils'
+import { router, routeAlias, ESourceTypeList } from '~utils'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import { getCustomerFans, getUserFans } from '~services'
 
@@ -19,7 +19,7 @@ export default class extends Component<any>{
   }
 
   //用户id
-  readonly id = getCurrentInstance().router.params.id
+  readonly id = getCurrentInstance().router?.params.id
 
   private scrollRef = React.createRef<GScrollView>()
 
@@ -63,7 +63,7 @@ export default class extends Component<any>{
     return (
       <GScrollView
         ref={this.scrollRef}
-        sourceType={'Scope'}
+        sourceType={ESourceTypeList.Scope}
         scrollWithAnimation={true}
         query={{ pageSize: 20 }}
         style={{ ...style.backgroundColor('bgColor') }}

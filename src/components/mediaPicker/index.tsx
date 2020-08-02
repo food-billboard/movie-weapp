@@ -31,7 +31,7 @@ export interface IProps extends ICommonFormProps {
  initialValue?: Array<IItem>
  value?: Array<IItem>
  length?: number
- style?: any
+ style?: React.CSSProperties
  width?: number | false
  height?:number | false
  close?: boolean

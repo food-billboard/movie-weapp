@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import { AtImagePicker } from 'taro-ui'
 import { IMAGE_CONFIG, FORM_ERROR } from '~config'
 import { Toast } from '../toast'
-import { noop } from 'lodash'
 
 import { ICommonFormProps, ICommonFormState } from '~utils'
 

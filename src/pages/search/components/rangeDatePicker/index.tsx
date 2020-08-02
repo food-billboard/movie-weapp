@@ -1,9 +1,21 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import GPicker from '~components/picker'
-import { IProps, IState } from './index.d'
 import { Toast } from '~components/toast'
 import './index.scss'
+
+export interface IProps {
+  onChange: (...args: any[]) => any
+  value: {
+    start: string
+    end: string
+  }
+ }
+
+ export interface IState {
+
+ }
 
 export default class extends Component<IProps, IState> {
 

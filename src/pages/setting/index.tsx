@@ -4,20 +4,21 @@ import { View, Button } from '@tarojs/components'
 import GRadio from '~components/radio'
 import Model from '~components/model'
 import List from '~components/linearlist'
-import Comment from '~components/comment'
+// import Comment from '~components/comment'
+import { EAction, IParams } from '../userComment'
 import GColor from './components/color'
 import { TypeColor, colorChange, colorStyleChange } from '~theme/color'
 import { router, routeAlias, createSystemInfo, withTry, clearToken } from '~utils'
 import { Toast } from '~components/toast'
-import { Option } from 'taro-ui/@types/radio'
+import { RadioOption } from 'taro-ui/types/radio'
 import style from '~theme/style'
-import { signout, getAppInfo, feedback, preCheckFeedback } from '~services'
+import { signout, getAppInfo } from '~services'
 
 import './index.scss'
 
 type TOptionType = 'on' | 'off'
 
-interface IOption extends Option<string> {
+interface IOption extends RadioOption<string> {
   value: string
 }
 
@@ -100,7 +101,12 @@ export default class Setting extends Component<any>{
     })
     return
     //
-    this.commentRef.current!.open()
+    let param: IParams = {
+      action: EAction.FEEDBACK
+    }
+    router.push(routeAlias.toComment, param)
+
+    // this.commentRef.current!.open()
   }
 
   public close = (prop) => {
@@ -125,28 +131,28 @@ export default class Setting extends Component<any>{
   //监听退出登录取消
   public logCancel = () => this.logClose()
 
-  //反馈信息发送
-  public handleFeedback = async (value: {
-    text?: string
-    image?: Array<string>
-    video?: Array<string>
-  }) => {
-    Taro.showLoading({ mask: true, title: '预检查中...' })
-    const data = await preCheckFeedback()
-    if (!data) {
-      Taro.showToast({
-        title: '已达到每日反馈上限',
-        icon: 'none',
-        duration: 1000
-      })
-      Taro.hideLoading()
-    } else {
-      const { text = '', image = [], video = [] } = value
-      await withTry(feedback)({ text, image, video })
-      Taro.hideLoading()
-      Taro.showToast({ mask: false, icon: 'none', title: 'success~', duration: 500 })
-    }
-  }
+  // //反馈信息发送
+  // public handleFeedback = async (value: {
+  //   text?: string
+  //   image?: Array<string>
+  //   video?: Array<string>
+  // }) => {
+  //   Taro.showLoading({ mask: true, title: '预检查中...' })
+  //   const data = await preCheckFeedback()
+  //   if (!data) {
+  //     Taro.showToast({
+  //       title: '已达到每日反馈上限',
+  //       icon: 'none',
+  //       duration: 1000
+  //     })
+  //     Taro.hideLoading()
+  //   } else {
+  //     const { text = '', image = [], video = [] } = value
+  //     await withTry(feedback)({ text, image, video })
+  //     Taro.hideLoading()
+  //     Taro.showToast({ mask: false, icon: 'none', title: 'success~', duration: 500 })
+  //   }
+  // }
 
   //反馈
   readonly feedback = {
@@ -161,7 +167,7 @@ export default class Setting extends Component<any>{
       color: TypeColor[ICON_COLOR]
     },
     handle: this.showFeedback,
-    feedback: this.handleFeedback
+    // feedback: this.handleFeedback
   }
 
   //色调
@@ -317,11 +323,11 @@ export default class Setting extends Component<any>{
           </Button>
         </View>
         <Model info={activeModel} />
-        <Comment
+        {/* <Comment
           buttonText={'发送'}
           ref={this.commentRef}
           publishCom={this.feedback.feedback}
-        />
+        /> */}
       </View>
     )
   }

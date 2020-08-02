@@ -28,7 +28,7 @@ class Index extends Component<IProps>{
       case ESwiperRouteType.MOVIE:
         router.push(routeAlias.detail, { id })
         break
-      case ESwiperRouteType.SPEICAL:
+      case ESwiperRouteType.SPECIAL:
         router.push(routeAlias.special, { id })
         break
     }

@@ -4,7 +4,7 @@ import { View } from '@tarojs/components'
 import { AtTimeline, AtButton, AtTag } from 'taro-ui'
 import GInput from '../input'
 import { Toast, IQuery } from '~components/toast'
-import { Item } from 'taro-ui/@types/timeline'
+import { Item } from 'taro-ui/types/timeline'
 import { isObject, ICommonFormProps, ICommonFormState } from '~utils'
 import customStyle from '~theme/style'
 import { TypeColor } from '~theme/color'
@@ -49,7 +49,7 @@ export interface IState {
   statusData: Array<IStatusData>
 }
 
-const TAT_STYLE = {
+const TAT_STYLE:any = {
   boxSizing: 'border-box',
   border: `1px dashed ${TypeColor['primary']}`,
   width: '100%',
@@ -85,7 +85,7 @@ class Rest extends Component<IProps, IState> {
   }
 
   //输入框
-  public inputRef = Taro.createRef<GInput>()
+  public inputRef = React.createRef<GInput>()
 
   //添加
   public handleAdd = async () => {

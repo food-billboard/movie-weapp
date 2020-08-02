@@ -3,7 +3,8 @@ import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import GVideo from '~components/video'
 import GButton from '~components/button'
-import Comment from '~components/comment'
+// import Comment from '~components/comment'
+import { IParams, EAction } from '~pages/userComment'
 import List from './components/imglist'
 import Content from './components/content'
 import IconList from './components/iconList'
@@ -24,7 +25,7 @@ import './index.scss'
 export default class extends Component<any> {
 
   //电影id
-  private id = getCurrentInstance().router.params.id
+  private id = getCurrentInstance().router?.params.id
 
   public componentDidShow = () => colorStyleChange()
 
@@ -50,6 +51,14 @@ export default class extends Component<any> {
   //获取数据
   public fetchData = async () => {
     const { userInfo } = this.props
+    if(!this.id) {
+      Taro.showToast({
+        title: '网络错误，请重试',
+        icon: 'none',
+        duration: 1000
+      })
+      return
+    }
     Taro.showLoading({ mask: true, title: '凶猛加载中' })
     const method = userInfo ? getCustomerMovieDetail : getUserMovieDetail
     const data = await method(this.id)
@@ -78,25 +87,31 @@ export default class extends Component<any> {
     return
     //
 
+    let param:IParams = {
+      action: EAction.COMMENT_MOVIE,
+      postInfo: this.id
+    }
+    router.push(routeAlias.toComment, param)
+
     //获取个人信息缓存
-    await this.props.getUserInfo()
-      .then(_ => {
-        this.commentRef.current!.open()
-      })
-      .catch(err => err)
+    // await this.props.getUserInfo()
+    //   .then(_ => {
+    //     this.commentRef.current!.open()
+    //   })
+    //   .catch(err => err)
   }
 
   //评论
-  public comment = async (value: {
-    text?: string,
-    image?: Array<any>,
-    video?: Array<any>
-  }) => {
-    const { text = '', image = [], video = [] } = value
-    Taro.showLoading({ mask: true, title: '评论中...' })
-    await withTry(postCommentToMovie)({ _id: this.id, content: { text, image, video } })
-    Taro.hideLoading()
-  }
+  // public comment = async (value: {
+  //   text?: string,
+  //   image?: Array<any>,
+  //   video?: Array<any>
+  // }) => {
+  //   const { text = '', image = [], video = [] } = value
+  //   Taro.showLoading({ mask: true, title: '评论中...' })
+  //   await withTry(postCommentToMovie)({ _id: this.id, content: { text, image, video } })
+  //   Taro.hideLoading()
+  // }
 
   //收藏
   public store = async (store: boolean) => {
@@ -266,11 +281,11 @@ export default class extends Component<any> {
             operate={this.handleComment}
           />
         </View>
-        <Comment
+        {/* <Comment
           buttonText={'俺说完了'}
           ref={this.commentRef}
           publishCom={this.comment}
-        />
+        /> */}
       </View>
     )
   }

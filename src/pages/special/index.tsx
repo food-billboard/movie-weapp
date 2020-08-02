@@ -5,7 +5,7 @@ import { throttle } from 'lodash'
 import IconList from '~components/iconlist'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
-import { router, routeAlias } from '~utils'
+import { router, routeAlias, ESourceTypeList } from '~utils'
 import { getSpecial } from '~services'
 
 let FIRST = true
@@ -13,7 +13,7 @@ let FIRST = true
 export default class extends Component<any>{
 
   //专题id
-  readonly id = getCurrentInstance.params.id
+  readonly id = getCurrentInstance().router?.params.id
 
   public state: any = {
     data: [],
@@ -70,7 +70,7 @@ export default class extends Component<any>{
         ref={this.scrollRef}
         style={{...style.backgroundColor('bgColor')}}
         query={{pageSize: 16}}
-        sourceType={'Scope'}
+        sourceType={ESourceTypeList.Scope}
         scrollWithAnimation={true}
         fetch={this.throttleFetchData}
         renderContent={<IconList list={data.map(item => {

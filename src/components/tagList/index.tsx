@@ -4,7 +4,7 @@ import { View } from '@tarojs/components'
 import { AtTag } from 'taro-ui'
 import { FORM_ERROR } from '~config'
 import style from '~theme/style'
-import { AtTagProps } from 'taro-ui/@types/tag'
+import { AtTagProps } from 'taro-ui/types/tag'
 
 import './index.scss'
 

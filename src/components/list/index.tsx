@@ -19,7 +19,7 @@ interface IList {
 
 export interface IProps {
   list: Array<IList>
-  style?: any
+  style?: React.CSSProperties
 }
 
 export default class List extends Component<IProps>{

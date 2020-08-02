@@ -35,7 +35,7 @@ const INIT_QUERY = { pageSize: 10, currPage: 1 }
 
 export default class List extends Component<IProps, IState> {
 
-  public topRef = Taro.createRef<Top>()
+  public topRef = React.createRef<Top>()
 
   public static defaultProps = {
     query: {},

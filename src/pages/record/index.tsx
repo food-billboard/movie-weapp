@@ -7,6 +7,7 @@ import { throttle } from 'lodash'
 import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
 import { getCustomerGlance, getUserGlance } from '~services'
+import { ESourceTypeList } from '~utils'
 
 export default class Index extends Component<any> {
 
@@ -15,7 +16,7 @@ export default class Index extends Component<any> {
   }
 
   //用户id
-  readonly id = getCurrentInstance().router.params.id
+  readonly id = getCurrentInstance().router?.params.id
 
   private scrollRef = React.createRef<GScrollView>()
 
@@ -57,7 +58,7 @@ export default class Index extends Component<any> {
       <GScrollView
         ref={this.scrollRef}
         style={{ ...style.backgroundColor('bgColor') }}
-        sourceType={'Scope'}
+        sourceType={ESourceTypeList.Scope}
         scrollWithAnimation={true}
         renderContent={<View>
           {

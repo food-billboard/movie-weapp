@@ -1,4 +1,4 @@
-import Taro from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { AtInput, AtForm, AtButton } from 'taro-ui'
@@ -76,9 +76,9 @@ export default class extends Component<any> {
 
     if (!userInfo) return
     //回到上一路由
-    const { target }: any = this.$router.params
-    if (target) {
-      return router.replace(target)
+    const { router:currRouter } = getCurrentInstance()
+    if (currRouter && currRouter.params.target) {
+      return router.replace(currRouter.params.target)
     }
     Taro.switchTab({ url: '../main/index' })
   }

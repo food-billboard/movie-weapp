@@ -21,7 +21,7 @@ export default class User extends Component<any>{
   }
 
   //用户id
-  readonly id = getCurrentInstance().router.params.id
+  readonly id = getCurrentInstance().router?.params.id
 
   public componentDidShow = () => {
     colorStyleChange()
@@ -35,6 +35,14 @@ export default class User extends Component<any>{
 
   //数据获取
   public fetchData = async () => {
+    if(!this.id) {
+      Taro.showToast({
+        title: '网络错误，请重试',
+        icon: 'none',
+        duration: 1000
+      })
+      return
+    }
     const { userInfo } = this.props
     Taro.showLoading({ mask: true, title: '加载中' })
     const method = userInfo ? getCustomerAntoherUserInfo : getUserInfo
