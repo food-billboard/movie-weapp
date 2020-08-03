@@ -12,6 +12,7 @@ import Curtain from '../curtain'
 
 import './index.scss'
 
+// --------------此组件当前不用
 export interface IProps {
     buttonText: string,
     publishCom: (value: any) => any

@@ -139,17 +139,6 @@ export default class extends Component<any> {
       postInfo: commentId
     } 
     router.push(routeAlias.toComment, param)
-
-    // await this.props.getUserInfo()
-    // .then(_ => {
-    //   this.commentRef.current!.open()
-
-    //   this.setState({
-    //     userCall: !!isUserCall,
-    //     id: !!commentId && commentId
-    //   })
-    // })
-    // .catch(err => err)
   }
 
   public render() {
