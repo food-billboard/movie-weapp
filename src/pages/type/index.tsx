@@ -71,9 +71,7 @@ export default class Index extends Component<any> {
     this.id = id || ''
   }
 
-  /**
-   * 获取数据
-   */
+  //获取数据
   public fetchData = async (query: any, isInit = false) => {
     const { typeDetail } = this.state
     const data = await getClassifyList({ id: this.id, ...query })

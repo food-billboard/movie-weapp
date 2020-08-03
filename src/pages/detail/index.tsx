@@ -4,7 +4,7 @@ import { View } from '@tarojs/components'
 import GVideo from '~components/video'
 import GButton from '~components/button'
 // import Comment from '~components/comment'
-import { IParams, EAction } from '~pages/userComment'
+import { IParams, EAction } from '~pages/comment'
 import List from './components/imglist'
 import Content from './components/content'
 import IconList from './components/iconList'
@@ -17,7 +17,7 @@ import { colorStyleChange } from '~theme/color'
 import { connect } from 'react-redux'
 import { mapDispatchToProps, mapStateToProps } from './connect'
 import { withTry, router, routeAlias } from '~utils'
-import { getCustomerMovieDetail, getUserMovieDetail, postCommentToMovie, putStore, cancelStore, putRate } from '~services'
+import { getCustomerMovieDetail, getUserMovieDetail, putStore, cancelStore, putRate } from '~services'
 
 import './index.scss'
 
@@ -28,8 +28,6 @@ export default class extends Component<any> {
   private id = getCurrentInstance().router?.params.id
 
   public componentDidShow = () => colorStyleChange()
-
-  private commentRef = React.createRef<Comment>()
 
   private tabRef = React.createRef<Tab>()
 

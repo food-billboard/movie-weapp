@@ -1,6 +1,6 @@
 import { IFiles } from '~components/imgPicker'
 import { IItem } from '~components/mediaPicker'
-import { Item } from 'taro-ui/@types/timeline'
+import { Item } from 'taro-ui/types/timeline'
 
 export interface ItypeList {
   value: string

@@ -1,205 +1,220 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
-import GButton from '~components/button'
-import Header from '~components/newsheader'
-import { List } from '~components/commentlist'
-import { EAction, IParams } from '../userComment'
-// import CommentCom from '~components/comment'
-import GScrollView from '~components/scrollList'
+import { AtButton } from 'taro-ui'
+import BaseForm from '~components/wrapForm'
+import GDescription from '~components/input'
+import { createFieldsStore } from '~components/wrapForm/fieldsStore'
+import Rate from '../detail/components/rate'
 import style from '~theme/style'
-import { colorStyleChange } from '~theme/color'
-import { throttle } from '~lodash'
-import { withTry, ESourceTypeList, router, routeAlias } from '~utils'
-import { connect } from 'react-redux'
-import { mapDispatchToProps, mapStateToProps } from './connect'
-import { getCustomerMovieCommentList, getMovieCommentList, getMovieDetailSimple, putLike, cancelLike } from '~services'
+import { size, withTry, upload } from '~utils'
+import { SYSTEM_PAGE_SIZE } from '~config'
+import { postCommentToUser, postCommentToMovie, feedback, preCheckFeedback } from '~services'
 
-@connect(mapStateToProps, mapDispatchToProps)
+import './index.scss'
+
+const fieldsStore = createFieldsStore('comment', {
+  getOnChangeValue(value) {
+    return value
+  }
+})
+
+const BUTTON_STYLE:any = {
+  position: 'fixed',
+  bottom:0,
+  left:0,
+  width: '100%',
+  height: SYSTEM_PAGE_SIZE(40) + 'px',
+  zIndex: 9
+}
+
+/**
+ * 评分
+ * 文字
+ * 图片
+ * 视频
+ */
+
+export enum EAction {
+  COMMENT_USER = 'COMMENT_USER',
+  COMMENT_MOVIE = 'COMMENT_MOVIE',
+  FEEDBACK = 'FEEDBACK',
+}
+
+// export enum EType {
+//   COMMENT = 'COMMENT',
+//   MOVIE = 'MOVIE'
+// }
+
+// export interface IPostInfo {
+//   type: EType
+//   id: string
+// }
+
+export interface IParams {
+  action: EAction
+  postInfo?: string
+}
+
 export default class extends Component<any> {
 
-  public componentDidMount = async () => await this.fetchMovieData()
-
-  public componentDidShow = () => colorStyleChange()
-
-  private scrollRef = React.createRef<GScrollView>()
-
-  //评论组件
-  // private commentRef = React.createRef<CommentCom>()
-
-  //电影id
-  readonly id = getCurrentInstance().router?.params.id
-
-  //下拉刷新
-  public onPullDownRefresh = async () => {
-    await this.scrollRef.current!.handleToUpper()
-    Taro.stopPullDownRefresh()
-  }
-
-  //上拉加载
-  public onReachBottom = async () => {
-    await this.scrollRef.current!.handleToLower()
-  }
-
   public state: any = {
-    data: [],
-    id: false,
-    userCall: false,
-    headerData: {},
+    comUser: {},
+    comMovie: {},
+    feedback: {}
   }
 
-  //获取电影数据
-  public fetchMovieData = async () => {
-    if(!this.id) {
+  public componentDidMount = () => {
+    //强制刷新设置
+    fieldsStore.setUpdate(this.forceUpdate.bind(this))
+    if(!this.router) {
       Taro.showToast({
         title: '网络错误，请重试',
         icon: 'none',
         duration: 1000
       })
+      this.disabled = true
       return
     }
-    const data = await getMovieDetailSimple(this.id)
-    this.setState({
-      headerData: data
-    })
+    this.disabled = false
+
+    const { params: { action, postInfo } } = this.router
+    const { comUser, comMovie, feedback } = this.state
+    let title: string = ''
+    switch(action) {
+      case EAction.COMMENT_MOVIE:
+        title = '电影评论'
+        this.setState({
+          comMovie: {
+            ...comMovie,
+            action: this.commentToMovie,
+            param: {
+              id: postInfo
+            }
+          }
+        })
+        break
+      case EAction.COMMENT_USER:
+        title = '用户评论'
+        this.setState({
+          comUser: {
+            ...comUser,
+            action: this.commentToUser,
+            param: {
+              id: postInfo
+            }
+          }
+        })
+        break
+      case EAction.FEEDBACK: 
+        title = '我的反馈'
+        this.setState({
+          feedback: {
+            ...feedback,
+            action: this.feedback,
+            param: {
+              
+            }
+          }
+        })
+        break
+    }
+    Taro.setNavigationBarTitle({ title })
   }
 
-  //获取评论数据
-  public fetchData = async (query: any, isInit = false) => {
-    const { data } = this.state
-    const { userInfo } = this.props
-    const method = userInfo ? getCustomerMovieCommentList : getMovieCommentList
-    const resData = await method({ id: this.id, ...query })
+  router = getCurrentInstance().router
 
-    this.setState({
-      comment: [ ...(isInit ? [] : [...data]), ...resData ]
-    })
-    return resData
+  disabled = false
+
+  public commentToMovie = () => {
+    
   }
 
-  public throttleFetchData = throttle(this.fetchData, 2000)
+  public commentToUser = () => {
 
-  //发布评论
-  // public publishComment = async (value: {
-  //   text?: string,
-  //   image?: Array<any>,
-  //   video?: Array<any>
-  // }) => {
-  //   const { id } = this.state
-  //   const { text = '', image = [], video = [] } = value
-  //   const method = id ? postCommentToUser : postCommentToMovie
-  //   const params: any = {
-  //     content: {
-  //       text,
-  //       image,
-  //       video
-  //     },
-  //     id: id ? id : this.id
-  //   }
-
-  //   Taro.showLoading({ mask: true, title: '发布中' })
-  //   await withTry(method)(params)
-  //   Taro.hideLoading()
-
-  //   await this.onPullDownRefresh()
-  // }
-
-  //点赞/取消点赞
-  public like = async (id: string, like: boolean) => {
-    await this.props.getUserInfo()
-      .then(async (_) => {
-        const method = like ? cancelLike : putLike
-
-        Taro.showLoading({ mask: true, title: '操作中' })
-        await withTry(method)(id)
-        Taro.hideLoading()
-        //刷新
-        await this.onPullDownRefresh()
-      })
-      .catch(err => err)
   }
 
-  /**
-   * 展示评论组件
-   * isUserCall: 是否为回复
-   * commentId: 评论id
-   */
-  public publish = async (isUserCall, commentId) => {
+  public feedback = () => {
 
-    //TODo
-    Taro.showToast({
-      title: '功能完善中...',
-      icon: 'none',
-      duration: 1000
+  }
+
+  private handleReset = () => {
+
+  }
+
+  private validateFields = () => {
+
+  }
+
+  private getPostConfig = () => {
+
+  }
+
+  private handleSubmit = async (_) => {
+    fieldsStore.validateFields(['description', 'rate', 'media'], async (errors, values) => {
+      //处理所有有错的表单项
+      if(errors) {
+        Taro.showToast({
+          mask: false,
+          title: '信息好像没填对',
+          icon: 'none',
+          duration: 1500
+        })
+        return
+      }
+
+      console.log(values)
     })
-    return
-    //
-    const param:IParams = {
-      action: isUserCall ? EAction.COMMENT_USER : EAction.COMMENT_MOVIE,
-      postInfo: commentId
-    } 
-    router.push(routeAlias.toComment, param)
-
-    // await this.props.getUserInfo()
-    // .then(_ => {
-    //   this.commentRef.current!.open()
-
-    //   this.setState({
-    //     userCall: !!isUserCall,
-    //     id: !!commentId && commentId
-    //   })
-    // })
-    // .catch(err => err)
   }
 
   public render() {
-    const { headerData: { description, _id, poster, ...nextHeaderData }, data } = this.state
-
-    return (
-      <GScrollView
-        ref={this.scrollRef}
-        sourceType={ESourceTypeList.Scope}
-        query={{ pageSize: 6 }}
-        style={{ ...style.backgroundColor('bgColor') }}
-        renderContent={<View>
-          {
-            data.map((value) => {
-              const { _id } = value
-              return (
-                <List
-                  comment={this.publish}
-                  key={_id}
-                  list={value}
-                  like={this.like}
-                />
-              )
-            })
-          }
-        </View>}
-        fetch={this.throttleFetchData}
-        header={200}
-        bottom={92}
-        renderHeader={<Header content={{
-          ...nextHeaderData,
-          detail: description,
-          id: _id,
-          image: poster,
-        }}></Header>}
-        renderBottom={<View>
-          <GButton
-            style={{ width: '100%', height: '92', position: 'fixed', bottom: 0, left: 0, zIndex: 999 }}
-            type={'secondary'}
-            value={['发布评论', '发布评论']}
-            operate={this.publish}
-          />
-          {/* <CommentCom
-            buttonText={'写完了'}
-            publishCom={this.publishComment}
-            ref={this.commentRef}
-          /> */}
-        </View>}
-      >
-      </GScrollView>
-    )
+     return (
+       <View className="user-comment">
+         <BaseForm
+            name="comment"
+          >
+            <View className='description'>
+              <GDescription
+                type={'textarea'}
+                style={{...style.backgroundColor('disabled'), marginBottom: '20px'}}
+                handleChange={
+                  fieldsStore.getFieldProps('description', 'onChange', {
+                    rules: [
+                      {
+                        required: true
+                      }
+                    ],
+                    initialValue: '说点什么吧...'
+                  })
+                }
+                value={fieldsStore.getFieldValue('description')}
+                error={!!size(fieldsStore.getFieldsError('description'))}
+              ></GDescription>
+            </View>
+            <View className="rate">
+              <Rate
+                style={{marginBottom: '20px'}}
+                rate={
+                  fieldsStore.getFieldProps('author_rate', 'onChange', {
+                    rules: [
+                      {
+                        required: false
+                      }
+                    ],
+                    initialValue: 0
+                  })
+                }
+                value={fieldsStore.getFieldValue('author_rate')}
+              ></Rate>
+            </View>
+            <View className="media">
+                媒体数据
+            </View>
+            <AtButton type={'primary'} onClick={this.handleSubmit} customStyle={{ ...BUTTON_STYLE, ...style.backgroundColor('thirdly'), ...style.border(1, 'thirdly', 'solid', 'all') }}>提交</AtButton>
+            <AtButton type={'primary'} onClick={this.handleReset} customStyle={{ ...BUTTON_STYLE, bottom: SYSTEM_PAGE_SIZE(40) + 'px', ...style.backgroundColor('primary'), ...style.border(1, 'primary', 'solid', 'all') }}>重置</AtButton>
+          </BaseForm>
+       </View>
+     ) 
   }
+
 }
