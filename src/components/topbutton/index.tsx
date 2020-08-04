@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { Text, View } from '@tarojs/components'
 import { AtFab  } from 'taro-ui'
 
-import { throttle } from 'lodash'
+import throttle from 'lodash/throttle'
 
 import './index.scss'
 

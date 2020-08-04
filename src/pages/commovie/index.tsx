@@ -5,11 +5,10 @@ import GButton from '~components/button'
 import Header from '~components/newsheader'
 import { List } from '~components/commentlist'
 import { EAction, IParams } from '../comment'
-// import CommentCom from '~components/comment'
 import GScrollView from '~components/scrollList'
 import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
-import { throttle } from '~lodash'
+import throttle from 'lodash/throttle'
 import { withTry, ESourceTypeList, router, routeAlias } from '~utils'
 import { connect } from 'react-redux'
 import { mapDispatchToProps, mapStateToProps } from './connect'
@@ -23,9 +22,6 @@ export default class extends Component<any> {
   public componentDidShow = () => colorStyleChange()
 
   private scrollRef = React.createRef<GScrollView>()
-
-  //评论组件
-  // private commentRef = React.createRef<CommentCom>()
 
   //电影id
   readonly id = getCurrentInstance().router?.params.id
@@ -72,37 +68,12 @@ export default class extends Component<any> {
     const resData = await method({ id: this.id, ...query })
 
     this.setState({
-      comment: [ ...(isInit ? [] : [...data]), ...resData ]
+      data: [ ...(isInit ? [] : [...data]), ...resData ]
     })
     return resData
   }
 
   public throttleFetchData = throttle(this.fetchData, 2000)
-
-  //发布评论
-  // public publishComment = async (value: {
-  //   text?: string,
-  //   image?: Array<any>,
-  //   video?: Array<any>
-  // }) => {
-  //   const { id } = this.state
-  //   const { text = '', image = [], video = [] } = value
-  //   const method = id ? postCommentToUser : postCommentToMovie
-  //   const params: any = {
-  //     content: {
-  //       text,
-  //       image,
-  //       video
-  //     },
-  //     id: id ? id : this.id
-  //   }
-
-  //   Taro.showLoading({ mask: true, title: '发布中' })
-  //   await withTry(method)(params)
-  //   Taro.hideLoading()
-
-  //   await this.onPullDownRefresh()
-  // }
 
   //点赞/取消点赞
   public like = async (id: string, like: boolean) => {
@@ -178,14 +149,9 @@ export default class extends Component<any> {
           <GButton
             style={{ width: '100%', height: '92', position: 'fixed', bottom: 0, left: 0, zIndex: 999 }}
             type={'secondary'}
-            value={['发布评论', '发布评论']}
+            value={new Array(2).fill('发布评论')}
             operate={this.publish}
           />
-          {/* <CommentCom
-            buttonText={'写完了'}
-            publishCom={this.publishComment}
-            ref={this.commentRef}
-          /> */}
         </View>}
       >
       </GScrollView>

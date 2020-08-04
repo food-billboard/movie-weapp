@@ -1,6 +1,6 @@
 @import "~taro-ui/dist/style/components/icon.scss";
 @import "~taro-ui/dist/style/components/flex.scss";
-.list{
+.comment-item{
     padding:20px;
     width:100%;
     box-sizing:border-box;
@@ -8,55 +8,94 @@
     position:relative;
     left:0;
     top:0;
-    .head{
-        width:100%;
-        height:60px;
-        &-img,
-        .name,
-        .up{
-            float:left;
-            margin-right:20px;
-        }
-        &-img{
-            width:52px;
-            height:52px;
-            border-radius:50%;
-            overflow:hidden;
-        }
-        .name{
-            width:250px;
+    &-header{
+      width:100%;
+      display:flex;
+      align-items: center;
+      &-image{
+        margin-right:20px;
+      }
+      .comment-item-header-info{
+        display:flex;
+        align-items: center;
+        .comment-item-username{
+          overflow:hidden;
+          display:flex;
+          justify-content: start;
+          align-items: center;
+          flex:1;
+          &-content{
             height:100%;
-            line-height:60px;
-            &-user{
-                height:100%;
-                text-overflow:ellipsis;
-                overflow:hidden;
-                white-space: nowrap;
-                float:left;
-            }
+            flex:0.3 1 auto;
+            white-space: nowrap;
+            overflow-x: scroll;
+          }
+          &-content::-webkit-scrollbar {
+            display:none
+          }
         }
-        .up{
-            width:160px;
-            height:100%;
-            text-align:center;
-            line-height:60px;
-            vertical-align: middle;
-            &-text{
-                // color:black;
-            }
+        .comment-item-up{
+          text-align:right;
+          margin-right:20px;
+          flex:1;
         }
-        .time{
-            width:150px;
-            height:100%;
-            float:right;
-            margin-right:20px;
-            line-height:60px;
-        }
+      }
+      .comment-item-header-sub-time{
+
+      }
+      .comment-item-header-sub-rate{
+
+      }
     }
+    // .head{
+    //     width:100%;
+    //     height:60px;
+    //     &-img,
+    //     .name,
+    //     .up{
+    //         float:left;
+    //         margin-right:20px;
+    //     }
+    //     &-img{
+    //         width:52px;
+    //         height:52px;
+    //         border-radius:50%;
+    //         overflow:hidden;
+    //     }
+    //     .name{
+    //         width:250px;
+    //         height:100%;
+    //         line-height:60px;
+    //         &-user{
+    //             height:100%;
+    //             text-overflow:ellipsis;
+    //             overflow:hidden;
+    //             white-space: nowrap;
+    //             float:left;
+    //         }
+    //     }
+    //     .up{
+    //         width:160px;
+    //         height:100%;
+    //         text-align:center;
+    //         line-height:60px;
+    //         vertical-align: middle;
+    //         &-text{
+    //             // color:black;
+    //         }
+    //     }
+    //     .time{
+    //         width:150px;
+    //         height:100%;
+    //         float:right;
+    //         margin-right:20px;
+    //         line-height:60px;
+    //     }
+    // }
     .content{
         width:100%;
         height:160px;
-        padding:30px;
+        padding:20px 0;
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 4;

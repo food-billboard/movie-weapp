@@ -7,7 +7,7 @@ import { SYSTEM_PAGE_SIZE } from '~config'
 import { getHot } from '~services'
 import style from '~theme/style'
 import { router, routeAlias } from '~utils'
-import { noop } from 'lodash'
+import noop from 'lodash/noop'
 
 import './index.scss'
 

@@ -5,13 +5,13 @@ import { AtButton, AtTag } from 'taro-ui'
 import GCommentPicker from '~components/picker'
 import GCheckBox, { EDataType } from './components/checkbox'
 import GVideo from './components/video'
-import GDescription from '~components/input'
+import GDescription, { EInputType } from '~components/input'
 import GImagePicker from '~components/imgPicker'
 import BaseForm from '~components/wrapForm'
 import Alias from '~components/restFactor'
 import { createFieldsStore } from '~components/wrapForm/fieldsStore'
 import Indexes from './components/indexes'
-import Rate from '../detail/components/rate'
+import Rate from '~components/rate'
 import TagList from '~components/tagList'
 import { IFormData, EIndexesType } from './interface'
 import { Item } from '~components/indexes'
@@ -504,7 +504,7 @@ export default class extends Component<any> {
                 type={'primary'}
               >电影描述</AtTag>
               <GDescription
-                type={'textarea'}
+                type={EInputType.TEXTAREA}
                 style={{...style.backgroundColor('disabled'), marginBottom: '20px'}}
                 handleChange={
                   fieldsStore.getFieldProps('description', 'onChange', {
@@ -528,7 +528,7 @@ export default class extends Component<any> {
                 你的看法（可不填）
               </AtTag>
               <GDescription
-                type={'textarea'}
+                type={EInputType.TEXTAREA}
                 style={{...style.backgroundColor('disabled'), marginBottom: '20px'}}
                 handleChange={
                   fieldsStore.getFieldProps('author_description', 'onChange', {
@@ -549,7 +549,7 @@ export default class extends Component<any> {
                 customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
                 type={'primary'}
               >
-                你的评分（可不填
+                你的评分（可不填)
               </AtTag>
               <Rate
                 style={{marginBottom: '20px'}}

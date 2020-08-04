@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { View, Picker } from '@tarojs/components'
 import { FORM_ERROR, SYSTEM_PAGE_SIZE } from '~config'
 import customStyle from '~theme/style'
-import { noop } from 'lodash'
+import noop from 'lodash/noop'
 import { ICommonFormProps, ICommonFormState, isObject, format } from '~utils'
 
 interface ISelector {

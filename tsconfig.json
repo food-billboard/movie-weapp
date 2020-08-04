@@ -24,7 +24,6 @@
         ],
       "paths":{
           "~*":["src/*"],
-          "~lodash": ["src/lib/lodash"]
       }
   },
   "exclude": [

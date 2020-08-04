@@ -16,10 +16,17 @@
             font-weight:bold;
             text-align:center;
             white-space:nowrap;
-            text-overflow:ellipsis;
-            overflow:hidden;
+            overflow-x: scroll;
+            // text-overflow:ellipsis;
+            // overflow:hidden;
             width:100%;
             font-size:32px;
+        }
+        .name::-webkit-scrollbar {
+            display:none
+        }
+        .rate{
+            width:100%;
         }
         .count{
             font-size:28px;

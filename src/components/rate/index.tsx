@@ -4,7 +4,7 @@ import { View, Text } from '@tarojs/components'
 import { AtRate } from 'taro-ui'
 import style from '~theme/style'
 import { SYSTEM_PAGE_SIZE } from '~config'
-import { noop } from '~lodash'
+import noop from 'lodash/noop'
 
 import './index.scss'
 

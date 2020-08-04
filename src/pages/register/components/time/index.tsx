@@ -4,7 +4,7 @@ import { View } from '@tarojs/components'
 import style from '~theme/style'
 import './index.scss'
 import { Toast } from '~components/toast'
-import { noop } from 'lodash'
+import noop from 'lodash/noop'
 
 export interface IState {
   text: string,

@@ -8,7 +8,6 @@ import { Item } from 'taro-ui/types/timeline'
 import { isObject, ICommonFormProps, ICommonFormState } from '~utils'
 import customStyle from '~theme/style'
 import { TypeColor } from '~theme/color'
-import { findIndex } from 'lodash'
 import { FORM_ERROR } from '~config'
 
 import './index.scss'
@@ -135,10 +134,8 @@ class Rest extends Component<IProps, IState> {
     if (data) {  //输入框中有内容
       const { status, statusData } = this.state
       const { value } = this.props
-      const index = findIndex(value, (val: any) => {
-        const { title } = val
-        return title === data
-      })
+      const index = value.findIndex((val: any) => val.title === data)
+
       let config: IQuery = { title: '' }
 
       //查看输入框内容是否在timeline中存在

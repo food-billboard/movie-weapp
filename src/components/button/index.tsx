@@ -3,7 +3,7 @@ import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import style from '~theme/style'
-import { noop } from 'lodash'
+import noop from 'lodash/noop'
 
 type primary = 'primary'
 type secondary = 'secondary'

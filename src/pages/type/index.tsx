@@ -5,7 +5,7 @@ import IconList from '~components/iconlist'
 import LinearList from '~components/list'
 import GScrollView from '~components/scrollList'
 import Fab from './components/fab'
-import { throttle } from 'lodash'
+import throttle from 'lodash/throttle'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { SYSTEM_PAGE_SIZE } from '~config'
@@ -43,7 +43,7 @@ export default class Index extends Component<any> {
   }
 
   public state = {
-    typeDetail: [],
+    data: [],
     type: [],
     listShow: true,
     typeShow: false
@@ -73,19 +73,12 @@ export default class Index extends Component<any> {
 
   //获取数据
   public fetchData = async (query: any, isInit = false) => {
-    const { typeDetail } = this.state
-    const data = await getClassifyList({ id: this.id, ...query })
-
-    let newData
-    if (isInit) {
-      newData = [...data]
-    } else {
-      newData = [...typeDetail, ...data]
-    }
+    const { data } = this.state
+    const resData = await getClassifyList({ id: this.id, ...query })
     await this.setState({
-      typeDetail: newData
+      typeDetail: [...(isInit ? [] : data), ...resData]
     })
-    return data
+    return resData
   }
 
   public throttleFetchData = throttle(this.fetchData, 2000)
@@ -132,7 +125,7 @@ export default class Index extends Component<any> {
   }
 
   public render() {
-    const { typeDetail, listShow, type, typeShow } = this.state
+    const { data, listShow, type, typeShow } = this.state
 
     const bgColor = style.backgroundColor('bgColor')
 
@@ -184,7 +177,7 @@ export default class Index extends Component<any> {
                           onClick={(e) => { this.handleControlTypeDetail.call(this, SHOW_TYPE.SHOW_MORE) }}
                         >
                           展开
-                                        </View>
+                        </View>
                         : null
                     }
                     {list}
@@ -201,28 +194,30 @@ export default class Index extends Component<any> {
                       onClick={(e) => { this.handleControlTypeDetail.call(this, SHOW_TYPE.HIDE_MORE) }}
                     >
                       收起
-                                    </View>
+                    </View>
                   </View>
               }
             </View>
             <View>
               {
-                listShow ? (<LinearList list={typeDetail.map(item => {
-                  const { _id: id, poster, name, hot } = item
+                listShow ? (<LinearList list={data.map(item => {
+                  const { _id: id, poster, name, hot, author_rate } = item
                   return {
                     id,
                     image: poster,
                     name,
                     time: Date.now(),
-                    hot
+                    hot,
+                    rate: author_rate
                   }
-                })} />) : (<IconList list={typeDetail.map(item => {
-                  const { _id: id, poster, name, hot } = item
+                })} />) : (<IconList list={data.map(item => {
+                  const { _id: id, poster, name, hot, author_rate } = item
                   return {
                     id,
                     image: poster,
                     name,
-                    hot
+                    hot,
+                    rate: author_rate
                   }
                 })} />)
               }

@@ -5,7 +5,7 @@ import Emoj from '../emojSwiper'
 import style from '~theme/style'
 import { EMediaType, upload, getTemplatePathMime } from '~utils'
 import { IMAGE_CONFIG } from '~config'
-import { noop } from 'lodash'
+import noop from 'lodash/noop'
 
 import './index.scss'
 

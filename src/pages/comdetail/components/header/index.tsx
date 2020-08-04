@@ -7,7 +7,7 @@ import { router, formatTime, formatNumber, routeAlias } from '~utils'
 import style from '~theme/style'
 import { TypeColor } from '~theme/color'
 import { SYSTEM_PAGE_SIZE } from '~config'
-import { noop } from 'lodash'
+import noop from 'lodash/noop'
 
 import './index.scss'
 

@@ -117,7 +117,7 @@ export interface ICommonFormState {
 export interface ICommonFormProps {
   handleChange?: (...args: any[]) => any
   error?:boolean
-  style?: any
+  style?: React.CSSProperties
   value?: Array<string> | Array<IFiles> |  Array<IItem> | Array<Item> | string | false
   initialValue?: Array<string> | Array<IFiles> |  Array<IItem> | Array<Item> | string
 }

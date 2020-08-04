@@ -7,6 +7,7 @@ import GResult from '~components/result'
 import Top from '../topbutton'
 import { isObject, ESourceTypeList } from '~utils'
 import customStyle from '~theme/style'
+import noop from 'lodash/noop'
 
 import './index.scss'
 
@@ -43,8 +44,8 @@ export default class List extends Component<IProps, IState> {
     scrollY: true,
     lowerThreshold: 50,
     scrollWithAnimation: false,
-    onScroll: () => { },
-    fetch: () => { },
+    onScroll: noop,
+    fetch: noop,
     header: false,
     bottom: false,
     autoFetch: true
@@ -89,6 +90,14 @@ export default class List extends Component<IProps, IState> {
     if (sourceType === ESourceTypeList.Scope) {
       const { data } = this.state
       const newData = await fetch(query, isInit)
+
+      //空数据提示
+      Taro.showToast({
+        title: '没有更多内容了',
+        icon: 'none',
+        duration: 500
+      })
+
       const { pageSize } = this.state.query
       //判断是否存在数据
       if (newData.length < pageSize) {

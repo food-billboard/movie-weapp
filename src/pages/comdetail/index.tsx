@@ -3,10 +3,10 @@ import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import CommentCom from '~components/comment'
 import GScrollView from '~components/scrollList'
-import {List} from '~components/commentlist'
+import { List } from '~components/commentlist'
 import GButton from '~components/button'
 import { EAction, IParams } from '../comment'
-import { throttle } from '~lodash'
+import throttle from 'lodash/throttle'
 import Header from './components/header'
 import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
@@ -67,27 +67,13 @@ export default class extends Component<any> {
     const { comment:main={}, sub={} } = await method({id: this.id,  ...query})
 
     this.setState({
-        comment: [ ...(isInit ? [] : [...data]), ...sub ],
+        data: [ ...(isInit ? [] : [...data]), ...sub ],
         headerData: main
     })
     return sub
   }
 
   public throttleFetchData = throttle(this.fetchData, 2000)
-
-  // //发布评论
-  // public publishComment = async (value: { 
-  //   text?: string,
-  //   image?: Array<any>,
-  //   video?: Array<any>
-  // }) => {
-  //   const { text='', image=[], video=[] } = value
-
-  //   Taro.showLoading({ mask: true, title: '发布中' })
-  //   await withTry(postCommentToUser)({ id: this.id, content: { text, image, video } })
-  //   Taro.hideLoading()
-  //   await this.onPullDownRefresh()
-  // }
 
   //点赞
   public like = async(id: string, like: boolean) => {
@@ -124,15 +110,6 @@ export default class extends Component<any> {
       postInfo: commentId
     }
     router.push(routeAlias.toComment, param)
-
-    // await this.props.getUserInfo()
-    // .then(_ => {
-    //   this.commentRef.current!.open()
-    //   this.setState({
-    //       commentId: !!commentId ? commentId : this.id
-    //   })
-    // })
-    // .catch(err => err)
   }
 
   public render() {
@@ -177,14 +154,9 @@ export default class extends Component<any> {
             <GButton 
                 style={{width: '100%', height: '92', position: 'fixed', bottom: 0, left: 0, zIndex: 999}}
                 type={'secondary'}
-                value={['发布评论', '发布评论']} 
+                value={new Array(2).fill('发布评论')} 
                 operate={this.publish}
             />
-            {/* <CommentCom
-                buttonText={'写完了'}
-                publishCom={this.publishComment}
-                ref={this.commentRef}
-            /> */}
           </View>
         }
       >

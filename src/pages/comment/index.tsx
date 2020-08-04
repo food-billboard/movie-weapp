@@ -3,10 +3,9 @@ import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { AtButton } from 'taro-ui'
 import BaseForm from '~components/wrapForm'
-import GDescription from '~components/input'
+import GDescription, { EInputType } from '~components/input'
 import MediaPicker from '~components/mediaPicker'
 import { createFieldsStore } from '~components/wrapForm/fieldsStore'
-import Rate from '../detail/components/rate'
 import style from '~theme/style'
 import { size, withTry, upload, router } from '~utils'
 import { SYSTEM_PAGE_SIZE } from '~config'
@@ -43,7 +42,13 @@ export interface IParams {
 export default class extends Component<any> {
 
   public state: any = {
-    config: {}
+    config: {
+      action:postCommentToMovie,
+      param: {
+        id: ''
+      },
+      validate: ['description', 'media']
+    }
   }
 
   public componentDidMount = () => {
@@ -64,7 +69,7 @@ export default class extends Component<any> {
 
     let title: string = ''
     let config = {}
-    const baseValidate = ['description', 'rate']
+    const baseValidate = ['description', 'media']
     switch(action) {
       case EAction.COMMENT_MOVIE:
         title = '电影评论'
@@ -94,7 +99,7 @@ export default class extends Component<any> {
           ...config,
           action: this.feedback,
           param: {},
-          validate: [ ...baseValidate, 'media' ]
+          validate: baseValidate
         }
         break
     }
@@ -138,14 +143,24 @@ export default class extends Component<any> {
 
     const { config: { validate, action, param } } = this.state
 
-    fieldsStore.validateFields(validate, async (errors, values) => {
+    fieldsStore.validateFields(validate, async (_, values) => {
       //处理所有有错的表单项
-      if(errors) {
+      // ----- 处理必填字段的错误
+      /*if(errors) {
         Taro.showToast({
-          mask: false,
           title: '信息好像没填对',
           icon: 'none',
-          duration: 1500
+          duration: 1000
+        })
+        return
+      }*/
+
+      //全空则无法提交
+      if(Object.values(values).every((item: string | any[]) => !item.length)) {
+        Taro.showToast({
+          title: '至少填写一项内容',
+          icon: 'none',
+          duration: 1000
         })
         return
       }
@@ -207,23 +222,20 @@ export default class extends Component<any> {
           >
             <View className='description'>
               <GDescription
-                type={'textarea'}
+                type={EInputType.TEXTAREA}
+                placeholder={'说点什么吧...'}
+                height={300}
                 style={{...style.backgroundColor('disabled'), marginBottom: '20px'}}
                 handleChange={
                   fieldsStore.getFieldProps('description', 'onChange', {
-                    rules: [
-                      {
-                        required: true
-                      }
-                    ],
-                    initialValue: '说点什么吧...'
+                    initialValue: ''
                   })
                 }
                 value={fieldsStore.getFieldValue('description')}
                 error={!!size(fieldsStore.getFieldsError('description'))}
               ></GDescription>
             </View>
-            {
+            {/* {
               true &&
               <View className="rate">
                 <Rate
@@ -241,17 +253,12 @@ export default class extends Component<any> {
                   value={fieldsStore.getFieldValue('author_rate')}
                 ></Rate>
               </View>
-            }
+            } */}
             <View className="media">
               <MediaPicker
-                style={{marginBottom: '20px'}}
+                style={{marginBottom: `${SYSTEM_PAGE_SIZE(80)}px`}}
                 handleChange={
                   fieldsStore.getFieldProps('media', 'onChange', {
-                    rules: [
-                      {
-                        required: true
-                      }
-                    ],
                     initialValue: []
                   })
                 }

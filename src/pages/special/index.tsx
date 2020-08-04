@@ -1,7 +1,7 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
 import Scroll from '~components/scrollList'
-import { throttle } from 'lodash'
+import throttle from 'lodash/throttle'
 import IconList from '~components/iconlist'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
@@ -74,10 +74,11 @@ export default class extends Component<any>{
         scrollWithAnimation={true}
         fetch={this.throttleFetchData}
         renderContent={<IconList list={data.map(item => {
-          const { _id, poster, ...nextItem } = item
+          const { _id, poster, author_rate, ...nextItem } = item
           return {
             ...nextItem,
             id: _id,
+            rate: author_rate,
             image: poster,
           }
         })}></IconList>}

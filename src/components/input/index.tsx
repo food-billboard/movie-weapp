@@ -7,12 +7,16 @@ import { FORM_ERROR } from '~config'
 
 import './index.scss'
 
+export enum EInputType {
+  INPUT,
+  TEXTAREA
+}
+
 export interface IProps extends ICommonFormProps {
   value?: string | false
   initialValue?: string
-  type?: 'input' | 'textarea'
+  type?: EInputType
   placeholder?: string | false
-  inputType?:string
   disabled?: boolean
   height?: number
   count?: boolean
@@ -28,9 +32,8 @@ export interface IState extends ICommonFormState {
 export default class extends Component<IProps, IState> {
 
   public static defaultProps: IProps = {
-    style: false,
-    type: 'input',
-    inputType: 'text',
+    style: {},
+    type: EInputType.INPUT,
     placeholder: false,
     disabled: false,
     value: false
@@ -98,15 +101,10 @@ export default class extends Component<IProps, IState> {
     return value
   }
 
-  public handleChange = (e) => {
+  public handleChange = (value: string, _) => {
     const { error } = this.state
-    const { handleChange, initialValue, value:propsValue } = this.props
-    let data
-    if(e.target) {  //textarea
-      data = e.target.value
-    }else { //input
-      data = e
-    }
+    const { handleChange, initialValue } = this.props
+    const data = value
 
     if(this.initialValue === undefined && typeof initialValue !== 'undefined') {
       this.initialValue = initialValue
@@ -133,7 +131,6 @@ export default class extends Component<IProps, IState> {
       style, 
       type, 
       placeholder, 
-      inputType='text', 
       disabled, 
       height=100, 
       count=true, 
@@ -151,7 +148,7 @@ export default class extends Component<IProps, IState> {
     return (
       <View>
         {
-          type === 'input' ?
+          type === EInputType.INPUT &&
           <Input
             disabled={stateDisabled ? stateDisabled : disabled}
             style={isObject(style) ? { ...style, ...errorStyle } : { ...errorStyle } }
@@ -163,12 +160,14 @@ export default class extends Component<IProps, IState> {
             placeholder={placeholder ? placeholder : ''}
             onTouchMove={(e) => {e.stopPropagation()}}
           />
-          :
+        }
+        { 
+          type === EInputType.TEXTAREA &&
           <AtTextarea
             disabled={stateDisabled ? stateDisabled : disabled}
             customStyle={isObject(style) ? { ...style, ...errorStyle } : { ...errorStyle } }
             value={this.value}
-            onChange={(e) => {this.handleChange.call(this, e)}}
+            onChange={(value) => {this.handleChange.call(this, value)}}
             maxLength={300}
             placeholder={placeholder ? placeholder : ''}
             height={height}

@@ -9,7 +9,6 @@ export * from './format'
 export * from './platform'
 export * from './globalType'
 export * from './websocket'
-export * from './systemInfo'
 export * from './token'
 // export * from './message'
 

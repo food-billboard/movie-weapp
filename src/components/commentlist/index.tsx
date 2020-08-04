@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, Text, ScrollView } from '@tarojs/components'
-import { AtIcon } from 'taro-ui'
+import { AtIcon, AtAvatar } from 'taro-ui'
 import GVideo from '../video'
 import Curtain from '../curtain'
 import ImageLoading from '../imageLoading'
@@ -10,24 +10,9 @@ import { router, formatTime, formatNumber, EMediaType, routeAlias } from '~utils
 import style from '~theme/style'
 import { TypeColor } from '~theme/color'
 import { SYSTEM_PAGE_SIZE } from '~config'
-import { noop } from 'lodash'
+import noop from 'lodash/noop'
 
 import './index.scss'
-
-interface IUser {
-  name: string,
-  time: string,
-  image: string,
-  id: string,
-  content: string,
-  hot: number,
-  isHot: boolean
-}
-
-interface CommentUsers {
-  image: string,
-  id: string
-}
 
 export interface IMediaList {
   image: string
@@ -75,11 +60,9 @@ export interface IProps {
   renderExtra?: any
   like: (id: string, like: boolean) => any
   comment: (isUserCall: boolean, user: string, commentId: string) => any
-  getUserInfo: () => any
 }
 
 export interface IState {
-  list: IList
   activeVideo: string | null
   videoShow: boolean
   activeVideoPoster: string | null
@@ -110,7 +93,6 @@ class List extends Component<IProps, IState>{
     },
     like: noop,
     comment: noop,
-    getUserInfo: noop
   }
 
   //视频modal配置
@@ -131,30 +113,21 @@ class List extends Component<IProps, IState>{
   }
 
   public state: IState = {
-    list: this.props.list,
     videoShow: false,
     activeVideo: '',
     activeVideoPoster: ''
   }
 
-  /**
-   * 查看详细评论
-   */
+  //查看详细评论
   public getDetail = () => {
     const { list: { _id } } = this.props
     router.push(routeAlias.commentdetail, { id: _id })
   }
 
-  /**
-   * 获取用户信息
-   */
-  public getUser = (id: string) => {
-    router.push(routeAlias.user, { id })
-  }
+  //获取用户信息
+  public getUser = (id: string) => router.push(routeAlias.user, { id })
 
-  /**
-   * 预览媒体
-   */
+  //预览媒体
   public handlePreviewMedia = (src: string, type: EMediaType, image: string = '') => {
     const { list: { content: { image: originImage = [] } } } = this.props
     if (type === EMediaType.IMAGE) {
@@ -162,13 +135,11 @@ class List extends Component<IProps, IState>{
     } else if (type === EMediaType.VIDEO) {
       this.handlePreviewVideo(src, image)
     } else {
-      //ToDo
+      //TODO
     }
   }
 
-  /**
-   * 查看图片
-   */
+  //查看图片
   public handlePreviewImage = (target: string, list: Array<string>) => {
     Taro.previewImage({
       urls: list,
@@ -176,9 +147,7 @@ class List extends Component<IProps, IState>{
     })
   }
 
-  /**
-   * 查看视频
-   */
+  //查看视频
   public handlePreviewVideo = (target: string, poster: string) => {
     this.setState({
       activeVideo: target,
@@ -203,7 +172,8 @@ class List extends Component<IProps, IState>{
   public getVideoShowStatus = () => this.state.videoShow
 
   public render() {
-    const { list, activeVideoPoster } = this.state
+    const { activeVideoPoster } = this.state
+    const { extra = false, list } = this.props
     const {
       comment_users,
       content: {
@@ -221,13 +191,60 @@ class List extends Component<IProps, IState>{
       },
       _id
     } = list
-    const { extra = false } = this.props
+
     return (
       <View
-        className={'list'}
+        className={'comment-item'}
         style={{ ...style.backgroundColor('disabled') }}
       >
-        <View className='head'>
+        <View className="comment-item-header">
+          <View 
+            className="comment-item-header-image"
+            onClick={this.getUser.bind(this, userId)}
+          >
+            <AtAvatar image={avatar || ''} text='头像' circle></AtAvatar>
+          </View>
+          <View 
+            className="at-row"
+            style={{flexDirection: 'column'}}
+          >
+
+            <View className="comment-item-header-info at-col">
+              <View
+                className={'comment-item-username'}
+                style={{ ...style.color('thirdly') }}
+              >
+                <Text
+                  className={'comment-item-username-content'}
+                  onClick={this.props.comment.bind(this, true, userId, _id)}
+                  style={{ ...style.color('primary') }}
+                >{username}</Text>
+                <Text style={{flex: 1}}>说: </Text>
+              </View>
+              <View
+                className={'comment-item-up'}
+                onClick={this.props.like.bind(this, userId, like)}
+                style={{ ...style.color('thirdly') }}
+              >
+                <View className={'up-text'}>
+                  {formatNumber(total_like)}
+                  <AtIcon value={like ? 'heart-2' : 'heart'} size={SYSTEM_PAGE_SIZE(14)} />
+                </View>
+              </View>
+            </View>
+
+            <View className="at-col">
+              <View
+                className={'comment-item-header-sub-time'}
+                style={{ ...style.color('thirdly') }}
+              >
+                {formatTime(createdAt)}
+              </View>
+            </View> 
+
+          </View>
+        </View>
+        {/* <View className='head'>
           <View className='head-img'
             onClick={this.getUser.bind(this, userId)}
           >
@@ -260,7 +277,7 @@ class List extends Component<IProps, IState>{
           >
             {formatTime(createdAt)}
           </View>
-        </View>
+        </View> */}
         <View
           className='content'
           style={{ ...style.color('primary') }}

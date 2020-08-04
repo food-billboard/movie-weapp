@@ -3,8 +3,10 @@ import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import ImageLoading from '../imageLoading'
 import Item from './item'
+import Rate from '../rate'
 import style from '~theme/style'
 import { router, formatTime, isObject, routeAlias, ItypeList } from '~utils'
+import noop from 'lodash/noop'
 
 import './index.scss'
 
@@ -15,6 +17,7 @@ interface IList {
   time: string | number,
   hot: number,
   id: string
+  rate: number
 }
 
 export interface IProps {
@@ -37,7 +40,7 @@ export default class List extends Component<IProps>{
       <View className='list'>
         {
           list.map((value) => {
-            const { image, name, type, time, hot, id } = value
+            const { image, name, type, time, hot, id, rate } = value
             return (
               <View className='list-content'
                 style={{ ...(isObject(propsStyle) ? propsStyle : {}), ...style.backgroundColor('disabled') }}
@@ -57,14 +60,21 @@ export default class List extends Component<IProps>{
                   >
                     {name}
                   </View>
+                  <View className="rate">
+                    <Rate
+                      value={rate}
+                      readonly={true}
+                      rate={noop}
+                    ></Rate>
+                  </View>
                   <Item
                     type={'类型: '}
                     value={type}
                   />
-                  <Item
+                  {/* <Item
                     type={'更新: '}
                     value={formatTime(time)}
-                  />
+                  /> */}
                   <Item
                     type={'人气: '}
                     value={hot}

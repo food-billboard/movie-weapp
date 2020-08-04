@@ -4,7 +4,7 @@ import GScrollView from '~components/scrollList'
 import IconList from '~components/iconlist'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
-import { throttle } from 'lodash'
+import throttle from 'lodash/throttle'
 import { connect } from 'react-redux'
 import { mapDispatchToProps, mapStateToProps } from './connect'
 import { getCustomerIssue, getUserIssue } from '~services'
@@ -78,10 +78,11 @@ export default class extends Component<any>{
         scrollWithAnimation={true}
         fetch={this.throttleFetchData}
         renderContent={<IconList list={data.map(item => {
-          const { _id, poster, ...nextItem } = item
+          const { _id, poster, author_rate, ...nextItem } = item
           return {
             ...nextItem,
             id: _id,
+            rate: author_rate,
             image: poster,
           }
         })} handleClick={this.editMovie}></IconList>}

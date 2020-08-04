@@ -12,7 +12,6 @@ const config = {
   },
   alias: {
     '~components': path.resolve(dirname, 'components'),
-    '~lodash': path.resolve(dirname, 'lib/lodash'),
     '~utils': path.resolve(dirname, 'utils'),
     '~config': path.resolve(dirname, 'config'),
     '~services': path.resolve(dirname, 'services'),

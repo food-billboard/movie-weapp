@@ -7,7 +7,7 @@ import { IMAGE_CONFIG, SYSTEM_PAGE_SIZE } from '~config'
 import { AtTextarea } from "taro-ui"
 import style from '~theme/style'
 import { upload } from '~utils'
-import { noop } from 'lodash'
+import noop from 'lodash/noop'
 import Curtain from '../curtain'
 
 import './index.scss'

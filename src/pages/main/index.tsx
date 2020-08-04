@@ -9,7 +9,7 @@ import Rank from './components/rank'
 import NoticeBar from '~components/noticeBar'
 import { TypeColor, colorStyleChange } from '~theme/color'
 import style from '~theme/style'
-import { throttle } from 'lodash'
+import throttle from 'lodash/throttle'
 import { getDailyNew, getNotice, getRank, getSwiper, getClassify } from '~services'
 
 import './index.scss'

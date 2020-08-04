@@ -1,5 +1,6 @@
 import Taro from '@tarojs/taro'
-import { styleChange, createSystemInfo } from '~utils'
+import { styleChange } from '~utils'
+import { createSystemInfo } from '~config'
 
 const systemInfo = createSystemInfo()
 

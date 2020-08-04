@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import { AtSegmentedControl } from 'taro-ui'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import { TypeColor } from '~theme/color'
-import { noop } from 'lodash'
 import { AtSegmentedControlProps } from 'taro-ui/types/segmented-control'
 
 export interface IProps extends Pick<AtSegmentedControlProps, 'color' | 'selectedColor' | 'fontSize' | 'disabled' | 'values'>{

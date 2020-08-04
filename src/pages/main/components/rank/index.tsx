@@ -38,9 +38,7 @@ export default class Rank extends Component<IProps, IState>{
     id: 0
   }
 
-  /**
-   * 获取详细信息
-   */
+  //获取详细信息
   public getDetail = (id: string) => router.push(routeAlias.detail, { id })
 
   public classify = () => {

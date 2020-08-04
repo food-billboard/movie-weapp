@@ -1,13 +1,8 @@
 import { uploadFile, uploadChunkFileCheck, uploadChunkFile, uploadChunkFileComplete } from '~services'
 import Taro from '@tarojs/taro'
 import { EAuthType, EMediaType } from './globalType'
-// import SparkMd5 from 'spark-md5'
+import SparkMd5 from 'spark-md5'
 import { getTemplatePathMime } from './tool'
-
-const SparkMd5 = {
-  ArrayBuffer: function() {}
-}
-
 
 /**
  * 1 文件路径传入

@@ -5,7 +5,7 @@ import GVideo, { IProps as IVideo } from '~components/video'
 import { AtButton } from 'taro-ui'
 import { FORM_ERROR } from '~config'
 import style from '~theme/style'
-import { noop } from '~lodash'
+import noop from 'lodash/noop'
 
 import './index.scss'
 

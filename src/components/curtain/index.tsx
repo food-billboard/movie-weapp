@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { isObject } from '~utils'
 import customeStyle from '~theme/style'
-import { noop } from '~lodash'
+import noop from 'lodash/noop'
 
 import './index.scss'
 

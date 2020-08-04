@@ -4,7 +4,6 @@ import { View, Text, Image } from '@tarojs/components'
 import GVideo from '../video'
 import { IMAGE_CONFIG, SYSTEM_PAGE_SIZE, FORM_ERROR } from '~config'
 import style from '~theme/style'
-import { findIndex } from 'lodash'
 import { Toast } from '~components/toast'
 import { isObject, EMediaType, ICommonFormProps, ICommonFormState } from '~utils'
 
@@ -144,10 +143,7 @@ export default class extends Component<IProps, IState> {
 
   //删除
   public handleClose = (target: string) => {
-    const index = findIndex(this.value, (val: any) => {
-      const { url } = val
-      return url === target
-    })
+    const index = this.value.findIndex((val: any) => val.url === target)
     if(index < 0) return 
     let data = [...this.value]
     data.splice(index, 1)
@@ -285,15 +281,19 @@ export default class extends Component<IProps, IState> {
                   key={url} 
                   style={{...(width ? {width: width + 'px'} : {}), ...(height ? {height: height + 'px'} : {}), marginBottom: '5px' }}
                 >
-                  <View className='media-main'>
+                  <View 
+                    className='media-main'
+                    style={{...style.border(1, 'disabled', 'solid', 'all')}}
+                  >
                     <View 
                       className='at-icon at-icon-close icon' 
                       style={{...style.color('primary'), fontSize: SYSTEM_PAGE_SIZE() + 'px'}}
-                      onClick={(e) => {this.handleClose.call(this, url)}}
+                      onClick={(_) => {this.handleClose.call(this, url)}}
                     ></View>
                     {
                       type === EType.IMAGE &&
                       <Image
+                        mode={'widthFix'}
                         onClick={() => {this.handlePreviewImage.call(this, url)}}
                         className='image'
                         src={url}
@@ -302,6 +302,7 @@ export default class extends Component<IProps, IState> {
                     {
                       type === EType.VIDEO &&
                       <Image 
+                        mode={'widthFix'}
                         onClick={() => {this.handlePreviewVideo.call(this, url)}}
                         src={poster}
                         className='video'

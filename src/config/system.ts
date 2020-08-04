@@ -1,4 +1,5 @@
 import Taro from '@tarojs/taro'
+import debounce from 'lodash/debounce'
 
 const SYSTEM_INFO = 'System_info'
 
@@ -37,14 +38,14 @@ class SystemInfo {
   }
 
   //设置系统信息
-  private setSystemInfo = (key: keyof ISystemInfo, value: any) => {
+  private _setSystemInfo = (key: keyof ISystemInfo, value: any) => {
     const data: ISystemInfo = this.getSystemInfo()
     const newData = { [key]: value }
     Taro.setStorageSync(SYSTEM_INFO, { ...data, ...newData })
   }
 
   //获取系统信息
-  private getSystemInfo = (key?: string | Array<string>) => {
+  private _getSystemInfo = (key?: string | Array<string>) => {
     const data: ISystemInfo = Taro.getStorageSync(SYSTEM_INFO) || {}
     if(!key) return data
     if(!Array.isArray(key)) return data[key] 
@@ -114,6 +115,10 @@ class SystemInfo {
       this.setSystemInfo(emojiInfo, [ ...prevData, value ])
     }
   }
+
+  private setSystemInfo = debounce(this._setSystemInfo, 1000)
+
+  private getSystemInfo = debounce(this._getSystemInfo, 1000)
 
 }
 

@@ -1,4 +1,8 @@
 import Day from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import 'dayjs/locale/zh-cn'
+Day.locale('zh-cn')
+Day.extend(relativeTime)
 
 const momentConfig: any = {
     months: '一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月'.split('_'),
@@ -147,7 +151,7 @@ export const formatTime = (date: any, type: string = 'YYYY-MM-DD', before: numbe
     const now = new Date().getTime()
     const beforeDate = valueOf(date)
     if(beforeDate + before > date) {
-        return Day(now).toNow()
+        return Day(now).fromNow()
     }
     return Day(date).format(type)
 }

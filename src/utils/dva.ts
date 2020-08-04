@@ -43,7 +43,6 @@ export default {
     createDva,
     //获取dispatch
     getDispatch() {
-        console.log(app)
         return app._store.dispatch
     }
 }

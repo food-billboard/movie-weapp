@@ -3,10 +3,9 @@ import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { List } from '~components/commentlist'
 import GScrollView from '~components/scrollList'
-// import Comment from '~components/comment'
 import Origin from './components/originComment'
 import { EAction, IParams } from '../comment'
-import { throttle } from 'lodash'
+import throttle from 'lodash/throttle'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { withTry, ESourceTypeList, router, routeAlias } from '~utils'
@@ -20,8 +19,6 @@ import './index.scss'
 export default class extends Component<any>{
 
   router = getCurrentInstance().router
-
-  // private commentRef = React.createRef<Comment>()
 
   private scrollRef = React.createRef<GScrollView>()
 
@@ -89,36 +86,7 @@ export default class extends Component<any>{
       postInfo: commentId
     }
     router.push({ url: routeAlias.toComment, param })
-
-
-
-    // await this.props.getUserInfo()
-    //   .then(_ => {
-    //     this.commentRef.current!.open()
-    //     this.setState({
-    //       id: commentId
-    //     })
-    //   })
-    //   .catch(err => err)
   }
-
-  // /**
-  //  * 发布评论
-  //  */
-  // public publishComment = async (value: {
-  //   text: string,
-  //   image: Array<any>,
-  //   video: Array<any>
-  // }) => {
-  //   const { id } = this.state
-  //   const { text = '', image = [], video = [] } = value
-
-  //   Taro.showLoading({ mask: true, title: '发布中' })
-  //   await withTry(postCommentToUser)({ id, content: { text, image, video } })
-  //   Taro.hideLoading()
-
-  //   await this.onPullDownRefresh()
-  // }
 
   //点赞
   public like = async (id: string, like: boolean) => {
@@ -173,15 +141,6 @@ export default class extends Component<any>{
           })
         }
         fetch={this.throttleFetchData}
-        // bottom={92}
-        // renderBottom={
-        //   <Comment
-        //     buttonText={'写完了'}
-        //     ref={this.commentRef}
-        //     publishCom={this.publishComment}
-        //   >
-        //   </Comment>
-        // }
       ></GScrollView>
     )
   }

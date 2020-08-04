@@ -7,7 +7,7 @@ import style from '~theme/style'
 import { mapDispatchToProps, mapStateToProps } from './connect'
 import { connect } from 'react-redux'
 import { router, routeAlias, formatTime, withTry, valueOf } from '~utils'
-import { throttle } from 'lodash'
+import throttle from 'lodash/throttle'
 import { SwipeActionOption } from 'taro-ui/types/swipe-action'
 
 import './index.scss'

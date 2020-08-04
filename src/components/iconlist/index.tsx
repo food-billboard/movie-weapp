@@ -1,9 +1,11 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
+import Rate from '../rate'
 import ImageLoading from '../imageLoading'
 import style from '~theme/style'
 import { router, formatNumber, routeAlias } from '~utils'
+import noop from 'lodash/noop'
 
 import './index.scss'
 
@@ -11,7 +13,8 @@ export interface IList {
   id: string,
   name: string,
   image: string,
-  hot: number
+  hot: number,
+  rate: number
 }
 
 export interface IProps {
@@ -28,12 +31,8 @@ export default class IconList extends Component<IProps>{
 
   public handleClick = (id: string) => this.props.handleClick(id)
 
-  /**
-   * 路由跳转
-   */
-  public goTo = (_, id, __) => {
-    router.push(routeAlias.detail, { id })
-  }
+  //路由跳转
+  public goTo = (_, id, __) => router.push(routeAlias.detail, { id })
 
   public render() {
 
@@ -43,7 +42,7 @@ export default class IconList extends Component<IProps>{
       <View className='icon at-row at-row--wrap at-row__justify--around'>
         {
           list.map((value) => {
-            const { id, name, image, hot } = value
+            const { id, name, image, hot, rate } = value
             return (
               <View
                 className='icon-content at-col at-col-5'
@@ -62,6 +61,13 @@ export default class IconList extends Component<IProps>{
                     style={{ ...style.color('primary') }}
                     onClick={this.handleClick.bind(this, id)}
                   >{name}</View>
+                  <View className="rate">
+                    <Rate
+                      value={rate}
+                      readonly={true}
+                      rate={noop}
+                    ></Rate>
+                  </View>
                   <View className='count'
                     style={{ ...style.color('secondary') }}
                   >

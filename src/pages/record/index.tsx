@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import List from '~components/newsheader'
 import GScrollView from '~components/scrollList'
-import { throttle } from 'lodash'
+import throttle from 'lodash/throttle'
 import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
 import { getCustomerGlance, getUserGlance } from '~services'
@@ -68,7 +68,7 @@ export default class Index extends Component<any> {
                 name,
                 detail: description,
                 image: poster,
-                id: _id
+                id: _id,
               }} key={_id} />
             })
           }

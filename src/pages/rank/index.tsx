@@ -7,7 +7,7 @@ import Rank from '../main/components/rank'
 import List from '~components/list'
 import { TypeColor, colorStyleChange } from '~theme/color'
 import style from '~theme/style'
-import { throttle } from 'lodash'
+import throttle from 'lodash/throttle'
 import { router, routeAlias, ESourceTypeList } from '~utils'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import { getRankList, getRankType } from '~services'
@@ -16,9 +16,9 @@ const COLUMN_COUNT = 4
 
 const COLUMN_MAX = 12
 
-const showType = {
-  SHOW_MORE: Symbol(),
-  HIDE_MORE: Symbol()
+enum showType {
+  SHOW_MORE = 'SHOW_MORE',
+  HIDE_MORE = 'HIDE_MORE'
 }
 
 const SHOW_ICON = {
@@ -114,11 +114,12 @@ export default class extends Component<any> {
     const data = await getRankType(16)
     this.setState({
       rankType: data.map(val => {
-        const { _id: id, name, icon } = val
+        const { _id: id, name, icon, author_rate } = val
         return {
           id,
           value: name,
-          image: icon
+          image: icon,
+          rate: author_rate
         }
       })
     })
