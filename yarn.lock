@@ -11509,6 +11509,11 @@ source-map@^0.7.3:
   resolved "http://192.168.10.162:8081/nexus/content/groups/npm-all/source-map/-/source-map-0.7.3.tgz#5302f8169031735226544092e64981f751750383"
   integrity sha1-UwL4FpAxc1ImVECS5kmB91F1A4M=
 
+spark-md5@^3.0.1:
+  version "3.0.1"
+  resolved "http://192.168.10.162:8081/nexus/content/groups/npm-all/spark-md5/-/spark-md5-3.0.1.tgz#83a0e255734f2ab4e5c466e5a2cfc9ba2aa2124d"
+  integrity sha1-g6DiVXNPKrTlxGblos/JuiqiEk0=
+
 spdx-correct@^3.0.0:
   version "3.1.1"
   resolved "http://192.168.10.162:8081/nexus/content/groups/npm-all/spdx-correct/-/spdx-correct-3.1.1.tgz#dece81ac9c1e6713e5f7d1b6f17d468fa53d89a9"

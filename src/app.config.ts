@@ -11,7 +11,7 @@ export default {
     // 'pages/commovie/index',
     // 'pages/user/index',
     // 'pages/search/index',
-    // 'pages/type/index',
+    'pages/type/index',
     // 'pages/rank/index',
     // 'pages/store/index',
     // 'pages/comdetail/index',
@@ -22,7 +22,7 @@ export default {
     // 'pages/newsdetail/index',
     // 'pages/login/index',
     // 'pages/register/index',
-    'pages/comment/index'
+    // 'pages/comment/index'
   ],
   window: {
     backgroundTextStyle: 'dark',
@@ -36,7 +36,7 @@ export default {
     "selectedColor": "#ff6600",
     "list": [
       {
-        "pagePath": "pages/comment/index",
+        "pagePath": "pages/type/index",
         "text": "首页",
         "iconPath": "./assets/home-icon.png",
         "selectedIconPath": './assets/home-icon-active.png'

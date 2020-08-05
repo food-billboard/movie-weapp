@@ -1,7 +1,7 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
-import List from '~components/newsheader'
+import List from '~components/list'
 import GScrollView from '~components/scrollList'
 import throttle from 'lodash/throttle'
 import style from '~theme/style'
@@ -43,7 +43,16 @@ export default class Index extends Component<any> {
     const resData = await method({ ...args, ...query })
 
     this.setState({
-      data: [...(isInit ? [] : data), ...resData]
+      data: [...(isInit ? [] : data), ...resData.map(item => {
+        const { _id, poster, classify, createdAt description, rate, ...nextItem } = item
+        return item
+        return {
+          ...nextItem,
+          image: poster,
+          type: classify,
+          time: createdAt,
+        }
+      })]
     })
     return resData
   }
@@ -60,19 +69,24 @@ export default class Index extends Component<any> {
         style={{ ...style.backgroundColor('bgColor') }}
         sourceType={ESourceTypeList.Scope}
         scrollWithAnimation={true}
-        renderContent={<View>
-          {
-            data.map(val => {
-              const { _id, poster, name, description } = val
-              return <List content={{
-                name,
-                detail: description,
-                image: poster,
-                id: _id,
-              }} key={_id} />
-            })
-          }
-        </View>}
+        renderContent={
+          <List
+            list={data}
+          ></List>
+        // <View>
+        //   {
+        //     data.map(val => {
+        //       const { _id, poster, name, description } = val
+        //       return <List content={{
+        //         name,
+        //         detail: description,
+        //         image: poster,
+        //         id: _id,
+        //       }} key={_id} />
+        //     })
+        //   }
+        // </View>
+        }
         fetch={this.throttleFetchData}
       ></GScrollView>
     )

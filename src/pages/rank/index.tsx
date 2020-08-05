@@ -104,7 +104,10 @@ export default class extends Component<any> {
     const { data } = this.state
     const resData = await getRankList({id: this.id, ...query})
     this.setState({
-      data: resData.length ? [ ...(isInit ? [] : data), ...resData ] : data
+      data: resData.length ? [ ...(isInit ? [] : data), ...resData.map(item => {
+        
+        return item
+      }) ] : data
     })
     return resData || [] 
   }
@@ -151,8 +154,6 @@ export default class extends Component<any> {
 
   public render() {
     const { data, rankType, showMore } = this.state
-    const realData = data.slice(0, 3)
-    const detail = data.slice(3)
 
     const color = { color: TypeColor['primary'] }
     const hideConfig = { ...HIDE_MORE_CONFIG, iconInfo: { ...HIDE_ICON, ...color } }
@@ -168,7 +169,7 @@ export default class extends Component<any> {
             <Rank
               style={{padding: '0 20px', boxSizing: 'border-box'}}
               type={''}
-              list={realData}
+              list={data}
             />
             <AtGrid
               hasBorder={false}
@@ -188,7 +189,7 @@ export default class extends Component<any> {
               onClick={this.exchangeRank}
               columnNum={COLUMN_COUNT}
             />
-            <List list={detail} style={{marginTop: '10px'}} />
+            <List list={data} style={{marginTop: '10px'}} />
           </View>
         }
         fetch={this.throttleFetchData}

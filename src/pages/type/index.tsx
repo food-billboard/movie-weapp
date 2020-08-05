@@ -74,7 +74,20 @@ export default class Index extends Component<any> {
   //获取数据
   public fetchData = async (query: any, isInit = false) => {
     const { data } = this.state
-    const resData = await getClassifyList({ id: this.id, ...query })
+    // const resData = await getClassifyList({ id: this.id, ...query })
+    const resData = [
+      {
+        image: '',
+        name: '超承诺书沙发打发',
+        type: '1',
+        time: new Date().getTime(),
+        hot: 1000000,
+        id: '11',
+        rate: 10,
+        description: 'sadfasdfasdfasdfiasdjfao;sjdfl;kajsdkfl;jasl;dfjkl;askdxcnvz,.nzx,vm.x,,nkasdfkalsdjf;kasdf',
+        store: false
+      }
+    ]
     await this.setState({
       typeDetail: [...(isInit ? [] : data), ...resData]
     })
