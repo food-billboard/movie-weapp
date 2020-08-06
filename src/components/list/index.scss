@@ -7,10 +7,12 @@
         margin-bottom:20px;
         .list-content-main{
             display:flex;
-            .img{
+            &-poster{
                 position:relative;
                 left:0;
                 top:0;
+                flex:2;
+                // width:200px;
                 // width:180px;
                 // height:180px;
                 margin-right:20px;
@@ -21,9 +23,11 @@
                     left:0;
                 }
             }
-            .detail{
-                flex:1;
+            &-detail{
+                flex:4;
                 height:100%;
+                overflow:hidden;
+                margin-right: 20px;
                 .name{
                     width:100%;
                     font-weight:bold;
@@ -37,6 +41,9 @@
                 .rate{
                     width:100%;
                 }
+            }
+            &-slot{
+                flex:1;
             }
         }
         .list-content-description{

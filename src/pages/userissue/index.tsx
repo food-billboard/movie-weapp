@@ -41,7 +41,16 @@ export default class extends Component<any>{
     const resData = await method({ ...args, ...query })
 
     this.setState({
-      data: [ ...(isInit ? [] : data), ...resData ]
+      data: [ ...(isInit ? [] : data), ...resData.map(item => {
+        const { poster, classify, _id, publish_time, ...nextItem } = item
+        return {
+          ...nextItem,
+          image: poster,
+          type: classify.map(item => item.name),
+          id: _id,
+          time: publish_time,
+        }
+      }) ]
     })
     return resData
   }
@@ -77,15 +86,7 @@ export default class extends Component<any>{
         sourceType={ESourceTypeList.Scope}
         scrollWithAnimation={true}
         fetch={this.throttleFetchData}
-        renderContent={<IconList list={data.map(item => {
-          const { _id, poster, author_rate, ...nextItem } = item
-          return {
-            ...nextItem,
-            id: _id,
-            rate: author_rate,
-            image: poster,
-          }
-        })} handleClick={this.editMovie}></IconList>}
+        renderContent={<IconList list={data} handleClick={this.editMovie}></IconList>}
       >
       </GScrollView>
     )

@@ -35,21 +35,19 @@ export default class NewsHead extends Component<IProps, IState>{
     style: {}
   }
 
-  public handleClick = (id: string) => {
-    router.push(routeAlias.detail, { id })
-  }
+  public handleClick = (id: string) => router.push(routeAlias.detail, { id })
 
   public render() {
     const { content, style: propsStyle } = this.props
     const { detail, name, id, image } = content
     return (
-      <View className='head'
+      <View className='newsheader'
         style={propsStyle}
         onClick={this.handleClick.bind(this, id)}>
-        <View className='img'>
+        <View className='newsheader-poster'>
           <ImageLoading src={image} loadingProps={{ content: '' }} />
         </View>
-        <View className='detail'>
+        <View className='newsheader-detail'>
           <View className='at-article'>
             <View className='at-article__h3' style={{ ...style.color('primary') }}>
               {name}

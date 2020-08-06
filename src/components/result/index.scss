@@ -1,16 +1,22 @@
-@import "~taro-ui/dist/style/components/flex.scss";
 .result {
   width:100%;
-  min-height:100vh;
+  // min-height:100vh;
   background-color:rgba(0, 0, 0, 0.1);
-  position:relative;
-  left:0;
-  top:0;
+  position:fixed;
+  left:50%;
+  top:50%;
+  transform: translateX(-50%) translateY(-50%);
 }
 .result-point{
   position:absolute;
   left:50%;
   top:50%;
   transform: translateX(-50%) translateY(-50%);
+  display:flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .result-text{
+    white-space: nowrap;
+  }
 }

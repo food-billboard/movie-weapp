@@ -141,6 +141,13 @@ export default class extends Component<any> {
 
   private handleSubmit = async (_) => {
 
+    Taro.showToast({
+      title: '功能完善中...',
+      icon: 'none',
+      duration: 1000
+    })
+    return
+
     const { config: { validate, action, param } } = this.state
 
     fieldsStore.validateFields(validate, async (_, values) => {

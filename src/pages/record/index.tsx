@@ -44,13 +44,12 @@ export default class Index extends Component<any> {
 
     this.setState({
       data: [...(isInit ? [] : data), ...resData.map(item => {
-        const { _id, poster, classify, createdAt description, rate, ...nextItem } = item
-        return item
+        const { _id, poster, classify, publish_time, ...nextItem } = item
         return {
           ...nextItem,
           image: poster,
-          type: classify,
-          time: createdAt,
+          type: classify.map(item => item.name),
+          time: publish_time,
         }
       })]
     })

@@ -74,22 +74,18 @@ export default class Index extends Component<any> {
   //获取数据
   public fetchData = async (query: any, isInit = false) => {
     const { data } = this.state
-    // const resData = await getClassifyList({ id: this.id, ...query })
-    const resData = [
-      {
-        image: '',
-        name: '超承诺书沙发打发',
-        type: '1',
-        time: new Date().getTime(),
-        hot: 1000000,
-        id: '11',
-        rate: 10,
-        description: 'sadfasdfasdfasdfiasdjfao;sjdfl;kajsdkfl;jasl;dfjkl;askdxcnvz,.nzx,vm.x,,nkasdfkalsdjf;kasdf',
-        store: false
-      }
-    ]
+    const resData = await getClassifyList({ id: this.id, ...query })
+
     await this.setState({
-      typeDetail: [...(isInit ? [] : data), ...resData]
+      data: [...(isInit ? [] : data), ...resData.map(item => {
+        const { poster, classify, publish_time, ...nextItem } = item
+        return {
+          ...nextItem,
+          image: poster,
+          type: classify.map(item => item.name),
+          time: publish_time
+        }
+      })]
     })
     return resData
   }
@@ -144,6 +140,7 @@ export default class Index extends Component<any> {
 
     const showType = type.length <= SCROLL_MAX_SHOW_COUNT
 
+
     const list = type.map((val: any) => {
       const { name, _id: id } = val
       return (
@@ -172,9 +169,12 @@ export default class Index extends Component<any> {
               height: Number(SYSTEM_PAGE_SIZE(headerHeight)) / 2 + 'px'
             }}
             >
-              <Text className='text'
-                style={{ ...style.color('thirdly'), ...bgColor }}
-              >分类: </Text>
+              {
+                !!list.length &&
+                <Text className='text'
+                  style={{ ...style.color('thirdly'), ...bgColor }}
+                >分类: </Text>
+              }
               {
                 showType || !typeShow ?
                   <ScrollView
@@ -213,26 +213,7 @@ export default class Index extends Component<any> {
             </View>
             <View>
               {
-                listShow ? (<LinearList list={data.map(item => {
-                  const { _id: id, poster, name, hot, author_rate } = item
-                  return {
-                    id,
-                    image: poster,
-                    name,
-                    time: Date.now(),
-                    hot,
-                    rate: author_rate
-                  }
-                })} />) : (<IconList list={data.map(item => {
-                  const { _id: id, poster, name, hot, author_rate } = item
-                  return {
-                    id,
-                    image: poster,
-                    name,
-                    hot,
-                    rate: author_rate
-                  }
-                })} />)
+                listShow ? (<LinearList list={data} />) : (<IconList list={data} />)
               }
             </View>
           </View>

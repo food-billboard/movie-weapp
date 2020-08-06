@@ -46,6 +46,16 @@ export default class extends Component<any> {
 
   //获取电影数据
   public fetchMovieData = async () => {
+    this.setState({
+      headerData: {
+        name: '名字很长很高圣诞节佛氨基酸的佛教阿斯蒂芬',
+        image: '',
+        detail: "名字很长很高圣诞节佛氨基酸的佛教阿斯蒂芬名字很长很高圣诞节佛氨基酸的佛教阿斯蒂芬名字很长很高圣诞节佛氨基酸的佛教阿斯蒂芬",
+        id: 0
+      }
+    })
+    return
+
     if(!this.id) {
       Taro.showToast({
         title: '网络错误，请重试',
@@ -54,9 +64,19 @@ export default class extends Component<any> {
       })
       return
     }
-    const data = await getMovieDetailSimple(this.id)
+    const {
+      _id,
+      poster,
+      description,
+      ...nextData
+    } = await getMovieDetailSimple(this.id) || {}
     this.setState({
-      headerData: data
+      headerData: {
+        ...nextData,
+        id: _id,
+        detail: description,
+        image: poster
+      }
     })
   }
 
@@ -96,15 +116,6 @@ export default class extends Component<any> {
    * commentId: 评论id
    */
   public publish = async (isUserCall, commentId) => {
-
-    //TODo
-    Taro.showToast({
-      title: '功能完善中...',
-      icon: 'none',
-      duration: 1000
-    })
-    return
-    //
     const param:IParams = {
       action: isUserCall ? EAction.COMMENT_USER : EAction.COMMENT_MOVIE,
       postInfo: commentId
@@ -145,7 +156,8 @@ export default class extends Component<any> {
           id: _id,
           image: poster,
         }}></Header>}
-        renderBottom={<View>
+        renderBottom={
+        <View>
           <GButton
             style={{ width: '100%', height: '92', position: 'fixed', bottom: 0, left: 0, zIndex: 999 }}
             type={'secondary'}

@@ -4,11 +4,11 @@ import { View, Button } from '@tarojs/components'
 import GRadio from '~components/radio'
 import Model from '~components/model'
 import List from '~components/linearlist'
-// import Comment from '~components/comment'
 import { EAction, IParams } from '../comment'
 import GColor from './components/color'
 import { TypeColor, colorChange, colorStyleChange } from '~theme/color'
-import { router, routeAlias, createSystemInfo, withTry, clearToken } from '~utils'
+import { router, routeAlias, withTry, clearToken } from '~utils'
+import { createSystemInfo } from '~config'
 import { Toast } from '~components/toast'
 import { RadioOption } from 'taro-ui/types/radio'
 import style from '~theme/style'
@@ -93,20 +93,10 @@ export default class Setting extends Component<any>{
 
   //显示反馈组件
   public showFeedback = async () => {
-    //TODO
-    Taro.showToast({
-      title: '功能完善中...',
-      icon: 'none',
-      duration: 1000
-    })
-    return
-    //
     let param: IParams = {
       action: EAction.FEEDBACK
     }
     router.push(routeAlias.toComment, param)
-
-    // this.commentRef.current!.open()
   }
 
   public close = (prop) => {
@@ -131,29 +121,6 @@ export default class Setting extends Component<any>{
   //监听退出登录取消
   public logCancel = () => this.logClose()
 
-  // //反馈信息发送
-  // public handleFeedback = async (value: {
-  //   text?: string
-  //   image?: Array<string>
-  //   video?: Array<string>
-  // }) => {
-  //   Taro.showLoading({ mask: true, title: '预检查中...' })
-  //   const data = await preCheckFeedback()
-  //   if (!data) {
-  //     Taro.showToast({
-  //       title: '已达到每日反馈上限',
-  //       icon: 'none',
-  //       duration: 1000
-  //     })
-  //     Taro.hideLoading()
-  //   } else {
-  //     const { text = '', image = [], video = [] } = value
-  //     await withTry(feedback)({ text, image, video })
-  //     Taro.hideLoading()
-  //     Taro.showToast({ mask: false, icon: 'none', title: 'success~', duration: 500 })
-  //   }
-  // }
-
   //反馈
   readonly feedback = {
     id: Symbol('feedback'),
@@ -167,7 +134,6 @@ export default class Setting extends Component<any>{
       color: TypeColor[ICON_COLOR]
     },
     handle: this.showFeedback,
-    // feedback: this.handleFeedback
   }
 
   //色调
@@ -323,11 +289,6 @@ export default class Setting extends Component<any>{
           </Button>
         </View>
         <Model info={activeModel} />
-        {/* <Comment
-          buttonText={'发送'}
-          ref={this.commentRef}
-          publishCom={this.feedback.feedback}
-        /> */}
       </View>
     )
   }

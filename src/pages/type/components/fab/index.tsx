@@ -29,7 +29,7 @@ export default class Fab extends Component<IProps, IState> {
       <AtFab
         onClick={this.props.change}
       >
-        <Text style={{ ...style.color('secondary'), fontSize: SYSTEM_PAGE_SIZE() + 'px' }} className={'at-fab__icon at-icon ' + (value ? 'at-icon-bullet-list' : 'at-icon-money')}></Text>
+        <Text style={{ ...style.color('secondary'), fontSize: SYSTEM_PAGE_SIZE() + 'px' }} className={`fab-icon at-fab__icon at-icon ${(value ? 'at-icon-bullet-list' : 'at-icon-money')}`}></Text>
       </AtFab>
     )
   }

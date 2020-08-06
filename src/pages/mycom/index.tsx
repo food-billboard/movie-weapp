@@ -71,16 +71,6 @@ export default class extends Component<any>{
    * commentId: 评论id
    */
   public publish = async (_, commentId) => {
-
-    //TODO
-    Taro.showToast({
-      title: '功能完善中...',
-      icon: 'none',
-      duration: 1000
-    })
-    return
-    //
-
     let param: IParams = {
       action: EAction.COMMENT_USER,
       postInfo: commentId

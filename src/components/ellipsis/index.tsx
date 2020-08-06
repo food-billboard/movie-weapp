@@ -31,7 +31,8 @@ export default class extends Component<IProps, IState> {
   }
 
   //获取详情
-  public getDetail = () => {
+  public getDetail = (e) => {
+    e.stopPropagation()
     const { show } = this.state
     this.setState({
       show: !show
@@ -56,13 +57,15 @@ export default class extends Component<IProps, IState> {
       <View className='ellipsis'
         style={{ ...style.color('secondary'), ...(isObject(customStyle) ? customStyle : {}) }}
       >
-        <Text style={{ display: 'inline-block', wordBreak: 'break-word' }}>
+        <Text 
+          onClick={this.getDetail}
+          style={{ display: 'inline-block', wordBreak: 'break-word' }}
+        >
           {_text}
         </Text>
         {
           needPoint && (text && text.length >= maxLen) ?
             <View
-              onClick={this.getDetail}
               style={{ ...style.color('thirdly') }}
               className='detail'
             >

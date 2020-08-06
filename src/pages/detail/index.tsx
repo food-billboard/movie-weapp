@@ -76,40 +76,12 @@ export default class extends Component<any> {
 
   //打开评论界面
   public handleComment = async () => {
-    //TODO
-    Taro.showToast({
-      title: '功能完善中...',
-      icon: 'none',
-      duration: 1000
-    })
-    return
-    //
-
     let param:IParams = {
       action: EAction.COMMENT_MOVIE,
       postInfo: this.id
     }
     router.push(routeAlias.toComment, param)
-
-    //获取个人信息缓存
-    // await this.props.getUserInfo()
-    //   .then(_ => {
-    //     this.commentRef.current!.open()
-    //   })
-    //   .catch(err => err)
   }
-
-  //评论
-  // public comment = async (value: {
-  //   text?: string,
-  //   image?: Array<any>,
-  //   video?: Array<any>
-  // }) => {
-  //   const { text = '', image = [], video = [] } = value
-  //   Taro.showLoading({ mask: true, title: '评论中...' })
-  //   await withTry(postCommentToMovie)({ _id: this.id, content: { text, image, video } })
-  //   Taro.hideLoading()
-  // }
 
   //收藏
   public store = async (store: boolean) => {

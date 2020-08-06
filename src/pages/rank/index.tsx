@@ -105,8 +105,14 @@ export default class extends Component<any> {
     const resData = await getRankList({id: this.id, ...query})
     this.setState({
       data: resData.length ? [ ...(isInit ? [] : data), ...resData.map(item => {
-        
-        return item
+        const { poster, classify, _id, publish_time, ...nextItem } = item
+        return {
+          ...nextItem,
+          image: poster,
+          type: classify.map(item => item.name),
+          id: _id,
+          time: publish_time,
+        }
       }) ] : data
     })
     return resData || [] 

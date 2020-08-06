@@ -45,10 +45,19 @@ export default class extends Component<any>{
    */
   public fetchData = async (query: any, isInit=false) => {
     const { data } = this.state
-    const { name, movie } = await getSpecial({id: this.id, ...query})
+    const { name, movie, poster } = await getSpecial({id: this.id, ...query})
 
     await this.setState({
-        data: [ ...(isInit ? [] : data), ...movie ],
+        data: [ ...(isInit ? [] : data), ...movie.map(item => {
+          const { poster, classify, _id, publish_time, ...nextItem } = item
+          return {
+            ...nextItem,
+            image: poster,
+            type: classify.map(item => item.name),
+            id: _id,
+            time: publish_time,
+          }
+        }) ],
         title: name
     })
     return movie
@@ -73,15 +82,7 @@ export default class extends Component<any>{
         sourceType={ESourceTypeList.Scope}
         scrollWithAnimation={true}
         fetch={this.throttleFetchData}
-        renderContent={<IconList list={data.map(item => {
-          const { _id, poster, author_rate, ...nextItem } = item
-          return {
-            ...nextItem,
-            id: _id,
-            rate: author_rate,
-            image: poster,
-          }
-        })}></IconList>}
+        renderContent={<IconList list={data}></IconList>}
       ></Scroll>
     )
   }

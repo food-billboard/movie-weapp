@@ -1,7 +1,7 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
-import List from '~components/newsheader'
+import List from '~components/list'
 import GScrollView from '~components/scrollList'
 import throttle from 'lodash/throttle'
 import { colorStyleChange } from '~theme/color'
@@ -39,7 +39,16 @@ export default class Index extends Component<any> {
     const resData = await method({ ...args, ...query })
 
     await this.setState({
-      data: [...(isInit ? [] : data), ...resData]
+      data: [...(isInit ? [] : data), ...resData.map(item => {
+        const { poster, classify, _id, publish_time, ...nextItem } = item
+        return {
+          ...nextItem,
+          image: poster,
+          type: classify.map(item => item.name),
+          id: _id,
+          time: publish_time,
+        }
+      })]
     })
     return resData
   }
@@ -56,19 +65,22 @@ export default class Index extends Component<any> {
         style={{ ...style.backgroundColor('bgColor') }}
         sourceType={ESourceTypeList.Scope}
         scrollWithAnimation={true}
-        renderContent={<View>
-          {
-            data.map(val => {
-              const { _id: id, poster, description, ...nextVal } = val
-              return <List content={{
-                ...nextVal,
-                id,
-                image: poster,
-                detail: description,
-              }} key={id} />
-            })
-          }
-        </View>}
+        renderContent={
+          <List list={data} />
+        // <View>
+        //   {
+        //     data.map(val => {
+        //       const { _id: id, poster, description, ...nextVal } = val
+        //       return <List content={{
+        //         ...nextVal,
+        //         id,
+        //         image: poster,
+        //         detail: description,
+        //       }} key={id} />
+        //     })
+        //   }
+        // </View>
+        }
         fetch={this.throttleFetchData}
       ></GScrollView>
     )

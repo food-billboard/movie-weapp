@@ -1,38 +1,52 @@
 @import "~taro-ui/dist/style/components/flex.scss";
-.icon{
-    
-    .icon-content{
-        width:300px;
-        height:260px;
+.icon-list{
+    display:flex;
+    flex-wrap: wrap;
+    &-content{
+        // width:300px;
+        // height:260px;
         box-sizing:border-box;
         padding:10px;
         margin-bottom:20px;
         box-shadow: 0 3px 6px 0px rgba(0, 0, 0, 0.12);
-        .img{
+        display:flex;
+        flex-direction: column;
+        &-poster{
+            // min-height: 200px;
+            height:200rpx;
+            position:relative;
+            left:0;
+            top:0;
             width:100%;
-            height:160px;
+            &-store {
+                position: absolute;
+                left:0;
+                top:0;
+            }
         }
-        .name{
-            font-weight:bold;
-            text-align:center;
-            white-space:nowrap;
-            overflow-x: scroll;
-            // text-overflow:ellipsis;
-            // overflow:hidden;
-            width:100%;
-            font-size:32px;
-        }
-        .name::-webkit-scrollbar {
-            display:none
-        }
-        .rate{
-            width:100%;
-        }
-        .count{
-            font-size:28px;
-            text-align:center;
-            .text{
-                font-size:20px;
+        &-main {
+            &-name{
+                font-weight:bold;
+                text-align:center;
+                white-space:nowrap;
+                overflow-x: scroll;
+                // text-overflow:ellipsis;
+                // overflow:hidden;
+                width:100%;
+                // font-size:32px;
+            }
+            .name::-webkit-scrollbar {
+                display:none
+            }
+            .rate{
+                width:100%;
+            }
+            .count{
+                // font-size:28px;
+                text-align:center;
+                .text{
+                    font-size:70%;
+                }
             }
         }
     }

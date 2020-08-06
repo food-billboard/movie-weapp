@@ -4,29 +4,39 @@ import { View, Text } from '@tarojs/components'
 import Rate from '../rate'
 import ImageLoading from '../imageLoading'
 import style from '~theme/style'
-import { router, formatNumber, routeAlias } from '~utils'
+import { connect } from 'react-redux'
+import { mapDispatchToProps, mapStateToProps } from './connect'
+import { router, formatNumber, routeAlias, ItypeList, withTry } from '~utils'
+import { putStore, cancelStore } from '~services'
 import noop from 'lodash/noop'
 
 import './index.scss'
 
 export interface IList {
-  id: string,
-  name: string,
-  image: string,
-  hot: number,
+  image: string
+  name: string
+  type?: Array<ItypeList>
+  time: string | number
+  hot: number
+  id: string
   rate: number
+  description: string
+  store?: boolean
 }
 
 export interface IProps {
   list: Array<IList>
   handleClick: (...args: any) => any
+  getUserInfo: () => Promise<any>
 }
 
+@connect(mapStateToProps, mapDispatchToProps)
 export default class IconList extends Component<IProps>{
   
   public static defaultProps: IProps = {
     list: [],
-    handleClick: () => { }
+    handleClick: noop,
+    getUserInfo: () => Promise.resolve()
   }
 
   public handleClick = (id: string) => this.props.handleClick(id)
@@ -34,30 +44,74 @@ export default class IconList extends Component<IProps>{
   //路由跳转
   public goTo = (_, id, __) => router.push(routeAlias.detail, { id })
 
+  //收藏
+  public handleStore = async (id: string, isStore?: boolean) => {
+    let method
+    if(typeof isStore === 'undefined' || isStore) {
+      method = putStore
+    }else {
+      method = cancelStore
+    }
+    await this.props.getUserInfo()
+    .then(_ => {
+      return withTry(method)(id)
+    })
+    .then(([err, ]) => {
+      let toastConfig:Taro.showToast.Option = {
+        icon: 'none',
+        duration: 1000,
+        title: ''
+      }
+      if(err) {
+        toastConfig = {
+          ...toastConfig,
+          title: '网络错误，请重试'
+        }
+      }else {
+        toastConfig = {
+          ...toastConfig,
+          title: '操作成功~'
+        }
+      }
+    })
+    .catch(_ => {
+      Taro.showToast({
+        title: '未登录无法操作',
+        icon: 'none',
+        duration: 1000
+      })
+    })
+    
+  }
+
   public render() {
 
     const { list } = this.props
 
     return (
-      <View className='icon at-row at-row--wrap at-row__justify--around'>
+      <View className='icon-list at-row at-row--wrap at-row__justify--around'>
         {
-          list.map((value) => {
-            const { id, name, image, hot, rate } = value
+          list.map((value: IList) => {
+            const { id, name, image, hot, rate, store } = value
             return (
               <View
-                className='icon-content at-col at-col-5'
+                className='icon-list-content at-col at-col-5'
                 style={{ ...style.backgroundColor('disabled') }}
                 key={id}
               >
                 <View
-                  className='img'
+                  className='icon-list-content-poster'
                   onClick={(event) => { this.goTo.call(this, name, id, event) }}
                 >
-                  <ImageLoading src={image} />
+                  <ImageLoading src={image} mode={'scaleToFill'} />
+                  <View 
+                    onClick={this.handleStore.bind(this, id, store)}
+                    className="at-icon at-icon-heart icon-list-content-poster-store"
+                  ></View>
                 </View>
-                <View>
+                <View className="icon-list-content-main">
                   <View
-                    className='name'
+                    className='icon-list-content-main-name'
                     style={{ ...style.color('primary') }}
                     onClick={this.handleClick.bind(this, id)}
                   >{name}</View>
@@ -66,6 +120,7 @@ export default class IconList extends Component<IProps>{
                       value={rate}
                       readonly={true}
                       rate={noop}
+                      size={10}
                     ></Rate>
                   </View>
                   <View className='count'

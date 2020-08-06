@@ -8,10 +8,10 @@ export default {
     // 'pages/attention/index',
     // 'pages/record/index',
     // 'pages/detail/index',
-    // 'pages/commovie/index',
+    'pages/commovie/index',
     // 'pages/user/index',
     // 'pages/search/index',
-    'pages/type/index',
+    // 'pages/type/index',
     // 'pages/rank/index',
     // 'pages/store/index',
     // 'pages/comdetail/index',
@@ -36,7 +36,7 @@ export default {
     "selectedColor": "#ff6600",
     "list": [
       {
-        "pagePath": "pages/type/index",
+        "pagePath": "pages/commovie/index",
         "text": "首页",
         "iconPath": "./assets/home-icon.png",
         "selectedIconPath": './assets/home-icon-active.png'

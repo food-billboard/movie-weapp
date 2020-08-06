@@ -143,47 +143,49 @@ export default class List extends Component<IProps, IState> {
     const { divider = true } = this.props
     const _header = typeof header === 'boolean'
     const _bottom = typeof bottom === 'boolean'
+
     return (
-      <GResult
-        isEmpty={!this.data.length}
-      >
-        <View className='list'>
-          <View
-            style={isObject(style) ? style : {}}
-            className='scroll-view'
+      <View className='list'>
+        <View
+          style={isObject(style) ? style : {}}
+          className='scroll-view'
+        >
+          <View style={{ ...customStyle.backgroundColor('bgColor'), paddingTop: (header || 0) + 'rpx' }}
           >
-            <View style={{ ...customStyle.backgroundColor('bgColor'), paddingTop: (header || 0) + 'rpx' }}
+            <GResult
+              loading={loading}
+              isEmpty={!this.data.length}
             >
               {this.props.renderContent}
-            </View>
-            {
-              empty && divider && <GDivider other={{ paddingBottom: (bottom ? bottom + 20 : 0) + 'rpx' }} />
-            }
-            {/* <Top 
-              ref={this.topRef} 
-            /> */}
-            {
-              !!_header &&
-                <View className='header' style={{ ...customStyle.backgroundColor('disabled') }}>
-                  {
-                    this.props.renderHeader
-                  }
-                </View>
-            }
-            { !_bottom && this.props.renderBottom}
+            </GResult>
           </View>
-          <View
-            className='active'
-          >
-            {loading &&
-              <AtActivityIndicator
-                size={100}
-                content={'玩命加载中...'}
-              />
-            }
-          </View>
+          {
+            empty && divider && <GDivider other={{ paddingBottom: (bottom ? bottom + 20 : 0) + 'rpx' }} />
+          }
+          {/* <Top 
+            ref={this.topRef} 
+          /> */}
+          {
+            !!_header && !loading &&
+              <View className='header' style={{ ...customStyle.backgroundColor('disabled') }}>
+                {
+                  this.props.renderHeader
+                }
+              </View>
+          }
+          { !_bottom && !loading && this.props.renderBottom}
         </View>
-      </GResult>
+        <View
+          className='active'
+        >
+          {loading &&
+            <AtActivityIndicator
+              size={100}
+              content={'玩命加载中...'}
+            />
+          }
+        </View>
+      </View>
     )
   }
 }
