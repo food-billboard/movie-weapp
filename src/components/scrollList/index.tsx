@@ -150,6 +150,14 @@ export default class List extends Component<IProps, IState> {
           style={isObject(style) ? style : {}}
           className='scroll-view'
         >
+          {
+            !_header && loading &&
+              <View className='header' style={{ ...customStyle.backgroundColor('disabled') }}>
+                {
+                  this.props.renderHeader
+                }
+              </View>
+          }
           <View style={{ ...customStyle.backgroundColor('bgColor'), paddingTop: (header || 0) + 'rpx' }}
           >
             <GResult
@@ -165,14 +173,6 @@ export default class List extends Component<IProps, IState> {
           {/* <Top 
             ref={this.topRef} 
           /> */}
-          {
-            !!_header && !loading &&
-              <View className='header' style={{ ...customStyle.backgroundColor('disabled') }}>
-                {
-                  this.props.renderHeader
-                }
-              </View>
-          }
           { !_bottom && !loading && this.props.renderBottom}
         </View>
         <View

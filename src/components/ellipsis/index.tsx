@@ -10,6 +10,7 @@ export interface IProps {
   text: string
   needPoint?: boolean
   style?: React.CSSProperties
+  onChange?: (...args: any[]) => any
 }
 
 export interface IState {
@@ -37,6 +38,7 @@ export default class extends Component<IProps, IState> {
     this.setState({
       show: !show
     })
+    this.props.onChange && this.props.onChange(!show)
   }
 
   //获取需要展示的文本

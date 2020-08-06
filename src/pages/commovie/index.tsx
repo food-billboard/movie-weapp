@@ -42,6 +42,17 @@ export default class extends Component<any> {
     id: false,
     userCall: false,
     headerData: {},
+    headerHeight: 0
+  }
+
+  handleSizeChange = () => {
+    const query = Taro.createSelectorQuery()
+    query.select('#commovie-header').boundingClientRect()
+    query.selectViewport().scrollOffset()
+    query.exec(function(res){
+      res[0].top       // #the-id节点的上边界坐标
+      res[1].scrollTop // 显示区域的竖直滚动位置
+    })
   }
 
   //获取电影数据
@@ -124,7 +135,7 @@ export default class extends Component<any> {
   }
 
   public render() {
-    const { headerData: { description, _id, poster, ...nextHeaderData }, data } = this.state
+    const { headerData, data, headerHeight } = this.state
 
     return (
       <GScrollView
@@ -148,14 +159,13 @@ export default class extends Component<any> {
           }
         </View>}
         fetch={this.throttleFetchData}
-        header={200}
+        header={headerHeight}
         bottom={92}
-        renderHeader={<Header content={{
-          ...nextHeaderData,
-          detail: description,
-          id: _id,
-          image: poster,
-        }}></Header>}
+        renderHeader={
+          <View id="commovie-header">
+            <Header content={headerData}></Header>
+          </View>
+        }
         renderBottom={
         <View>
           <GButton

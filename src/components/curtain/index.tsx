@@ -56,7 +56,7 @@ export default class extends Component<IProps, IState> {
         style={{ display: isOpen ? 'block' : 'none' }}
       >
         <View
-          className='shadow'
+          className='curtain-shadow'
           style={{ ...customeStyle.backgroundColor('primary'), ...(isObject(curtainStyle) ? curtainStyle : {}) }}
           onClick={() => { cancel ? (this.props.handleCancel ? this.props.handleCancel.call(this) : this.handleCancel.call(this)) : noop }}
         ></View>
