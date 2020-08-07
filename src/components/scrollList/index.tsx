@@ -133,6 +133,21 @@ export default class List extends Component<IProps, IState> {
     await this.fetchData(nextQuery, true)
   }
 
+  //获取header高度
+  public getHeaderHeight() {
+    const query = Taro.createSelectorQuery().in(this)
+    query.select('#scroll-header').boundingClientRect()
+    // .exec()
+    console.log(query)
+    // query.selectViewport().scrollOffset()
+    // // console.log(query)
+    // query.exec(function(res){
+    //   console.log(res)
+    //   // res[0].top       
+    //   // res[1].scrollTop // 显示区域的竖直滚动位置
+    // })
+  }
+
   public render() {
     const {
       header,
@@ -144,6 +159,8 @@ export default class List extends Component<IProps, IState> {
     const _header = typeof header === 'boolean'
     const _bottom = typeof bottom === 'boolean'
 
+this.getHeaderHeight()
+
     return (
       <View className='list'>
         <View
@@ -152,7 +169,7 @@ export default class List extends Component<IProps, IState> {
         >
           {
             !_header && loading &&
-              <View className='header' style={{ ...customStyle.backgroundColor('disabled') }}>
+              <View id="scroll-header" className='header' style={{ ...customStyle.backgroundColor('disabled') }}>
                 {
                   this.props.renderHeader
                 }

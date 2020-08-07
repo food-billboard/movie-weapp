@@ -51,7 +51,7 @@ export default class NewsHead extends Component<IProps, IState>{
         style={propsStyle}
         onClick={this.handleClick.bind(this, id)}>
         <View className='newsheader-poster'>
-          <ImageLoading src={image} loadingProps={{ content: '' }} mode={'scaleToFill'} />
+          <ImageLoading src={image} loadingProps={{ content: '' }} mode={'aspectFit'} />
         </View>
         <View className='newsheader-detail'>
           <View className='newsheader-detail-name' style={{ ...style.color('primary') }}>
@@ -59,13 +59,10 @@ export default class NewsHead extends Component<IProps, IState>{
           </View>
           <Ellipsis
             text={detail}
-            style={{padding:0}}
+            style={{padding: '10rpx 0 10rpx 15rpx', marginTop: '20rpx', ...style.border(1, 'bgColor', 'dashed', 'all'), borderRadius: '10rpx'}}
             needPoint={false}
             onChange={this.handleSizeChange}
           ></Ellipsis>
-          {/* <Text className='newsheader-detail-desc' style={{ ...style.color('thirdly') }}>
-            {detail}
-          </Text> */}
         </View>
         <View className={'enter'}
           style={{ color: 'rgb(193, 193, 193)' }}
