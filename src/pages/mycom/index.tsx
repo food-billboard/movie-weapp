@@ -1,6 +1,5 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
-import { View } from '@tarojs/components'
 import { List } from '~components/commentlist'
 import GScrollView from '~components/scrollList'
 import Origin from './components/originComment'
@@ -102,33 +101,24 @@ export default class extends Component<any>{
         sourceType={ESourceTypeList.Scope}
         scrollWithAnimation={true}
         renderContent={
-          data.map((value) => {
-            const { _id, source_type, source, ...nextValue } = value
-            const list = {
-              ...nextValue,
-              _id
+          <List
+            comment={this.publish}
+            like={this.like}
+            list={data}
+            renderExtra={
+              (item:any) => {
+                const { source_type, source } = item
+                return (
+                  <Origin
+                    info={{
+                      source,
+                      source_type
+                    }}
+                  />
+                )
+              }
             }
-            const info = {
-              source,
-              source_type
-            }
-            return (
-              <View>
-                <List
-                  comment={this.publish}
-                  key={_id}
-                  like={this.like}
-                  list={list}
-                  extra={true}
-                  renderExtra={
-                    <Origin
-                      info={info}
-                    />
-                  }
-                />
-              </View>
-            )
-          })
+          ></List>
         }
         fetch={this.throttleFetchData}
       ></GScrollView>

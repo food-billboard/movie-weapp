@@ -3,18 +3,16 @@
   height:100px;
   box-sizing:border-box;
   padding:0 20px;
+  display:flex;
+  align-items: center;
   .username{
-      float:left;
-  }
-  .username,
-  .enter{
-      line-height:100px;
-  }
-  .username{
-      width:400px;
-      white-space:nowrap;
-      text-overflow:ellipsis;
-      overflow:hidden;
+    //   float:left;
+    flex:3;
+    margin-left:20px;
+    width: 100%;
+    white-space: nowrap;
+    overflow-x: scroll;
+    // text-overflow: ellipsis;
   }
   .enter{
       float:right;

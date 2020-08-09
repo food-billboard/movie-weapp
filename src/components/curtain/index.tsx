@@ -10,27 +10,37 @@ import './index.scss'
 export interface IProps {
   contentStyle?: React.CSSProperties
   curtainStyle?: React.CSSProperties
-  title: boolean
-  main: boolean
-  action: boolean
-  other: boolean
-  renderTitle?: any
-  renderMain?: any
-  renderAction?: any
-  renderOther?: any
-  handleClose: (...args: any[]) => any
-  handleCancel?: (...args: any[]) => any
-  cancel?: boolean
-  isOpen: boolean
+  renderTitle?: React.ReactElement | string
+  renderMain: React.ReactElement | string
+  renderAction?: React.ReactElement | string
+  renderOther?: React.ReactElement | string
+  handleClose?: () => any
+  handleShow?: () => any
+  isOpen?: boolean
 }
 
-export interface IState { }
+export interface IState {
+  show: boolean
+}
 
 export default class extends Component<IProps, IState> {
 
-  //取消
-  public handleCancel = () => {
-    this.props.handleClose()
+  public handleClose = () => {
+    this.setState({
+      show: false
+    })
+    this.props.handleClose && this.props.handleClose()
+  }
+
+  public handleShow = () => {
+    this.setState({
+      show: true
+    })
+    this.props.handleShow && this.props.handleShow()
+  }
+
+  public state: IState = {
+    show: !!this.props.isOpen
   }
 
   //阻止手指滑动
@@ -41,27 +51,21 @@ export default class extends Component<IProps, IState> {
     const {
       contentStyle = {},
       curtainStyle = {},
-      title = false,
-      main = false,
-      action = false,
-      other = false,
-      cancel = true,
-      isOpen = false
     } = this.props
+    const { show } = this.state
 
     return (
       <View
-        className='curtain'
+        id='curtain'
+        className={`curtain-${show ? 'show' : 'hidden'}`}
         onTouchMove={this.stopMove}
-        style={{ display: isOpen ? 'block' : 'none' }}
       >
         <View
-          className='curtain-shadow'
+          className='curtain-mask'
           style={{ ...customeStyle.backgroundColor('primary'), ...(isObject(curtainStyle) ? curtainStyle : {}) }}
-          onClick={() => { cancel ? (this.props.handleCancel ? this.props.handleCancel.call(this) : this.handleCancel.call(this)) : noop }}
         ></View>
         <View
-          className='main'
+          className='curtain-main'
           style={{
             ...customeStyle.backgroundColor('bgColor'),
             borderRadius: '6px',
@@ -69,9 +73,9 @@ export default class extends Component<IProps, IState> {
           }}
         >
           {
-            title &&
+            !!this.props.renderTitle &&
             <View
-              className='title'
+              className='curtain-main-title'
               style={{ ...customeStyle.border(1, 'disabled', 'solid', 'bottom') }}
             >
               {
@@ -79,32 +83,29 @@ export default class extends Component<IProps, IState> {
               }
             </View>
           }
+          <View className='curtain-main-content'>
+            {this.props.renderMain}
+          </View>
           {
-            main &&
-            <View className='content'>
-              {this.props.renderMain}
-            </View>
-          }
-          {
-            action &&
+            !!this.props.renderAction &&
             <View
-              className='action'
+              className='curtain-main-action'
               style={{ ...customeStyle.border(1, 'disabled', 'solid', 'top') }}
             >
               {this.props.renderAction}
             </View>
           }
           {
-            other &&
-            <View className='other'>
+            !!this.props.renderOther &&
+            <View className='curtain-main-other'>
               {this.props.renderOther}
             </View>
           }
-          <View
-            className='close at-icon at-icon-close'
+          {/* <View
+            className='curtain-main-close at-icon at-icon-close'
             style={{ ...customeStyle.backgroundColor('bgColor'), ...customeStyle.color('primary') }}
             onClick={this.props.handleClose}
-          ></View>
+          ></View> */}
         </View>
       </View>
     )

@@ -44,44 +44,40 @@ export default class IconHead extends Component<IProps>{
     const { list } = this.props
     const { username = '', avatar = '', hot = 0, fans, attentions = 0 } = list
     return (
-      <View className='head'
+      <View id='user-head'
         style={{ ...style.backgroundColor('thirdly') }}
       >
-        <View className='icon'>
-          <View className='content'
+        <View className='user-head-icon'>
+          <View className='user-head-icon-content'
             onClick={this.previewImage.bind(this, avatar)}
           >
-            <View className='img'>
-              <AtAvatar
-                image={avatar}
-                text={'头像'}
-                circle
-                size={'large'}
-                customStyle={{ width: '100%', height: '100%' }}
-              />
-            </View>
+            <AtAvatar
+              image={avatar}
+              text={'头像'}
+              circle
+              size={'large'}
+              customStyle={{ width: '100%', height: '100%' }}
+            />
           </View>
-          <View className='username' style={{ ...style.color('primary') }}>
-            <Text
-              className='user-text'
-            >{username}</Text>
+          <View className='user-head-icon-username' style={{ ...style.color('primary') }}>
+            {username}
           </View>
         </View>
-        <View className='hot at-row'
+        <View className='user-head-info at-row'
           style={{ ...style.color('disabled') }}
         >
-          <View className='at-col text'>
-            <Text className='count'
+          <View className='at-col user-head-info-data'>
+            <Text className='user-head-info-data-count'
               style={{ ...style.color('primary') }}
             >{formatNumber(fans)}</Text> 粉丝
                     </View>
-          <View className='at-col text'>
-            <Text className='count'
+          <View className='at-col user-head-info-data'>
+            <Text className='user-head-info-data-count'
               style={{ ...style.color('primary') }}
             >{formatNumber(attentions)}</Text> 人关注
                     </View>
-          <View className='at-col text'>
-            <Text className='count'
+          <View className='at-col user-head-info-data'>
+            <Text className='user-head-info-data-count'
               style={{ ...style.color('primary') }}
             >{formatNumber(hot)}</Text> 人觉得很赞
                     </View>

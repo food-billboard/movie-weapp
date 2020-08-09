@@ -42,6 +42,7 @@ export default class List extends Component<IProps, IState> {
                 onClick={() => { this.handlePreviewImage.call(this, value) }}
               >
                 <ImageLoading
+                  mode={'widthFix'}
                   src={value}
                 />
               </View>

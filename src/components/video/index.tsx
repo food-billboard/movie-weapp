@@ -16,7 +16,6 @@ export interface IProps {
   poster: string
   initialTime?: number
   id?: string
-  loop?: boolean
   muted?: boolean
   style?: React.CSSProperties
   danmuList?: Array<IDanmu>
@@ -101,7 +100,6 @@ export default class Media extends Component<IProps, IState>{
       poster,
       initialTime = 0,
       id = 'video',
-      loop = false,
       muted = false,
       style = {},
       danmuList
@@ -119,7 +117,7 @@ export default class Media extends Component<IProps, IState>{
         danmuList={danmuList}
         style={isObject(style) ? style : {}}
         src={src}
-        controls={false}
+        controls={true}
         showFullscreenBtn={false}
         showPlayBtn={false}
         showCenterPlayBtn={false}
@@ -127,7 +125,7 @@ export default class Media extends Component<IProps, IState>{
         poster={poster}
         initialTime={initialTime}
         id={id}
-        loop={loop}
+        loop={false}
         muted={muted}
         onError={this.error}
         title={title}

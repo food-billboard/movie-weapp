@@ -42,30 +42,10 @@ export default class extends Component<any> {
     id: false,
     userCall: false,
     headerData: {},
-    headerHeight: 0
-  }
-
-  handleSizeChange = () => {
-    const query = Taro.createSelectorQuery()
-    query.select('#commovie-header').boundingClientRect()
-    query.selectViewport().scrollOffset()
-    query.exec(function(res){
-      res[0].top       // #the-id节点的上边界坐标
-      res[1].scrollTop // 显示区域的竖直滚动位置
-    })
   }
 
   //获取电影数据
   public fetchMovieData = async () => {
-    this.setState({
-      headerData: {
-        name: '名字很长很高圣诞节佛氨基酸的佛教阿斯蒂芬',
-        image: '',
-        detail: "名字很长很高圣诞节佛氨基酸的佛教阿斯蒂芬名字很长很高圣诞节佛氨基酸的佛教阿斯蒂芬名字很长很高圣诞节佛氨基酸的佛教阿斯蒂芬",
-        id: 0
-      }
-    })
-    return
 
     if(!this.id) {
       Taro.showToast({
@@ -93,13 +73,14 @@ export default class extends Component<any> {
 
   //获取评论数据
   public fetchData = async (query: any, isInit = false) => {
+
     const { data } = this.state
     const { userInfo } = this.props
     const method = userInfo ? getCustomerMovieCommentList : getMovieCommentList
     const resData = await method({ id: this.id, ...query })
 
     this.setState({
-      data: [ ...(isInit ? [] : [...data]), ...resData ]
+      data: [ ...(isInit ? [] : [...data]), ...resData]
     })
     return resData
   }
@@ -135,7 +116,7 @@ export default class extends Component<any> {
   }
 
   public render() {
-    const { headerData, data, headerHeight } = this.state
+    const { headerData, data } = this.state
 
     return (
       <GScrollView
@@ -143,38 +124,40 @@ export default class extends Component<any> {
         sourceType={ESourceTypeList.Scope}
         query={{ pageSize: 6 }}
         style={{ ...style.backgroundColor('bgColor') }}
-        renderContent={<View>
-          {
-            data.map((value) => {
-              const { _id } = value
-              return (
-                <List
-                  comment={this.publish}
-                  key={_id}
-                  list={value}
-                  like={this.like}
-                />
-              )
-            })
-          }
-        </View>}
+        renderContent={
+          <List
+            comment={this.publish}
+            list={data}
+            like={this.like}
+          ></List>
+        }
         fetch={this.throttleFetchData}
-        header={headerHeight}
-        bottom={92}
         renderHeader={
-          <View id="commovie-header">
-            <Header content={headerData}></Header>
-          </View>
+          (watch: () => any) => {
+            return (
+              <View id="commovie-header">
+                <Header 
+                  content={headerData}
+                  handleSizeChange={watch}
+                ></Header>
+              </View>
+            )
+          }
         }
         renderBottom={
-        <View>
-          <GButton
-            style={{ width: '100%', height: '92', position: 'fixed', bottom: 0, left: 0, zIndex: 999 }}
-            type={'secondary'}
-            value={new Array(2).fill('发布评论')}
-            operate={this.publish}
-          />
-        </View>}
+          (_: () => any) => {
+            return (
+              <View>
+                <GButton
+                  style={{ width: '100%', height: '92' }}
+                  type={'secondary'}
+                  value={new Array(2).fill('发布评论')}
+                  operate={this.publish}
+                />
+              </View>
+            )
+          }
+        }
       >
       </GScrollView>
     )

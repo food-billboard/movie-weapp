@@ -1,12 +1,10 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
-import { AtIcon, AtAvatar } from 'taro-ui'
+import { AtAvatar } from 'taro-ui'
 import Ellipsis from '~components/ellipsis'
 import { router, formatTime, formatNumber, routeAlias } from '~utils'
 import style from '~theme/style'
-import { TypeColor } from '~theme/color'
-import { SYSTEM_PAGE_SIZE } from '~config'
 import noop from 'lodash/noop'
 
 import './index.scss'
@@ -83,19 +81,16 @@ export default class extends Component<IProps, IState> {
       <View className='header'>
         <View   
           className={'content'}
-          style={{...style.border(2, 'disabled', 'dashed', 'top_bottom')}}
         >
-          <View className='content-header at-row'>
+          <View className='content-header at-row at-row__align--center'>
             <View 
               className='at-col at-col-2'
               onClick={this.getUser.bind(this, userId)}  
             >
               <AtAvatar 
                 image={avatar || ''}
-                circle={true}
-                className='icon' 
+                circle
                 text={'头像'}
-                customStyle={{width:SYSTEM_PAGE_SIZE(40) + 'px', height: SYSTEM_PAGE_SIZE(40) + 'px'}}
               />
             </View>
             <View 
@@ -119,22 +114,25 @@ export default class extends Component<IProps, IState> {
               {/* ToDo */}
             </View>
           </View>
-          <View className='content-footer'>
+          <View className='content-footer'
+            style={{...style.border(1, 'disabled', 'dashed', 'top')}}
+          >
               <View className='at-row at-row__align--center content-footer-main'>
-                <View className='at-col at-col-6 at-row at-row__align--center'>
-                  <AtIcon color={TypeColor['thirdly']} value={'message'} size={SYSTEM_PAGE_SIZE(16)} customStyle={{marginRight: '5px', display: 'inline-block'}} />
+                <View className='at-col at-col-6 content-footer-main-icon-content'>
+                  <View 
+                    className={`content-footer-icon at-icon at-icon-message`}
+                    style={{...style.color('thirdly')}}
+                  ></View>
                   <Text style={{...style.color('secondary')}}>{formatNumber(comment_users)}</Text>
                 </View>
                 <View 
-                  className='at-col at-col-6'
+                  className='at-col at-col-6 content-footer-main-icon-content'
                   onClick={this.props.like.bind(this, userId, commentId)}
                 >
-                  <AtIcon 
-                    color={TypeColor['thirdly']} 
-                    size={SYSTEM_PAGE_SIZE(16)} 
-                    value={like ? 'heart-2' : 'heart'} 
-                    customStyle={{marginRight: '5px', display: 'inline-block'}} 
-                  />
+                  <View 
+                    className={`content-footer-icon at-icon at-icon-heart${like ? '-2' : ''}`}
+                    style={{...style.color('thirdly')}}
+                  ></View>
                   <Text style={{...style.color('secondary')}}>{formatNumber(total_like)}</Text>
                 </View>
               </View>

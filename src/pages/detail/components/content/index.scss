@@ -1,5 +1,5 @@
 @import "~taro-ui/dist/style/components/flex.scss";
-@import "~taro-ui/dist/style/components/icon.scss";
+// @import "~taro-ui/dist/style/components/icon.scss";
 .ellipsis{
     white-space:nowrap;
     text-overflow:ellipsis;
@@ -22,9 +22,12 @@
     .main{
         width:100%;
         .main-rate{
-            .main-rate-number{
-                font-weight:bold;
-                font-size:40px;
+            .up-rate{
+                display: flex;
+                align-items: center;
+                .up-rate-title{
+                    line-height:1.2;
+                }
             }
         }
         .text{
@@ -74,12 +77,12 @@
                 box-sizing:border-box;
                 padding: 0 5px;
                 .text{
-                    display: -webkit-box;
-                    -webkit-box-orient: vertical;
-                    -webkit-line-clamp: 4;
-                    overflow: hidden;
-                    word-break: break-all;
-                    text-indent:56px;
+                    // display: -webkit-box;
+                    // -webkit-box-orient: vertical;
+                    // -webkit-line-clamp: 4;
+                    // overflow: hidden;
+                    // word-break: break-all;
+                    // text-indent:56px;
                 }
                 &-detail{
                     display:inline-block;

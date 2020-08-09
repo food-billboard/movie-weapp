@@ -3,8 +3,7 @@ import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import GVideo from '~components/video'
 import GButton from '~components/button'
-// import Comment from '~components/comment'
-import { IParams, EAction } from '~pages/comment'
+import { IParams, EAction } from '../comment'
 import List from './components/imglist'
 import Content from './components/content'
 import IconList from './components/iconList'
@@ -142,7 +141,7 @@ export default class extends Component<any> {
 
     this.setTitle()
     return (
-      <View className='detail' style={{ ...style.backgroundColor('bgColor') }}>
+      <View id='detail' style={{ ...style.backgroundColor('bgColor') }}>
         {
           tab.length ?
             <Tab
@@ -247,15 +246,10 @@ export default class extends Component<any> {
         <View className='other'>
           <GButton
             type={'secondary'}
-            value={['我有话说', '我有话说']}
+            value={new Array(2).fill('我有话说')}
             operate={this.handleComment}
           />
         </View>
-        {/* <Comment
-          buttonText={'俺说完了'}
-          ref={this.commentRef}
-          publishCom={this.comment}
-        /> */}
       </View>
     )
   }

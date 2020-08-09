@@ -159,9 +159,8 @@ export const formatTime = (date: any, type: string = 'YYYY-MM-DD', before: numbe
 export const valueOf = (time) => Day(time).valueOf()
 
 export const formatNumber = (data: number) => {
-    if(data > 9999) {
-        return Math.round(data / 10000) + 'w'
-    }
+    if(data > 99999999) return `${Math.round(data / 100000000)}ww` 
+    if(data > 9999) return `${Math.round(data / 10000)}w`
     return data
 }
 

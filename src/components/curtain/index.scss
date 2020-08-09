@@ -1,47 +1,56 @@
-@import "~taro-ui/dist/style/components/icon.scss";
-.curtain{
+// @import "~taro-ui/dist/style/components/icon.scss";
+.curtain-show {}
+.curtain-hidden {
+  display:none;
+}
+#curtain{
   width:100%;
-  height:100%;
+  height:100vh;
   position:fixed;
   left:0;
   top:0;
   z-index:1000;
-  &-shadow{
+  .curtain-mask{
     width:100%;
     height:100%;
     position:fixed;
     left:0;
     top:0;
     z-index:1000;
-    opacity:.7;
+    opacity:.9;
   }
-  .main{
+  .curtain-main{
     width:100%;
     position:fixed;
     left:50%;
     top:50%;
     transform:translateX(-50%) translateY(-50%);
     z-index:1001;
-    .title{
-      width:100%;
-      min-height:50px;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    &-title,
+    &-action{
+      min-height: 50px;
     }
-    .action{
+    &-title,
+    &-action,
+    &-content{
       width:100%;
-      min-height:50px;
+      display:flex;
+      justify-content: center;
+      align-items: center;
     }
-    .content{
-      width:100%;
-    }
-  }
-  .close{
-    font-size:44px;
-    border-radius:32px;
-    padding:40px;
-    position:absolute;
-    right:0;
-    top:-128px;
-    z-index:1002;
-    opacity: 0.7;
+    // &-close{
+    //   font-size:44px;
+    //   border-radius:32px;
+    //   padding:40px;
+    //   position:absolute;
+    //   right:0;
+    //   top:-128px;
+    //   z-index:1002;
+    //   opacity: 0.7;
+    // }
   }
 }

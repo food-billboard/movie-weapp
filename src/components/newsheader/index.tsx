@@ -5,6 +5,7 @@ import Ellipsis from '../ellipsis'
 import ImageLoading from '../imageLoading'
 import style from '~theme/style'
 import { router, routeAlias } from '~utils'
+import noop from 'lodash/noop'
 
 import './index.scss'
 
@@ -21,9 +22,7 @@ export interface IProps {
   handleSizeChange?: (...args: any[]) => any
 }
 
-export interface IState {
-
-}
+export interface IState {}
 
 export default class NewsHead extends Component<IProps, IState>{
 
@@ -34,7 +33,8 @@ export default class NewsHead extends Component<IProps, IState>{
       image: '',
       id: ''
     },
-    style: {}
+    style: {},
+    handleSizeChange: noop
   }
 
   handleSizeChange = (show) => this.props.handleSizeChange && this.props.handleSizeChange(show)
@@ -51,18 +51,20 @@ export default class NewsHead extends Component<IProps, IState>{
         style={propsStyle}
         onClick={this.handleClick.bind(this, id)}>
         <View className='newsheader-poster'>
-          <ImageLoading src={image} loadingProps={{ content: '' }} mode={'aspectFit'} />
+          <ImageLoading src={image} loadingProps={{ content: '' }} mode={'widthFix'} />
         </View>
         <View className='newsheader-detail'>
-          <View className='newsheader-detail-name' style={{ ...style.color('primary') }}>
-            {name}
+          <View className="newsheader-detail-content">
+            <View className='newsheader-detail-content-name' style={{ ...style.color('primary') }}>
+              {name}
+            </View>
+            <Ellipsis
+              text={detail}
+              style={{padding: '10rpx 0 10rpx 15rpx', marginTop: '20rpx', ...style.border(1, 'bgColor', 'dashed', 'all'), borderRadius: '10rpx'}}
+              needPoint={false}
+              onChange={this.handleSizeChange}
+            ></Ellipsis>
           </View>
-          <Ellipsis
-            text={detail}
-            style={{padding: '10rpx 0 10rpx 15rpx', marginTop: '20rpx', ...style.border(1, 'bgColor', 'dashed', 'all'), borderRadius: '10rpx'}}
-            needPoint={false}
-            onChange={this.handleSizeChange}
-          ></Ellipsis>
         </View>
         <View className={'enter'}
           style={{ color: 'rgb(193, 193, 193)' }}

@@ -1,13 +1,12 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
-import ImageLoading from '~components/imageLoading'
+import { AtAvatar } from 'taro-ui'
 import GScrollView from '~components/scrollList'
 import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
 import throttle from 'lodash/throttle'
 import { router, routeAlias, ESourceTypeList } from '~utils'
-import { SYSTEM_PAGE_SIZE } from '~config'
 import { getCustomerFans, getUserFans } from '~services'
 
 import './index.scss'
@@ -39,12 +38,10 @@ export default class extends Component<any>{
   //获取数据
   public fetchData = async (query: any, isInit = false) => {
     const { data } = this.state
-    //根据是否传递id显示内容
+    // 根据是否传递id显示内容
     const method = this.id ? getUserFans : getCustomerFans
     const args = this.id ? { id: this.id } : {}
-    Taro.showLoading({ mask: true, title: '加载中...' })
     const resData = await method({ ...args, ...query })
-    Taro.hideLoading()
 
     this.setState({
       data: [...(isInit ? [] : data), ...resData]
@@ -78,21 +75,12 @@ export default class extends Component<any>{
                   key={id}
                   onClick={this.getUser.bind(this, id)}
                 >
-                  <ImageLoading
-                    src={avatar}
-                    customStyle={{
-                      width: `${SYSTEM_PAGE_SIZE(45)}px`,
-                      height: `${SYSTEM_PAGE_SIZE(45)}px`,
-                      borderRadius: '50%',
-                      overflow: 'hidden',
-                      marginTop: `${SYSTEM_PAGE_SIZE(2.5)}px`,
-                      marginRight: `${SYSTEM_PAGE_SIZE(10)}px`,
-                      float: 'left'
-                    }}
-                    loadingProps={{
-                      content: ''
-                    }}
-                  />
+                  <AtAvatar
+                    size={'small'}
+                    circle
+                    image={avatar}
+                    text={'头'}
+                  ></AtAvatar>
                   <View className={'username'}
                     style={{ ...style.color('primary') }}
                   >

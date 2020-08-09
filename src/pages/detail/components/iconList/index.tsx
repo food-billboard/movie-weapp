@@ -51,20 +51,20 @@ export default class extends Component<IProps, IState> {
 
   public render() {
     
-    const { list } = this.props
+    const { list=[] } = this.props
     const { activeShow, active } = this.state
     const showList = list.length > 30 ? list.slice(0, 30) : list
 
     return (
       <View className='icon-list'>
         <View 
-            className='content' 
+            className='text-content' 
             style={{visibility: activeShow ? 'visible' : 'hidden', ...style.backgroundColor('primary'), ...style.color('disabled')}}
             onClick={() => { this.props.handleClick && this.props.handleClick() }}
           >
             {active}
             <View 
-              className='arrow'
+              className='list-content-arrow'
               style={{...style.border(20, 'primary', 'solid', 'top')}}
             ></View>
           </View>
@@ -77,7 +77,7 @@ export default class extends Component<IProps, IState> {
             showList.map(val => {
               const { image, content } = val
               return (
-                <View className='icon'
+                <View className='list-icon'
                   onClick={this.handleClick.bind(this, content)}
                 >
                   <Imageloading src={image} loadingProps={{content: ''}} />

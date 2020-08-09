@@ -1,7 +1,6 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
-import CommentCom from '~components/comment'
 import GScrollView from '~components/scrollList'
 import { List } from '~components/commentlist'
 import GButton from '~components/button'
@@ -23,9 +22,6 @@ export default class extends Component<any> {
   public componentDidShow = () => colorStyleChange()
 
   private scrollRef = React.createRef<GScrollView>()
-
-  //评论组件
-  private commentRef = React.createRef<CommentCom>()
 
   //评论id
   readonly id = getCurrentInstance().router?.params.id
@@ -118,36 +114,29 @@ export default class extends Component<any> {
         renderContent={
           <View>
             <Header content={headerData}
-            like={this.like}
+              like={this.like}
             ></Header>
-            {
-              data.map((value) => {
-                const { _id } = value
-                return (
-                  <View>
-                    <List 
-                      comment={this.publish} 
-                      key={_id}
-                      list={value}
-                      like={this.like}
-                    />
-                  </View>
-                )
-              })
-            }
+            <List
+              comment={this.publish}
+              list={data}
+              like={this.like}
+            ></List>
           </View>
         }
         fetch={this.throttleFetchData}
-        bottom={92}
         renderBottom={
-          <View>
-            <GButton 
-                style={{width: '100%', height: '92', position: 'fixed', bottom: 0, left: 0, zIndex: 999}}
-                type={'secondary'}
-                value={new Array(2).fill('发布评论')} 
-                operate={this.publish}
-            />
-          </View>
+          (_: () => any) => {
+            return (
+              <View>
+                <GButton 
+                    style={{width: '100%', height: '92'}}
+                    type={'secondary'}
+                    value={new Array(2).fill('发布评论')} 
+                    operate={this.publish}
+                />
+              </View>
+            )
+          }
         }
       >
       </GScrollView>

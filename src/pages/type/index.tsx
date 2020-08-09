@@ -219,10 +219,15 @@ export default class Index extends Component<any> {
           </View>
         }
         fetch={this.throttleFetchData}
-        bottom={80}
-        renderBottom={<View className="btn">
-          <Fab value={listShow} change={this.listChange} />
-        </View>}
+        renderBottom={
+          (_: () => any) => {
+            return (
+              <View className="btn">
+                <Fab value={listShow} change={this.listChange} />
+              </View>
+            )
+          }
+        }
       >
       </GScrollView>
     )

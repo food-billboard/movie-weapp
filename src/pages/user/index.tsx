@@ -23,18 +23,26 @@ export default class User extends Component<any>{
   //用户id
   readonly id = getCurrentInstance().router?.params.id
 
-  public componentDidShow = () => {
-    colorStyleChange()
-  }
+  public componentDidShow = () => colorStyleChange()
 
-  public componentDidMount = async () => {
-    await this.refresh()
-  }
+  public componentDidMount = async () =>  await this.refresh()
 
   public refresh = async () => await this.fetchData()
 
   //数据获取
   public fetchData = async () => {
+
+    this.setState({
+      data: {
+        username: '1111111111111111111111111111111111111111111111111111111111111111',
+        avatar: 'string',
+        hot: 1000000000,
+        fans: 1000000000,
+        attentions: 1000000000,
+      }
+    })
+    return
+
     if(!this.id) {
       Taro.showToast({
         title: '网络错误，请重试',
@@ -44,7 +52,7 @@ export default class User extends Component<any>{
       return
     }
     const { userInfo } = this.props
-    Taro.showLoading({ mask: true, title: '加载中' })
+    Taro.showLoading({ mask: true, title: '加载中...' })
     const method = userInfo ? getCustomerAntoherUserInfo : getUserInfo
     const data = await method(this.id)
     Taro.hideLoading()
@@ -154,13 +162,15 @@ export default class User extends Component<any>{
     const { data: { like, ...nextInfo } } = this.state
 
     return (
-      <View className='user'>
-        <View className='icon'>
+      <View id='user'
+        style={{...style.backgroundColor('bgColor')}}
+      >
+        <View className='user-icon'>
           <IconHead
             list={nextInfo}
           />
         </View>
-        <View className='list'
+        <View className='user-list'
           style={{ borderBottom: '1px solid rgb(237, 243, 248)' }}
         >
           <List
@@ -169,7 +179,7 @@ export default class User extends Component<any>{
         </View>
         <GButton
           type={'secondary'}
-          style={{ width: '100%', height: 120, position: 'fixed', left: 0, bottom: 0, ...style.backgroundColor('bgColor') }}
+          style={{ width: '100%', height: '100rpx', position: 'fixed', bottom: 0 }}
           active={like ? 1 : 0}
           value={['关注', '取消关注']}
           operate={this.attention}

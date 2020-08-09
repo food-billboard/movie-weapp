@@ -111,20 +111,25 @@ export default class Content extends Component<IProps, IState>{
           </View>
           <View className='main-rate'>
             <View className='up-rate'>
-              <View className='at-icon icon at-icon-tag'></View>
-                            楼主评分:
-                        </View>
+              <View className='at-icon up-rate-icon at-icon-tag'></View>
+              <View className="up-rate-title">楼主评分:</View>
+            </View>
             <View className='at-row at-row__align--center'>
               <View className='at-col at-col-9'>
-                <AtRate
+                <GRate
+                  value={author_rate}
+                  rate={() => {}}
+                  readonly={true}
+                />
+                {/* <AtRate
                   value={author_rate}
                   max={10}
                   size={SYSTEM_PAGE_SIZE(20)}
-                ></AtRate>
+                ></AtRate> */}
               </View>
-              <View className='at-col at-col-1 main-rate-number'>
+              {/* <View className='at-col at-col-1 main-rate-number'>
                 {author_rate}
-              </View>
+              </View> */}
             </View>
           </View>
           <View className='main-info'>
@@ -217,7 +222,7 @@ export default class Content extends Component<IProps, IState>{
             >
               <View className='at-icon icon at-icon-tag'></View>
                             简介:
-                            <Ellipsis
+              <Ellipsis
                 text={description}
                 style={{ lineHeight: SYSTEM_PAGE_SIZE(25) + 'px', ...style.color('primary') }}
                 needPoint={true}
@@ -227,7 +232,7 @@ export default class Content extends Component<IProps, IState>{
               className='mine description'
               style={{ ...style.border(1, 'disabled', 'dashed', 'left_right') }}
             >
-              <View className='at-icon icon at-icon-tag'></View>
+              <View className='at-icon up-description-icon at-icon-tag'></View>
                             楼主认为:
                             <Ellipsis
                 text={author_description}

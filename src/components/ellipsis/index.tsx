@@ -60,7 +60,8 @@ export default class extends Component<IProps, IState> {
         style={{ ...style.color('secondary'), ...(isObject(customStyle) ? customStyle : {}) }}
       >
         <Text 
-          onClick={this.getDetail}
+          onClick={(e) => {!needPoint && this.getDetail(e)}}
+          // className={`ellipsis-${show ? 'show' : 'hidden'}`}
           style={{ display: 'inline-block', wordBreak: 'break-word' }}
         >
           {_text}
@@ -69,7 +70,8 @@ export default class extends Component<IProps, IState> {
           needPoint && (text && text.length >= maxLen) ?
             <View
               style={{ ...style.color('thirdly') }}
-              className='detail'
+              className='ellipsis-detail'
+              onClick={(e) => needPoint && this.getDetail(e)}
             >
               {show ? this.textContent.retract : this.textContent.unfold}
             </View> :

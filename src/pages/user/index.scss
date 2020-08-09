@@ -1,17 +1,13 @@
-
-.user{
-    .icon{
-        margin-bottom:50px;
+#user{
+    min-height:100vh;
+    .user-icon{
+        margin-bottom:20px;
     }
-    .list{
+    .user-list{
         width:100%;
-        margin-bottom: 120px;
+        margin-bottom:100rpx;
     }
-    .button{
+    .user-button{
         width:100%;
-        height:120px;
-        position:fixed;
-        bottom:0;
-        left:0;
     }
 }

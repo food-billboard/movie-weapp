@@ -44,11 +44,11 @@ export default class extends Component<IProps, IState> {
             const { image, name } = val
             return (
               <View 
-                className='item' 
+                className='acotr-item' 
                 key={name}
                 onClick={() => {this.handlePreviewImage.call(this, image)}}
               >
-                <View className='image'>
+                <View className='actor-item-image'>
                   <ImageLoading 
                     src={image} 
                     customStyle={{
@@ -57,7 +57,7 @@ export default class extends Component<IProps, IState> {
                     loadingProps={{content: ''}}
                   />
                 </View>
-                <View className='text'>
+                <View className='actor-text'>
                   <Text>{name}</Text>
                 </View>
               </View>

@@ -51,12 +51,12 @@ export default class Button extends Component<IProps, IState>{
 
   public render() {
 
-    const { type, style: customStyle } = this.props
+    const { type, style: customStyle={} } = this.props
 
     return (
-      <View style={customStyle}>
+      <View>
         <AtButton
-          customStyle={{ ...style.border(1, 'primary', 'solid', 'all'), ...style.color('primary') }}
+          customStyle={{ ...style.border(1, 'primary', 'solid', 'all'), ...style.color('primary'), ...customStyle }}
           type={type}
           circle={true}
           onClick={this.modeChange}

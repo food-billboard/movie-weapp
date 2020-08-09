@@ -10,26 +10,45 @@
         flex:2;
         // width: 180px;
         // height:180px;
-        height:100%;
+        min-height:180px;
         width:100%;
         box-shadow: 0 3px 6px 0px rgba(0, 0, 0, 0.12);
+        display:flex;
+        align-items: center;
     }
     &-detail{
         flex:4;
         overflow: hidden;
         // width:430px;
         // height:180px;
-        &-name{
-            white-space: nowrap;
-            overflow-x: scroll;
-        }
-        &-name::-webkit-scrollbar {
-            display:none
-        }
-        &-desc{
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            overflow: hidden;
+        &-content{
+            /*
+                因为父元素高度不固定
+                导致子元素设置高度100%无效
+                通过将 子元素绝对定位
+                父元素相对定位
+                解决问题
+            */
+            // position:absolute;
+            // top:0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            height:100%;
+            padding:20px 0;
+            box-sizing: border-box;
+            &-name{
+                white-space: nowrap;
+                overflow-x: scroll;
+            }
+            &-name::-webkit-scrollbar {
+                display:none
+            }
+            // &-desc{
+            //     white-space: nowrap;
+            //     text-overflow: ellipsis;
+            //     overflow: hidden;
+            // }
         }
     }
     &-poster,

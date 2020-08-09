@@ -1,13 +1,12 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
+import { AtAvatar } from 'taro-ui'
 import GScrollView from '~components/scrollList'
-import ImageLoading from '~components/imageLoading'
 import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
 import throttle from 'lodash/throttle'
 import { router, routeAlias, ESourceTypeList } from '~utils'
-import { SYSTEM_PAGE_SIZE } from '~config'
 import { getCustomerAttention, getUserAttention } from '~services'
 
 import './index.scss'
@@ -75,7 +74,13 @@ export default class extends Component<any>{
                     key={id}
                     onClick={this.getUser.bind(this, id)}
                   >
-                    <ImageLoading
+                    <AtAvatar
+                      size={'small'}
+                      circle
+                      image={avatar}
+                      text={'头'}
+                    ></AtAvatar>
+                    {/* <ImageLoading
                       src={avatar}
                       loadingProps={{ content: '' }}
                       customStyle={{
@@ -87,7 +92,7 @@ export default class extends Component<any>{
                         marginRight: `${SYSTEM_PAGE_SIZE(10)}px`,
                         float: 'left'
                       }}
-                    />
+                    /> */}
                     <View className={'username'}
                       style={{ ...style.color('primary') }}
                     >

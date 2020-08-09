@@ -2,7 +2,8 @@ import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, ScrollView } from '@tarojs/components'
 import { Color, defaultColor } from '~theme/color'
-import { isObject, createSystemInfo } from '~utils'
+import { isObject } from '~utils'
+import { createSystemInfo } from '~config'
 
 import './index.scss'
 
