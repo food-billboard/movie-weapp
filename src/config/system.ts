@@ -23,15 +23,17 @@ interface ISystemInfo {
   emojiInfo?: Array<string>
 }
 
+const DEFAULT_COLOR = '#f5222d'
+
 class SystemInfo {
 
   public instance
 
-  readonly NEARLY_EMOJI_MAX_LENGTH = 12
+  readonly NEARLY_EMOJI_MAX_LENGTH: number = 12
 
-  readonly defaultColor
+  readonly defaultColor: string = DEFAULT_COLOR
 
-  constructor(color) {
+  constructor(color: string) {
     if(this.instance) return this.instance
     this.instance = this
     this.defaultColor = color
@@ -122,8 +124,6 @@ class SystemInfo {
 
 }
 
-const _color = '#f5222d'
-
-export function createSystemInfo(color=_color) {
+export function createSystemInfo(color=DEFAULT_COLOR) {
   return new SystemInfo(color)
 }

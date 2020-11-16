@@ -18,10 +18,10 @@ const BUTTON_STYLE = [
     style: {
       backgroundColor: '#6190E8'
     },
-    action: async (id: string) => {
+    action: async (id: string, props: any) => {
       //读消息
       Taro.showLoading({ mask: true, title: '稍等' })
-      await withTry(this.props.readMessage)(id)
+      await withTry(props.readMessage)(id)
       Taro.hideLoading()
     }
   },
@@ -30,10 +30,10 @@ const BUTTON_STYLE = [
     style: {
       backgroundColor: '#FF4949'
     },
-    action: async (id: string) => {
+    action: async (id: string, props: any) => {
       //删除消息
       Taro.showLoading({ mask: true, title: '删除中' })
-      await withTry(this.props.deleteMessage)(id)
+      await withTry(props.deleteMessage)(id)
       Taro.hideLoading()
     }
   }
@@ -50,9 +50,9 @@ export default class extends Component<any> {
     Taro.showModal({
       title: '温馨提示',
       content: '功能还在完善中...',
-      success: function (res) {
+      success: function (_) {
         Taro.switchTab({
-          url: '../main'
+          url: '../main/index'
         })
       }
     })
@@ -89,7 +89,7 @@ export default class extends Component<any> {
   //处理消息操作按钮
   public handleOperate = async (target: SwipeActionOption, id: string) => {
     const index = BUTTON_STYLE.findIndex(val => val.text === target.text)
-    BUTTON_STYLE[index] && await BUTTON_STYLE[index].action(id)
+    BUTTON_STYLE[index] && await BUTTON_STYLE[index].action(id, this)
     this.sort()
   }
 
@@ -123,7 +123,7 @@ export default class extends Component<any> {
     const { list } = this.state
 
     return (
-      <Result isEmpty={!list.length}>
+      <Result isEmpty={!list.length} loading={false}>
         <AtList>
           {
             list.map((val: any) => {

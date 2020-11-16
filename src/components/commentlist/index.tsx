@@ -10,7 +10,8 @@ import style from '~theme/style'
 import { TypeColor } from '~theme/color'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import noop from 'lodash/noop'
-import VideoStaticImage from '~assets/video.png'
+// import VideoStaticImage from '~assets/video.png'
+import VideoStaticImage from '../../assets/video.png'
 
 import './index.scss'
 

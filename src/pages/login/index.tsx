@@ -39,40 +39,35 @@ export default class extends Component<any> {
   }
 
   //监听用户名输入
-  public handleUser = (value: string, _) => {
-    this.setState({
-      mobile: value
-    })
-  }
+  public handleUser = (value: string) => this.setState({ mobile: value })
 
-  /**
-   * 监听密码输入
-   */
-  public handlePass = (value: string, _) => {
-    this.setState({
-      password: value
-    })
-  }
+  //监听密码输入
+  public handlePass = (value: string) => this.setState({ password: value })
 
   //信息提交
-  public submit = async (_) => {
+  public submit = async () => {
     const { mobile, password } = this.state
 
-    if (!/^1[345678][0-9]{9}$/.test(mobile) || !password.length || password.length < 6) {
-      Taro.showToast({
-        title: '请输入用户名和密码',
-        icon: 'none',
-        duration: 1000
-      })
-      return
+    let message!: string
+
+    if(!/^1[345678][0-9]{9}$/.test(mobile)) {
+      message = '手机号格式不正确'
+    }else if(password.length < 8) {
+      message = '密码格式不正确'
     }
+
+    if(!!message) return Taro.showToast({
+      title: message,
+      icon: 'none',
+      duration: 1000
+    })
 
     await Taro.showLoading({ mask: true, title: '加载中' })
     const userInfo = await withTry(this.props.signin)({ 
       mobile,
       password
     })
-    await Taro.hideLoading()
+    Taro.hideLoading()
 
     if (!userInfo) return
     //回到上一路由
@@ -91,9 +86,7 @@ export default class extends Component<any> {
 
     return (
       <View className='login' style={{ ...style.backgroundColor('bgColor') }}>
-        <AtForm
-          onSubmit={this.submit}
-        >
+        <AtForm>
           <AtInput
             name='mobile'
             title='手机号'
@@ -111,20 +104,21 @@ export default class extends Component<any> {
             onChange={this.handlePass.bind(this)}
           />
           <AtButton
-            formType='submit'
+            // formType='submit'
+            onClick={this.submit}
             type={'primary'}
             className='submit'
             customStyle={{ ...style.border(1, 'primary', 'solid', 'all'), ...style.backgroundColor('primary') }}
           >
             登录
-                    </AtButton>
+          </AtButton>
           <AtButton
             onClick={this.register}
             type={'secondary'}
             customStyle={{ ...style.color('primary'), ...style.border(1, 'primary', 'solid', 'all') }}
           >
             注册
-                    </AtButton>
+          </AtButton>
         </AtForm>
       </View>
     )

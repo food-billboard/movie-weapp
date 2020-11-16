@@ -15,7 +15,7 @@ import './app.scss'
 //创建dva实例
 const app = dva.createDva({
   log: false,
-  onError(e) {
+  onError(e: any) {
     // 关闭所有Loading
     Taro.hideLoading()
 
@@ -53,7 +53,7 @@ const app = dva.createDva({
     Taro.showToast(toast);
   },
   initialState: {}
-}, (app) => {
+}, (app: any) => {
   configure(app);
 })
 
@@ -75,7 +75,7 @@ class App extends Component {
        // 获取个人详情判断是否已经登录
       await dispatch({ type: 'global/getUserInfo'})
     }
-    await Taro.hideLoading();
+    Taro.hideLoading();
   }
 
   public componentDidMount () {}

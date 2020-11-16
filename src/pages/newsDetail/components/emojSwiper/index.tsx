@@ -4,7 +4,7 @@ import { Swiper, SwiperItem, View, Text } from '@tarojs/components'
 import { TypeColor } from '~theme/color'
 import { emoji } from '~theme/emoji'
 import style from '~theme/style'
-import { createSystemInfo } from '~utils'
+import { createSystemInfo } from '~config'
 
 import './index.scss'
 
@@ -27,8 +27,10 @@ export default class extends Component<IProps, IState> {
     mode: ''
   }
 
+  systemInfo = createSystemInfo()
+
   //记录最近使用的表情
-  public _nearlyEmoji = systemInfo.getEmojiInfo()
+  public _nearlyEmoji: Array<any>
 
   public get nearlyEmoji() {
     return systemInfo.getEmojiInfo()

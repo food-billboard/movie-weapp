@@ -1,9 +1,9 @@
 import Taro from '@tarojs/taro'
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import { AtCheckbox, AtButton } from 'taro-ui'
 import { View } from '@tarojs/components'
 import TagList from '../tagList'
-import { isObject, ICommonFormProps, ICommonFormState } from '~utils'
+import { isObject } from '~utils'
 import { FORM_ERROR, SYSTEM_PAGE_SIZE } from '~config'
 import styleColor  from '~theme/style'
 
@@ -33,62 +33,46 @@ const BUTTON_STYLE = {
   height:SYSTEM_PAGE_SIZE(40) + 'px'
 }
 
-export default class extends Component<IProps, IState> {
+const CheckBox: React.FC<IProps> = ({
+  style={},
+  value,
+  checkboxOption=[],
+  needHiddenList,
+  handleChange: onChange,
+  error
+}) => {
 
-  public state: IState = {
-    show: false,
-  }
+  const [ show, setShow ] = useState(false)
 
   //处理选择
-  public handleChange = (value: any) => {
-    const { 
-      handleChange,
-    } = this.props
-    handleChange && handleChange(value)
+  const handleChange = (value: any) => {
+    onChange && onChange(value)
   }
-
+  
   //打开
-  public open = () => {
-    this.setState({
-      show: true
-    })
-  }
-
+  const open = () => setShow(true)
+  
   //收起
-  public close = () => {
-    const { show } = this.state
+  const close = () => {
     if(!show) return
-    this.setState({
-      show: false
-    })
+    setShow(false)
   }
 
-  public render() {
-    const { 
-      checkboxOption=[], 
-      style={}, 
-      value=[],
-      needHiddenList, 
-      error=false 
-    } = this.props
+  const btnStyle = {
+    ...BUTTON_STYLE, 
+    ...styleColor.border(1, 'primary', 'solid', 'all'), 
+    ...styleColor.color('primary'), 
+  }
 
-    const { show } = this.state
+  const globalStyle = {
+    ...(isObject(style) ? style : {}),
+  }
 
-    const btnStyle = {
-      ...BUTTON_STYLE, 
-      ...styleColor.border(1, 'primary', 'solid', 'all'), 
-      ...styleColor.color('primary'), 
-    }
-
-    const globalStyle = {
-      ...(isObject(style) ? style : {}),
-    }
-
-    return (
+  return (
       <View style={globalStyle}>
-        {
-           needHiddenList ? 
-           <TagList
+         {
+          needHiddenList ? 
+          <TagList
             style={{marginBottom: '5px'}}
             list={value.map(item => {
               const [ data ] = checkboxOption.filter(option => option.value === item)
@@ -98,45 +82,46 @@ export default class extends Component<IProps, IState> {
                 key: value
               }
             })}
-            handleChange={this.handleChange}
-           ></TagList>
-          : null
-        }
-        {
-          (needHiddenList ? !show : false) ?
-          <AtButton 
-            type={'secondary'} 
-            onClick={this.open} 
-            customStyle={{
-              ...btnStyle,
-              ...(error ? FORM_ERROR : {})
-            }}>打开</AtButton>
-          : null
-        }
-        {
-          (needHiddenList ? show : true) ? 
-          <AtCheckbox
-            options={checkboxOption}
-            selectedList={value}
-            onChange={this.handleChange}
-          >
-          </AtCheckbox>
-          : null
-        }
-        {
-          <AtButton 
-            type={'secondary'} 
-            onClick={this.close} 
-            customStyle={{ 
-              ...btnStyle, 
-              display: (needHiddenList ? show : false) ? 'block' : 'none' 
-            }}
-          >
-            收起
-          </AtButton>
-        }
-      </View>
-    )
-  }
+            handleChange={handleChange}
+          ></TagList>
+        : null
+      }
+      {
+        (needHiddenList ? !show : false) ?
+        <AtButton 
+          type={'secondary'} 
+          onClick={open} 
+          customStyle={{
+            ...btnStyle,
+            ...(error ? FORM_ERROR : {})
+          }}>打开</AtButton>
+        : null
+      }
+      {
+        (needHiddenList ? show : true) ? 
+        <AtCheckbox
+          options={checkboxOption}
+          selectedList={value}
+          onChange={handleChange}
+        >
+        </AtCheckbox>
+        : null
+      }
+      {
+        <AtButton 
+          type={'secondary'} 
+          onClick={close} 
+          customStyle={{ 
+            ...btnStyle, 
+            display: (needHiddenList ? show : false) ? 'block' : 'none' 
+          }}
+        >
+          收起
+        </AtButton>
+      }
+    </View>
+  )
 
 }
+
+export default CheckBox

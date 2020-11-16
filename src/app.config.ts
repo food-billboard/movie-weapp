@@ -42,7 +42,7 @@ export default {
         "selectedIconPath": './assets/home-icon-active.png'
       },
       {
-        "pagePath": "pages/users/index",
+        "pagePath": "pages/news/index",
         "text": "消息",
         "iconPath": "./assets/issue-icon.png",
         "selectedIconPath": './assets/issue-icon-active.png'

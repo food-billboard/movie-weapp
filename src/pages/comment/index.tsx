@@ -5,6 +5,7 @@ import { AtButton } from 'taro-ui'
 import BaseForm from '~components/wrapForm'
 import GDescription, { EInputType } from '~components/input'
 import MediaPicker from '~components/mediaPicker'
+import { EAction } from './index.d'
 import { createFieldsStore } from '~components/wrapForm/fieldsStore'
 import style from '~theme/style'
 import { size, withTry, upload, router } from '~utils'
@@ -26,12 +27,6 @@ const BUTTON_STYLE:any = {
   width: '100%',
   height: SYSTEM_PAGE_SIZE(40) + 'px',
   zIndex: 9
-}
-
-export enum EAction {
-  COMMENT_USER = 'COMMENT_USER',
-  COMMENT_MOVIE = 'COMMENT_MOVIE',
-  FEEDBACK = 'FEEDBACK',
 }
 
 export interface IParams {

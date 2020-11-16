@@ -2,50 +2,54 @@ import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { AtInput, AtForm, AtButton } from 'taro-ui'
-// import Time from './components/time'
+import Time from './components/time'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { mapDispatchToProps, mapStateToProps } from './connect'
 import { connect } from 'react-redux'
-import { Toast } from '~components/toast'
 
 import './index.scss'
 
 interface IState {
-  username: string
+  // username: string
   password: string
   mobile: string
-  // check: string
+  captcha: string,
+  email: string
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class extends Component<any>{
 
   public state: IState = {
-    username: '',
+    // username: '',
     password: '',
     mobile: '',
-    // check: ''
+    captcha: '',
+    email: ''
   }
 
   public componentDidShow = () => colorStyleChange()
 
-  //监听用户名输入
-  public handleUser = (value, _) => {
-    this.setState({
-      username: value
-    })
-  }
+  // //监听用户名输入
+  // public handleUser = (value: string) => {
+  //   this.setState({
+  //     username: value
+  //   })
+  // }
+
+  //邮箱
+  public onEmailChange = (value: string) => this.setState({ email: value })
 
   //监听密码输入
-  public handlePass = (value, event) => {
+  public onPasswordChange = (value: string, event: any) => {
     const { type } = event
     if (type == 'blur' && value.length < 6) {
       Taro.showModal({
         title: '修改失败',
         content: '密码长度不能低于6',
         showCancel: false
-      }).then(res => {
+      }).then(_ => {
         this.setState({
           password: ''
         })
@@ -58,39 +62,37 @@ export default class extends Component<any>{
   }
 
   //监听手机号输入
-  public handlePhone = (value) => {
-    this.setState({
-      phone: value
-    })
-  }
+  public onMobileChange = (value: string) => this.setState({ mobile: value })
 
-  // /**
-  //  * 监听验证码输入
-  //  */
-  // public handleCheck(value) {
-  //     this.setState({
-  //         check: value
-  //     })
-  // }
+  //监听验证码输入
+  public onCaptchaChange = (value: string) => this.setState({ captcha: value })
 
-  /**
-   * 信息提交
-   */
-  public submit = async (_) => {
-    const { username, password, mobile } = this.state
-    if (username.length < 4 || password.length < 6 || !/^1[345678][0-9]{9}$/g.test(mobile)) {
-      Toast({
-        title: '请输入用户名和密码',
-        icon: 'fail'
-      })
-      return
+  //信息提交
+  public submit = async () => {
+    const { email, password, mobile, captcha } = this.state
+    let message!: string
+    if(password.length <= 8) {
+      message = '密码格式长度不足' 
+    }else if(!this.emailValidate(email)) {
+      message = '邮箱格式不正确'
+    }else if(!/^1[345678]\d{9}$/g.test(mobile)) {
+      message = '手机格式不正确'
+    }else if(captcha.length != 6) {
+      message = '验证码格式不正确'
     }
+
+    if(!!message) return Taro.showToast({
+      title: message,
+      duration: 1000,
+      icon: 'none'
+    })
+
     Taro.showLoading({ mask: true, title: '正在验证...' })
-    const data = await this.props.sendNewUser({ username, password, mobile })
+    const data = await this.props.sendNewUser({ email, password, mobile, captcha })
     Taro.hideLoading()
     if (data) {
       Taro.switchTab({
-        url: '../main'
+        url: '../main/index'
       })
     } else {
       Taro.showToast({
@@ -101,10 +103,8 @@ export default class extends Component<any>{
     }
   }
 
-  /**
-   * 重置
-   */
-  public reset() {
+  //重置
+  public reset = () => {
     Taro.showModal({
       title: '温馨提示',
       content: '您选择了重置，是否确认清空当前页面所有输入的信息',
@@ -114,51 +114,67 @@ export default class extends Component<any>{
       confirmText: '没错',
       confirmColor: '#000'
     }).then(res => {
-      if (res.cancel) {
-        return
-      }
+      if (res.cancel) return
       this.setState({
-        username: '',
-        phone: '',
+        mobile: '',
+        email: '',
         password: '',
-        // check: ''
+        captch: ''
       })
     })
   }
 
-  // /**
-  //  * 获取验证码
-  //  */
-  // public getData = async () => {
-  //     const {phone} = this.state
-  //     await Taro.showLoading({ mask: true, title: '加载中' });
-  //     await this.props.sendSMS(phone)
-  //     await Taro.hideLoading()
-  // }
+  //邮箱验证
+  public emailValidate = (email: string) => /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/.test(email)
+
+  //获取验证码
+  public getData = () => {
+    const { email } = this.state
+    if(!this.emailValidate) {
+      Taro.showToast({
+        title: '邮箱格式错误',
+        duration: 1000,
+        icon: 'none'
+      })
+      return false
+    }
+
+    return this.props.sendSMS(email)
+  }
 
   public render() {
-    const { mobile, username, password } = this.state
+    const { mobile, email, password, captcha } = this.state
     return (
       <View className='register' style={{ ...style.backgroundColor('bgColor') }}>
         <AtForm
           onSubmit={this.submit}
           onReset={this.reset}
         >
-          <AtInput
+          {/* <AtInput
             name='username'
             title='用户名'
             type='text'
             placeholder='想个名字吧'
             value={username}
             onChange={this.handleUser}
+          /> */}
+          <AtInput
+            name='email'
+            title='邮箱'
+            type='text'
+            required
+            placeholder='请输入邮箱'
+            value={email}
+            onChange={this.onEmailChange}
           />
           <AtInput
-            name='username'
+            name='mobile'
             title='手机号'
             type='phone'
             placeholder='手机号码'
             value={mobile}
-            onChange={this.handlePhone}
+            required
+            onChange={this.onMobileChange}
           />
           <AtInput
             name='password'
@@ -166,38 +182,38 @@ export default class extends Component<any>{
             type='password'
             placeholder='密码不能少于10位数'
             value={password}
-            onChange={this.handlePass}
+            required
+            onChange={this.onPasswordChange}
           />
-          {/* <AtInput
-                        clear
-                        name='check'
-                        title=''
-                        type='number'
-                        maxLength='6'
-                        placeholder='验证码'
-                        value={this.state.check}
-                        onChange={this.handleCheck}
-                        >
-                            <Time 
-                                getData={this.getData} 
-                                phone={phone}    
-                            />
-                    </AtInput> */}
+          <AtInput
+            clear
+            name='captcha'
+            title=''
+            type='number'
+            placeholder='验证码'
+            value={captcha}
+            required
+            onChange={this.onCaptchaChange}
+          >
+            <Time 
+              getData={this.getData}   
+            />
+          </AtInput>
           <AtButton
-            formType='submit'
+            onClick={this.submit}
             type={'primary'}
             className='submit'
             customStyle={{ ...style.backgroundColor('primary'), ...style.border(1, 'primary', 'solid', 'all') }}
           >
             提交
-                    </AtButton>
+          </AtButton>
           <AtButton
-            formType='reset'
+            onClick={this.reset}
             type={'secondary'}
             customStyle={{ ...style.border(1, 'primary', 'solid', 'all'), ...style.color('primary') }}
           >
             重置
-                    </AtButton>
+          </AtButton>
         </AtForm>
       </View>
     )

@@ -2,9 +2,9 @@ import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import style from '~theme/style'
-import './index.scss'
-import { Toast } from '~components/toast'
 import noop from 'lodash/noop'
+
+import './index.scss'
 
 export interface IState {
   text: string,
@@ -13,13 +13,11 @@ export interface IState {
 
 export interface IProps {
   getData: () => any,
-  phone: string
 }
 
 export default class Time extends Component<IProps>{
   public static defaultProps: IProps = {
     getData: noop,
-    phone: ''
   }
 
   public state: IState = {
@@ -30,15 +28,10 @@ export default class Time extends Component<IProps>{
   //处理点击
   public handleClick = () => {
     const { open } = this.state
-    const { phone } = this.props
-    if (!/^1[346789]\d{9}$/g.test(phone)) {
-      Toast({ title: '请输入正确的手机号~!', icon: 'fail' })
-      return
-    }
-    if (!open) {
-      return
-    }
-    this.props.getData()
+    if (!open) return
+    const res = this.props.getData()
+    if(!res) return 
+
     const _text = 's后重发'
     let count = 60
     this.setState({

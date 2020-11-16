@@ -27,7 +27,7 @@ const configs: IConfig = [
   () => {
     request.init({
       taro: Taro,
-      host: 'http://localhost:3000',
+      host: 'http://47.111.229.250:4000',
       error: requestError,
       options: {
         header: {

@@ -11,7 +11,8 @@ import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { connect } from 'react-redux'
 import {mapDispatchToProps, mapStateToProps} from './connect'
-import { createSystemInfo, EMediaType, withTry, ESourceTypeList } from '~utils'
+import { EMediaType, withTry, ESourceTypeList } from '~utils'
+import { createSystemInfo } from '~config'
 
 import './index.scss'
 
