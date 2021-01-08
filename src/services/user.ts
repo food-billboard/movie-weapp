@@ -47,7 +47,7 @@ export const getHot = (count:number=3) => {
 
 //跑马灯
 export const getNotice = () => {
-  return request('GET', '/api/user/home/notice')
+  return request('GET', '/api/user/setting/notice')
 }
 
 //排行榜(首页)

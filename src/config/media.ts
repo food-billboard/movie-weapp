@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import debounce from 'lodash/debounce'
+import { debounce } from 'lodash'
 
 const VIDEO_KEY = 'VIDEO_KEY'
 

@@ -56,7 +56,7 @@
 //     return request('GET', 'api/movie/fetchSearchPoint', { query: { text } })
 // }
 
-export * from './chat'
+// export * from './chat'
 export * from './customer'
 export * from './user' 
 export * from './upload'
