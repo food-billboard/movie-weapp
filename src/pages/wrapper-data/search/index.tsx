@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
-import SearchBar from '../main/components/searchButton'
+import SearchBar from '../../main/components/searchButton'
 import Head from './components/head'
 import List from '~components/list'
 import Indexes from '../issue/components/indexes'
@@ -20,9 +20,13 @@ import { AtDrawer } from 'taro-ui'
 import { Item } from '~components/indexes'
 import { EIndexesType } from '../issue/interface'
 import { withTry, ESourceTypeList } from '~utils'
-import { } from '~services'
+import {  } from '~services'
 
 import './index.scss'
+
+const factorySearch = () => {
+
+}
 
 const { screenWidth, screenHeight } = Taro.getSystemInfoSync()
 

@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { AtGrid } from "taro-ui"
 import GScrollView from '~components/scrollList'
-import Rank from '../main/components/rank'
+import Rank from '../../main/components/rank'
 import List from '~components/list'
 import { TypeColor, colorStyleChange } from '~theme/color'
 import style from '~theme/style'

@@ -1,8 +1,9 @@
 import Taro from '@tarojs/taro'
-import React, { Component } from 'react'
+import React, { Component, createRef } from 'react'
 import { View } from '@tarojs/components'
 import { AtInput, AtForm, AtButton } from 'taro-ui'
 import Time from './components/time'
+import { withTry } from '~utils'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { mapDispatchToProps, mapStateToProps } from './connect'
@@ -88,11 +89,11 @@ export default class extends Component<any>{
     })
 
     Taro.showLoading({ mask: true, title: '正在验证...' })
-    const data = await this.props.sendNewUser({ email, password, mobile, captcha })
+    const [ , data ] = await withTry(this.props.register)({ email, password, mobile, captcha })
     Taro.hideLoading()
     if (data) {
       Taro.switchTab({
-        url: '../main/index'
+        url: '../../main/index'
       })
     } else {
       Taro.showToast({
@@ -119,7 +120,7 @@ export default class extends Component<any>{
         mobile: '',
         email: '',
         password: '',
-        captch: ''
+        captcha: ''
       })
     })
   }
@@ -139,7 +140,7 @@ export default class extends Component<any>{
       return false
     }
 
-    return this.props.sendSMS(email)
+    return this.props.sendSMS(email, 'register')
   }
 
   public render() {

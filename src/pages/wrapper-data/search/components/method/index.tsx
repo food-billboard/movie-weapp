@@ -1,8 +1,8 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, Image } from '@tarojs/components'
-import icon from '../../../../assets/icon.png'
-import list from '../../../../assets/list.png'
+import icon from './images/icon.png'
+import list from './images/list.png'
 
 import './index.scss'
 

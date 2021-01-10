@@ -5,7 +5,7 @@ import { AtButton } from 'taro-ui'
 import BaseForm from '~components/wrapForm'
 import GDescription, { EInputType } from '~components/input'
 import MediaPicker from '~components/mediaPicker'
-import { EAction } from './index.d'
+import { EAction } from '~utils/types'
 import { createFieldsStore } from '~components/wrapForm/fieldsStore'
 import style from '~theme/style'
 import { size, withTry, upload, router } from '~utils'
@@ -27,11 +27,6 @@ const BUTTON_STYLE:any = {
   width: '100%',
   height: SYSTEM_PAGE_SIZE(40) + 'px',
   zIndex: 9
-}
-
-export interface IParams {
-  action: EAction
-  postInfo?: string
 }
 
 export default class extends Component<any> {

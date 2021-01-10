@@ -100,7 +100,7 @@ export default class IconList extends Component<IProps>{
 
   public render() {
     return (
-      <View className='icon'
+      <View className='mine-icon-list'
         style={{ ...style.border(1, 'thirdly', 'solid', 'bottom') }}
       >
         <AtGrid

@@ -3,8 +3,6 @@ import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import GVideo from '~components/video'
 import GButton from '~components/button'
-import { IParams } from '../comment'
-import { EAction } from '../comment/index.d'
 import List from './components/imglist'
 import Content from './components/content'
 import IconList from './components/iconList'
@@ -18,7 +16,6 @@ import { connect } from 'react-redux'
 import { mapDispatchToProps, mapStateToProps } from './connect'
 import { withTry, router, routeAlias } from '~utils'
 import { getCustomerMovieDetail, getUserMovieDetail, putStore, cancelStore, putRate } from '~services'
-
 import './index.scss'
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -76,8 +73,8 @@ export default class extends Component<any> {
 
   //打开评论界面
   public handleComment = async () => {
-    let param:IParams = {
-      action: EAction.COMMENT_MOVIE,
+    let param: NComment.Comment_Params = {
+      action: NComment.EAction.COMMENT_MOVIE,
       postInfo: this.id
     }
     router.push(routeAlias.toComment, param)

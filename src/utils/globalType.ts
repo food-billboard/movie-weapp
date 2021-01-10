@@ -77,8 +77,8 @@ export const routeConfig = [
   { path: 'pages/special/index', alias: routeAlias.special },
   { path: 'pages/fans/index', alias: routeAlias.fans },
   { path: 'pages/newsdetail/index', alias: routeAlias.newsdetail },
-  { path: 'pages/login/index', alias: routeAlias.login },
-  { path: 'pages/register/index', alias: routeAlias.register },
+  { path: 'pages/wrapper-login/login/index', alias: routeAlias.login },
+  { path: 'pages/wrapper-login/register/index', alias: routeAlias.register },
   { path: 'pages/comment/index', alias: routeAlias.comment }
 ]
 

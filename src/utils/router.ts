@@ -93,7 +93,6 @@ class Router {
     const toRoute: any = Object.assign({}, ROUTE_RUNTIME);
     const fromRoute = Object.assign({}, ROUTE_RUNTIME);
     const options: IDictionary = {};
-
     // 获取原始路由
     toRoute.route = this.getOriginPath(path);
 
@@ -181,7 +180,7 @@ class Router {
   }
 
   /* 获取当前路径 */
-  getOriginPath (path){
+  getOriginPath (path: string){
     let originPath = false;
     this.routes.some((route)=>{
       const { re } = route;

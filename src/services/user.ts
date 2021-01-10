@@ -2,7 +2,7 @@ import { request, getToken, createUserAuth } from '~utils'
 
 //其他用户信息
 export const getUserInfo = (id: string) => {
-  return request('GET', '/api/user/customer', { queyr: { _id: id } })
+  return request('GET', '/api/user/customer', { query: { _id: id } })
 }
 
 //其他用户粉丝
@@ -67,17 +67,23 @@ export const getSwiper = (count:number=6) => {
 
 //登录
 export const signin = ({ mobile, password, uid }: { mobile: string, password: string, uid?: string | undefined }) => {
-  return request('POST', `/api/user/logon/account`, { data: { uid }, header: createUserAuth({ mobile, password }) })
+  // return request('POST', `/api/user/logon/account`, { data: { uid }, header: createUserAuth({ mobile, password }) })
+  return request('POST', `/api/user/logon/account`, { data: { uid, mobile, password } })
 }
 
 //注册
-export const register = ({ mobile, password, uid }: { mobile: number, password: string, uid: string | undefined }) => {
-  return request('POST', '/api/user/logon/register', { data: { uid }, header: createUserAuth({ mobile, password }) })
+export const register = ({ mobile, password, uid, email, captcha }: { mobile: number, password: string, uid: string | undefined, captcha: string, email: string }) => {
+  return request('POST', '/api/user/logon/register', { data: { uid, email, mobile, password, captcha } })
 }
 
 //退出
 export const signout = () => {
   return request('POST', '/api/user/logon/signout', { header: getToken(true) })
+}
+
+//验证码
+export const sendSMS = ({ email, type }) => {
+  return request('POST', '/api/user/logon/email', { data: { email, type } })
 }
 
 //分类(首页)

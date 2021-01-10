@@ -111,11 +111,11 @@ export default class extends Component<any>{
 
   // //登录获取session
   // public handleLogin = async () => {
-  //     const data: string = await new Promise((resovle, reject) => {
+  //     const data: string = await new Promise((resolve, reject) => {
   //         Taro.login({
   //             success: (res) => {
   //                 const { code } = res
-  //                 resovle(code)
+  //                 resolve(code)
   //             },
   //             fail: () => {
   //                 reject(false)
@@ -154,51 +154,28 @@ export default class extends Component<any>{
         <View className='main'
           style={{ ...style.backgroundColor('disabled') }}
         >
-          {
-            // this.login ?
-            <View>
-              <View className='title'>
-                <Title />
-              </View>
-              <View className='iconlist'>
-                <IconList />
-              </View>
-              <View className='list'>
-                <List
-                  list={this.setting.map((val: IList) => {
-                    const { iconInfo } = val
-                    return {
-                      ...val,
-                      iconInfo: {
-                        ...iconInfo,
-                        color: TypeColor[ICON_COLOR]
-                      }
-                    }
-                  })}
-                />
-              </View>
+          <View>
+            <View className='title'>
+              <Title />
             </View>
-            // :
-            // <View className='login'>
-            //     <AtTag 
-            //         customStyle={{
-            //             ...style.border(1, 'primary', 'solid', 'all')
-            //         }}
-            //     >你还没有登录，可以点下面登录</AtTag>
-            //     <View style={{fontWeight: 'bolder', ...style.color('thirdly')}}>
-            //         {
-            //             [ ...new Array(7).fill('|'), '↓' ].map((val: string) => (<View>{val}</View>))
-            //         }
-            //     </View>
-            //     <Button 
-            //         className='button'
-            //         openType={'getUserInfo'}
-            //         style={{...style.backgroundColor('secondary')}}
-            //         onGetUserInfo={this.handleGetUserInfo}
-            //         onClick={this.handleLogin}
-            //     >点我登录</Button>
-            // </View>
-          }
+            <View className='iconlist'>
+              <IconList />
+            </View>
+            <View className='list'>
+              <List
+                list={this.setting.map((val: IList) => {
+                  const { iconInfo } = val
+                  return {
+                    ...val,
+                    iconInfo: {
+                      ...iconInfo,
+                      color: TypeColor[ICON_COLOR]
+                    }
+                  }
+                })}
+              />
+            </View>
+          </View>
         </View>
       </View>
     )

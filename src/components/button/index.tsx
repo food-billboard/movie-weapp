@@ -10,7 +10,7 @@ type secondary = 'secondary'
 
 export interface IProps {
   value: Array<string>
-  active: number
+  active?: number
   type: primary | secondary | undefined
   operate?: (...args: any) => any
   style?: React.CSSProperties

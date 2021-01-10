@@ -5,6 +5,7 @@ import style from '~theme/style'
 import noop from 'lodash/noop'
 
 import './index.scss'
+import { Toast } from '~components/toast'
 
 export interface IState {
   text: string,
@@ -26,11 +27,21 @@ export default class Time extends Component<IProps>{
   }
 
   //处理点击
-  public handleClick = () => {
+  public handleClick = async () => {
     const { open } = this.state
     if (!open) return
-    const res = this.props.getData()
-    if(!res) return 
+    Taro.showLoading({ title: '发送中，请注意查收邮箱' })
+    try {
+      await this.props.getData()
+    }catch(err) {
+      Taro.showToast({
+        title: '发生错误，请重试',
+        icon: 'none'
+      })
+      console.log(err)
+    }finally {
+      Taro.hideLoading()
+    }
 
     const _text = 's后重发'
     let count = 60

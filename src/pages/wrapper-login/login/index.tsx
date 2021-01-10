@@ -63,10 +63,11 @@ export default class extends Component<any> {
     })
 
     await Taro.showLoading({ mask: true, title: '加载中' })
-    const userInfo = await withTry(this.props.signin)({ 
+    const [ , userInfo ] = await withTry(this.props.signin)({ 
       mobile,
       password
     })
+    console.log(userInfo)
     Taro.hideLoading()
 
     if (!userInfo) return
@@ -75,7 +76,7 @@ export default class extends Component<any> {
     if (currRouter && currRouter.params.target) {
       return router.replace(currRouter.params.target)
     }
-    Taro.switchTab({ url: '../main/index' })
+    Taro.switchTab({ url: '../../main/index' })
   }
 
   public register = () => router.push(routeAlias.register)

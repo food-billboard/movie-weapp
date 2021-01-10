@@ -2,27 +2,28 @@ export default {
   pages: [
     'pages/main/index',
     'pages/mine/index',
-    'pages/setting/index',
     'pages/news/index',
-    'pages/mycom/index',
-    'pages/attention/index',
-    'pages/record/index',
-    'pages/detail/index',
-    'pages/commovie/index',
-    'pages/user/index',
-    'pages/search/index',
-    'pages/type/index',
-    'pages/rank/index',
-    'pages/store/index',
-    'pages/comdetail/index',
-    'pages/issue/index',
-    'pages/userissue/index',
-    'pages/special/index',
-    'pages/fans/index',
-    'pages/newsdetail/index',
-    'pages/login/index',
-    'pages/register/index',
-    'pages/comment/index'
+    
+    // 'pages/setting/index',
+    // 'pages/mycom/index',
+    // 'pages/attention/index',
+    // 'pages/record/index',
+    // 'pages/detail/index',
+    // 'pages/commovie/index',
+    // 'pages/user/index',
+    // 'pages/search/index',
+    // 'pages/type/index',
+    // 'pages/rank/index',
+    // 'pages/store/index',
+    // 'pages/comdetail/index',
+    // 'pages/issue/index',
+    // 'pages/userissue/index',
+    // 'pages/special/index',
+    // 'pages/fans/index',
+    // 'pages/newsdetail/index',
+    // 'pages/login/index',
+    // 'pages/register/index',
+    // 'pages/comment/index'
   ],
   window: {
     backgroundTextStyle: 'dark',
@@ -55,4 +56,51 @@ export default {
       }
     ]
   },
+
+  "subpackages": [
+    {
+      "root": "pages/wrapper-login",
+      "pages": [
+        'login/index',
+        'register/index',
+      ]
+    },
+    {
+      "root": "pages/wrapper-comment",
+      "pages": [
+        'mycom/index',
+        'commovie/index',
+        'comdetail/index',
+        'comment/index'
+      ]
+    },
+    {
+      "root": "pages/wrapper-data",
+      "pages": [
+        'record/index',
+        'detail/index',
+        'search/index',
+        'type/index',
+        'rank/index',
+        'store/index',
+        'issue/index',
+        'userissue/index',
+        'special/index',
+      ]
+    },
+    {
+      "root": "pages/wrapper-user",
+      "pages": [
+        'attention/index',
+        'user/index',
+        'fans/index',
+      ]
+    },
+    // {
+    //   "root": "pages/wrapper-message",
+    //   "pages": [
+    //     'pages/newsdetail/index',
+    //   ]
+    // }
+  ]
 }
