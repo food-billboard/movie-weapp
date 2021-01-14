@@ -1,49 +1,48 @@
 @import "~taro-ui/dist/style/components/flex.scss";
 @import "~taro-ui/dist/style/components/icon.scss";
-.video-title{
-  text-align:right;
-}
-.media-content{
-  display:flex;
-  box-sizing: border-box;
-  padding:10px;
-  position: relative;
-  left:0;
-  top:0;
-  .media-main{
-    flex:1;
-    display:flex;
-    align-items: center;
-    box-shadow:0 0 5px rgba(355, 255, 255, 0.5);
+.media-control-com {
+  display: flex;
+  justify-content: flex-end;
+  .media-control-com-image,
+  .media-control-com-video {
+    margin-right: 20px;
   }
 }
-.icon{
-  position:absolute;
-  left:0;
-  top:0;
-}
-.image,
-.video{
-  width:100%;
-  height:100%;
+.media-content{
+  display: inline-block;
+  width: 23.75vw;
+  height: 23.75vw;
+  margin-left: 1vw;
+  box-sizing: border-box;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  position: relative;
+  .image,
+  .video{
+    width:100%;
+    height:100%;
+  }
+  .icon{
+    position:absolute;
+    left:-6px;
+    top:0;
+    font-weight: bold;
+  }
 }
 .preview-video{
-  width:100%;
-  height:100%;
+  width:100vw;
+  height:100vh;
   position:fixed;
   left:50%;
   top:50%;
   transform:translateX(-50%) translateY(-50%);
   z-index:99;
+  background-color: rgb(0, 0, 0);
 }
 .video-icon{
   position:absolute;
   right:0;
   top:0;
   font-size:40px;
-}
-.btn{
-  font-size:32px;
-  height:92px;
-  border-radius:10px;
 }

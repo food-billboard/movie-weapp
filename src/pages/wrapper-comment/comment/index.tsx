@@ -8,7 +8,7 @@ import MediaPicker from '~components/mediaPicker'
 import { EAction } from '~utils/types'
 import { createFieldsStore } from '~components/wrapForm/fieldsStore'
 import style from '~theme/style'
-import { size, withTry, upload, router } from '~utils'
+import { size, withTry, router } from '~utils'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import { postCommentToUser, postCommentToMovie, feedback, preCheckFeedback } from '~services'
 
@@ -41,9 +41,14 @@ export default class extends Component<any> {
     }
   }
 
+  router = getCurrentInstance().router
+
+  disabled = false
+
   public componentDidMount = () => {
     //强制刷新设置
     fieldsStore.setUpdate(this.forceUpdate.bind(this))
+
     if(!this.router) {
       Taro.showToast({
         title: '网络错误，请重试',
@@ -96,10 +101,6 @@ export default class extends Component<any> {
     Taro.setNavigationBarTitle({ title })
   }
 
-  router = getCurrentInstance().router
-
-  disabled = false
-
   public feedback = async (values) => {
     Taro.hideLoading()
     Taro.showLoading({ mask: true, title: '预检查中...' })
@@ -129,7 +130,7 @@ export default class extends Component<any> {
     })
   }
 
-  private handleSubmit = async (_) => {
+  private handleSubmit = async () => {
 
     Taro.showToast({
       title: '功能完善中...',
@@ -232,25 +233,6 @@ export default class extends Component<any> {
                 error={!!size(fieldsStore.getFieldsError('description'))}
               ></GDescription>
             </View>
-            {/* {
-              true &&
-              <View className="rate">
-                <Rate
-                  style={{marginBottom: '20px'}}
-                  rate={
-                    fieldsStore.getFieldProps('author_rate', 'onChange', {
-                      rules: [
-                        {
-                          required: false
-                        }
-                      ],
-                      initialValue: 0
-                    })
-                  }
-                  value={fieldsStore.getFieldValue('author_rate')}
-                ></Rate>
-              </View>
-            } */}
             <View className="media">
               <MediaPicker
                 style={{marginBottom: `${SYSTEM_PAGE_SIZE(80)}px`}}

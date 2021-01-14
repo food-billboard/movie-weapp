@@ -38,10 +38,10 @@ export default class extends Component<any>{
     const { data } = this.state
     const method = this.id ? getUserIssue : getCustomerIssue
     const args = this.id ? { id: this.id } : {}
-    const resData = await method({ ...args, ...query })
+    const { issue } = await method({ ...args, ...query })
 
     this.setState({
-      data: [ ...(isInit ? [] : data), ...resData.map(item => {
+      data: [ ...(isInit ? [] : data), ...issue.map(item => {
         const { poster, classify, _id, publish_time, ...nextItem } = item
         return {
           ...nextItem,
@@ -52,7 +52,7 @@ export default class extends Component<any>{
         }
       }) ]
     })
-    return resData
+    return issue
   }
 
   public throttleFetchData = throttle(this.fetchData, 2000)

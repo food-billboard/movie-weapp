@@ -4,11 +4,10 @@ import { View, Button } from '@tarojs/components'
 import GRadio from '~components/radio'
 import Model from '~components/model'
 import List from '~components/linearlist'
-import { IParams } from '../comment'
-import { EAction } from '../comment/index.d'
 import GColor from './components/color'
 import { TypeColor, colorChange, colorStyleChange } from '~theme/color'
 import { router, routeAlias, withTry, clearToken } from '~utils'
+import { EAction } from '~utils/global'
 import { createSystemInfo } from '~config'
 import { Toast } from '~components/toast'
 import { RadioOption } from 'taro-ui/types/radio'
@@ -55,8 +54,11 @@ export default class Setting extends Component<any>{
   public showAbout = async () => {
     const { about: { isOpen, model, ...nextAbout } } = this.state
     Taro.showLoading({ mask: true, title: '稍等...' })
-    const { info = "" } = await getAppInfo()
+
+    const [, data] = await withTry(getAppInfo)()
+    const { info="信息似乎未获取到，但是可以知道这是一个电影推荐的小程序" } = data || {}
     Taro.hideLoading()
+    
     this.setState({
       about: {
         ...nextAbout,
@@ -64,7 +66,10 @@ export default class Setting extends Component<any>{
         model,
         content: info
       },
-      activeModel: model
+      activeModel: {
+        ...model,
+        isOpen: true
+      }
     })
   }
 
@@ -73,7 +78,7 @@ export default class Setting extends Component<any>{
     this.logClose()
     const { button } = this.state
     const { index, ...nextButton } = button
-    console.log(index, (index + 1) % 2)
+
     this.setState({
       button: {
         ...nextButton,
@@ -94,21 +99,38 @@ export default class Setting extends Component<any>{
 
   //显示反馈组件
   public showFeedback = async () => {
-    let param: IParams = {
+
+    let param: NComment.Comment_Params = {
       action: EAction.FEEDBACK
     }
     router.push(routeAlias.toComment, param)
   }
 
-  public close = (prop) => {
+  public close = (prop: string) => {
     const target = this.state[prop]
     if (!target) return
-    this.setState({
-      prop: {
+    let newState = {
+      [prop]: {
         ...target,
         isOpen: false
       }
-    })
+    }
+
+    if(target.model) {
+      const model = {
+        ...target.model,
+        isOpen: false
+      }
+      newState = {
+        [prop]: {
+          ...newState[prop],
+          model
+        },
+        activeModel: model
+      }
+    }
+
+    this.setState(newState)
   }
 
   public aboutClose = () => this.close('about')
@@ -131,7 +153,6 @@ export default class Setting extends Component<any>{
     arrow: arrow,
     iconInfo: {
       value: 'bell',
-      // size: 16, 
       color: TypeColor[ICON_COLOR]
     },
     handle: this.showFeedback,
@@ -255,13 +276,15 @@ export default class Setting extends Component<any>{
 
     const activeMode = this.colorStyle[color ? 0 : 1]['value']
 
+    const settingList = [
+      { ...about, iconInfo: { ...aboutInconInfo, color: TypeColor[ICON_COLOR] } },
+      { ...this.feedback, iconInfo: { ...feedbackInconInfo, color: TypeColor[ICON_COLOR] } },
+    ]
+
     return (
       <View className='setting'>
-        <View className='list'>
-          <List list={[
-            { ...this.feedback, iconInfo: { ...feedbackInconInfo, color: TypeColor[ICON_COLOR] } },
-            { ...about, iconInfo: { ...aboutInconInfo, color: TypeColor[ICON_COLOR] } }
-          ]} />
+        <View className='setting-list'>
+          <List list={settingList} />
           <GRadio
             style={{ marginTop: '48px' }}
             extraFactor={false}

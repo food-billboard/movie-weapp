@@ -40,10 +40,10 @@ export default class Index extends Component<any> {
     const { data } = this.state
     const method = this.id ? getUserGlance : getCustomerGlance
     const args = this.id ? { id: this.id } : {}
-    const resData = await method({ ...args, ...query })
+    const { glance } = await method({ ...args, ...query })
 
     this.setState({
-      data: [...(isInit ? [] : data), ...resData.map(item => {
+      data: [...(isInit ? [] : data), ...glance.map(item => {
         const { _id, poster, classify, publish_time, ...nextItem } = item
         return {
           ...nextItem,
@@ -53,7 +53,7 @@ export default class Index extends Component<any> {
         }
       })]
     })
-    return resData
+    return glance
   }
 
   public throttleFetchData = throttle(this.fetchData, 2000)
@@ -72,19 +72,6 @@ export default class Index extends Component<any> {
           <List
             list={data}
           ></List>
-        // <View>
-        //   {
-        //     data.map(val => {
-        //       const { _id, poster, name, description } = val
-        //       return <List content={{
-        //         name,
-        //         detail: description,
-        //         image: poster,
-        //         id: _id,
-        //       }} key={_id} />
-        //     })
-        //   }
-        // </View>
         }
         fetch={this.throttleFetchData}
       ></GScrollView>

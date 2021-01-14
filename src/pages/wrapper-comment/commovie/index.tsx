@@ -4,8 +4,6 @@ import { View } from '@tarojs/components'
 import GButton from '~components/button'
 import Header from '~components/newsheader'
 import { List } from '~components/commentlist'
-import { IParams } from '../comment'
-import { EAction } from '../comment/index.d'
 import GScrollView from '~components/scrollList'
 import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
@@ -108,9 +106,9 @@ export default class extends Component<any> {
    * isUserCall: 是否为回复
    * commentId: 评论id
    */
-  public publish = async (isUserCall, commentId) => {
-    const param:IParams = {
-      action: isUserCall ? EAction.COMMENT_USER : EAction.COMMENT_MOVIE,
+  public publish = async (isUserCall: boolean, commentId: string) => {
+    const param:NComment.Comment_Params = {
+      action: isUserCall ? NComment.EAction.COMMENT_USER : NComment.EAction.COMMENT_MOVIE,
       postInfo: commentId
     } 
     router.push(routeAlias.toComment, param)

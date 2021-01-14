@@ -36,10 +36,10 @@ export default class Index extends Component<any> {
     const { data } = this.state
     const method = this.id ? getUserStore : getCustomerStore
     const args = this.id ? { id: this.id } : {}
-    const resData = await method({ ...args, ...query })
+    const { store } = await method({ ...args, ...query })
 
-    await this.setState({
-      data: [...(isInit ? [] : data), ...resData.map(item => {
+    this.setState({
+      data: [...(isInit ? [] : data), ...store.map(item => {
         const { poster, classify, _id, publish_time, ...nextItem } = item
         return {
           ...nextItem,
@@ -50,7 +50,7 @@ export default class Index extends Component<any> {
         }
       })]
     })
-    return resData
+    return store
   }
 
   public throttleFetchData = throttle(this.fetchData, 2000)

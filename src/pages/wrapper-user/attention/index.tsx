@@ -40,12 +40,12 @@ export default class extends Component<any>{
     const { data } = this.state
     const method = this.id ? getUserAttention : getCustomerAttention
     const args = this.id ? { id: this.id } : {}
-    const resData = await method({ ...args, ...query })
+    const { attentions } = await method({ ...args, ...query })
 
     this.setState({
-      data: [...(isInit ? [] : data), ...resData]
+      data: [...(isInit ? [] : data), ...attentions]
     })
-    return resData
+    return attentions
   }
 
   public throttleFetchData = throttle(this.fetchData, 2000)

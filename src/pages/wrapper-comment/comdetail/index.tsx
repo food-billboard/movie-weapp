@@ -4,8 +4,7 @@ import { View } from '@tarojs/components'
 import GScrollView from '~components/scrollList'
 import { List } from '~components/commentlist'
 import GButton from '~components/button'
-import { IParams } from '../comment'
-import { EAction } from '../comment/index.d'
+import { EAction } from '~utils/global/comment_value'
 import throttle from 'lodash/throttle'
 import Header from './components/header'
 import style from '~theme/style'
@@ -92,7 +91,7 @@ export default class extends Component<any> {
    * commentId: 评论id
    */
   public publish = async (_, commentId) => {
-    let param: IParams = {
+    let param: NComment.Comment_Params = {
       action: EAction.COMMENT_USER,
       postInfo: commentId
     }

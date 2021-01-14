@@ -45,7 +45,7 @@ export default class extends Component<IProps, IState> {
     const { active, color } = this.state
     const { style = {} } = this.props
     return (
-      <ScrollView className='list'
+      <ScrollView className='setting-color-list'
         scrollX={true}
         style={{ ...(isObject(style) ? style : {}) }}
       >

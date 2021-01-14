@@ -39,6 +39,7 @@ export default class Setting extends Component<IProps>{
   }
 
   public render() {
+
     const { info, content: renderContent = false } = this.props
     const {
       isOpen,
@@ -50,10 +51,11 @@ export default class Setting extends Component<IProps>{
       onConfirm,
       content
     } = info
+
     return (
       <AtModal
         isOpened={isOpen}
-        onCancel={onCancel}
+        onCancel={onCancel || onClose}
       >
         {
           title && title.length ?

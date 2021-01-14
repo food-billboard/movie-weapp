@@ -3,8 +3,6 @@ import React, { Component } from 'react'
 import { List } from '~components/commentlist'
 import GScrollView from '~components/scrollList'
 import Origin from './components/originComment'
-import { IParams } from '../comment'
-import { EAction } from '../comment/index.d'
 import throttle from 'lodash/throttle'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
@@ -55,12 +53,12 @@ export default class extends Component<any>{
       method = isLogin ? getCustomerUserComment : getUserComment
       params = { ...params, id: this.id }
     }
-    const resData = await method({ ...params, ...query })
+    const { comment } = await method({ ...params, ...query })
 
     this.setState({
-      data: [...(isInit ? data : []), ...resData]
+      data: [...(isInit ? data : []), ...comment]
     })
-    return resData
+    return comment
   }
 
   public throttleFetchData = throttle(this.fetchData, 2000)
@@ -71,8 +69,8 @@ export default class extends Component<any>{
    * commentId: 评论id
    */
   public publish = async (_, commentId) => {
-    let param: IParams = {
-      action: EAction.COMMENT_USER,
+    let param: NComment.Comment_Params = {
+      action: NComment.EAction.COMMENT_USER,
       postInfo: commentId
     }
     router.push({ url: routeAlias.toComment, param })

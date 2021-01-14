@@ -57,7 +57,7 @@ export const getEditMovieInfo = (id: string) => {
 
 //浏览记录
 export const getCustomerGlance = ({ currPage=0, pageSize=30 }: { currPage: number, pageSize:number }) => {
-  return request('GET', '/api/customer/manage/movie/browser ', { query: { currPage, pageSize }, header: getToken(true) })
+  return request('GET', '/api/customer/manage/movie/browser', { query: { currPage, pageSize }, header: getToken(true) })
 }
 
 //反馈

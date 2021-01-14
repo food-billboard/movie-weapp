@@ -3,27 +3,7 @@ export default {
     'pages/main/index',
     'pages/mine/index',
     'pages/news/index',
-    
-    // 'pages/setting/index',
-    // 'pages/mycom/index',
-    // 'pages/attention/index',
-    // 'pages/record/index',
-    // 'pages/detail/index',
-    // 'pages/commovie/index',
-    // 'pages/user/index',
-    // 'pages/search/index',
-    // 'pages/type/index',
-    // 'pages/rank/index',
-    // 'pages/store/index',
-    // 'pages/comdetail/index',
-    // 'pages/issue/index',
-    // 'pages/userissue/index',
-    // 'pages/special/index',
-    // 'pages/fans/index',
-    // 'pages/newsdetail/index',
-    // 'pages/login/index',
-    // 'pages/register/index',
-    // 'pages/comment/index'
+    'pages/setting/index',
   ],
   window: {
     backgroundTextStyle: 'dark',
@@ -95,12 +75,6 @@ export default {
         'user/index',
         'fans/index',
       ]
-    },
-    // {
-    //   "root": "pages/wrapper-message",
-    //   "pages": [
-    //     'pages/newsdetail/index',
-    //   ]
-    // }
+    }
   ]
 }

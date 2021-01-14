@@ -1,58 +1,121 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { Video } from '@tarojs/components'
-import { isObject } from '~utils'
 import { EVideoMode, setVideoConfig, getVideoConfig } from '~config'
 
 import './index.scss'
 
 export interface IDanmu {
-
+  _id: string
+  hot: number
+  like: boolean
+  time_line: number
+  content: string
+  updatedAt: string
 }
 
 export interface IProps {
   src: string
   autoplay?: boolean
   poster: string
-  initialTime?: number
   id?: string
   muted?: boolean
   style?: React.CSSProperties
-  danmuList?: Array<IDanmu>
+  danmuList?: Array<IDanmu> | false
   title?: string
+  mode: EVideoMode
 }
 
-export interface IState {
-  danmu: boolean
-  mode: EVideoMode
-  mute: number 
-}
+export interface IState extends IProps {}
 
 export default class Media extends Component<IProps, IState>{
 
-  public constructor(props) {
+  public constructor(props: IProps) {
     super(props)
 
     //获取播放器基础配置
     const config = getVideoConfig()
+
     this.state = {
       ...config
     }
   }
+
+  instance = Taro.createVideoContext(this.props.id || 'video', this)
 
   public static defaultProps = {
     src: '',
     title: '',
     autoplay: false,
     poster: '',
-    initialTime: 0,
     id: 'video',
     loop: false,
     muted: false,
     danmuList: [],
+    mode: EVideoMode.cover
   }
 
-  public error = (err) => {
+  timer: any
+
+  configHistory: any[] = []
+
+  public componentDidMount = () => {
+    const { style, ...nextProps } = this.props
+    //初始化配置
+    const newState = Object.keys(nextProps).reduce((acc: any, cur: string) => {
+      if(typeof nextProps[cur] !== 'undefined') acc[cur] = nextProps[cur]
+      return acc
+    }, {})
+    this.setState({
+      ...newState
+    })
+
+    //定时将video配置放入缓存
+    this.timer = setInterval(() => {
+      this.storeConfig()
+    }, 10000)
+
+  }
+
+  public componentWillUnmount = () => {
+    clearInterval(this.timer)
+  }
+
+  //配置改变
+  private changeConfig = (key: string, value: any) => {
+    this.configHistory.push({
+      [key]: value
+    })
+  }
+
+  //video配置保存
+  private storeConfig = () => {
+    if(!this.configHistory.length) return
+    const newConfig = this.configHistory.reduce((acc: any, cur: any) => {
+      const [ [ key, value ] ] = Object.entries(cur)
+      acc[key] = value
+      return acc
+    }, {})
+    setVideoConfig(newConfig)
+    this.configHistory = []
+  }
+
+  //src
+  public changeConfigSrc = (src: string) => this.setState({ src }, () => this.play())
+  
+  //seek
+  public seek = (time: number) => this.instance && this.instance.seek(time)
+
+  //停止视频
+  public stop = () => this.instance && this.instance.stop()
+
+  //播放视频
+  public play = () => this.instance && this.instance.play()
+
+  //暂停视频
+  public pause = () => this.instance && this.instance.pause()
+
+  public error = (err: any) => {
     console.log(err)
   }
 
@@ -94,36 +157,33 @@ export default class Media extends Component<IProps, IState>{
 
   public render() {
     const {
-      src,
-      title,
-      autoplay = false,
-      poster,
-      initialTime = 0,
-      id = 'video',
-      muted = false,
-      style = {},
-      danmuList
+      style,
+      id='video'
     } = this.props
     const {
-      mute,
-      danmu,
-      mode
+      mode,
+      src,
+      title,
+      autoplay = true,
+      poster,
+      muted = false,
+      danmuList
     } = this.state
     //TODO
 
     return (
       <Video
         className='video'
-        danmuList={danmuList}
-        style={isObject(style) ? style : {}}
+        //待开发
+        // danmuList={danmuList}
+        style={style}
         src={src}
         controls={true}
-        showFullscreenBtn={false}
-        showPlayBtn={false}
-        showCenterPlayBtn={false}
+        showFullscreenBtn={true}
+        showPlayBtn={true}
+        showCenterPlayBtn={true}
         autoplay={autoplay}
         poster={poster}
-        initialTime={initialTime}
         id={id}
         loop={false}
         muted={muted}

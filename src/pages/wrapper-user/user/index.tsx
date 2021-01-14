@@ -32,17 +32,6 @@ export default class User extends Component<any>{
   //数据获取
   public fetchData = async () => {
 
-    this.setState({
-      data: {
-        username: '1111111111111111111111111111111111111111111111111111111111111111',
-        avatar: 'string',
-        hot: 1000000000,
-        fans: 1000000000,
-        attentions: 1000000000,
-      }
-    })
-    return
-
     if(!this.id) {
       Taro.showToast({
         title: '网络错误，请重试',

@@ -1,5 +1,4 @@
 
-
 declare namespace NComment {
 
   export enum EAction {

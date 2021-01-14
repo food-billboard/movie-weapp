@@ -41,12 +41,12 @@ export default class extends Component<any>{
     // 根据是否传递id显示内容
     const method = this.id ? getUserFans : getCustomerFans
     const args = this.id ? { id: this.id } : {}
-    const resData = await method({ ...args, ...query })
+    const { fans } = await method({ ...args, ...query })
 
     this.setState({
-      data: [...(isInit ? [] : data), ...resData]
+      data: [...(isInit ? [] : data), ...fans]
     })
-    return resData
+    return fans
   }
 
   public throttleFetchData = throttle(this.fetchData, 2000)
