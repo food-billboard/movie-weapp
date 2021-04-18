@@ -1,3 +1,4 @@
+@import "~taro-ui/dist/style/components/icon.scss";
 .list{
     width:100%;
     .content{
@@ -6,6 +7,10 @@
         box-sizing:border-box;
         padding:0 80px;
         margin-bottom:10px;
+    }
+    .image-list-icon {
+        font-size: 60px;
+        text-align: right;
     }
     .content:nth-last-of-type(1) {
         margin-bottom:0;

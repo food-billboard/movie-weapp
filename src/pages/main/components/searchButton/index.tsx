@@ -41,7 +41,7 @@ export default class extends Component<IProps, IState> {
   public componentDidMount = async () => await this.fetchData()
 
   public fetchData = async () => {
-    const hot = await getHot()
+    const hot = await getHot() || []
     this.setState({
       hot
     })

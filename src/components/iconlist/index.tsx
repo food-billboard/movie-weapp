@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
 import Rate from '../rate'
 import ImageLoading from '../imageLoading'
+import Swipper from './swipper'
 import style from '~theme/style'
 import { connect } from 'react-redux'
 import { mapDispatchToProps, mapStateToProps } from './connect'
@@ -93,6 +94,7 @@ export default class IconList extends Component<IProps>{
         {
           list.map((value: IList) => {
             const { id, name, image, hot, rate, store } = value
+            const imageList = Array.isArray(image) ? image : [image]
             return (
               <View
                 className='icon-list-content at-col at-col-5'
@@ -103,7 +105,8 @@ export default class IconList extends Component<IProps>{
                   className='icon-list-content-poster'
                   onClick={(event) => { this.goTo.call(this, name, id, event) }}
                 >
-                  <ImageLoading src={image} mode={'scaleToFill'} />
+                  {/* <ImageLoading src={image} mode={'scaleToFill'} /> */}
+                  <Swipper style={{height: '100%'}} list={imageList} />
                   <View 
                     onClick={this.handleStore.bind(this, id, store)}
                     className="at-icon at-icon-heart icon-list-content-poster-store"

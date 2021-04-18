@@ -57,6 +57,7 @@ export default class extends Component<any> {
     Taro.showLoading({ mask: true, title: '凶猛加载中' })
     const method = userInfo ? getCustomerMovieDetail : getUserMovieDetail
     const data = await method(this.id)
+    console.log(data, 1111)
     const { comment, same_film = [], name, _id } = data
     const baseTab = [{
       _id,

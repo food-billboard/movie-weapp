@@ -52,6 +52,8 @@ export default class Setting extends Component<IProps>{
       content
     } = info
 
+    console.log(content)
+
     return (
       <AtModal
         isOpened={isOpen}

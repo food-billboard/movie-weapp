@@ -25,6 +25,7 @@ export interface IProps {
   renderHeader?: any
   renderBottom?: any
   divider?: boolean
+  emptyShow?: boolean 
 }
 
 export interface IState {
@@ -56,6 +57,7 @@ export default class List extends Component<IProps, IState> {
     autoFetch: true,
     fixHeader: true,
     fixBottom: true,
+    emptyShow: true
   }
 
   public state: IState = {
@@ -105,17 +107,14 @@ export default class List extends Component<IProps, IState> {
       const { data } = this.state
       const newData = await fetch(query, isInit)
 
-      //空数据提示
-      // Taro.showToast({
-      //   title: '没有更多内容了',
-      //   icon: 'none',
-      //   duration: 500
-      // })
-
       const { pageSize } = this.state.query
       //判断是否存在数据
-      if (newData.length < pageSize) {
+      if (newData.length < pageSize || !newData.length) {
         this.setState({ empty: true })
+        Taro.showToast({
+          title: '没有更多数据了',
+          icon: 'none'
+        })
       } else {
         this.setState({ empty: false })
       }
@@ -126,7 +125,7 @@ export default class List extends Component<IProps, IState> {
       })
     } else if (sourceType === ESourceTypeList.Dva) {
       await fetch(query, isInit)
-      await this.setState({ loading: false })
+      this.setState({ loading: false })
     }
   }
 
@@ -185,6 +184,7 @@ export default class List extends Component<IProps, IState> {
       fixBottom,
       fixHeader,
       style = {},
+      emptyShow
     } = this.props
     const { empty, loading, headerHeight, bottomHeight } = this.state
     const { divider = true } = this.props
@@ -205,12 +205,18 @@ export default class List extends Component<IProps, IState> {
           }
           <View style={{ ...customStyle.backgroundColor('bgColor'), paddingTop: `${fixHeader ? headerHeight : 0}px` }}
           >
-            <GResult
-              loading={loading}
-              isEmpty={!this.data.length}
-            >
-              {this.props.renderContent}
-            </GResult>
+            {
+              emptyShow ? (
+                <GResult
+                loading={loading}
+                isEmpty={!this.data.length}
+              >
+                {this.props.renderContent}
+              </GResult>
+              )
+              :
+              this.props.renderContent
+            }
           </View>
           {
             !!this.data.length && empty && divider && <GDivider lineColor="transparent" other={{ paddingBottom: `${fixBottom ? bottomHeight : 0}px` }} />

@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
-import ImageLoading from '../imageLoading'
+import Swipper from '../iconlist/swipper'
 import Ellipsis from '../ellipsis'
 import Item from './item'
 import Rate from '../rate'
@@ -79,6 +79,7 @@ export default class List extends Component<IProps>{
         {
           list.map((value:IList) => {
             const { image, name, type, time, hot, id, rate, description, store } = value
+            const imageList = Array.isArray(image) ? image : [image]
             return (
               <View className='list-content'
                 style={{ ...(isObject(propsStyle) ? propsStyle : {}), ...style.backgroundColor('disabled') }}
@@ -89,8 +90,11 @@ export default class List extends Component<IProps>{
                   onClick={this.goTo.bind(this, id)}
                 >
                   <View className='list-content-main-poster'>
-                    <ImageLoading
+                    {/* <ImageLoading
                       src={image}
+                    /> */}
+                    <Swipper
+                      list={imageList}
                     />
                     <View className="at-icon at-icon-heart list-content-icon" onClick={this.handleStore.bind(this, id, store)}></View>
                   </View>

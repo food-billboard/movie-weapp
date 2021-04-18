@@ -42,7 +42,7 @@ export default class extends Component<any> {
     Taro.showLoading({ mask: true, title: '查找中' })
     const daily = await this.throttleGetDaily()
     Taro.hideLoading()
-    this.setState({ daily: daily.daily })
+    this.setState({ daily })
   }
 
   public throttleGetDaily = throttle(this.getDaily, 2000)

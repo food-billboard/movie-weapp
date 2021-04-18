@@ -1,7 +1,9 @@
 import Taro  from '@tarojs/taro'
-import React, { Component } from 'react'
+import React, { Component, memo, useCallback, useMemo, useState } from 'react'
+import classnames from 'classnames'
 import { View } from '@tarojs/components'
 import ImageLoading from '~components/imageLoading'
+import Swipper from '~components/iconlist/swipper'
 
 import './index.scss'
 
@@ -11,45 +13,52 @@ export interface IProps {
 
 export interface IState {}
 
-export default class List extends Component<IProps, IState> {
-  public static defaultProps = {
-    list: []
-  }
+export default memo((props: IProps) => {
 
-  //查看图片
-  public handlePreviewImage = (image: string) => {
+  const [ status, setStatus ] = useState<'icon' | 'list'>('icon')
+
+  const list = useMemo(() => {
+    if(status === 'icon') {
+      return <Swipper className={'content'} list={(props.list || [])} />
+    }
+    return (
+      (props.list || []).map(value => {
+        return (
+          <View
+            className='content'
+            key={value}
+            onClick={() => { handlePreviewImage.call(this, value) }}
+          >
+            <ImageLoading
+              mode={'widthFix'}
+              src={value}
+            />
+          </View>
+        )
+      })
+    )
+  }, [props.list, status])
+
+  const handlePreviewImage = useCallback((image: string) => {
     if (image && image.length) {
-      const { list } = this.props
+      const { list } = props
       Taro.previewImage({
         current: image,
-        urls: list
+        urls: list || []
       })
     }
-  }
+  }, [props.list])
 
-  public render() {
-    
-    const { list } = this.props
+  const changeStatus = useCallback(() => {
+    if(status === 'list') setStatus('icon')
+    if(status === 'icon') setStatus('list')
+  }, [status])
 
-    return (
-      <View className='list'>
-        {
-          list.map(value => {
-            return (
-              <View
-                className='content'
-                key={value}
-                onClick={() => { this.handlePreviewImage.call(this, value) }}
-              >
-                <ImageLoading
-                  mode={'widthFix'}
-                  src={value}
-                />
-              </View>
-            )
-          })
-        }
-      </View>
-    )
-  }
-}
+  return (
+    <View className='list'>
+      <View onClick={changeStatus} className={classnames('at-icon', 'content', 'image-list-icon', { 'at-icon-image': status === 'icon' }, { 'at-icon-list': status === 'list' })}></View>
+      {list}
+    </View>
+  )
+
+})
