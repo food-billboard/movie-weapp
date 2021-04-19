@@ -45,6 +45,7 @@ class News extends Component<IProps>{
         {
           list.map((value) => {
             const { _id: id, name: title, poster: image } = value
+
             return (
               <View className='news-img'
                 onClick={(_) => { this.gotTo.call(this, id) }}

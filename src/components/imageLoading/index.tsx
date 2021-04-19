@@ -1,14 +1,14 @@
 import Taro from '@tarojs/taro'
-import React, { Component } from 'react'
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { View, Image } from '@tarojs/components'
 import { AtActivityIndicator } from 'taro-ui'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import { TypeColor } from '~theme/color'
 import style from '~theme/style'
-import noop from 'lodash/noop'
 import { isObject } from '~utils'
 import { ImageProps } from '@tarojs/components/types/Image'
 import { AtActivityIndicatorProps } from 'taro-ui/types/activity-indicator'
+import fallback from '~assets/fallback.png'
 
 import './index.scss'
 
@@ -22,56 +22,54 @@ export interface IProps extends ImageProps {
 
 export interface IState {
   loading: boolean
+  error: boolean 
 }
 
-export default class extends Component<IProps, IState> {
+export default memo((props: IProps) => {
 
-  public state: IState = {
-    loading: true
-  }
+  const [ loading, setLoading ] = useState<boolean>(true)
+  const [ error, setError ] = useState<boolean>(false)
 
-  public handleLoad = (event) => {
-    const { onLoad } = this.props
-    if (onLoad) onLoad(event)
-    this.setState({
-      loading: false
-    })
-  }
-
-  public handleError = (e) => {
-    const { onError } = this.props
-    if (onError) onError(e)
-  }
-
-  public handleClick = (e) => {
-    const { handleClick } = this.props
-    if (handleClick) handleClick(e)
-  }
-
-  public render() {
-
-    const {
-      //img
-      src,
-      webp = false,
-      mode = 'scaleToFill',
-      lazyLoad = true,
-      showMenuByLongpress = false,
-      //loading
-      loadingProps = {},
-      customStyle = false,
-      border = false,
-      imageStyle = false,
-    } = this.props
-    
-    const {
+  const {  
+    //img
+    src,
+    webp = false,
+    mode = 'scaleToFill',
+    lazyLoad = true,
+    showMenuByLongpress = false,
+    //loading
+    loadingProps: {
       size = 32,
       mode: loadingMode = 'center',
       color = TypeColor.primary,
       content = '加载中...'
-    } = loadingProps
-    const { loading } = this.state
-    const contentStyle = {
+    }={},
+    customStyle = false,
+    border = false,
+    imageStyle = false,
+    onLoad,
+    onError
+  } = useMemo(() => {
+    return props 
+  }, [props])
+
+  const handleLoad = useCallback((event) => {
+    onLoad && onLoad(event)
+    setLoading(false)
+  }, [onLoad])
+
+  const handleError = useCallback((e) => {
+    onError && onError(e)
+    setError(true)
+    setLoading(false)
+  }, [])
+
+  const handleClick = useCallback((e) => {
+    handleClick && handleClick(e)
+  }, [])
+
+  const contentStyle = useMemo(() => {
+    return {
       width: '100%',
       height: '100%',
       ...(loading ? style.backgroundColor('disabled') : {}),
@@ -88,41 +86,45 @@ export default class extends Component<IProps, IState> {
           {}
       )
     }
+  }, [loading])
 
-    return (
-      <View
-        className='loading'
-        onClick={this.handleClick}
-        style={contentStyle}
-      >
-        {/* {
-          loading ?
-          <View className='avatar'>图</View>
-          :
-          null
-        } */}
-        {
-          loading ?
-            <AtActivityIndicator
-              content={content}
-              color={color}
-              mode={loadingMode}
-              size={SYSTEM_PAGE_SIZE(size)}
-            ></AtActivityIndicator>
-            : null
-        }
-        <Image
-          style={{ visibility: loading ? 'hidden' : 'visible', width: '100%', height: '100%', ...(isObject(imageStyle) ? imageStyle : {}) }}
-          src={src}
-          webp={webp}
-          mode={mode}
-          lazyLoad={lazyLoad}
-          showMenuByLongpress={showMenuByLongpress}
-          onError={(e) => this.handleError.call(this, e)}
-          onLoad={(e) => this.handleLoad.call(this, e)}
-        />
-      </View>
-    )
-  }
+  useEffect(() => {
+    setError(false)
+    setLoading(true)
+  }, [src])
 
-}
+  return (
+    <View
+      className='loading'
+      onClick={handleClick}
+      style={contentStyle}
+    >
+      {/* {
+        loading ?
+        <View className='avatar'>图</View>
+        :
+        null
+      } */}
+      {
+        loading ?
+          <AtActivityIndicator
+            content={content}
+            color={color}
+            mode={loadingMode}
+            size={SYSTEM_PAGE_SIZE(size)}
+          ></AtActivityIndicator>
+          : null
+      }
+      <Image
+        style={{ visibility: loading ? 'hidden' : 'visible', width: '100%', height: '100%', ...(isObject(imageStyle) ? imageStyle : {}) }}
+        src={(error && !loading || !src) ? fallback : src}
+        webp={webp}
+        mode={mode}
+        lazyLoad={lazyLoad}
+        showMenuByLongpress={showMenuByLongpress}
+        onError={handleError}
+        onLoad={handleLoad}
+      />
+    </View>
+  )
+})

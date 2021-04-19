@@ -11,6 +11,7 @@ const config = {
     '828': 1.81 / 2
   },
   alias: {
+    '~assets': path.resolve(dirname, 'assets'),
     '~components': path.resolve(dirname, 'components'),
     '~utils': path.resolve(dirname, 'utils'),
     '~config': path.resolve(dirname, 'config'),

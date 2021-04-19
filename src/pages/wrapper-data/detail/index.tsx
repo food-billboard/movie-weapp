@@ -30,7 +30,7 @@ export default class extends Component<any> {
 
   public state: any = {
     data: {},
-    tab: [],
+    // tab: [],
     commentData: []
   }
 
@@ -57,15 +57,14 @@ export default class extends Component<any> {
     Taro.showLoading({ mask: true, title: '凶猛加载中' })
     const method = userInfo ? getCustomerMovieDetail : getUserMovieDetail
     const data = await method(this.id)
-    console.log(data, 1111)
     const { comment, same_film = [], name, _id } = data
-    const baseTab = [{
-      _id,
-      same_name: name,
-      type: 'NAMESAKE'
-    }]
+    // const baseTab = [{
+    //   _id,
+    //   same_name: name,
+    //   type: 'NAMESAKE'
+    // }]
     this.setState({
-      tab: same_film.length ? [...baseTab, ...same_film] : [...baseTab],
+      // tab: same_film.length ? [...baseTab, ...same_film] : [...baseTab],
       data,
       commentData: comment,
     })
@@ -104,14 +103,14 @@ export default class extends Component<any> {
       .catch(err => err)
   }
 
-  //tab切换
-  public handleTabChange = async (value: string) => {
-    const { tab } = this.state
-    // const [ item ] = tab.filter(item => item.name === value)
-    const { _id } = tab[value]
-    this.id = _id
-    await this.fetchData()
-  }
+  // //tab切换
+  // public handleTabChange = async (value: string) => {
+  //   const { tab } = this.state
+  //   // const [ item ] = tab.filter(item => item.name === value)
+  //   const { _id } = tab[value]
+  //   this.id = _id
+  //   await this.fetchData()
+  // }
 
   public render() {
     const { data: {
@@ -139,9 +138,10 @@ export default class extends Component<any> {
     } = info
 
     this.setTitle()
+
     return (
       <View id='detail' style={{ ...style.backgroundColor('bgColor') }}>
-        {
+        {/* {
           tab.length ?
             <Tab
               values={tab.map(item => item.name)}
@@ -150,7 +150,7 @@ export default class extends Component<any> {
               tabToggle={1000}
             />
             : null
-        }
+        } */}
         <View className='video'>
           {
             !!video && <GVideo

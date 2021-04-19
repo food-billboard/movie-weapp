@@ -74,9 +74,10 @@ export default class Index extends Component<any> {
   //获取数据
   public fetchData = async (query: any, isInit = false) => {
     const { data } = this.state
+    if(!this.id) return 
     const resData = await getClassifyList({ id: this.id, ...query })
 
-    await this.setState({
+    this.setState({
       data: [...(isInit ? [] : data), ...resData.map(item => {
         const { poster, classify, publish_time, ...nextItem } = item
         return {

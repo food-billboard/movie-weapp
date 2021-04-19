@@ -14,7 +14,7 @@ import './index.scss'
 const HOT_HEIGHT = SYSTEM_PAGE_SIZE(35)
 
 interface Hot {
-  key_word: string,
+  name: string,
   _id: string
 }
 
@@ -69,21 +69,28 @@ export default class extends Component<IProps, IState> {
               className='at-row hotsearch at-row__align--center'
               style={{ height: hotShow ? hotShow + 'px' : '0', ...style.backgroundColor('bgColor'), ...style.color('primary') }}>
               <View
-                className='at-col at-col-1 hotlist title'
+                className='at-col at-col-1 title'
               >热搜</View>
               {
                 hot.map((value) => {
-                  const { key_word, _id: id } = value
+                  const { name, _id: id } = value
                   return (
-                    <View className='at-col at-col-2 hotlist'
+                    <View className='at-col at-col-3'
                       key={id}>
                       <AtTag
-                        customStyle={{ ...style.backgroundColor('disabled'), ...style.color('primary') }}
+                        customStyle={{ 
+                          ...style.backgroundColor('disabled'), 
+                          ...style.color('primary'), 
+                          width: '100%',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis'
+                        }}
                         type={"primary"}
                         size={"normal"}
                         circle={true}
                         onClick={(event) => { this.getHot(id, event) }}
-                      >{key_word}</AtTag>
+                      >{name}</AtTag>
                     </View>
                   )
                 })
