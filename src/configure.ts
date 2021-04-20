@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro';
-import { request, router, routeConfig } from '~utils';
+import { request, router, routeConfig, API_DOMAIN } from '~utils';
 import { requestError, getRequestCookie } from '~config'
 
 import models from './models'
@@ -27,8 +27,7 @@ const configs: IConfig = [
   () => {
     request.init({
       taro: Taro,
-      // host: 'http://47.111.229.250',
-      host: 'http://localhost:4000',
+      host: API_DOMAIN,
       error: requestError,
       options: {
         header: {

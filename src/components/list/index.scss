@@ -1,7 +1,6 @@
-.list{
+.list-component{
     .list-content{
         width:100%;
-        // height:200px;
         box-sizing:border-box;
         padding:10px;
         margin-bottom:20px;
@@ -12,15 +11,14 @@
                 left:0;
                 top:0;
                 flex:2;
-                // width:200px;
-                // width:180px;
-                // height:180px;
                 margin-right:20px;
-                // float:left;
                 .list-content-icon{
                     position:absolute;
-                    top:0;
-                    left:0;
+                    top:5px;
+                    left:5px;
+                    font-size: 60px;
+                    text-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+                    color: yellowgreen;
                 }
             }
             &-detail{
@@ -48,7 +46,9 @@
         }
         .list-content-description{
             width:100%;
-            background-color: rgba(0, 0, 0, 0.3);
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 20px 0;
+            margin-top: 10px;
         }
     }
 }

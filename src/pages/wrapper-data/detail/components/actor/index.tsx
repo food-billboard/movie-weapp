@@ -37,27 +37,25 @@ export default class extends Component<IProps, IState> {
     return (
       <ScrollView
         scrollX
-        className='actor'
+        className='data-actor-icon-list'
       >
         {
           list.map((val: IList) => {
             const { image, name } = val
             return (
               <View 
-                className='acotr-item' 
+                className='data-actor-icon-list-item' 
                 key={name}
                 onClick={() => {this.handlePreviewImage.call(this, image)}}
               >
-                <View className='actor-item-image'>
-                  <ImageLoading 
-                    src={image} 
-                    customStyle={{
-                      height: `${SYSTEM_PAGE_SIZE(85)}px`
-                    }} 
-                    loadingProps={{content: ''}}
-                  />
-                </View>
-                <View className='actor-text'>
+                <ImageLoading 
+                  src={image} 
+                  customStyle={{
+                    height: `${SYSTEM_PAGE_SIZE(85)}px`
+                  }} 
+                  loadingProps={{content: ''}}
+                />
+                <View className='data-actor-icon-list-text'>
                   <Text>{name}</Text>
                 </View>
               </View>

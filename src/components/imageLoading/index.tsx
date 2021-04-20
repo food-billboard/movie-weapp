@@ -37,6 +37,7 @@ export default memo((props: IProps) => {
     mode = 'scaleToFill',
     lazyLoad = true,
     showMenuByLongpress = false,
+    handleClick,
     //loading
     loadingProps: {
       size = 32,
@@ -64,7 +65,7 @@ export default memo((props: IProps) => {
     setLoading(false)
   }, [])
 
-  const handleClick = useCallback((e) => {
+  const onClick = useCallback((e) => {
     handleClick && handleClick(e)
   }, [])
 
@@ -96,7 +97,7 @@ export default memo((props: IProps) => {
   return (
     <View
       className='loading'
-      onClick={handleClick}
+      onClick={onClick}
       style={contentStyle}
     >
       {/* {

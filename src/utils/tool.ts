@@ -1,3 +1,5 @@
+import { API_DOMAIN } from './globalType'
+
 export {default as extend} from './lib/extend'
 
 //uid生成

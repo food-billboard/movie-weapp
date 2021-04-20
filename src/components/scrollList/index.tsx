@@ -74,6 +74,8 @@ export default class List extends Component<IProps, IState> {
     this.state.query = { ...INIT_QUERY, ...this.props.query }
   }
 
+  public readonly DEFAULT_QUERY = INIT_QUERY
+
   //获取数据
   public get data() {
     if (this.state.data) return this.state.data
@@ -87,7 +89,6 @@ export default class List extends Component<IProps, IState> {
   }
 
   public componentDidMount = () => {
-
     setTimeout(() => {
       this.watchBottomHeight()
       this.watchHeaderHeight()
@@ -210,6 +211,7 @@ export default class List extends Component<IProps, IState> {
                 <GResult
                 loading={loading}
                 isEmpty={!this.data.length}
+                type="scope"
               >
                 {this.props.renderContent}
               </GResult>

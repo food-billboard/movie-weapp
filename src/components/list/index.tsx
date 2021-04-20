@@ -75,7 +75,7 @@ export default class List extends Component<IProps>{
   public render() {
     const { list, style: propsStyle = {} } = this.props
     return (
-      <View className='list'>
+      <View className='list-component'>
         {
           list.map((value:IList) => {
             const { image, name, type, time, hot, id, rate, description, store } = value
@@ -90,10 +90,8 @@ export default class List extends Component<IProps>{
                   onClick={this.goTo.bind(this, id)}
                 >
                   <View className='list-content-main-poster'>
-                    {/* <ImageLoading
-                      src={image}
-                    /> */}
                     <Swipper
+                      style={{height: '100px'}}
                       list={imageList}
                     />
                     <View className="at-icon at-icon-heart list-content-icon" onClick={this.handleStore.bind(this, id, store)}></View>

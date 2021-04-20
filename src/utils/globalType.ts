@@ -121,3 +121,7 @@ export interface ICommonFormProps {
   value?: Array<string> | Array<IFiles> |  Array<IItem> | Array<Item> | string | false
   initialValue?: Array<string> | Array<IFiles> |  Array<IItem> | Array<Item> | string
 }
+
+
+export const API_DOMAIN = 'http://localhost:4000'
+// export const API_DOMAIN = 'http://47.111.229.250'

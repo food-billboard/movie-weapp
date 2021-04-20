@@ -1,14 +1,13 @@
-.actor{
+.data-actor-icon-list{
   white-space: nowrap;
   &-item{
     display:inline-block;
-    width:130px;
+    width:24vw;
     height:202px;
-    margin-left:20px;
-    display:flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    margin-left: 0.8vw;
+  }
+  &-item:nth-last-of-type(1) {
+    margin-right: 0.8vw;
   }
   &-text{
     width:100%;

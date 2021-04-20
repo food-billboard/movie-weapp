@@ -58,7 +58,7 @@ export default class extends Component<IProps, IState> {
     return (
       <View className='icon-list'>
         <View 
-            className='text-content' 
+            className='icon-list-text-content' 
             style={{visibility: activeShow ? 'visible' : 'hidden', ...style.backgroundColor('primary'), ...style.color('disabled')}}
             onClick={() => { this.props.handleClick && this.props.handleClick() }}
           >
@@ -70,14 +70,14 @@ export default class extends Component<IProps, IState> {
           </View>
         <ScrollView
           scrollX={true}
-          className='list'
+          className='icon-list-content'
           style={{...style.border(1, 'disabled', 'dashed', 'all')}}
         >
           {
             showList.map(val => {
               const { image, content } = val
               return (
-                <View className='list-icon'
+                <View className='icon-list-content-item'
                   onClick={this.handleClick.bind(this, content)}
                 >
                   <Imageloading src={image} loadingProps={{content: ''}} />

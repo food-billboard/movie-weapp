@@ -26,7 +26,7 @@ export default memo((props: IProps) => {
 
   return (
     <Swiper
-      circular
+      circular={true}
       indicatorDots={props.list.length > 1}
       autoplay
       {...props}

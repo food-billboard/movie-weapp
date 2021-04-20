@@ -3,16 +3,14 @@
     display:flex;
     flex-wrap: wrap;
     &-content{
-        // width:300px;
-        // height:260px;
         box-sizing:border-box;
-        padding:10px;
-        margin-bottom:20px;
-        box-shadow: 0 3px 6px 0px rgba(0, 0, 0, 0.12);
+        padding:20px;
+        margin-bottom:40px;
+        box-shadow: 0 20px 20px 0px rgba(0, 0, 0, 0.12);
         display:flex;
         flex-direction: column;
+        border-radius: 5px;
         &-poster{
-            // min-height: 200px;
             height:200rpx;
             position:relative;
             left:0;
@@ -30,23 +28,18 @@
                 text-align:center;
                 white-space:nowrap;
                 overflow-x: scroll;
-                // text-overflow:ellipsis;
-                // overflow:hidden;
                 width:100%;
-                // font-size:32px;
             }
-            .name::-webkit-scrollbar {
+            &-name::-webkit-scrollbar {
                 display:none
             }
-            .rate{
+            &-rate{
                 width:100%;
             }
-            .count{
-                // font-size:28px;
-                text-align:center;
-                .text{
-                    font-size:70%;
-                }
+            &-extra{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
             }
         }
     }

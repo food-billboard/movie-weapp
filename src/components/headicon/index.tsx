@@ -53,7 +53,7 @@ export default class IconHead extends Component<IProps>{
           >
             <AtAvatar
               image={avatar}
-              text={'头像'}
+              text={username}
               circle
               size={'large'}
               customStyle={{ width: '100%', height: '100%' }}

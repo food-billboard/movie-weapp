@@ -68,23 +68,25 @@ export default class Index extends Component<any> {
   public componentDidMount = async () => {
     await this.fetchTypeData()
     const { params: { id=null }={} } = getCurrentInstance().router || {}
-    this.id = id || ''
+    if(!id) return 
+    this.getTypeDetail(id)
   }
 
   //获取数据
   public fetchData = async (query: any, isInit = false) => {
     const { data } = this.state
-    if(!this.id) return 
+    if(!this.id) return []
     const resData = await getClassifyList({ id: this.id, ...query })
 
     this.setState({
       data: [...(isInit ? [] : data), ...resData.map(item => {
-        const { poster, classify, publish_time, ...nextItem } = item
+        const { poster, classify, publish_time, author_description, ...nextItem } = item
         return {
           ...nextItem,
           image: poster,
           type: classify.map(item => item.name),
-          time: publish_time
+          time: publish_time,
+          description: author_description
         }
       })]
     })
@@ -163,6 +165,7 @@ export default class Index extends Component<any> {
         style={{ ...bgColor }}
         sourceType={ESourceTypeList.Scope}
         scrollWithAnimation={true}
+        emptyShow={false}
         renderContent={
           <View>
             <View className='header-type' style={{

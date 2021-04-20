@@ -38,9 +38,10 @@ export default class extends Component<any> {
 
   //设置标题
   public setTitle = async () => {
-    const current = this.tabRef.current ? this.tabRef.current.getCurrent() : 0
-    const { tab } = this.state
-    Taro.setNavigationBarTitle({ title: tab[current] ? tab[current].same_name : '电影' })
+    // const current = this.tabRef.current ? this.tabRef.current.getCurrent() : 0
+    // const { tab } = this.state
+    // Taro.setNavigationBarTitle({ title: tab[current] ? tab[current].same_name : '电影' })
+    Taro.setNavigationBarTitle({ title: '电影' })
   }
 
   //获取数据
@@ -170,11 +171,11 @@ export default class extends Component<any> {
             info={{
               ...nextInfo,
               glance,
-              district: district ? district.map(item => ({ value: item.name })) : [],
-              director: director ? director.map(item => ({ value: item.name })) : [],
-              actor: actor ? actor.map(item => ({ value: item.name })) : [],
-              classify: classify ? classify.map(item => ({ value: item.name })) : [],
-              language: language ? language.map(item => ({ value: item.name })) : [],
+              district: (district || []).map(item => ({ value: item.name })),
+              director: (director || []).map(item => ({ value: item.name })),
+              actor: (actor || []).map(item => ({ value: item.name })),
+              classify: (classify || []).map(item => ({ value: item.name })),
+              language: (language || []).map(item => ({ value: item.name })),
               createdAt,
               hot,
               rate: rate || 0,
@@ -201,51 +202,59 @@ export default class extends Component<any> {
               title={'卡司'}
             />
           </View>
-          <Actor list={actor ? actor.map(item => {
-            const { name, other: { avatar } } = item
+          <Actor list={(actor || []).map(item => {
+            const { name, avatar } = item
             return {
               name,
               image: avatar
             }
-          }) : []} />
+          })} />
         </View>
-        <View className='tag'>
-          <View className='title'>
-            <Title
-              title={'大家都说'}
-            />
-          </View>
-          <GTag
-            list={tag ? tag.map(item => {
-              const { text } = item
-              return {
-                value: text
-              }
-            }) : []}
-          ></GTag>
-        </View>
-        <View className='comment'>
-          <View className='title'>
-            <Title
-              title={'大家评论'}
-            />
-          </View>
-          <IconList
-            list={commentData.map(comment => {
-              const { content: { text }, _id, user_info: { avatar } } = comment
-              return {
-                id: _id,
-                content: text || '[ 媒体 ]',
-                image: avatar
-              }
-            })}
-            handleClick={() => router.push(routeAlias.comment, { id: this.id })}
-          />
-        </View>
+        {
+          Array.isArray(tag) && !!tag.length && (
+            <View className='tag'>
+              <View className='title'>
+                <Title
+                  title={'大家都说'}
+                />
+              </View>
+              <GTag
+                list={tag.map(item => {
+                  const { text } = item
+                  return {
+                    value: text
+                  }
+                })}
+              ></GTag>
+            </View>
+          )
+        }
+        {
+          Array.isArray(commentData) && !!commentData.length && (
+            <View className='comment'>
+              <View className='title'>
+                <Title
+                  title={'大家评论'}
+                />
+              </View>
+              <IconList
+                list={commentData.map(comment => {
+                  const { content: { text }, _id, user_info: { avatar } } = comment
+                  return {
+                    id: _id,
+                    content: text || '[ 媒体 ]',
+                    image: avatar
+                  }
+                })}
+                handleClick={() => router.push(routeAlias.comment, { id: this.id })}
+              />
+            </View>
+          )
+        }
         <View className='other'>
           <GButton
             type={'secondary'}
-            value={new Array(2).fill('我有话说')}
+            value={new Array(2).fill('说点什么吧')}
             operate={this.handleComment}
           />
         </View>

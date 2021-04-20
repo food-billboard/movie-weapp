@@ -1,8 +1,8 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
+import { AtAvatar } from 'taro-ui'
 import { View, Text } from '@tarojs/components'
 import Rate from '../rate'
-import ImageLoading from '../imageLoading'
 import Swipper from './swipper'
 import style from '~theme/style'
 import { connect } from 'react-redux'
@@ -23,6 +23,11 @@ export interface IList {
   rate: number
   description: string
   store?: boolean
+  author: {
+    avatar: string
+    username: string
+    _id: string 
+  }
 }
 
 export interface IProps {
@@ -85,15 +90,27 @@ export default class IconList extends Component<IProps>{
     
   }
 
+  private getUserInfo = (e, id: string) => {
+    e.stopPropagation()
+    router.push(routeAlias.user, { id })
+  }
+
   public render() {
 
     const { list } = this.props
+    const listLen = list.length
+    const realList = listLen % 2 == 0 ? list : [...list, null]
 
     return (
       <View className='icon-list at-row at-row--wrap at-row__justify--around'>
         {
-          list.map((value: IList) => {
-            const { id, name, image, hot, rate, store } = value
+          realList.map((value: IList) => {
+            if(!value) return (
+              <View
+                className='at-col at-col-5'
+              ></View>
+            )
+            const { id, name, image, hot, rate, store, author } = value
             const imageList = Array.isArray(image) ? image : [image]
             return (
               <View
@@ -118,19 +135,24 @@ export default class IconList extends Component<IProps>{
                     style={{ ...style.color('primary') }}
                     onClick={this.handleClick.bind(this, id)}
                   >{name}</View>
-                  <View className="rate">
+                  <View className="icon-list-content-main-rate">
                     <Rate
                       value={rate}
                       readonly={true}
                       rate={noop}
-                      size={10}
+                      size={8}
                     ></Rate>
                   </View>
-                  <View className='count'
+                  <View className='icon-list-content-main-extra'
                     style={{ ...style.color('secondary') }}
                   >
-                    {formatNumber(hot)}
-                    <Text className='text'>人看</Text>
+                    <View className="icon-list-content-main-extra-count">
+                      {formatNumber(hot)}
+                      <Text style={{fontSize: '70&'}}>人看</Text>
+                    </View>
+                    <View onClick={(e) => this.getUserInfo.call(this, e, author._id)}>
+                      <AtAvatar size="small" circle image={author.avatar} text={author.username}></AtAvatar>
+                    </View>
                   </View>
                 </View>
               </View>

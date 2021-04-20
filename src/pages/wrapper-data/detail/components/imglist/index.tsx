@@ -19,13 +19,13 @@ export default memo((props: IProps) => {
 
   const list = useMemo(() => {
     if(status === 'icon') {
-      return <Swipper className={'content'} list={(props.list || [])} />
+      return <Swipper className='data-detail-image-content-list' list={(props.list || [])} />
     }
     return (
       (props.list || []).map(value => {
         return (
           <View
-            className='content'
+            className='data-detail-image-content-list'
             key={value}
             onClick={() => { handlePreviewImage.call(this, value) }}
           >
@@ -56,7 +56,7 @@ export default memo((props: IProps) => {
 
   return (
     <View className='list'>
-      <View onClick={changeStatus} className={classnames('at-icon', 'content', 'image-list-icon', { 'at-icon-image': status === 'icon' }, { 'at-icon-list': status === 'list' })}></View>
+      <View onClick={changeStatus} className={classnames('at-icon', 'data-detail-image-content', 'image-list-icon', { 'at-icon-image': status === 'icon' }, { 'at-icon-list': status === 'list' })}></View>
       {list}
     </View>
   )
