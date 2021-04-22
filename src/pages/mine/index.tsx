@@ -1,7 +1,6 @@
-import Taro, { getCurrentInstance } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
-// import { AtTag } from 'taro-ui'
 import Title from './components/title'
 import IconList from './components/icon'
 import List from '~components/linearlist'
@@ -12,7 +11,6 @@ import { IList } from '~components/linearlist'
 import { connect } from 'react-redux'
 import { mapStateToProps, mapDispatchToProps } from './connect'
 import { router, routeAlias } from '~utils'
-import { getCustomerUserInfo } from '~services'
 
 import './index.scss'
 

@@ -5,7 +5,6 @@ import style from '~theme/style'
 import noop from 'lodash/noop'
 
 import './index.scss'
-import { Toast } from '~components/toast'
 
 export interface IState {
   text: string,

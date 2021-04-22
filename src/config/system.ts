@@ -79,7 +79,7 @@ class SystemInfo {
 
   //app色调信息
   public getColorStyle = () => {
-    const _colorStyle = this.getSystemInfo(colorStyle)
+    const _colorStyle = this._getSystemInfo(colorStyle)
     if(_colorStyle) return _colorStyle
     this.setSystemInfo(colorStyle, {
       color: this.defaultColor,

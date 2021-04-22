@@ -40,9 +40,9 @@ export default class User extends Component<any>{
       })
       return
     }
-    const { userInfo } = this.props
-    Taro.showLoading({ mask: true, title: '加载中...' })
+    const userInfo = await this.props.getUserInfo({ prompt: false })
     const method = userInfo ? getCustomerAntoherUserInfo : getUserInfo
+    Taro.showLoading({ mask: true, title: '加载中...' })
     const data = await method(this.id)
     Taro.hideLoading()
     this.setState({
@@ -52,10 +52,10 @@ export default class User extends Component<any>{
 
   //关注/取消关注
   public attention = async () => {
-    const { userInfo: { like } } = this.state
+    const { data: { like } } = this.state
     const method = like ? cancelAttention : toAttention
     await this.props.getUserInfo()
-      .then(async (_) => {
+      .then(async () => {
         Taro.showLoading({ mask: true, title: '操作中' })
         await withTry(method)(this.id)
         Taro.hideLoading()

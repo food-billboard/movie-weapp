@@ -136,7 +136,7 @@ export default class Forms extends Component<IProps> {
             district,
             ...nextProps
         } = values
-        console.log(values)
+
         let data: FormData = {
             maxPrice: max,
             minPrice: min,

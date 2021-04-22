@@ -6,7 +6,7 @@ import Origin from './components/originComment'
 import throttle from 'lodash/throttle'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
-import { withTry, ESourceTypeList, router, routeAlias } from '~utils'
+import { withTry, ESourceTypeList, router, routeAlias, EAction } from '~utils'
 import { mapDispatchToProps, mapStateToProps } from './connect'
 import { connect } from 'react-redux'
 import { getCustomerComment, getCustomerUserComment, getUserComment, cancelLike, putLike } from '~services'
@@ -47,18 +47,16 @@ export default class extends Component<any>{
     if (!this.id) {
       method = getCustomerComment
     } else {
-      const isLogin = await this.props.getUserInfo()
-        .then(_ => true)
-        .catch(_ => false)
+      const isLogin = await this.props.getUserInfo({ prompt: false })
       method = isLogin ? getCustomerUserComment : getUserComment
       params = { ...params, id: this.id }
     }
     const { comment } = await method({ ...params, ...query })
 
     this.setState({
-      data: [...(isInit ? data : []), ...comment]
+      data: [...(isInit ? data : []), ...comment || []]
     })
-    return comment
+    return comment || []
   }
 
   public throttleFetchData = throttle(this.fetchData, 2000)
@@ -70,16 +68,16 @@ export default class extends Component<any>{
    */
   public publish = async (_, commentId) => {
     let param: NComment.Comment_Params = {
-      action: NComment.EAction.COMMENT_USER,
+      action: EAction.COMMENT_USER,
       postInfo: commentId
     }
-    router.push({ url: routeAlias.toComment, param })
+    router.push(routeAlias.toComment, param)
   }
 
   //点赞
   public like = async (id: string, like: boolean) => {
     await this.props.getUserInfo()
-      .then(async (_) => {
+      .then(async () => {
         const method = like ? cancelLike : putLike
         Taro.showLoading({ mask: true, title: '操作中' })
         await withTry(method)(id)

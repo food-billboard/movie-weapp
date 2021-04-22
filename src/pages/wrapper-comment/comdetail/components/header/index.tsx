@@ -1,5 +1,6 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
+import { merge } from 'lodash'
 import { View, Text } from '@tarojs/components'
 import { AtAvatar } from 'taro-ui'
 import Ellipsis from '~components/ellipsis'
@@ -34,22 +35,24 @@ export interface IProps {
 
 export interface IState {}
 
+const DEFAULT_CONTENT = {
+  _id: '',
+  user_info: {
+    avatar: null,
+    username: '',
+    _id: ''
+  },
+  content: {},
+  comment_users: 0,
+  createdAt: Date.now(),
+  like: false,
+  total_like: 0
+}
+
 export default class extends Component<IProps, IState> {
 
   public static defaultProps: IProps = {
-    content: {
-      _id: '',
-      user_info: {
-        avatar: null,
-        username: '',
-        _id: ''
-      },
-      content: {},
-      comment_users: 0,
-      createdAt: Date.now(),
-      like: false,
-      total_like: 0
-    },
+    content: DEFAULT_CONTENT,
     like: noop,
   }
 
@@ -58,27 +61,31 @@ export default class extends Component<IProps, IState> {
   public render() {
     
     const { 
-      content: {
-        _id:commentId,
-        user_info: {
-          avatar,
-          username,
-          _id:userId
-        },
-        content: {
-          text='',
-          image=[],
-          video=[]
-        },
-        comment_users,
-        createdAt,
-        like,
-        total_like
-      }
+      content
     } = this.props
+    const {
+      _id:commentId,
+      user_info: {
+        avatar,
+        username,
+        _id:userId
+      }={},
+      content: {
+        text='',
+        image=[],
+        video=[]
+      },
+      comment_users,
+      createdAt,
+      like,
+      total_like
+    } = merge({}, DEFAULT_CONTENT, content) as IContent
 
     return (
-      <View className='header'>
+      <View 
+        className='header'
+        style={{ ...style.backgroundColor('thirdly') }}
+      >
         <View   
           className={'content'}
         >

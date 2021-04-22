@@ -61,9 +61,8 @@ export const getCustomerGlance = ({ currPage=0, pageSize=30 }: { currPage: numbe
 }
 
 //反馈
-export const feedback = ({ text='', image=[], video=[] }: { text: string, image: Array<string>, video: Array<string> }) => {
-  console.log(text, video, image)
-    return request('POST', '/api/customer/manage/feedback', { data: { content: { text, image, video } }, header: getToken(true) })
+export const feedback = ({ content }: { content: { text: string, image: string[], video: string[] } }) => {
+  return request('POST', '/api/customer/manage/feedback', { data: { content }, header: getToken(true) })
 }
 
 //用户反馈发送预查
@@ -112,13 +111,30 @@ export const getCustomerMovieCommentDetail = ({ id, currPage=0, pageSize=30 }: {
 }
 
 //评论用户
-export const postCommentToUser = ({ id, content: { text='', image=[], video=[] } }: { id: string, content: { text: string, image: Array<string>, video: Array<string> } }) => {
-  return request('POST', '/api/customer/movie/detail/comment', {data: { _id: id, content: { text, image, video }, header: getToken(true) }})
+export const postCommentToUser = ({ id, content }: { id: string, content: { text: string, image: Array<string>, video: Array<string> } }) => {
+  return request(
+    'POST', 
+    '/api/customer/movie/detail/comment', 
+    { data: { _id: id, content }, header: getToken(true) }
+  )
 }
 
 //评论电影
-export const postCommentToMovie = ({ id, content: { text='', image=[], video=[] } }: { id: string, content: { text: string, image: Array<string>, video: Array<string> } }) => {
-  return request('POST', '/api/customer/movie/detail/comment/movie', { data: { _id: id, content: { text, image, video } }, header: getToken(true) })
+export const postCommentToMovie = ({ id, content }: { id: string, content: { text: string, image: Array<string>, video: Array<string> } }) => {
+  return request(
+    'POST', 
+    '/api/customer/movie/detail/comment/movie', 
+    { 
+      data: { 
+        _id: id, 
+        content 
+      }, 
+      header: getToken(true),
+      dynamicOptions: async () => {
+
+      }
+    }
+  )
 }
 
 //点赞

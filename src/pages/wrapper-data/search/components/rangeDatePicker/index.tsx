@@ -2,7 +2,6 @@ import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import GPicker from '~components/picker'
-import { Toast } from '~components/toast'
 import './index.scss'
 
 export interface IProps {
@@ -23,17 +22,17 @@ export default class extends Component<IProps, IState> {
     
   }
 
-  private startRef = Taro.createRef<GPicker>()
-  private endRef = Taro.createRef<GPicker>()
+  private startRef = React.createRef<GPicker>()
+  private endRef = React.createRef<GPicker>()
 
   public startChange = async (value) => {
     const { onChange, value: { end=new Date().getFullYear() }={} } = this.props
     let data = value
     if(end.toString().length && ~~value >= ~~end) {
       data = end
-      Toast({
+      Taro.showToast({
         title: '时间错误会默认忽略',
-        icon: 'fail'
+        icon: 'none'
       })
     }
     onChange && onChange({start: data})
@@ -44,9 +43,9 @@ export default class extends Component<IProps, IState> {
     let data = value
     if(start.toString().length && ~~value <= ~~start) {
       data = start
-      Toast({
+      Taro.showToast({
         title: '时间错误会默认忽略',
-        icon: 'fail'
+        icon: 'none'
       })
     }
     onChange && onChange({end: data})

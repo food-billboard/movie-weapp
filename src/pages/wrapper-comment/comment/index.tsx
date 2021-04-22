@@ -8,7 +8,7 @@ import MediaPicker from '~components/mediaPicker'
 import { EAction } from '~utils/types'
 import { createFieldsStore } from '~components/wrapForm/fieldsStore'
 import style from '~theme/style'
-import { size, withTry, router } from '~utils'
+import { size, withTry, router, Upload, EMediaType, TOiriginFileType } from '~utils'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import { postCommentToUser, postCommentToMovie, feedback, preCheckFeedback } from '~services'
 
@@ -70,7 +70,7 @@ export default class extends Component<any> {
         title = '电影评论'
         config = {
           ...config,
-          action: postCommentToMovie,
+          action: this.postCommentToMovie,
           param: {
             id: postInfo
           },
@@ -81,7 +81,7 @@ export default class extends Component<any> {
         title = '用户评论'
         config = {
           ...config,
-          action: postCommentToUser,
+          action: this.postCommentToUser,
           param: {
             id: postInfo
           },
@@ -98,12 +98,36 @@ export default class extends Component<any> {
         }
         break
     }
+    this.setState({
+      config
+    })
     Taro.setNavigationBarTitle({ title })
+  }
+
+  public postCommentToMovie = async (values) => {
+    return this.postComment(postCommentToMovie, values)
+  }
+
+  public postCommentToUser = async (values) => {
+    return this.postComment(postCommentToUser, values)
+  }
+
+  public postComment = async (action, values) => {
+    const { description, video, image, id } = values
+    return action({
+      id,
+      content: {
+        text: description,
+        video,
+        image
+      }
+    })
   }
 
   public feedback = async (values) => {
     Taro.hideLoading()
     Taro.showLoading({ mask: true, title: '预检查中...' })
+    const { description, video, image } = values
     const data = await preCheckFeedback()
     if (!data) {
       Taro.showToast({
@@ -114,7 +138,13 @@ export default class extends Component<any> {
       Taro.hideLoading()
       throw new Error()
     } else {
-      return await feedback(values)
+      return feedback({
+        content: {
+          text: description,
+          image,
+          video
+        }
+      })
     }
   }
 
@@ -132,27 +162,9 @@ export default class extends Component<any> {
 
   private handleSubmit = async () => {
 
-    Taro.showToast({
-      title: '功能完善中...',
-      icon: 'none',
-      duration: 1000
-    })
-    return
-
     const { config: { validate, action, param } } = this.state
-
-    fieldsStore.validateFields(validate, async (_, values) => {
-      //处理所有有错的表单项
-      // ----- 处理必填字段的错误
-      /*if(errors) {
-        Taro.showToast({
-          title: '信息好像没填对',
-          icon: 'none',
-          duration: 1000
-        })
-        return
-      }*/
-
+    const values = fieldsStore.getFieldsValue()
+    return new Promise((resolve, reject) => {
       //全空则无法提交
       if(Object.values(values).every((item: string | any[]) => !item.length)) {
         Taro.showToast({
@@ -160,54 +172,63 @@ export default class extends Component<any> {
           icon: 'none',
           duration: 1000
         })
-        return
+        return resolve(null)
       }
 
       const {
         media,
         ...nextValues
       } = values
-      //对媒体内容进行处理
-      // TODO
-      //
-      let image = []
-      let video = []
-      media.forEach(async(item) => {
-        await Taro.getFileInfo({
-          filePath: item
-        })
-        .then((data: any) => {
-          const { type } = data
-          
+
+      Taro.showLoading({ mask: true, title: '数据提交中...' })
+
+      Upload(media)
+      .then(data => {
+        return data.reduce((acc, cur) => {
+          const { value, type } = cur 
+          if(type === EMediaType.IMAGE) acc.image.push(value)
+          if(type === EMediaType.VIDEO) acc.video.push(value)
+          return acc 
+        }, {
+          video: [] as string[],
+          image: [] as string[]
         })
       })
-
-      Taro.showLoading({ mask: true, title: '发送中...' })
-      const [err, ] = await withTry(action)({
-        ...nextValues,
-        ...param,
-        image,
-        video
-      })
-      Taro.hideLoading()
-
-      if(err) {
-        Taro.showToast({
-          title: '发送错误，请重试',
-          icon: 'none',
-          duration: 1000
+      .then(data => {
+        const { image, video } = data
+        return action({
+          ...nextValues,
+          ...param,
+          image,
+          video
         })
-      }else {
+      })
+      .then(_ => {
+        Taro.hideLoading()
         Taro.showToast({
           title: '发送成功',
           icon: 'none',
           duration: 1000
         })
+        fieldsStore.resetFields()
         //返回上一路由
         if (this.router && this.router.params.target) {
           return router.replace(this.router.params.target)
+        }else {
+          return router.back()
         }
-      }
+      })
+      .catch(err => {
+        console.log(err)
+        Taro.hideLoading()
+        Taro.showToast({
+          title: '发送错误，请重试',
+          icon: 'none',
+          duration: 1000
+        })
+      })
+      
+      return resolve(null)
     })
   }
 

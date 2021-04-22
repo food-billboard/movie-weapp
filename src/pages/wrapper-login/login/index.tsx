@@ -67,7 +67,7 @@ export default class extends Component<any> {
       mobile,
       password
     })
-    console.log(userInfo)
+
     Taro.hideLoading()
 
     if (!userInfo) return

@@ -1,8 +1,9 @@
-import { uploadFile, uploadChunkFileCheck, uploadChunkFile, uploadChunkFileComplete } from '~services'
+import { uploadFile, checkUploadFile } from '~services'
 import Taro from '@tarojs/taro'
-import { EAuthType, EMediaType } from './globalType'
-// import SparkMd5 from 'spark-md5'
-import { getTemplatePathMime } from './tool'
+import { Upload as TusUpload, isSupported, PreviousUpload, HttpRequest } from 'tus-js-client'
+import { WeUpload } from 'chunk-file-upload'
+import { EAuthType, EMediaType } from '../globalType'
+import { getTemplatePathMime } from '../tool'
 
 const SparkMd5 = {
   ArrayBuffer: function() {}
@@ -18,10 +19,10 @@ const SparkMd5 = {
  */
 
 const fileManager = Taro.getFileSystemManager()
-const MAX_FILE_SIZE = 1024 * 1024 * 5
+const MAX_FILE_SIZE = 1024 * 500
 
 //读取临时文件地址获取文件
-const readFile = (tempPath, start, length?) => {
+const readFile = (tempPath: string, start: number, length?: number) => {
   return new Promise((resolve, reject) => {
     const config:any = {
       filePath: tempPath,
@@ -38,7 +39,7 @@ const readFile = (tempPath, start, length?) => {
 }
 
 //获取文件消息
-const getFileInfo = (tempPath) => {
+const getFileInfo = async (tempPath: string) => {
   return new Promise((resolve, reject) => {
     const config: any = {
       filePath: tempPath,
@@ -52,22 +53,11 @@ const getFileInfo = (tempPath) => {
 }
 
 const exitDataFn = (data: { suffix: string, chunksLength: number, size: number, auth: EAuthType }) => {
-  return uploadChunkFileCheck(data)
+  return checkUploadFile(data)
 }
 
 const uploadFn = (data: any) => {
-  return uploadChunkFile(data)
-}
-
-const completeFn = (data: { name: string, md5: string }) => {
-  return uploadChunkFileComplete(data)
-}
-
-const callback = (err, rest) => {
-  if(err) {
-    console.log('失败了')
-  }
-  return true
+  return uploadFile(data)
 }
 
 interface ITask {
@@ -121,14 +111,31 @@ const largeFileUpload = async (task: ITask) => {
   }
 }
 
+let UploadInstance
 
-const upload = async (file: string) => {
-  const size = await getFileInfo(file)
-  const mime = getTemplatePathMime(file)
-  if(!size) {
-    Taro.showToast({ mask: false, title: '文件不合理' })
-    return 
+export type TOiriginFileType = {
+  url: string 
+  type: EMediaType
+  [key: string]: any
+}
+
+export const Upload = async (file: TOiriginFileType | TOiriginFileType[]): Promise<{ value: string, type: EMediaType }[]> => {
+  console.log(file, 1111111)
+  const files = Array.isArray(file) ? file : [file]
+  if(!UploadInstance) UploadInstance = new WeUpload()
+  for(let i = 0; i < files.length; i ++) {
+    const file = files[i]
+    const { url, type } = file 
+    const size = await getFileInfo(url)
+    const mime = getTemplatePathMime(url)
+    if(!size) {
+      Taro.showToast({ mask: false, title: '文件不合理' })
+      return Promise.reject([])
+    }
+
   }
+
+  return Promise.resolve([])
 
   let sizeList:Array<any> = []
   let now = 0
@@ -165,5 +172,3 @@ const upload = async (file: string) => {
     })
   }
 }
-
-export default upload

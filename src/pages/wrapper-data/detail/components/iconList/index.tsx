@@ -71,7 +71,7 @@ export default class extends Component<IProps, IState> {
         <ScrollView
           scrollX={true}
           className='icon-list-content'
-          style={{...style.border(1, 'disabled', 'dashed', 'all')}}
+          style={{...style.border(1, 'disabled', 'dashed', 'all'), boxSizing: 'content-box', boxShadow: '0 0 10rpx rgba(0, 0, 0, 0.12)'}}
         >
           {
             showList.map(val => {

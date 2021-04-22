@@ -158,14 +158,14 @@ export default class Content extends Component<IProps, IState>{
               }).join(' ')}</Text>
             </View>
             <View className='at-row at-row__justify--between data-detail-content-main-info-time-publish'>
-              <View className='at-col at-col-5'>
+              <View className='at-col at-col-6' style={{paddingRight: '1em'}}>
                 <Tag className={['data-detail-content-icon']} />
                 时间: 
                 <Text className={'text'}
                   style={{ ...style.color('primary') }}
                 >{formatTime(createdAt)}</Text>
               </View>
-              <View className='at-col at-col-5'>
+              <View className='at-col at-col-6' style={{paddingRight: '1em'}}>
                 <Tag className={['data-detail-content-icon']} />
                 上映: 
                 <Text className={'text'}
@@ -174,14 +174,14 @@ export default class Content extends Component<IProps, IState>{
               </View>
             </View>
             <View className='at-row at-row__justify--between data-detail-content-main-info-area-lang'>
-              <View className='at-col at-col-5 lang'>
+              <View className='at-col at-col-6 lang' style={{paddingRight: '1em'}}>
                 <Tag className={['data-detail-content-icon']} />
                 语言: 
                 <Text className={'text'}
                   style={{ ...style.color('primary') }}
                 >{language.map((val: ItypeList) => val.value).join(' ')}</Text>
               </View>
-              <View className='at-col at-col-5 area'>
+              <View className='at-col at-col-6 area' style={{paddingRight: '1em'}}>
                 <Tag className={['data-detail-content-icon']} />
                 地区: 
                 <Text className={'text'}

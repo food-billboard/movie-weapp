@@ -38,7 +38,7 @@ export interface IState {
   [key: string]: any
 }
 
-const INIT_QUERY = { pageSize: 10, currPage: 1 }
+const INIT_QUERY = { pageSize: 10, currPage: 0 }
 
 export default class List extends Component<IProps, IState> {
 

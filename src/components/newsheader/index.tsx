@@ -37,6 +37,11 @@ export default class NewsHead extends Component<IProps, IState>{
     handleSizeChange: noop
   }
 
+  componentDidMount = () => {
+    const { handleSizeChange } = this.props 
+    handleSizeChange && handleSizeChange()
+  }
+
   handleSizeChange = (show) => this.props.handleSizeChange && this.props.handleSizeChange(show)
 
   public handleClick = (id: string) => router.push(routeAlias.detail, { id })
@@ -44,7 +49,7 @@ export default class NewsHead extends Component<IProps, IState>{
   public render() {
 
     const { content, style: propsStyle } = this.props
-    const { detail, name, id, image } = content
+    const { detail, name, id, image } = content || {}
 
     return (
       <View className='newsheader'

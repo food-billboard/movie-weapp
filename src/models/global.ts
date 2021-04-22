@@ -8,11 +8,12 @@ export default {
     userInfo: null
   },
   effects: {
-    * getUserInfo({}, { call, put }) {
+    * getUserInfo({ prompt=true }, { call, put }) {
       const token = yield getToken()
 
       function * unlogin() {
         Taro.hideLoading()
+        if(!prompt) return false 
         const res = yield Taro.showModal({
           title: '您还未登录',
           content: "是否前往登录"

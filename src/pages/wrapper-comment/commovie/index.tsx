@@ -8,7 +8,7 @@ import GScrollView from '~components/scrollList'
 import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
 import throttle from 'lodash/throttle'
-import { withTry, ESourceTypeList, router, routeAlias } from '~utils'
+import { withTry, ESourceTypeList, router, routeAlias, EAction } from '~utils'
 import { connect } from 'react-redux'
 import { mapDispatchToProps, mapStateToProps } from './connect'
 import { getCustomerMovieCommentList, getMovieCommentList, getMovieDetailSimple, putLike, cancelLike } from '~services'
@@ -76,12 +76,12 @@ export default class extends Component<any> {
     const { data } = this.state
     const { userInfo } = this.props
     const method = userInfo ? getCustomerMovieCommentList : getMovieCommentList
-    const resData = await method({ id: this.id, ...query })
+    const { comment=[] } = await method({ id: this.id, ...query }) || {}
 
     this.setState({
-      data: [ ...(isInit ? [] : [...data]), ...resData]
+      data: [ ...(isInit ? [] : [...data]), ...(comment || [])]
     })
-    return resData
+    return comment
   }
 
   public throttleFetchData = throttle(this.fetchData, 2000)
@@ -108,8 +108,8 @@ export default class extends Component<any> {
    */
   public publish = async (isUserCall: boolean, commentId: string) => {
     const param:NComment.Comment_Params = {
-      action: isUserCall ? NComment.EAction.COMMENT_USER : NComment.EAction.COMMENT_MOVIE,
-      postInfo: commentId
+      action: isUserCall ? EAction.COMMENT_USER : EAction.COMMENT_MOVIE,
+      postInfo: commentId || this.id
     } 
     router.push(routeAlias.toComment, param)
   }

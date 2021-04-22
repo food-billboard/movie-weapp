@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import GInput from '~components/input'
 import style from '~theme/style'
-import { Toast } from '~components/toast'
 import './index.scss'
 
 export interface IProps {
@@ -30,9 +29,9 @@ export default class extends Component<IProps, IState>{
     let data = value
     if(max.toString().length && ~~max <= value) {
       data = max
-      Toast({
+      Taro.showToast({
         title: '价格错误默认会忽略',
-        icon: 'fail'
+        icon: 'none'
       })
     }
     onChange({min: data})
@@ -44,9 +43,9 @@ export default class extends Component<IProps, IState>{
     let data = value
     if(min.toString().length && ~~min >= value) {
       data = min
-      Toast({
+      Taro.showToast({
         title: '价格错误默认会忽略',
-        icon: 'fail'
+        icon: 'none'
       })
     }
 

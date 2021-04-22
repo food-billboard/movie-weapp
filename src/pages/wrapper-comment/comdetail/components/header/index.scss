@@ -18,6 +18,9 @@
       }
       .time{
         text-align:right;
+        font-size: small;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
     }
     .contnet-main {
@@ -37,7 +40,7 @@
           justify-content: center;
           align-items: center;
           .content-footer-icon{
-            font-size:32px;
+            font-size:40px;
             margin-right:10px;
           }
         }

@@ -34,7 +34,7 @@ export default memo((props: IProps) => {
     //img
     src,
     webp = false,
-    mode = 'scaleToFill',
+    mode = 'aspectFill', //scaleToFill
     lazyLoad = true,
     showMenuByLongpress = false,
     handleClick,

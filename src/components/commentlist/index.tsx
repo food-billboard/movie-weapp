@@ -5,13 +5,13 @@ import { AtIcon, AtAvatar } from 'taro-ui'
 import CurtainVideo from './components/curtainVideo'
 import Curtain from '../curtain'
 import ImageLoading from '../imageLoading'
+import EmptyTry from '../empty-try'
 import { router, formatTime, formatNumber, EMediaType, routeAlias } from '~utils'
 import style from '~theme/style'
 import { TypeColor } from '~theme/color'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import noop from 'lodash/noop'
-// import VideoStaticImage from '~assets/video.png'
-import VideoStaticImage from '../../assets/video.png'
+import VideoStaticImage from '~assets/video.png'
 
 import './index.scss'
 
@@ -180,42 +180,39 @@ class List extends Component<IProps, IState>{
                     <AtAvatar image={avatar || ''} text='头像' circle></AtAvatar>
                   </View>
                   <View 
-                    className="at-row"
-                    style={{flexDirection: 'column'}}
+                    style={{flexDirection: 'column', flex: 1}}
                   >
 
-                    <View className="comment-item-header-info at-col">
+                    <View className="comment-item-header-info at-row">
                       <View
-                        className={'comment-item-header-info-username'}
+                        className={'comment-item-header-info-username at-col at-col-8'}
                         style={{ ...style.color('thirdly') }}
                       >
                         <Text
                           className={'comment-item-header-info-username-content'}
-                          onClick={this.props.comment.bind(this, true, userId, _id)}
+                          onClick={this.props.comment.bind(this, true, _id)}
                           style={{ ...style.color('primary') }}
                         >{username}</Text>
                         <Text style={{flex: 1}}>说: </Text>
                       </View>
                       <View
-                        className={'comment-item-up'}
-                        onClick={this.props.like.bind(this, userId, like)}
+                        className={'comment-item-up at-col at-col-4'}
+                        onClick={this.props.like.bind(this, _id, like)}
                         style={{ ...style.color('thirdly') }}
                       >
                         <View className={'up-text'}>
                           {formatNumber(total_like)}
-                          <AtIcon value={like ? 'heart-2' : 'heart'} size={SYSTEM_PAGE_SIZE(14)} />
+                          <AtIcon value={like ? 'heart-2' : 'heart'} size={SYSTEM_PAGE_SIZE(24)} customStyle={{textIndent: '.2em'}} />
                         </View>
                       </View>
                     </View>
 
-                    <View className="at-col">
-                      <View
-                        className={'comment-item-header-sub-time'}
-                        style={{ ...style.color('thirdly') }}
-                      >
-                        {formatTime(createdAt)}
-                      </View>
-                    </View> 
+                    <View
+                      className={'comment-item-header-sub-time'}
+                      style={{ ...style.color('thirdly') }}
+                    >
+                      {formatTime(createdAt)}
+                    </View>
 
                   </View>
                 </View>         
@@ -279,32 +276,36 @@ class List extends Component<IProps, IState>{
                 {
                   !!this.props.renderExtra && this.props.renderExtra(item)
                 }
-                <ScrollView
-                  scrollX
-                  className='comment-item-footer'
+                <EmptyTry
+                  value={comment_users}
                 >
-                  {
-                    comment_users.map((value) => {
-                      const { avatar, _id: id } = value
-                      return (
-                        <View className='comment-item-footer-img'
-                          key={id}
-                          onClick={this.getUser.bind(this, id)}
-                        >
-                          <ImageLoading
-                            src={avatar || ''}
-                            loadingProps={{ content: '' }}
-                            customStyle={{
-                              display: 'inline-block',
-                              width: `${SYSTEM_PAGE_SIZE(25)}px`,
-                              height: `${SYSTEM_PAGE_SIZE(25)}px`,
-                            }}
-                          />
-                        </View>
-                      )
-                    })
-                  }
-                </ScrollView>
+                  <ScrollView
+                    scrollX
+                    className='comment-item-footer'
+                  >
+                    {
+                      (Array.isArray(comment_users) ? comment_users : []).map((value) => {
+                        const { avatar, _id: id } = value
+                        return (
+                          <View className='comment-item-footer-img'
+                            key={id}
+                            onClick={this.getUser.bind(this, id)}
+                          >
+                            <ImageLoading
+                              src={avatar || ''}
+                              loadingProps={{ content: '' }}
+                              customStyle={{
+                                display: 'inline-block',
+                                width: `${SYSTEM_PAGE_SIZE(25)}px`,
+                                height: `${SYSTEM_PAGE_SIZE(25)}px`,
+                              }}
+                            />
+                          </View>
+                        )
+                      })
+                    }
+                  </ScrollView>
+                </EmptyTry>
               </View>
             )
           })

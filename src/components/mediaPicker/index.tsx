@@ -127,6 +127,7 @@ export default class extends Component<IProps, IState> {
 
 
     this.onChange(newStateValue)
+    this.value = newStateValue   
   }
 
   //图片选择
@@ -155,10 +156,10 @@ export default class extends Component<IProps, IState> {
         const { path } = val
         return {
           url: path,
-          type: 'IMAGE'
+          type: EMediaType.IMAGE
         }
       }),
-      ...stateValue,
+      ...stateValue
     ]
 
     this.onChange(newStateValue)

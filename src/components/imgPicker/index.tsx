@@ -2,7 +2,6 @@ import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { AtImagePicker } from 'taro-ui'
 import { IMAGE_CONFIG, FORM_ERROR } from '~config'
-import { Toast } from '../toast'
 
 import { ICommonFormProps, ICommonFormState } from '~utils'
 
@@ -69,10 +68,9 @@ export default class extends Component<IProps, IState> {
     const fileLen = files.length
     if (operationType === 'add') {
       if (fileLen > count) {
-        Toast({
+        Taro.showToast({
           title: '超出图片增加数',
-          icon: 'fail',
-          duration: 1000
+          icon: 'none'
         })
         return
       }
@@ -80,8 +78,7 @@ export default class extends Component<IProps, IState> {
     if (this.initialValue === undefined && typeof initialValue !== 'undefined') this.initialValue = initialValue
     this.setImageItem(files)
     handleChange && handleChange(files, operationType, index)
-
-    Toast({
+    Taro.showToast({
       title: operationType === 'add' ? '添加成功' : '删除成功',
       icon: 'success',
       duration: 500

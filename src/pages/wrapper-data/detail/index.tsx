@@ -2,6 +2,7 @@ import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import GVideo from '~components/video'
+import EmptyTry from '~components/empty-try'
 import GButton from '~components/button'
 import List from './components/imglist'
 import Content from './components/content'
@@ -14,7 +15,7 @@ import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
 import { connect } from 'react-redux'
 import { mapDispatchToProps, mapStateToProps } from './connect'
-import { withTry, router, routeAlias } from '~utils'
+import { withTry, router, routeAlias, EAction } from '~utils'
 import { getCustomerMovieDetail, getUserMovieDetail, putStore, cancelStore, putRate } from '~services'
 import './index.scss'
 
@@ -57,25 +58,34 @@ export default class extends Component<any> {
     }
     Taro.showLoading({ mask: true, title: '凶猛加载中' })
     const method = userInfo ? getCustomerMovieDetail : getUserMovieDetail
-    const data = await method(this.id)
-    const { comment, same_film = [], name, _id } = data
-    // const baseTab = [{
-    //   _id,
-    //   same_name: name,
-    //   type: 'NAMESAKE'
-    // }]
-    this.setState({
-      // tab: same_film.length ? [...baseTab, ...same_film] : [...baseTab],
-      data,
-      commentData: comment,
+    return method(this.id)
+    .then(data => {
+      const { comment, same_film = [], name, _id } = data
+      // const baseTab = [{
+      //   _id,
+      //   same_name: name,
+      //   type: 'NAMESAKE'
+      // }]
+      this.setState({
+        // tab: same_film.length ? [...baseTab, ...same_film] : [...baseTab],
+        data,
+        commentData: comment,
+      })
+      Taro.hideLoading()
     })
-    Taro.hideLoading()
+    .catch(err => {
+      Taro.showToast({
+        title: '数据获取出错',
+        icon: 'none'
+      })
+      Taro.hideLoading()
+    })
   }
 
   //打开评论界面
   public handleComment = async () => {
     let param: NComment.Comment_Params = {
-      action: NComment.EAction.COMMENT_MOVIE,
+      action: EAction.COMMENT_MOVIE,
       postInfo: this.id
     }
     router.push(routeAlias.toComment, param)
@@ -186,71 +196,79 @@ export default class extends Component<any> {
             }}
           />
         </View>
-        <View className='image'>
-          <View className='title'>
-            <Title
-              title={'截图'}
-            />
-          </View>
-          <List
-            list={images}
-          />
-        </View>
-        <View className='actor'>
-          <View className='title'>
-            <Title
-              title={'卡司'}
-            />
-          </View>
-          <Actor list={(actor || []).map(item => {
-            const { name, avatar } = item
-            return {
-              name,
-              image: avatar
-            }
-          })} />
-        </View>
-        {
-          Array.isArray(tag) && !!tag.length && (
-            <View className='tag'>
-              <View className='title'>
-                <Title
-                  title={'大家都说'}
-                />
-              </View>
-              <GTag
-                list={tag.map(item => {
-                  const { text } = item
-                  return {
-                    value: text
-                  }
-                })}
-              ></GTag>
-            </View>
-          )
-        }
-        {
-          Array.isArray(commentData) && !!commentData.length && (
-            <View className='comment'>
-              <View className='title'>
-                <Title
-                  title={'大家评论'}
-                />
-              </View>
-              <IconList
-                list={commentData.map(comment => {
-                  const { content: { text }, _id, user_info: { avatar } } = comment
-                  return {
-                    id: _id,
-                    content: text || '[ 媒体 ]',
-                    image: avatar
-                  }
-                })}
-                handleClick={() => router.push(routeAlias.comment, { id: this.id })}
+        <EmptyTry
+          value={images}
+        >
+          <View className='image'>
+            <View className='title'>
+              <Title
+                title={'截图'}
               />
             </View>
-          )
-        }
+            <List
+              list={images}
+            />
+          </View>
+        </EmptyTry>
+        <EmptyTry
+          value={actor}
+        >
+          <View className='actor'>
+            <View className='title'>
+              <Title
+                title={'卡司'}
+              />
+            </View>
+            <Actor list={(actor || []).map(item => {
+              const { name, avatar } = item
+              return {
+                name,
+                image: avatar
+              }
+            })} />
+          </View>
+        </EmptyTry>
+        <EmptyTry
+          value={tag}
+        >
+          <View className='tag'>
+            <View className='title'>
+              <Title
+                title={'大家都说'}
+              />
+            </View>
+            <GTag
+              list={tag?.map(item => {
+                const { text } = item
+                return {
+                  value: text
+                }
+              })}
+            ></GTag>
+          </View>
+        </EmptyTry>
+        <EmptyTry
+          value={commentData}
+        >
+          <View className='comment'>
+            <View className='title'>
+              <Title
+                title={'大家评论'}
+              />
+            </View>
+            <IconList
+              list={commentData?.map(comment => {
+                const { content: { text }, _id, user_info: { avatar } } = comment
+                return {
+                  id: _id,
+                  content: text || '[ 媒体 ]',
+                  image: avatar
+                }
+              })}
+              handleClick={() => router.push(routeAlias.comment, { id: this.id })}
+            />
+          </View>
+        </EmptyTry>
         <View className='other'>
           <GButton
             type={'secondary'}

@@ -18,6 +18,7 @@
     &-info{
       display:flex;
       align-items: center;
+      line-height: 1.6;
       &-username{
         overflow:hidden;
         display:flex;
@@ -41,7 +42,7 @@
       }
     }
     .comment-item-header-sub-time{
-
+      font-size:small;
     }
     .comment-item-header-sub-rate{
 

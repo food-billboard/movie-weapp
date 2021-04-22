@@ -93,7 +93,7 @@ export default class extends Component<any> {
   public publish = async (_, commentId) => {
     let param: NComment.Comment_Params = {
       action: EAction.COMMENT_USER,
-      postInfo: commentId
+      postInfo: commentId,
     }
     router.push(routeAlias.toComment, param)
   }

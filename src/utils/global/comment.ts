@@ -10,6 +10,7 @@ declare namespace NComment {
   export interface Comment_Params {
     action: EAction
     postInfo?: string
+    target?: string 
   }
 
 }

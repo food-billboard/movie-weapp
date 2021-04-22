@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { AtTimeline, AtButton, AtTag } from 'taro-ui'
 import GInput from '../input'
-import { Toast, IQuery } from '~components/toast'
 import { Item } from 'taro-ui/types/timeline'
 import { isObject, ICommonFormProps, ICommonFormState } from '~utils'
 import customStyle from '~theme/style'
@@ -97,6 +96,11 @@ class Rest extends Component<IProps, IState> {
       const newItem = {
         title: data,
         ..._defaultItemStyle
+      } as Item
+
+      const newStatusData: IStatusData = {
+        value: newItem,
+        index: itemLen
       }
       //新数据
       const newValue = [...value, newItem]
@@ -104,11 +108,7 @@ class Rest extends Component<IProps, IState> {
         disabled: false,
         //记录最近操作
         status: [...status, operateType.add],
-        statusData: [...statusData, {
-          value: newItem,
-          index: itemLen
-        }
-        ]
+        statusData: [ ...statusData, newStatusData ],
       }, () => {
         this.props.handleChange && this.props.handleChange(newValue)
         this.inputRef.current!.reset()
@@ -136,7 +136,7 @@ class Rest extends Component<IProps, IState> {
       const { value } = this.props
       const index = value.findIndex((val: any) => val.title === data)
 
-      let config: IQuery = { title: '' }
+      let config: any = { title: '' }
 
       //查看输入框内容是否在timeline中存在
       if (index < 0) {
@@ -159,8 +159,7 @@ class Rest extends Component<IProps, IState> {
           this.inputRef.current!.reset()
         })
       }
-
-      Toast(config)
+      Taro.showToast(config)
     }
   }
 

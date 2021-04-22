@@ -36,6 +36,7 @@ export default class extends Component<IProps> {
   }
 
   public handleClick = (id: string, origin: ESourceType) => {
+    console.log(1111111111)
     if(origin === ESourceType.MOVIE) {
       router.push(routeAlias.comment, { id })
     }else {
@@ -53,19 +54,11 @@ export default class extends Component<IProps> {
       }
     } } = this.props
 
-    
     return(
       <View className='origin at-row'
         style={{...style.border(1, 'thirdly', 'dashed', 'all')}}
-        onClick={() => {this.handleClick.call(this, _id, source_type)}}
+        onClick={() => { this.handleClick.call(this, _id, source_type) }}
       >
-        {/* {
-          (image && image.length) ?
-          <View className='at-col at-col-2'>
-            <ImageLoading src={image} loadingProps={{content: ''}} />
-          </View>
-          : null
-        } */}
         <View className={(false) ? 'at-col-10' : 'at-col-12'}>
           <Ellipsis
             text={content ? content : '[媒体]'}

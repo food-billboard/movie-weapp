@@ -1,7 +1,9 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, Button } from '@tarojs/components'
-import GRadio from '~components/radio'
+import { AtRadio } from 'taro-ui'
+import AtRadioRef from 'taro-ui/types/radio'
+import { merge } from 'lodash'
 import Model from '~components/model'
 import List from '~components/linearlist'
 import GColor from './components/color'
@@ -9,7 +11,6 @@ import { TypeColor, colorChange, colorStyleChange } from '~theme/color'
 import { router, routeAlias, withTry, clearToken } from '~utils'
 import { EAction } from '~utils/global'
 import { createSystemInfo } from '~config'
-import { Toast } from '~components/toast'
 import { RadioOption } from 'taro-ui/types/radio'
 import style from '~theme/style'
 import { signout, getAppInfo } from '~services'
@@ -38,11 +39,11 @@ const colorControl = {
 
 const systemInfo = createSystemInfo()
 
+const sleep = (times=1000) => new Promise((resolve) => setTimeout(resolve, times))
+
 export default class Setting extends Component<any>{
 
   public commentRef = React.createRef<Comment>()
-
-  public radioRef = React.createRef<GRadio>()
 
   public colorRef = React.createRef<GColor>()
 
@@ -58,18 +59,12 @@ export default class Setting extends Component<any>{
     const [, data] = await withTry(getAppInfo)()
     const { info="信息似乎未获取到，但是可以知道这是一个电影推荐的小程序" } = data || {}
     Taro.hideLoading()
+
+    const newModel = merge({}, model, { content: info })
     
     this.setState({
-      about: {
-        ...nextAbout,
-        isOpen: true,
-        model,
-        content: info
-      },
-      activeModel: {
-        ...model,
-        isOpen: true
-      }
+      about: merge({}, nextAbout, { isOpen: true, model: newModel }),
+      activeModel: merge({}, newModel, { isOpen: true })
     })
   }
 
@@ -85,14 +80,18 @@ export default class Setting extends Component<any>{
         index: (index + 1) % 2
       }
     })
+
     Taro.showLoading({ mask: true, title: '稍等一下' })
     const [, data] = await withTry(signout)()
     Taro.hideLoading()
     if (data) {
       clearToken()
-      Toast({
-        title: '好了',
-        icon: 'success'
+      Taro.showToast({
+        title: '操作成功',
+        icon: 'success',
+        duration: 1000,
+        mask: true,
+        complete: Taro.switchTab.bind(this, { url: '../main/index' })
       })
     }
   }
@@ -172,18 +171,17 @@ export default class Setting extends Component<any>{
 
   //控制色调开启关闭
   public colorStyleChange = async (value: TOptionType) => {
-    this.radioRef.current!.handleChange(value)
+    Taro.showLoading({
+      title: '切换中...'
+    })
     const data = this.colorRef.current!.state.active
-    let status
-    if (value === colorControl.on) {
-      status = true
-    } else if (value === colorControl.off) {
-      status = false
-    }
+    let status: boolean = value === colorControl.on
     colorChange(status, data, true)
     this.setState({
       colorStyle: status
     })
+    await sleep()
+    Taro.hideLoading()
   }
 
   //颜色选择 
@@ -245,19 +243,9 @@ export default class Setting extends Component<any>{
     if (index == 0) {
       const { button: { model, index, ...nextButton } } = this.state
       this.setState({
-        button: {
-          ...nextButton,
-          model,
-          index: (index + 1) % 2,
-          isOpen: true
-        },
-        activeModel: model,
+        button: merge({}, nextButton, { model, index: (index + 1) % 2, isOpen: true }),
+        activeModel: merge({}, model, { isOpen: true }),
       })
-      Taro.showLoading({ mask: true, title: '稍等一下...' })
-      await withTry(signout)()
-      clearToken()
-      Taro.hideLoading()
-      Taro.switchTab({ url: '../main/index' })
     } else {
       router.push(routeAlias.login)
     }
@@ -285,15 +273,12 @@ export default class Setting extends Component<any>{
       <View className='setting'>
         <View className='setting-list'>
           <List list={settingList} />
-          <GRadio
-            style={{ marginTop: '48px' }}
-            extraFactor={false}
-            needHiddenList={false}
-            ref={this.radioRef}
-            radioboxOption={this.colorStyle}
+          <AtRadio
+            customStyle={{marginTop: '48px'}}
+            options={this.colorStyle}
             value={activeMode}
-            handleChange={this.colorStyleChange}
-          ></GRadio>
+            onClick={this.colorStyleChange}
+          />
           <GColor
             ref={this.colorRef}
             style={{
