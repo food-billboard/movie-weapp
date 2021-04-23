@@ -82,10 +82,10 @@ export const routeConfig = [
   { path: 'pages/wrapper-comment/comment/index', alias: routeAlias.toComment }
 ]
 
-//轮播图路由跳转类型"MOVIE", "SPEICAL", "COMMENT"
+//轮播图路由跳转类型"MOVIE", "SPECIAL", "COMMENT"
 export enum ESwiperRouteType {
   MOVIE = "MOVIE",
-  SPECIAL = "SPEICAL",
+  SPECIAL = "SPECIAL",
   COMMENT = "COMMENT"
 }
 

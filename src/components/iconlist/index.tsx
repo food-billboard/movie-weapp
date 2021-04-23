@@ -19,7 +19,7 @@ export interface IList {
   type?: Array<ItypeList>
   time: string | number
   hot: number
-  id: string
+  _id: string
   rate: number
   description: string
   store?: boolean
@@ -110,22 +110,22 @@ export default class IconList extends Component<IProps>{
                 className='at-col at-col-5'
               ></View>
             )
-            const { id, name, image, hot, rate, store, author } = value
+            const { _id, name, image, hot, rate, store, author } = value
             const imageList = Array.isArray(image) ? image : [image]
             return (
               <View
                 className='icon-list-content at-col at-col-5'
                 style={{ ...style.backgroundColor('disabled') }}
-                key={id}
+                key={_id}
               >
                 <View
                   className='icon-list-content-poster'
-                  onClick={(event) => { this.goTo.call(this, name, id, event) }}
+                  onClick={(event) => { this.goTo.call(this, name, _id, event) }}
                 >
                   {/* <ImageLoading src={image} mode={'scaleToFill'} /> */}
                   <Swipper style={{height: '100%'}} list={imageList} />
                   <View 
-                    onClick={this.handleStore.bind(this, id, store)}
+                    onClick={this.handleStore.bind(this, _id, store)}
                     className="at-icon at-icon-heart icon-list-content-poster-store"
                   ></View>
                 </View>
@@ -133,7 +133,7 @@ export default class IconList extends Component<IProps>{
                   <View
                     className='icon-list-content-main-name'
                     style={{ ...style.color('primary') }}
-                    onClick={this.handleClick.bind(this, id)}
+                    onClick={this.handleClick.bind(this, _id)}
                   >{name}</View>
                   <View className="icon-list-content-main-rate">
                     <Rate
@@ -148,7 +148,7 @@ export default class IconList extends Component<IProps>{
                   >
                     <View className="icon-list-content-main-extra-count">
                       {formatNumber(hot)}
-                      <Text style={{fontSize: '70&'}}>人看</Text>
+                      <Text style={{fontSize: '70%'}}>人看</Text>
                     </View>
                     <View onClick={(e) => this.getUserInfo.call(this, e, author._id)}>
                       <AtAvatar size="small" circle image={author.avatar} text={author.username}></AtAvatar>

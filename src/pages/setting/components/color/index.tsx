@@ -2,7 +2,7 @@ import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, ScrollView } from '@tarojs/components'
 import { Color, defaultColor } from '~theme/color'
-import { isObject } from '~utils'
+import { isObject, sleep } from '~utils'
 import { createSystemInfo } from '~config'
 
 import './index.scss'
@@ -35,10 +35,15 @@ export default class extends Component<IProps, IState> {
   }
 
   //点击
-  public handleClick = (val) => {
+  public handleClick = async (val: string) => {
+    const { active } = this.state 
+    if(active === val) return 
+    Taro.showLoading({ title: '切换中...', mask: true })
     this.setState({
       active: val
     })
+    await sleep()
+    Taro.hideLoading()
   }
 
   public render() {

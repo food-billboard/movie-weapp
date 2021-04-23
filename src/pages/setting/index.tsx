@@ -2,13 +2,12 @@ import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, Button } from '@tarojs/components'
 import { AtRadio } from 'taro-ui'
-import AtRadioRef from 'taro-ui/types/radio'
 import { merge } from 'lodash'
 import Model from '~components/model'
 import List from '~components/linearlist'
 import GColor from './components/color'
 import { TypeColor, colorChange, colorStyleChange } from '~theme/color'
-import { router, routeAlias, withTry, clearToken } from '~utils'
+import { router, routeAlias, withTry, clearToken, sleep } from '~utils'
 import { EAction } from '~utils/global'
 import { createSystemInfo } from '~config'
 import { RadioOption } from 'taro-ui/types/radio'
@@ -38,8 +37,6 @@ const colorControl = {
 }
 
 const systemInfo = createSystemInfo()
-
-const sleep = (times=1000) => new Promise((resolve) => setTimeout(resolve, times))
 
 export default class Setting extends Component<any>{
 
@@ -171,8 +168,11 @@ export default class Setting extends Component<any>{
 
   //控制色调开启关闭
   public colorStyleChange = async (value: TOptionType) => {
+    const { colorStyle } = this.state 
+    if(colorStyle === value) return 
     Taro.showLoading({
-      title: '切换中...'
+      title: '切换中...',
+      mask: true
     })
     const data = this.colorRef.current!.state.active
     let status: boolean = value === colorControl.on
@@ -185,8 +185,8 @@ export default class Setting extends Component<any>{
   }
 
   //颜色选择 
-  public colorSelect = async (value) => {
-    this.colorRef.current!.handleClick(value)
+  public colorSelect = async (value: string) => {
+    await this.colorRef.current!.handleClick(value)
     const { colorStyle } = this.state
     colorChange(colorStyle, value, true)
     this.setState({})

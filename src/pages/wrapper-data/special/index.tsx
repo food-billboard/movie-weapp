@@ -47,7 +47,7 @@ export default class extends Component<any>{
     const { data } = this.state
     const { name, movie, poster } = await getSpecial({id: this.id, ...query})
 
-    await this.setState({
+    this.setState({
         data: [ ...(isInit ? [] : data), ...movie.map(item => {
           const { poster, classify, _id, publish_time, ...nextItem } = item
           return {

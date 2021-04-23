@@ -78,23 +78,23 @@ export default class List extends Component<IProps>{
       <View className='list-component'>
         {
           list.map((value:IList) => {
-            const { image, name, type, time, hot, id, rate, description, store } = value
+            const { image, name, type, time, hot, _id, rate, description, store } = value
             const imageList = Array.isArray(image) ? image : [image]
             return (
               <View className='list-content'
                 style={{ ...(isObject(propsStyle) ? propsStyle : {}), ...style.backgroundColor('disabled') }}
-                key={id}
+                key={_id}
               >
                 <View 
                   className="list-content-main"
-                  onClick={this.goTo.bind(this, id)}
+                  onClick={this.goTo.bind(this, _id)}
                 >
                   <View className='list-content-main-poster'>
                     <Swipper
                       style={{height: '100px'}}
                       list={imageList}
                     />
-                    <View className="at-icon at-icon-heart list-content-icon" onClick={this.handleStore.bind(this, id, store)}></View>
+                    <View className="at-icon at-icon-heart list-content-icon" onClick={this.handleStore.bind(this, _id, store)}></View>
                   </View>
                   <View className='list-content-main-detail'
                     style={{ ...style.backgroundColor('disabled'), ...style.color('secondary') }}

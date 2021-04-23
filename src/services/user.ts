@@ -56,8 +56,16 @@ export const getRank = (count:number=6) => {
 }
 
 //专题
-export const getSpecial = (id: string) => {
-  return request('GET', '/api/user/home/special', { query: { _id: id } })
+export const getSpecial = ({
+  id,
+  currPage,
+  pageSize 
+}: {
+  id: string,
+  currPage?: number
+  pageSize?: number 
+}) => {
+  return request('GET', '/api/user/home/special', { query: { _id: id, currPage, pageSize } })
 }
 
 //轮播图

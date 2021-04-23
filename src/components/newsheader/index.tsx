@@ -56,7 +56,12 @@ export default class NewsHead extends Component<IProps, IState>{
         style={propsStyle}
         onClick={this.handleClick.bind(this, id)}>
         <View className='newsheader-poster'>
-          <ImageLoading src={image} loadingProps={{ content: '' }} mode={'widthFix'} />
+          <ImageLoading 
+            customStyle={{display: 'flex'}} 
+            src={image} 
+            loadingProps={{ content: '' }} 
+            mode={'widthFix'} 
+          />
         </View>
         <View className='newsheader-detail'>
           <View className="newsheader-detail-content">
