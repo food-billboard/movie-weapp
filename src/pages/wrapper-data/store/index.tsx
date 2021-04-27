@@ -40,12 +40,11 @@ export default class Index extends Component<any> {
 
     this.setState({
       data: [...(isInit ? [] : data), ...store.map(item => {
-        const { poster, classify, _id, publish_time, ...nextItem } = item
+        const { poster, classify, publish_time, ...nextItem } = item
         return {
           ...nextItem,
           image: poster,
           type: classify.map(item => item.name),
-          id: _id,
           time: publish_time,
         }
       })]
@@ -66,20 +65,7 @@ export default class Index extends Component<any> {
         sourceType={ESourceTypeList.Scope}
         scrollWithAnimation={true}
         renderContent={
-          <List list={data} />
-        // <View>
-        //   {
-        //     data.map(val => {
-        //       const { _id: id, poster, description, ...nextVal } = val
-        //       return <List content={{
-        //         ...nextVal,
-        //         id,
-        //         image: poster,
-        //         detail: description,
-        //       }} key={id} />
-        //     })
-        //   }
-        // </View>
+          <List reload={this.fetchData.bind(this, {}, true)} list={data} />
         }
         fetch={this.throttleFetchData}
       ></GScrollView>

@@ -44,7 +44,6 @@ class Index extends Component<IProps>{
         indicatorActiveColor={TypeColor['disabled']}
         circular
         indicatorDots
-        autoplay={false}
         className='swiper'
       >
         {list.map((value) => {

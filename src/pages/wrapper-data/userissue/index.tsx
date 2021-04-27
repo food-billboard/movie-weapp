@@ -42,12 +42,11 @@ export default class extends Component<any>{
 
     this.setState({
       data: [ ...(isInit ? [] : data), ...issue.map(item => {
-        const { poster, classify, _id, publish_time, ...nextItem } = item
+        const { poster, classify, publish_time, ...nextItem } = item
         return {
           ...nextItem,
           image: poster,
           type: classify.map(item => item.name),
-          id: _id,
           time: publish_time,
         }
       }) ]
@@ -66,11 +65,12 @@ export default class extends Component<any>{
         duration: 1000
       })
     } else {
-      await this.props.getUserInfo()
-        .then(_ => {
-          router.push(routeAlias.issue, { id })
-        })
-        .catch(err => err)
+      const action = (res) => {
+        if(!res) return 
+        router.push(routeAlias.issue, { id })
+      }
+      await this.props.getUserInfo({ action })
+      .catch(err => err)
     }
   }
 
@@ -86,7 +86,7 @@ export default class extends Component<any>{
         sourceType={ESourceTypeList.Scope}
         scrollWithAnimation={true}
         fetch={this.throttleFetchData}
-        renderContent={<IconList list={data} handleClick={this.editMovie}></IconList>}
+        renderContent={<IconList reload={this.fetchData.bind(this, {}, true)} list={data} handleClick={this.editMovie}></IconList>}
       >
       </GScrollView>
     )

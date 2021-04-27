@@ -1,5 +1,5 @@
 export const mapStateToProps = (_) => ({})
 
 export const mapDispatchToProps = (dispatch) => ({
-  getUserInfo: () => dispatch({ type: 'global/getUserInfo' })
+  getUserInfo: (params={}) => dispatch({ type: 'global/getUserInfo', ...params })
 })

@@ -105,12 +105,11 @@ export default class extends Component<any> {
     const resData = await getRankList({id: this.id, ...query})
     this.setState({
       data: resData.length ? [ ...(isInit ? [] : data), ...resData.map(item => {
-        const { poster, classify, _id, publish_time, ...nextItem } = item
+        const { poster, classify, publish_time, ...nextItem } = item
         return {
           ...nextItem,
           image: poster,
           type: classify.map(item => item.name),
-          id: _id,
           time: publish_time,
         }
       }) ] : data
@@ -195,7 +194,7 @@ export default class extends Component<any> {
               onClick={this.exchangeRank}
               columnNum={COLUMN_COUNT}
             />
-            <List list={data} style={{marginTop: '10px'}} />
+            <List list={data} style={{marginTop: '10px'}} reload={this.fetchData.bind(this, {}, true)} />
           </View>
         }
         fetch={this.throttleFetchData}

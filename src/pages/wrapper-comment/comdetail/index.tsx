@@ -56,34 +56,44 @@ export default class extends Component<any> {
    //获取评论数据
   public fetchData = async (query: any, isInit=false) => {
     const { data } = this.state
-    const isLogin = await this.props.getUserInfo()
-    .then(_ => true)
-    .catch(_ => false)
-    const method = isLogin ? getCustomerMovieCommentDetail : getUserMovieCommentDetail
-    const { comment:main={}, sub={} } = await method({id: this.id,  ...query})
-
-    this.setState({
+    return this.props.getUserInfo({ prompt: false })
+    .then((isLogin: boolean) => {
+      const method = isLogin ? getCustomerMovieCommentDetail : getUserMovieCommentDetail
+      return method({id: this.id,  ...query})
+    })
+    .then(res => {
+      const { comment:main={}, sub={} } = res
+      this.setState({
         data: [ ...(isInit ? [] : [...data]), ...sub ],
         headerData: main
+      })
+      return sub 
     })
-    return sub
+    .catch(_ => {
+      return []
+    })
   }
 
   public throttleFetchData = throttle(this.fetchData, 2000)
 
   //点赞
   public like = async(id: string, like: boolean) => {
-    await this.props.getUserInfo()
-    .then(async (_) => {
-        const method = like ? cancelLike : putLike
-
-        Taro.showLoading({ mask: true, title: '操作中' })
-        await withTry(method)(id)
-        Taro.hideLoading()
-        //刷新
-        await this.onPullDownRefresh()
+    const action = async (res) => {
+      if(!res) return 
+      const method = like ? cancelLike : putLike
+      Taro.showLoading({ mask: true, title: '操作中' })
+      await withTry(method)(id)
+      Taro.hideLoading()
+      //刷新
+      await this.onPullDownRefresh()
+    }
+    await this.props.getUserInfo({ action })
+    .catch(() => {
+      Taro.showToast({
+        title: '操作失败，请重试',
+        icon: 'none'
+      })
     })
-    .catch(err => err)
   }
 
   /**

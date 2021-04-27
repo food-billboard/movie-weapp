@@ -217,7 +217,7 @@ export default class Index extends Component<any> {
             </View>
             <View>
               {
-                listShow ? (<LinearList list={data} />) : (<IconList list={data} />)
+                listShow ? (<LinearList list={data} reload={this.fetchData.bind(this, {}, true)} />) : (<IconList list={data} reload={this.fetchData.bind(this, {}, true)} />)
               }
             </View>
           </View>

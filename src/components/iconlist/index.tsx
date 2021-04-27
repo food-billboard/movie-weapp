@@ -33,7 +33,8 @@ export interface IList {
 export interface IProps {
   list: Array<IList>
   handleClick: (...args: any) => any
-  getUserInfo: () => Promise<any>
+  getUserInfo: TGetUserInfo
+  reload: (...args: any[]) => Promise<any>
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -42,7 +43,8 @@ export default class IconList extends Component<IProps>{
   public static defaultProps: IProps = {
     list: [],
     handleClick: noop,
-    getUserInfo: () => Promise.resolve()
+    getUserInfo: () => Promise.resolve(),
+    reload: () => Promise.resolve()
   }
 
   public handleClick = (id: string) => this.props.handleClick(id)
@@ -58,11 +60,9 @@ export default class IconList extends Component<IProps>{
     }else {
       method = cancelStore
     }
-    await this.props.getUserInfo()
-    .then(_ => {
-      return withTry(method)(id)
-    })
-    .then(([err, ]) => {
+    const action = async (res) => {
+      if(res) return 
+      const [err] = await withTry(method)(id)
       let toastConfig:Taro.showToast.Option = {
         icon: 'none',
         duration: 1000,
@@ -79,7 +79,9 @@ export default class IconList extends Component<IProps>{
           title: '操作成功~'
         }
       }
-    })
+      Taro.showToast(toastConfig)
+    }
+    await this.props.getUserInfo({ action })
     .catch(_ => {
       Taro.showToast({
         title: '未登录无法操作',
@@ -87,7 +89,7 @@ export default class IconList extends Component<IProps>{
         duration: 1000
       })
     })
-    
+    return this.props.reload()
   }
 
   private getUserInfo = (e, id: string) => {

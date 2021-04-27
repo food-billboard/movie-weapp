@@ -44,7 +44,7 @@ export default class Index extends Component<any> {
 
     this.setState({
       data: [...(isInit ? [] : data), ...glance.map(item => {
-        const { _id, poster, classify, publish_time, ...nextItem } = item
+        const { poster, classify, publish_time, ...nextItem } = item
         return {
           ...nextItem,
           image: poster,
@@ -70,6 +70,7 @@ export default class Index extends Component<any> {
         scrollWithAnimation={true}
         renderContent={
           <List
+            reload={this.fetchData.bind(this, {}, true)}
             list={data}
           ></List>
         }

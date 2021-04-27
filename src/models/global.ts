@@ -1,6 +1,7 @@
+import Taro from '@tarojs/taro'
+import { noop } from 'lodash'
 import { router, routeAlias, setToken, getToken, clearToken } from '~utils'
 import { signin, register, signout, getCustomerUserInfo, sendSMS } from '~services'
-import Taro from '@tarojs/taro'
 
 export default {
   namespace: 'global',
@@ -8,7 +9,7 @@ export default {
     userInfo: null
   },
   effects: {
-    * getUserInfo({ prompt=true }, { call, put }) {
+    * getUserInfo({ prompt=true, action, unloginAction=noop }, { call, put }) {
       const token = yield getToken()
 
       function * unlogin() {
@@ -21,10 +22,10 @@ export default {
         const { confirm } = res
         if(confirm) {
           router.push(routeAlias.login)
-          return Promise.resolve()
         }else {
-          return Promise.reject()
+          yield unloginAction()
         }
+        return Promise.resolve(false)
       }
 
       if(!token) {
@@ -33,7 +34,7 @@ export default {
         try {
           const data = yield call(getCustomerUserInfo)
           yield put({ type: 'setData', payload: { userInfo: data } })
-          return Promise.resolve(data)
+          return action ? action(data) : data
         }catch(err) {
           clearToken()
           return yield unlogin()

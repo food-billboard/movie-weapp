@@ -88,17 +88,23 @@ export default class extends Component<any> {
 
   //点赞/取消点赞
   public like = async (id: string, like: boolean) => {
-    await this.props.getUserInfo()
-      .then(async (_) => {
-        const method = like ? cancelLike : putLike
+    const action = async (res) => {
+      if(!res) return 
+      const method = like ? cancelLike : putLike
 
-        Taro.showLoading({ mask: true, title: '操作中' })
-        await withTry(method)(id)
-        Taro.hideLoading()
-        //刷新
-        await this.onPullDownRefresh()
+      Taro.showLoading({ mask: true, title: '操作中' })
+      await withTry(method)(id)
+      Taro.hideLoading()
+      //刷新
+      await this.onPullDownRefresh()
+    }
+    return this.props.getUserInfo({ action })
+    .catch(() => {
+      Taro.showToast({
+        title: '操作失败，请重试',
+        icon: 'none'
       })
-      .catch(err => err)
+    })
   }
 
   /**

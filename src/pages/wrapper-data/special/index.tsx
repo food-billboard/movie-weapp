@@ -49,12 +49,11 @@ export default class extends Component<any>{
 
     this.setState({
         data: [ ...(isInit ? [] : data), ...movie.map(item => {
-          const { poster, classify, _id, publish_time, ...nextItem } = item
+          const { poster, classify, publish_time, ...nextItem } = item
           return {
             ...nextItem,
             image: poster,
             type: classify.map(item => item.name),
-            id: _id,
             time: publish_time,
           }
         }) ],
@@ -82,7 +81,7 @@ export default class extends Component<any>{
         sourceType={ESourceTypeList.Scope}
         scrollWithAnimation={true}
         fetch={this.throttleFetchData}
-        renderContent={<IconList list={data}></IconList>}
+        renderContent={<IconList reload={this.fetchData.bind(this, {}, true)} list={data}></IconList>}
       ></Scroll>
     )
   }

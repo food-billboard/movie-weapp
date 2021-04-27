@@ -47,7 +47,6 @@ export default class extends Component<any> {
 
   //获取数据
   public fetchData = async () => {
-    const { userInfo } = this.props
     if(!this.id) {
       Taro.showToast({
         title: '网络错误，请重试',
@@ -57,7 +56,8 @@ export default class extends Component<any> {
       return
     }
     Taro.showLoading({ mask: true, title: '凶猛加载中' })
-    const method = userInfo ? getCustomerMovieDetail : getUserMovieDetail
+    const isLogin = await this.props.getUserInfo({ prompt: false })
+    const method = isLogin ? getCustomerMovieDetail : getUserMovieDetail
     return method(this.id)
     .then(data => {
       const { comment, same_film = [], name, _id } = data
@@ -93,25 +93,39 @@ export default class extends Component<any> {
 
   //收藏
   public store = async (store: boolean) => {
-    await this.props.getUserInfo()
-      .then(async (_) => {
-        Taro.showLoading({ mask: true, title: '稍等一下' })
-        const method = store ? cancelStore : putStore
-        await withTry(method)(this.id)
-        Taro.hideLoading()
+    const action = async (res) => {
+      if(!res) return 
+      Taro.showLoading({ mask: true, title: '稍等一下' })
+      const method = store ? putStore : cancelStore
+      await withTry(method)(this.id)
+      Taro.hideLoading()
+      return this.fetchData()
+    }
+    return this.props.getUserInfo({ action })
+    .catch(() => {
+      Taro.showToast({
+        title: '操作失败，请重试',
+        icon: 'none'
       })
-      .catch(err => err)
+    })
   }
 
   //评分
   public rate = async (value: number) => {
-    await this.props.getUserInfo()
-      .then(async (_) => {
-        Taro.showLoading({ mask: true, title: '稍等一下' })
-        await withTry(putRate)({ _id: this.id, value })
-        Taro.hideLoading()
+    const action = async (res) => {
+      if(!res) return 
+      Taro.showLoading({ mask: true, title: '稍等一下' })
+      await withTry(putRate)(this.id, value)
+      Taro.hideLoading()
+      return this.fetchData()
+    }
+    return this.props.getUserInfo({ action })
+    .catch(() => {
+      Taro.showToast({
+        title: '操作失败，请重试',
+        icon: 'none'
       })
-      .catch(err => err)
+    })
   }
 
   // //tab切换
@@ -192,7 +206,7 @@ export default class extends Component<any> {
               author_rate,
               store,
               author_description,
-              author: author ? author.user : ''
+              author
             }}
           />
         </View>

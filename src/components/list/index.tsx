@@ -9,7 +9,7 @@ import style from '~theme/style'
 import { IList } from '../iconlist'
 import { connect } from 'react-redux'
 import { mapDispatchToProps, mapStateToProps } from './connect'
-import { router, formatTime, isObject, routeAlias, withTry } from '~utils'
+import { router, isObject, routeAlias, withTry } from '~utils'
 import noop from 'lodash/noop'
 import { putStore, cancelStore } from '~services'
 
@@ -18,14 +18,16 @@ import './index.scss'
 export interface IProps {
   list: Array<IList>
   style?: React.CSSProperties
-  getUserInfo: () => Promise<any>
+  getUserInfo: TGetUserInfo
+  reload: (...args: any[]) => Promise<any>
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class List extends Component<IProps>{
   public static defaultProps: IProps = {
     list: [],
-    getUserInfo: () => Promise.resolve()
+    getUserInfo: () => Promise.resolve(),
+    reload: () => Promise.resolve()
   }
 
   public goTo = (id: string) => {
@@ -33,18 +35,18 @@ export default class List extends Component<IProps>{
   }
 
   //收藏
-  handleStore = async (id: string, isStore?: boolean) => {
+  handleStore = async (id: string, isStore: boolean, e: any) => {
+    e.stopPropagation()
     let method
-    if(typeof isStore === 'undefined' || isStore) {
+    if(isStore) {
       method = putStore
     }else {
       method = cancelStore
     }
-    await this.props.getUserInfo()
-    .then(_ => {
-      return withTry(method)(id)
-    })
-    .then(([err, ]) => {
+
+    const action = async (res) => {
+      if(!res) return 
+      const [ err,  ] = await withTry(method)(id)
       let toastConfig:Taro.showToast.Option = {
         icon: 'none',
         duration: 1000,
@@ -61,10 +63,14 @@ export default class List extends Component<IProps>{
           title: '操作成功~'
         }
       }
-    })
+      Taro.showToast(toastConfig)
+      return this.props.reload()
+    }
+
+    return this.props.getUserInfo({ action })
     .catch(_ => {
       Taro.showToast({
-        title: '未登录无法操作',
+        title: '操作失败',
         icon: 'none',
         duration: 1000
       })
@@ -94,7 +100,7 @@ export default class List extends Component<IProps>{
                       style={{height: '100px'}}
                       list={imageList}
                     />
-                    <View className="at-icon at-icon-heart list-content-icon" onClick={this.handleStore.bind(this, _id, store)}></View>
+                    <View className="at-icon at-icon-heart list-content-icon" onClick={this.handleStore.bind(this, _id, !store)}></View>
                   </View>
                   <View className='list-content-main-detail'
                     style={{ ...style.backgroundColor('disabled'), ...style.color('secondary') }}

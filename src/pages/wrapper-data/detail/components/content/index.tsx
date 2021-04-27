@@ -2,11 +2,10 @@ import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import classnames from 'classnames'
 import { View, Text } from '@tarojs/components'
-import { AtRate } from 'taro-ui'
 import GRate from '~components/rate'
 import GStore from '../store'
 import Ellipsis from '~components/ellipsis'
-import { formatTime, formatNumber, ItypeList } from '~utils'
+import { formatTime, formatNumber, ItypeList, router, routeAlias } from '~utils'
 import style from '~theme/style'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import noop from 'lodash/noop'
@@ -35,7 +34,10 @@ interface Info {
   author_rate: number
   store: boolean
   author_description: string
-  author: string
+  author: {
+    username: string 
+    _id: string 
+  }
 }
 
 export interface IState { }
@@ -43,6 +45,7 @@ export interface IState { }
 const Tag = ({ className=[] }: { className?: string[] }) => <View className={classnames('at-icon', 'at-icon-tag', ...className)}></View>
 
 export default class Content extends Component<IProps, IState>{
+
   public static defaultProps: IProps = {
     info: {
       name: '',
@@ -60,10 +63,17 @@ export default class Content extends Component<IProps, IState>{
       author_rate: 0,
       store: false,
       author_description: '',
-      author: ''
+      author: {
+        username: '',
+        _id: ''
+      }
     },
     store: noop,
     rate: noop,
+  }
+
+  public getUserInfo = (_id: string) => {
+    return router.push(routeAlias.user, { _id })
   }
 
   public render() {
@@ -210,9 +220,13 @@ export default class Content extends Component<IProps, IState>{
             <View className='data-detail-content-main-info-author'>
               <Tag className={['data-detail-content-icon']} />
               作者:
-              <Text className={'text'}
+              <Text 
+                className={'text'}
                 style={{ ...style.color('primary') }}
-              >{author}</Text>
+                onClick={this.getUserInfo.bind(this, author?._id)}
+              >
+                {author?.username}
+              </Text>
               <Text className='data-detail-content-main-info-hot-text' style={{ ...style.color('thirdly') }}></Text>
             </View>
             <View className='data-detail-content-main-info-description'

@@ -54,14 +54,20 @@ export default class User extends Component<any>{
   public attention = async () => {
     const { data: { like } } = this.state
     const method = like ? cancelAttention : toAttention
-    await this.props.getUserInfo()
-      .then(async () => {
-        Taro.showLoading({ mask: true, title: '操作中' })
-        await withTry(method)(this.id)
-        Taro.hideLoading()
-        await this.refresh()
+    const action = async (res) => {
+      if(!res) return 
+      Taro.showLoading({ mask: true, title: '操作中' })
+      await withTry(method)(this.id)
+      Taro.hideLoading()
+      await this.refresh()
+    }
+    return this.props.getUserInfo({ action })
+    .catch(() => {
+      Taro.showToast({
+        title: '操作失败，请重试',
+        icon: 'none'
       })
-      .catch(err => err)
+    })
   }
 
   //查看收藏

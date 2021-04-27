@@ -16,3 +16,5 @@ declare const process: {
     [key: string]: any;
   }
 }
+
+declare type TGetUserInfo = (params?: { action?: Function, unloginAction?: Function, prompt?: boolean }) => Promise<any>
