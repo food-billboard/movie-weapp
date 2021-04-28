@@ -1,6 +1,7 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, Text, Swiper, SwiperItem } from '@tarojs/components'
+import { merge } from 'lodash'
 import RankIcon from './icon'
 import { router, routeAlias } from '~utils'
 import style from '~theme/style'
@@ -9,7 +10,6 @@ import ImageLoading from '~components/imageLoading'
 import './index.scss'
 
 export interface List {
-  // rank: number,
   _id: string,
   poster: string,
   name: string
@@ -44,20 +44,23 @@ export default class Rank extends Component<IProps, IState>{
   public classify = () => {
     const { list = [] } = this.props
     let newList: Array<any> = []
-    const len = (i) => {
+    const len = (i: number) => {
       if (i == 0) return 1
       if (i == 1) return 4
       return len(i - 1) * 4
     }
     let i = 0
+    let counter = 0
     list.forEach((item: List) => {
-      if (!Array.isArray(newList[i])) newList[i] = []
-      if (newList[i].length < len(i)) {
-        newList[i].push(item)
-      } else {
+      counter ++
+      const newItem = merge({}, item, { index: counter })
+      if(!Array.isArray(newList[i])) newList[i] = []
+      if(newList[i].length < len(i)) {
+        newList[i].push(newItem)
+      }else {
         i++
-        if (!Array.isArray(newList[i])) newList[i] = []
-        newList[i].push(item)
+        if(!Array.isArray(newList[i])) newList[i] = []
+        newList[i].push(newItem)
       }
     })
     return newList.slice(0, 3)
@@ -74,31 +77,42 @@ export default class Rank extends Component<IProps, IState>{
           style={{ ...style.backgroundColor('secondary'), ...style.color('disabled') }}
           onClick={() => { router.push(routeAlias.rank, { id, type }) }}
         >{type}</Text>
-        <Swiper className="rank-content">
+        <Swiper 
+          className="rank-content"
+          circular
+        >
           {
-            list.map((value: Array<List>, index: number) => {
+            list.map((value: List[], index: number) => {
               return (
                 <SwiperItem
                   key={value.length}
                 >
-                  {
-                    value.map((item: List) => {
-                      const { _id, poster } = item
-                      return (
-                        <View
-                          className='rank-list'
-                          style={{ width: `${100 / Math.pow(2, index) - 1}%`, height: `${100 / Math.pow(2, index) - 1}%` }}
-                          key={_id}
-                          onClick={this.getDetail.bind(this, _id)}
-                        >
-                          <ImageLoading
-                            src={poster}
-                          />
-                          <RankIcon rank={index + 1} />
-                        </View>
-                      )
-                    })
-                  }
+                  <View
+                    className="rank-content-item-wrapper"
+                  >
+                    {
+                      value.map((item: List & { index: number }) => {
+                        const { _id, poster, index: rank } = item
+                        return (
+                          <View
+                            className='rank-list'
+                            style={{ width: `${100 / Math.pow(2, index) - 1}%`, height: `${100 / Math.pow(2, index) - 1}%` }}
+                            key={_id}
+                            onClick={this.getDetail.bind(this, _id)}
+                          >
+                            <ImageLoading
+                              src={poster}
+                              customStyle={{
+                                padding:'10rpx',
+                                boxSizing: 'border-box'
+                              }}
+                            />
+                            <RankIcon rank={rank} />
+                          </View>
+                        )
+                      })
+                    }
+                  </View>
                 </SwiperItem>
               )
             })

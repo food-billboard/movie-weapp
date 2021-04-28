@@ -56,7 +56,7 @@ export default class extends Component<any> {
     //获取每日上新
     const daily = await this.getDaily()
     //获取排行榜
-    const rank = await getRank()
+    const rank = await getRank(16)
     //获取跑马灯内容
     const notice = await getNotice()
 
