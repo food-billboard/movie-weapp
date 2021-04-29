@@ -79,6 +79,13 @@ export default class extends Component<any> {
     return this._title
   }
 
+  public set title(title) {
+    const realTitle = decodeURIComponent(title)
+    console.log(realTitle, 2333, title)
+    this._title = realTitle
+    Taro.setNavigationBarTitle({ title: realTitle })
+  }
+
   private _title
 
   public scrollRef = React.createRef<GScrollView>()
@@ -92,11 +99,6 @@ export default class extends Component<any> {
   //上拉加载
   public onReachBottom = async () => {
       await this.scrollRef.current!.handleToLower()
-  }
-
-  public set title(title) {
-    this._title = title
-    Taro.setNavigationBarTitle({title})
   }
 
   //数据获取

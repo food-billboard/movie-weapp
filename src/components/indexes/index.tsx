@@ -39,11 +39,12 @@ export default class extends Component<IProps, IState> {
 
   public render() {
 
-    const { list=[] } = this.props
+    const { list=[], ...nextProps } = this.props
 
     return (
       <AtIndexes
         list={list}
+        {...nextProps}
         onClick={this.handleClick}
       >
       </AtIndexes>

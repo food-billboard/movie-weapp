@@ -30,7 +30,7 @@ export default class extends Component<any> {
   }
 
   public indexesVisible = async (type: EIndexesType) => {
-    let active
+    let active: any[] = []
     const { director, actor, district } = this.state
     switch(type) {
       case EIndexesType.ACTOR: active = [...actor]; break;
@@ -51,6 +51,7 @@ export default class extends Component<any> {
   public render() {
 
     const { list } = this.state
+    console.log(list, 11111111)
 
     return (
       <Indexes

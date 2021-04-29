@@ -27,7 +27,9 @@ export default class extends Component<any> {
 
   render() {
     return (
-      <View>
+      <View
+        {...this.props}
+      >
         {this.props.children}
       </View>
     )
