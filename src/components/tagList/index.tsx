@@ -24,15 +24,19 @@ export interface IState {}
 
 export default class extends Component<IProps, IState> {
 
-  public handleAppend = (item: Item) => {
+  public handleAppend = (item: Item | Item[]) => {
     const { list } = this.props
-    const { name, key } = item
-    const exists = list.some(l => l.name === name && l.key === key)
-    let realList = [...list]
-    if(exists) {
-      Taro.showToast({mask: false, icon: 'none', title: 'exists~'})
+    const items = Array.isArray(item) ? item : [item]
+    const newList = items.filter(item => {
+      const { name, key } = item
+      const exists = list.some(l => l.name === name && l.key === key)
+      return !exists
+    })
+    let realList = [ ...list, ...newList ]
+    console.log(realList, 111111111)
+    if(newList.length != items.length) {
+      Taro.showToast({ mask: false, icon: 'none', title: 'exists~' })
     }else {
-      realList = [ ...realList, item ]
       Taro.showToast({mask: false, icon: 'none', title: 'success~'})
     }
     this.props.handleChange && this.props.handleChange(realList)
@@ -80,7 +84,7 @@ export default class extends Component<IProps, IState> {
             return (
               <View className="at-col at-col-3">
                 <AtTag
-                  customStyle={{...style.backgroundColor('disabled')}}
+                  customStyle={{...style.backgroundColor('disabled'), width: '100%', overflow: 'hidden', 'textOverflow': 'ellipsis', whiteSpace: 'nowrap'}}
                   key={key}
                   size={size}
                   type={type}

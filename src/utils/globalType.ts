@@ -52,7 +52,8 @@ export const routeAlias = {
   newsdetail: '/newsdetail',
   login: '/login',
   register: '/register',
-  toComment: '/comment'
+  toComment: '/comment',
+  indexes: '/indexes'
 }
 
 //路由配置
@@ -79,7 +80,8 @@ export const routeConfig = [
   { path: 'pages/newsdetail/index', alias: routeAlias.newsdetail },
   { path: 'pages/wrapper-login/login/index', alias: routeAlias.login },
   { path: 'pages/wrapper-login/register/index', alias: routeAlias.register },
-  { path: 'pages/wrapper-comment/comment/index', alias: routeAlias.toComment }
+  { path: 'pages/wrapper-comment/comment/index', alias: routeAlias.toComment },
+  { path: 'pages/wrapper-data/indexes/index', alias: routeAlias.indexes },
 ]
 
 //轮播图路由跳转类型"MOVIE", "SPECIAL", "COMMENT"

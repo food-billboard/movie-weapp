@@ -1,8 +1,11 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
+import { View } from '@tarojs/components'
+import { pick } from 'lodash'
 import Indexes from '~components/indexes'
 import { EIndexesType } from '../../interface'
-import { getDirectorList, getActorList, getDistrictList } from '~services'
+import { getDirectorList, getActorList, getDistrictList, getLanguageList, getClassify } from '~services'
+import './index.scss'
 
 export default class extends Component<any> {
 
@@ -11,6 +14,8 @@ export default class extends Component<any> {
     director: [],
     actor: [],
     district: [],
+    // classify: [],
+    // language: [],
     type: 'DIRECTOR'
   }
 
@@ -22,11 +27,35 @@ export default class extends Component<any> {
     const actor = await getActorList()
     const director = await getDirectorList()
     const district = await getDistrictList()
+    // const language = await getLanguageList()
+    // const classify = await getClassify()
     this.setState({
-      director,
-      actor,
-      district
+      director: this.formatList(director),
+      actor: this.formatList(actor),
+      district: this.formatList(district),
+      // language: this.formatList(language),
+      // classify: this.formatList(classify)
+    }, () => {
+      console.log(this.state)
     })
+  }
+
+  private formatList = (list) => {
+    return list.reduce((acc, cur) => {
+      const { key } = cur 
+      const exists = acc.findIndex(item => item.key == key)
+      const newValue = pick(cur, ['name', '_id'])
+      if(!!~exists) {
+        acc[exists].items.push(newValue)
+      }else {
+        acc.push({
+          title: key,
+          key,
+          items: [newValue]
+        })
+      }
+      return acc 
+    }, [])
   }
 
   public indexesVisible = async (type: EIndexesType) => {
@@ -36,6 +65,8 @@ export default class extends Component<any> {
       case EIndexesType.ACTOR: active = [...actor]; break;
       case EIndexesType.DIRECTOR: active = [...director]; break;
       case EIndexesType.DISTRICT: active = [...district]; break;
+      // case EIndexesType.CLASSIFY: active = [...classify]; break;
+      // case EIndexesType.LANGUAGE: active = [...language]; break;
     }
     this.setState({
       list: active,
@@ -51,13 +82,16 @@ export default class extends Component<any> {
   public render() {
 
     const { list } = this.state
-    console.log(list, 11111111)
 
     return (
-      <Indexes
-        handleClick={this.handleClick}
-        list={list}
-      ></Indexes>
+      <View className="issue-indexes">
+        <Indexes
+          handleClick={this.handleClick}
+          list={list}
+        >
+
+        </Indexes>
+      </View>
     )
   }
 

@@ -174,7 +174,7 @@ export default class extends Component<IProps, IState> {
 
     let dateShow
     if (date) {
-      dateShow = fieldTypeList[date.fields = 'year']
+      dateShow = fieldTypeList[date.fields || 'year']
     }
 
     const { disabled } = this.state
@@ -209,6 +209,7 @@ export default class extends Component<IProps, IState> {
         }
         {
           multi ?
+            //@ts-ignore
             <Picker
               mode={'multiSelector'}
               range={multi.range || this.defaultConfig.range.multi}
@@ -220,7 +221,7 @@ export default class extends Component<IProps, IState> {
               onCancel={multi.onCancel || noop}
             >
               <View className='picker'
-                style={{ ..._style }}
+                style={{ ..._style as any }}
               >
                 {title}: {Array.isArray(value) ? value.join(' & ') : value}
               </View>

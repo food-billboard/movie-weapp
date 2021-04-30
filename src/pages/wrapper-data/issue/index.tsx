@@ -1,7 +1,7 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
-import { View } from '@tarojs/components'
-import { AtButton, AtTag } from 'taro-ui'
+import { View, Text } from '@tarojs/components'
+import { AtButton, AtTag, AtFab } from 'taro-ui'
 import GCommentPicker from '~components/picker'
 import GCheckBox, { EDataType } from './components/checkbox'
 import GVideo from './components/video'
@@ -10,13 +10,12 @@ import GImagePicker from '~components/imgPicker'
 import BaseForm from '~components/wrapForm'
 import Alias from '~components/restFactor'
 import { createFieldsStore } from '~components/wrapForm/fieldsStore'
-import Indexes from './components/indexes'
 import Rate from '~components/rate'
 import TagList from '~components/tagList'
 import { IFormData, EIndexesType } from './interface'
 import { Item } from '~components/indexes'
 import { colorStyleChange } from '~theme/color'
-import { size, withTry, Upload, TOiriginFileType } from '~utils'
+import { size, withTry, Upload, TOiriginFileType, routeAlias, router } from '~utils'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import style from '~theme/style'
 import { getEditMovieInfo, editIssue, sendIssue } from '~services'
@@ -57,7 +56,6 @@ export default class extends Component<any> {
     detail: {},
     formData: {},
     lang: [],
-    indexesVisible: false,
   }
 
   router = getCurrentInstance().router
@@ -70,15 +68,24 @@ export default class extends Component<any> {
 
   private districtRef = React.createRef<TagList>()
 
-  private indexesRef = React.createRef<Indexes>()
-
   //色调修改时重绘用
   public componentDidShow = () => colorStyleChange()
 
   public componentDidMount = async () => {
+    const { value, type } = this.router?.params || {}
+    let newValue 
+    try {
+      newValue = JSON.parse(decodeURIComponent(value as string))
+    }catch(err){}
+    //init
     //强制刷新设置
     fieldsStore.setUpdate(this.forceUpdate.bind(this))
-    this.fetchData()
+    if(!value && !type) {
+      fieldsStore.resetFields()
+      this.fetchData()
+    }else {
+      this.handleSelectIndexes(newValue as Item, type as EIndexesType)
+    }
   }
 
   //获取数据
@@ -95,6 +102,7 @@ export default class extends Component<any> {
   public handleSubmit = async (_) => {
     //验证
     fieldsStore.validateFields(['video', 'district', 'name', 'classify', 'director', 'actor', 'screen_time', 'description', 'author_description', 'author_rate', 'image', 'language', 'alias'], async (errors, values) => {
+      console.log(values, 1111111111)
       //处理所有有错的表单项
       if(errors) {
         Taro.showToast({
@@ -105,8 +113,6 @@ export default class extends Component<any> {
         })
         return
       }
-
-      console.log(values)
 
       const { 
         image,
@@ -219,38 +225,25 @@ export default class extends Component<any> {
     visible: boolean,
     type: EIndexesType
   }) => {
-    const { visible, type } = config
-    this.setState({
-      indexesVisible: visible
-    }, () => {
-      setTimeout(() => {
-        this.indexesRef.current!.indexesVisible(type)
-      }, 0)
-    })
+    const { type } = config
+    router.push(routeAlias.indexes, { type,  })
   }
 
   //indexes选择
   public handleSelectIndexes = (item: Item, type: EIndexesType) => {
-    const { key, name } = item
-    //隐藏索引
-    this.setState({
-      indexesVisible: false
-    }, () => {
-      setTimeout(() => {
-        let ref
-        //触发onChange
-        switch(type) {
-          case 'DIRECTOR': ref = this.directorRef; break;
-          case 'ACTOR': ref = this.actorRef;break;
-          case 'DISTRICT': ref = this.districtRef; break;
-        }
-        ref.current!.handleAppend({ name, key })
-      }, 0)
-    })
+    let ref
+    //触发onChange
+    switch(type) {
+      case 'DIRECTOR': ref = this.directorRef; break;
+      case 'ACTOR': ref = this.actorRef;break;
+      case 'DISTRICT': ref = this.districtRef; break;
+    }
+  
+    ref.current!.handleAppend(item)
   }
 
   public render() {
-    const { detail, indexesVisible } = this.state
+    const { detail } = this.state
     const { 
       author_description='',
       author_rate,
@@ -271,15 +264,8 @@ export default class extends Component<any> {
     } = detail
     return (
       <View className='data-issue' style={{...style.backgroundColor('bgColor')}}>
-        <View style={{height: '100vh', display: indexesVisible ? 'block' : 'none'}}>
-          <Indexes
-            handleClick={this.handleSelectIndexes}
-            ref={this.indexesRef}
-          ></Indexes>
-        </View>
         <BaseForm
           name="issue"
-          style={{display: indexesVisible ? 'none' : 'block'}}
         >
           <View className='video'>
             <AtTag 
@@ -426,6 +412,7 @@ export default class extends Component<any> {
           </View>
           <View className='classify'>
             <AtTag 
+              onClick={this.handleIndexesShow.bind(this, { visible: true, type: 'CLASSIFY' })}
               customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
               type={'primary'}
             >
@@ -458,7 +445,9 @@ export default class extends Component<any> {
             </AtTag>
             <GCommentPicker
               style={PICKER_STYLE}
-              date={{}}
+              date={{
+                fields: "day"
+              }}
               handleChange={
                 fieldsStore.getFieldProps('screen_time', 'onChange', {
                   rules: [
@@ -475,6 +464,7 @@ export default class extends Component<any> {
           </View>
           <View className='language'>
             <AtTag 
+              onClick={this.handleIndexesShow.bind(this, { visible: true, type: 'LANGUAGE' })}
               customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
               type={'primary'}
             >

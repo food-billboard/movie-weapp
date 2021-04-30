@@ -66,6 +66,7 @@ export default {
         'issue/index',
         'userissue/index',
         'special/index',
+        'indexes/index'
       ]
     },
     {
