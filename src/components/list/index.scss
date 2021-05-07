@@ -26,22 +26,24 @@
                 height:100%;
                 overflow:hidden;
                 margin-right: 20px;
-                .name{
-                    width:100%;
+                &-name {
+                    width: 100%;
+                    overflow: hidden;
                     font-weight:bold;
                     font-size:40px;
                     overflow-x: scroll;
                     white-space:nowrap;
                 }
-                .name::-webkit-scrollbar {
+                &-name::-webkit-scrollbar {
                     display:none
                 }
-                .rate{
+                &-rate{
                     width:100%;
                 }
             }
             &-slot{
                 flex:1;
+                text-align: center;
             }
         }
         .list-content-description{

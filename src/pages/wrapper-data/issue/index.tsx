@@ -1,7 +1,7 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
-import { View, Text } from '@tarojs/components'
-import { AtButton, AtTag, AtFab } from 'taro-ui'
+import { View } from '@tarojs/components'
+import { AtButton, AtTag } from 'taro-ui'
 import GCommentPicker from '~components/picker'
 import GCheckBox, { EDataType } from './components/checkbox'
 import GVideo from './components/video'
@@ -73,14 +73,14 @@ export default class extends Component<any> {
 
   public componentDidMount = async () => {
     const { value, type } = this.router?.params || {}
-    let newValue 
+    let newValue!: Item
     try {
       newValue = JSON.parse(decodeURIComponent(value as string))
     }catch(err){}
     //init
     //强制刷新设置
     fieldsStore.setUpdate(this.forceUpdate.bind(this))
-    if(!value && !type) {
+    if(!value || !type) {
       fieldsStore.resetFields()
       this.fetchData()
     }else {
@@ -175,9 +175,9 @@ export default class extends Component<any> {
           ...(author_description ? { author_description } : {}),
           ...(author_rate ? { author_rate } : {}),
           ...(alias.length ? { alias: alias.map(item => item.title) } : {}),
-          director: director.map(item => item.key),
-          actor: actor.map(item => item.key),
-          district: district.map(item => item.key)
+          director: director.map(item => item._id),
+          actor: actor.map(item => item._id),
+          district: district.map(item => item._id)
         },
         images: image
       }
@@ -222,11 +222,11 @@ export default class extends Component<any> {
 
   //indexes展示
   public handleIndexesShow = (config: {
-    visible: boolean,
     type: EIndexesType
   }) => {
     const { type } = config
-    router.push(routeAlias.indexes, { type,  })
+    const prevValue = fieldsStore?.getFieldValue(type) || []
+    router.push(routeAlias.indexes, { type, value: JSON.stringify(prevValue || []) })
   }
 
   //indexes选择
@@ -234,11 +234,10 @@ export default class extends Component<any> {
     let ref
     //触发onChange
     switch(type) {
-      case 'DIRECTOR': ref = this.directorRef; break;
-      case 'ACTOR': ref = this.actorRef;break;
-      case 'DISTRICT': ref = this.districtRef; break;
+      case EIndexesType.director: ref = this.directorRef; break;
+      case EIndexesType.actor: ref = this.actorRef;break;
+      case EIndexesType.district: ref = this.districtRef; break;
     }
-  
     ref.current!.handleAppend(item)
   }
 
@@ -310,7 +309,7 @@ export default class extends Component<any> {
           </View>
           <View className='district'>
             <AtTag 
-              onClick={this.handleIndexesShow.bind(this, { visible: true, type: 'DISTRICT' })}
+              onClick={this.handleIndexesShow.bind(this, { type: 'district' })}
               customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
               type={'primary'}
             >
@@ -344,7 +343,7 @@ export default class extends Component<any> {
           </View>
           <View className='director'>
             <AtTag 
-              onClick={this.handleIndexesShow.bind(this, { visible: true, type: 'DIRECTOR' })}
+              onClick={this.handleIndexesShow.bind(this, { type: 'director' })}
               customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
               type={'primary'}
             >
@@ -378,7 +377,7 @@ export default class extends Component<any> {
           </View>
           <View className='actor'>
             <AtTag 
-              onClick={this.handleIndexesShow.bind(this, { visible: true, type: 'ACTOR' })}
+              onClick={this.handleIndexesShow.bind(this, { type: 'actor' })}
               customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
               type={'primary'}
             >
@@ -412,7 +411,6 @@ export default class extends Component<any> {
           </View>
           <View className='classify'>
             <AtTag 
-              onClick={this.handleIndexesShow.bind(this, { visible: true, type: 'CLASSIFY' })}
               customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
               type={'primary'}
             >
@@ -464,7 +462,6 @@ export default class extends Component<any> {
           </View>
           <View className='language'>
             <AtTag 
-              onClick={this.handleIndexesShow.bind(this, { visible: true, type: 'LANGUAGE' })}
               customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
               type={'primary'}
             >

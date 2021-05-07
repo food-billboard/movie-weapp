@@ -72,11 +72,15 @@ export default class Rank extends Component<IProps, IState>{
 
     return (
       <View className='rank-main' style={propsStyle}>
-        <Text
-          className={'rank-title'}
-          style={{ ...style.backgroundColor('secondary'), ...style.color('disabled') }}
-          onClick={() => { router.push(routeAlias.rank, { id, type }) }}
-        >{type}</Text>
+        {
+          !!type && (
+            <Text
+              className={'rank-title'}
+              style={{ ...style.backgroundColor('secondary'), ...style.color('disabled') }}
+              onClick={() => { router.push(routeAlias.rank, { id, type }) }}
+            >{type}</Text>
+          )
+        }
         <Swiper 
           className="rank-content"
           circular

@@ -1,13 +1,14 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
+import { connect } from 'react-redux'
+import Picker from './components/Picker'
 import Swipper from '../iconlist/swipper'
 import Ellipsis from '../ellipsis'
 import Item from './item'
 import Rate from '../rate'
 import style from '~theme/style'
 import { IList } from '../iconlist'
-import { connect } from 'react-redux'
 import { mapDispatchToProps, mapStateToProps } from './connect'
 import { router, isObject, routeAlias, withTry } from '~utils'
 import noop from 'lodash/noop'
@@ -78,6 +79,10 @@ export default class List extends Component<IProps>{
     
   }
 
+  readonly OP_SELECTOR_MAP = {
+
+  }
+
   public render() {
     const { list, style: propsStyle = {} } = this.props
     return (
@@ -93,7 +98,6 @@ export default class List extends Component<IProps>{
               >
                 <View 
                   className="list-content-main"
-                  onClick={this.goTo.bind(this, _id)}
                 >
                   <View className='list-content-main-poster'>
                     <Swipper
@@ -104,13 +108,14 @@ export default class List extends Component<IProps>{
                   </View>
                   <View className='list-content-main-detail'
                     style={{ ...style.backgroundColor('disabled'), ...style.color('secondary') }}
+                    onClick={this.goTo.bind(this, _id)}
                   >
-                    <View className='name'
+                    <View className="list-content-main-detail-name"
                       style={{ ...style.color('primary') }}
                     >
                       {name}
                     </View>
-                    <View className="rate">
+                    <View className="list-content-main-detail-rate">
                       <Rate
                         value={rate}
                         readonly={true}
@@ -133,6 +138,11 @@ export default class List extends Component<IProps>{
                   </View>
                   <View className="list-content-main-slot">
                     {/**TODO */}
+                    <Picker
+                      selector={this.OP_SELECTOR_MAP}
+                    >
+                      <View className='at-icon at-icon-bullet-list'></View>
+                    </Picker>
                   </View>
                 </View>
                 <View className="list-content-description">

@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import React, { Component } from 'react'
+import React, { Component, createRef } from 'react'
 import { Video } from '@tarojs/components'
 import { EVideoMode, setVideoConfig, getVideoConfig } from '~config'
 
@@ -23,7 +23,7 @@ export interface IProps {
   style?: React.CSSProperties
   danmuList?: Array<IDanmu> | false
   title?: string
-  mode: EVideoMode
+  mode?: EVideoMode
 }
 
 export interface IState extends IProps {}
@@ -58,6 +58,14 @@ export default class Media extends Component<IProps, IState>{
   timer: any
 
   configHistory: any[] = []
+
+  public componentDidUpdate = (prevProps) => {
+    const { src: prevSrc, poster: prevPoster } = prevProps
+    const { src: nowSrc, poster: nowPoster } = this.props
+    if(prevSrc != nowSrc || prevPoster != nowPoster) {
+      this.forceUpdate()
+    }
+  }
 
   public componentDidMount = () => {
     const { style, ...nextProps } = this.props
@@ -158,14 +166,14 @@ export default class Media extends Component<IProps, IState>{
   public render() {
     const {
       style,
-      id='video'
+      id='video',
+      src,
+      poster,
     } = this.props
     const {
       mode,
-      src,
       title,
       autoplay = true,
-      poster,
       muted = false,
       danmuList
     } = this.state

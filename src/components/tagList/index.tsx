@@ -33,7 +33,6 @@ export default class extends Component<IProps, IState> {
       return !exists
     })
     let realList = [ ...list, ...newList ]
-    console.log(realList, 111111111)
     if(newList.length != items.length) {
       Taro.showToast({ mask: false, icon: 'none', title: 'exists~' })
     }else {

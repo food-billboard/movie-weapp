@@ -1,9 +1,9 @@
 import IFormData from './formData'
 
 enum EIndexesType {
-  DIRECTOR = 'DIRECTOR',
-  ACTOR = 'ACTOR',
-  DISTRICT = 'DISTRICT',
+  director = 'director',
+  actor = 'actor',
+  district = 'district',
   // LANGUAGE = 'LANGUAGE',
   // CLASSIFY = 'CLASSIFY'
 }

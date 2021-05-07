@@ -81,7 +81,6 @@ export default class extends Component<any> {
 
   public set title(title) {
     const realTitle = decodeURIComponent(title)
-    console.log(realTitle, 2333, title)
     this._title = realTitle
     Taro.setNavigationBarTitle({ title: realTitle })
   }
@@ -174,7 +173,7 @@ export default class extends Component<any> {
         renderContent={
           <View>
             <Rank
-              style={{padding: '0 20px', boxSizing: 'border-box'}}
+              style={{padding: '10px 10px 0 10px', boxSizing: 'border-box'}}
               type={''}
               list={data}
             />

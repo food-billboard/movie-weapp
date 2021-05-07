@@ -38,8 +38,6 @@ export default class extends Component<IProps, IState> {
     posterError: false
   }
 
-  private _value
-
   private get value() {
     const { info:propsValue, initialValue } = this.props
     const { info: stateValue } = this.state
@@ -56,10 +54,17 @@ export default class extends Component<IProps, IState> {
   //添加海报
   public handleAddPoster = () => {
     const { handleOnChange=noop } = this.props
+    Taro.showLoading({
+      title: '图片加载中...',
+      mask: true
+    })
     Taro.chooseImage({
       count: 1,
       sizeType: ['original', 'compressed'],
       sourceType: ['album', 'camera'], 
+      complete: () => {
+        Taro.hideLoading()
+      },
       success: (res) => {
         var tempFilePaths = res.tempFilePaths
         const { info } = this.state
@@ -79,9 +84,16 @@ export default class extends Component<IProps, IState> {
   //添加视频
   public handleAddMedia = () => {
     const { handleOnChange=noop } = this.props
+    Taro.showLoading({
+      title: '视频加载中...',
+      mask: true
+    })
     Taro.chooseVideo({
       sourceType: ['album'],
       compressed: true,
+      complete: () => {
+        Taro.hideLoading()
+      },
       success: (res) => {
         const file = res.tempFilePath
         const { info } = this.state
@@ -113,18 +125,18 @@ export default class extends Component<IProps, IState> {
     const { src, poster } = info
     if(!src.length || !poster.length) {
       if(!src.length) {
-        await this.setState({
+        this.setState({
           srcError: true
         })
       }
       if(!poster.length) {
-        await this.setState({
+        this.setState({
           posterError: true
         })
       }
       return false
     }
-    await this.setState({
+    this.setState({
       srcError: false,
       posterError: false
     })
