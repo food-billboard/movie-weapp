@@ -1,17 +1,16 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
+import throttle from 'lodash/throttle'
+import debounce from 'lodash/debounce' 
 import SearchBar from '../../main/components/searchButton'
 import Head from './components/head'
 import List from '~components/list'
-import Indexes from '../issue/components/indexes'
 import IconList from '~components/iconlist'
 import GScrollView from '~components/scrollList'
 import RadioList from './components/radio'
 import Method from './components/method'
 import Forms from './components/form'
-import throttle from 'lodash/throttle'
-import debounce from 'lodash/debounce' 
 import { FormData } from './interface'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
@@ -20,14 +19,9 @@ import { AtDrawer } from 'taro-ui'
 import { Item } from '~components/indexes'
 import { EIndexesType } from '../issue/interface'
 import { withTry, ESourceTypeList } from '~utils'
+import { getSearchDataList } from '~services'
 
 import './index.scss'
-
-const factorySearch = () => {
-
-}
-
-const { screenWidth, screenHeight } = Taro.getSystemInfoSync()
 
 //初始化页码参数
 const INIT_PAGE = { currPage: 1, pageSize: 10 }
@@ -38,13 +32,13 @@ const INIT_QUERY = { type: '', sort: '', query: {} }
 //初始hot高度
 const HOT_HEIGHT = SYSTEM_PAGE_SIZE(35)
 
+const { screenHeight } = Taro.getSystemInfoSync()
+
 export default class Index extends Component<any> {
 
   public searchBarRef = React.createRef<SearchBar>()
 
   public scrollRef = React.createRef<GScrollView>()
-
-  private indexesRef = React.createRef<Indexes>()
 
   private formRef = React.createRef<Forms>()
 
@@ -66,24 +60,23 @@ export default class Index extends Component<any> {
     searchList: [],
     query: { ...INIT_QUERY },
     selectShow: false,
-    indexesVisible: false
   }
 
   //数据获取
-  public fetchData = async (query: any, isInit = false) => {
+  public fetchData = async (query: API_USER.ISearchDataParams, isInit = false) => {
     const { searchList } = this.state
     Taro.showLoading({ mask: true, title: '查询中' })
-    const [, data] = await withTry(factorySearch)({ ...query })
+    const [, data] = await withTry(getSearchDataList)(query)
     Taro.hideLoading()
     if (data) {
-      const _data = data.data
+      const _data = data
       let newData
       if (isInit) {
         newData = [..._data]
       } else {
         newData = [...searchList, ..._data]
       }
-      await this.setState({
+      this.setState({
         searchList: newData
       })
       return _data || []
@@ -91,92 +84,49 @@ export default class Index extends Component<any> {
     return []
   }
 
-  /**
-   * 字段筛选
-   */
+  //字段筛选
   public confirm = async (value: string) => {
-    Taro.showLoading({ mask: true, title: '努力搜索中' })
-    const [, data] = await withTry(factorySearch)({ ...INIT_PAGE, query: { query: {}, field: value } })
-    Taro.hideLoading()
-    if (data) {
-      const _data = data.data
-      await this.setState({
-        searchList: _data
-      })
-      this.showList(true)
-    }
+    const params = { ...INIT_PAGE, query: { query: {}, field: value } }
+    await this.fetchData(params, true)
   }
 
-  /**
-   * 分类筛选
-   */
+  //分类筛选
   public typeScreen = async (type: string) => {
     const { query } = this.state
     this.setState({
       query: { ...query, type }
     })
-    Taro.showLoading({ mask: true, title: '筛选中' })
-    const [, data] = await withTry(factorySearch)({ ...INIT_PAGE, query: { ...INIT_QUERY, ...query, type, field: this.searchBarRef.current!.searchBarRef.current!.state!.value || '' } })
-    Taro.hideLoading()
-    if (data) {
-      const _data = data.data
-      await this.setState({
-        searchList: _data
-      })
-    }
+    const params = { ...INIT_PAGE, query: { ...INIT_QUERY, ...query, type, field: this.searchBarRef.current!.searchBarRef.current!.state!.value || '' } }
+    this.fetchData(params, true)
   }
 
-  /**
-   * 排序筛选
-   */
+  //排序筛选
   public sortScreen = async (sort: string) => {
     const { query } = this.state
     this.setState({
       query: { ...query, sort }
     })
-    Taro.showLoading({ mask: true, title: '努力搜索中' })
-    const [, data] = await withTry(factorySearch)({ ...INIT_PAGE, query: { ...INIT_QUERY, ...query, sort, field: this.searchBarRef.current!.searchBarRef.current!.state!.value || '' } })
-    Taro.hideLoading()
-    if (data) {
-      const _data = data.data
-      await this.setState({
-        searchList: _data
-      })
-    }
+    const params = { ...INIT_PAGE, query: { ...INIT_QUERY, ...query, sort, field: this.searchBarRef.current!.searchBarRef.current!.state!.value || '' } }
+    this.fetchData(params, true)
   }
 
-  /**
-   * 参数筛选
-   */
+  //参数筛选
   public queryScreen = async (formData: FormData) => {
     const { query } = this.state
     this.setState({
       query: { ...query, query: formData }
     })
-    Taro.showLoading({ mask: true, title: '努力筛选中' })
-    const [, data] = await withTry(factorySearch)({ ...INIT_PAGE, query: { ...INIT_QUERY, ...query, query: formData, field: this.searchBarRef.current!.searchBarRef.current!.state.value || '' } })
-    Taro.hideLoading()
-    if (data) {
-      const _data = data.data
-      await this.setState({
-        searchList: _data
-      })
-    }
+    const params = { ...INIT_PAGE, query: { ...INIT_QUERY, ...query, query: formData, field: this.searchBarRef.current!.searchBarRef.current!.state.value || '' } }
+    this.fetchData(params, true)
   }
 
-  /**
-   * 节流数据获取
-   */
+  //节流数据获取
   public throttleFetchData = throttle(this.fetchData, 2000)
 
-  /**
-   * 防抖搜索
-   */
-  public debounceConfirm = debounce(this.confirm, 2000)
+  //防抖搜索
+  public debounceConfirm = debounce(this.confirm, 1000)
 
-  /**
-   * 展示方式切换
-   */
+  //展示方式切换
   public showMethod = () => {
     const { showList } = this.state
     this.setState({
@@ -217,155 +167,106 @@ export default class Index extends Component<any> {
     }
   }
 
-  /**
-   * 筛选遮罩展示
-   */
-  public drawerOpen() {
+  //筛选遮罩展示
+  public drawerOpen = () => {
     this.setState({
       selectShow: true
     })
   }
 
-  /**
-   * 关闭抽屉
-   */
+  //关闭抽屉
   public drawerClose = () => {
     this.setState({
       selectShow: false
     })
   }
 
-  //索引显示隐藏
-  public handleIndexesShow = ({ visible, type }) => {
-    this.setState({
-      indexesVisible: visible
-    }, () => {
-      setTimeout(() => {
-        this.indexesRef.current!.indexesVisible(type)
-      }, 0)
-    })
-  }
-
-  //索引选择
-  public handleSelectIndexes = (item: Item, type: EIndexesType) => {
-    //隐藏索引
-    this.setState({
-      indexesVisible: false
-    }, () => {
-      setTimeout(() => {
-        this.formRef.current!.handleIndexesAppend(item, type)
-      }, 0)
-    })
-  }
-
   public render() {
-    const { showList, searchList, listShow, hotShow, selectShow, indexesVisible } = this.state
+    const { showList, searchList, listShow, hotShow, selectShow } = this.state
+
     return (
       <GScrollView
         ref={this.scrollRef}
         style={{
           ...style.backgroundColor('bgColor')
         }}
+        emptyShow={false}
         autoFetch={false}
         sourceType={ESourceTypeList.Scope}
         renderContent={
-          !indexesVisible ?
-            <Indexes
-              handleClick={this.handleSelectIndexes}
-              ref={this.indexesRef}
-            ></Indexes>
-            :
-            <View>
-              <AtDrawer
-                show={selectShow}
-                mask={false}
-                right={true}
-                width={SYSTEM_PAGE_SIZE(300) + 'px'}
-                className='drawer'
-              >
-                <Forms
-                  ref={this.formRef}
-                  screen={this.queryScreen}
-                  indexesShow={this.handleIndexesShow}
-                />
-              </AtDrawer>
-              {
-                selectShow ?
-                  <View
-                    className='curtain'
-                    onClick={this.drawerClose}
-                    style={{
-                      opacity: selectShow ? '0.3' : '0',
-                    }}
-                    onTouchMove={(e) => { e.stopPropagation() }}
-                  ></View>
-                  : null
-              }
+          <View>
+            <AtDrawer
+              show={selectShow}
+              mask={false}
+              right={true}
+              width={SYSTEM_PAGE_SIZE(300) + 'px'}
+              className='drawer'
+            >
+              <Forms
+                visible={selectShow}
+                ref={this.formRef}
+                screen={this.queryScreen}
+              />
+            </AtDrawer>
+            {
+              selectShow ?
+                <View
+                  className='curtain'
+                  onClick={this.drawerClose}
+                  style={{
+                    opacity: selectShow ? '0.3' : '0',
+                  }}
+                  onTouchMove={(e) => { e.stopPropagation() }}
+                ></View>
+                : null
+            }
+            <View
+              className='search-head'
+            >
+              <SearchBar
+                confirm={this.debounceConfirm}
+                ref={this.searchBarRef}
+                focus={false}
+                control={this.showList}
+                hotShow={hotShow}
+                disabled={false}
+              />
+            </View>
+            <View
+              className='search-main'
+              style={{
+                display: listShow && searchList.length ? 'block' : 'none',
+              }}
+            >
               <View
-                className='search-head'
-                style={{ width: screenWidth + 'px' }}
+                className='head'
               >
-                <SearchBar
-                  confirm={this.debounceConfirm}
-                  ref={this.searchBarRef}
-                  focus={false}
-                  control={this.showList}
-                  hotShow={hotShow}
-                  disabled={false}
-                />
+                <Head screen={this.typeScreen} />
               </View>
               <View
-                className='search-main'
-                style={{
-                  display: listShow && searchList.length ? 'block' : 'none',
-                  overflowX: 'hidden',
-                  paddingTop: 150 + 'rpx',
-                }}
+                className='head-sub'
               >
-                <View
-                  className='head'
-                >
-                  <Head screen={this.typeScreen} />
-                </View>
-                <View
-                  className='head-sub'
-                >
-                  <View className='at-row at-row__justify--around sub'>
-                    <View className='at-col at-col-5 select'>
-                      <RadioList screen={this.sortScreen} />
-                    </View>
-                    <View className='at-col at-col-3 look'>
-                      <Method
-                        screen={this.showMethod}
-                      />
-                    </View>
-                    <View className='at-col at-col-5 screen'>
-                      <Text
-                        className='text'
-                        onClick={this.drawerOpen}>筛选</Text>
-                    </View>
+                <View className='at-row at-row__justify--around sub'>
+                  <View className='at-col at-col-5 select'>
+                    <RadioList screen={this.sortScreen} />
+                  </View>
+                  <View className='at-col at-col-3 look'>
+                    <Method
+                      screen={this.showMethod}
+                    />
+                  </View>
+                  <View className='at-col at-col-5 screen'>
+                    <Text
+                      className='text'
+                      onClick={this.drawerOpen}>筛选</Text>
                   </View>
                 </View>
-                {showList ? <List list={searchList} /> : <IconList list={searchList} />}
               </View>
+              {showList ? <List list={searchList} /> : <IconList list={searchList} />}
             </View>
+          </View>
         }
         fetch={this.throttleFetchData}
-      // header={150}
-      // renderHeader={
-      //     <View 
-      //         className='search-head' 
-      //         style={{width: screenWidth + 'px'}}
-      //     >
-      //         <SearchBar 
-      //             confirm={this.debounceConfirm} 
-      //             ref={this.searchBarRef}
-      //             focus={false}
-      //             control={this.showList}
-      //             hotShow={hotShow}
-      //         />
-      //     </View>
-      // }
       >
       </GScrollView>
     )

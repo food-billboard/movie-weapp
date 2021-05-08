@@ -59,7 +59,7 @@ const init = (settings) => {
 
 }
 
-const request = async function(method, path, settings:any={}) {
+const request = async function<T=any>(method, path, settings:any={}): Promise<T> {
     const {query, data, header, ...options} = settings
     invariant(HTTP_METHODS.indexOf(method) >= 0, '错误的请求方法')
 

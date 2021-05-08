@@ -1,22 +1,22 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
-import GPicker from '~components/picker'
+import { AtForm, AtButton, AtTag } from 'taro-ui'
 import ChargePicker from '../rangeCharge'
 import BaseForm from '~components/wrapForm'
+import Fab from '../../../indexes/components/Fab'
 import DateRangePicker from '../rangeDatePicker'
 import TagList from '~components/tagList'
-import { AtForm, AtButton, AtTag } from 'taro-ui'
 import { createFieldsStore } from '~components/wrapForm/fieldsStore'
 import ComponentCheckbox from '~components/checkbox'
-import GCheckbox from '../../../issue/components/checkbox'
+import GCheckbox, { EDataType } from '../../../issue/components/checkbox'
 import { FormData } from '../../interface'
 import { TypeColor } from '~theme/color'
 import style from '~theme/style'
 import List from '~components/linearlist'
 import { IList } from '~components/linearlist'
 import { SYSTEM_PAGE_SIZE } from '~config'
-import { withTry } from '~utils'
+import { withTry, router, routeAlias } from '~utils'
 import { Item } from '~components/indexes'
 import { EIndexesType } from '../../../issue/interface'
 
@@ -24,22 +24,22 @@ import './index.scss'
 
 export interface IProps {
     screen: (formData: FormData) => void
-    indexesShow: (...args: Array<any>) => any
-  }
+    visible: boolean 
+}
   
-  interface FeeOption {
+interface FeeOption {
     value: string,
     label: string,
     disabled: boolean
-  }
-  
-  export interface FormDefault {
+}
+
+export interface FormDefault {
     feeOptions: Array<FeeOption>
-  }
-  
-  export interface IState {
+}
+
+export interface IState {
     open: boolean
-  }
+}
 
 const TAT_STYLE = {
     boxSizing: 'border-box', 
@@ -123,9 +123,7 @@ export default class Forms extends Component<IProps> {
             id: Symbol('other')
         }
 
-    /**
-     * 搜索条件数据检验
-     */
+    //搜索条件数据检验
     public filterFactor = () => {
         const values = fieldsStore.getFieldsValue()
         const {
@@ -142,18 +140,15 @@ export default class Forms extends Component<IProps> {
             minPrice: min,
             startDate: start,
             endDate: end,
-            director: director.map(item => item.key),
-            actor: actor.map(item => item.key),
-            district: district.map(item => item.key),
+            director: director.map(item => item._id),
+            actor: actor.map(item => item._id),
+            district: district.map(item => item._id),
             ...nextProps
         }
         return data
-
     }
 
-    /**
-     * 筛选提交
-     */
+    //筛选提交
     public onSubmit = async () => {
         const data = this.filterFactor()
         Taro.showLoading({title: '稍等', mask: true})
@@ -161,9 +156,7 @@ export default class Forms extends Component<IProps> {
         Taro.hideLoading()
     }
 
-    /**
-     * 筛选重置
-     */
+    //筛选重置
     public onReset = async () => {
         const {confirm} = await Taro.showModal({
             title: '提示',
@@ -178,9 +171,7 @@ export default class Forms extends Component<IProps> {
         })
     }
 
-    /**
-     * 是否选择免费
-     */
+    //是否选择免费
     public feeChange = (value:Array<string>) => {
         let status = false
         if(value.includes('free') && value.length === 1) {
@@ -196,14 +187,22 @@ export default class Forms extends Component<IProps> {
         })
     }
 
+    public handleIndexesVisible = (config: {
+        type: EIndexesType
+    }) => {
+        const { type } = config
+        const prevValue = fieldsStore?.getFieldValue(type) || []
+        router.push(routeAlias.indexes, { type, value: JSON.stringify(prevValue || []) })
+    }
+
     //索引选择
     public handleIndexesAppend = (item: Item, type:EIndexesType) => {
         const { key, name } = item 
-        let ref
+        let ref: any
         switch(type) {
-            case 'ACTOR': ref = this.actorRef; break;
-            case 'DIRECTOR': ref = this.directorRef; break;
-            case 'DISTRICT': ref = this.districtRef; break;
+            case EIndexesType.actor: ref = this.actorRef; break;
+            case EIndexesType.director: ref = this.directorRef; break;
+            case EIndexesType.district: ref = this.districtRef; break;
         }
         ref.current!.handleAppend({ name, key })
     }
@@ -211,6 +210,7 @@ export default class Forms extends Component<IProps> {
     public render() {
         const { open } = this.state
         const { feeOptions } = this.formDefault
+        const { visible } = this.props
 
         const tagStyle: any = {
             ...TAT_STYLE,
@@ -226,9 +226,10 @@ export default class Forms extends Component<IProps> {
                 onReset={this.onReset}
                 customStyle={{
                     ...style.backgroundColor('bgColor'),
-                    position:'absolute',
+                    position:'relative',
                     left:0,
                     top:0,
+                    height: '100%'
                 }}
             >
                 <BaseForm name="search-select">
@@ -276,7 +277,7 @@ export default class Forms extends Component<IProps> {
                             分类
                         </AtTag>
                         <GCheckbox
-                            type={'CLASSIFY'}
+                            type={EDataType.CLASSIFY}
                             handleChange={fieldsStore.getFieldProps('classify', 'onChange', {
                                 initialValue: []
                             })}
@@ -302,122 +303,111 @@ export default class Forms extends Component<IProps> {
                                 initialValue: {start: '', end: ''}
                             })}
                             value={fieldsStore.getFieldValue('time')}
+                            
                         ></DateRangePicker>
                     </View>
                     <List
                         list={[{...this.detailScreenBtn, arrow: open ? 'up' : 'down'}]}
-                        style={open ? {} : {paddingBottom: SYSTEM_PAGE_SIZE(92) + 'px'}}
+                        style={{ paddingBottom: open ? 0 : SYSTEM_PAGE_SIZE(92) + 'px' }}
                     ></List>
-                    {
-                        open && <View className='other'>
-                            <View className='actor'>
-                                <AtTag 
-                                    onClick={this.props.indexesShow.bind(this, { visible: true, type: 'ACTOR' })}
-                                    customStyle={{...tagStyle, marginTop: '20px'}} 
-                                    type={'primary'}
-                                >
-                                    演员
-                                </AtTag>
-                                <TagList
-                                    ref={this.actorRef}
-                                    style={{marginBottom: '20px'}}
-                                    list={fieldsStore.getFieldValue('actor')}
-                                    handleChange={
-                                    fieldsStore.getFieldProps('actor', 'onChange', {
-                                        rules: [
-                                        {
-                                            required: true
-                                        }
-                                        ],
-                                        initialValue: [],
-                                        getOnChangeValue(value) {
-                                            return value
-                                        }
-                                    })
+                    <View className='other' style={{display: open ? 'block' : 'none', paddingBottom: open ? SYSTEM_PAGE_SIZE(92) + 'px' : 0}}>
+                        <View className='actor'>
+                            <AtTag 
+                                onClick={this.handleIndexesVisible.bind(this, { type: EIndexesType.actor })}
+                                customStyle={{...tagStyle, marginTop: '20px'}} 
+                                type={'primary'}
+                            >
+                                演员
+                            </AtTag>
+                            <TagList
+                                ref={this.actorRef}
+                                style={{marginBottom: '20px'}}
+                                list={fieldsStore.getFieldValue('actor')}
+                                handleChange={
+                                fieldsStore.getFieldProps('actor', 'onChange', {
+                                    rules: [
+                                    {
+                                        required: true
                                     }
-                                ></TagList>
-                            </View>
-                            <View className='director'>
-                                <AtTag 
-                                    onClick={this.props.indexesShow.bind(this, { visible: true, type: 'DIRECTOR' })}
-                                    customStyle={tagStyle} 
-                                    type={'primary'}
-                                >
-                                    导演
-                                </AtTag>
-                                <TagList
-                                    ref={this.directorRef}
-                                    style={{marginBottom: '20px'}}
-                                    list={fieldsStore.getFieldValue('director')}
-                                    handleChange={
-                                    fieldsStore.getFieldProps('director', 'onChange', {
-                                        rules: [
-                                        {
-                                            required: true
-                                        }
-                                        ],
-                                        initialValue: [],
-                                        getOnChangeValue(value) {
-                                            return value
-                                        }
-                                    })
+                                    ],
+                                    initialValue: [],
+                                    getOnChangeValue(value) {
+                                        return value
                                     }
-                                ></TagList>
-                            </View >
-                            <View className='language'>
-                                <AtTag 
-                                    customStyle={tagStyle} 
-                                    type={'primary'}
-                                >
-                                    语言
-                                </AtTag>
-                                <GCheckbox
-                                    type={'LANGUAGE'}
-                                    handleChange={fieldsStore.getFieldProps('language', 'onChange', {
-                                        initialValue: []
-                                    })}
-                                    value={fieldsStore.getFieldValue('language')}
-                                ></GCheckbox>
-                                <GPicker
-                                    selector={{range: lang.map((val: any) => {
-                                    const { value } = val
-                                    return value
-                                    })}}
-                                    handleChange={fieldsStore.getFieldProps('lang', 'onChange', {
-                                        initialValue: []
-                                    })}
-                                    value={fieldsStore.getFieldValue('lang')}
-                                ></GPicker>
-                            </View>
-                            <View className='area'>
-                                <AtTag 
-                                    customStyle={tagStyle} 
-                                    type={'primary'}
-                                >
-                                    地区
-                                </AtTag>
-                                <TagList
-                                    ref={this.districtRef}
-                                    style={{marginBottom: '20px'}}
-                                    list={fieldsStore.getFieldValue('district')}
-                                    handleChange={
-                                    fieldsStore.getFieldProps('district', 'onChange', {
-                                        rules: [
-                                        {
-                                            required: true
-                                        }
-                                        ],
-                                        initialValue: [],
-                                        getOnChangeValue(value) {
-                                            return value
-                                        }
-                                    })
-                                    }
-                                ></TagList>
-                            </View>
+                                })
+                                }
+                            ></TagList>
                         </View>
-                    }
-                    <View className='btn'>
+                        <View className='director'>
+                            <AtTag 
+                                onClick={this.handleIndexesVisible.bind(this, { type: EIndexesType.director })}
+                                customStyle={tagStyle} 
+                                type={'primary'}
+                            >
+                                导演
+                            </AtTag>
+                            <TagList
+                                ref={this.directorRef}
+                                style={{marginBottom: '20px'}}
+                                list={fieldsStore.getFieldValue('director')}
+                                handleChange={
+                                fieldsStore.getFieldProps('director', 'onChange', {
+                                    rules: [
+                                    {
+                                        required: true
+                                    }
+                                    ],
+                                    initialValue: [],
+                                    getOnChangeValue(value) {
+                                        return value
+                                    }
+                                })
+                                }
+                            ></TagList>
+                        </View >
+                        <View className='language'>
+                            <AtTag 
+                                customStyle={tagStyle} 
+                                type={'primary'}
+                            >
+                                语言
+                            </AtTag>
+                            <GCheckbox
+                                type={EDataType.LANGUAGE}
+                                handleChange={fieldsStore.getFieldProps('language', 'onChange', {
+                                    initialValue: []
+                                })}
+                                value={fieldsStore.getFieldValue('language')}
+                            ></GCheckbox>
+                        </View>
+                        <View className='area'>
+                            <AtTag 
+                                customStyle={tagStyle} 
+                                type={'primary'}
+                            >
+                                地区
+                            </AtTag>
+                            <TagList
+                                ref={this.districtRef}
+                                style={{marginBottom: '20px'}}
+                                list={fieldsStore.getFieldValue('district')}
+                                handleChange={
+                                fieldsStore.getFieldProps('district', 'onChange', {
+                                    rules: [
+                                    {
+                                        required: true
+                                    }
+                                    ],
+                                    initialValue: [],
+                                    getOnChangeValue(value) {
+                                        return value
+                                    }
+                                })
+                                }
+                            ></TagList>
+                        </View>
+                    </View>
+                    {/* <View className='btn'>
                         <AtButton 
                             formType='reset' 
                             type='secondary' 
@@ -432,8 +422,16 @@ export default class Forms extends Component<IProps> {
                             type='primary' 
                             customStyle={{...style.backgroundColor('primary'), ...style.border(1, 'primary', 'solid', 'all'), ...style.color('disabled')}}
                         >确定</AtButton>
-                    </View>
+                    </View> */}
                 </BaseForm>
+                {
+                    visible && (
+                        <Fab
+                            text="确定"
+                            onClick={this.onSubmit}
+                        />
+                    )
+                }
             </AtForm>
         )
     }

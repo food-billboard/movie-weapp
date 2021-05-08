@@ -32,7 +32,7 @@ export default class RadioList extends Component<IProps>{
 
     public state:IState = {
         value: '',
-        text: '',
+        text: '综合',
         show: false,
         radioList: []
     }
@@ -46,22 +46,24 @@ export default class RadioList extends Component<IProps>{
         Taro.showLoading({mask: true, title: '稍等一下'})
         const [, data] = await withTry(getOrderList)()
         Taro.hideLoading()
-        if(data) {
-            this.setState({
-                radioList: data.map((val:any) => {
+        data && this.setState({
+            radioList: [
+                ...data.map((val:any) => {
                     const { name, _id } = val
                     return {
                         value: _id,
                         label: name,
                     }
-                })
-            })
-        }
+                }),
+                {
+                    value: '',
+                    label: '综合'
+                }
+            ]
+        })
     }
 
-    /**
-     * 条件选择
-     */
+    //条件选择
     public handleChange = (label: string, value: string) => {
         this.setState({
             value: value,
@@ -71,9 +73,7 @@ export default class RadioList extends Component<IProps>{
         this.props.screen(value)
     }
 
-    /**
-     * 列表显示控制
-     */
+    //列表显示控制
     public showList = () => {
         const { show } = this.state
         this.setState({
@@ -90,6 +90,7 @@ export default class RadioList extends Component<IProps>{
 
     public render() {
         const { text, show, radioList } = this.state
+
         return (
             <View className='radio'>
                 <Text className='select'

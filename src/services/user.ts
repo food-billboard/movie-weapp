@@ -166,5 +166,12 @@ export const getActorList = (count: number = -1) => {
 
 //排序列表
 export const getOrderList = () => {
-  return request('GET', '/api/user/movie/order/list')
+  return request<API_USER.ISearchOrderFieldListRes>('GET', '/api/user/movie/order')
+}
+
+//数据搜索
+export const getSearchDataList = (params: API_USER.ISearchDataParams) => {
+  return request<API_USER.ISearchDataRes>('GET', '/api/user/movie/search', {
+    query: params
+  })
 }

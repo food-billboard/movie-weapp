@@ -6,6 +6,7 @@ import './index.scss'
 
 interface IProps {
   onClick?: () => any
+  text?: string 
 }
 
 export default memo((props: IProps) => {
@@ -19,7 +20,7 @@ export default memo((props: IProps) => {
       <AtFab
         onClick={handleClick}
       >
-        <View>完成</View>
+        <View>{props.text || '完成'}</View>
       </AtFab>
     </View>
   )

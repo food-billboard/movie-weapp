@@ -61,7 +61,7 @@ export default class extends Component<IProps, IState> {
           <GPicker
             ref={this.startRef}
             date={{
-              fields: 'year',
+              fields: 'day',
             }}
             title={'起始时间'}
             style={{marginBottom: '5px'}}
@@ -74,7 +74,7 @@ export default class extends Component<IProps, IState> {
           <GPicker
             ref={this.endRef}
             date={{
-              fields: 'year'
+              fields: 'day'
             }}
             title={'结束时间'}
             style={{paddingBottom:'20px'}}

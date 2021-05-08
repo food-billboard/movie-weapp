@@ -1,8 +1,6 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
-import { View, Image } from '@tarojs/components'
-import icon from './images/icon.png'
-import list from './images/list.png'
+import { View } from '@tarojs/components'
 
 import './index.scss'
 
@@ -11,9 +9,7 @@ export interface IProps {
   }
   
   export interface IState {
-    change: Array<number>,
-    index: number,
-    active: number
+    active: boolean
   }
 
 export default class Methods extends Component<IProps, IState>{
@@ -22,32 +18,24 @@ export default class Methods extends Component<IProps, IState>{
     }
 
     public state: IState = {
-        change: [0, 1],
-        index: 0,
-        active: 0
+        active: true
     }
 
-    /**
-     * 状态改变
-     */
     public change = () => {
-        const {index, change} = this.state
-        var i = index
-        i ++
-        i %= 2
+        const { active } = this.state
         this.setState({
-            active: change[i],
-            index: i
+            active: !active
         })
         this.props.screen()
     }
 
     public render() {
+        const { active } = this.state 
         return (
-            <View className='method'
-                onClick={this.change}>
-                <Image className='active' src={this.state.active ? list : icon}></Image>
-            </View>
+            <View 
+                className={`at-icon at-icon-${active ? 'list' : 'image'}`}
+                onClick={this.change}
+            ></View>
         )
     }
 }
