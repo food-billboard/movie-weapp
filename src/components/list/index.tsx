@@ -8,7 +8,6 @@ import Ellipsis from '../ellipsis'
 import Item from './item'
 import Rate from '../rate'
 import style from '~theme/style'
-import { IList } from '../iconlist'
 import { mapDispatchToProps, mapStateToProps } from './connect'
 import { router, isObject, routeAlias, withTry } from '~utils'
 import noop from 'lodash/noop'
@@ -17,7 +16,7 @@ import { putStore, cancelStore } from '~services'
 import './index.scss'
 
 export interface IProps {
-  list: Array<IList>
+  list: API_USER.IMovieListData[]
   style?: React.CSSProperties
   getUserInfo: TGetUserInfo
   reload: (...args: any[]) => Promise<any>
@@ -88,7 +87,7 @@ export default class List extends Component<IProps>{
     return (
       <View className='list-component'>
         {
-          list.map((value:IList) => {
+          list.map((value:API_USER.IMovieListData) => {
             const { image, name, type, time, hot, _id, rate, description, store } = value
             const imageList = Array.isArray(image) ? image : [image]
             return (

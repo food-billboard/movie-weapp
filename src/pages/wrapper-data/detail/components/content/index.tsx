@@ -5,7 +5,7 @@ import { View, Text } from '@tarojs/components'
 import GRate from '~components/rate'
 import GStore from '../store'
 import Ellipsis from '~components/ellipsis'
-import { formatTime, formatNumber, ItypeList, router, routeAlias } from '~utils'
+import { formatTime, formatNumber, router, routeAlias } from '~utils'
 import style from '~theme/style'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import noop from 'lodash/noop'
@@ -20,14 +20,14 @@ export interface IProps {
 
 interface Info {
   name: string
-  district: Array<ItypeList>
+  district: API_USER.ItypeList[]
   glance: number
-  director: Array<ItypeList>
-  actor: Array<ItypeList>
-  classify: Array<ItypeList>
+  director: API_USER.ItypeList[]
+  actor: API_USER.ItypeList[]
+  classify: API_USER.ItypeList[]
   screen_time: string
   createdAt: string
-  language: Array<ItypeList>
+  language: API_USER.ItypeList[]
   description: string
   hot: number
   rate: number
@@ -143,7 +143,7 @@ export default class Content extends Component<IProps, IState>{
               主演: 
               <Text className='text'
                 style={{ ...style.color('primary') }}
-              >{actor.map((val: ItypeList) => val.value).join(' ')}</Text>
+              >{actor.map((val: API_USER.ItypeList) => val.value).join(' ')}</Text>
             </View>
             <View className='data-detail-content-main-info-director'>
               <View className='at-col director-content'>
@@ -151,7 +151,7 @@ export default class Content extends Component<IProps, IState>{
                 导演: 
                 <Text className={'text'}
                   style={{ ...style.color('primary') }}
-                >{director.map((val: ItypeList) => {
+                >{director.map((val: API_USER.ItypeList) => {
                   const { value } = val
                   return value
                 }).join(' ')}</Text>
@@ -162,7 +162,7 @@ export default class Content extends Component<IProps, IState>{
                 分类: 
               <Text className={'text'}
                 style={{ ...style.color('primary') }}
-              >{classify.map((val: ItypeList) => {
+              >{classify.map((val: API_USER.ItypeList) => {
                 const { value } = val
                 return value
               }).join(' ')}</Text>
@@ -189,14 +189,14 @@ export default class Content extends Component<IProps, IState>{
                 语言: 
                 <Text className={'text'}
                   style={{ ...style.color('primary') }}
-                >{language.map((val: ItypeList) => val.value).join(' ')}</Text>
+                >{language.map((val: API_USER.ItypeList) => val.value).join(' ')}</Text>
               </View>
               <View className='at-col at-col-6 area' style={{paddingRight: '1em'}}>
                 <Tag className={['data-detail-content-icon']} />
                 地区: 
                 <Text className={'text'}
                   style={{ ...style.color('primary') }}
-                >{district.map((val: ItypeList) => val.value).join(' ')}</Text>
+                >{district.map((val: API_USER.ItypeList) => val.value).join(' ')}</Text>
               </View>
             </View>
             <View className='data-detail-content-main-info-hot'>

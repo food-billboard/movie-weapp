@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
 import throttle from 'lodash/throttle'
 import debounce from 'lodash/debounce' 
+import merge from 'lodash/merge'
 import SearchBar from '../../main/components/searchButton'
 import Head from './components/head'
 import List from '~components/list'
@@ -16,23 +17,19 @@ import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import { AtDrawer } from 'taro-ui'
-import { Item } from '~components/indexes'
-import { EIndexesType } from '../issue/interface'
 import { withTry, ESourceTypeList } from '~utils'
 import { getSearchDataList } from '~services'
 
 import './index.scss'
 
 //初始化页码参数
-const INIT_PAGE = { currPage: 1, pageSize: 10 }
+const INIT_PAGE = { currPage: 0, pageSize: 10 }
 
 //初始化参数
-const INIT_QUERY = { type: '', sort: '', query: {} }
+const INIT_QUERY = { type: '', sort: '' }
 
 //初始hot高度
 const HOT_HEIGHT = SYSTEM_PAGE_SIZE(35)
-
-const { screenHeight } = Taro.getSystemInfoSync()
 
 export default class Index extends Component<any> {
 
@@ -70,7 +67,7 @@ export default class Index extends Component<any> {
     Taro.hideLoading()
     if (data) {
       const _data = data
-      let newData
+      let newData: any
       if (isInit) {
         newData = [..._data]
       } else {
@@ -84,47 +81,56 @@ export default class Index extends Component<any> {
     return []
   }
 
-  //字段筛选
+  //内容筛选
   public confirm = async (value: string) => {
-    const params = { ...INIT_PAGE, query: { query: {}, field: value } }
+    const params = { ...INIT_PAGE, content: value }
     await this.fetchData(params, true)
+  }
+
+  private get searchValue() {
+    return this.searchBarRef.current?.searchBarRef.current?.state?.value || ''
   }
 
   //分类筛选
   public typeScreen = async (type: string) => {
     const { query } = this.state
-    this.setState({
-      query: { ...query, type }
-    })
-    const params = { ...INIT_PAGE, query: { ...INIT_QUERY, ...query, type, field: this.searchBarRef.current!.searchBarRef.current!.state!.value || '' } }
+    // this.setState({
+    //   query: { ...query, type }
+    // })
+    const params = { ...INIT_PAGE, ...query, content: this.searchValue }
     this.fetchData(params, true)
   }
 
   //排序筛选
   public sortScreen = async (sort: string) => {
     const { query } = this.state
-    this.setState({
-      query: { ...query, sort }
+    const newQuery = merge({}, query, {
+      sort: `${sort}=-1`
     })
-    const params = { ...INIT_PAGE, query: { ...INIT_QUERY, ...query, sort, field: this.searchBarRef.current!.searchBarRef.current!.state!.value || '' } }
+    this.setState({
+      query: newQuery
+    })
+    const params = { ...INIT_PAGE, ...newQuery, content: this.searchValue }
     this.fetchData(params, true)
   }
 
   //参数筛选
-  public queryScreen = async (formData: FormData) => {
+  public queryScreen = async (formData: Partial<FormData>) => {
     const { query } = this.state
+    const newQuery = merge({}, query, formData)
     this.setState({
-      query: { ...query, query: formData }
+      query: newQuery,
+      selectShow: false
     })
-    const params = { ...INIT_PAGE, query: { ...INIT_QUERY, ...query, query: formData, field: this.searchBarRef.current!.searchBarRef.current!.state.value || '' } }
-    this.fetchData(params, true)
+    const params = { ...INIT_PAGE, ...newQuery, content: this.searchValue, }
+    this.fetchData(params as any, true)
   }
 
   //节流数据获取
   public throttleFetchData = throttle(this.fetchData, 2000)
 
   //防抖搜索
-  public debounceConfirm = debounce(this.confirm, 1000)
+  public debounceConfirm = debounce(this.confirm, 200)
 
   //展示方式切换
   public showMethod = () => {
@@ -199,7 +205,7 @@ export default class Index extends Component<any> {
               show={selectShow}
               mask={false}
               right={true}
-              width={SYSTEM_PAGE_SIZE(300) + 'px'}
+              width={"90vw"}
               className='drawer'
             >
               <Forms

@@ -1,6 +1,7 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, ScrollView, Text } from '@tarojs/components'
+import classnames from 'classnames'
 import IconList from '~components/iconlist'
 import LinearList from '~components/list'
 import GScrollView from '~components/scrollList'
@@ -148,7 +149,15 @@ export default class Index extends Component<any> {
       const { name, _id: id } = val
       return (
         <View
-          className={'header-list ' + (typeShow ? 'at-col at-col-2' : 'header-list-size')}
+          className={
+            classnames({
+              'header-list': true,
+              'at-col': typeShow,
+              'at-col-2': typeShow,
+              'header-list-size': !typeShow,
+              'header-list-active': id == this.id
+            })
+          }
           style={{ ...style.color('primary') }}
           key={id}
           onClick={(_) => { this.getTypeDetail.call(this, id) }}
@@ -189,7 +198,7 @@ export default class Index extends Component<any> {
                     {
                       !showType ?
                         <View
-                          className={'header-list header-list-size'}
+                          className={`header-list header-list-size`}
                           style={{ ...style.color('primary'), fontWeight: 'normal' }}
                           onClick={(e) => { this.handleControlTypeDetail.call(this, SHOW_TYPE.SHOW_MORE) }}
                         >
@@ -215,7 +224,7 @@ export default class Index extends Component<any> {
                   </View>
               }
             </View>
-            <View>
+            <View className="classify-list">
               {
                 listShow ? (<LinearList list={data} reload={this.fetchData.bind(this, {}, true)} />) : (<IconList list={data} reload={this.fetchData.bind(this, {}, true)} />)
               }

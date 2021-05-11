@@ -12,12 +12,42 @@ declare namespace API_UPLOAD {
 
 declare namespace API_USER {
 
-  export interface ISearchDataParams {
+  export interface ItypeList {
+    value: string
+    id?: string
+  }
 
+  export interface IMovieListData {
+    image: string
+    name: string
+    type?: ItypeList[]
+    time: string | number
+    hot: number
+    _id: string
+    rate: number
+    description: string
+    store?: boolean
+    author: {
+      avatar: string
+      username: string
+      _id: string 
+    }
+  }
+
+  export interface ISearchDataParams {
+    currPage?: number 
+    pageSize?: number 
+    content?: string 
+    area?: string 
+    director?: string 
+    actor?: string 
+    lang?: string 
+    time?: string 
+    sort?: string 
   }
 
   export interface ISearchDataRes {
-
+    
   }
 
   export interface ISearchDataResData {

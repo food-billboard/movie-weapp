@@ -64,7 +64,7 @@ export default class extends Component<IProps, IState> {
           control={control}
         />
         {
-          hot.length ?
+          !!hot.length &&
             <View
               className='at-row hotsearch at-row__align--center'
               style={{ height: hotShow ? hotShow + 'px' : '0', ...style.backgroundColor('bgColor'), ...style.color('primary') }}>
@@ -96,7 +96,6 @@ export default class extends Component<IProps, IState> {
                 })
               }
             </View>
-            : null
         }
       </View>
     )

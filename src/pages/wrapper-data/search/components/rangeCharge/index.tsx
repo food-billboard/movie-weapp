@@ -11,6 +11,7 @@ export interface IProps {
     min: string
   }
   onChange: (...args: any[]) => any
+  disabled?: boolean
  }
 
  export interface IState {
@@ -20,7 +21,7 @@ export interface IProps {
 export default class extends Component<IProps, IState>{ 
 
   public state: IState = {
-    disabled: false
+    disabled: !!this.props.disabled
   }
 
   public minChange = (value) => {

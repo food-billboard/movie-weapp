@@ -54,17 +54,21 @@ export default class extends Component<IProps, IState>{
   }
 
   type: EIndexesType
+  url: string
 
   componentDidMount = async () => {
     const router = getCurrentInstance().router
-    const { value, type } = router?.params || {}
+    const { value, type, url } = router?.params || {}
     await this.fetchData(type)
     try {
       this.setState({
         value: JSON.parse(decodeURIComponent(value as string))
       })
+      this.url = (url ? decodeURIComponent(url) : false) || routeAlias.issue
     }catch(err) {}
-    if(type) this.type = type as EIndexesType
+    if(type) {
+      this.type = type as EIndexesType
+    }
   }
 
   handleClick = (newItem: Item) => {
@@ -105,7 +109,7 @@ export default class extends Component<IProps, IState>{
 
   back = () => {
     const { value } = this.state
-    router.replace(routeAlias.issue, {
+    router.replace(this.url, {
       type: this.type,
       value: JSON.stringify(value || [])
     })

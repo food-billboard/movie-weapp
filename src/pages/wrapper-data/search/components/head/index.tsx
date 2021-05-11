@@ -47,9 +47,7 @@ export default class Head extends Component<IProps, IState>{
         current: 0  
     }
 
-    /**
-     * 条件筛选
-     */
+    //条件筛选
     public handleClick = (value: number) => {
         this.setState({
             current: value

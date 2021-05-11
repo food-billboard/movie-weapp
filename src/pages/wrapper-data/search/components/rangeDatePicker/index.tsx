@@ -1,5 +1,6 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
+import Day from 'dayjs'
 import { View } from '@tarojs/components'
 import GPicker from '~components/picker'
 import './index.scss'
@@ -26,9 +27,9 @@ export default class extends Component<IProps, IState> {
   private endRef = React.createRef<GPicker>()
 
   public startChange = async (value) => {
-    const { onChange, value: { end=new Date().getFullYear() }={} } = this.props
+    const { onChange, value: { end=Day() }={} } = this.props
     let data = value
-    if(end.toString().length && ~~value >= ~~end) {
+    if(end.toString().length && Day(value).valueOf() >= Day(end).valueOf()) {
       data = end
       Taro.showToast({
         title: '时间错误会默认忽略',
@@ -39,9 +40,9 @@ export default class extends Component<IProps, IState> {
   }
 
   public endChange = async (value) => {
-    const { onChange, value: { start=1970 }={} } = this.props
+    const { onChange, value: { start='1970-01-01' }={} } = this.props
     let data = value
-    if(start.toString().length && ~~value <= ~~start) {
+    if(start.toString().length && Day(value).valueOf() <= Day(start).valueOf()) {
       data = start
       Taro.showToast({
         title: '时间错误会默认忽略',

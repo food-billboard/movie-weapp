@@ -1,6 +1,7 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, Input } from '@tarojs/components'
+import { InputProps } from '@tarojs/components/types/Input'
 import { AtTextarea } from 'taro-ui'
 import { isObject, ICommonFormState, ICommonFormProps } from '~utils'
 import { FORM_ERROR } from '~config'
@@ -22,6 +23,7 @@ export interface IProps extends ICommonFormProps {
   count?: boolean
   textareaFixed?: boolean
   handleLineChange?: (e: any) => any
+  inputType: InputProps["type"]
 }
 
 export interface IState extends ICommonFormState {
@@ -36,7 +38,8 @@ export default class extends Component<IProps, IState> {
     type: EInputType.INPUT,
     placeholder: false,
     disabled: false,
-    value: false
+    value: false,
+    inputType: 'text'
   }
 
   public state: IState = {

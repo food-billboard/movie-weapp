@@ -4,6 +4,9 @@ $item_width: 125px;
     overflow:hidden;
     transition:.3s;
     font-size:32px;
+    position: relative;
+    z-index: 2;
+
     .header{
         position:fixed;
         white-space:nowrap;
@@ -26,6 +29,13 @@ $item_width: 125px;
         text-align:center;
         line-height:80px;
         font-weight:bold;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        opacity: 0.7;
+    }
+    .header-list-active {
+        opacity: 1;
     }
     .header-list:nth-of-type(1) {
         margin-left:$item_width;
@@ -36,6 +46,10 @@ $item_width: 125px;
     .header-type-detail{
         position:fixed;
     }
+}
+.classify-list {
+    position: relative;
+    z-index: 1;
 }
 .btn{
     position:fixed;

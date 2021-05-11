@@ -2,12 +2,12 @@ import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { AtTag } from 'taro-ui'
-import { isObject, ItypeList } from '~utils'
+import { isObject } from '~utils'
 import { TypeColor } from '~theme/color'
 import './index.scss'
 
 export interface IProps {
-  list: Array<ItypeList>
+  list: API_USER.ItypeList[]
   style?: React.CSSProperties
 }
 
@@ -38,7 +38,7 @@ export default class extends Component<IProps, IState> {
     return (
       <View className='tag'>
         {
-          list.map((val: ItypeList) => {
+          list.map((val: API_USER.ItypeList) => {
             const { id, value } = val
             return (
               <AtTag 

@@ -2,9 +2,9 @@ import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { AtForm, AtButton, AtTag } from 'taro-ui'
+import { pick } from 'lodash'
 import ChargePicker from '../rangeCharge'
 import BaseForm from '~components/wrapForm'
-import Fab from '../../../indexes/components/Fab'
 import DateRangePicker from '../rangeDatePicker'
 import TagList from '~components/tagList'
 import { createFieldsStore } from '~components/wrapForm/fieldsStore'
@@ -23,7 +23,7 @@ import { EIndexesType } from '../../../issue/interface'
 import './index.scss'
 
 export interface IProps {
-    screen: (formData: FormData) => void
+    screen: (formData: Partial<FormData>) => void
     visible: boolean 
 }
   
@@ -49,6 +49,12 @@ const TAT_STYLE = {
     color: TypeColor['primary']
 }
 
+const tagStyle: any = {
+    ...TAT_STYLE,
+    border: `1px dashed ${TypeColor['primary']}`, 
+    color: TypeColor['primary']
+}
+
 const ICON_COLOR = 'primary'
 
 const fieldsStore = createFieldsStore('issue', {
@@ -65,8 +71,7 @@ export default class Forms extends Component<IProps> {
         minPrice: 0,    //价格下限
         fee: [],   //是否免费
         type: '',   //电影类型
-        startDate: '',  //起始时间,
-        endDate: '',    //结束时间,
+        time: '',
         actor: [],   //演员
         director: [],   //导演
         language: [],   //语言
@@ -100,7 +105,7 @@ export default class Forms extends Component<IProps> {
             {
                 value: 'fee',
                 label: '付费',
-                disabled: false
+                disabled: true
             }
         ]
     }
@@ -127,22 +132,21 @@ export default class Forms extends Component<IProps> {
     public filterFactor = () => {
         const values = fieldsStore.getFieldsValue()
         const {
-            price: {max, min},
-            time: {start, end},
-            director,
-            actor,
-            district,
+            price: { max, min },
+            time: { start, end },
+            // director,
+            // actor,
+            // district,
             ...nextProps
-        } = values
+        } = pick(values, ['price', 'time', 'classify'])
 
-        let data: FormData = {
+        let data: Partial<FormData> = {
             maxPrice: max,
             minPrice: min,
-            startDate: start,
-            endDate: end,
-            director: director.map(item => item._id),
-            actor: actor.map(item => item._id),
-            district: district.map(item => item._id),
+            time: `${start}_${end}`,
+            // director: director.map(item => item._id),
+            // actor: actor.map(item => item._id),
+            // district: district.map(item => item._id),
             ...nextProps
         }
         return data
@@ -192,7 +196,7 @@ export default class Forms extends Component<IProps> {
     }) => {
         const { type } = config
         const prevValue = fieldsStore?.getFieldValue(type) || []
-        router.push(routeAlias.indexes, { type, value: JSON.stringify(prevValue || []) })
+        router.push(routeAlias.indexes, { url: routeAlias.search,type, value: JSON.stringify(prevValue || []) })
     }
 
     //索引选择
@@ -210,20 +214,9 @@ export default class Forms extends Component<IProps> {
     public render() {
         const { open } = this.state
         const { feeOptions } = this.formDefault
-        const { visible } = this.props
-
-        const tagStyle: any = {
-            ...TAT_STYLE,
-            border: `1px dashed ${TypeColor['primary']}`, 
-            color: TypeColor['primary']
-        }
-
-        const that = this
 
         return (
             <AtForm
-                onSubmit={this.onSubmit}
-                onReset={this.onReset}
                 customStyle={{
                     ...style.backgroundColor('bgColor'),
                     position:'relative',
@@ -232,7 +225,7 @@ export default class Forms extends Component<IProps> {
                     height: '100%'
                 }}
             >
-                <BaseForm name="search-select">
+                <BaseForm name="search-select" style={{height: '100vh', overflowY: 'auto', overflowX: 'hidden'}}>
                     <View className='fee'>
                         <AtTag 
                             customStyle={tagStyle} 
@@ -243,14 +236,15 @@ export default class Forms extends Component<IProps> {
                         <ComponentCheckbox
                             checkboxOption={feeOptions}
                             needHiddenList={false}
-                            handleChange={fieldsStore.getFieldProps('fee', 'onChange', {
-                                getOnChangeValue(value) {
-                                    that.feeChange(value)
-                                    return value
-                                },
-                                initialValue: []
-                            })}
-                            value={fieldsStore.getFieldValue('fee')}
+                            // handleChange={fieldsStore.getFieldProps('fee', 'onChange', {
+                            //     getOnChangeValue(value) {
+                            //         that.feeChange(value)
+                            //         return value
+                            //     },
+                            //     initialValue: ["free"]
+                            // })}
+                            // value={fieldsStore.getFieldValue('fee')}
+                            value={["free"]}
                         ></ComponentCheckbox>
                     </View>
                     <View className='price'>
@@ -267,6 +261,7 @@ export default class Forms extends Component<IProps> {
                                 initialValue: {max: '', min: ''}
                             })}
                             value={fieldsStore.getFieldValue('price')}
+                            disabled
                         />
                     </View>
                     <View className='classify'>
@@ -300,16 +295,17 @@ export default class Forms extends Component<IProps> {
                                         ...value
                                     }
                                 },
-                                initialValue: {start: '', end: ''}
+                                initialValue: { start: '', end: '' }
                             })}
                             value={fieldsStore.getFieldValue('time')}
                             
                         ></DateRangePicker>
                     </View>
-                    <List
+                    {/** 复杂筛选功能 暂时不需要*/}
+                    {/* <List
                         list={[{...this.detailScreenBtn, arrow: open ? 'up' : 'down'}]}
                         style={{ paddingBottom: open ? 0 : SYSTEM_PAGE_SIZE(92) + 'px' }}
-                    ></List>
+                    ></List> */}
                     <View className='other' style={{display: open ? 'block' : 'none', paddingBottom: open ? SYSTEM_PAGE_SIZE(92) + 'px' : 0}}>
                         <View className='actor'>
                             <AtTag 
@@ -407,9 +403,9 @@ export default class Forms extends Component<IProps> {
                             ></TagList>
                         </View>
                     </View>
-                    {/* <View className='btn'>
+                    <View className='btn'>
                         <AtButton 
-                            formType='reset' 
+                            onClick={this.onReset}
                             type='secondary' 
                             customStyle={{
                                 ...style.backgroundColor('disabled'),
@@ -418,20 +414,12 @@ export default class Forms extends Component<IProps> {
                             }}
                         >重置</AtButton>
                         <AtButton 
-                            formType='submit' 
+                            onClick={this.onSubmit}
                             type='primary' 
                             customStyle={{...style.backgroundColor('primary'), ...style.border(1, 'primary', 'solid', 'all'), ...style.color('disabled')}}
                         >确定</AtButton>
-                    </View> */}
+                    </View>
                 </BaseForm>
-                {
-                    visible && (
-                        <Fab
-                            text="确定"
-                            onClick={this.onSubmit}
-                        />
-                    )
-                }
             </AtForm>
         )
     }

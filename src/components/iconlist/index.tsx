@@ -7,31 +7,14 @@ import Swipper from './swipper'
 import style from '~theme/style'
 import { connect } from 'react-redux'
 import { mapDispatchToProps, mapStateToProps } from './connect'
-import { router, formatNumber, routeAlias, ItypeList, withTry } from '~utils'
+import { router, formatNumber, routeAlias, withTry } from '~utils'
 import { putStore, cancelStore } from '~services'
 import noop from 'lodash/noop'
 
 import './index.scss'
 
-export interface IList {
-  image: string
-  name: string
-  type?: Array<ItypeList>
-  time: string | number
-  hot: number
-  _id: string
-  rate: number
-  description: string
-  store?: boolean
-  author: {
-    avatar: string
-    username: string
-    _id: string 
-  }
-}
-
 export interface IProps {
-  list: Array<IList>
+  list: API_USER.IMovieListData[]
   handleClick: (...args: any) => any
   getUserInfo: TGetUserInfo
   reload: (...args: any[]) => Promise<any>
@@ -106,7 +89,7 @@ export default class IconList extends Component<IProps>{
     return (
       <View className='icon-list at-row at-row--wrap at-row__justify--around'>
         {
-          realList.map((value: IList) => {
+          realList.map((value: API_USER.IMovieListData) => {
             if(!value) return (
               <View
                 className='at-col at-col-5'

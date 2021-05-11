@@ -3,8 +3,7 @@ export interface FormData {
   minPrice: number | string
   fee: Array<string>,
   type: string,
-  startDate: number | string,  
-  endDate: number | string,
+  time: string 
   actor: Array<string>
   director: Array<string>
   district: Array<string>
