@@ -1,11 +1,32 @@
 declare namespace API_UPLOAD {
 
-  export interface IUploadParams {
+  export type TAuathType = "PRIVATE" | "PUBLIC"
 
+  export interface IUploadParams {
+    md5: string
+    offset: number 
+  }
+
+  export interface IUploadRes {
+    "upload-offset": number 
   }
 
   export interface ICheckUploadFileParams {
-    
+    "tus-resumable": "1.0.0"
+    md5: string 
+    auth: TAuathType 
+    size: number 
+    mime: string
+    name?: string 
+    chunk: number 
+  }
+
+  export interface ICheckUploadFileRes {
+    "tus-resumable": "1.0.0"
+    location: string 
+    "upload-offset": number 
+    "upload-length": number 
+    "upload-id": string 
   }
 
 }

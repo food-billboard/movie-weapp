@@ -1,8 +1,8 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
-import { View, Text, Image, ScrollView } from '@tarojs/components'
+import { View, Image, ScrollView } from '@tarojs/components'
 import GVideo from '../video'
-import { IMAGE_CONFIG, SYSTEM_PAGE_SIZE, FORM_ERROR } from '~config'
+import { IMAGE_CONFIG, SYSTEM_PAGE_SIZE } from '~config'
 import style from '~theme/style'
 import { isObject, EMediaType, ICommonFormProps, ICommonFormState } from '~utils'
 
@@ -87,15 +87,33 @@ export default class extends Component<IProps, IState> {
 
   //媒体选择
   public handleSelect = (type:EMediaType) => {
+    Taro.showLoading({
+      title: '选择中',
+      mask: true 
+    })
     if(type === EMediaType.IMAGE) {
       return Taro.chooseImage({
         count: IMAGE_CONFIG.count, 
         sizeType: ['original', 'compressed'],
         sourceType: ['album', 'camera'],
       })
+      .then(data => {
+        Taro.hideLoading()
+        return data 
+      })
+      .catch(_ => {
+        Taro.hideLoading()
+      })
     }else if(type === EMediaType.VIDEO) {
       return Taro.chooseVideo({
         sourceType: ['album']
+      })
+      .then(data => {
+        Taro.hideLoading()
+        return data 
+      })
+      .catch(_ => {
+        Taro.hideLoading()
       })
     }
   }
@@ -127,7 +145,7 @@ export default class extends Component<IProps, IState> {
 
 
     this.onChange(newStateValue)
-    this.value = newStateValue   
+    this.value = newStateValue as IItem[]
   }
 
   //图片选择

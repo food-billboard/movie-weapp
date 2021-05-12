@@ -3,7 +3,7 @@ import {setResponseCookie} from './cookie'
 //报错来源
 const origin = 'errorHandler'
 
-export default (type, {response}) => {
+export default (type, { response }) => {
     //response处理
     if(type === 'REQUEST_SUCCESS') {
         //设置响应状态码

@@ -1,11 +1,12 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
-import { View, Text } from '@tarojs/components'
+import merge from 'lodash/merge'
+import noop from 'lodash/noop'
+import { View } from '@tarojs/components'
 import Ellipsis from '../ellipsis'
 import ImageLoading from '../imageLoading'
 import style from '~theme/style'
 import { router, routeAlias } from '~utils'
-import noop from 'lodash/noop'
 
 import './index.scss'
 
@@ -52,9 +53,14 @@ export default class NewsHead extends Component<IProps, IState>{
     const { detail, name, id, image } = content || {}
 
     return (
-      <View className='newsheader'
+      <View 
+        className='newsheader'
         style={propsStyle}
-        onClick={this.handleClick.bind(this, id)}>
+        onClick={this.handleClick.bind(this, id)}
+      >
+        <View className="newsheader-background" style={{
+          background: `url(${image})`
+        }}></View>  
         <View className='newsheader-poster'>
           <ImageLoading 
             customStyle={{display: 'flex'}} 
