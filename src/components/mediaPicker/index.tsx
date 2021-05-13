@@ -37,7 +37,7 @@ export interface IState extends ICommonFormState {
   value: Array<IItem>
   maxCount: number
   activeVideo: string
-  isVideo: boolean
+  isVideo: false | string 
 }
 
 const { count } = IMAGE_CONFIG
@@ -58,7 +58,7 @@ export default class extends Component<IProps, IState> {
     maxCount: count,
     error: false,
     activeVideo: '',
-    isVideo: false
+    isVideo: false,
   }
 
   private videoRef:GVideo
@@ -121,6 +121,7 @@ export default class extends Component<IProps, IState> {
   //视频选择
   public handleVideoChange = async () => {
     const response: any = await this.handleSelect(EMediaType.VIDEO)
+    if(!response) return 
     const { errMsg } = response
     if(errMsg.split(':')[1] !== 'ok') {
       return
@@ -151,6 +152,7 @@ export default class extends Component<IProps, IState> {
   //图片选择
   public handleImageChange = async () => {
     const response: any = await this.handleSelect(EMediaType.IMAGE)
+    if(!response) return 
     const { errMsg } = response
     if(errMsg.split(':')[1] !== 'ok') {
       return
@@ -210,18 +212,12 @@ export default class extends Component<IProps, IState> {
       value: this.initialValue ? this.initialValue : [],
       isVideo: false,
     })
-    this.videoRef.changeConfigSrc('')
   }
 
   //查看视频
   public handlePreviewVideo = (url: string) => {
     this.setState({
-      isVideo: true
-    }, () => {
-      if(this.videoRef) {
-        this.videoRef.changeConfigSrc(url)
-        this.videoRef.seek(0)
-      }
+      isVideo: url
     })
   }
 
@@ -343,6 +339,7 @@ export default class extends Component<IProps, IState> {
               style={{ width: '100%', height: '100%', display: isVideo ? 'block' : 'none' }}
               muted={true}
               autoplay
+              src={isVideo ? isVideo : ''}
             ></GVideo>
           }
           {

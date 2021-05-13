@@ -15,7 +15,7 @@ import TagList from '~components/tagList'
 import { IFormData, EIndexesType } from './interface'
 import { Item } from '~components/indexes'
 import { colorStyleChange } from '~theme/color'
-import { size, withTry, Upload, TOiriginFileType, routeAlias, router } from '~utils'
+import { size, withTry, Upload, routeAlias, router, EMediaType } from '~utils'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import style from '~theme/style'
 import { getEditMovieInfo, editIssue, sendIssue } from '~services'
@@ -99,10 +99,9 @@ export default class extends Component<any> {
   }
 
   //提交
-  public handleSubmit = async (_) => {
+  public handleSubmit = async () => {
     //验证
     fieldsStore.validateFields(['video', 'district', 'name', 'classify', 'director', 'actor', 'screen_time', 'description', 'author_description', 'author_rate', 'image', 'language', 'alias'], async (errors, values) => {
-      console.log(values, 1111111111)
       //处理所有有错的表单项
       if(errors) {
         Taro.showToast({
@@ -129,67 +128,69 @@ export default class extends Component<any> {
         ...nextValues
       } = values
 
-    //   const [, newPoster] = await Taro.getFileInfo({
-    //     filePath: poster
-    //   })
-    //   .then((data: any) => {
-    //     const { type } = data
-    //     return upload({
-    //         file: poster,
-    //         mime: type
-    //     })
-    //   })
-    //   const [, newSrc] = await Taro.getFileInfo({
-    //     filePath: src
-    //   })
-    //   .then((data: any) => {
-    //     const { type } = data
-    //     return upload({
-    //         file: src,
-    //         mime: type
-    //     })
-    //   })
-    //   withTry(upload)(src)
-    //   const newImage:Array<any> = await Promise.all(image.map(item => {
-    //     return Taro.getFileInfo({
-    //         filePath: item
-    //     })
-    //     .then((data:any) => {
-    //         const { type } = data
-    //         return upload({
-    //             file: item,
-    //             mime: type
-    //         })
-    //     })
-    // }))
+      const res = await Upload([
+        {
+          type: EMediaType.IMAGE,
+          url: poster,
+          poster: true
+        },
+        {
+          type: EMediaType.VIDEO,
+          url: src
+        },
+        ...image.map((item: any) => ({ type: EMediaType.IMAGE, url: item.url }))
+      ])
+      .then(data => {
+        if(data.some(item => !item.success)) return Promise.reject(false)
+        return data.reduce((acc, cur) => {
+          const { url, type, poster } = cur 
+          if(poster) acc.poster = url 
+          if(type === EMediaType.IMAGE) acc.image.push(url)
+          if(type === EMediaType.VIDEO) acc.video = url
+          return acc 
+        }, {
+          video: '',
+          image: [] as string[],
+          poster: ''
+        })
+      })
+      if(!res) return
 
       //生成模板数据
       let data: IFormData = {  
         ...(this.id ? { _id: this.id } : {}),
         video: {
-          poster,
-          src
+          poster: res.poster,
+          src: res.video
         },
         info: {
           ...nextValues,
           ...(author_description ? { author_description } : {}),
           ...(author_rate ? { author_rate } : {}),
-          ...(alias.length ? { alias: alias.map(item => item.title) } : {}),
-          director: director.map(item => item._id),
-          actor: actor.map(item => item._id),
-          district: district.map(item => item._id)
+          ...(alias.length ? { alias: alias.map((item: any) => item.title) } : {}),
+          director: director.map((item: any) => item._id),
+          actor: actor.map((item: any) => item._id),
+          district: district.map((item: any) => item._id)
         },
-        images: image
+        images: res.image
       }
 
       Taro.showLoading({mask: true, title: '提交中...'})
-       //数据提交
+      let response: any
+      //数据提交
       if(this.id) {
-        await withTry(editIssue)(data)
+        response = await withTry(editIssue)(data)
       }else {
-        await withTry(sendIssue)(data)
+        response = await withTry(sendIssue)(data)
       }
       Taro.hideLoading()
+      if(!!response[0]) {
+        Taro.showToast({
+          title: '上传出错',
+          icon: 'none'
+        })
+        return 
+      }
 
       Taro.showModal({
         title: '提示',
@@ -208,7 +209,7 @@ export default class extends Component<any> {
   }
 
   //重置
-  public handleReset = async (_) => {
+  public handleReset = async () => {
     Taro.showModal({
       title: '提示',
       content: '是否确定重置数据'

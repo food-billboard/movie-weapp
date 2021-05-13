@@ -73,6 +73,8 @@ export default memo((props: IProps) => {
     return {
       width: '100%',
       height: '100%',
+      display: 'flex',
+      alignItems: 'center',
       ...(loading ? style.backgroundColor('disabled') : {}),
       ...(
         typeof border === 'string' ?

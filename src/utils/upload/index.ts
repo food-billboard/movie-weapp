@@ -2,10 +2,8 @@ import { uploadFile, checkUploadFile } from '~services'
 import Taro from '@tarojs/taro'
 import SparkMd5 from 'spark-md5'
 import { merge } from 'lodash'
-import { WeUpload } from 'chunk-file-upload'
-import { EAuthType, EMediaType } from '../globalType'
 import Mime from 'mime'
-import { getTemplatePathMime } from '../tool'
+import { EMediaType } from '../globalType'
 
 /**
  * 1 文件路径传入
@@ -16,25 +14,25 @@ import { getTemplatePathMime } from '../tool'
  * 6 对未上传文件进行上传（以base64传递）
  */
 
-interface ITask {
-  file: Array<ArrayBuffer>
-  mime: string
-  md5: string
-  size: number
-}
-
-let UploadInstance
-
 export type TOiriginFileType = {
   url: string 
   type: EMediaType
   [key: string]: any
 }
 
-export type TResultType = {
+export type TResultType = TOiriginFileType & {
   success: boolean 
   url: string 
   type: EMediaType
+}
+
+const DEFAULT_TOTAST_CONFIG: Taro.showToast.Option = {
+  title: '文件上传错误',
+  icon: 'none',
+  duration: 1000,
+  complete() {
+    UploadTask.toast = false 
+  }
 }
 
 class UploadTask {
@@ -46,7 +44,7 @@ class UploadTask {
     return this.instance
   }
 
-  static MAX_UPLOAD_FILE_SIZE = 1024 * 500
+  static MAX_UPLOAD_FILE_SIZE = 1024 * 1024 * 5
   static MAX_READ_FILE_SIZE = 1024 * 1024 * 5
   static toast = false
 
@@ -59,49 +57,23 @@ class UploadTask {
     [key: string]: any
   } = {
     chunk: UploadTask.MAX_UPLOAD_FILE_SIZE,
-    "tus-resumable": "1.0.0",
     auth: "PUBLIC"
   }
 
-  start = async () => {
+  toast = (config: Partial<Taro.showToast.Option>={}) => {
+    if(UploadTask.toast) return 
+    UploadTask.toast = true
+    Taro.showToast(merge({}, DEFAULT_TOTAST_CONFIG, config))
+  }
+
+  start: () => Promise<string | false> = async () => {
     return this.setBaseFileInfo()
-    .then(_ => {
-
+    .then(this.fileUpload)
+    .catch(_ => {
+      console.log(_)
+      this.toast()
+      return false 
     })
-    // let sizeList:Array<any> = []
-    // let now = 0
-    // let spark = new SparkMd5.ArrayBuffer()
-
-    // while(now < size) {
-    //   let data
-    //   if(now + MAX_FILE_SIZE >= size) {
-    //     data = await readFile(file, now)
-    //     now = size
-    //   }else {
-    //     data = await readFile(file, now, MAX_FILE_SIZE)
-    //     now += MAX_FILE_SIZE
-    //   }
-    //   spark.append(data)
-    //   sizeList.push(data)
-    // }
-
-    // const md5 = spark.end()
-    // if(size <= MAX_FILE_SIZE) {
-    //   return miniFileUpload({
-    //     file: sizeList, 
-    //     mime,
-    //     md5,
-    //     size
-    //   })
-    // }else {
-    //   return largeFileUpload({
-    //     file: sizeList, 
-    //     mime,
-    //     md5,
-    //     size,
-
-    //   })
-    // }
   }
 
   //读取临时文件地址获取文件
@@ -176,55 +148,58 @@ class UploadTask {
     .then((data: any) => (data.size))
   }
 
-  exitDataFn = (data: { suffix: string, chunksLength: number, size: number, auth: EAuthType }) => {
-    return checkUploadFile(data)
+  exitDataFn = () => {
+    const { size, mime, auth, md5 } = this.fileInfo
+    return checkUploadFile({
+      auth,
+      mime,
+      chunk: UploadTask.MAX_UPLOAD_FILE_SIZE,
+      md5,
+      size,
+      name: md5
+    })
   }
 
-  uploadFn = (data: any) => {
-    return uploadFile(data)
+  uploadFn = async ({ offset }: { offset: number | string }) => {
+    const { size, md5 } = this.fileInfo
+    const chunkSize = UploadTask.MAX_UPLOAD_FILE_SIZE
+    const realOffset = typeof offset === 'string' ? parseInt(offset) : offset
+    let data: any = await this.readFile({
+      start: realOffset,
+      length: (realOffset + chunkSize >= size) ? size - realOffset : chunkSize
+    })
+    let response 
+    try {
+      response = await uploadFile({
+        md5,
+        file: data as ArrayBuffer,
+        offset: realOffset
+      })
+    }catch(err) {
+      console.log(err)
+    }finally {
+      data = null 
+    }
+    const nextOffset = response["upload-offset"] ?? response["Upload-Offset"]
+    if(nextOffset >= size) return 
+    return this.uploadFn({ offset: nextOffset }) 
   }
 
-  completeFn = (params: { name: string, md5: string }) => {
+  fileUpload = async () => {
+    const { size } = this.fileInfo
+    const exitResData = await this.exitDataFn()
+    const offset = exitResData["upload-offset"] ?? exitResData["Upload-Offset"]
+    // const uploadLength = exitResData["upload-length"]
+    const fileId = exitResData["upload-id"] ?? exitResData["Upload-Id"]
 
-  }
-
-  fileUpload = async (task: ITask) => {
-    const { file, mime, md5, size } = task
-    const exit = await this.exitDataFn({ suffix: mime, chunksLength: file.length, size, auth: EAuthType.PUBLIC })
     //上传完成
-    if(typeof exit == 'string') {
-      return exit
+    if(offset == size) {
+      return fileId
     }
     //未完成
     else {
-      return Promise.all(file.map((item, index) => {
-        const formData = {
-          file: Taro.arrayBufferToBase64(item),
-          name: md5,
-          index: index.toString()
-        }
-        // let formData = new FormData()
-        // formData.append('file', Taro.arrayBufferToBase64(item))
-        // formData.append('name', md5)
-        // formData.append('index', index.toString())
-        return this.uploadFn(formData)
-      }))
-      .then(_ => this.completeFn({ name: md5, md5 }))
-      .catch(_ => {
-        console.log(_)
-        if(!UploadTask.toast) {
-          UploadTask.toast = true 
-          Taro.showToast({
-            title: '上传出错',
-            icon: 'none',
-            duration: 1000,
-            complete: () => {
-              UploadTask.toast = false
-            }
-          })
-        }
-        return null
-      })
+      return this.uploadFn({ offset })
+      .then(() => fileId)
     }
   }
 
@@ -232,18 +207,18 @@ class UploadTask {
 
 export const Upload = async (file: TOiriginFileType | TOiriginFileType[]): Promise<TResultType[]> => {
   const files = Array.isArray(file) ? file : [file]
-  if(!UploadInstance) UploadInstance = new WeUpload()
   let results:TResultType[] = []
   for(let i = 0; i < files.length; i ++) {
     const file = files[i]
-    const { url, type } = file 
+    const { url, type, ...nextFile } = file 
     const task = new UploadTask(url)
     const result = await task.start()
     results.push({
+      ...nextFile,
       success: !!result,
-      url: result,
-      type
+      url: !!result ? result : url,
+      type,
     })
   }
-  return Promise.resolve(results)
+  return results
 }

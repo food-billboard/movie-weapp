@@ -11,6 +11,7 @@ export * from './globalType'
 export * from './websocket'
 export * from './token'
 export * from './global/comment_value'
+export * from './string2base64'
 // export * from './message'
 
 export const includes = (collection: any=[], value:any='') => {

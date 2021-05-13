@@ -123,12 +123,12 @@ export default class extends Component<IProps, IState> {
   public getData = async (emptyCharge = true) => {
     const { value: files } = this.state
     if (!files.length && emptyCharge) {
-      await this.setState({
+      this.setState({
         error: true
       })
       return false
     }
-    await this.setState({
+    this.setState({
       error: false
     })
     return files

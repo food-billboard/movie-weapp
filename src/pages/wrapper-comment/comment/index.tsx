@@ -8,7 +8,7 @@ import MediaPicker from '~components/mediaPicker'
 import { EAction } from '~utils/types'
 import { createFieldsStore } from '~components/wrapForm/fieldsStore'
 import style from '~theme/style'
-import { size, withTry, router, Upload, EMediaType, TOiriginFileType } from '~utils'
+import { size, router, Upload, EMediaType } from '~utils'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import { postCommentToUser, postCommentToMovie, feedback, preCheckFeedback } from '~services'
 
@@ -48,6 +48,7 @@ export default class extends Component<any> {
   public componentDidMount = () => {
     //强制刷新设置
     fieldsStore.setUpdate(this.forceUpdate.bind(this))
+    fieldsStore.resetFields()
 
     if(!this.router) {
       Taro.showToast({
@@ -162,7 +163,7 @@ export default class extends Component<any> {
 
   private handleSubmit = async () => {
 
-    const { config: { validate, action, param } } = this.state
+    const { config: { action, param } } = this.state
     const values = fieldsStore.getFieldsValue()
     return new Promise((resolve, reject) => {
       //全空则无法提交
@@ -184,10 +185,11 @@ export default class extends Component<any> {
 
       Upload(media)
       .then(data => {
+        if(data.some(item => !item.success)) return Promise.reject(false)
         return data.reduce((acc, cur) => {
-          const { value, type } = cur 
-          if(type === EMediaType.IMAGE) acc.image.push(value)
-          if(type === EMediaType.VIDEO) acc.video.push(value)
+          const { url, type } = cur 
+          if(type === EMediaType.IMAGE) acc.image.push(url)
+          if(type === EMediaType.VIDEO) acc.video.push(url)
           return acc 
         }, {
           video: [] as string[],
@@ -219,9 +221,8 @@ export default class extends Component<any> {
         }
       })
       .catch(err => {
-        console.log(err)
         Taro.hideLoading()
-        Taro.showToast({
+        if(err) Taro.showToast({
           title: '发送错误，请重试',
           icon: 'none',
           duration: 1000

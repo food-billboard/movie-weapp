@@ -109,7 +109,10 @@ export default class Media extends Component<IProps, IState>{
   }
 
   //src
-  public changeConfigSrc = (src: string) => this.setState({ src }, () => this.play())
+  public changeConfigSrc = (src: string) => {
+    console.log(src, 222233)
+    this.setState({ src })
+  }
   
   //seek
   public seek = (time: number) => this.instance && this.instance.seek(time)
@@ -118,7 +121,9 @@ export default class Media extends Component<IProps, IState>{
   public stop = () => this.instance && this.instance.stop()
 
   //播放视频
-  public play = () => this.instance && this.instance.play()
+  public play = () => {
+    this.instance && this.instance.play()
+  }
 
   //暂停视频
   public pause = () => this.instance && this.instance.pause()
@@ -175,7 +180,7 @@ export default class Media extends Component<IProps, IState>{
       title,
       autoplay = true,
       muted = false,
-      danmuList
+      danmuList,
     } = this.state
     //TODO
 

@@ -1,5 +1,3 @@
-import { API_DOMAIN } from './globalType'
-
 export {default as extend} from './lib/extend'
 
 //uid生成
@@ -144,8 +142,3 @@ export const isEqualObj = (targetA, targetB) => {
 }
 
 export const sleep = (times=1000) => new Promise((resolve) => setTimeout(resolve, times))
-
-export const getTemplatePathMime = (url: string) => {
-    const list = url.split('.')
-    return list[list.length - 1]
-}

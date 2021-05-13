@@ -4,15 +4,16 @@ declare namespace API_UPLOAD {
 
   export interface IUploadParams {
     md5: string
-    offset: number 
+    offset: number
+    file: ArrayBuffer
   }
 
   export interface IUploadRes {
-    "upload-offset": number 
+    "Upload-Offset": number 
   }
 
   export interface ICheckUploadFileParams {
-    "tus-resumable": "1.0.0"
+    "Tus-Resumable": "1.0.0"
     md5: string 
     auth: TAuathType 
     size: number 
@@ -22,11 +23,11 @@ declare namespace API_UPLOAD {
   }
 
   export interface ICheckUploadFileRes {
-    "tus-resumable": "1.0.0"
+    "Tus-Resumable": "1.0.0"
     location: string 
-    "upload-offset": number 
-    "upload-length": number 
-    "upload-id": string 
+    "Upload-Offset": number 
+    "Upload-Length": number 
+    "Upload-Id": string 
   }
 
 }
