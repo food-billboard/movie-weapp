@@ -179,7 +179,7 @@ export default class extends Component<any> {
         <View className='video'>
           {
             !!video && <GVideo
-              src={video.src}
+              src={video}
               poster={poster}
               id={video}
             />

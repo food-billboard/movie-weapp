@@ -86,3 +86,19 @@ declare namespace API_USER {
   }
 
 }
+
+declare namespace API_CHAT {
+
+  export interface IGetGlobalMessageListParams {
+
+  }
+
+  export interface IGetGlobalMessageListRes {
+    
+  }
+
+  export interface IGetGlobalMessageListData {
+    [key: string]: any
+  }
+
+}

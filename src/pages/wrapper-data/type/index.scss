@@ -32,10 +32,13 @@ $item_width: 125px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        opacity: 0.7;
+        opacity: 0.6;
+        box-sizing: border-box;
+        padding: 0 10px;
     }
     .header-list-active {
         opacity: 1;
+        text-shadow: 0 0 5px currentColor;
     }
     .header-list:nth-of-type(1) {
         margin-left:$item_width;
@@ -50,6 +53,7 @@ $item_width: 125px;
 .classify-list {
     position: relative;
     z-index: 1;
+    margin-top: 20px;
 }
 .btn{
     position:fixed;

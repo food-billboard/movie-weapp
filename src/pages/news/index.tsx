@@ -2,7 +2,6 @@ import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { AtList, AtListItem, AtSwipeAction } from "taro-ui"
 import { colorStyleChange } from '~theme/color'
-import Result from '~components/result'
 import style from '~theme/style'
 import { mapDispatchToProps, mapStateToProps } from './connect'
 import { connect } from 'react-redux'
@@ -12,11 +11,16 @@ import { SwipeActionOption } from 'taro-ui/types/swipe-action'
 
 import './index.scss'
 
+const { screenWidth } = Taro.getSystemInfoSync()
+
 const BUTTON_STYLE = [
   {
     text: '已读',
     style: {
-      backgroundColor: '#6190E8'
+      backgroundColor: '#6190E8',
+      width: '50px',
+      display: 'flex',
+      justifyContent: 'center'
     },
     action: async (id: string, props: any) => {
       //读消息
@@ -28,7 +32,10 @@ const BUTTON_STYLE = [
   {
     text: '删除',
     style: {
-      backgroundColor: '#FF4949'
+      backgroundColor: '#FF4949',
+      width: '50px',
+      display: 'flex',
+      justifyContent: 'center'
     },
     action: async (id: string, props: any) => {
       //删除消息
@@ -45,7 +52,6 @@ export default class extends Component<any> {
   private worker: any
 
   public componentDidShow = () => {
-
     //TODO
     Taro.showModal({
       title: '温馨提示',
@@ -68,7 +74,9 @@ export default class extends Component<any> {
     Taro.stopPullDownRefresh()
   }
 
-  public state: any = {
+  public state: {
+    list: API_CHAT.IGetGlobalMessageListData[]
+  } = {
     list: this.props.list
   }
 
@@ -89,13 +97,13 @@ export default class extends Component<any> {
   //处理消息操作按钮
   public handleOperate = async (target: SwipeActionOption, id: string) => {
     const index = BUTTON_STYLE.findIndex(val => val.text === target.text)
-    BUTTON_STYLE[index] && await BUTTON_STYLE[index].action(id, this)
+    BUTTON_STYLE[index] && await BUTTON_STYLE[index]?.action(id, this)
     this.sort()
   }
 
   public throttleFetchData = throttle(this.fetchData, 2000)
 
-  sortMethod = list => {
+  sortMethod = (list: API_CHAT.IGetGlobalMessageListData[]) => {
     return [...list].sort(function (a, b) {
       const { message: { count: Acount, time: Atime } } = a
       const { message: { count: Bcount, time: Btime } } = b
@@ -123,35 +131,37 @@ export default class extends Component<any> {
     const { list } = this.state
 
     return (
-      <Result isEmpty={!list.length} loading={false}>
-        <AtList>
-          {
-            list.map((val: any) => {
-              const { _id, type, info: { avatar, name, description }, message: { count, lastData, time } } = val
+      <AtList
+        className="news-list-wrapper"
+      >
+        {
+          list.map((val: any) => {
+            const { _id, type, info: { avatar, name, description }, message: { count, lastData, time } } = val
 
-              return (
-                <AtSwipeAction
-                  key={_id}
-                  onClick={(target) => { this.handleOperate.call(this, target, _id) }}
-                  options={BUTTON_STYLE}
-                  autoClose={true}
-                >
-                  <AtListItem
-                    className='list'
-                    customStyle={{ ...style.backgroundColor('disabled') }}
-                    title={name}
-                    arrow='right'
-                    thumb={avatar}
-                    extraText={formatTime(time)}
-                    note={length > 0 ? (`${count}条新消息`) : '无新消息'}
-                    onClick={() => { this.getDetail.call(this, _id, type) }}
-                  />
-                </AtSwipeAction>
-              )
-            })
-          }
-        </AtList>
-      </Result>
+            return (
+              <AtSwipeAction
+                key={_id}
+                onClick={(target) => { this.handleOperate.call(this, target, _id) }}
+                options={BUTTON_STYLE}
+                autoClose={true}
+                maxDistance={164}
+                areaWidth={screenWidth}
+              >
+                <AtListItem
+                  className='news-list'
+                  customStyle={{ ...style.backgroundColor('disabled') }}
+                  title={name}
+                  arrow='right'
+                  thumb={avatar}
+                  extraText={formatTime(time)}
+                  note={count > 0 ? (`${count}条新消息`) : '无新消息'}
+                  onClick={() => { this.getDetail.call(this, _id, type) }}
+                />
+              </AtSwipeAction>
+            )
+          })
+        }
+      </AtList>
     )
   }
 }

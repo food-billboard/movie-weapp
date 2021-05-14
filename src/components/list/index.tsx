@@ -146,7 +146,7 @@ export default class List extends Component<IProps>{
                 </View>
                 <View className="list-content-description">
                   <Ellipsis
-                    text={description}
+                    text={description || '这位作者什么也没有留下...'}
                     needPoint={false}
                     style={{borderRadius: '30px'}}
                   ></Ellipsis>

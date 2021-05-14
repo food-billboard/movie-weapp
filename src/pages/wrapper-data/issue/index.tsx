@@ -201,6 +201,8 @@ export default class extends Component<any> {
           Taro.reLaunch({
             url: '../main/index'
           })
+        }else {
+          fieldsStore.resetFields()
         }
       })
 

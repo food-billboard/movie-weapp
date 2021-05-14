@@ -97,7 +97,7 @@ export default class extends Component<any> {
   
   //上拉加载
   public onReachBottom = async () => {
-      await this.scrollRef.current!.handleToLower()
+    this.scrollRef.current!.handleToLower()
   }
 
   //数据获取
@@ -127,7 +127,7 @@ export default class extends Component<any> {
         return {
           id,
           value: name,
-          image: icon,
+          // image: icon,
           rate: author_rate
         }
       })

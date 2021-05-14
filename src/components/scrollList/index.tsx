@@ -2,13 +2,13 @@ import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, ScrollView, Text } from '@tarojs/components'
 import { AtActivityIndicator } from 'taro-ui'
+import noop from 'lodash/noop'
+import { Observer } from './observer'
 import GDivider from '~components/divider'
 import GResult from '~components/result'
 import Top from '../topbutton'
 import { isObject, ESourceTypeList } from '~utils'
 import customStyle from '~theme/style'
-import noop from 'lodash/noop'
-
 import './index.scss'
 
 export interface IProps {
@@ -19,8 +19,6 @@ export interface IProps {
   fetch: (...args: any[]) => any
   fixHeader?: boolean
   fixBottom?: boolean
-  // header?: false | number
-  // bottom?: false | number
   renderContent?: any
   renderHeader?: any
   renderBottom?: any
@@ -43,6 +41,7 @@ const INIT_QUERY = { pageSize: 10, currPage: 0 }
 export default class List extends Component<IProps, IState> {
 
   public topRef = React.createRef<Top>()
+  // public observer: Observer = new Observer(this)
 
   public static defaultProps = {
     query: {},
@@ -96,6 +95,9 @@ export default class List extends Component<IProps, IState> {
     const { autoFetch } = this.props
     if (!autoFetch) return
     const { query } = this.state
+    // this.observer.observer.relativeTo('.scroll-view').observe('.loading-view', (res) => {
+      
+    // })
     this.fetchData(query)
   }
 
@@ -112,10 +114,10 @@ export default class List extends Component<IProps, IState> {
       //判断是否存在数据
       if (newData.length < pageSize || !newData.length) {
         this.setState({ empty: true })
-        Taro.showToast({
-          title: '没有更多数据了',
-          icon: 'none'
-        })
+        // Taro.showToast({
+        //   title: '没有更多数据了',
+        //   icon: 'none'
+        // })
       } else {
         this.setState({ empty: false })
       }

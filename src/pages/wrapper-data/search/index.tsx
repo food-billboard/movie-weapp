@@ -47,7 +47,11 @@ export default class Index extends Component<any> {
 
   //上拉加载
   public onReachBottom = async () => {
-    await this.scrollRef.current!.handleToLower()
+    this.scrollRef.current!.handleToLower()
+  }
+
+  public onPullDownRefresh = async () => {
+    this.scrollRef.current!.handleToUpper()
   }
 
   public state = {

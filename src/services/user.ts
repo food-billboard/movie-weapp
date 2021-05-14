@@ -136,7 +136,7 @@ export const getRankList = ({ id, currPage=0, pageSize=30 }: { id: string, currP
 
 //排行榜列表
 export const getRankType = (count: number) => {
-  return request('GET', '/api/user/movie/classify/specDropList', { query: { count } })
+  return request('GET', '/api/user/movie/rank/specDropList', { query: { count } })
 }   
 
 //小程序信息

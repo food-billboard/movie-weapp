@@ -121,6 +121,7 @@ export default class extends Component<any> {
         sourceType={ESourceTypeList.Scope}
         scrollWithAnimation={true}
         query={{pageSize: 7}}
+        emptyShow={false}
         renderContent={
           <View>
             <Header content={headerData}
