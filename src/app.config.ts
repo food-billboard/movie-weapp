@@ -4,6 +4,7 @@ export default {
     'pages/mine/index',
     'pages/news/index',
     'pages/setting/index',
+    'pages/adminSetting/index'
   ],
   window: {
     backgroundTextStyle: 'dark',

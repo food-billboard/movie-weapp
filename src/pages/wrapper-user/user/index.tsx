@@ -20,12 +20,17 @@ export default class User extends Component<any>{
     data: {}
   }
 
-  //用户id
-  readonly id = getCurrentInstance().router?.params.id
+  readonly router = getCurrentInstance().router
+
+  get id() {
+    return this.router?.params._id
+  }
 
   public componentDidShow = () => colorStyleChange()
 
-  public componentDidMount = async () =>  await this.refresh()
+  public componentDidMount = async () => {
+    await this.refresh()
+  }
 
   public refresh = async () => await this.fetchData()
 

@@ -102,6 +102,10 @@ export default class Setting extends Component<any>{
     router.push(routeAlias.toComment, param)
   }
 
+  private handleAdminSetting = async () => {
+    router.push(routeAlias.adminSetting)
+  }
+
   public close = (prop: string) => {
     const target = this.state[prop]
     if (!target) return
@@ -152,6 +156,20 @@ export default class Setting extends Component<any>{
       color: TypeColor[ICON_COLOR]
     },
     handle: this.showFeedback,
+  }
+
+  //信息设置
+  readonly adminSetting = {
+    id: Symbol('adminSetting'),
+    title: '基础设置',
+    disabled: false,
+    note: '',
+    arrow: arrow,
+    iconInfo: {
+      value: 'user',
+      color: TypeColor[ICON_COLOR]
+    },
+    handle: this.handleAdminSetting,
   }
 
   //色调
@@ -260,6 +278,7 @@ export default class Setting extends Component<any>{
       index
     } = button
     const { iconInfo: feedbackInconInfo } = this.feedback
+    const { iconInfo: adminIconInfo } = this.adminSetting
     const { iconInfo: aboutInconInfo } = about
 
     const activeMode = this.colorStyle[color ? 0 : 1]['value']
@@ -267,6 +286,7 @@ export default class Setting extends Component<any>{
     const settingList = [
       { ...about, iconInfo: { ...aboutInconInfo, color: TypeColor[ICON_COLOR] } },
       { ...this.feedback, iconInfo: { ...feedbackInconInfo, color: TypeColor[ICON_COLOR] } },
+      { ...this.adminSetting, iconInfo: { ...adminIconInfo, color: TypeColor[ICON_COLOR] } }
     ]
 
     return (

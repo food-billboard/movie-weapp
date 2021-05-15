@@ -27,12 +27,12 @@ export const getUserIssue = ({ id, currPage=0, pageSize=30  }: { id: string, cur
 
 //其他用户浏览记录
 export const getUserGlance = ({ id, currPage=0, pageSize=30  }: { id: string, currPage: number, pageSize: number }) => {
-  return request('GET', '/api/user/customer/borwser', { query: { _id: id, currPage, pageSize } })
+  return request('GET', '/api/user/customer/movie/browser', { query: { _id: id, currPage, pageSize } })
 }
 
 //其他用户收藏的电影
 export const getUserStore = ({ id, currPage=0, pageSize=30  }: { id: string, currPage: number, pageSize: number }) => {
-  return request('GET', '/api/user/customer/store', { query: { _id: id, currPage, pageSize } })
+  return request('GET', '/api/user/customer/movie/store', { query: { _id: id, currPage, pageSize } })
 }
 
 //每日上新

@@ -48,13 +48,15 @@ export const routeAlias = {
   login: '/login',
   register: '/register',
   toComment: '/comment',
-  indexes: '/indexes'
+  indexes: '/indexes',
+  adminSetting: '/adminSetting'
 }
 
 //路由配置
 export const routeConfig = [
   { path: 'pages/main/index', alias: routeAlias.main },
   { path: 'pages/mine/index', alias: routeAlias.mine },
+  { path: 'pages/adminSetting/index', alias: routeAlias.adminSetting },
   { path: 'pages/wrapper-comment/commovie/index', alias: routeAlias.comment },
   { path: 'pages/news/index', alias: routeAlias.news },
   { path: 'pages/wrapper-user/attention/index', alias: routeAlias.attention },

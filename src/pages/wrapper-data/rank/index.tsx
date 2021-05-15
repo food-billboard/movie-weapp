@@ -1,49 +1,49 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
-import { View } from '@tarojs/components'
-import { AtGrid } from "taro-ui"
+import { View, ScrollView } from '@tarojs/components'
+import { AtTag } from "taro-ui"
 import GScrollView from '~components/scrollList'
 import Rank from '../../main/components/rank'
 import List from '~components/list'
-import { TypeColor, colorStyleChange } from '~theme/color'
+import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import throttle from 'lodash/throttle'
 import { router, routeAlias, ESourceTypeList } from '~utils'
-import { SYSTEM_PAGE_SIZE } from '~config'
+// import { SYSTEM_PAGE_SIZE } from '~config'
 import { getRankList, getRankType } from '~services'
 
-const COLUMN_COUNT = 4
+// const COLUMN_COUNT = 4
 
-const COLUMN_MAX = 12
+// const COLUMN_MAX = 12
 
 enum showType {
   SHOW_MORE = 'SHOW_MORE',
   HIDE_MORE = 'HIDE_MORE'
 }
 
-const SHOW_ICON = {
-  value: 'chevron-right',
-  color: '',
-  size: SYSTEM_PAGE_SIZE(30)
-}
+// const SHOW_ICON = {
+//   value: 'chevron-right',
+//   color: '',
+//   size: SYSTEM_PAGE_SIZE(30)
+// }
 
-const HIDE_ICON = {
-  value: 'chevron-left',
-  color: '',
-  size: SYSTEM_PAGE_SIZE(30)
-}
+// const HIDE_ICON = {
+//   value: 'chevron-left',
+//   color: '',
+//   size: SYSTEM_PAGE_SIZE(30)
+// }
 
-const SHOW_MORE_CONFIG = {
-  id: showType.SHOW_MORE,
-  value: '展开',
-  iconInfo: {...SHOW_ICON}
-}
+// const SHOW_MORE_CONFIG = {
+//   id: showType.SHOW_MORE,
+//   value: '展开',
+//   iconInfo: {...SHOW_ICON}
+// }
 
-const HIDE_MORE_CONFIG = {
-  id: showType.HIDE_MORE,
-  value: '收起',
-  iconInfo: {...HIDE_ICON}
-}
+// const HIDE_MORE_CONFIG = {
+//   id: showType.HIDE_MORE,
+//   value: '收起',
+//   iconInfo: {...HIDE_ICON}
+// }
 
 export default class extends Component<any> {
 
@@ -161,9 +161,10 @@ export default class extends Component<any> {
   public render() {
     const { data, rankType, showMore } = this.state
 
-    const color = { color: TypeColor['primary'] }
-    const hideConfig = { ...HIDE_MORE_CONFIG, iconInfo: { ...HIDE_ICON, ...color } }
-    const showConfig = { ...SHOW_MORE_CONFIG, iconInfo: { ...SHOW_ICON, ...color } }
+    // const color = { color: TypeColor['primary'] }
+    // const hideConfig = { ...HIDE_MORE_CONFIG, iconInfo: { ...HIDE_ICON, ...color } }
+    // const showConfig = { ...SHOW_MORE_CONFIG, iconInfo: { ...SHOW_ICON, ...color } }
+
     return(
       <GScrollView
         style={{...style.backgroundColor('bgColor')}}
@@ -177,7 +178,28 @@ export default class extends Component<any> {
               type={''}
               list={data}
             />
-            <AtGrid
+            <ScrollView
+              scrollX
+              style={{whiteSpace: 'nowrap', padding: '10px 10px 10px 5px', boxSizing: 'border-box', width: '100%'}}
+            >
+              {
+                rankType.map(item => {
+                  const { _id, value } = item
+                  return (
+                    <AtTag 
+                      customStyle={{display: 'inline-block', marginLeft: '5px'}}
+                      circle
+                      onClick={this.exchangeRank.bind(this, item)}
+                      key={_id}
+                    >
+                      {value}
+                    </AtTag>
+                  ) 
+                })
+              }
+            </ScrollView>
+            {/* <AtGrid
+              mode="rect"
               hasBorder={false}
               data={
                 showMore ? 
@@ -194,7 +216,7 @@ export default class extends Component<any> {
               }
               onClick={this.exchangeRank}
               columnNum={COLUMN_COUNT}
-            />
+            /> */}
             <List list={data} style={{marginTop: '10px'}} reload={this.fetchData.bind(this, {}, true)} />
           </View>
         }
