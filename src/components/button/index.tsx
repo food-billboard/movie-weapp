@@ -1,6 +1,6 @@
 import { AtButton } from 'taro-ui'
 import Taro from '@tarojs/taro'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View } from '@tarojs/components'
 import style from '~theme/style'
 import noop from 'lodash/noop'
@@ -35,6 +35,10 @@ const Button: React.FC<IProps> = ({
     operate()
     setActive((active + 1) % 2)
   }
+
+  useEffect(() => {
+    setActive(propActive)
+  }, [propActive])
 
   return (
     <View>

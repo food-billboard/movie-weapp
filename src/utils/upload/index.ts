@@ -1,9 +1,13 @@
-import { uploadFile, checkUploadFile } from '~services'
 import Taro from '@tarojs/taro'
 import SparkMd5 from 'spark-md5'
 import { merge } from 'lodash'
 import Mime from 'mime'
-import { EMediaType } from '../globalType'
+import { uploadFile, checkUploadFile, getMediaData } from '~services'
+import { EMediaType, API_DOMAIN } from '../globalType'
+
+const objectIdReg = /^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i
+
+export const isObjectId = (str: string) => objectIdReg.test(str)
 
 /**
  * 1 文件路径传入
@@ -67,6 +71,16 @@ class UploadTask {
   }
 
   start: () => Promise<string | false> = async () => {
+    if(isObjectId(this.file)) return this.file 
+    if(this.file.startsWith(API_DOMAIN)) {
+      try {
+        const data = await getMediaData({ load: this.file })
+        return data
+      }catch(err) {
+        this.toast()
+        return false 
+      }
+    }
     return this.setBaseFileInfo()
     .then(this.fileUpload)
     .catch(_ => {

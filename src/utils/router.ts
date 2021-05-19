@@ -175,7 +175,7 @@ class Router {
   }
 
   /* 打开到应用的某个页面 */
-  reload = (path, send) => {
+  reload = (path, send?) => {
     return this.navigate('RE_LAUNCH', { path, send });
   }
 

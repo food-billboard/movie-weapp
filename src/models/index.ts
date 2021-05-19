@@ -2,7 +2,8 @@
 const models = [
     require('./chat.ts').default,
     require('./customer').default,
-    require('./global').default
+    require('./global').default,
+    require('./issue').default
 ]
 
 export default (app, others = []) => {

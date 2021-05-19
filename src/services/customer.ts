@@ -17,7 +17,7 @@ export const toAttention = (id: string) => {
 
 //取消关注
 export const cancelAttention = (id: string) => {
-  return request('DELETE', '/api/customer/manage/attention', { data: { _id: id }, header: getToken(true) })
+  return request('DELETE', '/api/customer/manage/attention', { query: { _id: id }, header: getToken(true) })
 } 
 
 //粉丝列表
@@ -154,5 +154,5 @@ export const getCustomerAntoherUserInfo = (id: string) => {
 
 //获取他人评论信息
 export const getCustomerUserComment = ({ id, currPage=0, pageSize=30 }: { id: string, currPage: number, pageSize: number }) => {
-  return request('GET', '/api/customer/user/comment ', { query: { currPage, pageSize, _id: id }, header: getToken(true) })
+  return request('GET', '/api/customer/user/comment', { query: { currPage, pageSize, _id: id }, header: getToken(true) })
 }

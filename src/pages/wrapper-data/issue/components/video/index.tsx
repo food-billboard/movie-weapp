@@ -22,7 +22,7 @@ export interface IState {
   posterError: boolean
 }
 
-const defaultInfo = {src: '', poster: ''}
+const defaultInfo = { src: '', poster: '' }
 
 export default class extends Component<IProps, IState> {
 

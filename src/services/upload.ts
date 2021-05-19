@@ -46,3 +46,10 @@ export const uploadFile = async (params: API_UPLOAD.IUploadParams) => {
   })
 
 }
+
+export const getMediaData = async (query: API_UPLOAD.IGetMediaDataParams) => {
+  return request<string>('GET', '/api/customer/upload', {
+    query,
+    header: getToken(true)
+  })
+}

@@ -1,29 +1,22 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
-import {} from '@tarojs/components'
 import React, { Component } from 'react'
 import { AtIndexes } from 'taro-ui'
+import { connect } from 'react-redux'
 import { EIndexesType } from '../issue/interface'
 import Selected from './components/Selected'
 import BackButton from './components/Fab'
-import { getDistrictList, getDirectorList, getActorList } from '~services'
-import { routeAlias, router } from '~utils'
-
-export interface Item {
-  name: string
-  _id: string 
-  key: string 
-  [propName: string]: any
-}
+import { router } from '~utils'
+import { mapDispatchToProps, mapStateToProps } from './connect'
 
 interface ListItem {
   title: string
 
   key: string
 
-  items: Array<Item>
+  items: Model_Issue.IItem[]
 }
 
-function formatResponse(list: Item[]) {
+function formatResponse(list: Model_Issue.IItem[]) {
   return list.reduce((acc, cur) => {
     const { key } = cur 
     let index = acc.findIndex(item => item.key == key)
@@ -40,83 +33,102 @@ function formatResponse(list: Item[]) {
   }, [] as ListItem[])
 }
 
-interface IProps {}
-interface IState {
-  list: ListItem[]
-  value: Item[]
+interface IProps {
+  actor: Model_Issue.IItem[]
+  director: Model_Issue.IItem[] 
+  district: Model_Issue.IItem[]
+  selectDistrict: Model_Issue.IItem[]
+  selectDirector: Model_Issue.IItem[]
+  selectActor: Model_Issue.IItem[]
+  fetchDistrict: any 
+  fetchDirector: any 
+  fetchActor: any 
+  editDirector: any 
+  editDistrict: any 
+  editActor: any 
 }
 
-export default class extends Component<IProps, IState>{
+interface IState {
+  list: ListItem[]
+}
+
+class Indexes extends Component<IProps, IState>{
 
   state: IState = {
     list: [],
-    value: []
   }
 
   type: EIndexesType
-  url: string
+
+  fetchDataMethod: any 
+  editMethod: any 
+  origin: any 
+
+  get typeInfo() {
+    let info: any = {}
+    switch(this.type) {
+      case EIndexesType.actor:
+        info.fetchData = this.props.fetchActor
+        info.editMethod = this.props.editActor
+        info.origin = this.props.actor
+        info.value = this.props.selectActor
+        break
+      case EIndexesType.director:
+        info.fetchData = this.props.fetchDirector
+        info.editMethod = this.props.editDirector
+        info.origin = this.props.director
+        info.value = this.props.selectDirector
+        break
+      case EIndexesType.district:
+        info.fetchData = this.props.fetchDistrict
+        info.editMethod = this.props.editDistrict
+        info.origin = this.props.district
+        info.value = this.props.selectDistrict
+        break
+    }
+    return info 
+  }
 
   componentDidMount = async () => {
     const router = getCurrentInstance().router
-    const { value, type, url } = router?.params || {}
-    await this.fetchData(type)
-    try {
-      this.setState({
-        value: JSON.parse(decodeURIComponent(value as string))
-      })
-      this.url = (url ? decodeURIComponent(url) : false) || routeAlias.issue
-    }catch(err) {}
+    const { type } = router?.params || {}
     if(type) {
       this.type = type as EIndexesType
     }
+    const { fetchData, editMethod, origin } = this.typeInfo
+    this.fetchDataMethod = fetchData
+    this.editMethod = editMethod 
+    this.origin = origin
+    await this.fetchData()
   }
 
-  handleClick = (newItem: Item) => {
-    const { value } = this.state 
-    this.setState({
-      value: [
-        ...value.filter(item => item._id != newItem._id),
-        newItem
-      ]
-    })
+  handleClick = async (newItem: Model_Issue.IItem) => {
+    const { value } = this.typeInfo || {}
+    await this.editMethod([
+      ...(value || []).filter((item: Model_Issue.IItem) => item._id != newItem._id),
+      newItem
+    ])
   }
 
-  fetchData = async(type) => {
-    let method 
-    switch(type) {
-      case EIndexesType.actor:
-        method = getActorList
-        break
-      case EIndexesType.director:
-        method = getDirectorList
-        break
-      case EIndexesType.district:
-        method = getDistrictList
-        break
-    }
-    const data = await method()
+  fetchData = async() => {
+    const data = await this.fetchDataMethod?.() || []
     const newValue = formatResponse(data)
     this.setState({
       list: newValue
     })
   }
 
-  onSelectChange = (value: Item[]) => {
-    this.setState({
-      value
-    })
+  onSelectChange = (value: Model_Issue.IItem[]) => {
+    this.editMethod(value)
   }
 
   back = () => {
-    const { value } = this.state
-    router.replace(this.url, {
-      type: this.type,
-      value: JSON.stringify(value || [])
-    })
+    router.back()
   }
 
   render() {
-    const { list, value } = this.state 
+    const { list } = this.state 
+    const { value=[] } = this.typeInfo || {}
     return (
       <AtIndexes
         list={list}
@@ -134,3 +146,5 @@ export default class extends Component<IProps, IState>{
   }
 
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Indexes)

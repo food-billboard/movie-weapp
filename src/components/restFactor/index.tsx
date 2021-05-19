@@ -76,6 +76,19 @@ const getDefaultItemStyle = () => {
 
 class Rest extends Component<IProps, IState> {
 
+  public static normalizeData = (data: ((string | Item)[] | string | Item), defaultItemStyle=getDefaultItemStyle()) => {
+    const isSingle = !Array.isArray(data)
+    const realData = Array.isArray(data) ? data : [data]
+    const dealData = realData.map(item => {
+      const initItem = typeof item === 'string' ? { title: item } : { ...item }
+      return {
+        ...defaultItemStyle,
+        ...initItem
+      }
+    })
+    return isSingle ? dealData[0] : dealData
+  }
+
   public state: IState = {
     disabled: true,
     status: [],
@@ -90,13 +103,9 @@ class Rest extends Component<IProps, IState> {
     const data = await this.inputRef.current!.getData()
     if (data) {
       const { status, statusData } = this.state
-      const { defaultItemStyle, value } = this.props
+      const { value } = this.props
       const itemLen = value.length
-      const _defaultItemStyle = defaultItemStyle ? defaultItemStyle : getDefaultItemStyle()
-      const newItem = {
-        title: data,
-        ..._defaultItemStyle
-      } as Item
+      const newItem = Rest.normalizeData(data) as Item
 
       const newStatusData: IStatusData = {
         value: newItem,
@@ -260,23 +269,6 @@ class Rest extends Component<IProps, IState> {
     )
   }
 
-}
-
-Rest.normalizeData = (data) => {
-  if (Array.isArray(data) && data.length) {
-    if (typeof data[0] === 'string') {
-      const da = data.map(item => {
-        if (typeof item === 'object') return item
-        return {
-          ...getDefaultItemStyle(),
-          title: item
-        }
-      })
-      return da
-    }
-    return data
-  }
-  return []
 }
 
 export default Rest

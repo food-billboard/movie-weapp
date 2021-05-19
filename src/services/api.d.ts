@@ -30,6 +30,10 @@ declare namespace API_UPLOAD {
     "Upload-Id": string 
   }
 
+  export interface IGetMediaDataParams {
+    load: string 
+  }
+
 }
 
 declare namespace API_USER {
