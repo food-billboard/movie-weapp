@@ -53,3 +53,10 @@ export const getMediaData = async (query: API_UPLOAD.IGetMediaDataParams) => {
     header: getToken(true)
   })
 }
+
+export const putVideoPoster = async (data: API_UPLOAD.IPutVideoPosterParams) => {
+  return request('PUT', '/api/customer/upload/video/poster', {
+    data,
+    header: getToken(true)
+  })
+}

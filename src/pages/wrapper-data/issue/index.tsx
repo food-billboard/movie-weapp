@@ -17,7 +17,7 @@ import TagList from '~components/tagList'
 import { IFormData, EIndexesType } from './interface'
 import { Item } from '~components/indexes'
 import { colorStyleChange } from '~theme/color'
-import { size, withTry, Upload, routeAlias, router, EMediaType } from '~utils'
+import { size, withTry, Upload, routeAlias, router, EMediaType, sleep } from '~utils'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import style from '~theme/style'
 import { getEditMovieInfo, editIssue, sendIssue } from '~services'
@@ -223,11 +223,10 @@ class Issue extends Component<any> {
         icon: 'none',
         mask: true,
         duration: 3000,
-        complete: () => {
-          Taro.reLaunch({
-            url: '../../main/index'
-          })
-        }
+      })
+      await sleep(3000)
+      Taro.reLaunch({
+        url: '../../main/index'
       })
 
     })

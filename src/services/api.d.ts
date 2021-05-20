@@ -1,5 +1,9 @@
 declare namespace API_UPLOAD {
 
+  export interface IPutVideoPosterParams {
+    data: string 
+  }
+
   export type TAuathType = "PRIVATE" | "PUBLIC"
 
   export interface IUploadParams {

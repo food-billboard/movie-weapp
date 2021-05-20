@@ -41,32 +41,36 @@ export default class extends Component<IProps, IState> {
     this.props.onChange && this.props.onChange(!show)
   }
 
-  //获取需要展示的文本
-  public getText = () => {
-    const { show, maxLen } = this.state
-    const { text = '' } = this.props
-    if(show) return text
-    return text.length <= maxLen ? text : (text.slice(0, maxLen) + '...')
-  }
+  // //获取需要展示的文本
+  // public getText = () => {
+  //   const { show, maxLen } = this.state
+  //   // const { text = '' } = this.props
+  //   const text = '22233'.repeat(60)
+  //   if(show) return text
+  //   return text.length <= maxLen ? text : (text.slice(0, maxLen) + '...')
+  // }
 
   public render() {
 
     const { style: customStyle = {}, text, needPoint = true } = this.props
-    const _text = this.getText()
+    const aa = '2333'.repeat(100)
+    // const _text = this.getText()
     const { show, maxLen } = this.state
     
     return (
-      <View className='ellipsis'
+      <View 
+        className='text-ellipsis'
         style={{ ...style.color('secondary'), ...(isObject(customStyle) ? customStyle : {}) }}
+        onClick={this.getDetail}
       >
         <Text 
           onClick={(e) => {!needPoint && this.getDetail(e)}}
-          // className={`ellipsis-${show ? 'show' : 'hidden'}`}
-          style={{ display: 'inline-block', wordBreak: 'break-word' }}
+          className={`ellipsis-${show ? 'show' : 'hidden'}`}
+          // style={{ display: 'inline-block', wordBreak: 'break-word' }}
         >
-          {_text}
+          {aa}
         </Text>
-        {
+        {/* {
           needPoint && (text && text.length >= maxLen) ?
             <View
               style={{ ...style.color('thirdly') }}
@@ -76,7 +80,7 @@ export default class extends Component<IProps, IState> {
               {show ? this.textContent.retract : this.textContent.unfold}
             </View> :
             null
-        }
+        } */}
       </View>
     )
   }

@@ -2,6 +2,7 @@ import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { AtButton } from 'taro-ui'
+import { pick, merge, noop } from 'lodash'
 import BaseForm from '~components/wrapForm'
 import GDescription, { EInputType } from '~components/input'
 import MediaPicker from '~components/mediaPicker'
@@ -10,7 +11,7 @@ import { createFieldsStore } from '~components/wrapForm/fieldsStore'
 import style from '~theme/style'
 import { size, router, Upload, EMediaType } from '~utils'
 import { SYSTEM_PAGE_SIZE } from '~config'
-import { postCommentToUser, postCommentToMovie, feedback, preCheckFeedback } from '~services'
+import { postCommentToUser, postCommentToMovie, feedback, preCheckFeedback, putVideoPoster } from '~services'
 
 import './index.scss'
 
@@ -180,24 +181,60 @@ export default class extends Component<any> {
         media,
         ...nextValues
       } = values
+      const newMedia = media.reduce((acc, cur) => {
+        const { type, url, poster } = cur
+        acc.push(merge({}, pick(cur, ['type', 'url']), {
+          originUrl: url
+        }))
+        if(type === EMediaType.VIDEO) {
+          acc.push({
+            url: poster,
+            originUrl: url,
+            child: true,
+            type: EMediaType.IMAGE
+          })
+        } 
+        return acc 
+      }, [])
+
+      console.log(media)
 
       Taro.showLoading({ mask: true, title: '数据提交中...' })
 
-      Upload(media)
+      Upload(newMedia)
       .then(data => {
         if(data.some(item => !item.success)) return Promise.reject(false)
-        return data.reduce((acc, cur) => {
-          const { url, type } = cur 
-          if(type === EMediaType.IMAGE) acc.image.push(url)
-          if(type === EMediaType.VIDEO) acc.video.push(url)
+        let videoPosters: string[] = []
+        const uploadData = data.reduce((acc, cur) => {
+          const { url, type, child, orignUrl } = cur 
+          if(type === EMediaType.IMAGE) {
+            if(!child) {
+              acc.image.push(url)
+            }else {
+              const videoId = data.find(item => {
+                return item.type === EMediaType.VIDEO && item.orignUrl == orignUrl
+              })
+              if(videoId) {
+                videoPosters.push(`${videoId.url}-${url}`)
+              }
+            }
+          }
+          if(type === EMediaType.VIDEO) {
+            acc.video.push(url)
+          }
           return acc 
         }, {
           video: [] as string[],
           image: [] as string[]
         })
+        const method = videoPosters.length ? putVideoPoster : noop
+        return Promise.all([
+          uploadData,
+          method({ data: videoPosters.join(',') })
+        ])
       })
-      .then(data => {
-        const { image, video } = data
+      .then(([uploadData]) => {
+        const { image, video } = uploadData
         return action({
           ...nextValues,
           ...param,

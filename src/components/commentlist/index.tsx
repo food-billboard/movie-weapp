@@ -40,8 +40,11 @@ interface IList {
   comment_users: Array<ICommentUsers>
   content: {
     text?: string
-    image?: Array<string>
-    video?: Array<string>
+    image?: string[]
+    video?: {
+      src: string 
+      poster?: string 
+    }[]
   }
   createdAt: number | string
   updatedAt: number | string
@@ -226,16 +229,22 @@ class List extends Component<IProps, IState>{
                 <View className='comment-item-image-list at-row at-row--wrap'>
                   {
                     [
-                      ...video.map(src => ({ src, type: EMediaType.VIDEO })),
+                      ...video.map(src => {
+                        return { 
+                          src: src?.src || src,
+                          type: EMediaType.VIDEO,
+                          poster: src?.poster
+                        }
+                      }),
                       ...image.map(src => ({ src, type: EMediaType.IMAGE }))
-                    ].map((val: { src: string, type: EMediaType }, _: number) => {
-                      const { src, type } = val
+                    ].map((val: { src: string, type: EMediaType, poster?: string }, _: number) => {
+                      const { src, type, poster } = val
                       //处理不同类型的文件
                       let imageSrc,
                         args
                       switch (type) {
                         case EMediaType.VIDEO:
-                          imageSrc = VideoStaticImage
+                          imageSrc = poster || VideoStaticImage
                           args = [src, EMediaType.VIDEO]
                           break 
                         case EMediaType.IMAGE:

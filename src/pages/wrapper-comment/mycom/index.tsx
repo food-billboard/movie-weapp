@@ -37,7 +37,7 @@ export default class extends Component<any>{
   }
 
   //上拉加载
-  public onReachBottom = async () => await this.scrollRef.current!.handleToLower()
+  public onReachBottom = async () => this.scrollRef.current!.handleToLower()
 
   //获取数据
   public fetchData = async (query: any, isInit = false) => {
@@ -54,7 +54,7 @@ export default class extends Component<any>{
     const { comment } = await method({ ...params, ...query })
 
     this.setState({
-      data: [...(isInit ? data : []), ...comment || []]
+      data: [...(isInit ? [] : data), ...comment || []]
     })
     return comment || []
   }
