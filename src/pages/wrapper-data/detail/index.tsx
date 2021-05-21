@@ -25,7 +25,10 @@ export default class extends Component<any> {
   //电影id
   private id = getCurrentInstance().router?.params.id
 
-  public componentDidShow = () => colorStyleChange()
+  public componentDidShow = async () => {
+    await this.fetchData()
+    colorStyleChange()
+  }
 
   private tabRef = React.createRef<Tab>()
 
@@ -35,7 +38,7 @@ export default class extends Component<any> {
     commentData: []
   }
 
-  public componentDidMount = async () => await this.fetchData()
+  // public componentDidMount = async () => await this.fetchData()
 
   //设置标题
   public setTitle = async () => {

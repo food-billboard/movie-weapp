@@ -63,7 +63,7 @@ export default class List extends Component<IProps, IState> {
     data: [],
     empty: false,
     query: {},
-    loading: false,
+    loading: true,
     headerHeight: 0,
     bottomHeight: 0
   }

@@ -88,8 +88,8 @@ export default class List extends Component<IProps>{
       <View className='list-component'>
         {
           list.map((value:API_USER.IMovieListData) => {
-            const { image, name, type, time, hot, _id, rate, description, store } = value
-            const imageList = Array.isArray(image) ? image : [image]
+            const { images, name, type, time, hot, _id, rate, description, store } = value
+            const imageList = Array.isArray(images) ? images : [images]
             return (
               <View className='list-content'
                 style={{ ...(isObject(propsStyle) ? propsStyle : {}), ...style.backgroundColor('disabled') }}

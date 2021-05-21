@@ -23,10 +23,12 @@ const randomColor = () => {
   return COLOR_LIST[Math.floor(Math.random() * len)]
 }
 
-const TAG_STYLE = {
-  marginBottom: '5px',
-  marginRight: '10px',
-  color: '#fff'
+const TAG_STYLE: any = {
+  color: '#fff',
+  whiteSpace: 'nowrap',
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
+  maxWidth: '20vw'
 }
 
 export default class extends Component<IProps, IState> {
@@ -36,7 +38,7 @@ export default class extends Component<IProps, IState> {
     const { list=[], style } = this.props
 
     return (
-      <View className='tag'>
+      <View className='movie-tag'>
         {
           list.map((val: API_USER.ItypeList) => {
             const { id, value } = val
@@ -45,7 +47,7 @@ export default class extends Component<IProps, IState> {
                 key={id}
                 name={id}
                 type='primary' 
-                customStyle={{ ...TAG_STYLE, marginLeft: randomArea(), backgroundColor: randomColor(), ...(isObject(style) ? style : {})}}
+                customStyle={{ ...TAG_STYLE, backgroundColor: randomColor(), ...(isObject(style) ? style : {})}}
               >
                 {value}
               </AtTag>

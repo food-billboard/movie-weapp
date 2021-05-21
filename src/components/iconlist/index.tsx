@@ -95,8 +95,8 @@ export default class IconList extends Component<IProps>{
                 className='at-col at-col-5'
               ></View>
             )
-            const { _id, name, image, hot, rate, store, author } = value
-            const imageList = Array.isArray(image) ? image : [image]
+            const { _id, name, images, hot, rate, store, author } = value
+            const imageList = Array.isArray(images) ? images : [images]
             return (
               <View
                 className='icon-list-content at-col at-col-5'

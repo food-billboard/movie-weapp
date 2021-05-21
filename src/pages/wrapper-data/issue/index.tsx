@@ -284,6 +284,8 @@ class Issue extends Component<any> {
 
   public render() {
 
+    console.log(fieldsStore.getFieldsError('video'), 22222)
+
     return (
       <View className='data-issue' style={{...style.backgroundColor('bgColor')}}>
         <BaseForm

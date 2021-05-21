@@ -39,6 +39,7 @@ export default class extends Component<any> {
 
   //重新加载每日上新
   public hanleExchangeDaily = async () => {
+    return 
     Taro.showLoading({ mask: true, title: '查找中' })
     const daily = await this.throttleGetDaily()
     Taro.hideLoading()

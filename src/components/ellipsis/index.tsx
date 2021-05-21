@@ -53,7 +53,6 @@ export default class extends Component<IProps, IState> {
   public render() {
 
     const { style: customStyle = {}, text, needPoint = true } = this.props
-    const aa = '2333'.repeat(100)
     // const _text = this.getText()
     const { show, maxLen } = this.state
     
@@ -68,7 +67,7 @@ export default class extends Component<IProps, IState> {
           className={`ellipsis-${show ? 'show' : 'hidden'}`}
           // style={{ display: 'inline-block', wordBreak: 'break-word' }}
         >
-          {aa}
+          {text}
         </Text>
         {/* {
           needPoint && (text && text.length >= maxLen) ?

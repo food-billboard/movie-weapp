@@ -10,7 +10,7 @@ export interface IProps extends Partial<SwiperProps> {
 export default memo((props: IProps) => {
 
   const list = useMemo(() => {
-    return props.list
+    return (props.list.length ? props.list : [''])
     .map(item => {
       return (
         <SwiperItem>
@@ -27,8 +27,8 @@ export default memo((props: IProps) => {
   return (
     <Swiper
       circular={true}
-      indicatorDots={props.list.length > 1}
-      autoplay
+      indicatorDots={false}
+      autoplay={false}
       {...props}
     >
       {list}

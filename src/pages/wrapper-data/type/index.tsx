@@ -175,6 +175,7 @@ export default class Index extends Component<any> {
         sourceType={ESourceTypeList.Scope}
         scrollWithAnimation={true}
         emptyShow={false}
+        autoFetch={false}
         renderContent={
           <View>
             <View className='header-type' style={{
