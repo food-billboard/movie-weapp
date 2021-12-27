@@ -141,13 +141,6 @@ export default class Index extends Component<any> {
     })
   }
 
-  //获取搜索栏是否为选中状态
-  public getSearchBarStatus = () => {
-    const { current } = this.searchBarRef
-    if (!current) return false
-    return !current!.searchBarRef.current!.state.focus
-  }
-
   //是否显示列表
   public showList = (show: boolean) => {
     this.setState({
@@ -216,7 +209,7 @@ export default class Index extends Component<any> {
               />
             </AtDrawer>
             {
-              selectShow ?
+              !!selectShow &&
                 <View
                   className='curtain'
                   onClick={this.drawerClose}
@@ -225,7 +218,6 @@ export default class Index extends Component<any> {
                   }}
                   onTouchMove={(e) => { e.stopPropagation() }}
                 ></View>
-                : null
             }
             <View
               className='search-head'
@@ -245,11 +237,6 @@ export default class Index extends Component<any> {
                 display: listShow && searchList.length ? 'block' : 'none',
               }}
             >
-              <View
-                className='head'
-              >
-                <Head screen={this.typeScreen} />
-              </View>
               <View
                 className='head-sub'
               >

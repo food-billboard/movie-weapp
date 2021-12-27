@@ -1,31 +1,26 @@
-.fee,
-.price,
 .type,
-.time{
-    margin-bottom:20px;
+.time {
+  margin-bottom: 20px;
 }
-.price{
-    
+.classify {
+  padding: 0 20px;
+  box-sizing: border-box;
 }
-.classify{
-    padding:0 20px;
-    box-sizing:border-box;
+.time {
+  padding: 0 20px;
+  box-sizing: border-box;
+  margin-bottom: 196px;
 }
-.time{
-    padding:0 20px;
-    box-sizing:border-box;
-    margin-bottom: 196px;
+.language {
+  margin-bottom: 40px;
 }
-.language{
-    margin-bottom:40px;
-}
-.other{
-    padding-bottom:184px;
+.other {
+  padding-bottom: 184px;
 }
 
-.btn{
-    position:absolute;
-    bottom:0;
-    right:0;
-    width:100%;
+.btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
 }

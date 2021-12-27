@@ -76,9 +76,6 @@ export default class Forms extends Component<IProps> {
 
   //表单格式
   readonly formData: FormData = {
-    maxPrice: 0, //价格上限
-    minPrice: 0,    //价格下限
-    fee: [],   //是否免费
     type: '',   //电影类型
     time: '',
     actor: [],   //演员
@@ -94,22 +91,6 @@ export default class Forms extends Component<IProps> {
   private directorRef = React.createRef<TagList>()
 
   private districtRef = React.createRef<TagList>()
-
-  //表单默认属性
-  readonly formDefault: FormDefault = {
-    feeOptions: [
-      {
-        value: 'free',
-        label: '免费',
-        disabled: false
-      },
-      {
-        value: 'fee',
-        label: '付费',
-        disabled: true
-      }
-    ]
-  }
 
   //详细筛选控制按钮信息
   readonly detailScreenBtn: IList = {
@@ -133,14 +114,11 @@ export default class Forms extends Component<IProps> {
   public filterFactor = () => {
     const values = fieldsStore.getFieldsValue()
     const {
-      price: { max, min },
       time: { start, end },
       ...nextProps
-    } = pick(values, ['price', 'time', 'classify'])
+    } = pick(values, ['time', 'classify'])
 
     let data: Partial<FormData> = {
-      maxPrice: max,
-      minPrice: min,
       time: `${start}_${end}`,
       ...nextProps
     }
@@ -168,15 +146,6 @@ export default class Forms extends Component<IProps> {
     this.setState({
       open: false
     })
-  }
-
-  //是否选择免费
-  public feeChange = (value: Array<string>) => {
-    let status = false
-    if (value.includes('free') && value.length === 1) {
-      status = true
-    }
-    this.chargeRef.current!.setDisabled(status)
   }
 
   //处理其他筛选
@@ -208,7 +177,6 @@ export default class Forms extends Component<IProps> {
 
   public render() {
     const { open } = this.state
-    const { feeOptions } = this.formDefault
 
     return (
       <AtForm
@@ -224,19 +192,6 @@ export default class Forms extends Component<IProps> {
           name='search-select' 
           style={{ height: '100vh', overflowY: 'auto', overflowX: 'hidden' }}
         >
-          <View className='fee'>
-            <AtTag
-              customStyle={tagStyle}
-              type='primary'
-            >
-              价格选择
-            </AtTag>
-            <ComponentCheckbox
-              checkboxOption={feeOptions}
-              needHiddenList={false}
-              value={["free"]}
-            ></ComponentCheckbox>
-          </View>
           <View className='price'>
             <ChargePicker
               ref={this.chargeRef}

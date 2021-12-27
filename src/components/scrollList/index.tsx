@@ -5,7 +5,7 @@ import { AtActivityIndicator } from 'taro-ui'
 import noop from 'lodash/noop'
 import GDivider from '~components/divider'
 import GResult from '~components/result'
-import { isObject, ESourceTypeList } from '~utils'
+import { isObject, ESourceTypeList, sleep } from '~utils'
 import customStyle from '~theme/style'
 import Top from '../topbutton'
 import './index.scss'
@@ -47,12 +47,10 @@ export default class List extends Component<IProps, IState> {
     scrollWithAnimation: false,
     onScroll: noop,
     fetch: noop,
-    // header: false,
-    // bottom: false,
     autoFetch: true,
     fixHeader: true,
     fixBottom: true,
-    emptyShow: true
+    emptyShow: true,
   }
 
   public constructor(props) {
@@ -64,16 +62,15 @@ export default class List extends Component<IProps, IState> {
     data: [],
     empty: false,
     query: {},
-    loading: true,
+    loading: !!this.props.autoFetch,
     headerHeight: 0,
     bottomHeight: 0
   }
 
-  public componentDidMount = () => {
-    setTimeout(() => {
-      this.watchBottomHeight()
-      this.watchHeaderHeight()
-    }, 10)
+  public componentDidMount = async () => {
+    await sleep(10)
+    this.watchBottomHeight()
+    this.watchHeaderHeight()
     const { autoFetch } = this.props
     if (!autoFetch) return
     const { query } = this.state
