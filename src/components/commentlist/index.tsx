@@ -3,7 +3,8 @@ import React, { Component } from 'react'
 import { View, Text, ScrollView, Block } from '@tarojs/components'
 import { AtIcon, AtAvatar } from 'taro-ui'
 import noop from 'lodash/noop'
-import { router, formatTime, formatNumber, EMediaType, routeAlias } from '~utils'
+import { connect } from 'react-redux'
+import { router, formatTime, formatNumber, EMediaType, routeAlias, LoginTool } from '~utils'
 import style from '~theme/style'
 import { TypeColor } from '~theme/color'
 import { SYSTEM_PAGE_SIZE } from '~config'
@@ -12,6 +13,7 @@ import CurtainVideo from './components/curtainVideo'
 import Curtain from '../curtain'
 import ImageLoading from '../imageLoading'
 import EmptyTry from '../empty-try'
+import { mapStateToProps, mapDispatchToProps } from './connect'
 
 import './index.scss'
 
@@ -63,6 +65,7 @@ export interface IProps {
   renderExtra?: (item: IList) => React.ReactNode
   like: (id: string, like: boolean) => any
   comment: (isUserCall: boolean, user: string, commentId: string) => any
+  userInfo?: any 
 }
 
 export interface IState {
@@ -77,7 +80,7 @@ const ICON_TYPE = {
   action: 'at-icon-soung'
 }
 
-class List extends Component<IProps, IState>{
+class ListContent extends Component<IProps, IState>{
 
   public static defaultProps: IProps = {
     list: [],
@@ -98,7 +101,17 @@ class List extends Component<IProps, IState>{
   }
 
   //获取用户信息
-  public getUser = (id: string) => router.push(routeAlias.user, { id })
+  public getUser = (id: string) => {
+    const { _id } = this.props.userInfo || {}
+    if(LoginTool.isLogin() && _id === id) {
+      router.push(routeAlias.mine)
+      Taro.switchTab({
+        url: "../../mine/index"
+      })
+      return 
+    }
+    router.push(routeAlias.user, { id })
+  }
 
   //预览媒体
   public handlePreviewMedia = (src: string, type: EMediaType, image: string = '') => {
@@ -336,6 +349,4 @@ class List extends Component<IProps, IState>{
   }
 }
 
-export {
-  List
-}
+export const List = connect(mapStateToProps, mapDispatchToProps)(ListContent)
