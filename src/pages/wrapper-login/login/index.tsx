@@ -67,6 +67,8 @@ class Login extends Component<any> {
 
   public register = () => router.push(routeAlias.register)
 
+  public forget = () => router.push(routeAlias.forget)
+
   public render() {
 
     const { mobile, password } = this.state
@@ -102,9 +104,17 @@ class Login extends Component<any> {
           <AtButton
             onClick={this.register}
             type='secondary'
+            className='register'
             customStyle={{ ...style.color('primary'), ...style.border(1, 'primary', 'solid', 'all') }}
           >
             注册
+          </AtButton>
+          <AtButton
+            onClick={this.forget}
+            type='secondary'
+            customStyle={{ ...style.color('primary'), ...style.border(1, 'primary', 'solid', 'all') }}
+          >
+            忘记密码
           </AtButton>
         </AtForm>
       </View>

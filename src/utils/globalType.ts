@@ -46,6 +46,7 @@ export const routeAlias = {
   fans: '/fans',
   newsdetail: '/newsdetail',
   login: '/login',
+  forget: '/forget',
   register: '/register',
   toComment: '/comment',
   indexes: '/indexes',
@@ -79,6 +80,7 @@ export const routeConfig = [
   { path: 'pages/wrapper-login/register/index', alias: routeAlias.register },
   { path: 'pages/wrapper-comment/comment/index', alias: routeAlias.toComment },
   { path: 'pages/wrapper-data/indexes/index', alias: routeAlias.indexes },
+  { path: 'pages/wrapper-login/forget/index', alias: routeAlias.forget },
 ]
 
 //轮播图路由跳转类型"MOVIE", "SPECIAL", "COMMENT"

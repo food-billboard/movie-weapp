@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro'
 import { noop } from 'lodash'
 import { router, routeAlias, setToken, getToken, clearToken } from '~utils'
-import { signin, register, signout, getCustomerUserInfo, sendSMS } from '~services'
+import { signin, register, signout, getCustomerUserInfo, sendSMS, forget } from '~services'
 
 export default {
   namespace: 'global',
@@ -66,6 +66,11 @@ export default {
 
     * sendSMS({ email, emailType }, { call, put }) {
       return yield call(sendSMS, { email, type: emailType })
+    },
+
+    * forget({ email, captcha, password }, { call, put }) {
+      const data = yield call(forget, { password, email, captcha })
+      return data
     }
 
   },

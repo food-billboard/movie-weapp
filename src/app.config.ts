@@ -44,6 +44,7 @@ export default {
       "pages": [
         'login/index',
         'register/index',
+        'forget/index',
       ]
     },
     {

@@ -86,7 +86,12 @@ export const register = ({ mobile, password, uid, email, captcha }: { mobile: nu
 
 //退出
 export const signout = () => {
-  return request('POST', '/api/user/logon/signout', { header: getToken(true) })
+  return request('PUT', '/api/user/logon/signout', { header: getToken(true) })
+}
+
+//忘记密码
+export const forget = (data: { password: string, email: string, captcha: string }) => {
+  return request('POST', '/api/user/logon/forget', { header: getToken(true), data })
 }
 
 //验证码
