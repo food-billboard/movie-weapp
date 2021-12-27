@@ -1,5 +1,6 @@
 import { IFiles } from '~components/imgPicker'
 import { IItem } from '~components/mediaPicker'
+import { Item as TagItem } from '~components/tagList'
 import { Item } from 'taro-ui/types/timeline'
 
 //权限类型
@@ -111,7 +112,7 @@ export const responseType = {
 //表单通用state
 export interface ICommonFormState {
   error:boolean
-  value: Array<string> | Array<IFiles> |  Array<IItem> | Array<Item> | string
+  value: Array<string> | Array<IFiles> |  Array<IItem> | Array<Item> | string | TagItem[]
 }
 
 //表单通用props
@@ -119,8 +120,8 @@ export interface ICommonFormProps {
   handleChange?: (...args: any[]) => any
   error?:boolean
   style?: React.CSSProperties
-  value?: Array<string> | Array<IFiles> |  Array<IItem> | Array<Item> | string | false
-  initialValue?: Array<string> | Array<IFiles> |  Array<IItem> | Array<Item> | string
+  value?: Array<string> | Array<IFiles> |  Array<IItem> | Array<Item> | string | false | TagItem[]
+  initialValue?: Array<string> | Array<IFiles> |  Array<IItem> | Array<Item> | string | TagItem[]
 }
 
 

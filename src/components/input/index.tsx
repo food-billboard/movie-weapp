@@ -138,7 +138,7 @@ export default class extends Component<IProps, IState> {
       height = 100,
       count = true,
       textareaFixed = false,
-      error: propsError = false
+      error: propsError = false,
     } = this.props
 
     const {

@@ -8,6 +8,7 @@ import customStyle from '~theme/style'
 import { TypeColor } from '~theme/color'
 import { FORM_ERROR } from '~config'
 import GInput from '../input'
+import TagList, { Item as TagItem } from '../tagList'
 
 import './index.scss'
 
@@ -29,13 +30,13 @@ export const operateType: IOperate<TStatus> = {
 export type TStatus = 'add' | 'cancel'
 
 export interface IStatusData {
-  value: Item
+  value: TagItem
   index: number
 }
 
 export interface IProps extends ICommonFormProps {
   title?: string
-  value: Array<Item>
+  value: Array<TagItem>
   defaultItemStyle?: IDefaultItemStyle | false
   handleError?: (status) => any
   error?: boolean
@@ -74,25 +75,19 @@ const getDefaultItemStyle = () => {
   }
 }
 
-class Rest extends Component<IProps, IState> {
+class Rest extends Component<IProps> {
 
-  public static normalizeData = (data: ((string | Item)[] | string | Item), defaultItemStyle = getDefaultItemStyle()) => {
-    const isSingle = !Array.isArray(data)
-    const realData = Array.isArray(data) ? data : [data]
-    const dealData = realData.map(item => {
-      const initItem = typeof item === 'string' ? { title: item } : { ...item }
+  public static normalizeData = (data: string | string[]) => {
+    return (Array.isArray(data) ? data : [data]).map(item => {
       return {
-        ...defaultItemStyle,
-        ...initItem
+        name: item,
+        key: item 
       }
     })
-    return isSingle ? dealData[0] : dealData
   }
 
-  public state: IState = {
-    disabled: true,
-    status: [],
-    statusData: []
+  public isExists = (value: string) => {
+    return !!(this.props.value.some(item => item.name === value))
   }
 
   //输入框
@@ -101,29 +96,25 @@ class Rest extends Component<IProps, IState> {
   //添加
   public handleAdd = async () => {
     const data = await this.inputRef.current!.getData()
-    if (data) {
-      const { status, statusData } = this.state
-      const { value } = this.props
-      const itemLen = value.length
-      const newItem = Rest.normalizeData(data) as Item
-
-      const newStatusData: IStatusData = {
-        value: newItem,
-        index: itemLen
-      }
-      //新数据
-      const newValue = [...value, newItem]
-      this.setState({
-        disabled: false,
-        //记录最近操作
-        status: [...status, operateType.add],
-        statusData: [...statusData, newStatusData],
-      }, () => {
-        this.props.handleChange && this.props.handleChange(newValue)
-        this.inputRef.current!.reset()
+    const { value } = this.props
+    if(typeof data === "string" && this.isExists(data)) {
+      return Taro.showToast({
+        title: '名称重复',
+        icon: 'none',
+        duration: 500,
+        mask: false
       })
+    }
+    if (data) {
+      const newItem = Rest.normalizeData(data)
 
-      this.props.handleError && this.props.handleError(false)
+      //新数据
+      const newValue = [...value, ...newItem]
+      this.props.handleChange?.(newValue)
+      this.inputRef.current!.reset()
+
+      this.props.handleError?.(false)
+
       Taro.showToast({
         title: '成功~',
         icon: 'none',
@@ -133,73 +124,8 @@ class Rest extends Component<IProps, IState> {
     }
   }
 
-  //删除
-  public handleDelete = async () => {
-    const { disabled } = this.state
-    if (disabled) return
-
-    const data = await this.inputRef.current!.getData()
-
-    if (data) {  //输入框中有内容
-      const { status, statusData } = this.state
-      const { value } = this.props
-      const index = value.findIndex((val: any) => val.title === data)
-
-      let config: any = { title: '' }
-
-      //查看输入框内容是否在timeline中存在
-      if (index < 0) {
-        config = { ...config, title: '好像没有找到', icon: 'none', duration: 500 }
-      } else {
-        config = { ...config, title: '操作成功', icon: 'none', duration: 500 }
-        let newValue = [...value]
-        const [deleteItem]: Array<Item> = newValue.splice(index, 1)
-        this.setState({
-          disabled: newValue.length ? false : true,
-          //记录最近操作
-          status: [...status, operateType.cancel],
-          statusData: [...statusData, {
-            value: deleteItem,
-            index: index
-          }
-          ]
-        }, () => {
-          this.props.handleChange && this.props.handleChange(newValue)
-          this.inputRef.current!.reset()
-        })
-      }
-      Taro.showToast(config)
-    }
-  }
-
-  //撤销
-  public handleCancel = async () => {
-    const { disabled, status, statusData } = this.state
-    const { value } = this.props
-    if (disabled) return
-    if (!status.length) return
-    let newValue = [...value]
-    const _status = [...status]
-    const _statusData = [...statusData]
-    const [__status]: Array<TStatus> = _status.splice(_status.length - 1, 1)
-    const [__statusData]: Array<IStatusData> = _statusData.splice(_statusData.length - 1)
-
-    //判断需要撤销的操作
-    const { value: prevOp, index } = __statusData
-    if (__status === operateType.add) {
-      newValue.splice(index, 1)
-    } else if (__status === operateType.cancel) {
-      newValue.splice(index, 0, prevOp)
-    }
-
-    this.setState({
-      disabled: newValue.length ? false : true,
-      status: status.length === _status.length ? status : _status,
-      statusData: statusData.length === _statusData.length ? statusData : _statusData
-    }, () => {
-      this.props.handleChange && this.props.handleChange(newValue)
-      this.inputRef.current!.reset()
-    })
+  onSelectChange = async (selectValue) => {
+    this.props.handleChange?.(selectValue)
   }
 
   public render() {
@@ -210,8 +136,6 @@ class Rest extends Component<IProps, IState> {
       error = false,
       value
     } = this.props
-
-    const { disabled } = this.state
 
     const _style = {
       ...(isObject(style) ? style : {}),
@@ -224,18 +148,19 @@ class Rest extends Component<IProps, IState> {
         style={_style}
       >
         {
-          title ?
+          !!title &&
             <AtTag
               customStyle={{ ...TAT_STYLE, ...customStyle.border(1, 'primary', 'dashed', 'all'), ...customStyle.color('thirdly') }}
               type='primary'
             >
               {title}
             </AtTag>
-            : null
         }
-        <AtTimeline
-          items={value}
-        ></AtTimeline>
+        <TagList
+          style={{marginBottom: '10px'}}
+          list={value}
+          handleChange={this.onSelectChange}
+        ></TagList>
         <View className='input at-row'>
           <View className='at-col at-col-2'>
             <AtButton
@@ -244,25 +169,11 @@ class Rest extends Component<IProps, IState> {
               customStyle={{ ...customStyle.backgroundColor('primary') }}
             >添加</AtButton>
           </View>
-          <View className='at-col at-col-6'>
+          <View className='at-col at-col-10'>
             <GInput
               style={{ ...customStyle.backgroundColor('disabled'), marginLeft: 0 }}
               ref={this.inputRef}
             ></GInput>
-          </View>
-          <View className='at-col at-col-2'>
-            <AtButton
-              onClick={this.handleDelete}
-              type='primary'
-              customStyle={{ ...(disabled ? customStyle.backgroundColor('thirdly') : customStyle.backgroundColor('secondary')) }}
-            >删除</AtButton>
-          </View>
-          <View className='at-col at-col-2'>
-            <AtButton
-              onClick={this.handleCancel}
-              type='primary'
-              customStyle={{ ...(disabled ? customStyle.backgroundColor('thirdly') : customStyle.backgroundColor('secondary')) }}
-            >撤销</AtButton>
           </View>
         </View>
       </View>

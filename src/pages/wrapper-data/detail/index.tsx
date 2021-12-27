@@ -204,7 +204,7 @@ class Detail extends Component<any> {
             </View>
             <Actor 
               list={(actor || []).map(item => {
-                const { name, other: { avatar } } = item
+                const { name, avatar } = item
                 return {
                   name,
                   image: avatar
