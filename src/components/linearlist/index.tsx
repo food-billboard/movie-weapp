@@ -42,7 +42,7 @@ export default class List extends Component<IProps>{
   }
 
   public render() {
-    
+
     const { list, style = {} } = this.props
 
     return (
@@ -50,7 +50,7 @@ export default class List extends Component<IProps>{
         className='list'
         style={isObject(style) ? style : {}}
       >
-        <AtList hasBorder={true}>
+        <AtList hasBorder>
           {
             list.map((value) => {
               const {

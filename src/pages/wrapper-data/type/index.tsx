@@ -5,13 +5,13 @@ import classnames from 'classnames'
 import IconList from '~components/iconlist'
 import LinearList from '~components/list'
 import GScrollView from '~components/scrollList'
-import Fab from './components/fab'
 import throttle from 'lodash/throttle'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import { getClassifyList, getClassify } from '~services'
 import { ESourceTypeList } from '~utils'
+import Fab from './components/fab'
 
 import './index.scss'
 
@@ -28,6 +28,20 @@ enum SHOW_TYPE {
 
 export default class Index extends Component<any> {
 
+  public state = {
+    data: [],
+    type: [],
+    listShow: true,
+    typeShow: false
+  }
+
+  public componentDidMount = async () => {
+    await this.fetchTypeData()
+    const { params: { id = null } = {} } = getCurrentInstance().router || {}
+    if (!id) return
+    this.getTypeDetail(id)
+  }
+
   public componentDidShow = () => {
     colorStyleChange()
   }
@@ -41,13 +55,6 @@ export default class Index extends Component<any> {
   //上拉加载
   public onReachBottom = async () => {
     await this.scrollRef.current!.handleToLower()
-  }
-
-  public state = {
-    data: [],
-    type: [],
-    listShow: true,
-    typeShow: false
   }
 
   //电影分类id
@@ -66,17 +73,10 @@ export default class Index extends Component<any> {
 
   public fabRef = React.createRef<Fab>()
 
-  public componentDidMount = async () => {
-    await this.fetchTypeData()
-    const { params: { id=null }={} } = getCurrentInstance().router || {}
-    if(!id) return 
-    this.getTypeDetail(id)
-  }
-
   //获取数据
   public fetchData = async (query: any, isInit = false) => {
     const { data } = this.state
-    if(!this.id) return []
+    if (!this.id) return []
     const resData = await getClassifyList({ id: this.id, ...query })
 
     this.setState({
@@ -85,7 +85,7 @@ export default class Index extends Component<any> {
         return {
           ...nextItem,
           image: poster,
-          type: classify.map(item => item.name),
+          type: classify.map(classData => classData.name),
           time: publish_time,
           description: author_description
         }
@@ -123,7 +123,7 @@ export default class Index extends Component<any> {
   //设置标题
   public setTitle = (id: string) => {
     const { type } = this.state
-    const [target]: any = type.filter((val: any) => { val._id === id })
+    const [target]: any = type.filter((val: any) => val._id === id)
     const title = target ? target.name : '分类'
     Taro.setNavigationBarTitle({ title })
   }
@@ -173,7 +173,7 @@ export default class Index extends Component<any> {
         ref={this.scrollRef}
         style={{ ...bgColor }}
         sourceType={ESourceTypeList.Scope}
-        scrollWithAnimation={true}
+        scrollWithAnimation
         emptyShow={false}
         autoFetch={false}
         renderContent={
@@ -192,14 +192,14 @@ export default class Index extends Component<any> {
               {
                 showType || !typeShow ?
                   <ScrollView
-                    scrollX={true}
+                    scrollX
                     className='header'
                     style={{ ...bgColor }}
                   >
                     {
                       !showType ?
                         <View
-                          className={`header-list header-list-size`}
+                          className='header-list header-list-size'
                           style={{ ...style.color('primary'), fontWeight: 'normal' }}
                           onClick={(e) => { this.handleControlTypeDetail.call(this, SHOW_TYPE.SHOW_MORE) }}
                         >
@@ -216,7 +216,7 @@ export default class Index extends Component<any> {
                   >
                     {list}
                     <View
-                      className={'header-list at-col at-col-2'}
+                      className='header-list at-col at-col-2'
                       style={{ ...style.color('primary'), fontWeight: 'normal' }}
                       onClick={(e) => { this.handleControlTypeDetail.call(this, SHOW_TYPE.HIDE_MORE) }}
                     >
@@ -225,7 +225,7 @@ export default class Index extends Component<any> {
                   </View>
               }
             </View>
-            <View className="classify-list">
+            <View className='classify-list'>
               {
                 listShow ? (<LinearList list={data} reload={this.fetchData.bind(this, {}, true)} />) : (<IconList list={data} reload={this.fetchData.bind(this, {}, true)} />)
               }
@@ -236,7 +236,7 @@ export default class Index extends Component<any> {
         renderBottom={
           (_: () => any) => {
             return (
-              <View className="btn">
+              <View className='btn'>
                 <Fab value={listShow} change={this.listChange} />
               </View>
             )

@@ -1,29 +1,26 @@
 import Taro from '@tarojs/taro'
-import React, { Component, createRef } from 'react'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { AtInput, AtForm, AtButton } from 'taro-ui'
-import Time from './components/time'
+import { connect } from 'react-redux'
 import { withTry } from '~utils'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { mapDispatchToProps, mapStateToProps } from './connect'
-import { connect } from 'react-redux'
+import Time from './components/time'
 
 import './index.scss'
 
 interface IState {
-  // username: string
   password: string
   mobile: string
   captcha: string,
   email: string
 }
 
-@connect(mapStateToProps, mapDispatchToProps)
-export default class extends Component<any>{
+class Register extends Component<any>{
 
   public state: IState = {
-    // username: '',
     password: '',
     mobile: '',
     captcha: '',
@@ -31,13 +28,6 @@ export default class extends Component<any>{
   }
 
   public componentDidShow = () => colorStyleChange()
-
-  // //监听用户名输入
-  // public handleUser = (value: string) => {
-  //   this.setState({
-  //     username: value
-  //   })
-  // }
 
   //邮箱
   public onEmailChange = (value: string) => this.setState({ email: value })
@@ -72,24 +62,24 @@ export default class extends Component<any>{
   public submit = async () => {
     const { email, password, mobile, captcha } = this.state
     let message!: string
-    if(password.length <= 8) {
-      message = '密码格式长度不足' 
-    }else if(!this.emailValidate(email)) {
+    if (password.length <= 8) {
+      message = '密码格式长度不足'
+    } else if (!this.emailValidate(email)) {
       message = '邮箱格式不正确'
-    }else if(!/^1[345678]\d{9}$/g.test(mobile)) {
+    } else if (!/^1[345678]\d{9}$/g.test(mobile)) {
       message = '手机格式不正确'
-    }else if(captcha.length != 6) {
+    } else if (captcha.length != 6) {
       message = '验证码格式不正确'
     }
 
-    if(!!message) return Taro.showToast({
+    if (!!message) return Taro.showToast({
       title: message,
       duration: 1000,
       icon: 'none'
     })
 
     Taro.showLoading({ mask: true, title: '正在验证...' })
-    const [ , data ] = await withTry(this.props.register)({ email, password, mobile, captcha })
+    const [, data] = await withTry(this.props.register)({ email, password, mobile, captcha })
     Taro.hideLoading()
     if (data) {
       Taro.switchTab({
@@ -131,7 +121,7 @@ export default class extends Component<any>{
   //获取验证码
   public getData = () => {
     const { email } = this.state
-    if(!this.emailValidate) {
+    if (!this.emailValidate) {
       Taro.showToast({
         title: '邮箱格式错误',
         duration: 1000,
@@ -151,14 +141,6 @@ export default class extends Component<any>{
           onSubmit={this.submit}
           onReset={this.reset}
         >
-          {/* <AtInput
-            name='username'
-            title='用户名'
-            type='text'
-            placeholder='想个名字吧'
-            value={username}
-            onChange={this.handleUser}
-          /> */}
           <AtInput
             name='email'
             title='邮箱'
@@ -196,13 +178,13 @@ export default class extends Component<any>{
             required
             onChange={this.onCaptchaChange}
           >
-            <Time 
-              getData={this.getData}   
+            <Time
+              getData={this.getData}
             />
           </AtInput>
           <AtButton
             onClick={this.submit}
-            type={'primary'}
+            type='primary'
             className='submit'
             customStyle={{ ...style.backgroundColor('primary'), ...style.border(1, 'primary', 'solid', 'all') }}
           >
@@ -210,7 +192,7 @@ export default class extends Component<any>{
           </AtButton>
           <AtButton
             onClick={this.reset}
-            type={'secondary'}
+            type='secondary'
             customStyle={{ ...style.border(1, 'primary', 'solid', 'all'), ...style.color('primary') }}
           >
             重置
@@ -220,3 +202,5 @@ export default class extends Component<any>{
     )
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Register)

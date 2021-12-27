@@ -1,24 +1,24 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
+import { AtDrawer } from 'taro-ui'
 import throttle from 'lodash/throttle'
-import debounce from 'lodash/debounce' 
+import debounce from 'lodash/debounce'
 import merge from 'lodash/merge'
-import SearchBar from '../../main/components/searchButton'
-import Head from './components/head'
 import List from '~components/list'
 import IconList from '~components/iconlist'
 import GScrollView from '~components/scrollList'
-import RadioList from './components/radio'
-import Method from './components/method'
-import Forms from './components/form'
-import { FormData } from './interface'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { SYSTEM_PAGE_SIZE } from '~config'
-import { AtDrawer } from 'taro-ui'
 import { withTry, ESourceTypeList } from '~utils'
 import { getSearchDataList } from '~services'
+import RadioList from './components/radio'
+import Method from './components/method'
+import Forms from './components/form'
+import SearchBar from '../../main/components/searchButton'
+import Head from './components/head'
+import { FormData } from './interface'
 
 import './index.scss'
 
@@ -98,9 +98,6 @@ export default class Index extends Component<any> {
   //分类筛选
   public typeScreen = async (type: string) => {
     const { query } = this.state
-    // this.setState({
-    //   query: { ...query, type }
-    // })
     const params = { ...INIT_PAGE, ...query, content: this.searchValue }
     this.fetchData(params, true)
   }
@@ -208,8 +205,8 @@ export default class Index extends Component<any> {
             <AtDrawer
               show={selectShow}
               mask={false}
-              right={true}
-              width={"90vw"}
+              right
+              width='90vw'
               className='drawer'
             >
               <Forms
@@ -268,7 +265,8 @@ export default class Index extends Component<any> {
                   <View className='at-col at-col-5 screen'>
                     <Text
                       className='text'
-                      onClick={this.drawerOpen}>筛选</Text>
+                      onClick={this.drawerOpen}
+                    >筛选</Text>
                   </View>
                 </View>
               </View>

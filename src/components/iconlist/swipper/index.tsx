@@ -11,13 +11,15 @@ export default memo((props: IProps) => {
 
   const list = useMemo(() => {
     return (props.list.length ? props.list : [''])
-    .map(item => {
+    .map((item, index) => {
       return (
-        <SwiperItem>
+        <SwiperItem
+          key={index}
+        >
           <ImageLoading
             style={{ width: "100%", height: "100%" }}
             src={item}
-            mode={'scaleToFill'}
+            mode='scaleToFill'
           />
         </SwiperItem>
       )
@@ -26,7 +28,7 @@ export default memo((props: IProps) => {
 
   return (
     <Swiper
-      circular={true}
+      circular
       indicatorDots={false}
       autoplay={false}
       {...props}

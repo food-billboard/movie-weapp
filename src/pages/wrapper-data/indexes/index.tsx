@@ -2,10 +2,10 @@ import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
 import { AtIndexes } from 'taro-ui'
 import { connect } from 'react-redux'
+import { router } from '~utils'
 import { EIndexesType } from '../issue/interface'
 import Selected from './components/Selected'
 import BackButton from './components/Fab'
-import { router } from '~utils'
 import { mapDispatchToProps, mapStateToProps } from './connect'
 
 interface ListItem {
@@ -18,9 +18,9 @@ interface ListItem {
 
 function formatResponse(list: Model_Issue.IItem[]) {
   return list.reduce((acc, cur) => {
-    const { key } = cur 
+    const { key } = cur
     let index = acc.findIndex(item => item.key == key)
-    if(!~index) {
+    if (!~index) {
       acc.push({
         title: key,
         key,
@@ -29,23 +29,23 @@ function formatResponse(list: Model_Issue.IItem[]) {
       index = acc.length - 1
     }
     acc[index].items.push(cur)
-    return acc 
+    return acc
   }, [] as ListItem[])
 }
 
 interface IProps {
   actor: Model_Issue.IItem[]
-  director: Model_Issue.IItem[] 
+  director: Model_Issue.IItem[]
   district: Model_Issue.IItem[]
   selectDistrict: Model_Issue.IItem[]
   selectDirector: Model_Issue.IItem[]
   selectActor: Model_Issue.IItem[]
-  fetchDistrict: any 
-  fetchDirector: any 
-  fetchActor: any 
-  editDirector: any 
-  editDistrict: any 
-  editActor: any 
+  fetchDistrict: any
+  fetchDirector: any
+  fetchActor: any
+  editDirector: any
+  editDistrict: any
+  editActor: any
 }
 
 interface IState {
@@ -58,15 +58,28 @@ class Indexes extends Component<IProps, IState>{
     list: [],
   }
 
-  type: EIndexesType
+  componentDidMount = async () => {
+    const currentRouter = getCurrentInstance().router
+    const { type } = currentRouter?.params || {}
+    if (type) {
+      this.type = type as EIndexesType
+    }
+    const { fetchData, editMethod, origin } = this.typeInfo
+    this.fetchDataMethod = fetchData
+    this.editMethod = editMethod
+    this.origin = origin
+    await this.fetchData()
+  }
 
-  fetchDataMethod: any 
-  editMethod: any 
-  origin: any 
+  type: EIndexesType
+  fetchDataMethod: any
+  editMethod: any
+  origin: any
+
 
   get typeInfo() {
     let info: any = {}
-    switch(this.type) {
+    switch (this.type) {
       case EIndexesType.actor:
         info.fetchData = this.props.fetchActor
         info.editMethod = this.props.editActor
@@ -86,20 +99,7 @@ class Indexes extends Component<IProps, IState>{
         info.value = this.props.selectDistrict
         break
     }
-    return info 
-  }
-
-  componentDidMount = async () => {
-    const router = getCurrentInstance().router
-    const { type } = router?.params || {}
-    if(type) {
-      this.type = type as EIndexesType
-    }
-    const { fetchData, editMethod, origin } = this.typeInfo
-    this.fetchDataMethod = fetchData
-    this.editMethod = editMethod 
-    this.origin = origin
-    await this.fetchData()
+    return info
   }
 
   handleClick = async (newItem: Model_Issue.IItem) => {
@@ -110,7 +110,7 @@ class Indexes extends Component<IProps, IState>{
     ])
   }
 
-  fetchData = async() => {
+  fetchData = async () => {
     const data = await this.fetchDataMethod?.() || []
     const newValue = formatResponse(data)
     this.setState({
@@ -127,8 +127,8 @@ class Indexes extends Component<IProps, IState>{
   }
 
   render() {
-    const { list } = this.state 
-    const { value=[] } = this.typeInfo || {}
+    const { list } = this.state
+    const { value = [] } = this.typeInfo || {}
     return (
       <AtIndexes
         list={list}

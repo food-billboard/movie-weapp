@@ -1,32 +1,30 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import throttle from 'lodash/throttle'
 import { List } from '~components/commentlist'
 import GScrollView from '~components/scrollList'
-import Origin from './components/originComment'
-import throttle from 'lodash/throttle'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { withTry, ESourceTypeList, router, routeAlias, EAction } from '~utils'
-import { mapDispatchToProps, mapStateToProps } from './connect'
-import { connect } from 'react-redux'
 import { getCustomerComment, getCustomerUserComment, getUserComment, cancelLike, putLike } from '~services'
+import Origin from './components/originComment'
+import { mapDispatchToProps, mapStateToProps } from './connect'
 
 import './index.scss'
 
-@connect(mapStateToProps, mapDispatchToProps)
-export default class extends Component<any>{
-
-  router = getCurrentInstance().router
-
-  private scrollRef = React.createRef<GScrollView>()
-
-  //用户id
-  readonly id = this.router?.params.id
+class MyComment extends Component<any>{
 
   public state: any = {
     data: [],
-    id: null
   }
+
+  private scrollRef = React.createRef<GScrollView>()
+
+  router = getCurrentInstance().router
+
+  //用户id
+  readonly id = this.router?.params.id
 
   public componentDidShow = () => colorStyleChange()
 
@@ -102,7 +100,7 @@ export default class extends Component<any>{
         query={{ pageSize: 6 }}
         style={{ ...style.backgroundColor('bgColor') }}
         sourceType={ESourceTypeList.Scope}
-        scrollWithAnimation={true}
+        scrollWithAnimation
         renderContent={
           <List
             comment={this.publish}
@@ -128,3 +126,5 @@ export default class extends Component<any>{
     )
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(MyComment)

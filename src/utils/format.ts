@@ -1,6 +1,7 @@
 import Day from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/zh-cn'
+
 Day.locale('zh-cn')
 Day.extend(relativeTime)
 
@@ -119,7 +120,7 @@ export const formatDate = (date:any, type='Y-M-D h:m:s') => {
         hour = myDate.getHours()
     }else {
         myDate = new Date()
-        hour - myDate.getHours()
+        hour -= myDate.getHours()
     }
     const Y = myDate.getFullYear()
     const M = myDate.getMonth() + 1 < 10 ? `0${myDate.getMonth() + 1}` : myDate.getMonth() + 1

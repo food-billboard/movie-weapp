@@ -1,7 +1,7 @@
 import {setResponseCookie} from './cookie'
 
 //报错来源
-const origin = 'errorHandler'
+const originType = 'errorHandler'
 
 export default (type, { response, origin }) => {
     //response处理

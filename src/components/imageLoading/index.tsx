@@ -22,15 +22,15 @@ export interface IProps extends ImageProps {
 
 export interface IState {
   loading: boolean
-  error: boolean 
+  error: boolean
 }
 
 export default memo((props: IProps) => {
 
-  const [ loading, setLoading ] = useState<boolean>(true)
-  const [ error, setError ] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
+  const [error, setError] = useState<boolean>(false)
 
-  const {  
+  const {
     //img
     src,
     webp = false,
@@ -42,16 +42,16 @@ export default memo((props: IProps) => {
     loadingProps: {
       size = 32,
       mode: loadingMode = 'center',
-      color = TypeColor.primary,
+      color = TypeColor().primary,
       content = '加载中...'
-    }={},
+    } = {},
     customStyle = false,
     border = false,
     imageStyle = false,
     onLoad,
     onError
   } = useMemo(() => {
-    return props 
+    return props
   }, [props])
 
   const handleLoad = useCallback((event) => {
@@ -102,12 +102,6 @@ export default memo((props: IProps) => {
       onClick={onClick}
       style={contentStyle}
     >
-      {/* {
-        loading ?
-        <View className='avatar'>图</View>
-        :
-        null
-      } */}
       {
         loading ?
           <AtActivityIndicator

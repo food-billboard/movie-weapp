@@ -4,16 +4,16 @@ import { AtInput, AtForm, AtButton, AtImagePicker } from 'taro-ui'
 import { AtImagePickerProps } from 'taro-ui/types/image-picker'
 import { Text, View } from '@tarojs/components'
 import { connect } from 'react-redux'
-import { mapDispatchToProps, mapStateToProps } from './connect'
 import { Upload, EMediaType } from '~utils'
 import { putUsername, putAvatar } from '~services'
+import { mapDispatchToProps, mapStateToProps } from './connect'
 import './index.scss'
 
 const Setting = memo((props: any) => {
 
   const { getUserInfo, userInfo } = useMemo(() => {
-    const { userInfo, ...nextProps } = props 
-    const { avatar, ...nextUserInfo } = userInfo || {}
+    const { userInfo: originUserInfo, ...nextProps } = props 
+    const { avatar, ...nextUserInfo } = originUserInfo || {}
     return {
       ...nextProps,
       userInfo: {
@@ -67,7 +67,7 @@ const Setting = memo((props: any) => {
         duration: 1000
       })
     }
-  }, [ username, avatar ])
+  }, [ username, avatar, getUserInfo ])
 
   return (
     <AtForm
@@ -82,9 +82,9 @@ const Setting = memo((props: any) => {
         onChange={onUserNameChange}
       />
       <View
-        className="admin-setting-avatar"
+        className='admin-setting-avatar'
       >
-        <Text className="at-input__title ">头像</Text>
+        <Text className='at-input__title'>头像</Text>
         <AtImagePicker
           files={avatar}
           count={1}
@@ -94,11 +94,14 @@ const Setting = memo((props: any) => {
           showAddBtn={!avatar.length}
         />  
       </View>
-      <AtButton customStyle={{
-        position: 'absolute',
-        bottom: 0,
-        width: '100%'
-      }} onClick={submit}>确定</AtButton>
+      <AtButton 
+        customStyle={{
+          position: 'absolute',
+          bottom: 0,
+          width: '100%'
+        }} 
+        onClick={submit}
+      >确定</AtButton>
     </AtForm>
   )
 

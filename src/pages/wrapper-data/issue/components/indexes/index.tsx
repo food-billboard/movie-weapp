@@ -1,12 +1,12 @@
-import React, { memo, useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { memo, useCallback, useEffect, useMemo } from 'react'
 import Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { connect } from 'react-redux'
 import { AtTag } from 'taro-ui'
-import { EIndexesType } from '../../interface'
 import TagList from '~components/tagList'
 import style from '~theme/style'
 import { mapDispatchToProps, mapStateToProps } from './connect'
+import { EIndexesType } from '../../interface'
 
 interface IProps {
   selectDistrict: Model_Issue.IItem[]
@@ -34,38 +34,38 @@ const TAT_STYLE: any = {
 
 const Indexes = memo((props: IProps) => {
 
-  const getTypeInfo = useCallback((props) => {
-    const { type } = props 
+  const getTypeInfo = (originProps) => {
+    const { type, editActor, selectActor, editDirector, selectDirector, editDistrict, selectDistrict } = originProps 
     let info: any = {}
     switch(type) {
       case EIndexesType.actor:
-        info.editMethod = props.editActor
-        info.value = props.selectActor
+        info.editMethod = editActor
+        info.value = selectActor
         break
       case EIndexesType.director:
-        info.editMethod = props.editDirector
-        info.value = props.selectDirector
+        info.editMethod = editDirector
+        info.value = selectDirector
         break
       case EIndexesType.district:
-        info.editMethod = props.editDistrict
-        info.value = props.selectDistrict
+        info.editMethod = editDistrict
+        info.value = selectDistrict
         break
     }
     return info 
-  }, [])
+  }
 
   const { wrapperStyle={}, onClick, value=[], onChange, isError, wraperRef, editMethod, propsValue, title } = useMemo(() => {
-    const { value: propsValue } = props
+    const { value: originValue } = props
     return {
       ...props,
       ...getTypeInfo(props) || {},
-      propsValue
+      propsValue: originValue
     } 
   }, [props])
 
-  const onSelectChange = useCallback(async (value) => {
-    onChange(value)
-    await editMethod(value)
+  const onSelectChange = useCallback(async (selectValue) => {
+    onChange(selectValue)
+    await editMethod(selectValue)
   }, [editMethod, onChange])
 
   const diff = useCallback((targetA: any[], targetB: any[]) => {
@@ -90,7 +90,7 @@ const Indexes = memo((props: IProps) => {
       <AtTag 
         onClick={onClick}
         customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
-        type={'primary'}
+        type='primary'
       >
         {title}
       </AtTag>

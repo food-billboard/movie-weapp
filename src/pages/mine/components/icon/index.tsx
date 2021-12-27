@@ -24,19 +24,19 @@ export interface IProps {}
 
 const ICON_INFO = {
   size: SYSTEM_PAGE_SIZE(28),
-  color: TypeColor['thirdly']
+  color: TypeColor()['thirdly']
 }
 
 export default class IconList extends Component<IProps>{
 
   public state: any = {
-    typeColor: TypeColor
+    typeColor: TypeColor()
   }
 
   public componentDidShow = () => {
     const { typeColor } = this.state
-    if (typeColor == TypeColor) return
-    this.setState({ typeColor: TypeColor })
+    if (typeColor == TypeColor()) return
+    this.setState({ typeColor: TypeColor() })
   }
 
   //标题配置
@@ -108,10 +108,10 @@ export default class IconList extends Component<IProps>{
             const { iconInfo } = val
             return {
               ...val,
-              iconInfo: { ...iconInfo, color: TypeColor['thirdly'] }
+              iconInfo: { ...iconInfo, color: TypeColor()['thirdly'] }
             }
           })}
-          mode={'square'}
+          mode='square'
           hasBorder={false}
           columnNum={4}
           onClick={this.handleClick}

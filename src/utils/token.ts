@@ -1,4 +1,5 @@
 import Taro from '@tarojs/taro'
+
 const TOKEN = 'TOKEN'
 
 export const getToken = (returnHeaders: boolean=false) => {

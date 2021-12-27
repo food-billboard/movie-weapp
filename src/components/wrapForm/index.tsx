@@ -4,8 +4,6 @@ import { createFieldsStore } from './fieldsStore'
 
 export default class extends Component<any> {
 
-  fieldsStore
-
   constructor(props) {
     super(props)
     this.init()
@@ -17,6 +15,8 @@ export default class extends Component<any> {
       this.fieldsStore.setFields(options.mapPropsToFields(props))
     }
   }
+
+  fieldsStore
 
   init() {
     if(!this.props.name) return

@@ -1,17 +1,19 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
+import classnames from 'classnames'
 import { connect } from 'react-redux'
+import noop from 'lodash/noop'
+import merge from 'lodash/merge'
+import style from '~theme/style'
+import { putStore, cancelStore } from '~services'
+import { router, routeAlias, withTry } from '~utils'
 import Picker from './components/Picker'
 import Swipper from '../iconlist/swipper'
 import Ellipsis from '../ellipsis'
 import Item from './item'
 import Rate from '../rate'
-import style from '~theme/style'
 import { mapDispatchToProps, mapStateToProps } from './connect'
-import { router, isObject, routeAlias, withTry } from '~utils'
-import noop from 'lodash/noop'
-import { putStore, cancelStore } from '~services'
 
 import './index.scss'
 
@@ -22,8 +24,7 @@ export interface IProps {
   reload: (...args: any[]) => Promise<any>
 }
 
-@connect(mapStateToProps, mapDispatchToProps)
-export default class List extends Component<IProps>{
+class List extends Component<IProps>{
   public static defaultProps: IProps = {
     list: [],
     getUserInfo: () => Promise.resolve(),
@@ -38,26 +39,26 @@ export default class List extends Component<IProps>{
   handleStore = async (id: string, isStore: boolean, e: any) => {
     e.stopPropagation()
     let method
-    if(isStore) {
+    if (isStore) {
       method = putStore
-    }else {
+    } else {
       method = cancelStore
     }
 
     const action = async (res) => {
-      if(!res) return 
-      const [ err,  ] = await withTry(method)(id)
-      let toastConfig:Taro.showToast.Option = {
+      if (!res) return
+      const [err,] = await withTry(method)(id)
+      let toastConfig: Taro.showToast.Option = {
         icon: 'none',
         duration: 1000,
         title: ''
       }
-      if(err) {
+      if (err) {
         toastConfig = {
           ...toastConfig,
           title: '网络错误，请重试'
         }
-      }else {
+      } else {
         toastConfig = {
           ...toastConfig,
           title: '操作成功~'
@@ -68,14 +69,14 @@ export default class List extends Component<IProps>{
     }
 
     return this.props.getUserInfo({ action })
-    .catch(_ => {
-      Taro.showToast({
-        title: '操作失败',
-        icon: 'none',
-        duration: 1000
+      .catch(_ => {
+        Taro.showToast({
+          title: '操作失败',
+          icon: 'none',
+          duration: 1000
+        })
       })
-    })
-    
+
   }
 
   readonly OP_SELECTOR_MAP = {
@@ -87,56 +88,58 @@ export default class List extends Component<IProps>{
     return (
       <View className='list-component'>
         {
-          list.map((value:API_USER.IMovieListData) => {
-            const { images, name, type, time, hot, _id, rate, description, store } = value
+          list.map((value: API_USER.IMovieListData) => {
+            const { images, name, type, hot, _id, rate, description, store } = value
             const imageList = Array.isArray(images) ? images : [images]
             return (
               <View className='list-content'
-                style={{ ...(isObject(propsStyle) ? propsStyle : {}), ...style.backgroundColor('disabled') }}
+                style={merge(propsStyle || {}, style.backgroundColor('disabled'))}
                 key={_id}
               >
-                <View 
-                  className="list-content-main"
+                <View
+                  className='list-content-main'
                 >
                   <View className='list-content-main-poster'>
                     <Swipper
-                      style={{height: '100px'}}
+                      style={{ height: '100px' }}
                       list={imageList}
                     />
-                    <View className="at-icon at-icon-heart list-content-icon" onClick={this.handleStore.bind(this, _id, !store)}></View>
+                    <View
+                      className={classnames('at-icon', 'list-content-icon', {
+                        'at-icon-heart': !store,
+                        'at-icon-heart-2': store
+                      })}
+                      onClick={this.handleStore.bind(this, _id, !store)}
+                    ></View>
                   </View>
                   <View className='list-content-main-detail'
-                    style={{ ...style.backgroundColor('disabled'), ...style.color('secondary') }}
+                    style={merge(style.backgroundColor('disabled'), style.color('secondary'))}
                     onClick={this.goTo.bind(this, _id)}
                   >
-                    <View className="list-content-main-detail-name"
-                      style={{ ...style.color('primary') }}
+                    <View className='list-content-main-detail-name'
+                      style={style.color('primary')}
                     >
                       {name}
                     </View>
-                    <View className="list-content-main-detail-rate">
+                    <View className='list-content-main-detail-rate'>
                       <Rate
                         value={rate}
-                        readonly={true}
+                        readonly
                         rate={noop}
                         size={10}
                       ></Rate>
                     </View>
                     <Item
-                      type={'类型: '}
+                      type='类型: '
                       value={type}
                     />
-                    {/* <Item
-                      type={'更新: '}
-                      value={formatTime(time)}
-                    /> */}
                     <Item
-                      type={'人气: '}
+                      type='人气: '
                       value={hot}
                     />
                   </View>
-                  <View className="list-content-main-slot">
-                    {/**TODO */}
+                  <View className='list-content-main-slot'>
+                    {/** TODO */}
                     <Picker
                       selector={this.OP_SELECTOR_MAP}
                     >
@@ -144,11 +147,11 @@ export default class List extends Component<IProps>{
                     </Picker>
                   </View>
                 </View>
-                <View className="list-content-description">
+                <View className='list-content-description'>
                   <Ellipsis
                     text={description || '这位作者什么也没有留下...'}
                     needPoint={false}
-                    style={{borderRadius: '30px'}}
+                    style={{ borderRadius: '30px' }}
                   ></Ellipsis>
                 </View>
               </View>
@@ -159,3 +162,5 @@ export default class List extends Component<IProps>{
     )
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(List)

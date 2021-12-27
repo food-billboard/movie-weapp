@@ -2,13 +2,13 @@ import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import classnames from 'classnames'
 import { View, Text } from '@tarojs/components'
+import noop from 'lodash/noop'
 import GRate from '~components/rate'
-import GStore from '../store'
 import Ellipsis from '~components/ellipsis'
 import { formatTime, formatNumber, router, routeAlias } from '~utils'
 import style from '~theme/style'
 import { SYSTEM_PAGE_SIZE } from '~config'
-import noop from 'lodash/noop'
+import GStore from '../store'
 
 import './index.scss'
 
@@ -101,7 +101,7 @@ export default class Content extends Component<IProps, IState>{
     return (
       <View className='data-detail-content'>
         <View
-          className={'data-detail-content-title at-row'}
+          className='data-detail-content-title at-row'
           style={{ ...style.color('primary') }}
         >
           <View className='data-detail-content-title-name at-col at-col-10'>
@@ -125,14 +125,14 @@ export default class Content extends Component<IProps, IState>{
           <View className='data-detail-content-main-rate'>
             <View className='up-rate'>
               <Tag className={['up-rate-icon']} />
-              <View className="up-rate-title">楼主评分:</View>
+              <View className='up-rate-title'>楼主评分:</View>
             </View>
             <View className='at-row at-row__align--center'>
               <View className='at-col at-col-9'>
                 <GRate
                   value={author_rate}
                   rate={() => {}}
-                  readonly={true}
+                  readonly
                 />
               </View>
             </View>
@@ -149,7 +149,7 @@ export default class Content extends Component<IProps, IState>{
               <View className='at-col director-content'>
                 <Tag className={['data-detail-content-icon']} />
                 导演: 
-                <Text className={'text'}
+                <Text className='text'
                   style={{ ...style.color('primary') }}
                 >{director.map((val: API_USER.ItypeList) => {
                   const { value } = val
@@ -160,7 +160,7 @@ export default class Content extends Component<IProps, IState>{
             <View className='data-detail-content-main-info-type'>
               <Tag className={['data-detail-content-icon']} />
                 分类: 
-              <Text className={'text'}
+              <Text className='text'
                 style={{ ...style.color('primary') }}
               >{classify.map((val: API_USER.ItypeList) => {
                 const { value } = val
@@ -171,14 +171,14 @@ export default class Content extends Component<IProps, IState>{
               <View className='at-col at-col-6' style={{paddingRight: '1em'}}>
                 <Tag className={['data-detail-content-icon']} />
                 时间: 
-                <Text className={'text'}
+                <Text className='text'
                   style={{ ...style.color('primary') }}
                 >{formatTime(createdAt)}</Text>
               </View>
               <View className='at-col at-col-6' style={{paddingRight: '1em'}}>
                 <Tag className={['data-detail-content-icon']} />
                 上映: 
-                <Text className={'text'}
+                <Text className='text'
                   style={{ ...style.color('primary') }}
                 >{formatTime(screen_time)}</Text>
               </View>
@@ -187,14 +187,14 @@ export default class Content extends Component<IProps, IState>{
               <View className='at-col at-col-6 lang' style={{paddingRight: '1em'}}>
                 <Tag className={['data-detail-content-icon']} />
                 语言: 
-                <Text className={'text'}
+                <Text className='text'
                   style={{ ...style.color('primary') }}
                 >{language.map((val: API_USER.ItypeList) => val.value).join(' ')}</Text>
               </View>
               <View className='at-col at-col-6 area' style={{paddingRight: '1em'}}>
                 <Tag className={['data-detail-content-icon']} />
                 地区: 
-                <Text className={'text'}
+                <Text className='text'
                   style={{ ...style.color('primary') }}
                 >{district.map((val: API_USER.ItypeList) => val.value).join(' ')}</Text>
               </View>
@@ -202,7 +202,7 @@ export default class Content extends Component<IProps, IState>{
             <View className='data-detail-content-main-info-hot'>
               <Tag className={['data-detail-content-icon']} />
               人气:
-              <Text className={'text'}
+              <Text className='text'
                 style={{ ...style.color('primary') }}
               >
                 {formatNumber(hot)}
@@ -212,7 +212,7 @@ export default class Content extends Component<IProps, IState>{
             <View className='look'>
               <Tag className={['data-detail-content-icon']} />
               浏览:
-              <Text className={'text'}
+              <Text className='text'
                 style={{ ...style.color('primary') }}
               >{formatNumber(glance)}</Text>
               <Text className='data-detail-content-main-info-look-text' style={{ ...style.color('thirdly') }}> 人看过</Text>
@@ -221,7 +221,7 @@ export default class Content extends Component<IProps, IState>{
               <Tag className={['data-detail-content-icon']} />
               作者:
               <Text 
-                className={'text'}
+                className='text'
                 style={{ ...style.color('primary') }}
                 onClick={this.getUserInfo.bind(this, author?._id)}
               >
@@ -237,7 +237,7 @@ export default class Content extends Component<IProps, IState>{
               <Ellipsis
                 text={description}
                 style={{ lineHeight: SYSTEM_PAGE_SIZE(25) + 'px', ...style.color('primary') }}
-                needPoint={true}
+                needPoint
               ></Ellipsis>
             </View>
             <View
@@ -249,7 +249,7 @@ export default class Content extends Component<IProps, IState>{
                 <Ellipsis
                   text={author_description}
                   style={{ lineHeight: SYSTEM_PAGE_SIZE(25) + 'px', ...style.color('primary') }}
-                  needPoint={true}
+                  needPoint
                 ></Ellipsis>
             </View>
           </View>

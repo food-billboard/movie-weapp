@@ -113,6 +113,7 @@ export default class extends Component<IProps, IState> {
   public render() {
 
     const { show } = this.state
+    const typeColor = TypeColor()
 
     const nearEmoji = this.nearlyEmoji
 
@@ -140,8 +141,8 @@ export default class extends Component<IProps, IState> {
             ...style.border(1, 'disabled', 'solid', 'all')
           }}
           // className='swiper'
-          indicatorColor={TypeColor['primary']}
-          indicatorActiveColor={TypeColor['disabled']}
+          indicatorColor={typeColor['primary']}
+          indicatorActiveColor={typeColor['disabled']}
           circular={false}
           indicatorDots
           autoplay={false}
@@ -172,7 +173,7 @@ export default class extends Component<IProps, IState> {
                       style={{ ...style.color('primary'), marginLeft: '-5px', textAlign: 'center' }}
                       onClick={this.props.handleRemoveEmoj}
                     >
-                      <View className='at-icon at-icon-trash' style={{ textShadow: `0 0 2px ${TypeColor['bgColor']}` }}></View>
+                      <View className='at-icon at-icon-trash' style={{ textShadow: `0 0 2px ${typeColor['bgColor']}` }}></View>
                     </View>
                   </View>
                 </SwiperItem>

@@ -1,6 +1,5 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
-import { View } from '@tarojs/components'
 import List from '~components/list'
 import GScrollView from '~components/scrollList'
 import throttle from 'lodash/throttle'
@@ -44,7 +43,7 @@ export default class Index extends Component<any> {
         return {
           ...nextItem,
           image: poster,
-          type: classify.map(item => item.name),
+          type: classify.map(classifyData => classifyData.name),
           time: publish_time,
         }
       })]
@@ -63,7 +62,7 @@ export default class Index extends Component<any> {
         ref={this.scrollRef}
         style={{ ...style.backgroundColor('bgColor') }}
         sourceType={ESourceTypeList.Scope}
-        scrollWithAnimation={true}
+        scrollWithAnimation
         renderContent={
           <List reload={this.fetchData.bind(this, {}, true)} list={data} />
         }

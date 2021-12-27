@@ -2,7 +2,7 @@ import qs from 'qs'
 import invariant from 'invariant'
 import { merge } from 'lodash'
 
-import { isType, extend, coverPromise } from './tool'
+import { extend } from './tool'
 
 const HTTP_METHODS = ['OPTIONS', 'GET', 'HEAD', 'POST', 'DELETE', 'PUT', 'TRACT', 'CONNECT']
 

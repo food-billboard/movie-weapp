@@ -1,9 +1,9 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
-import Modal from '../model'
 import { AtNoticebar } from 'taro-ui'
 import { AtNoticeBarProps } from 'taro-ui/types/noticebar'
+import Modal from '../model'
 
 export interface IProps extends AtNoticeBarProps {
   text: string
@@ -18,9 +18,9 @@ export interface IState {
 
 export default class extends Component<IProps, IState> {
 
-  //关闭
-  public handleClose = () => {
-
+  public state: IState = {
+    show: true,
+    modalShow: false
   }
 
   //查看更多
@@ -28,11 +28,6 @@ export default class extends Component<IProps, IState> {
     this.setState({
       modalShow: true
     })
-  }
-
-  public state: IState = {
-    show: true,
-    modalShow: false
   }
 
   public render() {
@@ -53,7 +48,7 @@ export default class extends Component<IProps, IState> {
     return (
       <View>
         {
-          text ?
+          !!text &&
             <AtNoticebar
               customStyle={{ visibility: show ? 'visible' : 'hidden' }}
               moreText={moreText}
@@ -63,13 +58,12 @@ export default class extends Component<IProps, IState> {
               speed={speed}
               showMore={showMore}
               icon={icon}
-              onClose={this.props.handleClose ? this.props.handleClose : this.handleClose}
-              onGotoMore={this.props.handleMore ? this.props.handleMore : this.handleMore}
+              onClose={this.props.handleClose}
+              onGotoMore={this.props.handleMore || this.handleMore}
             >{text}</AtNoticebar>
-            : null
         }
         {
-          showMore ?
+          !!showMore &&
             <Modal
               info={
                 {
@@ -84,7 +78,6 @@ export default class extends Component<IProps, IState> {
                 }
               }
             ></Modal>
-            : null
         }
       </View>
     )

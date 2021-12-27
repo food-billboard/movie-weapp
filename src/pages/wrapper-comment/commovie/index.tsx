@@ -1,20 +1,24 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
+import throttle from 'lodash/throttle'
+import { connect } from 'react-redux'
 import GButton from '~components/button'
 import Header from '~components/newsheader'
 import { List } from '~components/commentlist'
 import GScrollView from '~components/scrollList'
 import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
-import throttle from 'lodash/throttle'
 import { withTry, ESourceTypeList, router, routeAlias, EAction } from '~utils'
-import { connect } from 'react-redux'
-import { mapDispatchToProps, mapStateToProps } from './connect'
 import { getCustomerMovieCommentList, getMovieCommentList, getMovieDetailSimple, putLike, cancelLike } from '~services'
+import { mapDispatchToProps, mapStateToProps } from './connect'
 
-@connect(mapStateToProps, mapDispatchToProps)
-export default class extends Component<any> {
+class CommentMovie extends Component<any> {
+
+  public state: any = {
+    data: [],
+    headerData: {},
+  }
 
   public componentDidMount = async () => await this.fetchMovieData()
 
@@ -34,13 +38,6 @@ export default class extends Component<any> {
   //上拉加载
   public onReachBottom = async () => {
     await this.scrollRef.current!.handleToLower()
-  }
-
-  public state: any = {
-    data: [],
-    id: false,
-    userCall: false,
-    headerData: {},
   }
 
   //获取电影数据
@@ -140,7 +137,7 @@ export default class extends Component<any> {
         renderHeader={
           (watch: () => any) => {
             return (
-              <View id="commovie-header">
+              <View id='commovie-header'>
                 <Header 
                   content={headerData}
                   handleSizeChange={watch}
@@ -155,7 +152,7 @@ export default class extends Component<any> {
               <View>
                 <GButton
                   style={{ width: '100%', height: '92' }}
-                  type={'secondary'}
+                  type='secondary'
                   value={new Array(2).fill('发布评论')}
                   operate={this.publish}
                 />
@@ -168,3 +165,5 @@ export default class extends Component<any> {
     )
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(CommentMovie)

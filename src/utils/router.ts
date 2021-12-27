@@ -25,7 +25,6 @@ class Router {
   public log: any
 
   constructor(){
-    this.taro;
     this.routes = [];
     this.beforeEach = function(){ return true };
     this.afterEach = function(){};

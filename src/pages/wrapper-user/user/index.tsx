@@ -1,23 +1,26 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
+import { connect } from 'react-redux'
 import IconHead from '~components/headicon'
 import List from '~components/linearlist'
 import GButton from '~components/button'
 import { TypeColor, colorStyleChange } from '~theme/color'
-import { mapStateToProps, mapDispatchToProps } from './connect'
 import { router, routeAlias, withTry } from '~utils'
-import { connect } from 'react-redux'
 import style from '~theme/style'
 import { getUserInfo, getCustomerAntoherUserInfo, toAttention, cancelAttention } from '~services'
+import { mapStateToProps, mapDispatchToProps } from './connect'
 
 import './index.scss'
 
-@connect(mapStateToProps, mapDispatchToProps)
-export default class User extends Component<any>{
+class User extends Component<any>{
 
   public state: any = {
     data: {}
+  }
+
+  public componentDidMount = async () => {
+    await this.refresh()
   }
 
   readonly router = getCurrentInstance().router
@@ -28,16 +31,12 @@ export default class User extends Component<any>{
 
   public componentDidShow = () => colorStyleChange()
 
-  public componentDidMount = async () => {
-    await this.refresh()
-  }
-
   public refresh = async () => await this.fetchData()
 
   //数据获取
   public fetchData = async () => {
 
-    if(!this.id) {
+    if (!this.id) {
       Taro.showToast({
         title: '网络错误，请重试',
         icon: 'none',
@@ -60,19 +59,19 @@ export default class User extends Component<any>{
     const { data: { like } } = this.state
     const method = like ? cancelAttention : toAttention
     const action = async (res) => {
-      if(!res) return 
+      if (!res) return
       Taro.showLoading({ mask: true, title: '操作中' })
       await withTry(method)(this.id)
       Taro.hideLoading()
       await this.refresh()
     }
     return this.props.getUserInfo({ action })
-    .catch(() => {
-      Taro.showToast({
-        title: '操作失败，请重试',
-        icon: 'none'
+      .catch(() => {
+        Taro.showToast({
+          title: '操作失败，请重试',
+          icon: 'none'
+        })
       })
-    })
   }
 
   //查看收藏
@@ -100,7 +99,7 @@ export default class User extends Component<any>{
       iconInfo: {
         value: 'heart',
         // size: SYSTEM_PAGE_SIZE(14), 
-        color: TypeColor['primary']
+        color: TypeColor()['primary']
       },
       handle: this.handleCheckStore,
       id: Symbol('store')
@@ -110,7 +109,7 @@ export default class User extends Component<any>{
       iconInfo: {
         value: 'star',
         // size: SYSTEM_PAGE_SIZE(14), 
-        color: TypeColor['primary']
+        color: TypeColor()['primary']
       },
       handle: this.handleCheckAttention,
       id: Symbol('attention')
@@ -120,7 +119,7 @@ export default class User extends Component<any>{
       iconInfo: {
         value: 'user',
         // size: SYSTEM_PAGE_SIZE(14), 
-        color: TypeColor['primary']
+        color: TypeColor()['primary']
       },
       handle: this.handleCheckFans,
       id: Symbol('fans')
@@ -130,7 +129,7 @@ export default class User extends Component<any>{
       iconInfo: {
         value: 'list',
         // size: SYSTEM_PAGE_SIZE(14), 
-        color: TypeColor['primary']
+        color: TypeColor()['primary']
       },
       handle: this.handleCheckRecord,
       id: Symbol('record')
@@ -140,7 +139,7 @@ export default class User extends Component<any>{
       iconInfo: {
         value: 'bookmark',
         // size: SYSTEM_PAGE_SIZE(14), 
-        color: TypeColor['primary']
+        color: TypeColor()['primary']
       },
       handle: this.handleCheckComment,
       id: Symbol('comment')
@@ -150,7 +149,7 @@ export default class User extends Component<any>{
       iconInfo: {
         value: 'share-2',
         // size: SYSTEM_PAGE_SIZE(14), 
-        color: TypeColor['primary']
+        color: TypeColor()['primary']
       },
       handle: this.handleCheckIssue,
       id: Symbol('issue')
@@ -163,7 +162,7 @@ export default class User extends Component<any>{
 
     return (
       <View id='user'
-        style={{...style.backgroundColor('bgColor')}}
+        style={{ ...style.backgroundColor('bgColor') }}
       >
         <View className='user-icon'>
           <IconHead
@@ -178,7 +177,7 @@ export default class User extends Component<any>{
           />
         </View>
         <GButton
-          type={'secondary'}
+          type='secondary'
           style={{ width: '100%', height: '100rpx', position: 'fixed', bottom: 0 }}
           active={like ? 1 : 0}
           value={['关注', '取消关注']}
@@ -188,3 +187,5 @@ export default class User extends Component<any>{
     )
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(User)

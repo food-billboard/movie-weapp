@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
-import { AtIcon, AtBadge } from 'taro-ui'
+import { AtIcon } from 'taro-ui'
 import { router, routeAlias } from '~utils'
 import { TypeColor } from '~theme/color'
 import style from '~theme/style'
@@ -46,26 +46,25 @@ export default class Title extends Component<IProps>{
 
   public render() {
     const { titleConfig: config } = this
+    const typeColor = TypeColor()
 
     return (
       <View className='title at-row at-row__justify--around'
-        style={{ ...style.border(1, 'thirdly', 'solid', 'bottom') }}
+        style={style.border(1, 'thirdly', 'solid', 'bottom')}
       >
         <View className='message at-col at-col-5'
           onClick={() => { this.handleClick.call(this, config.store) }}
         >
-          <AtIcon value='message' size='30' color={TypeColor['secondary']}></AtIcon>
+          <AtIcon value='message' size='30' color={typeColor['secondary']}></AtIcon>
           <Text className='text'>{this.titleConfig.store}</Text>
         </View>
         <View className='separate'
-          style={{ ...style.backgroundColor('thirdly') }}
+          style={style.backgroundColor('thirdly')}
         ></View>
         <View className='folder at-col at-col-5'
           onClick={() => { this.handleClick.call(this, config.issue) }}
         >
-          {/* <AtBadge dot={hasNews}> */}
-          <AtIcon value='folder' size='30' color={TypeColor['secondary']}></AtIcon>
-          {/* </AtBadge> */}
+          <AtIcon value='folder' size='30' color={typeColor['secondary']}></AtIcon>
           <Text className='text'>{this.titleConfig.issue}</Text>
         </View>
       </View>

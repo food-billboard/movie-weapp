@@ -1,12 +1,12 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
+import { connect } from 'react-redux'
 import { AtInput, AtForm, AtButton } from 'taro-ui'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
-import { connect } from 'react-redux'
-import { mapStateToProps, mapDispatchToProps } from './connect'
 import { router, routeAlias, withTry } from '~utils'
+import { mapStateToProps, mapDispatchToProps } from './connect'
 
 import './index.scss'
 
@@ -15,28 +15,14 @@ interface IState {
   password: string
 }
 
-@connect(mapStateToProps, mapDispatchToProps)
-export default class extends Component<any> {
-
-  // public componentDidMount = async () => {
-  //     const { password='', username='' } = this.$router.params
-  //     if(password.length && username.length) {
-  //         this.setState({
-  //             password,
-  //             username
-  //         })
-  //         return
-  //     }
-  //     await this.props.getUserInfo()
-  // }
-
-  public componentDidShow = () => colorStyleChange()
+class Login extends Component<any> {
 
   public state: IState = {
     mobile: '',
     password: '',
-    // check: ''
   }
+
+  public componentDidShow = () => colorStyleChange()
 
   //监听用户名输入
   public handleUser = (value: string) => this.setState({ mobile: value })
@@ -50,20 +36,20 @@ export default class extends Component<any> {
 
     let message!: string
 
-    if(!/^1[345678][0-9]{9}$/.test(mobile)) {
+    if (!/^1[345678][0-9]{9}$/.test(mobile)) {
       message = '手机号格式不正确'
-    }else if(password.length < 8) {
+    } else if (password.length < 8) {
       message = '密码格式不正确'
     }
 
-    if(!!message) return Taro.showToast({
+    if (!!message) return Taro.showToast({
       title: message,
       icon: 'none',
       duration: 1000
     })
 
     await Taro.showLoading({ mask: true, title: '加载中' })
-    const [ , userInfo ] = await withTry(this.props.signin)({ 
+    const [, userInfo] = await withTry(this.props.signin)({
       mobile,
       password
     })
@@ -72,7 +58,7 @@ export default class extends Component<any> {
 
     if (!userInfo) return
     //回到上一路由
-    const { router:currRouter } = getCurrentInstance()
+    const { router: currRouter } = getCurrentInstance()
     if (currRouter && currRouter.params.target) {
       return router.replace(currRouter.params.target)
     }
@@ -107,7 +93,7 @@ export default class extends Component<any> {
           <AtButton
             // formType='submit'
             onClick={this.submit}
-            type={'primary'}
+            type='primary'
             className='submit'
             customStyle={{ ...style.border(1, 'primary', 'solid', 'all'), ...style.backgroundColor('primary') }}
           >
@@ -115,7 +101,7 @@ export default class extends Component<any> {
           </AtButton>
           <AtButton
             onClick={this.register}
-            type={'secondary'}
+            type='secondary'
             customStyle={{ ...style.color('primary'), ...style.border(1, 'primary', 'solid', 'all') }}
           >
             注册
@@ -125,3 +111,5 @@ export default class extends Component<any> {
     )
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

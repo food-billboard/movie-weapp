@@ -1,7 +1,6 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
-// import ImageLoading from '~components/imageLoading'
 import style from '~theme/style'
 import Ellipsis from '~components/ellipsis'
 import { router, routeAlias } from '~utils'
@@ -36,7 +35,6 @@ export default class extends Component<IProps> {
   }
 
   public handleClick = (id: string, origin: ESourceType) => {
-    console.log(1111111111)
     if(origin === ESourceType.MOVIE) {
       router.push(routeAlias.comment, { id })
     }else {

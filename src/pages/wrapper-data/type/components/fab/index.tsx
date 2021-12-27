@@ -14,8 +14,6 @@ export interface IProps {
 
 export interface IState { }
 
-const { screenWidth } = Taro.getSystemInfoSync()
-
 export default class Fab extends Component<IProps, IState> {
 
   public static defualtProps: IProps = {

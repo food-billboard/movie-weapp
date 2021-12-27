@@ -11,25 +11,25 @@ interface IProps {
 
 const CustomPicker: FC<IProps> = (props) => {
   const { children, selector, selectorMap, onChange } = useMemo(() => {
-    const { selector, ...nextProps } = props
+    const { selector: originSelector, ...nextProps } = props
     return {
       ...nextProps,
-      selector: Object.keys(selector),
-      selectorMap: selector
-    } 
+      selector: Object.keys(originSelector),
+      selectorMap: originSelector
+    }
   }, [props])
 
   const onSelectorChange = useCallback(async (e) => {
-    const value = e.detail.value  
-    if(onChange) await onChange(value)
+    const value = e.detail.value
+    if (onChange) await onChange(value)
     const method = selectorMap[value]
-    if(typeof method === 'function') await method()
+    if (typeof method === 'function') await method()
   }, [onChange, selectorMap])
 
   return (
-    <Picker 
-      mode='selector' 
-      range={selector} 
+    <Picker
+      mode='selector'
+      range={selector}
       onChange={onSelectorChange}
       disabled
     >

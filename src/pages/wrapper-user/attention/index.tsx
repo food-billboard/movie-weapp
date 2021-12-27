@@ -60,7 +60,7 @@ export default class extends Component<any>{
       <GScrollView
         ref={this.scrollRef}
         sourceType={ESourceTypeList.Scope}
-        scrollWithAnimation={true}
+        scrollWithAnimation
         query={{ pageSize: 20 }}
         style={{ ...style.backgroundColor('bgColor') }}
         fetch={this.throttleFetchData}
@@ -69,36 +69,24 @@ export default class extends Component<any>{
             {
               data.map(({ avatar, username, _id: id }) => {
                 return (
-                  <View className={'list'}
+                  <View className='list'
                     style={{ ...style.border(1, 'disabled', 'solid', 'bottom') }}
                     key={id}
                     onClick={this.getUser.bind(this, id)}
                   >
                     <AtAvatar
-                      size={'small'}
+                      size='small'
                       circle
                       image={avatar}
-                      text={'头'}
+                      text='头'
                     ></AtAvatar>
-                    {/* <ImageLoading
-                      src={avatar}
-                      loadingProps={{ content: '' }}
-                      customStyle={{
-                        width: `${SYSTEM_PAGE_SIZE(45)}px`,
-                        height: `${SYSTEM_PAGE_SIZE(45)}px`,
-                        borderRadius: '50%',
-                        overflow: 'hidden',
-                        marginTop: `${SYSTEM_PAGE_SIZE(2.5)}px`,
-                        marginRight: `${SYSTEM_PAGE_SIZE(10)}px`,
-                        float: 'left'
-                      }}
-                    /> */}
-                    <View className={'username'}
+                    <View className='username'
                       style={{ ...style.color('primary') }}
                     >
                       {username}
                     </View>
-                    <Text className={'enter'}
+                    <Text 
+                      className='enter'
                       style={{ ...style.color('thirdly') }}
                     >{'>'}</Text>
                   </View>

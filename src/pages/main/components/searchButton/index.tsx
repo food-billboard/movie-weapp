@@ -36,9 +36,9 @@ export default class extends Component<IProps, IState> {
     hot: []
   }
 
-  public searchBarRef = React.createRef<SearchButton>()
-
   public componentDidMount = async () => await this.fetchData()
+
+  public searchBarRef = React.createRef<SearchButton>()
 
   public fetchData = async () => {
     const hot = await getHot() || []
@@ -67,7 +67,8 @@ export default class extends Component<IProps, IState> {
           !!hot.length &&
             <View
               className='at-row hotsearch at-row__align--center'
-              style={{ height: hotShow ? hotShow + 'px' : '0', ...style.backgroundColor('bgColor'), ...style.color('primary') }}>
+              style={{ height: hotShow ? hotShow + 'px' : '0', ...style.backgroundColor('bgColor'), ...style.color('primary') }}
+            >
               <View
                 className='at-col at-col-1 title'
               >热搜</View>
@@ -75,8 +76,10 @@ export default class extends Component<IProps, IState> {
                 hot.map((value) => {
                   const { name, _id: id } = value
                   return (
-                    <View className='at-col at-col-3'
-                      key={id}>
+                    <View 
+                      className='at-col at-col-3'
+                      key={id}
+                    >
                       <AtTag
                         customStyle={{ 
                           ...style.backgroundColor('disabled'), 
@@ -86,9 +89,9 @@ export default class extends Component<IProps, IState> {
                           overflow: 'hidden',
                           textOverflow: 'ellipsis'
                         }}
-                        type={"primary"}
-                        size={"normal"}
-                        circle={true}
+                        type='primary'
+                        size='normal'
+                        circle
                         onClick={(event) => { this.getHot(id, event) }}
                       >{name}</AtTag>
                     </View>

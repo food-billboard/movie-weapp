@@ -59,7 +59,7 @@ export default class extends Component<IProps, IState> {
         <GVideo
           style={{ width: '100%', height: '100%' }}
           src={src || ''}
-          autoplay={true}
+          autoplay
           poster={poster || ''}
         ></GVideo>
       </View>

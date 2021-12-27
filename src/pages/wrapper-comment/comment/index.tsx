@@ -42,10 +42,6 @@ export default class extends Component<any> {
     }
   }
 
-  router = getCurrentInstance().router
-
-  disabled = false
-
   public componentDidMount = () => {
     //强制刷新设置
     fieldsStore.setUpdate(this.forceUpdate.bind(this))
@@ -105,6 +101,9 @@ export default class extends Component<any> {
     })
     Taro.setNavigationBarTitle({ title })
   }
+
+  router = getCurrentInstance().router
+  disabled = false
 
   public postCommentToMovie = async (values) => {
     return this.postComment(postCommentToMovie, values)
@@ -273,14 +272,12 @@ export default class extends Component<any> {
   public render() {
 
      return (
-       <View className="user-comment">
-         <BaseForm
-            name="comment"
-          >
+       <View className='user-comment'>
+         <BaseForm name='comment' >
             <View className='description'>
               <GDescription
                 type={EInputType.TEXTAREA}
-                placeholder={'说点什么吧...'}
+                placeholder='说点什么吧...'
                 height={300}
                 style={{...style.backgroundColor('disabled'), marginBottom: '20px'}}
                 handleChange={
@@ -292,7 +289,7 @@ export default class extends Component<any> {
                 error={!!size(fieldsStore.getFieldsError('description'))}
               ></GDescription>
             </View>
-            <View className="media">
+            <View className='media'>
               <MediaPicker
                 style={{marginBottom: `${SYSTEM_PAGE_SIZE(80)}px`}}
                 handleChange={
@@ -304,8 +301,16 @@ export default class extends Component<any> {
                 error={!!size(fieldsStore.getFieldsError('media'))}
               ></MediaPicker>
             </View>
-            <AtButton type={'primary'} onClick={this.handleSubmit} customStyle={{ ...BUTTON_STYLE, ...style.backgroundColor('thirdly'), ...style.border(1, 'thirdly', 'solid', 'all') }}>发布</AtButton>
-            <AtButton type={'primary'} onClick={this.handleReset} customStyle={{ ...BUTTON_STYLE, bottom: SYSTEM_PAGE_SIZE(40) + 'px', ...style.backgroundColor('primary'), ...style.border(1, 'primary', 'solid', 'all') }}>清空</AtButton>
+            <AtButton 
+              type='primary' 
+              onClick={this.handleSubmit} 
+              customStyle={merge(BUTTON_STYLE, style.backgroundColor('thirdly'), style.border(1, 'thirdly', 'solid', 'all'))}
+            >发布</AtButton>
+            <AtButton 
+              type='primary' 
+              onClick={this.handleReset} 
+              customStyle={merge(BUTTON_STYLE, { bottom: SYSTEM_PAGE_SIZE(40) + 'px' }, style.backgroundColor('primary'), style.border(1, 'primary', 'solid', 'all'))}
+            >清空</AtButton>
           </BaseForm>
        </View>
      ) 

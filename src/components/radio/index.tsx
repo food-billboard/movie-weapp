@@ -2,7 +2,6 @@ import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { AtRadio, AtButton } from 'taro-ui'
-// import Rest from '~components/restFactor'
 import { isObject, ICommonFormProps, ICommonFormState } from '~utils'
 import { FORM_ERROR, SYSTEM_PAGE_SIZE } from '~config'
 import customeStyle from '~theme/style'
@@ -35,6 +34,12 @@ export default class extends Component<IProps, IState> {
     needHiddenList: true,
   }
 
+  public state: IState = {
+    value: '',
+    show: false,
+    error: false
+  }
+
   private initialValue: any = undefined
 
   private _restValue: any = []
@@ -50,13 +55,7 @@ export default class extends Component<IProps, IState> {
   }
 
   //额外内容
-  // public restRef = React.createRef<Rest>()
-
-  public state: IState = {
-    value: '',
-    show: false,
-    error: false
-  }
+  public restRef = React.createRef<any>()
 
   //表单value
   private _value
@@ -107,19 +106,6 @@ export default class extends Component<IProps, IState> {
     handleChange && handleChange(value)
   }
 
-  // //处理额外内容change
-  // public handleRestChange = (items: string[]) => {
-  //   const { handleChange, radioboxOption = [] } = this.props
-  //   this.restValue = [...items]
-  //   let item = items.pop()
-  //   if (item || (!item && !radioboxOption.some(item => item.value == this.value))) {
-  //     this.setState({
-  //       value: item || ''
-  //     })
-  //     handleChange && handleChange(item)
-  //   }
-  // }
-
   //打开
   public open = () => {
     this.setState({
@@ -136,15 +122,10 @@ export default class extends Component<IProps, IState> {
 
   //重置
   public reset = () => {
-    // const { extraFactor } = this.props
     this.setState({
       value: this.initialValue ? this.initialValue : ''
     })
     this.close()
-    // if (extraFactor) {
-    //   this.restRef.current!.reset()
-    //   this.restValue = []
-    // }
   }
 
   //获取数据
@@ -190,7 +171,7 @@ export default class extends Component<IProps, IState> {
     return (
       <View style={isObject(style) ? style : {}}>
         <View
-          className="title"
+          className='title'
           style={{
             ...customeStyle.backgroundColor('thirdly'),
             ...customeStyle.border(1, 'primary', 'solid', 'all'),
@@ -201,7 +182,7 @@ export default class extends Component<IProps, IState> {
         </View>
         {
           (needHiddenList ? !show : false) ?
-            <AtButton type={'secondary'} onClick={this.open} customStyle={commonStyle}>打开</AtButton>
+            <AtButton type='secondary' onClick={this.open} customStyle={commonStyle}>打开</AtButton>
             : null
         }
         {
@@ -213,7 +194,7 @@ export default class extends Component<IProps, IState> {
             ></AtRadio>
             : null
         }
-        {
+        {/* {
           extraFactor ?
             <Rest
               ref={this.restRef}
@@ -223,16 +204,14 @@ export default class extends Component<IProps, IState> {
               value={this.restValue}
             ></Rest>
             : null
-        }
-        {
-          <AtButton
-            type={'secondary'}
-            onClick={this.close}
-            customStyle={{ ...commonStyle, display: (needHiddenList ? show : false) ? 'block' : 'none' }}
-          >
-            收起
-          </AtButton>
-        }
+        } */}
+        <AtButton
+          type='secondary'
+          onClick={this.close}
+          customStyle={{ ...commonStyle, display: (needHiddenList ? show : false) ? 'block' : 'none' }}
+        >
+          收起
+        </AtButton>
       </View>
     )
   }

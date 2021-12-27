@@ -1,15 +1,12 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, ScrollView, Image } from '@tarojs/components'
-import { AtAvatar, AtActivityIndicator } from 'taro-ui'
 import GVideo from '~components/video'
 import Curtain from '~components/curtain'
 import style from '~theme/style'
 import { formatTime, isObject, EMediaType, valueOf, router, routeAlias } from '~utils'
 import noop from 'lodash/noop'
 import last from 'lodash/last'
-import { SYSTEM_PAGE_SIZE } from '~config'
-import { TypeColor } from '~theme/color'
 
 import './index.scss'
 
@@ -240,12 +237,7 @@ export default class extends Component<IProps, IState> {
           className='loading'
           style={{display: loadLoading ? 'block' : 'none'}}
         >
-          {/* <AtActivityIndicator 
-            mode={'normal'} 
-            size={SYSTEM_PAGE_SIZE(32)} 
-            color={TypeColor['thirdly']} 
-            content={'加载中'}
-          ></AtActivityIndicator> */}
+
         </View>
 
         {
@@ -310,11 +302,7 @@ export default class extends Component<IProps, IState> {
                       {
                         direction && loading ?
                         <View className='acitve-indicator'>
-                          {/* <AtActivityIndicator 
-                            mode={'normal'} 
-                            size={SYSTEM_PAGE_SIZE(32)} 
-                            color={TypeColor['thirdly']} 
-                          /> */}
+        
                         </View>
                         : null
                       }

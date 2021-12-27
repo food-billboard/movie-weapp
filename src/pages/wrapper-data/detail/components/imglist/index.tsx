@@ -1,5 +1,5 @@
 import Taro  from '@tarojs/taro'
-import React, { Component, memo, useCallback, useMemo, useState } from 'react'
+import React, { memo, useCallback, useMemo, useState } from 'react'
 import classnames from 'classnames'
 import { View } from '@tarojs/components'
 import ImageLoading from '~components/imageLoading'
@@ -17,6 +17,15 @@ export default memo((props: IProps) => {
 
   const [ status, setStatus ] = useState<'icon' | 'list'>('icon')
 
+  const handlePreviewImage = useCallback((image: string) => {
+    if (image && image.length) {
+      Taro.previewImage({
+        current: image,
+        urls: props.list || []
+      })
+    }
+  }, [props.list])
+
   const list = useMemo(() => {
     if(status === 'icon') {
       return <Swipper className='data-detail-image-content-list' list={(props.list || [])} />
@@ -30,24 +39,14 @@ export default memo((props: IProps) => {
             onClick={() => { handlePreviewImage.call(this, value) }}
           >
             <ImageLoading
-              mode={'widthFix'}
+              mode='widthFix'
               src={value}
             />
           </View>
         )
       })
     )
-  }, [props.list, status])
-
-  const handlePreviewImage = useCallback((image: string) => {
-    if (image && image.length) {
-      const { list } = props
-      Taro.previewImage({
-        current: image,
-        urls: list || []
-      })
-    }
-  }, [props.list])
+  }, [props.list, status, handlePreviewImage])
 
   const changeStatus = useCallback(() => {
     if(status === 'list') setStatus('icon')

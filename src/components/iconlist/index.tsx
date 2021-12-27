@@ -2,14 +2,14 @@ import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { AtAvatar } from 'taro-ui'
 import { View, Text } from '@tarojs/components'
-import Rate from '../rate'
-import Swipper from './swipper'
-import style from '~theme/style'
 import { connect } from 'react-redux'
-import { mapDispatchToProps, mapStateToProps } from './connect'
+import noop from 'lodash/noop'
+import style from '~theme/style'
 import { router, formatNumber, routeAlias, withTry } from '~utils'
 import { putStore, cancelStore } from '~services'
-import noop from 'lodash/noop'
+import { mapDispatchToProps, mapStateToProps } from './connect'
+import Rate from '../rate'
+import Swipper from './swipper'
 
 import './index.scss'
 
@@ -19,10 +19,8 @@ export interface IProps {
   getUserInfo: TGetUserInfo
   reload: (...args: any[]) => Promise<any>
 }
+class IconList extends Component<IProps>{
 
-@connect(mapStateToProps, mapDispatchToProps)
-export default class IconList extends Component<IProps>{
-  
   public static defaultProps: IProps = {
     list: [],
     handleClick: noop,
@@ -38,25 +36,25 @@ export default class IconList extends Component<IProps>{
   //收藏
   public handleStore = async (id: string, isStore?: boolean) => {
     let method
-    if(typeof isStore === 'undefined' || isStore) {
+    if (typeof isStore === 'undefined' || isStore) {
       method = putStore
-    }else {
+    } else {
       method = cancelStore
     }
     const action = async (res) => {
-      if(res) return 
+      if (res) return
       const [err] = await withTry(method)(id)
-      let toastConfig:Taro.showToast.Option = {
+      let toastConfig: Taro.showToast.Option = {
         icon: 'none',
         duration: 1000,
         title: ''
       }
-      if(err) {
+      if (err) {
         toastConfig = {
           ...toastConfig,
           title: '网络错误，请重试'
         }
-      }else {
+      } else {
         toastConfig = {
           ...toastConfig,
           title: '操作成功~'
@@ -65,13 +63,13 @@ export default class IconList extends Component<IProps>{
       Taro.showToast(toastConfig)
     }
     await this.props.getUserInfo({ action })
-    .catch(_ => {
-      Taro.showToast({
-        title: '未登录无法操作',
-        icon: 'none',
-        duration: 1000
+      .catch(_ => {
+        Taro.showToast({
+          title: '未登录无法操作',
+          icon: 'none',
+          duration: 1000
+        })
       })
-    })
     return this.props.reload()
   }
 
@@ -90,7 +88,7 @@ export default class IconList extends Component<IProps>{
       <View className='icon-list at-row at-row--wrap at-row__justify--around'>
         {
           realList.map((value: API_USER.IMovieListData) => {
-            if(!value) return (
+            if (!value) return (
               <View
                 className='at-col at-col-5'
               ></View>
@@ -108,22 +106,22 @@ export default class IconList extends Component<IProps>{
                   onClick={(event) => { this.goTo.call(this, name, _id, event) }}
                 >
                   {/* <ImageLoading src={image} mode={'scaleToFill'} /> */}
-                  <Swipper style={{height: '100%'}} list={imageList} />
-                  <View 
+                  <Swipper style={{ height: '100%' }} list={imageList} />
+                  <View
                     onClick={this.handleStore.bind(this, _id, store)}
-                    className="at-icon at-icon-heart icon-list-content-poster-store"
+                    className='at-icon at-icon-heart icon-list-content-poster-store'
                   ></View>
                 </View>
-                <View className="icon-list-content-main">
+                <View className='icon-list-content-main'>
                   <View
                     className='icon-list-content-main-name'
                     style={{ ...style.color('primary') }}
                     onClick={this.handleClick.bind(this, _id)}
                   >{name}</View>
-                  <View className="icon-list-content-main-rate">
+                  <View className='icon-list-content-main-rate'>
                     <Rate
                       value={rate}
-                      readonly={true}
+                      readonly
                       rate={noop}
                       size={8}
                     ></Rate>
@@ -131,12 +129,12 @@ export default class IconList extends Component<IProps>{
                   <View className='icon-list-content-main-extra'
                     style={{ ...style.color('secondary') }}
                   >
-                    <View className="icon-list-content-main-extra-count">
+                    <View className='icon-list-content-main-extra-count'>
                       {formatNumber(hot)}
-                      <Text style={{fontSize: '70%'}}>人看</Text>
+                      <Text style={{ fontSize: '70%' }}>人看</Text>
                     </View>
                     <View onClick={(e) => this.getUserInfo.call(this, e, author._id)}>
-                      <AtAvatar size="small" circle image={author.avatar} text={author.username}></AtAvatar>
+                      <AtAvatar size='small' circle image={author.avatar} text={author.username}></AtAvatar>
                     </View>
                   </View>
                 </View>
@@ -148,3 +146,6 @@ export default class IconList extends Component<IProps>{
     )
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(IconList)
+

@@ -4,7 +4,7 @@ import { View, Picker } from '@tarojs/components'
 import { FORM_ERROR, SYSTEM_PAGE_SIZE } from '~config'
 import customStyle from '~theme/style'
 import noop from 'lodash/noop'
-import { ICommonFormProps, ICommonFormState, isObject, format } from '~utils'
+import { ICommonFormProps, isObject, format } from '~utils'
 
 interface ISelector {
   disabled?: boolean
@@ -179,7 +179,7 @@ export default class extends Component<IProps, IState> {
 
     const { disabled } = this.state
 
-    const _style = {
+    const _style: any = {
       ...STYLE,
       ...customStyle.backgroundColor('disabled'),
       ...(isObject(style) ? style : {}),
@@ -195,12 +195,13 @@ export default class extends Component<IProps, IState> {
               onCancel={selector.onCancel || noop}
               range={selector.range || this.defaultConfig.range.selector}
               rangeKey={selector.rangeKey || this.defaultConfig.rangeKey.selector}
-              mode={'selector'}
+              mode='selector'
               onChange={(e) => { this.handleChange.call(this, e, modeList.selector) }}
               value={value}
             >
-              <View className='picker'
-                style={{ ..._style }}
+              <View 
+                className='picker'
+                style={_style}
               >
                 {title}: {value}
               </View>
@@ -232,7 +233,7 @@ export default class extends Component<IProps, IState> {
           date ?
             <Picker
               {...date}
-              mode={'date'}
+              mode='date'
               onChange={(e) => { this.handleChange.call(this, e, modeList.date) }}
               value={value}
               start={date.start || this.defaultConfig.start.date}
@@ -250,9 +251,9 @@ export default class extends Component<IProps, IState> {
             : null
         }
         {
-          time ?
+          !!time &&
             <Picker
-              mode={'time'}
+              mode='time'
               value={value}
               onChange={(e) => { this.handleChange.call(this, e, modeList.time) }}
               onCancel={time.onCancel || noop}
@@ -266,7 +267,6 @@ export default class extends Component<IProps, IState> {
                 {title}: {(value + '').length ? format(value, this.defaultConfig.time) : ''}
               </View>
             </Picker>
-            : null
         }
       </View>
     )

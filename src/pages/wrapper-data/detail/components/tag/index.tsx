@@ -11,14 +11,12 @@ export interface IProps {
   style?: React.CSSProperties
 }
 
-export interface IState {}
+export interface IState { }
 
-const randomArea = () => {
-  return Math.ceil(Math.random() * 20) + 'px'
-}
+const typeColor = TypeColor()
 
 const randomColor = () => {
-  const COLOR_LIST = [ TypeColor['thirdly'], TypeColor['secondary'], TypeColor['primary'] ]
+  const COLOR_LIST = [typeColor['thirdly'], typeColor['secondary'], typeColor['primary']]
   const len = COLOR_LIST.length
   return COLOR_LIST[Math.floor(Math.random() * len)]
 }
@@ -35,7 +33,7 @@ export default class extends Component<IProps, IState> {
 
   public render() {
 
-    const { list=[], style } = this.props
+    const { list = [], style } = this.props
 
     return (
       <View className='movie-tag'>
@@ -43,11 +41,11 @@ export default class extends Component<IProps, IState> {
           list.map((val: API_USER.ItypeList) => {
             const { id, value } = val
             return (
-              <AtTag 
+              <AtTag
                 key={id}
                 name={id}
-                type='primary' 
-                customStyle={{ ...TAG_STYLE, backgroundColor: randomColor(), ...(isObject(style) ? style : {})}}
+                type='primary'
+                customStyle={{ ...TAG_STYLE, backgroundColor: randomColor(), ...(isObject(style) ? style : {}) }}
               >
                 {value}
               </AtTag>

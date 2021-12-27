@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { isObject } from '~utils'
 import customeStyle from '~theme/style'
-import noop from 'lodash/noop'
 
 import './index.scss'
 
@@ -25,6 +24,10 @@ export interface IState {
 
 export default class extends Component<IProps, IState> {
 
+  public state: IState = {
+    show: !!this.props.isOpen
+  }
+
   public handleClose = () => {
     this.setState({
       show: false
@@ -37,10 +40,6 @@ export default class extends Component<IProps, IState> {
       show: true
     })
     this.props.handleShow && this.props.handleShow()
-  }
-
-  public state: IState = {
-    show: !!this.props.isOpen
   }
 
   //阻止手指滑动

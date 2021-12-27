@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import React, { Component, createRef } from 'react'
+import React, { Component } from 'react'
 import { Video } from '@tarojs/components'
 import { EVideoMode, setVideoConfig, getVideoConfig } from '~config'
 
@@ -28,20 +28,7 @@ export interface IProps {
 
 export interface IState extends IProps {}
 
-export default class Media extends Component<IProps, IState>{
-
-  public constructor(props: IProps) {
-    super(props)
-
-    //获取播放器基础配置
-    const config = getVideoConfig()
-
-    this.state = {
-      ...config
-    }
-  }
-
-  instance = Taro.createVideoContext(this.props.id || 'video', this)
+export default class Media extends Component<IProps, IState> {
 
   public static defaultProps = {
     src: '',
@@ -55,15 +42,14 @@ export default class Media extends Component<IProps, IState>{
     mode: EVideoMode.cover
   }
 
-  timer: any
+  public constructor(props: IProps) {
+    super(props)
 
-  configHistory: any[] = []
+    //获取播放器基础配置
+    const config = getVideoConfig()
 
-  public componentDidUpdate = (prevProps) => {
-    const { src: prevSrc, poster: prevPoster } = prevProps
-    const { src: nowSrc, poster: nowPoster } = this.props
-    if(prevSrc != nowSrc || prevPoster != nowPoster) {
-      this.forceUpdate()
+    this.state = {
+      ...config
     }
   }
 
@@ -85,9 +71,23 @@ export default class Media extends Component<IProps, IState>{
 
   }
 
+  public componentDidUpdate = (prevProps) => {
+    const { src: prevSrc, poster: prevPoster } = prevProps
+    const { src: nowSrc, poster: nowPoster } = this.props
+    if(prevSrc != nowSrc || prevPoster != nowPoster) {
+      this.forceUpdate()
+    }
+  }
+
   public componentWillUnmount = () => {
     clearInterval(this.timer)
   }
+
+  instance = Taro.createVideoContext(this.props.id || 'video', this)
+
+  timer: any
+
+  configHistory: any[] = []
 
   //配置改变
   private changeConfig = (key: string, value: any) => {
@@ -108,11 +108,10 @@ export default class Media extends Component<IProps, IState>{
     this.configHistory = []
   }
 
-  //src
-  public changeConfigSrc = (src: string) => {
-    console.log(src, 222233)
-    this.setState({ src })
-  }
+  // //src
+  // public changeConfigSrc = (src: string) => {
+  //   this.setState({ src })
+  // }
   
   //seek
   public seek = (time: number) => this.instance && this.instance.seek(time)
@@ -191,10 +190,10 @@ export default class Media extends Component<IProps, IState>{
         // danmuList={danmuList}
         style={style}
         src={src}
-        controls={true}
-        showFullscreenBtn={true}
-        showPlayBtn={true}
-        showCenterPlayBtn={true}
+        controls
+        showFullscreenBtn
+        showPlayBtn
+        showCenterPlayBtn
         autoplay={autoplay}
         poster={poster}
         id={id}
@@ -202,7 +201,7 @@ export default class Media extends Component<IProps, IState>{
         muted={muted}
         onError={this.error}
         title={title}
-        enablePlayGesture={true}
+        enablePlayGesture
         onPlay={this.handleOnPlay}
         onPause={this.handleOnPause}
         onTimeUpdate={this.handleTimeUpdate}

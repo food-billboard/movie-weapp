@@ -53,7 +53,7 @@ class News extends Component<IProps>{
               >
                 <Text
                   className='news-title'
-                  style={{ ...style.color('primary'), textShadow: `0 0 2px ${TypeColor['disabled']}` }}
+                  style={{ ...style.color('primary'), textShadow: `0 0 2px ${TypeColor()['disabled']}` }}
                 >{title}</Text>
                 <ImageLoading
                   src={image}

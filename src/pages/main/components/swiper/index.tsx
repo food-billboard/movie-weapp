@@ -37,11 +37,12 @@ class Index extends Component<IProps>{
   public render() {
 
     const { list } = this.props
+    const typeColor = TypeColor()
 
     return (
       <Swiper
-        indicatorColor={TypeColor['primary']}
-        indicatorActiveColor={TypeColor['disabled']}
+        indicatorColor={typeColor['primary']}
+        indicatorActiveColor={typeColor['disabled']}
         circular
         indicatorDots
         className='swiper'

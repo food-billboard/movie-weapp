@@ -2,7 +2,7 @@ import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, ScrollView } from '@tarojs/components'
 import { Color, defaultColor } from '~theme/color'
-import { isObject, sleep } from '~utils'
+import { sleep } from '~utils'
 import { createSystemInfo } from '~config'
 
 import './index.scss'
@@ -21,17 +21,17 @@ const systemInfo = createSystemInfo()
 
 export default class extends Component<IProps, IState> {
 
+  public state: IState = {
+    active: defaultColor,
+    color: [...Color]
+  }
+
   public componentDidMount = () => {
     const _style = systemInfo.getColorStyle()
     const { color } = _style
     this.setState({
       active: color
     })
-  }
-
-  public state: IState = {
-    active: defaultColor,
-    color: [...Color]
   }
 
   //点击
@@ -50,9 +50,10 @@ export default class extends Component<IProps, IState> {
     const { active, color } = this.state
     const { style = {} } = this.props
     return (
-      <ScrollView className='setting-color-list'
-        scrollX={true}
-        style={{ ...(isObject(style) ? style : {}) }}
+      <ScrollView 
+        className='setting-color-list'
+        scrollX
+        style={style || {}}
       >
         {
           color.map((val: any) => {

@@ -25,14 +25,14 @@ export default class Divider extends Component<IProps> {
   }
 
   public render() {
-    
+
     const {
       content,
       fontSize,
       childNode,
       other,
-      fontColor = TypeColor['thirdly'],
-      lineColor = TypeColor['thirdly']
+      fontColor = TypeColor()['thirdly'],
+      lineColor = TypeColor()['thirdly']
     } = this.props
 
     return (

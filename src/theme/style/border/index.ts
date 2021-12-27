@@ -1,4 +1,4 @@
-import { TypeColor } from '../../color'
+import { TypeColor, TTypeColor } from '../../color'
 //border方位
 const Direction = {
   all: [ 'Top', 'Bottom', 'Left', 'Right' ],
@@ -28,10 +28,11 @@ const defaultBorder = {
 //border 线型样式
 type TLine = 'solid' | 'dashed'
 
-export default (size: number, type: keyof typeof TypeColor = 'primary', line: TLine = 'solid', direction: keyof typeof Direction) => {
+export default (size: number, type: keyof TTypeColor = 'primary', line: TLine = 'solid', direction: keyof typeof Direction) => {
+  const typeColor = TypeColor()
   let data = { ...defaultBorder }
   Direction[direction].map(val => {
-    data[ 'border' + val ] = `${size}px ${line} ${TypeColor[type]}`
+    data[ 'border' + val ] = `${size}px ${line} ${typeColor[type]}`
   })
   return data
 }

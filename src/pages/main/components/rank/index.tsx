@@ -2,10 +2,10 @@ import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, Text, Swiper, SwiperItem } from '@tarojs/components'
 import { merge } from 'lodash'
-import RankIcon from './icon'
-import { router, routeAlias } from '~utils'
 import style from '~theme/style'
 import ImageLoading from '~components/imageLoading'
+import { router, routeAlias } from '~utils'
+import RankIcon from './icon'
 
 import './index.scss'
 
@@ -75,14 +75,14 @@ export default class Rank extends Component<IProps, IState>{
         {
           !!type && (
             <Text
-              className={'rank-title'}
+              className='rank-title'
               style={{ ...style.backgroundColor('secondary'), ...style.color('disabled') }}
               onClick={() => { router.push(routeAlias.rank, { id, type }) }}
             >{type}</Text>
           )
         }
         <Swiper 
-          className="rank-content"
+          className='rank-content'
           circular
         >
           {
@@ -92,7 +92,7 @@ export default class Rank extends Component<IProps, IState>{
                   key={value.length}
                 >
                   <View
-                    className="rank-content-item-wrapper"
+                    className='rank-content-item-wrapper'
                   >
                     {
                       value.map((item: List & { index: number }) => {

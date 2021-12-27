@@ -1,16 +1,16 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
+import throttle from 'lodash/throttle'
+import NoticeBar from '~components/noticeBar'
+import { TypeColor, colorStyleChange } from '~theme/color'
+import style from '~theme/style'
+import { getDailyNew, getNotice, getRank, getSwiper, getClassify } from '~services'
 import SearchBar from './components/searchButton'
 import Swipers from './components/swiper'
 import Itemize from './components/itemize'
 import News from './components/news'
 import Rank from './components/rank'
-import NoticeBar from '~components/noticeBar'
-import { TypeColor, colorStyleChange } from '~theme/color'
-import style from '~theme/style'
-import throttle from 'lodash/throttle'
-import { getDailyNew, getNotice, getRank, getSwiper, getClassify } from '~services'
 
 import './index.scss'
 
@@ -22,24 +22,24 @@ export default class extends Component<any> {
     daily: [],
     rank: [],
     notice: {},
-    typeColor: TypeColor
+    typeColor: TypeColor()
   }
+
+  public componentDidMount = async () => await this.fetchData()
 
   //色调修改时重绘用
   public componentDidShow = () => {
     colorStyleChange(true)
     const { typeColor } = this.state
-    if(typeColor == TypeColor) return
-    this.setState({ typeColor: TypeColor })
+    if (typeColor == TypeColor()) return
+    this.setState({ typeColor: TypeColor() })
   }
-
-  public componentDidMount = async () => await this.fetchData()
 
   private getDaily = async () => await getDailyNew()
 
   //重新加载每日上新
   public hanleExchangeDaily = async () => {
-    return 
+    return
     Taro.showLoading({ mask: true, title: '查找中' })
     const daily = await this.throttleGetDaily()
     Taro.hideLoading()
@@ -71,16 +71,16 @@ export default class extends Component<any> {
     Taro.hideLoading();
   }
 
-  public render () {
+  public render() {
     const { rank, classify, swiper, daily, notice } = this.state
 
     const secondaryColor = style.color('secondary')
 
     return (
-      <View className='index' style={{...style.backgroundColor('bgColor')}}>
+      <View className='index' style={style.backgroundColor('bgColor')}>
         <View className='searchbar'>
-          <SearchBar 
-            disabled={true}
+          <SearchBar
+            disabled
           />
         </View>
         <View className='swiper'>
@@ -99,29 +99,29 @@ export default class extends Component<any> {
         <View className='news'>
           <View className='at-row at-row__justify--between at-row__align--center'>
             <Text className='news-title at-col'
-              style={{...secondaryColor}}
+              style={{ ...secondaryColor }}
             >每日上新</Text>
             <Text className='news-title at-col'
-              style={{...secondaryColor}}
+              style={{ ...secondaryColor }}
               onClick={this.hanleExchangeDaily}
             >换一批</Text>
           </View>
-          <News 
+          <News
             list={daily}
           />
         </View>
         <View className='rank'>
           <Text className='rank-title'
-            style={{...secondaryColor}}
+            style={{ ...secondaryColor }}
           >排行榜</Text>
           {
             rank.filter(item => !!item.match.length).map(value => {
               const { match, name, _id } = value
               return (
-                <Rank 
+                <Rank
                   id={_id}
                   key={_id}
-                  type={name} 
+                  type={name}
                   list={match}
                 />
               )

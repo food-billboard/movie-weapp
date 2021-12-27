@@ -2,10 +2,10 @@ import Taro from '@tarojs/taro'
 import React, { useState } from 'react'
 import { AtCheckbox, AtButton } from 'taro-ui'
 import { View } from '@tarojs/components'
-import TagList from '../tagList'
 import { isObject } from '~utils'
 import { FORM_ERROR, SYSTEM_PAGE_SIZE } from '~config'
 import styleColor  from '~theme/style'
+import TagList from '../tagList'
 
 import './index.scss'
 
@@ -45,8 +45,8 @@ const CheckBox: React.FC<IProps> = ({
   const [ show, setShow ] = useState(false)
 
   //处理选择
-  const handleChange = (value: any) => {
-    onChange && onChange(value)
+  const handleChange = (select: any) => {
+    onChange && onChange(select)
   }
   
   //打开
@@ -76,10 +76,10 @@ const CheckBox: React.FC<IProps> = ({
             style={{marginBottom: '5px'}}
             list={value.map(item => {
               const [ data ] = checkboxOption.filter(option => option.value === item)
-              const { label, value } = data
+              const { label, value: tagValue } = data
               return {
                 name: label,
-                key: value
+                key: tagValue
               }
             })}
             handleChange={handleChange}
@@ -89,12 +89,13 @@ const CheckBox: React.FC<IProps> = ({
       {
         (needHiddenList ? !show : false) ?
         <AtButton 
-          type={'secondary'} 
+          type='secondary'
           onClick={open} 
           customStyle={{
             ...btnStyle,
             ...(error ? FORM_ERROR : {})
-          }}>打开</AtButton>
+          }}
+        >打开</AtButton>
         : null
       }
       {
@@ -107,18 +108,16 @@ const CheckBox: React.FC<IProps> = ({
         </AtCheckbox>
         : null
       }
-      {
-        <AtButton 
-          type={'secondary'} 
-          onClick={close} 
-          customStyle={{ 
-            ...btnStyle, 
-            display: (needHiddenList ? show : false) ? 'block' : 'none' 
-          }}
-        >
-          收起
-        </AtButton>
-      }
+      <AtButton 
+        type='secondary'
+        onClick={close} 
+        customStyle={{ 
+          ...btnStyle, 
+          display: (needHiddenList ? show : false) ? 'block' : 'none' 
+        }}
+      >
+        收起
+      </AtButton>
     </View>
   )
 

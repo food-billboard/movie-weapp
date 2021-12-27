@@ -223,8 +223,8 @@ export const Upload = async (file: TOiriginFileType | TOiriginFileType[]): Promi
   const files = Array.isArray(file) ? file : [file]
   let results:TResultType[] = []
   for(let i = 0; i < files.length; i ++) {
-    const file = files[i]
-    const { url, type, ...nextFile } = file 
+    const currentFile = files[i]
+    const { url, type, ...nextFile } = currentFile 
     const task = new UploadTask(url)
     const result = await task.start()
     results.push({

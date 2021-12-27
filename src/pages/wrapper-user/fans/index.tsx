@@ -61,7 +61,7 @@ export default class extends Component<any>{
       <GScrollView
         ref={this.scrollRef}
         sourceType={ESourceTypeList.Scope}
-        scrollWithAnimation={true}
+        scrollWithAnimation
         query={{ pageSize: 20 }}
         style={{ ...style.backgroundColor('bgColor') }}
         fetch={this.throttleFetchData}
@@ -70,23 +70,25 @@ export default class extends Component<any>{
             data.map((value) => {
               const { avatar, username, _id: id } = value
               return (
-                <View className={'list'}
+                <View className='list'
                   style={{ ...style.border(1, 'disabled', 'solid', 'bottom') }}
                   key={id}
                   onClick={this.getUser.bind(this, id)}
                 >
                   <AtAvatar
-                    size={'small'}
+                    size='small'
                     circle
                     image={avatar}
-                    text={'头'}
+                    text='头'
                   ></AtAvatar>
-                  <View className={'username'}
+                  <View
+                    className='username'
                     style={{ ...style.color('primary') }}
                   >
                     {username}
                   </View>
-                  <Text className={'enter'}
+                  <Text
+                    className='enter'
                     style={{ ...style.color('thirdly') }}
                   >{'>'}</Text>
                 </View>

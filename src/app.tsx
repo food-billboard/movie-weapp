@@ -53,8 +53,8 @@ const app = dva.createDva({
     Taro.showToast(toast);
   },
   initialState: {}
-}, (app: any) => {
-  configure(app);
+}, (instance: any) => {
+  configure(instance);
 })
 
 

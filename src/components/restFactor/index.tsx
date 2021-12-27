@@ -2,12 +2,12 @@ import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { AtTimeline, AtButton, AtTag } from 'taro-ui'
-import GInput from '../input'
 import { Item } from 'taro-ui/types/timeline'
-import { isObject, ICommonFormProps, ICommonFormState } from '~utils'
+import { isObject, ICommonFormProps } from '~utils'
 import customStyle from '~theme/style'
 import { TypeColor } from '~theme/color'
 import { FORM_ERROR } from '~config'
+import GInput from '../input'
 
 import './index.scss'
 
@@ -47,12 +47,12 @@ export interface IState {
   statusData: Array<IStatusData>
 }
 
-const TAT_STYLE:any = {
+const TAT_STYLE: any = {
   boxSizing: 'border-box',
-  border: `1px dashed ${TypeColor['primary']}`,
+  border: `1px dashed ${TypeColor()['primary']}`,
   width: '100%',
   marginBottom: '5px',
-  color: TypeColor['primary']
+  color: TypeColor()['primary']
 }
 
 const itemStyleIconList = [
@@ -61,7 +61,7 @@ const itemStyleIconList = [
 ]
 
 const itemStyleColorList = [
-  TypeColor['primary'], TypeColor['secondary'], TypeColor['disabled'], TypeColor['thirdly']
+  TypeColor()['primary'], TypeColor()['secondary'], TypeColor()['disabled'], TypeColor()['thirdly']
 ]
 
 //获取默认项目样式
@@ -76,7 +76,7 @@ const getDefaultItemStyle = () => {
 
 class Rest extends Component<IProps, IState> {
 
-  public static normalizeData = (data: ((string | Item)[] | string | Item), defaultItemStyle=getDefaultItemStyle()) => {
+  public static normalizeData = (data: ((string | Item)[] | string | Item), defaultItemStyle = getDefaultItemStyle()) => {
     const isSingle = !Array.isArray(data)
     const realData = Array.isArray(data) ? data : [data]
     const dealData = realData.map(item => {
@@ -117,7 +117,7 @@ class Rest extends Component<IProps, IState> {
         disabled: false,
         //记录最近操作
         status: [...status, operateType.add],
-        statusData: [ ...statusData, newStatusData ],
+        statusData: [...statusData, newStatusData],
       }, () => {
         this.props.handleChange && this.props.handleChange(newValue)
         this.inputRef.current!.reset()
@@ -227,7 +227,7 @@ class Rest extends Component<IProps, IState> {
           title ?
             <AtTag
               customStyle={{ ...TAT_STYLE, ...customStyle.border(1, 'primary', 'dashed', 'all'), ...customStyle.color('thirdly') }}
-              type={'primary'}
+              type='primary'
             >
               {title}
             </AtTag>
@@ -240,7 +240,7 @@ class Rest extends Component<IProps, IState> {
           <View className='at-col at-col-2'>
             <AtButton
               onClick={this.handleAdd}
-              type={'primary'}
+              type='primary'
               customStyle={{ ...customStyle.backgroundColor('primary') }}
             >添加</AtButton>
           </View>
@@ -253,14 +253,14 @@ class Rest extends Component<IProps, IState> {
           <View className='at-col at-col-2'>
             <AtButton
               onClick={this.handleDelete}
-              type={'primary'}
+              type='primary'
               customStyle={{ ...(disabled ? customStyle.backgroundColor('thirdly') : customStyle.backgroundColor('secondary')) }}
             >删除</AtButton>
           </View>
           <View className='at-col at-col-2'>
             <AtButton
               onClick={this.handleCancel}
-              type={'primary'}
+              type='primary'
               customStyle={{ ...(disabled ? customStyle.backgroundColor('thirdly') : customStyle.backgroundColor('secondary')) }}
             >撤销</AtButton>
           </View>

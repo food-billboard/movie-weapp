@@ -12,52 +12,52 @@ let FIRST = true
 
 export default class extends Component<any>{
 
-  //专题id
-  readonly id = getCurrentInstance().router?.params.id
-
   public state: any = {
     data: [],
     title: false
   }
+
+  //专题id
+  readonly id = getCurrentInstance().router?.params.id
 
   private scrollRef = React.createRef<Scroll>()
 
   public componentDidShow = () => {
     colorStyleChange()
   }
-    
+
   //上拉加载
   public onReachBottom = async () => {
-      await this.scrollRef.current!.handleToLower()
+    await this.scrollRef.current!.handleToLower()
   }
 
   //设置标题
   public setTitle = async () => {
     const { title } = this.state
-    if(title && FIRST) {
-        FIRST = false
-        Taro.setNavigationBarTitle({title})
+    if (title && FIRST) {
+      FIRST = false
+      Taro.setNavigationBarTitle({ title })
     }
   }
 
   /**
    * 获取数据
    */
-  public fetchData = async (query: any, isInit=false) => {
+  public fetchData = async (query: any, isInit = false) => {
     const { data } = this.state
-    const { name, movie, poster } = await getSpecial({id: this.id, ...query})
+    const { name, movie } = await getSpecial({ id: this.id, ...query })
 
     this.setState({
-        data: [ ...(isInit ? [] : data), ...movie.map(item => {
-          const { poster, classify, publish_time, ...nextItem } = item
-          return {
-            ...nextItem,
-            image: poster,
-            type: classify.map(item => item.name),
-            time: publish_time,
-          }
-        }) ],
-        title: name
+      data: [...(isInit ? [] : data), ...movie.map(item => {
+        const { poster, classify, publish_time, ...nextItem } = item
+        return {
+          ...nextItem,
+          image: poster,
+          type: classify.map(classData => classData.name),
+          time: publish_time,
+        }
+      })],
+      title: name
     })
     return movie
   }
@@ -72,14 +72,14 @@ export default class extends Component<any>{
     const { data } = this.state
 
     this.setTitle()
-    
+
     return (
       <Scroll
         ref={this.scrollRef}
-        style={{...style.backgroundColor('bgColor')}}
-        query={{pageSize: 16}}
+        style={{ ...style.backgroundColor('bgColor') }}
+        query={{ pageSize: 16 }}
         sourceType={ESourceTypeList.Scope}
-        scrollWithAnimation={true}
+        scrollWithAnimation
         fetch={this.throttleFetchData}
         renderContent={<IconList reload={this.fetchData.bind(this, {}, true)} list={data}></IconList>}
       ></Scroll>

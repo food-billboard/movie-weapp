@@ -16,22 +16,22 @@ export interface IProps {
   size?: number | string
 }
 
-export interface IState {}
+export interface IState { }
 
 export default class GTate extends Component<IProps, IState>{
 
   public static defaultProps: IProps = {
     value: 0,
     rate: noop,
-    size:20
+    size: 20
   }
 
   //监听分数变化
-  public handleChange = async (value: number) => await this.props.rate(value)
+  public handleChange = async (value: any) => await this.props.rate(value)
 
   public render() {
-    
-    const { readonly = false, value, style: customerStyle = {}, size=20 } = this.props
+
+    const { readonly = false, value, style: customerStyle = {}, size = 20 } = this.props
 
     return (
       <View className='rate'
@@ -51,7 +51,7 @@ export default class GTate extends Component<IProps, IState>{
               size={SYSTEM_PAGE_SIZE(Number(size))}
               max={10}
               value={value}
-              onChange={(value) => { this.handleChange.call(this, value) }}
+              onChange={this.handleChange}
             />
         }
         <Text

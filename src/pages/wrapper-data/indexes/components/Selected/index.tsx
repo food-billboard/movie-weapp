@@ -1,21 +1,18 @@
 import Taro from '@tarojs/taro'
 import { ScrollView } from '@tarojs/components'
 import { AtTag } from 'taro-ui'
-import React, { memo, useCallback, useMemo } from 'react'
-import { Item } from '../../index'
+import React, { memo, useCallback } from 'react'
 
 interface IProps {
-  value: Item[]
-  onChange?: (value: Item[]) => any
+  value: Model_Issue.IItem[]
+  onChange?: (value: Model_Issue.IItem[]) => any
 }
 
 export default memo((props: IProps) => {
 
-  const { value, onChange } = useMemo(() => {
-    return props 
-  }, [props])
+  const { value, onChange } = props
 
-  const handleDelete = useCallback((deleteItem: Item) => {
+  const handleDelete = useCallback((deleteItem: Model_Issue.IItem) => {
     const { _id } = deleteItem
     if(onChange) {
       Taro.showModal({
@@ -30,7 +27,7 @@ export default memo((props: IProps) => {
         }
       })
     }
-  }, [value])
+  }, [value, onChange])
  
   return (
     <ScrollView

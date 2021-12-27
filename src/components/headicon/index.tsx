@@ -55,7 +55,7 @@ export default class IconHead extends Component<IProps>{
               image={avatar}
               text={username}
               circle
-              size={'large'}
+              size='large'
               customStyle={{ width: '100%', height: '100%' }}
             />
           </View>
@@ -70,17 +70,17 @@ export default class IconHead extends Component<IProps>{
             <Text className='user-head-info-data-count'
               style={{ ...style.color('primary') }}
             >{formatNumber(fans)}</Text> 粉丝
-                    </View>
+          </View>
           <View className='at-col user-head-info-data'>
             <Text className='user-head-info-data-count'
               style={{ ...style.color('primary') }}
             >{formatNumber(attentions)}</Text> 人关注
-                    </View>
+          </View>
           <View className='at-col user-head-info-data'>
             <Text className='user-head-info-data-count'
               style={{ ...style.color('primary') }}
             >{formatNumber(hot)}</Text> 人觉得很赞
-                    </View>
+          </View>
         </View>
       </View>
     )

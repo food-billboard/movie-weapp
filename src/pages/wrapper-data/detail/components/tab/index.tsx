@@ -5,7 +5,7 @@ import { SYSTEM_PAGE_SIZE } from '~config'
 import { TypeColor } from '~theme/color'
 import { AtSegmentedControlProps } from 'taro-ui/types/segmented-control'
 
-export interface IProps extends Pick<AtSegmentedControlProps, 'color' | 'selectedColor' | 'fontSize' | 'disabled' | 'values'>{
+export interface IProps extends Pick<AtSegmentedControlProps, 'color' | 'selectedColor' | 'fontSize' | 'disabled' | 'values'> {
   handleClick?: (value: any) => void
   current?: number
   tabToggle?: false | number
@@ -13,7 +13,7 @@ export interface IProps extends Pick<AtSegmentedControlProps, 'color' | 'selecte
 
 export interface IState {
   current: number
-} 
+}
 
 export default class extends Component<IProps, IState> {
 
@@ -30,11 +30,11 @@ export default class extends Component<IProps, IState> {
     const { tabToggle } = this.props
     const { current } = this.state
 
-    if(current == value) return
-    if(tabToggle) {
-      if(this.isLoading) return
+    if (current == value) return
+    if (tabToggle) {
+      if (this.isLoading) return
       this.isLoading = true
-      Taro.showLoading({mask: true, title: '加载中...'})
+      Taro.showLoading({ mask: true, title: '加载中...' })
     }
 
     let timer = setTimeout(() => {
@@ -45,7 +45,7 @@ export default class extends Component<IProps, IState> {
 
     const { handleClick } = this.props
     handleClick && handleClick(value)
-    
+
     this.setState({
       current: value
     })
@@ -54,13 +54,13 @@ export default class extends Component<IProps, IState> {
   public getCurrent = () => this.state.current
 
   public render() {
-
+    const typeColor = TypeColor()
     const {
-      color=TypeColor['disabled'],
-      selectedColor=TypeColor['primary'],
-      fontSize=SYSTEM_PAGE_SIZE(32),
-      disabled=false,
-      values=[],
+      color = typeColor['disabled'],
+      selectedColor = typeColor['primary'],
+      fontSize = SYSTEM_PAGE_SIZE(32),
+      disabled = false,
+      values = [],
     } = this.props
     const {
       current
@@ -68,13 +68,13 @@ export default class extends Component<IProps, IState> {
 
     return (
       <AtSegmentedControl
-          values={values}
-          onClick={this.handleChangeTab}
-          current={current}
-          color={color}
-          selectedColor={selectedColor}
-          fontSize={fontSize}
-          disabled={disabled}
+        values={values}
+        onClick={this.handleChangeTab}
+        current={current}
+        color={color}
+        selectedColor={selectedColor}
+        fontSize={fontSize}
+        disabled={disabled}
       >
         {this.props.children}
       </AtSegmentedControl>

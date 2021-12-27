@@ -28,19 +28,19 @@ export default class extends Component<IProps, IState> {
     list: [],
   }
 
-  public timer
-
   public state: IState = {
     active: '',
     activeShow: false,
   }
 
+  public timer
+
   //查看评论
-  public handleClick = (vlaue: string) => {
+  public handleClick = (value: string) => {
     clearTimeout(this.timer)
     this.setState({
       activeShow: true,
-      active: vlaue
+      active: value
     })
     this.timer = setTimeout(() => {
       this.setState({
@@ -50,37 +50,39 @@ export default class extends Component<IProps, IState> {
   }
 
   public render() {
-    
-    const { list=[] } = this.props
+
+    const { list = [] } = this.props
     const { activeShow, active } = this.state
     const showList = list.length > 30 ? list.slice(0, 30) : list
 
     return (
       <View className='icon-list'>
-        <View 
-            className='icon-list-text-content' 
-            style={{visibility: activeShow ? 'visible' : 'hidden', ...style.backgroundColor('primary'), ...style.color('disabled')}}
-            onClick={() => { this.props.handleClick && this.props.handleClick() }}
-          >
-            {active}
-            <View 
-              className='list-content-arrow'
-              style={{...style.border(20, 'primary', 'solid', 'top')}}
-            ></View>
-          </View>
+        <View
+          className='icon-list-text-content'
+          style={{ visibility: activeShow ? 'visible' : 'hidden', ...style.backgroundColor('primary'), ...style.color('disabled') }}
+          onClick={() => { this.props.handleClick && this.props.handleClick() }}
+        >
+          {active}
+          <View
+            className='list-content-arrow'
+            style={{ ...style.border(20, 'primary', 'solid', 'top') }}
+          ></View>
+        </View>
         <ScrollView
-          scrollX={true}
+          scrollX
           className='icon-list-content'
-          style={{...style.border(1, 'disabled', 'dashed', 'all'), boxSizing: 'content-box', boxShadow: '0 0 10rpx rgba(0, 0, 0, 0.12)'}}
+          style={{ ...style.border(1, 'disabled', 'dashed', 'all'), boxSizing: 'content-box', boxShadow: '0 0 10rpx rgba(0, 0, 0, 0.12)' }}
         >
           {
             showList.map(val => {
-              const { image, content } = val
+              const { image, content, id } = val
               return (
-                <View className='icon-list-content-item'
+                <View 
+                  key={id}
+                  className='icon-list-content-item'
                   onClick={this.handleClick.bind(this, content)}
                 >
-                  <Imageloading src={image} loadingProps={{content: ''}} />
+                  <Imageloading src={image} loadingProps={{ content: '' }} />
                 </View>
               )
             })

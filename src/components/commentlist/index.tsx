@@ -2,16 +2,16 @@ import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, Text, ScrollView, Block } from '@tarojs/components'
 import { AtIcon, AtAvatar } from 'taro-ui'
-import CurtainVideo from './components/curtainVideo'
-import Curtain from '../curtain'
-import ImageLoading from '../imageLoading'
-import EmptyTry from '../empty-try'
+import noop from 'lodash/noop'
 import { router, formatTime, formatNumber, EMediaType, routeAlias } from '~utils'
 import style from '~theme/style'
 import { TypeColor } from '~theme/color'
 import { SYSTEM_PAGE_SIZE } from '~config'
-import noop from 'lodash/noop'
 import VideoStaticImage from '~assets/video.png'
+import CurtainVideo from './components/curtainVideo'
+import Curtain from '../curtain'
+import ImageLoading from '../imageLoading'
+import EmptyTry from '../empty-try'
 
 import './index.scss'
 
@@ -42,8 +42,8 @@ interface IList {
     text?: string
     image?: string[]
     video?: {
-      src: string 
-      poster?: string 
+      src: string
+      poster?: string
     }[]
   }
   createdAt: number | string
@@ -171,54 +171,54 @@ class List extends Component<IProps, IState>{
             } = item
             return (
               <View
-                className={'comment-item'}
+                className='comment-item'
                 key={_id}
                 style={{ ...style.backgroundColor('disabled') }}
               >
-                <View className="comment-item-header">
-                  <View 
-                    className="comment-item-header-image"
+                <View className='comment-item-header'>
+                  <View
+                    className='comment-item-header-image'
                     onClick={this.getUser.bind(this, userId)}
                   >
                     <AtAvatar image={avatar || ''} text='头像' circle></AtAvatar>
                   </View>
-                  <View 
-                    style={{flexDirection: 'column', flex: 1}}
+                  <View
+                    style={{ flexDirection: 'column', flex: 1 }}
                   >
 
-                    <View className="comment-item-header-info at-row">
+                    <View className='comment-item-header-info at-row'>
                       <View
-                        className={'comment-item-header-info-username at-col at-col-8'}
-                        style={{ ...style.color('thirdly') }}
+                        className='comment-item-header-info-username at-col at-col-8'
+                        style={style.color('thirdly')}
                       >
                         <Text
-                          className={'comment-item-header-info-username-content'}
+                          className='comment-item-header-info-username-content'
                           onClick={this.props.comment.bind(this, true, _id)}
-                          style={{ ...style.color('primary') }}
+                          style={style.color('primary')}
                         >{username}</Text>
-                        <Text style={{flex: 1}}>说: </Text>
+                        <Text style={{ flex: 1 }}>说: </Text>
                       </View>
                       <View
-                        className={'comment-item-up at-col at-col-4'}
+                        className='comment-item-up at-col at-col-4'
                         onClick={this.props.like.bind(this, _id, like)}
-                        style={{ ...style.color('thirdly') }}
+                        style={style.color('thirdly')}
                       >
-                        <View className={'up-text'}>
+                        <View className='up-text'>
                           {formatNumber(total_like)}
-                          <AtIcon value={like ? 'heart-2' : 'heart'} size={SYSTEM_PAGE_SIZE(24)} customStyle={{textIndent: '.2em'}} />
+                          <AtIcon value={like ? 'heart-2' : 'heart'} size={SYSTEM_PAGE_SIZE(24)} customStyle={{ textIndent: '.2em' }} />
                         </View>
                       </View>
                     </View>
 
                     <View
-                      className={'comment-item-header-sub-time'}
-                      style={{ ...style.color('thirdly') }}
+                      className='comment-item-header-sub-time'
+                      style={style.color('thirdly')}
                     >
                       {formatTime(createdAt)}
                     </View>
 
                   </View>
-                </View>         
+                </View>
                 <View
                   className='comment-item-content'
                   style={{ ...style.color('primary') }}
@@ -230,7 +230,7 @@ class List extends Component<IProps, IState>{
                   {
                     [
                       ...video.map(src => {
-                        return { 
+                        return {
                           src: src?.src || src,
                           type: EMediaType.VIDEO,
                           poster: src?.poster
@@ -246,7 +246,7 @@ class List extends Component<IProps, IState>{
                         case EMediaType.VIDEO:
                           imageSrc = poster || VideoStaticImage
                           args = [src, EMediaType.VIDEO]
-                          break 
+                          break
                         case EMediaType.IMAGE:
                           imageSrc = src
                           args = [src, EMediaType.IMAGE]
@@ -256,7 +256,7 @@ class List extends Component<IProps, IState>{
                       }
                       return (
                         <View
-                          className={'at-col at-col-4 comment-item-image-list-image'}
+                          className='at-col at-col-4 comment-item-image-list-image'
                           key={src}
                           onClick={() => { this.handlePreviewMedia.apply(this, args) }}
                         >
@@ -264,13 +264,13 @@ class List extends Component<IProps, IState>{
                             className={`comment-item-image-list-image-icon at-icon ${ICON_TYPE[type]}`}
                             style={{
                               ...style.color('primary'),
-                              textShadow: `0 0 2px ${TypeColor['disabled']}`,
+                              textShadow: `0 0 2px ${TypeColor()['disabled']}`,
                               fontSize: SYSTEM_PAGE_SIZE(16) + 'px'
                             }}
                           ></View>
                           <ImageLoading
                             src={imageSrc}
-                            mode={'widthFix'}
+                            mode='widthFix'
                             customStyle={{
                               ...style.border(1, 'thirdly', 'dashed', 'all'),
                               boxSizing: 'border-box',
@@ -294,14 +294,14 @@ class List extends Component<IProps, IState>{
                   >
                     {
                       (Array.isArray(comment_users) ? comment_users : []).map((value) => {
-                        const { avatar, _id: id } = value
+                        const { avatar: commentUserAvatar, _id: id } = value
                         return (
                           <View className='comment-item-footer-img'
                             key={id}
                             onClick={this.getUser.bind(this, id)}
                           >
                             <ImageLoading
-                              src={avatar || ''}
+                              src={commentUserAvatar || ''}
                               loadingProps={{ content: '' }}
                               customStyle={{
                                 display: 'inline-block',

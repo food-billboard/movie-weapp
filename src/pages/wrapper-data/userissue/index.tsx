@@ -1,17 +1,20 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
+import throttle from 'lodash/throttle'
+import { connect } from 'react-redux'
 import GScrollView from '~components/scrollList'
 import IconList from '~components/iconlist'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
-import throttle from 'lodash/throttle'
-import { connect } from 'react-redux'
-import { mapDispatchToProps, mapStateToProps } from './connect'
 import { getCustomerIssue, getUserIssue } from '~services'
 import { router, routeAlias, ESourceTypeList } from '~utils'
+import { mapDispatchToProps, mapStateToProps } from './connect'
 
-@connect(mapStateToProps, mapDispatchToProps)
-export default class extends Component<any>{
+class UserIssue extends Component<any>{
+
+  public state: any = {
+    data: []
+  }
 
   private scrollRef = React.createRef<GScrollView>()
 
@@ -25,10 +28,6 @@ export default class extends Component<any>{
 
   //上拉加载
   public onReachBottom = async () => await this.scrollRef.current!.handleToLower()
-
-  public state: any = {
-    data: []
-  }
 
   //用户id
   readonly id = getCurrentInstance().router?.params.id
@@ -46,7 +45,7 @@ export default class extends Component<any>{
         return {
           ...nextItem,
           image: poster,
-          type: classify.map(item => item.name),
+          type: classify.map(classData => classData.name),
           time: publish_time,
         }
       }) ]
@@ -84,7 +83,7 @@ export default class extends Component<any>{
         query={{ pageSize: 16 }}
         style={{ ...style.backgroundColor('bgColor') }}
         sourceType={ESourceTypeList.Scope}
-        scrollWithAnimation={true}
+        scrollWithAnimation
         fetch={this.throttleFetchData}
         renderContent={<IconList reload={this.fetchData.bind(this, {}, true)} list={data} handleClick={this.editMovie}></IconList>}
       >
@@ -93,4 +92,6 @@ export default class extends Component<any>{
   }
 
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserIssue)
 

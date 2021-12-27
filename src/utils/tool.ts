@@ -104,10 +104,10 @@ export const withTry = (method) => {
 
 //判断两个对象是否相等
 export const isEqualObj = (targetA, targetB) => {
-    var typeA = typeof targetA,
-        typeB = typeof targetB
-    var keysA,
-        keysB
+    var typeA:string = typeof targetA,
+        typeB: string = typeof targetB
+    var keysA: string[],
+        keysB: string[]
     if(typeA !== 'object' && typeB !== 'object') return targetA == targetB
     typeA = Object.prototype.toString.call(targetA)
     typeB = Object.prototype.toString.call(targetB)
@@ -118,7 +118,7 @@ export const isEqualObj = (targetA, targetB) => {
     }else if(typeA === '[object Array]' || typeB === '[object Array]') {
         return targetA.toString() === targetB.toString() && typeA === typeB
     }
-    keysA = Object.keys(targetA),
+    keysA = Object.keys(targetA)
     keysB = Object.keys(targetB)
 
 

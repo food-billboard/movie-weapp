@@ -24,8 +24,7 @@ export default class extends Component<IProps, IState> {
     Taro.previewImage({
       current: image,
       urls: list.map((val: IList) => {
-        const { image } = val
-        return image
+        return val.image
       })
     })
   }

@@ -12,37 +12,37 @@ export interface IProps {
   }
   onChange: (...args: any[]) => any
   disabled?: boolean
- }
+}
 
- export interface IState {
+export interface IState {
   disabled: boolean
- }
+}
 
-export default class extends Component<IProps, IState>{ 
+export default class extends Component<IProps, IState>{
 
   public state: IState = {
     disabled: !!this.props.disabled
   }
 
   public minChange = (value) => {
-    const { onChange, value: propsValue = {max:''} } = this.props
-    const { max='' } = propsValue
+    const { onChange, value: propsValue = { max: '' } } = this.props
+    const { max = '' } = propsValue
     let data = value
-    if(max.toString().length && ~~max <= value) {
+    if (max.toString().length && ~~max <= value) {
       data = max
       Taro.showToast({
         title: '价格错误默认会忽略',
         icon: 'none'
       })
     }
-    onChange({min: data})
+    onChange({ min: data })
   }
 
   public maxChange = (value) => {
-    const { onChange, value:propsValue = {min:''} } = this.props
-    const { min='' } = propsValue
+    const { onChange, value: propsValue = { min: '' } } = this.props
+    const { min = '' } = propsValue
     let data = value
-    if(min.toString().length && ~~min >= value) {
+    if (min.toString().length && ~~min >= value) {
       data = min
       Taro.showToast({
         title: '价格错误默认会忽略',
@@ -50,7 +50,7 @@ export default class extends Component<IProps, IState>{
       })
     }
 
-    onChange({max: data})
+    onChange({ max: data })
   }
 
   public setDisabled = (status: boolean) => {
@@ -61,33 +61,33 @@ export default class extends Component<IProps, IState>{
 
   public render() {
 
-    const { 
-      value: { max='', min='' } = {}
+    const {
+      value: { max = '', min = '' } = {}
     } = this.props
-    const {  
+    const {
       disabled
     } = this.state
 
     return (
-      <View className="at-row">
+      <View className='at-row'>
         <View className='at-col'>
           <GInput
-              style={{...style.backgroundColor('disabled'), marginBottom: '10px'}}
-              inputType={'number'}
-              placeholder={'最低价格'}
-              handleChange={this.minChange}
-              disabled={disabled}
-              value={min}
+            style={{ ...style.backgroundColor('disabled'), marginBottom: '10px' }}
+            inputType='number'
+            placeholder='最低价格'
+            handleChange={this.minChange}
+            disabled={disabled}
+            value={min}
           ></GInput>
         </View>
         <View className='at-col'>
           <GInput
-              style={{...style.backgroundColor('disabled')}}
-              inputType={'number'}
-              placeholder={'最高价格'}
-              handleChange={this.maxChange}
-              disabled={disabled}
-              value={max}
+            style={{ ...style.backgroundColor('disabled') }}
+            inputType='number'
+            placeholder='最高价格'
+            handleChange={this.maxChange}
+            disabled={disabled}
+            value={max}
           ></GInput>
         </View>
       </View>

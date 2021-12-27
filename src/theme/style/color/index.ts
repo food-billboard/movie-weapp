@@ -1,7 +1,7 @@
-import { TypeColor } from '../../color'
+import { TypeColor, TTypeColor } from '../../color'
 
-export default (type: keyof typeof TypeColor='primary') => {
+export default (type: keyof TTypeColor='primary') => {
   return {
-    color: `${TypeColor[type]}`
+    color: `${TypeColor()[type]}`
   }
 }

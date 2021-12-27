@@ -21,8 +21,6 @@ export interface IProps extends ICommonFormProps {
 
 export interface IState extends ICommonFormState {
   value: Array<IFiles>
-  showAddBtn: boolean
-  // count: number
 }
 
 const { count: defaultCount } = IMAGE_CONFIG
@@ -35,7 +33,6 @@ export default class extends Component<IProps, IState> {
 
   public state: IState = {
     value: [],
-    showAddBtn: true,
     error: false,
   }
 
@@ -112,10 +109,8 @@ export default class extends Component<IProps, IState> {
 
   //重置
   public reset = () => {
-    const { count = defaultCount } = this.props
     this.setState({
       value: this.initialValue ? this.initialValue : [],
-      showAddBtn: this.initialValue ? (this.initialValue.length >= count ? false : true) : true
     })
   }
 

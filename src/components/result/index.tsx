@@ -13,9 +13,9 @@ export interface IState {}
 
 const GlobalEmpty = () => {
   return (
-    <View className="result-point">
-      <Text className="result-text">暂时没有数据，去看看其他的吧</Text>
-      <View className="at-icon at-icon-alert-circle"></View>
+    <View className='result-point'>
+      <Text className='result-text'>暂时没有数据，去看看其他的吧</Text>
+      <View className='at-icon at-icon-alert-circle'></View>
     </View>
   )
 }
@@ -34,7 +34,7 @@ export default class extends Component<IProps, IState> {
     const empty = ( typeof isEmpty === 'function' ? isEmpty() : isEmpty ) && !loading
 
     return (
-      <View className="result"> 
+      <View className='result'> 
         {
           empty ? 
             <GlobalEmpty />

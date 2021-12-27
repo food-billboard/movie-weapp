@@ -48,7 +48,7 @@ declare namespace API_USER {
   }
 
   export interface IMovieListData {
-    images: string
+    images: string[]
     name: string
     type?: ItypeList[]
     time: string | number

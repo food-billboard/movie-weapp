@@ -30,13 +30,13 @@ export default class extends Component<IProps, IState> {
     info: false
   }
 
-  private initialValue:any = false
-
   public state: IState = {
     info: {...defaultInfo},
     srcError: false,
     posterError: false
   }
+
+  private initialValue:any = false
 
   private get value() {
     const { info:propsValue, initialValue } = this.props

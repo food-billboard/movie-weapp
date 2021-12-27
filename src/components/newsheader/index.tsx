@@ -1,12 +1,11 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
-import merge from 'lodash/merge'
 import noop from 'lodash/noop'
 import { View } from '@tarojs/components'
-import Ellipsis from '../ellipsis'
-import ImageLoading from '../imageLoading'
 import style from '~theme/style'
 import { router, routeAlias } from '~utils'
+import Ellipsis from '../ellipsis'
+import ImageLoading from '../imageLoading'
 
 import './index.scss'
 
@@ -23,7 +22,7 @@ export interface IProps {
   handleSizeChange?: (...args: any[]) => any
 }
 
-export interface IState {}
+export interface IState { }
 
 export default class NewsHead extends Component<IProps, IState>{
 
@@ -39,7 +38,7 @@ export default class NewsHead extends Component<IProps, IState>{
   }
 
   componentDidMount = () => {
-    const { handleSizeChange } = this.props 
+    const { handleSizeChange } = this.props
     handleSizeChange && handleSizeChange()
   }
 
@@ -53,36 +52,39 @@ export default class NewsHead extends Component<IProps, IState>{
     const { detail, name, id, image } = content || {}
 
     return (
-      <View 
+      <View
         className='newsheader'
         style={propsStyle}
         onClick={this.handleClick.bind(this, id)}
       >
-        <View className="newsheader-background" style={{
-          background: `url(${image})`
-        }}></View>  
+        <View 
+          className='newsheader-background' 
+          style={{
+            background: `url(${image})`
+          }}
+        ></View>
         <View className='newsheader-poster'>
-          <ImageLoading 
-            customStyle={{display: 'flex'}} 
-            src={image} 
-            loadingProps={{ content: '' }} 
-            mode={'widthFix'} 
+          <ImageLoading
+            customStyle={{ display: 'flex' }}
+            src={image}
+            loadingProps={{ content: '' }}
+            mode='widthFix'
           />
         </View>
         <View className='newsheader-detail'>
-          <View className="newsheader-detail-content">
+          <View className='newsheader-detail-content'>
             <View className='newsheader-detail-content-name' style={{ ...style.color('primary') }}>
               {name}
             </View>
             <Ellipsis
               text={detail}
-              style={{padding: '10rpx 0 10rpx 15rpx', marginTop: '20rpx', ...style.border(1, 'bgColor', 'dashed', 'all'), borderRadius: '10rpx'}}
+              style={{ padding: '10rpx 0 10rpx 15rpx', marginTop: '20rpx', ...style.border(1, 'bgColor', 'dashed', 'all'), borderRadius: '10rpx' }}
               needPoint={false}
               onChange={this.handleSizeChange}
             ></Ellipsis>
           </View>
         </View>
-        <View className={'enter'}
+        <View className='enter'
           style={{ color: 'rgb(193, 193, 193)' }}
         >
           {'>'}

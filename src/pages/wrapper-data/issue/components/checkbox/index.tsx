@@ -55,7 +55,7 @@ export default class extends Component<IProps> {
 
     return (
       <GCheckbox
-        needHiddenList={true}
+        needHiddenList
         style={{marginBottom: '20px'}}
         checkboxOption={list}
         value={value}

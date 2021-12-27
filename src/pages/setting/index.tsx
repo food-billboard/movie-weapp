@@ -3,16 +3,16 @@ import React, { Component } from 'react'
 import { View, Button } from '@tarojs/components'
 import { AtRadio } from 'taro-ui'
 import { merge } from 'lodash'
+import { RadioOption } from 'taro-ui/types/radio'
 import Model from '~components/model'
 import List from '~components/linearlist'
-import GColor from './components/color'
 import { TypeColor, colorChange, colorStyleChange } from '~theme/color'
 import { router, routeAlias, withTry, clearToken, sleep } from '~utils'
 import { EAction } from '~utils/global'
 import { createSystemInfo } from '~config'
-import { RadioOption } from 'taro-ui/types/radio'
 import style from '~theme/style'
 import { signout, getAppInfo } from '~services'
+import GColor from './components/color'
 
 import './index.scss'
 
@@ -153,7 +153,7 @@ export default class Setting extends Component<any>{
     arrow: arrow,
     iconInfo: {
       value: 'bell',
-      color: TypeColor[ICON_COLOR]
+      color: TypeColor()[ICON_COLOR]
     },
     handle: this.showFeedback,
   }
@@ -167,7 +167,7 @@ export default class Setting extends Component<any>{
     arrow: arrow,
     iconInfo: {
       value: 'user',
-      color: TypeColor[ICON_COLOR]
+      color: TypeColor()[ICON_COLOR]
     },
     handle: this.handleAdminSetting,
   }
@@ -220,7 +220,7 @@ export default class Setting extends Component<any>{
       arrow: arrow,
       iconInfo: {
         value: 'tag',
-        color: TypeColor[ICON_COLOR]
+        color: TypeColor()[ICON_COLOR]
       },
       handle: this.showAbout,
       model: {
@@ -256,9 +256,9 @@ export default class Setting extends Component<any>{
   /**
    * 退出登录
    */
-  public handleButton = async (index: number) => {
+  public handleButton = async (statusIndex: number) => {
     //退出登录
-    if (index == 0) {
+    if (statusIndex == 0) {
       const { button: { model, index, ...nextButton } } = this.state
       this.setState({
         button: merge({}, nextButton, { model, index: (index + 1) % 2, isOpen: true }),
@@ -284,9 +284,9 @@ export default class Setting extends Component<any>{
     const activeMode = this.colorStyle[color ? 0 : 1]['value']
 
     const settingList = [
-      { ...about, iconInfo: { ...aboutInconInfo, color: TypeColor[ICON_COLOR] } },
-      { ...this.feedback, iconInfo: { ...feedbackInconInfo, color: TypeColor[ICON_COLOR] } },
-      { ...this.adminSetting, iconInfo: { ...adminIconInfo, color: TypeColor[ICON_COLOR] } }
+      { ...about, iconInfo: { ...aboutInconInfo, color: TypeColor()[ICON_COLOR] } },
+      { ...this.feedback, iconInfo: { ...feedbackInconInfo, color: TypeColor()[ICON_COLOR] } },
+      { ...this.adminSetting, iconInfo: { ...adminIconInfo, color: TypeColor()[ICON_COLOR] } }
     ]
 
     return (
@@ -310,7 +310,7 @@ export default class Setting extends Component<any>{
         <View className='button'>
           <Button
             type={type[index]}
-            plain={true}
+            plain
             onClick={this.handleButton.bind(this, index)}
             style={{ ...style.backgroundColor('bgColor') }}
           >

@@ -1,50 +1,41 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
+import { connect } from 'react-redux'
+import merge from 'lodash/merge'
 import GVideo from '~components/video'
 import EmptyTry from '~components/empty-try'
 import GButton from '~components/button'
+import { colorStyleChange } from '~theme/color'
+import style from '~theme/style'
+import { withTry, router, routeAlias, EAction } from '~utils'
+import { getCustomerMovieDetail, getUserMovieDetail, putStore, cancelStore, putRate } from '~services'
 import List from './components/imglist'
 import Content from './components/content'
 import IconList from './components/iconList'
 import GTag from './components/tag'
 import Actor from './components/actor'
 import Title from './components/title'
-import Tab from './components/tab'
-import style from '~theme/style'
-import { colorStyleChange } from '~theme/color'
-import { connect } from 'react-redux'
 import { mapDispatchToProps, mapStateToProps } from './connect'
-import { withTry, router, routeAlias, EAction } from '~utils'
-import { getCustomerMovieDetail, getUserMovieDetail, putStore, cancelStore, putRate } from '~services'
 import './index.scss'
 
-@connect(mapStateToProps, mapDispatchToProps)
-export default class extends Component<any> {
+class Detail extends Component<any> {
 
-  //电影id
-  private id = getCurrentInstance().router?.params.id
+  public state: any = {
+    data: {},
+    commentData: []
+  }
 
   public componentDidShow = async () => {
     await this.fetchData()
     colorStyleChange()
   }
 
-  private tabRef = React.createRef<Tab>()
-
-  public state: any = {
-    data: {},
-    // tab: [],
-    commentData: []
-  }
-
-  // public componentDidMount = async () => await this.fetchData()
+  //电影id
+  private id = getCurrentInstance().router?.params.id
 
   //设置标题
   public setTitle = async () => {
-    // const current = this.tabRef.current ? this.tabRef.current.getCurrent() : 0
-    // const { tab } = this.state
-    // Taro.setNavigationBarTitle({ title: tab[current] ? tab[current].same_name : '电影' })
     Taro.setNavigationBarTitle({ title: '电影' })
   }
 
@@ -63,14 +54,8 @@ export default class extends Component<any> {
     const method = isLogin ? getCustomerMovieDetail : getUserMovieDetail
     return method(this.id)
     .then(data => {
-      const { comment, same_film = [], name, _id } = data
-      // const baseTab = [{
-      //   _id,
-      //   same_name: name,
-      //   type: 'NAMESAKE'
-      // }]
+      const { comment} = data
       this.setState({
-        // tab: same_film.length ? [...baseTab, ...same_film] : [...baseTab],
         data,
         commentData: comment,
       })
@@ -131,15 +116,6 @@ export default class extends Component<any> {
     })
   }
 
-  // //tab切换
-  // public handleTabChange = async (value: string) => {
-  //   const { tab } = this.state
-  //   // const [ item ] = tab.filter(item => item.name === value)
-  //   const { _id } = tab[value]
-  //   this.id = _id
-  //   await this.fetchData()
-  // }
-
   public render() {
     const { data: {
       video,
@@ -155,7 +131,7 @@ export default class extends Component<any> {
       store,
       author_description,
       author
-    }, commentData = [], tab } = this.state
+    }, commentData = [] } = this.state
     const {
       actor,
       district,
@@ -168,17 +144,7 @@ export default class extends Component<any> {
     this.setTitle()
 
     return (
-      <View id='detail' style={{ ...style.backgroundColor('bgColor') }}>
-        {/* {
-          tab.length ?
-            <Tab
-              values={tab.map(item => item.name)}
-              handleClick={this.handleTabChange}
-              ref={this.tabRef}
-              tabToggle={1000}
-            />
-            : null
-        } */}
+      <View id='detail' style={style.backgroundColor('bgColor')}>
         <View className='video'>
           {
             !!video && <GVideo
@@ -189,8 +155,8 @@ export default class extends Component<any> {
           }
         </View>
         <View 
-          className={'description'}
-          style={{ ...style.color('thirdly'), ...style.border(1, 'thirdly', 'solid', 'top') }}
+          className='description'
+          style={merge(style.color('thirdly'), style.border(1, 'thirdly', 'solid', 'top'))}
         >
           <Content
             store={this.store}
@@ -219,7 +185,7 @@ export default class extends Component<any> {
           <View className='image'>
             <View className='title'>
               <Title
-                title={'截图'}
+                title='截图'
               />
             </View>
             <List
@@ -233,16 +199,18 @@ export default class extends Component<any> {
           <View className='actor'>
             <View className='title'>
               <Title
-                title={'卡司'}
+                title='卡司'
               />
             </View>
-            <Actor list={(actor || []).map(item => {
-              const { name, avatar } = item
-              return {
-                name,
-                image: avatar
-              }
-            })} />
+            <Actor 
+              list={(actor || []).map(item => {
+                const { name, other: { avatar } } = item
+                return {
+                  name,
+                  image: avatar
+                }
+              })} 
+            />
           </View>
         </EmptyTry>
         <EmptyTry
@@ -251,7 +219,7 @@ export default class extends Component<any> {
           <View className='tag'>
             <View className='title'>
               <Title
-                title={'大家都说'}
+                title='大家都说'
               />
             </View>
             <GTag
@@ -270,7 +238,7 @@ export default class extends Component<any> {
           <View className='comment'>
             <View className='title'>
               <Title
-                title={'大家评论'}
+                title='大家评论'
               />
             </View>
             <IconList
@@ -288,7 +256,7 @@ export default class extends Component<any> {
         </EmptyTry>
         <View className='other'>
           <GButton
-            type={'secondary'}
+            type='secondary'
             value={new Array(2).fill('说点什么吧')}
             operate={this.handleComment}
           />
@@ -297,3 +265,5 @@ export default class extends Component<any> {
     )
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Detail)

@@ -32,13 +32,13 @@ export default class Time extends Component<IProps>{
     Taro.showLoading({ title: '发送中，请注意查收邮箱' })
     try {
       await this.props.getData()
-    }catch(err) {
+    } catch (err) {
       Taro.showToast({
         title: '发生错误，请重试',
         icon: 'none'
       })
       console.log(err)
-    }finally {
+    } finally {
       Taro.hideLoading()
     }
 
@@ -68,7 +68,7 @@ export default class Time extends Component<IProps>{
     const { open, text } = this.state
     return (
       <View
-        className={'time'}
+        className='time'
         style={{ ...style.color(open ? 'primary' : 'thirdly') }}
         onClick={this.handleClick}
       >

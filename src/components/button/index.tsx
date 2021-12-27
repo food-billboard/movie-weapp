@@ -22,7 +22,7 @@ export interface IState {
 
 const Button: React.FC<IProps> = ({
   value = ['是', '不是'],
-  active:propActive = 0,
+  active: propActive = 0,
   type = 'primary',
   operate = noop,
   style: customStyle = {}
@@ -45,7 +45,7 @@ const Button: React.FC<IProps> = ({
       <AtButton
         customStyle={{ ...style.border(1, 'primary', 'solid', 'all'), ...style.color('primary'), ...customStyle }}
         type={type}
-        circle={true}
+        circle
         onClick={modeChange}
         size='normal'
       >{value[active]}</AtButton>

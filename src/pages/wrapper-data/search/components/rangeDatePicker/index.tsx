@@ -11,61 +11,61 @@ export interface IProps {
     start: string
     end: string
   }
- }
+}
 
- export interface IState {
+export interface IState {
 
- }
+}
 
 export default class extends Component<IProps, IState> {
 
   public state: IState = {
-    
+
   }
 
   private startRef = React.createRef<GPicker>()
   private endRef = React.createRef<GPicker>()
 
   public startChange = async (value) => {
-    const { onChange, value: { end=Day() }={} } = this.props
+    const { onChange, value: { end = Day() } = {} } = this.props
     let data = value
-    if(end.toString().length && Day(value).valueOf() >= Day(end).valueOf()) {
+    if (end.toString().length && Day(value).valueOf() >= Day(end).valueOf()) {
       data = end
       Taro.showToast({
         title: '时间错误会默认忽略',
         icon: 'none'
       })
     }
-    onChange && onChange({start: data})
+    onChange && onChange({ start: data })
   }
 
   public endChange = async (value) => {
-    const { onChange, value: { start='1970-01-01' }={} } = this.props
+    const { onChange, value: { start = '1970-01-01' } = {} } = this.props
     let data = value
-    if(start.toString().length && Day(value).valueOf() <= Day(start).valueOf()) {
+    if (start.toString().length && Day(value).valueOf() <= Day(start).valueOf()) {
       data = start
       Taro.showToast({
         title: '时间错误会默认忽略',
         icon: 'none'
       })
     }
-    onChange && onChange({end: data})
+    onChange && onChange({ end: data })
   }
 
   public render() {
 
-    const { value: { start='', end='' }={} } = this.props
+    const { value: { start = '', end = '' } = {} } = this.props
 
     return (
-      <View className="at-row">
-        <View className="at-col">
+      <View className='at-row'>
+        <View className='at-col'>
           <GPicker
             ref={this.startRef}
             date={{
               fields: 'day',
             }}
-            title={'起始时间'}
-            style={{marginBottom: '5px'}}
+            title='起始时间'
+            style={{ marginBottom: '5px' }}
             handleChange={this.startChange}
             value={start}
           >
@@ -77,8 +77,8 @@ export default class extends Component<IProps, IState> {
             date={{
               fields: 'day'
             }}
-            title={'结束时间'}
-            style={{paddingBottom:'20px'}}
+            title='结束时间'
+            style={{ paddingBottom: '20px' }}
             handleChange={this.endChange}
             value={end}
           >
