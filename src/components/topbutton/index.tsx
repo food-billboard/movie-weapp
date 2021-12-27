@@ -1,8 +1,9 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { Text, View } from '@tarojs/components'
 import { AtFab  } from 'taro-ui'
 
-import { throttle } from 'lodash'
+import throttle from 'lodash/throttle'
 
 import './index.scss'
 
@@ -48,8 +49,8 @@ export default class Top extends Component<ITopProps> {
         size: small
     }
 
-    public constructor() {
-        super(...arguments)
+    public constructor(props) {
+        super(props)
 
         this.handlerClick = this.handlerClick.bind(this)
         this.throttleClick = this.throttleClick.bind(this)

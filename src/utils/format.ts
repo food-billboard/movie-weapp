@@ -1,4 +1,8 @@
 import Day from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import 'dayjs/locale/zh-cn'
+Day.locale('zh-cn')
+Day.extend(relativeTime)
 
 const momentConfig: any = {
     months: '一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月'.split('_'),
@@ -141,12 +145,13 @@ export const getHourMinute = (minutes = 0) => {
     return ret
 }
 
+export const format = (date:Date, type:string="YYYY-MM-DD") => Day(date).format(type)
+
 export const formatTime = (date: any, type: string = 'YYYY-MM-DD', before: number = 1296000000) => {
-    // moment.locale('zh-cn');
     const now = new Date().getTime()
-    const beforeDate = Day(date).valueOf()
+    const beforeDate = valueOf(date)
     if(beforeDate + before > date) {
-        return Day(now).toNow()
+        return Day(now).fromNow()
     }
     return Day(date).format(type)
 }
@@ -154,9 +159,8 @@ export const formatTime = (date: any, type: string = 'YYYY-MM-DD', before: numbe
 export const valueOf = (time) => Day(time).valueOf()
 
 export const formatNumber = (data: number) => {
-    if(data > 9999) {
-        return Math.round(data / 10000) + 'w'
-    }
+    if(data > 99999999) return `${Math.round(data / 100000000)}ww` 
+    if(data > 9999) return `${Math.round(data / 10000)}w`
     return data
 }
 

@@ -1,0 +1,77 @@
+@import "~taro-ui/dist/style/components/flex.scss";
+// @import "~taro-ui/dist/style/components/icon.scss";
+.ellipsis{
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    overflow:hidden;
+}
+.data-detail-content{
+    width:100%;
+    height:100%;
+    &-title{
+        width:100%;
+        font-weight:bold;
+        font-size:48px;
+        &-name{
+            @extend .ellipsis
+        }
+        &-store{
+
+        }
+    }
+    &-main{
+        width:100%;
+        &-rate{
+            .up-rate{
+                display: flex;
+                align-items: center;
+                .up-rate-title{
+                    line-height:1.2;
+                }
+            }
+        }
+        &-info{
+            width:100%;
+            &-actor,
+            &-type,
+            &-time-publish,
+            &-area-lang,
+            &-hot,
+            &-look,
+            &-author,
+            &-director{
+                @extend .ellipsis;
+                text-align:left;
+                line-height:1.5;
+            }
+            &-hot-text,
+            &-look-text{
+                color:rgba(0, 0, 0, 0.8);
+                font-size:24px;
+            }
+            &-description{
+                border-radius:20px;
+                box-sizing:border-box;
+                padding: 0 5px;
+            }
+        }
+    }
+}
+
+.data-detail-content-icon{
+    font-size:32px;
+}
+
+@media screen and (min-width: 700px) {
+    .up-rate,
+    .actor,
+    .director,
+    .type,
+    .time-publish,
+    .area-lang,
+    .hot,
+    .look,
+    .description{
+        font-size:32px;
+    }
+}

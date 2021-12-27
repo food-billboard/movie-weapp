@@ -93,7 +93,6 @@ class Router {
     const toRoute: any = Object.assign({}, ROUTE_RUNTIME);
     const fromRoute = Object.assign({}, ROUTE_RUNTIME);
     const options: IDictionary = {};
-
     // 获取原始路由
     toRoute.route = this.getOriginPath(path);
 
@@ -176,12 +175,12 @@ class Router {
   }
 
   /* 打开到应用的某个页面 */
-  reload = (path, send) => {
+  reload = (path, send?) => {
     return this.navigate('RE_LAUNCH', { path, send });
   }
 
   /* 获取当前路径 */
-  getOriginPath (path){
+  getOriginPath (path: string){
     let originPath = false;
     this.routes.some((route)=>{
       const { re } = route;

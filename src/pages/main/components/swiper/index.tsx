@@ -1,4 +1,5 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { Swiper, SwiperItem, Image } from '@tarojs/components'
 import { router, routeAlias, ESwiperRouteType } from '~utils'
 import { TypeColor } from '~theme/color'
@@ -27,7 +28,7 @@ class Index extends Component<IProps>{
       case ESwiperRouteType.MOVIE:
         router.push(routeAlias.detail, { id })
         break
-      case ESwiperRouteType.SPEICAL:
+      case ESwiperRouteType.SPECIAL:
         router.push(routeAlias.special, { id })
         break
     }
@@ -43,7 +44,6 @@ class Index extends Component<IProps>{
         indicatorActiveColor={TypeColor['disabled']}
         circular
         indicatorDots
-        autoplay={false}
         className='swiper'
       >
         {list.map((value) => {

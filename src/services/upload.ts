@@ -1,21 +1,62 @@
-import { request, getToken } from '~utils'
+import { merge } from 'lodash'
+import { request, getToken, encoder } from '~utils'
 
-//普通文件上传
-export const uploadFile = (data) => {
-  return request('POST', '/api/customer/upload', { data, header: getToken(true) })
+function string2Base64(str: string) {
+  return encoder(str)
 }
 
-//分片上传预查
-export const uploadChunkFileCheck = (query) => {
-  return request('GET', '/api/customer/upload/chunk', { query, header: getToken(true) })
+const DEFAULT_CHECK_UPLOAD_PARAMS = {
+  auth: 'PUBLIC',
+  chunk: 1024 * 1024 * 5
 }
 
-//分片上传
-export const uploadChunkFile = (data) => {
-  return request('POST', '/api/customer/upload/chunk', { data, header: getToken(true) })
+function mergeMetaData(params: { [key: string]: any }) {
+  const data = Object.entries(params).reduce((acc, cur) => {
+    const [ key, value ] = cur
+    const realValue = typeof value === 'string' ? value : value.toString()
+    acc.push(`${key} ${string2Base64(realValue)}`)
+    return acc 
+  }, [] as any)
+  return {
+    ['Upload-Metadata']: data.join(',')
+  }
 }
 
-//分片上传完成
-export const uploadChunkFileComplete = (name) => {
-  return request('PUT', '/api/customer/upload/chunk', { data: { name, header: getToken(true) } })
+export const checkUploadFile = async (params: Partial<API_UPLOAD.ICheckUploadFileParams>) => {
+  const newParams = merge({}, DEFAULT_CHECK_UPLOAD_PARAMS, params)
+  return request<{ header: API_UPLOAD.ICheckUploadFileRes, [key: string]: any }>('HEAD', '/api/customer/upload', {
+    header: merge({}, getToken(true), { "Tus-Resumable": "1.0.0" }, mergeMetaData(newParams))
+  }, true)
+  .then(data => {
+    const { header } = data
+    return header
+  })
+}
+
+export const uploadFile = async (params: API_UPLOAD.IUploadParams) => {
+  const { file, offset, ...nextParams } = params 
+  return request('POST', '/api/customer/upload/weapp', {
+    header: merge({}, getToken(true), { "Tus-Resumable": "1.0.0", "Upload-Offset": offset, "content-type": "application/offset+octet-stream" }, mergeMetaData(nextParams)),
+    data: file
+  }, true)
+  .then(data => {
+    console.log(data)
+    const { header } = data
+    return header
+  })
+
+}
+
+export const getMediaData = async (query: API_UPLOAD.IGetMediaDataParams) => {
+  return request<string>('GET', '/api/customer/upload', {
+    query,
+    header: getToken(true)
+  })
+}
+
+export const putVideoPoster = async (data: API_UPLOAD.IPutVideoPosterParams) => {
+  return request('PUT', '/api/customer/upload/video/poster', {
+    data,
+    header: getToken(true)
+  })
 }

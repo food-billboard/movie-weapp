@@ -1,8 +1,8 @@
-import { request, getToken } from '~utils'
+import { request, getToken, createUserAuth } from '~utils'
 
 //其他用户信息
 export const getUserInfo = (id: string) => {
-  return request('GET', '/api/user/customer', { queyr: { _id: id } })
+  return request('GET', '/api/user/customer', { query: { _id: id } })
 }
 
 //其他用户粉丝
@@ -27,12 +27,12 @@ export const getUserIssue = ({ id, currPage=0, pageSize=30  }: { id: string, cur
 
 //其他用户浏览记录
 export const getUserGlance = ({ id, currPage=0, pageSize=30  }: { id: string, currPage: number, pageSize: number }) => {
-  return request('GET', '/api/user/customer/borwser', { query: { _id: id, currPage, pageSize } })
+  return request('GET', '/api/user/customer/movie/browser', { query: { _id: id, currPage, pageSize } })
 }
 
 //其他用户收藏的电影
 export const getUserStore = ({ id, currPage=0, pageSize=30  }: { id: string, currPage: number, pageSize: number }) => {
-  return request('GET', '/api/user/customer/store', { query: { _id: id, currPage, pageSize } })
+  return request('GET', '/api/user/customer/movie/store', { query: { _id: id, currPage, pageSize } })
 }
 
 //每日上新
@@ -47,7 +47,7 @@ export const getHot = (count:number=3) => {
 
 //跑马灯
 export const getNotice = () => {
-  return request('GET', '/api/user/home/notice')
+  return request('GET', '/api/user/setting/info/notice')
 }
 
 //排行榜(首页)
@@ -56,8 +56,16 @@ export const getRank = (count:number=6) => {
 }
 
 //专题
-export const getSpecial = (id: string) => {
-  return request('GET', '/api/user/home/special', { query: { _id: id } })
+export const getSpecial = ({
+  id,
+  currPage,
+  pageSize 
+}: {
+  id: string,
+  currPage?: number
+  pageSize?: number 
+}) => {
+  return request('GET', '/api/user/home/special', { query: { _id: id, currPage, pageSize } })
 }
 
 //轮播图
@@ -67,17 +75,23 @@ export const getSwiper = (count:number=6) => {
 
 //登录
 export const signin = ({ mobile, password, uid }: { mobile: string, password: string, uid?: string | undefined }) => {
-  return request('POST', `/api/user/logon/account`, { data: { password, mobile, uid } })
+  // return request('POST', `/api/user/logon/account`, { data: { uid }, header: createUserAuth({ mobile, password }) })
+  return request('POST', `/api/user/logon/account`, { data: { uid, mobile, password } })
 }
 
 //注册
-export const register = ({ mobile, password, uid }: { mobile: number, password: string, uid: string | undefined }) => {
-  return request('POST', '/api/user/logon/register', {data: { mobile, password, uid }})
+export const register = ({ mobile, password, uid, email, captcha }: { mobile: number, password: string, uid: string | undefined, captcha: string, email: string }) => {
+  return request('POST', '/api/user/logon/register', { data: { uid, email, mobile, password, captcha } })
 }
 
 //退出
 export const signout = () => {
   return request('POST', '/api/user/logon/signout', { header: getToken(true) })
+}
+
+//验证码
+export const sendSMS = ({ email, type }) => {
+  return request('POST', '/api/user/logon/email', { data: { email, type } })
 }
 
 //分类(首页)
@@ -122,7 +136,7 @@ export const getRankList = ({ id, currPage=0, pageSize=30 }: { id: string, currP
 
 //排行榜列表
 export const getRankType = (count: number) => {
-  return request('GET', '/api/user/movie/classify/specDropList', { query: { count } })
+  return request('GET', '/api/user/movie/rank/specDropList', { query: { count } })
 }   
 
 //小程序信息
@@ -152,5 +166,12 @@ export const getActorList = (count: number = -1) => {
 
 //排序列表
 export const getOrderList = () => {
-  return request('GET', '/api/user/movie/order/list')
+  return request<API_USER.ISearchOrderFieldListRes>('GET', '/api/user/movie/order')
+}
+
+//数据搜索
+export const getSearchDataList = (params: API_USER.ISearchDataParams) => {
+  return request<API_USER.ISearchDataRes>('GET', '/api/user/movie/search', {
+    query: params
+  })
 }

@@ -1,6 +1,6 @@
 import createLoading from 'dva-loading'
 import * as core from 'dva-core'
-import {createLogger} from 'redux-logger'
+import { createLogger } from 'redux-logger'
 
 const isProduction = process.env.NODE_ENV === 'production'
 
@@ -43,7 +43,6 @@ export default {
     createDva,
     //获取dispatch
     getDispatch() {
-        console.log(app)
         return app._store.dispatch
     }
 }

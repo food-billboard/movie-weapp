@@ -1,13 +1,12 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { AtTimeline, AtButton, AtTag } from 'taro-ui'
 import GInput from '../input'
-import { Toast, IQuery } from '~components/toast'
-import { Item } from 'taro-ui/@types/timeline'
+import { Item } from 'taro-ui/types/timeline'
 import { isObject, ICommonFormProps, ICommonFormState } from '~utils'
 import customStyle from '~theme/style'
 import { TypeColor } from '~theme/color'
-import { findIndex } from 'lodash'
 import { FORM_ERROR } from '~config'
 
 import './index.scss'
@@ -48,7 +47,7 @@ export interface IState {
   statusData: Array<IStatusData>
 }
 
-const TAT_STYLE = {
+const TAT_STYLE:any = {
   boxSizing: 'border-box',
   border: `1px dashed ${TypeColor['primary']}`,
   width: '100%',
@@ -77,6 +76,19 @@ const getDefaultItemStyle = () => {
 
 class Rest extends Component<IProps, IState> {
 
+  public static normalizeData = (data: ((string | Item)[] | string | Item), defaultItemStyle=getDefaultItemStyle()) => {
+    const isSingle = !Array.isArray(data)
+    const realData = Array.isArray(data) ? data : [data]
+    const dealData = realData.map(item => {
+      const initItem = typeof item === 'string' ? { title: item } : { ...item }
+      return {
+        ...defaultItemStyle,
+        ...initItem
+      }
+    })
+    return isSingle ? dealData[0] : dealData
+  }
+
   public state: IState = {
     disabled: true,
     status: [],
@@ -84,19 +96,20 @@ class Rest extends Component<IProps, IState> {
   }
 
   //输入框
-  public inputRef = Taro.createRef<GInput>()
+  public inputRef = React.createRef<GInput>()
 
   //添加
   public handleAdd = async () => {
     const data = await this.inputRef.current!.getData()
     if (data) {
       const { status, statusData } = this.state
-      const { defaultItemStyle, value } = this.props
+      const { value } = this.props
       const itemLen = value.length
-      const _defaultItemStyle = defaultItemStyle ? defaultItemStyle : getDefaultItemStyle()
-      const newItem = {
-        title: data,
-        ..._defaultItemStyle
+      const newItem = Rest.normalizeData(data) as Item
+
+      const newStatusData: IStatusData = {
+        value: newItem,
+        index: itemLen
       }
       //新数据
       const newValue = [...value, newItem]
@@ -104,11 +117,7 @@ class Rest extends Component<IProps, IState> {
         disabled: false,
         //记录最近操作
         status: [...status, operateType.add],
-        statusData: [...statusData, {
-          value: newItem,
-          index: itemLen
-        }
-        ]
+        statusData: [ ...statusData, newStatusData ],
       }, () => {
         this.props.handleChange && this.props.handleChange(newValue)
         this.inputRef.current!.reset()
@@ -134,11 +143,9 @@ class Rest extends Component<IProps, IState> {
     if (data) {  //输入框中有内容
       const { status, statusData } = this.state
       const { value } = this.props
-      const index = findIndex(value, (val: any) => {
-        const { title } = val
-        return title === data
-      })
-      let config: IQuery = { title: '' }
+      const index = value.findIndex((val: any) => val.title === data)
+
+      let config: any = { title: '' }
 
       //查看输入框内容是否在timeline中存在
       if (index < 0) {
@@ -161,8 +168,7 @@ class Rest extends Component<IProps, IState> {
           this.inputRef.current!.reset()
         })
       }
-
-      Toast(config)
+      Taro.showToast(config)
     }
   }
 
@@ -263,23 +269,6 @@ class Rest extends Component<IProps, IState> {
     )
   }
 
-}
-
-Rest.normalizeData = (data) => {
-  if (Array.isArray(data) && data.length) {
-    if (typeof data[0] === 'string') {
-      const da = data.map(item => {
-        if (typeof item === 'object') return item
-        return {
-          ...getDefaultItemStyle(),
-          title: item
-        }
-      })
-      return da
-    }
-    return data
-  }
-  return []
 }
 
 export default Rest

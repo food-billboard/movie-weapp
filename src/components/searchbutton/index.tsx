@@ -1,4 +1,5 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { AtSearchBar } from 'taro-ui'
 import { router, routeAlias } from '~utils'
@@ -21,7 +22,7 @@ export interface IProps {
 
 export interface IState {
     focus: boolean
-    value?: string
+    value: string
     pointList: Array<IPoint>
 }
 
@@ -37,22 +38,18 @@ class SearchButton extends Component<IProps, IState>{
 
     public state: IState = {
         focus: false,
-        pointList: []
+        pointList: [],
+        value: ''
     }
 
     /**
      * 监听输入框改变
      */
     public onChange = (value: string = '') => {
-        // this.setState({
-        //     value: value,
-        // }, async() => {
-        //     const pointList = await this.props.fetchSearchPoint(value)
-        //     const { data } = pointList
-        //     this.setState({
-        //         pointList: value.length ? data : []
-        //     })
-        // })
+        this.setState({
+            value: value,
+        })
+        this.props.handleChange && this.props.handleChange(value)
     }
 
     /**
@@ -81,7 +78,16 @@ class SearchButton extends Component<IProps, IState>{
      */
     public confirm = () => {
         const { value } = this.props
-        this.props.confirm && this.props.confirm(value)
+        const { value: stateValue } = this.state
+        const realValue = value || stateValue
+        if(!realValue) {
+            return Taro.showToast({
+                title: '搜索词太少',
+                icon: 'none',
+                mask: true,
+            })
+        }
+        this.props.confirm && this.props.confirm(realValue)
         this.setState({
             pointList: []
         })
@@ -97,7 +103,7 @@ class SearchButton extends Component<IProps, IState>{
     public render() {
         //获取热搜信息列表
         const { focus, disabled = false } = this.props
-        const { pointList } = this.state
+        const { pointList, value } = this.state
 
         return (
             <View className="searchbutton">
@@ -105,8 +111,8 @@ class SearchButton extends Component<IProps, IState>{
                     <AtSearchBar
                         customStyle={{ ...style.backgroundColor('bgColor') }}
                         onActionClick={this.confirm}
-                        value={this.props.value}
-                        onChange={this.props.handleChange ? this.props.handleChange : this.onChange}
+                        value={this.props.value || value}
+                        onChange={this.onChange}
                         actionName={"找一找"}
                         onBlur={this.onBlur}
                         onFocus={this.onFocus}

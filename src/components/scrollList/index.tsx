@@ -1,26 +1,29 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View, ScrollView, Text } from '@tarojs/components'
 import { AtActivityIndicator } from 'taro-ui'
-import GDivider from '~components/divider/a'
+import noop from 'lodash/noop'
+import { Observer } from './observer'
+import GDivider from '~components/divider'
+import GResult from '~components/result'
 import Top from '../topbutton'
-import { IProps, IState } from './index.d'
 import { isObject, ESourceTypeList } from '~utils'
 import customStyle from '~theme/style'
-
 import './index.scss'
 
 export interface IProps {
   sourceType: ESourceTypeList
-  style?: any
+  style?: React.CSSProperties
   autoFetch?: boolean
   query?: any
   fetch: (...args: any[]) => any
-  header?: false | number
-  bottom?: false | number
+  fixHeader?: boolean
+  fixBottom?: boolean
   renderContent?: any
   renderHeader?: any
   renderBottom?: any
   divider?: boolean
+  emptyShow?: boolean 
 }
 
 export interface IState {
@@ -28,13 +31,17 @@ export interface IState {
   empty: boolean
   query: any
   loading: boolean
+  headerHeight: number
+  bottomHeight: number
+  [key: string]: any
 }
 
-const INIT_QUERY = { pageSize: 10, currPage: 1 }
+const INIT_QUERY = { pageSize: 10, currPage: 0 }
 
 export default class List extends Component<IProps, IState> {
 
-  public topRef = Taro.createRef<Top>()
+  public topRef = React.createRef<Top>()
+  // public observer: Observer = new Observer(this)
 
   public static defaultProps = {
     query: {},
@@ -42,24 +49,31 @@ export default class List extends Component<IProps, IState> {
     scrollY: true,
     lowerThreshold: 50,
     scrollWithAnimation: false,
-    onScroll: () => { },
-    fetch: () => { },
-    header: false,
-    bottom: false,
-    autoFetch: true
+    onScroll: noop,
+    fetch: noop,
+    // header: false,
+    // bottom: false,
+    autoFetch: true,
+    fixHeader: true,
+    fixBottom: true,
+    emptyShow: true
   }
 
   public state: IState = {
     data: [],
     empty: false,
     query: {},
-    loading: false,
+    loading: true,
+    headerHeight: 0,
+    bottomHeight: 0
   }
 
-  public constructor() {
-    super(...arguments)
+  public constructor(props) {
+    super(props)
     this.state.query = { ...INIT_QUERY, ...this.props.query }
   }
+
+  public readonly DEFAULT_QUERY = INIT_QUERY
 
   //获取数据
   public get data() {
@@ -74,9 +88,16 @@ export default class List extends Component<IProps, IState> {
   }
 
   public componentDidMount = () => {
+    setTimeout(() => {
+      this.watchBottomHeight()
+      this.watchHeaderHeight()
+    }, 10)
     const { autoFetch } = this.props
     if (!autoFetch) return
     const { query } = this.state
+    // this.observer.observer.relativeTo('.scroll-view').observe('.loading-view', (res) => {
+      
+    // })
     this.fetchData(query)
   }
 
@@ -88,27 +109,26 @@ export default class List extends Component<IProps, IState> {
     if (sourceType === ESourceTypeList.Scope) {
       const { data } = this.state
       const newData = await fetch(query, isInit)
+
       const { pageSize } = this.state.query
       //判断是否存在数据
-      if (newData.length < pageSize) {
+      if (newData.length < pageSize || !newData.length) {
         this.setState({ empty: true })
+        // Taro.showToast({
+        //   title: '没有更多数据了',
+        //   icon: 'none'
+        // })
       } else {
         this.setState({ empty: false })
       }
 
-      let nextData
-      //判断是否为初始化前端数据
-      if (isInit) {
-        nextData = [...newData]
-      } else {
-        nextData = [...data, ...newData]
-      }
-      this.setState({ data: nextData, loading: false })
-      return
+      this.setState({ 
+        data: [ ...(isInit ? [] : data), ...newData ], 
+        loading: false 
+      })
     } else if (sourceType === ESourceTypeList.Dva) {
       await fetch(query, isInit)
-      await this.setState({ loading: false })
-      return
+      this.setState({ loading: false })
     }
   }
 
@@ -129,45 +149,91 @@ export default class List extends Component<IProps, IState> {
     await this.fetchData(nextQuery, true)
   }
 
-  //空函数
-  public defaultFn = () => { }
+  public getHeight(domId: string, key: string) {
+    let _domId = domId
+    if(!/^#.+/.test(_domId)) _domId = `#${_domId}`
+    const that = this
+    const query = Taro.createSelectorQuery() // query 是 SelectorQuery 对象
+    query.select(_domId).boundingClientRect() // select 后是 NodesRef 对象，然后 boundingClientRect 返回 SelectorQuery 对象
+    query.selectViewport().scrollOffset() // selectViewport 后是 NodesRef 对象，然后 scrollOffset 返回 SelectorQuery 对象
+    query.exec(function (res) { // exec 返回 NodesRef 对象
+      const [ dom ] = res.filter(dom => dom && dom.id == _domId.slice(1))
+      if(!dom) return
+      that.setState({
+        [key]: dom.height || 0
+      })
+    })
+  }
+
+  //获取header高度
+  public watchHeaderHeight = () => {
+    const { fixHeader } = this.props
+    if(!fixHeader) return
+    setTimeout(() => {
+      this.getHeight('scroll-header', 'headerHeight')
+    }, 10)
+  }
+
+  public watchBottomHeight = () => {
+    const { fixBottom } = this.props
+    if(!fixBottom) return
+    setTimeout(() => {
+      this.getHeight('scroll-bottom', 'bottomHeight')
+    }, 10)
+  }
 
   public render() {
     const {
-      header,
-      bottom,
+      fixBottom,
+      fixHeader,
       style = {},
+      emptyShow
     } = this.props
-    const { empty, loading } = this.state
+    const { empty, loading, headerHeight, bottomHeight } = this.state
     const { divider = true } = this.props
-    const _header = typeof header === 'boolean'
-    const _bottom = typeof bottom === 'boolean'
+
     return (
       <View className='list'>
         <View
           style={isObject(style) ? style : {}}
           className='scroll-view'
         >
-          <View style={{ ...customStyle.backgroundColor('bgColor'), paddingTop: (header || 0) + 'rpx' }}
+          {
+            !loading && 
+              <View id="scroll-header" className={fixHeader ? 'scroll-fix-header' : 'scroll-normal-header'} style={{ ...customStyle.backgroundColor('disabled') }}>
+                {
+                  this.props.renderHeader && this.props.renderHeader(this.watchHeaderHeight)
+                }
+              </View>
+          }
+          <View style={{ ...customStyle.backgroundColor('bgColor'), paddingTop: `${fixHeader ? headerHeight : 0}px` }}
           >
-            {this.props.renderContent}
+            {
+              emptyShow ? (
+                <GResult
+                loading={loading}
+                isEmpty={!this.data.length}
+                type="scope"
+              >
+                {this.props.renderContent}
+              </GResult>
+              )
+              :
+              this.props.renderContent
+            }
           </View>
           {
-            empty && divider ? <GDivider other={{ paddingBottom: (bottom ? bottom + 20 : 0) + 'rpx' }} /> : null
+            !!this.data.length && empty && divider && <GDivider lineColor="transparent" other={{ paddingBottom: `${fixBottom ? bottomHeight : 0}px` }} />
           }
           {/* <Top 
             ref={this.topRef} 
           /> */}
           {
-            _header ?
-              null :
-              <View className='header' style={{ ...customStyle.backgroundColor('disabled') }}>
-                {
-                  this.props.renderHeader
-                }
-              </View>
+            !loading && 
+            <View className={fixBottom ? 'scroll-fix-bottom' : 'scroll-normal-bottom'} id="scroll-bottom">
+              { this.props.renderBottom && this.props.renderBottom(this.watchBottomHeight)}
+            </View>
           }
-          {_bottom ? null : this.props.renderBottom}
         </View>
         <View
           className='active'

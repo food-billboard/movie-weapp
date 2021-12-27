@@ -1,11 +1,12 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
+import Mime from 'mime'
 import { View, Textarea } from '@tarojs/components'
 import Emoj from '../emojSwiper'
-import { IProps, IState } from './index.d'
 import style from '~theme/style'
-import { EMediaType, upload, getTemplatePathMime } from '~utils'
+import { EMediaType, Upload } from '~utils'
 import { IMAGE_CONFIG } from '~config'
-import { noop } from 'lodash'
+import noop from 'lodash/noop'
 
 import './index.scss'
 
@@ -39,7 +40,7 @@ export default class extends Component<IProps, IState> {
     // lifeStatus: false
   }
 
-  private EmojRef = Taro.createRef<Emoj>()
+  private EmojRef = React.createRef<Emoj>()
 
   //重置状态
   public resetStatus = (status?) => this.handleShowDetailFunc(false)
@@ -62,8 +63,8 @@ export default class extends Component<IProps, IState> {
         const { tempFilePaths } = res //地址的字符串数组
         //文件上传
         return Promise.all((Array.isArray(tempFilePaths) ? tempFilePaths : [tempFilePaths]).map((tempPath: string) => {
-          const mime = getTemplatePathMime(tempPath)
-          return upload(tempPath)
+          const mime = Mime.getType(tempPath)
+          return Upload(tempPath)
         }))
       } else {
         return Promise.reject()
@@ -111,8 +112,8 @@ export default class extends Component<IProps, IState> {
         } = res
         //文件上传
         return Promise.all([
-          upload(thumbTempFilePath),
-          upload(tempFilePath)
+          Upload(thumbTempFilePath),
+          Upload(tempFilePath)
         ])
       }
     })

@@ -1,33 +1,80 @@
 @import "~taro-ui/dist/style/components/article.scss";
-.head{
+.newsheader{
     width:100%;
-    height:200px;
+    // height:200px;
     box-sizing:border-box;
-    padding:10px;
-    .img{
-      width: 180px;
-      height:180px;
-      box-shadow: 0 3px 6px 0px rgba(0, 0, 0, 0.12);
+    padding:20px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    &-background {
+        background-size: cover;
+        filter: blur(50px);
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
     }
-    .detail{
-        width:430px;
-        height:180px;
-        .article{
-            
+    &-poster{
+        flex:2;
+        // width: 180px;
+        // height:180px;
+        min-height:180px;
+        width:100%;
+        box-shadow: 0 3px 6px 0px rgba(0, 0, 0, 0.12);
+        display:flex;
+        align-items: center;
+    }
+    &-detail{
+        flex:4;
+        overflow: hidden;
+        // width:430px;
+        // height:180px;
+        &-content{
+            /*
+                因为父元素高度不固定
+                导致子元素设置高度100%无效
+                通过将 子元素绝对定位
+                父元素相对定位
+                解决问题
+            */
+            // position:absolute;
+            // top:0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            height:100%;
+            padding:20px 0;
+            box-sizing: border-box;
+            &-name{
+                white-space: nowrap;
+                overflow-x: scroll;
+            }
+            &-name::-webkit-scrollbar {
+                display:none
+            }
+            // &-desc{
+            //     white-space: nowrap;
+            //     text-overflow: ellipsis;
+            //     overflow: hidden;
+            // }
         }
     }
-    .img,
-    .detail{
+    &-poster,
+    &-detail{
         margin-right:20px;
-        float:left;
+        // float:left;
     }
     .enter{
-        width:80px;
-        float:right;
-        height:180px;
+        flex:1;
+        // width:80px;
+        // float:right;
+        // height:180px;
         font-size:50px;
         text-align:center;
-        line-height:180px;
+        // line-height:180px;
         font-weight:500;
     }
 }

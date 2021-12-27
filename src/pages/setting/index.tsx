@@ -1,22 +1,24 @@
-import Taro, { Component, Config } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View, Button } from '@tarojs/components'
-import GRadio from '~components/radio'
+import { AtRadio } from 'taro-ui'
+import { merge } from 'lodash'
 import Model from '~components/model'
 import List from '~components/linearlist'
-import Comment from '~components/comment'
 import GColor from './components/color'
 import { TypeColor, colorChange, colorStyleChange } from '~theme/color'
-import { router, routeAlias, createSystemInfo, withTry, clearToken } from '~utils'
-import { Toast } from '~components/toast'
-import { Option } from 'taro-ui/@types/radio'
+import { router, routeAlias, withTry, clearToken, sleep } from '~utils'
+import { EAction } from '~utils/global'
+import { createSystemInfo } from '~config'
+import { RadioOption } from 'taro-ui/types/radio'
 import style from '~theme/style'
-import { signout, getAppInfo, feedback, preCheckFeedback } from '~services'
+import { signout, getAppInfo } from '~services'
 
 import './index.scss'
 
 type TOptionType = 'on' | 'off'
 
-interface IOption extends Option<string> {
+interface IOption extends RadioOption<string> {
   value: string
 }
 
@@ -38,16 +40,9 @@ const systemInfo = createSystemInfo()
 
 export default class Setting extends Component<any>{
 
-  public static config: Config = {
-    navigationBarTitleText: '设置',
-    disableScroll: true
-  }
+  public commentRef = React.createRef<Comment>()
 
-  public commentRef = Taro.createRef<Comment>()
-
-  public radioRef = Taro.createRef<GRadio>()
-
-  public colorRef = Taro.createRef<GColor>()
+  public colorRef = React.createRef<GColor>()
 
   public componentDidShow = () => {
     colorStyleChange()
@@ -57,16 +52,16 @@ export default class Setting extends Component<any>{
   public showAbout = async () => {
     const { about: { isOpen, model, ...nextAbout } } = this.state
     Taro.showLoading({ mask: true, title: '稍等...' })
-    const { info = "" } = await getAppInfo()
+
+    const [, data] = await withTry(getAppInfo)()
+    const { info="信息似乎未获取到，但是可以知道这是一个电影推荐的小程序" } = data || {}
     Taro.hideLoading()
+
+    const newModel = merge({}, model, { content: info })
+    
     this.setState({
-      about: {
-        ...nextAbout,
-        isOpen: true,
-        model,
-        content: info
-      },
-      activeModel: model
+      about: merge({}, nextAbout, { isOpen: true, model: newModel }),
+      activeModel: merge({}, newModel, { isOpen: true })
     })
   }
 
@@ -75,47 +70,67 @@ export default class Setting extends Component<any>{
     this.logClose()
     const { button } = this.state
     const { index, ...nextButton } = button
-    console.log(index, (index + 1) % 2)
+
     this.setState({
       button: {
         ...nextButton,
         index: (index + 1) % 2
       }
     })
+
     Taro.showLoading({ mask: true, title: '稍等一下' })
     const [, data] = await withTry(signout)()
     Taro.hideLoading()
     if (data) {
       clearToken()
-      Toast({
-        title: '好了',
-        icon: 'success'
+      Taro.showToast({
+        title: '操作成功',
+        icon: 'success',
+        duration: 1000,
+        mask: true,
+        complete: Taro.switchTab.bind(this, { url: '../main/index' })
       })
     }
   }
 
   //显示反馈组件
   public showFeedback = async () => {
-    //TODO
-    Taro.showToast({
-      title: '功能完善中...',
-      icon: 'none',
-      duration: 1000
-    })
-    return
-    //
-    this.commentRef.current!.open()
+
+    let param: NComment.Comment_Params = {
+      action: EAction.FEEDBACK
+    }
+    router.push(routeAlias.toComment, param)
   }
 
-  public close = (prop) => {
+  private handleAdminSetting = async () => {
+    router.push(routeAlias.adminSetting)
+  }
+
+  public close = (prop: string) => {
     const target = this.state[prop]
     if (!target) return
-    this.setState({
-      prop: {
+    let newState = {
+      [prop]: {
         ...target,
         isOpen: false
       }
-    })
+    }
+
+    if(target.model) {
+      const model = {
+        ...target.model,
+        isOpen: false
+      }
+      newState = {
+        [prop]: {
+          ...newState[prop],
+          model
+        },
+        activeModel: model
+      }
+    }
+
+    this.setState(newState)
   }
 
   public aboutClose = () => this.close('about')
@@ -129,29 +144,6 @@ export default class Setting extends Component<any>{
   //监听退出登录取消
   public logCancel = () => this.logClose()
 
-  //反馈信息发送
-  public handleFeedback = async (value: {
-    text?: string
-    image?: Array<string>
-    video?: Array<string>
-  }) => {
-    Taro.showLoading({ mask: true, title: '预检查中...' })
-    const data = await preCheckFeedback()
-    if (!data) {
-      Taro.showToast({
-        title: '已达到每日反馈上限',
-        icon: 'none',
-        duration: 1000
-      })
-      Taro.hideLoading()
-    } else {
-      const { text = '', image = [], video = [] } = value
-      await withTry(feedback)({ text, image, video })
-      Taro.hideLoading()
-      Taro.showToast({ mask: false, icon: 'none', title: 'success~', duration: 500 })
-    }
-  }
-
   //反馈
   readonly feedback = {
     id: Symbol('feedback'),
@@ -161,11 +153,23 @@ export default class Setting extends Component<any>{
     arrow: arrow,
     iconInfo: {
       value: 'bell',
-      // size: 16, 
       color: TypeColor[ICON_COLOR]
     },
     handle: this.showFeedback,
-    feedback: this.handleFeedback
+  }
+
+  //信息设置
+  readonly adminSetting = {
+    id: Symbol('adminSetting'),
+    title: '基础设置',
+    disabled: false,
+    note: '',
+    arrow: arrow,
+    iconInfo: {
+      value: 'user',
+      color: TypeColor[ICON_COLOR]
+    },
+    handle: this.handleAdminSetting,
   }
 
   //色调
@@ -182,23 +186,25 @@ export default class Setting extends Component<any>{
 
   //控制色调开启关闭
   public colorStyleChange = async (value: TOptionType) => {
-    this.radioRef.current!.handleChange(value)
+    const { colorStyle } = this.state 
+    if(colorStyle === value) return 
+    Taro.showLoading({
+      title: '切换中...',
+      mask: true
+    })
     const data = this.colorRef.current!.state.active
-    let status
-    if (value === colorControl.on) {
-      status = true
-    } else if (value === colorControl.off) {
-      status = false
-    }
+    let status: boolean = value === colorControl.on
     colorChange(status, data, true)
     this.setState({
       colorStyle: status
     })
+    await sleep()
+    Taro.hideLoading()
   }
 
   //颜色选择 
-  public colorSelect = async (value) => {
-    this.colorRef.current!.handleClick(value)
+  public colorSelect = async (value: string) => {
+    await this.colorRef.current!.handleClick(value)
     const { colorStyle } = this.state
     colorChange(colorStyle, value, true)
     this.setState({})
@@ -255,19 +261,9 @@ export default class Setting extends Component<any>{
     if (index == 0) {
       const { button: { model, index, ...nextButton } } = this.state
       this.setState({
-        button: {
-          ...nextButton,
-          model,
-          index: (index + 1) % 2,
-          isOpen: true
-        },
-        activeModel: model,
+        button: merge({}, nextButton, { model, index: (index + 1) % 2, isOpen: true }),
+        activeModel: merge({}, model, { isOpen: true }),
       })
-      Taro.showLoading({ mask: true, title: '稍等一下...' })
-      await withTry(signout)()
-      clearToken()
-      Taro.hideLoading()
-      Taro.switchTab({ url: '../main/index' })
     } else {
       router.push(routeAlias.login)
     }
@@ -282,26 +278,27 @@ export default class Setting extends Component<any>{
       index
     } = button
     const { iconInfo: feedbackInconInfo } = this.feedback
+    const { iconInfo: adminIconInfo } = this.adminSetting
     const { iconInfo: aboutInconInfo } = about
 
     const activeMode = this.colorStyle[color ? 0 : 1]['value']
 
+    const settingList = [
+      { ...about, iconInfo: { ...aboutInconInfo, color: TypeColor[ICON_COLOR] } },
+      { ...this.feedback, iconInfo: { ...feedbackInconInfo, color: TypeColor[ICON_COLOR] } },
+      { ...this.adminSetting, iconInfo: { ...adminIconInfo, color: TypeColor[ICON_COLOR] } }
+    ]
+
     return (
       <View className='setting'>
-        <View className='list'>
-          <List list={[
-            { ...this.feedback, iconInfo: { ...feedbackInconInfo, color: TypeColor[ICON_COLOR] } },
-            { ...about, iconInfo: { ...aboutInconInfo, color: TypeColor[ICON_COLOR] } }
-          ]} />
-          <GRadio
-            style={{ marginTop: '48px' }}
-            extraFactor={false}
-            needHiddenList={false}
-            ref={this.radioRef}
-            radioboxOption={this.colorStyle}
+        <View className='setting-list'>
+          <List list={settingList} />
+          <AtRadio
+            customStyle={{marginTop: '48px'}}
+            options={this.colorStyle}
             value={activeMode}
-            handleChange={this.colorStyleChange}
-          ></GRadio>
+            onClick={this.colorStyleChange}
+          />
           <GColor
             ref={this.colorRef}
             style={{
@@ -321,11 +318,6 @@ export default class Setting extends Component<any>{
           </Button>
         </View>
         <Model info={activeModel} />
-        <Comment
-          buttonText={'发送'}
-          ref={this.commentRef}
-          publishCom={this.feedback.feedback}
-        />
       </View>
     )
   }

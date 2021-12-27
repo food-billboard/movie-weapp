@@ -1,4 +1,5 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { Button, View } from '@tarojs/components'
 import MediaPicker from '../mediaPicker'
 import { IItem, EType } from '../mediaPicker'
@@ -6,11 +7,12 @@ import { IMAGE_CONFIG, SYSTEM_PAGE_SIZE } from '~config'
 import { AtTextarea } from "taro-ui"
 import style from '~theme/style'
 import { upload } from '~utils'
-import { noop } from 'lodash'
+import noop from 'lodash/noop'
 import Curtain from '../curtain'
 
 import './index.scss'
 
+// --------------此组件当前不用
 export interface IProps {
     buttonText: string,
     publishCom: (value: any) => any
@@ -27,7 +29,7 @@ export default class Comment extends Component<IProps>{
         publishCom: noop
     }
 
-    readonly mediaPickerRef = Taro.createRef<MediaPicker>()
+    readonly mediaPickerRef = React.createRef<MediaPicker>()
 
     //图片提交的配置
     readonly imageConfig = {

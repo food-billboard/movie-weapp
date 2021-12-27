@@ -1,11 +1,12 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { AtGrid } from "taro-ui"
 import { router, routeAlias } from '~utils'
 import { TypeColor } from '~theme/color'
 import style from '~theme/style'
 import { SYSTEM_PAGE_SIZE } from '~config'
-import { AtIconBaseProps } from 'taro-ui/@types/base'
+import { AtIconBaseProps } from 'taro-ui/types/base'
 
 import './index.scss'
 
@@ -99,7 +100,7 @@ export default class IconList extends Component<IProps>{
 
   public render() {
     return (
-      <View className='icon'
+      <View className='mine-icon-list'
         style={{ ...style.border(1, 'thirdly', 'solid', 'bottom') }}
       >
         <AtGrid

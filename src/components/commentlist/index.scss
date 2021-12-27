@@ -1,108 +1,107 @@
-@import "~taro-ui/dist/style/components/icon.scss";
+// @import "~taro-ui/dist/style/components/icon.scss";
 @import "~taro-ui/dist/style/components/flex.scss";
-.list{
-    padding:20px;
+.comment-item{
+  padding:20px;
+  width:100%;
+  box-sizing:border-box;
+  margin-top:40px;
+  position:relative;
+  left:0;
+  top:0;
+  &-header{
     width:100%;
-    box-sizing:border-box;
-    margin-bottom:40px;
-    position:relative;
-    left:0;
-    top:0;
-    .head{
-        width:100%;
-        height:60px;
-        &-img,
-        .name,
-        .up{
-            float:left;
-            margin-right:20px;
-        }
-        &-img{
-            width:52px;
-            height:52px;
-            border-radius:50%;
-            overflow:hidden;
-        }
-        .name{
-            width:250px;
-            height:100%;
-            line-height:60px;
-            &-user{
-                height:100%;
-                text-overflow:ellipsis;
-                overflow:hidden;
-                white-space: nowrap;
-                float:left;
-            }
-        }
-        .up{
-            width:160px;
-            height:100%;
-            text-align:center;
-            line-height:60px;
-            vertical-align: middle;
-            &-text{
-                // color:black;
-            }
-        }
-        .time{
-            width:150px;
-            height:100%;
-            float:right;
-            margin-right:20px;
-            line-height:60px;
-        }
+    display:flex;
+    align-items: center;
+    &-image{
+      margin-right:20px;
     }
-    .content{
-        width:100%;
-        height:160px;
-        padding:30px;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 4;
-        overflow: hidden;
-        word-break: break-all;
-        box-sizing:border-box;
-    }
-    .image-list{
-        width:100%;
-        box-sizing:border-box;
-        padding-left:20px;
-        .image{
-            height:220px;
-            overflow:hidden;
-            box-sizing:border-box;
-            padding-right:20px;
-            margin-bottom:20px;
-            position:relative;
-            left:0;
-            top:0;
-            .image-icon{
-                position:absolute;
-                left:50%;
-                top:50%;
-                transform:translateX(-50%) translateY(-50%);
-                font-size:64px;
-                border-radius:32px;
-                opacity:.6;
-            }
+    &-info{
+      display:flex;
+      align-items: center;
+      line-height: 1.6;
+      &-username{
+        overflow:hidden;
+        display:flex;
+        justify-content: start;
+        align-items: center;
+        flex:1;
+        &-content{
+          height:100%;
+          flex:0.05 1 auto;
+          white-space: nowrap;
+          overflow-x: scroll;
         }
-    }
-    .footer{
-        height:50px;
-        white-space:nowrap;
-        &-img{
-            display:inline-block;
-            width:50px;
-            height:100%;
-            border-radius:50%;
-            overflow:hidden;
+        &-content::-webkit-scrollbar {
+          display:none
         }
+      }
+      .comment-item-up{
+        text-align:right;
+        margin-right:20px;
+        flex:1;
+      }
     }
-    .video{
-        width:100%;
-        height:600px;
+    .comment-item-header-sub-time{
+      font-size:small;
     }
+    .comment-item-header-sub-rate{
+
+    }
+  }
+  &-content{
+      width:100%;
+      height:160px;
+      padding:20px 0;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 4;
+      overflow: hidden;
+      word-break: break-all;
+      box-sizing:border-box;
+  }
+  &-image-list{
+      width:100%;
+      box-sizing:border-box;
+      padding-left:20px;
+      &-image{
+          // height:220px;
+          width:100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          overflow:hidden;
+          box-sizing:border-box;
+          padding-right:20px;
+          margin-bottom:20px;
+          position:relative;
+          left:0;
+          top:0;
+          &-icon{
+              position:absolute;
+              left:50%;
+              top:50%;
+              transform:translateX(-50%) translateY(-50%);
+              font-size:64px;
+              border-radius:32px;
+              opacity:.6;
+          }
+      }
+  }
+  .comment-item-footer{
+    height:50px;
+    white-space:nowrap;
+    &-img{
+        display:inline-block;
+        width:50px;
+        height:100%;
+        border-radius:50%;
+        overflow:hidden;
+    }
+  }
+}
+.comment-item-video{
+  width:100%;
+  height:500px;
 }
 
 @media screen and (min-width: 700px) {

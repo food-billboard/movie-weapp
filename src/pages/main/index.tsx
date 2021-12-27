@@ -1,4 +1,5 @@
-import Taro, { Component, Config } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
 import SearchBar from './components/searchButton'
 import Swipers from './components/swiper'
@@ -8,16 +9,12 @@ import Rank from './components/rank'
 import NoticeBar from '~components/noticeBar'
 import { TypeColor, colorStyleChange } from '~theme/color'
 import style from '~theme/style'
-import { throttle } from 'lodash'
+import throttle from 'lodash/throttle'
 import { getDailyNew, getNotice, getRank, getSwiper, getClassify } from '~services'
 
 import './index.scss'
 
 export default class extends Component<any> {
-
-  public config: Config = {
-    navigationBarTitleText: '电影推荐'
-  }
 
   public state: any = {
     swiper: [],
@@ -42,10 +39,11 @@ export default class extends Component<any> {
 
   //重新加载每日上新
   public hanleExchangeDaily = async () => {
+    return 
     Taro.showLoading({ mask: true, title: '查找中' })
     const daily = await this.throttleGetDaily()
     Taro.hideLoading()
-    this.setState({ daily: daily.daily })
+    this.setState({ daily })
   }
 
   public throttleGetDaily = throttle(this.getDaily, 2000)
@@ -59,7 +57,7 @@ export default class extends Component<any> {
     //获取每日上新
     const daily = await this.getDaily()
     //获取排行榜
-    const rank = await getRank()
+    const rank = await getRank(16)
     //获取跑马灯内容
     const notice = await getNotice()
 

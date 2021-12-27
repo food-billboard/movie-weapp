@@ -1,71 +1,143 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
+import { AtAvatar } from 'taro-ui'
 import { View, Text } from '@tarojs/components'
-import ImageLoading from '../imageLoading'
+import Rate from '../rate'
+import Swipper from './swipper'
 import style from '~theme/style'
-import { router, formatNumber, routeAlias } from '~utils'
+import { connect } from 'react-redux'
+import { mapDispatchToProps, mapStateToProps } from './connect'
+import { router, formatNumber, routeAlias, withTry } from '~utils'
+import { putStore, cancelStore } from '~services'
+import noop from 'lodash/noop'
 
 import './index.scss'
 
-export interface IList {
-  id: string,
-  name: string,
-  image: string,
-  hot: number
-}
-
 export interface IProps {
-  list: Array<IList>
+  list: API_USER.IMovieListData[]
   handleClick: (...args: any) => any
+  getUserInfo: TGetUserInfo
+  reload: (...args: any[]) => Promise<any>
 }
 
+@connect(mapStateToProps, mapDispatchToProps)
 export default class IconList extends Component<IProps>{
   
   public static defaultProps: IProps = {
     list: [],
-    handleClick: () => { }
+    handleClick: noop,
+    getUserInfo: () => Promise.resolve(),
+    reload: () => Promise.resolve()
   }
 
   public handleClick = (id: string) => this.props.handleClick(id)
 
-  /**
-   * 路由跳转
-   */
-  public goTo = (_, id, __) => {
-    router.push(routeAlias.detail, { id })
+  //路由跳转
+  public goTo = (_, id, __) => router.push(routeAlias.detail, { id })
+
+  //收藏
+  public handleStore = async (id: string, isStore?: boolean) => {
+    let method
+    if(typeof isStore === 'undefined' || isStore) {
+      method = putStore
+    }else {
+      method = cancelStore
+    }
+    const action = async (res) => {
+      if(res) return 
+      const [err] = await withTry(method)(id)
+      let toastConfig:Taro.showToast.Option = {
+        icon: 'none',
+        duration: 1000,
+        title: ''
+      }
+      if(err) {
+        toastConfig = {
+          ...toastConfig,
+          title: '网络错误，请重试'
+        }
+      }else {
+        toastConfig = {
+          ...toastConfig,
+          title: '操作成功~'
+        }
+      }
+      Taro.showToast(toastConfig)
+    }
+    await this.props.getUserInfo({ action })
+    .catch(_ => {
+      Taro.showToast({
+        title: '未登录无法操作',
+        icon: 'none',
+        duration: 1000
+      })
+    })
+    return this.props.reload()
+  }
+
+  private getUserInfo = (e, id: string) => {
+    e.stopPropagation()
+    router.push(routeAlias.user, { id })
   }
 
   public render() {
 
     const { list } = this.props
+    const listLen = list.length
+    const realList = listLen % 2 == 0 ? list : [...list, null]
 
     return (
-      <View className='icon at-row at-row--wrap at-row__justify--around'>
+      <View className='icon-list at-row at-row--wrap at-row__justify--around'>
         {
-          list.map((value) => {
-            const { id, name, image, hot } = value
+          realList.map((value: API_USER.IMovieListData) => {
+            if(!value) return (
+              <View
+                className='at-col at-col-5'
+              ></View>
+            )
+            const { _id, name, images, hot, rate, store, author } = value
+            const imageList = Array.isArray(images) ? images : [images]
             return (
               <View
-                className='icon-content at-col at-col-5'
+                className='icon-list-content at-col at-col-5'
                 style={{ ...style.backgroundColor('disabled') }}
-                key={id}
+                key={_id}
               >
                 <View
-                  className='img'
-                  onClick={(event) => { this.goTo.call(this, name, id, event) }}
+                  className='icon-list-content-poster'
+                  onClick={(event) => { this.goTo.call(this, name, _id, event) }}
                 >
-                  <ImageLoading src={image} />
+                  {/* <ImageLoading src={image} mode={'scaleToFill'} /> */}
+                  <Swipper style={{height: '100%'}} list={imageList} />
+                  <View 
+                    onClick={this.handleStore.bind(this, _id, store)}
+                    className="at-icon at-icon-heart icon-list-content-poster-store"
+                  ></View>
                 </View>
-                <View>
+                <View className="icon-list-content-main">
                   <View
-                    className='name'
+                    className='icon-list-content-main-name'
                     style={{ ...style.color('primary') }}
-                    onClick={this.handleClick.bind(this, id)}
+                    onClick={this.handleClick.bind(this, _id)}
                   >{name}</View>
-                  <View className='count'
+                  <View className="icon-list-content-main-rate">
+                    <Rate
+                      value={rate}
+                      readonly={true}
+                      rate={noop}
+                      size={8}
+                    ></Rate>
+                  </View>
+                  <View className='icon-list-content-main-extra'
                     style={{ ...style.color('secondary') }}
                   >
-                    {formatNumber(hot)}
-                    <Text className='text'>人看</Text>
+                    <View className="icon-list-content-main-extra-count">
+                      {formatNumber(hot)}
+                      <Text style={{fontSize: '70%'}}>人看</Text>
+                    </View>
+                    <View onClick={(e) => this.getUserInfo.call(this, e, author._id)}>
+                      <AtAvatar size="small" circle image={author.avatar} text={author.username}></AtAvatar>
+                    </View>
                   </View>
                 </View>
               </View>

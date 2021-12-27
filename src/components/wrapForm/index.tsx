@@ -1,4 +1,4 @@
-import { Component } from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { createFieldsStore } from './fieldsStore'
 
@@ -6,8 +6,8 @@ export default class extends Component<any> {
 
   fieldsStore
 
-  constructor() {
-    super(...arguments)
+  constructor(props) {
+    super(props)
     this.init()
   }
 
@@ -22,15 +22,15 @@ export default class extends Component<any> {
     if(!this.props.name) return
     this.fieldsStore = createFieldsStore(this.props.name)
     this.fieldsStore.setProps(this.props)
+    // this.fieldsStore.setUpdate(this.forceUpdate.bind(this))
   }
 
   render() {
-
     return (
-      <View>
-        {
-          this.props.children
-        }
+      <View
+        {...this.props}
+      >
+        {this.props.children}
       </View>
     )
   }

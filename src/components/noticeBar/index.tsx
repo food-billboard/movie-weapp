@@ -1,8 +1,9 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import Modal from '../model'
 import { AtNoticebar } from 'taro-ui'
-import { AtNoticeBarProps } from 'taro-ui/@types/noticebar'
+import { AtNoticeBarProps } from 'taro-ui/types/noticebar'
 
 export interface IProps extends AtNoticeBarProps {
   text: string

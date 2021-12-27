@@ -1,16 +1,17 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { AtRadio, AtButton } from 'taro-ui'
-import Rest from '~components/restFactor'
+// import Rest from '~components/restFactor'
 import { isObject, ICommonFormProps, ICommonFormState } from '~utils'
 import { FORM_ERROR, SYSTEM_PAGE_SIZE } from '~config'
 import customeStyle from '~theme/style'
-import { Option } from 'taro-ui/@types/radio'
+import { RadioOption } from 'taro-ui/types/radio'
 
 import './index.scss'
 
 export interface IProps extends ICommonFormProps {
-  radioboxOption: Array<Option<string>>,
+  radioboxOption: Array<RadioOption<string>>,
   value?: string | false
   initialValue?: string
   needHiddenList?: boolean,
@@ -49,7 +50,7 @@ export default class extends Component<IProps, IState> {
   }
 
   //额外内容
-  public restRef = Taro.createRef<Rest>()
+  // public restRef = React.createRef<Rest>()
 
   public state: IState = {
     value: '',
@@ -99,25 +100,25 @@ export default class extends Component<IProps, IState> {
       error: false
     })
     if (this.initialValue === undefined && typeof initialValue !== 'undefined') this.initialValue = initialValue
-    if (extraFactor) {
-      this.restRef!.current!.reset()
-      this.restValue = []
-    }
+    // if (extraFactor) {
+    //   this.restRef!.current!.reset()
+    //   this.restValue = []
+    // }
     handleChange && handleChange(value)
   }
 
-  //处理额外内容change
-  public handleRestChange = (items: string[]) => {
-    const { handleChange, radioboxOption = [] } = this.props
-    this.restValue = [...items]
-    let item = items.pop()
-    if (item || (!item && !radioboxOption.some(item => item.value == this.value))) {
-      this.setState({
-        value: item || ''
-      })
-      handleChange && handleChange(item)
-    }
-  }
+  // //处理额外内容change
+  // public handleRestChange = (items: string[]) => {
+  //   const { handleChange, radioboxOption = [] } = this.props
+  //   this.restValue = [...items]
+  //   let item = items.pop()
+  //   if (item || (!item && !radioboxOption.some(item => item.value == this.value))) {
+  //     this.setState({
+  //       value: item || ''
+  //     })
+  //     handleChange && handleChange(item)
+  //   }
+  // }
 
   //打开
   public open = () => {
@@ -135,15 +136,15 @@ export default class extends Component<IProps, IState> {
 
   //重置
   public reset = () => {
-    const { extraFactor } = this.props
+    // const { extraFactor } = this.props
     this.setState({
       value: this.initialValue ? this.initialValue : ''
     })
     this.close()
-    if (extraFactor) {
-      this.restRef.current!.reset()
-      this.restValue = []
-    }
+    // if (extraFactor) {
+    //   this.restRef.current!.reset()
+    //   this.restValue = []
+    // }
   }
 
   //获取数据

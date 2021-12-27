@@ -1,7 +1,8 @@
 import qs from 'qs'
 import invariant from 'invariant'
+import { merge } from 'lodash'
 
-import {isType, extend, coverPromise} from './tool'
+import { isType, extend, coverPromise } from './tool'
 
 const HTTP_METHODS = ['OPTIONS', 'GET', 'HEAD', 'POST', 'DELETE', 'PUT', 'TRACT', 'CONNECT']
 
@@ -59,29 +60,31 @@ const init = (settings) => {
 
 }
 
-const request = async function(method, path, settings:any={}) {
-    const {query, data, ...options} = settings
+const request = async function<T=any>(method, path, settings:any={}, origin: boolean=false): Promise<T> {
+    const {query, data, header, ...options} = settings
     invariant(HTTP_METHODS.indexOf(method) >= 0, '错误的请求方法')
 
     //参数配置
-    const setting: any = {
+    let setting: any = {
         url: joinUrl(path, defaultHost, query),
         method,
+        header,
         data
     }
     
-    extend(true, setting, defaultOptions, options)
+    setting = merge({}, defaultOptions, setting, options)
 
-    if(isType(dynamicOptions, 'Fucntion')) {
-        const dynamicOptionsPromise = coverPromise(dynamicOptions)
-        const args: any = []
-        args[0] = extend(true, {path, query}, setting)
-        const dynaicSetting = await dynamicOptionsPromise(...args)
-        extend(true, setting, {data: qs.stringify(data)}, dynamicOptions)
-    }
+    // if(isType(dynamicOptions, 'Fucntion')) {
+    //     const dynamicOptionsPromise = coverPromise(dynamicOptions)
+    //     const args: any = []
+    //     args[0] = extend(true, {path, query}, setting)
+    //     const dynaicSetting = await dynamicOptionsPromise(...args)
+    //     extend(true, setting, { data: qs.stringify(data) }, dynamicOptions)
+    // }
+    if(Object.prototype.toString.call(data) != '[object ArrayBuffer]') extend(true, setting, { data: qs.stringify(data) })
     try {
         const response = await Taro.request(setting)
-        return errorHandler('REQUEST_SUCCESS', { response })
+        return errorHandler('REQUEST_SUCCESS', { response, origin })
     }catch(err) {
         if(!err.origin && isAlipay) {
             return errorHandler("REQUEST_SUCCESS", {response: err})

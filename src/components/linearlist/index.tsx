@@ -1,9 +1,10 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { AtList, AtListItem } from "taro-ui"
 import { isObject } from '~utils'
 import { SYSTEM_PAGE_SIZE } from '~config/media'
-import { AtIconBaseProps } from 'taro-ui/@types/base'
+import { AtIconBaseProps } from 'taro-ui/types/base'
 
 import './index.scss'
 
@@ -32,7 +33,7 @@ export interface IList {
 
 export interface IProps {
   list: Array<IList>
-  style?: any
+  style?: React.CSSProperties
 }
 
 export default class List extends Component<IProps>{
@@ -41,37 +42,40 @@ export default class List extends Component<IProps>{
   }
 
   public render() {
+    
     const { list, style = {} } = this.props
-    const icon = list.map((value) => {
-      const {
-        title = '标签',
-        disabled = false,
-        note = '',
-        arrow = 'right',
-        iconInfo,
-        handle = () => { },
-        id
-      } = value
-      const _iconInfo = { size: SYSTEM_PAGE_SIZE(24), ...iconInfo }
-      return (
-        <AtListItem
-          key={id.toString()}
-          title={title}
-          disabled={disabled}
-          onClick={handle}
-          note={note}
-          arrow={arrow}
-          iconInfo={{ ..._iconInfo }}
-        />
-      )
-    })
+
     return (
       <View
         className='list'
         style={isObject(style) ? style : {}}
       >
         <AtList hasBorder={true}>
-          {icon}
+          {
+            list.map((value) => {
+              const {
+                title = '标签',
+                disabled = false,
+                note = '',
+                arrow = 'right',
+                iconInfo,
+                handle = () => { },
+                id
+              } = value
+              const _iconInfo = { size: SYSTEM_PAGE_SIZE(24), ...iconInfo }
+              return (
+                <AtListItem
+                  key={id.toString()}
+                  title={title}
+                  disabled={disabled}
+                  onClick={handle}
+                  note={note}
+                  arrow={arrow}
+                  iconInfo={{ ..._iconInfo }}
+                />
+              )
+            })
+          }
         </AtList>
       </View>
     )

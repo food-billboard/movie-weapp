@@ -1,4 +1,5 @@
-import Taro, { Component } from "@tarojs/taro"
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { AtTag } from 'taro-ui'
 import SearchButton from '~components/searchbutton'
@@ -6,14 +7,14 @@ import { SYSTEM_PAGE_SIZE } from '~config'
 import { getHot } from '~services'
 import style from '~theme/style'
 import { router, routeAlias } from '~utils'
-import { noop } from 'lodash'
+import noop from 'lodash/noop'
 
 import './index.scss'
 
 const HOT_HEIGHT = SYSTEM_PAGE_SIZE(35)
 
 interface Hot {
-  key_word: string,
+  name: string,
   _id: string
 }
 
@@ -35,12 +36,12 @@ export default class extends Component<IProps, IState> {
     hot: []
   }
 
-  public searchBarRef = Taro.createRef<SearchButton>()
+  public searchBarRef = React.createRef<SearchButton>()
 
   public componentDidMount = async () => await this.fetchData()
 
   public fetchData = async () => {
-    const hot = await getHot()
+    const hot = await getHot() || []
     this.setState({
       hot
     })
@@ -63,32 +64,38 @@ export default class extends Component<IProps, IState> {
           control={control}
         />
         {
-          hot.length ?
+          !!hot.length &&
             <View
               className='at-row hotsearch at-row__align--center'
               style={{ height: hotShow ? hotShow + 'px' : '0', ...style.backgroundColor('bgColor'), ...style.color('primary') }}>
               <View
-                className='at-col at-col-1 hotlist title'
+                className='at-col at-col-1 title'
               >热搜</View>
               {
                 hot.map((value) => {
-                  const { key_word, _id: id } = value
+                  const { name, _id: id } = value
                   return (
-                    <View className='at-col at-col-2 hotlist'
+                    <View className='at-col at-col-3'
                       key={id}>
                       <AtTag
-                        customStyle={{ ...style.backgroundColor('disabled'), ...style.color('primary') }}
+                        customStyle={{ 
+                          ...style.backgroundColor('disabled'), 
+                          ...style.color('primary'), 
+                          width: '100%',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis'
+                        }}
                         type={"primary"}
                         size={"normal"}
                         circle={true}
                         onClick={(event) => { this.getHot(id, event) }}
-                      >{key_word}</AtTag>
+                      >{name}</AtTag>
                     </View>
                   )
                 })
               }
             </View>
-            : null
         }
       </View>
     )

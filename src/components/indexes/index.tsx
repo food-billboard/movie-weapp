@@ -1,4 +1,5 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { AtIndexes } from 'taro-ui'
 
 export interface Item {
@@ -38,11 +39,12 @@ export default class extends Component<IProps, IState> {
 
   public render() {
 
-    const { list=[] } = this.props
+    const { list=[], ...nextProps } = this.props
 
     return (
       <AtIndexes
         list={list}
+        {...nextProps}
         onClick={this.handleClick}
       >
       </AtIndexes>

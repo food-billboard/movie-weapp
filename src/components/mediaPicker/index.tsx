@@ -1,17 +1,16 @@
-import Taro, { Component } from '@tarojs/taro'
-import { View, Text, Image } from '@tarojs/components'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
+import { View, Image, ScrollView } from '@tarojs/components'
 import GVideo from '../video'
-import { IMAGE_CONFIG, SYSTEM_PAGE_SIZE, FORM_ERROR } from '~config'
+import { IMAGE_CONFIG, SYSTEM_PAGE_SIZE } from '~config'
 import style from '~theme/style'
-import { findIndex } from 'lodash'
-import { Toast } from '~components/toast'
 import { isObject, EMediaType, ICommonFormProps, ICommonFormState } from '~utils'
 
 import './index.scss'
 
 export enum EType {
-  VIDEO,
-  IMAGE
+  VIDEO = "VIDEO",
+  IMAGE = "IMAGE"
 }
 
 export interface IFile {
@@ -30,9 +29,7 @@ export interface IProps extends ICommonFormProps {
  initialValue?: Array<IItem>
  value?: Array<IItem>
  length?: number
- style?: any
- width?: number | false
- height?:number | false
+ style?: React.CSSProperties
  close?: boolean
 }
 
@@ -40,12 +37,17 @@ export interface IState extends ICommonFormState {
   value: Array<IItem>
   maxCount: number
   activeVideo: string
-  isVideo: boolean
+  isVideo: false | string 
 }
 
 const { count } = IMAGE_CONFIG
 
 const FLEX_MAX_SIZE = 12
+
+const MEDIA_COMPONENT_STYLE = {
+  ...style.color('primary'),
+  fontSize: SYSTEM_PAGE_SIZE() * 1.5 + 'px',
+}
 
 export default class extends Component<IProps, IState> {
 
@@ -56,8 +58,10 @@ export default class extends Component<IProps, IState> {
     maxCount: count,
     error: false,
     activeVideo: '',
-    isVideo: false
+    isVideo: false,
   }
+
+  private videoRef:GVideo
 
   //表单value
   private _value
@@ -75,17 +79,41 @@ export default class extends Component<IProps, IState> {
     }
   }
 
+  private set value(value) {
+    this.setState({
+      value
+    })
+  }
+
   //媒体选择
   public handleSelect = (type:EMediaType) => {
+    Taro.showLoading({
+      title: '选择中',
+      mask: true 
+    })
     if(type === EMediaType.IMAGE) {
       return Taro.chooseImage({
         count: IMAGE_CONFIG.count, 
         sizeType: ['original', 'compressed'],
         sourceType: ['album', 'camera'],
       })
+      .then(data => {
+        Taro.hideLoading()
+        return data 
+      })
+      .catch(_ => {
+        Taro.hideLoading()
+      })
     }else if(type === EMediaType.VIDEO) {
       return Taro.chooseVideo({
         sourceType: ['album']
+      })
+      .then(data => {
+        Taro.hideLoading()
+        return data 
+      })
+      .catch(_ => {
+        Taro.hideLoading()
       })
     }
   }
@@ -93,64 +121,79 @@ export default class extends Component<IProps, IState> {
   //视频选择
   public handleVideoChange = async () => {
     const response: any = await this.handleSelect(EMediaType.VIDEO)
+    if(!response) return 
     const { errMsg } = response
     if(errMsg.split(':')[1] !== 'ok') {
       return
     }
     const { tempFilePath, thumbTempFilePath } = response
     const { value:stateValue, maxCount } = this.state
-    const { value:propsValue } = this.props
+
     const itemLen = this.value.length
     if(maxCount < itemLen + 1) {
-      Toast({
+      Taro.showToast({
         title: '超出添加数量',
-        icon: 'fail'
+        icon: 'none',
+        duration: 1000
       })
       return
     }
 
-    this.onChange([ ...stateValue, {url: tempFilePath, type: EMediaType.VIDEO, poster: thumbTempFilePath} ])
+    const newStateValue = [
+      {url: tempFilePath, type: EMediaType.VIDEO, poster: thumbTempFilePath},
+      ...stateValue,
+    ]
+
+
+    this.onChange(newStateValue)
+    this.value = newStateValue as IItem[]
   }
 
   //图片选择
   public handleImageChange = async () => {
     const response: any = await this.handleSelect(EMediaType.IMAGE)
+    if(!response) return 
     const { errMsg } = response
     if(errMsg.split(':')[1] !== 'ok') {
       return
     }
     const { tempFiles=[] } = response
     const { maxCount, value:stateValue } = this.state
-    const { value:propsValue } = this.props
+
     const itemLen = this.value.length
     const tempLen = tempFiles.length
     if(maxCount < itemLen + tempLen) {
-      Toast({
+      Taro.showToast({
         title: '超出添加数量',
-        icon: 'fail'
+        icon: 'none',
+        duration: 1000
       })
       return
     }
 
-    this.onChange([ ...stateValue, ...tempFiles.map((val: any) => {
-      const { path } = val
-      return {
-        url: path,
-        type: 'IMAGE'
-      }
-    })])    
+    const newStateValue = [
+      ...tempFiles.map((val: any) => {
+        const { path } = val
+        return {
+          url: path,
+          type: EMediaType.IMAGE
+        }
+      }),
+      ...stateValue
+    ]
+
+    this.onChange(newStateValue)
+    this.value = newStateValue   
   }
 
   //删除
   public handleClose = (target: string) => {
-    const index = findIndex(this.value, (val: any) => {
-      const { url } = val
-      return url === target
-    })
+    const index = this.value.findIndex((val: any) => val.url === target)
     if(index < 0) return 
     let data = [...this.value]
     data.splice(index, 1)
     this.onChange(data)
+    this.value = data
   }
 
   //change
@@ -158,7 +201,7 @@ export default class extends Component<IProps, IState> {
     const { handleChange, initialValue, value:propsValue } = this.props
     if(this.initialValue === undefined && typeof initialValue !== 'undefined') this.initialValue = initialValue
     if(typeof propsValue === 'undefined') {
-      this.setState({value}) 
+      this.value = value
     }
     handleChange && handleChange(value)
   }
@@ -168,23 +211,24 @@ export default class extends Component<IProps, IState> {
     this.setState({
       value: this.initialValue ? this.initialValue : [],
       isVideo: false,
-      activeVideo: ''
     })
   }
 
   //查看视频
-  public handlePreviewVideo = (url) => {
+  public handlePreviewVideo = (url: string) => {
     this.setState({
-      activeVideo: url,
-      isVideo: true
+      isVideo: url
     })
   }
 
   //查看图片
   public handlePreviewImage = (url: string) => {
+    const urls = this.value.filter((item:IItem) => {
+      return item.type == EType.IMAGE
+    }).map((item: IItem) => item.url)
     Taro.previewImage({
       current: url,
-      urls:[url]
+      urls: urls
     })
   }
 
@@ -192,12 +236,12 @@ export default class extends Component<IProps, IState> {
   public getData = async (emptyCharge=true) => {
     const { value: items } = this.state
     if(!items.length  && emptyCharge) {
-      await this.setState({
+      this.setState({
         error: true
       })
       return false
     }
-    await this.setState({
+    this.setState({
       error: false
     })
     return items
@@ -205,7 +249,8 @@ export default class extends Component<IProps, IState> {
 
   //关闭视频
   public videoClose = () => {
-    this.setState({isVideo: false, activeVideo: ''})
+    this.setState({ isVideo: false })
+    this.videoRef.stop()
   }
 
   //设置error
@@ -220,20 +265,11 @@ export default class extends Component<IProps, IState> {
     const { 
       length=3, 
       style: customStyle={}, 
-      width, 
-      height, 
       close=true, 
       error:propsError=false 
     } = this.props
 
-    const { maxCount, activeVideo, isVideo, error: stateError } = this.state
-
-    const buttonStyle = {
-      ...style.backgroundColor('disabled'), 
-      ...style.color('primary'), 
-      ...style.border(1, 'disabled', 'solid', 'all'),
-      ...((propsError || stateError) ? FORM_ERROR : {})
-    }
+    const { maxCount, isVideo, error: stateError } = this.state
 
     return (
       <View 
@@ -241,85 +277,69 @@ export default class extends Component<IProps, IState> {
         style={isObject(customStyle) ? customStyle : {}}
       >
         <View 
-          className='title at-row at-row__justify--between' 
+          className="media-control-com"
           style={{display: maxCount === this.value.length ? 'none' : 'flex'}}
         >
-          <View className='image-title at-col at-col-5'>
-            <View 
-              className='at-row at-row__align--center at-row__justify--center btn' 
-              style={{...buttonStyle}}
-              onClick={this.handleImageChange.bind(this)}
-            >
-              <View 
-                className='at-icon at-icon-image' 
-                style={{fontSize: SYSTEM_PAGE_SIZE() + 'px'}}
-              ></View>
-              <Text>图片选择</Text>
-            </View>
-          </View>
-          <View className='video-title at-col at-col-5 at-col-offset-2'>
-            <View 
-              className='at-row at-row__align--center at-row__justify--center btn' 
-              style={buttonStyle}
-              onClick={this.handleVideoChange.bind(this)}
-            >
-              <View 
-                className='at-icon at-icon-video' 
-                style={{fontSize: SYSTEM_PAGE_SIZE() + 'px'}}
-              ></View>
-              <Text>视频选择</Text>
-            </View>
-          </View>
+          <View 
+            className='at-icon at-icon-image media-control-com-image' 
+            style={MEDIA_COMPONENT_STYLE}
+            onClick={this.handleImageChange.bind(this)}
+          ></View>
+          <View 
+            className='at-icon at-icon-video media-control-com-video' 
+            style={MEDIA_COMPONENT_STYLE}
+            onClick={this.handleVideoChange.bind(this)}
+          ></View>
         </View>
-        <View 
-          className='main at-row at-row--wrap' 
-          style={{marginTop: '10px'}}
+        <ScrollView
+          scrollX
+          style={{ whiteSpace: 'nowrap', marginTop: '10px' }}
         >
           {
             this.value.map((val: any) => {
               const { url, type, poster='' } = val
               return (
                 <View 
-                  className={'at-col media-content ' + `at-col-${FLEX_MAX_SIZE / length}`} 
                   key={url} 
-                  style={{...(width ? {width: width + 'px'} : {}), ...(height ? {height: height + 'px'} : {}), marginBottom: '5px' }}
+                  className="media-content"
                 >
-                  <View className='media-main'>
-                    <View 
-                      className='at-icon at-icon-close icon' 
-                      style={{...style.color('primary'), fontSize: SYSTEM_PAGE_SIZE() + 'px'}}
-                      onClick={(e) => {this.handleClose.call(this, url)}}
-                    ></View>
-                    {
-                      type === EType.IMAGE &&
-                      <Image
-                        onClick={() => {this.handlePreviewImage.call(this, url)}}
-                        className='image'
-                        src={url}
-                      ></Image>
-                    }
-                    {
-                      type === EType.VIDEO &&
-                      <Image 
-                        onClick={() => {this.handlePreviewVideo.call(this, url)}}
-                        src={poster}
-                        className='video'
-                      ></Image>
-                    }
-                  </View>
+                  <View 
+                    className='at-icon at-icon-close icon' 
+                    style={{...style.color('primary'), fontSize: SYSTEM_PAGE_SIZE() + 'px'}}
+                    onClick={(_) => {this.handleClose.call(this, url)}}
+                  ></View>
+                  {
+                    type === EType.IMAGE &&
+                    <Image
+                      onClick={() => {this.handlePreviewImage.call(this, url)}}
+                      className='image'
+                      src={url}
+                    ></Image>
+                  }
+                  {
+                    type === EType.VIDEO &&
+                    <Image 
+                      onClick={() => {this.handlePreviewVideo.call(this, url)}}
+                      src={poster}
+                      className='video'
+                    ></Image>
+                  }
                 </View>
               )
             })
           }
-        </View> 
+        </ScrollView>
         <View 
           className='preview-video' 
           style={{visibility: isVideo ? 'visible' : 'hidden'}}
         >
           {
             <GVideo
-              style={{width: '100%', height: '100%', ...(isVideo ? {} : {display: 'none'})}}
-              src={activeVideo}
+              ref={(ref: any) => this.videoRef = ref}
+              style={{ width: '100%', height: '100%', display: isVideo ? 'block' : 'none' }}
+              muted={true}
+              autoplay
+              src={isVideo ? isVideo : ''}
             ></GVideo>
           }
           {

@@ -1,6 +1,8 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
+import merge from 'lodash/merge'
+import noop from 'lodash/noop'
 import { View } from '@tarojs/components'
-import { IProps, IState } from './index.d'
 import Ellipsis from '../ellipsis'
 import ImageLoading from '../imageLoading'
 import style from '~theme/style'
@@ -17,14 +19,14 @@ interface IContent {
 
 export interface IProps {
   content: IContent
-  style?: {} | object
+  style?: React.CSSProperties
+  handleSizeChange?: (...args: any[]) => any
 }
 
-export interface IState {
-
-}
+export interface IState {}
 
 export default class NewsHead extends Component<IProps, IState>{
+
   public static defaultProps: IProps = {
     content: {
       name: '',
@@ -32,38 +34,52 @@ export default class NewsHead extends Component<IProps, IState>{
       image: '',
       id: ''
     },
-    style: {}
+    style: {},
+    handleSizeChange: noop
   }
 
-  public handleClick = (id: string) => {
-    router.push(routeAlias.detail, { id })
+  componentDidMount = () => {
+    const { handleSizeChange } = this.props 
+    handleSizeChange && handleSizeChange()
   }
+
+  handleSizeChange = (show) => this.props.handleSizeChange && this.props.handleSizeChange(show)
+
+  public handleClick = (id: string) => router.push(routeAlias.detail, { id })
 
   public render() {
+
     const { content, style: propsStyle } = this.props
-    const { detail, name, id, image } = content
+    const { detail, name, id, image } = content || {}
+
     return (
-      <View className='head'
+      <View 
+        className='newsheader'
         style={propsStyle}
-        onClick={this.handleClick.bind(this, id)}>
-        <View className='img'>
-          <ImageLoading src={image} loadingProps={{ content: '' }} />
+        onClick={this.handleClick.bind(this, id)}
+      >
+        <View className="newsheader-background" style={{
+          background: `url(${image})`
+        }}></View>  
+        <View className='newsheader-poster'>
+          <ImageLoading 
+            customStyle={{display: 'flex'}} 
+            src={image} 
+            loadingProps={{ content: '' }} 
+            mode={'widthFix'} 
+          />
         </View>
-        <View className='detail'>
-          <View className='at-article'>
-            <View className='at-article__h3' style={{ ...style.color('primary') }}>
+        <View className='newsheader-detail'>
+          <View className="newsheader-detail-content">
+            <View className='newsheader-detail-content-name' style={{ ...style.color('primary') }}>
               {name}
             </View>
-            <View className='at-article__content'>
-              <View className='at-article__section'>
-                <View className='at-article__p article' style={{ ...style.color('thirdly') }}>
-                  <Ellipsis
-                    style={{ padding: 0 }}
-                    text={detail}
-                  ></Ellipsis>
-                </View>
-              </View>
-            </View>
+            <Ellipsis
+              text={detail}
+              style={{padding: '10rpx 0 10rpx 15rpx', marginTop: '20rpx', ...style.border(1, 'bgColor', 'dashed', 'all'), borderRadius: '10rpx'}}
+              needPoint={false}
+              onChange={this.handleSizeChange}
+            ></Ellipsis>
           </View>
         </View>
         <View className={'enter'}

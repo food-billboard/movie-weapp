@@ -1,8 +1,9 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
 import { AtModal, AtModalHeader, AtModalContent, AtModalAction, AtButton } from "taro-ui"
 import style from '~theme/style'
-import { noop } from 'lodash'
+import noop from 'lodash/noop'
 
 import './index.scss'
 
@@ -38,6 +39,7 @@ export default class Setting extends Component<IProps>{
   }
 
   public render() {
+
     const { info, content: renderContent = false } = this.props
     const {
       isOpen,
@@ -49,10 +51,11 @@ export default class Setting extends Component<IProps>{
       onConfirm,
       content
     } = info
+
     return (
       <AtModal
         isOpened={isOpen}
-        onCancel={onCancel}
+        onCancel={onCancel || onClose}
       >
         {
           title && title.length ?

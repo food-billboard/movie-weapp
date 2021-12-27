@@ -1,11 +1,12 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
 
 import './index.scss'
 
 export interface IItemProps {
   type: string,
-  value: string | number | Array<ItypeList>
+  value: string | number | API_USER.ItypeList[]
 }
 
 export default class Item extends Component<IItemProps>{

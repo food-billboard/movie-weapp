@@ -1,5 +1,6 @@
 import Taro from '@tarojs/taro'
-import { styleChange, createSystemInfo } from '~utils'
+import { styleChange } from '~utils'
+import { createSystemInfo } from '~config'
 
 const systemInfo = createSystemInfo()
 
@@ -283,7 +284,7 @@ export const colorChange = (status: boolean, styleColor: string, needUpdateStora
       TypeColor = { ...TypeColor, ...color[DAY][styleColor] }
     }
     systemInfo.setColorStyle({
-      style: status,
+      style: !!status,
       color: styleColor
     })
   }
@@ -305,18 +306,16 @@ export const colorChange = (status: boolean, styleColor: string, needUpdateStora
 
 //样式修改
 export const colorStyleChange = (isTab=false) => {
-  let _status
-    //查看缓存
-    const value = systemInfo.getColorStyle()
-    const { style, color: styleColor } = value
-    _status = value
-    colorChange(style, styleColor, true)
-    if(isTab) {
-      Taro.setTabBarStyle({ 
-        color: '#000000',
-        selectedColor: '#ff6600',
-        backgroundColor: TypeColor['bgColor'],
-        borderStyle: 'white'
-      })
-    }
+  //查看缓存
+  const value = systemInfo.getColorStyle()
+  const { style, color: styleColor } = value
+  colorChange(style, styleColor, true)
+  if(isTab) {
+    Taro.setTabBarStyle({ 
+      color: '#000000',
+      selectedColor: '#ff6600',
+      backgroundColor: TypeColor['bgColor'],
+      borderStyle: 'white'
+    })
+  }
 }

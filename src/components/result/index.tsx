@@ -1,25 +1,48 @@
-import Taro, { Component } from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
+import { View, Text } from '@tarojs/components'
+import './index.scss'
 
 export interface IProps {
-  isEmpty: (() => boolean) | boolean
+  isEmpty: (() => boolean) | boolean,
+  loading: boolean
+  type?: 'global' | 'scope'
 }
 
 export interface IState {} 
 
-export default class extends Component<IProps> {
+const GlobalEmpty = () => {
+  return (
+    <View className="result-point">
+      <Text className="result-text">暂时没有数据，去看看其他的吧</Text>
+      <View className="at-icon at-icon-alert-circle"></View>
+    </View>
+  )
+}
 
-  render() {
-    const { isEmpty } = this.props
+const ScopeEmpty = (props) => {
+  return (
+    props.children 
+  )
+}
+
+export default class extends Component<IProps, IState> {
+  
+  public render() {
+
+    const { isEmpty, loading, type='global' } = this.props
+    const empty = ( typeof isEmpty === 'function' ? isEmpty() : isEmpty ) && !loading
+
     return (
-      <View className="result">
+      <View className="result"> 
         {
-          ( typeof isEmpty === 'function' ? isEmpty() : isEmpty ) ?
-          <View>暂时没有数据</View>
+          empty ? 
+            <GlobalEmpty />
           :
           this.props.children
         }
       </View>
     )
   }
+
 }

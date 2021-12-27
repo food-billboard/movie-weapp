@@ -1,4 +1,5 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { ScrollView, View, Text } from '@tarojs/components'
 import { TypeColor, colorStyleChange } from '~theme/color'
 import style from '~theme/style'
@@ -44,6 +45,7 @@ class News extends Component<IProps>{
         {
           list.map((value) => {
             const { _id: id, name: title, poster: image } = value
+
             return (
               <View className='news-img'
                 onClick={(_) => { this.gotTo.call(this, id) }}

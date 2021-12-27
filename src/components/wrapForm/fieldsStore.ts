@@ -286,10 +286,10 @@ class FieldsStore {
     this.setFields(allFields)
 
     //验证
-    const validator = new AsyncValidator(allRules)
+    const validator: any = new AsyncValidator(allRules)
 
     if (this.options.validateMessages) {
-      validator.messages(this.options.validateMessages);
+      validator.message(this.options.validateMessages);
     }
 
     validator.validate(allValues, options, errors => {

@@ -25,10 +25,23 @@
   opacity: 0;
 }
 
-.header{
-  position:fixed;
-  z-index:99;
+.scroll-fix-header{
   top:0;
+}
+.scroll-fix-header,
+.scroll-fix-bottom{
+  position:fixed;
+  z-index:999;
   left:0;
   overflow:hidden;
+  width:100%;
+}
+.scroll-normal-header,
+.scroll-normal-bottom {
+  
+}
+
+.scroll-fix-bottom{
+  bottom:0;
+  width:100%
 }

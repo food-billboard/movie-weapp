@@ -1,5 +1,6 @@
 import Taro from '@tarojs/taro'
-import {find, findIndex} from 'lodash'
+import find from 'lodash/find'
+import findIndex from 'lodash/findIndex'
 import {cookieParse, isType} from '~utils'
 const COOKIE_ID = 'cookie'
 

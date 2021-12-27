@@ -1,11 +1,12 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { AtGrid } from 'taro-ui'
 import { router, routeAlias } from '~utils'
 
 export interface List {
   _id: string,
   name: string,
-  poster: string
+  icon: string
 }
 
 export interface IProps {
@@ -35,10 +36,10 @@ class Itemize extends Component<IProps, IState>{
         mode='square'
         hasBorder={false}
         data={list.map(item => {
-          const { _id, poster, name } = item
+          const { _id, icon, name } = item
           return {
             id: _id,
-            image: poster,
+            image: icon,
             value: name
           }
         })}

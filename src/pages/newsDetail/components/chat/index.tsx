@@ -1,11 +1,13 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { View, ScrollView, Image } from '@tarojs/components'
 import { AtAvatar, AtActivityIndicator } from 'taro-ui'
 import GVideo from '~components/video'
 import Curtain from '~components/curtain'
 import style from '~theme/style'
 import { formatTime, isObject, EMediaType, valueOf, router, routeAlias } from '~utils'
-import { last, noop } from 'lodash'
+import noop from 'lodash/noop'
+import last from 'lodash/last'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import { TypeColor } from '~theme/color'
 
@@ -39,7 +41,48 @@ export interface INewData extends Exclude<IList, 'createdAt' | 'origin'> {
 export interface IProps {
  list: Array<INewData>
  height?: number
- style?: any
+ style?: React.CSSProperties
+ onScroll?: (...args: any[]) => any
+ autoBottom?: boolean
+ onPreview: (status: boolean) => void
+}
+
+export interface IState {
+  videoShow: boolean
+  activeVideo: string
+  activeScrollItem: string
+  loadLoading: boolean
+}
+
+export interface IContent<T> {
+  text: T 
+  image: T 
+  video: T 
+  audio: T 
+}
+
+export interface IList {
+ type: EMediaType
+ content: string
+ createdAt: string
+ _id: string
+ origin: {
+   _id: string
+   username: string
+   avatar: string
+   isMine: boolean
+ }
+}
+
+export interface INewData extends Exclude<IList, 'createdAt' | 'origin'> {
+ loading: boolean
+ scrollId?: string
+}
+
+export interface IProps {
+ list: Array<INewData>
+ height?: number
+ style?: React.CSSProperties
  onScroll?: (...args: any[]) => any
  autoBottom?: boolean
  onPreview: (status: boolean) => void

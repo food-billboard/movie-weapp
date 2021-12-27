@@ -1,4 +1,5 @@
-import Taro, { Component } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
+import React, { Component } from 'react'
 import { AtDivider } from 'taro-ui'
 import { TypeColor } from '~theme/color'
 
@@ -24,6 +25,7 @@ export default class Divider extends Component<IProps> {
   }
 
   public render() {
+    
     const {
       content,
       fontSize,
@@ -32,13 +34,14 @@ export default class Divider extends Component<IProps> {
       fontColor = TypeColor['thirdly'],
       lineColor = TypeColor['thirdly']
     } = this.props
+
     return (
       <AtDivider
         content={content}
         fontColor={fontColor}
         fontSize={fontSize}
         lineColor={lineColor}
-        customStyle={{ marginTop: '20px', ...(isObject(other) ? other : {}) }}
+        customStyle={{ backgroundColor: TypeColor['bgColor'], ...(isObject(other) ? other : {}) }}
       >
         {content ? '' : childNode}
       </AtDivider>
