@@ -1,6 +1,7 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
+import Divider from '../divider'
 import './index.scss'
 
 export interface IProps {
@@ -37,7 +38,7 @@ export default class extends Component<IProps, IState> {
       <View className='result'> 
         {
           empty ? 
-            <GlobalEmpty />
+            <Divider />
           :
           this.props.children
         }

@@ -41,7 +41,7 @@ export default class Divider extends Component<IProps> {
         fontColor={fontColor}
         fontSize={fontSize}
         lineColor={lineColor}
-        customStyle={{ backgroundColor: TypeColor['bgColor'], ...(isObject(other) ? other : {}) }}
+        customStyle={other || {}}
       >
         {content ? '' : childNode}
       </AtDivider>
