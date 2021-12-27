@@ -3,7 +3,6 @@
   &-item{
     display:inline-block;
     width:24vw;
-    height:202px;
     margin-left: 0.8vw;
   }
   &-item:nth-last-of-type(1) {
@@ -11,7 +10,7 @@
   }
   &-text{
     width:100%;
-    line-height:32px;
+    line-height: 1.8;
     text-align:center;
     white-space: nowrap;
     overflow-x: scroll;

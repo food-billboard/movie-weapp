@@ -42,8 +42,6 @@ interface Info {
 
 export interface IState { }
 
-const Tag = ({ className=[] }: { className?: string[] }) => <View className={classnames('at-icon', 'at-icon-tag', ...className)}></View>
-
 export default class Content extends Component<IProps, IState>{
 
   public static defaultProps: IProps = {
@@ -124,7 +122,6 @@ export default class Content extends Component<IProps, IState>{
           </View>
           <View className='data-detail-content-main-rate'>
             <View className='up-rate'>
-              <Tag className={['up-rate-icon']} />
               <View className='up-rate-title'>楼主评分:</View>
             </View>
             <View className='at-row at-row__align--center'>
@@ -139,7 +136,6 @@ export default class Content extends Component<IProps, IState>{
           </View>
           <View className='data-detail-content-main-info'>
             <View className='data-detail-content-main-info-actor'>
-              <Tag className={['data-detail-content-icon']} />
               主演: 
               <Text className='text'
                 style={{ ...style.color('primary') }}
@@ -147,7 +143,6 @@ export default class Content extends Component<IProps, IState>{
             </View>
             <View className='data-detail-content-main-info-director'>
               <View className='at-col director-content'>
-                <Tag className={['data-detail-content-icon']} />
                 导演: 
                 <Text className='text'
                   style={{ ...style.color('primary') }}
@@ -158,7 +153,6 @@ export default class Content extends Component<IProps, IState>{
               </View>
             </View>
             <View className='data-detail-content-main-info-type'>
-              <Tag className={['data-detail-content-icon']} />
                 分类: 
               <Text className='text'
                 style={{ ...style.color('primary') }}
@@ -169,14 +163,12 @@ export default class Content extends Component<IProps, IState>{
             </View>
             <View className='at-row at-row__justify--between data-detail-content-main-info-time-publish'>
               <View className='at-col at-col-6' style={{paddingRight: '1em'}}>
-                <Tag className={['data-detail-content-icon']} />
                 时间: 
                 <Text className='text'
                   style={{ ...style.color('primary') }}
                 >{formatTime(createdAt)}</Text>
               </View>
               <View className='at-col at-col-6' style={{paddingRight: '1em'}}>
-                <Tag className={['data-detail-content-icon']} />
                 上映: 
                 <Text className='text'
                   style={{ ...style.color('primary') }}
@@ -185,14 +177,12 @@ export default class Content extends Component<IProps, IState>{
             </View>
             <View className='at-row at-row__justify--between data-detail-content-main-info-area-lang'>
               <View className='at-col at-col-6 lang' style={{paddingRight: '1em'}}>
-                <Tag className={['data-detail-content-icon']} />
                 语言: 
                 <Text className='text'
                   style={{ ...style.color('primary') }}
                 >{language.map((val: API_USER.ItypeList) => val.value).join(' ')}</Text>
               </View>
               <View className='at-col at-col-6 area' style={{paddingRight: '1em'}}>
-                <Tag className={['data-detail-content-icon']} />
                 地区: 
                 <Text className='text'
                   style={{ ...style.color('primary') }}
@@ -200,7 +190,6 @@ export default class Content extends Component<IProps, IState>{
               </View>
             </View>
             <View className='data-detail-content-main-info-hot'>
-              <Tag className={['data-detail-content-icon']} />
               人气:
               <Text className='text'
                 style={{ ...style.color('primary') }}
@@ -209,8 +198,7 @@ export default class Content extends Component<IProps, IState>{
               </Text>
               <Text className='data-detail-content-main-info-hot-text' style={{ ...style.color('thirdly') }}> 人收藏</Text>
             </View>
-            <View className='look'>
-              <Tag className={['data-detail-content-icon']} />
+            <View className='data-detail-content-main-info-look'>
               浏览:
               <Text className='text'
                 style={{ ...style.color('primary') }}
@@ -218,7 +206,6 @@ export default class Content extends Component<IProps, IState>{
               <Text className='data-detail-content-main-info-look-text' style={{ ...style.color('thirdly') }}> 人看过</Text>
             </View>
             <View className='data-detail-content-main-info-author'>
-              <Tag className={['data-detail-content-icon']} />
               作者:
               <Text 
                 className='text'
@@ -232,7 +219,6 @@ export default class Content extends Component<IProps, IState>{
             <View className='data-detail-content-main-info-description'
               style={{ ...style.border(1, 'disabled', 'dashed', 'left_right'), marginBottom: '10px' }}
             >
-              <Tag className={['data-detail-content-icon']} />
               简介:
               <Ellipsis
                 text={description}
@@ -244,7 +230,6 @@ export default class Content extends Component<IProps, IState>{
               className='mine data-detail-content-main-info-description'
               style={{ ...style.border(1, 'disabled', 'dashed', 'left_right') }}
             >
-              <Tag className={['up-description-icon']} />
                 楼主认为:
                 <Ellipsis
                   text={author_description}
