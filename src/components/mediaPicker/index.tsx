@@ -5,7 +5,6 @@ import { IMAGE_CONFIG, SYSTEM_PAGE_SIZE } from '~config'
 import style from '~theme/style'
 import { isObject, EMediaType, ICommonFormProps, ICommonFormState } from '~utils'
 import GVideo from '../video'
-
 import './index.scss'
 
 export enum EType {
@@ -268,12 +267,12 @@ export default class extends Component<IProps, IState> {
 
     return (
       <View
-        className='media'
+        className='media-picker'
         style={isObject(customStyle) ? customStyle : {}}
       >
         <View
-          className='media-control-com'
           style={{ display: maxCount === this.value.length ? 'none' : 'flex' }}
+          className='media-control-com'
         >
           <View
             className='at-icon at-icon-image media-control-com-image'
@@ -296,7 +295,7 @@ export default class extends Component<IProps, IState> {
               return (
                 <View
                   key={url}
-                  className='media-content"'
+                  className='media-content'
                 >
                   <View
                     className='at-icon at-icon-close icon'

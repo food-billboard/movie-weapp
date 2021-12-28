@@ -21,15 +21,6 @@ const fieldsStore = createFieldsStore('comment', {
   }
 })
 
-const BUTTON_STYLE:any = {
-  position: 'fixed',
-  bottom:0,
-  left:0,
-  width: '100%',
-  height: SYSTEM_PAGE_SIZE(40) + 'px',
-  zIndex: 9
-}
-
 export default class extends Component<any> {
 
   public state: any = {
@@ -289,7 +280,7 @@ export default class extends Component<any> {
             </View>
             <View className='media'>
               <MediaPicker
-                style={{marginBottom: `${SYSTEM_PAGE_SIZE(80)}px`}}
+                style={{marginBottom: `${SYSTEM_PAGE_SIZE(40)}px`}}
                 handleChange={
                   fieldsStore.getFieldProps('media', 'onChange', {
                     initialValue: []
@@ -299,16 +290,36 @@ export default class extends Component<any> {
                 error={!!size(fieldsStore.getFieldsError('media'))}
               ></MediaPicker>
             </View>
-            <AtButton 
-              type='primary' 
-              onClick={this.handleSubmit} 
-              customStyle={merge(BUTTON_STYLE, style.backgroundColor('thirdly'), style.border(1, 'thirdly', 'solid', 'all'))}
-            >发布</AtButton>
-            <AtButton 
-              type='primary' 
-              onClick={this.handleReset} 
-              customStyle={merge(BUTTON_STYLE, { bottom: SYSTEM_PAGE_SIZE(40) + 'px' }, style.backgroundColor('primary'), style.border(1, 'primary', 'solid', 'all'))}
-            >清空</AtButton>
+            <View className='at-row at-row__justify--between'>
+              <View className='at-col at-col-4'>
+                <AtButton 
+                  type='primary' 
+                  onClick={this.handleSubmit} 
+                  customStyle={style.backgroundColor('primary')}
+                >
+                  <View className='at-row at-row__align--center'>
+                    <View className='at-col'>
+                      发布
+                    </View>
+                    <View className='at-icon at-icon-upload at-col at-col__offset-1'></View>
+                  </View>
+                </AtButton>
+              </View>
+              <View className='at-col at-col-4'>
+                <AtButton 
+                  type='primary' 
+                  onClick={this.handleReset}
+                  customStyle={style.backgroundColor('thirdly')}
+                >
+                  <View className='at-row at-row__align--center'>
+                    <View className='at-col'>
+                    清空
+                    </View>
+                    <View className='at-icon at-icon-trash at-col at-col__offset-1'></View>
+                  </View>
+                </AtButton>
+              </View>
+            </View>
           </BaseForm>
        </View>
      ) 

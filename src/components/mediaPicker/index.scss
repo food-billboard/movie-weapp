@@ -1,48 +1,50 @@
 @import "~taro-ui/dist/style/components/flex.scss";
-@import "~taro-ui/dist/style/components/icon.scss";
-.media-control-com {
-  display: flex;
-  justify-content: flex-end;
-  .media-control-com-image,
-  .media-control-com-video {
-    margin-right: 20px;
+
+.media-picker {
+  .media-control-com {
+    display: flex;
+    justify-content: flex-end;
+    .media-control-com-image,
+    .media-control-com-video {
+      margin-right: 20px;
+    }
   }
-}
-.media-content{
-  display: inline-block;
-  width: 23.75vw;
-  height: 23.75vw;
-  margin-left: 1vw;
-  box-sizing: border-box;
-  padding: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 15px;
-  position: relative;
-  .image,
-  .video{
-    width:100%;
-    height:100%;
+  .media-content{
+    display: inline-block;
+    width: 23.75vw;
+    height: 23.75vw;
+    margin-left: 1vw;
+    box-sizing: border-box;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    position: relative;
+    .image,
+    .video{
+      width:100%;
+      height:100%;
+    }
+    .icon{
+      position:absolute;
+      left:-6px;
+      top:0;
+      font-weight: bold;
+    }
   }
-  .icon{
+  .preview-video{
+    width:100vw;
+    height:100vh;
+    position:fixed;
+    left:50%;
+    top:50%;
+    transform:translateX(-50%) translateY(-50%);
+    z-index:99;
+    background-color: rgb(0, 0, 0);
+  }
+  .video-icon{
     position:absolute;
-    left:-6px;
+    right:0;
     top:0;
-    font-weight: bold;
+    font-size:40px;
   }
-}
-.preview-video{
-  width:100vw;
-  height:100vh;
-  position:fixed;
-  left:50%;
-  top:50%;
-  transform:translateX(-50%) translateY(-50%);
-  z-index:99;
-  background-color: rgb(0, 0, 0);
-}
-.video-icon{
-  position:absolute;
-  right:0;
-  top:0;
-  font-size:40px;
 }
