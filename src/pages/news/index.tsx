@@ -3,11 +3,11 @@ import React, { Component } from 'react'
 import { AtList, AtListItem, AtSwipeAction } from "taro-ui"
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
-import { mapDispatchToProps, mapStateToProps } from './connect'
 import { connect } from 'react-redux'
-import { router, routeAlias, formatTime, withTry, valueOf } from '~utils'
+import { router, routeAlias, formatTime, withTry, valueOf, TaroShowModal } from '~utils'
 import throttle from 'lodash/throttle'
 import { SwipeActionOption } from 'taro-ui/types/swipe-action'
+import { mapDispatchToProps, mapStateToProps } from './connect'
 
 import './index.scss'
 
@@ -53,7 +53,7 @@ export default class extends Component<any> {
 
   public componentDidShow = () => {
     //TODO
-    Taro.showModal({
+    TaroShowModal({
       title: '温馨提示',
       content: '功能还在完善中...',
       success: function (_) {

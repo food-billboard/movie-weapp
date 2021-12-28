@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro';
-import { styleChange } from '~utils';
+import { styleChange, supportAndDeal } from '~utils';
 import { createSystemInfo } from '~config';
 
 const systemInfo = createSystemInfo();
@@ -307,19 +307,19 @@ export const colorChange = (
       color: styleColor,
     });
   }
-  Taro.setBackgroundColor({
+  supportAndDeal("setBackgroundColor", {
     backgroundColor: _TypeColor['bgColor'],
     backgroundColorTop: _TypeColor['bgColor'],
     backgroundColorBottom: _TypeColor['bgColor'],
-  });
-  Taro.setNavigationBarColor({
+  })
+  supportAndDeal("setNavigationBarColor", {
     frontColor: '#000000',
     backgroundColor: _TypeColor['bgColor'],
     animation: {
       duration: 400,
       timingFunc: 'easeIn',
     },
-  });
+  })
   return _TypeColor;
 };
 

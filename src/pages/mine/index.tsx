@@ -62,10 +62,10 @@ class Mine extends Component<any>{
   }
 
   public componentDidShow = async () => {
-    ////色调修改时重绘
+    // 色调修改时重绘
     colorStyleChange(true)
 
-    //刷新数据
+    // 刷新数据
     await this.fetchData()
 
   }

@@ -6,12 +6,11 @@ import { pick } from 'lodash'
 import BaseForm from '~components/wrapForm'
 import TagList from '~components/tagList'
 import { createFieldsStore } from '~components/wrapForm/fieldsStore'
-import ComponentCheckbox from '~components/checkbox'
 import { TypeColor } from '~theme/color'
 import style from '~theme/style'
 import { IList } from '~components/linearlist'
 import { SYSTEM_PAGE_SIZE } from '~config'
-import { withTry, router, routeAlias } from '~utils'
+import { withTry, router, routeAlias, TaroShowModal } from '~utils'
 import { Item } from '~components/indexes'
 import GCheckbox, { EDataType } from '../../../issue/components/checkbox'
 import DateRangePicker from '../rangeDatePicker'
@@ -135,7 +134,7 @@ export default class Forms extends Component<IProps> {
 
   //筛选重置
   public onReset = async () => {
-    const { confirm } = await Taro.showModal({
+    const { confirm } = await TaroShowModal({
       title: '提示',
       content: '您的操作会清空当前输入数据! 是否继续?'
     })

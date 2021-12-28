@@ -4,7 +4,7 @@ import { View, ScrollView, Image } from '@tarojs/components'
 import GVideo from '~components/video'
 import Curtain from '~components/curtain'
 import style from '~theme/style'
-import { formatTime, isObject, EMediaType, valueOf, router, routeAlias } from '~utils'
+import { formatTime, isObject, EMediaType, valueOf, router, routeAlias, TaroShowModal } from '~utils'
 import noop from 'lodash/noop'
 import last from 'lodash/last'
 
@@ -178,7 +178,7 @@ export default class extends Component<IProps, IState> {
 
   //查看文本
   public handlePreviewText = (src: string) => {
-    Taro.showModal({
+    TaroShowModal({
       content: src,
     })
   }

@@ -2,6 +2,7 @@ import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { AtTag } from 'taro-ui'
+import { TaroShowModal } from '~utils'
 import { FORM_ERROR } from '~config'
 import style from '~theme/style'
 import { AtTagProps } from 'taro-ui/types/tag'
@@ -43,7 +44,7 @@ export default class extends Component<IProps, IState> {
 
   public handleDelete = (item: Item) => {
     const that = this
-    Taro.showModal({
+    TaroShowModal({
       title: '提示',
       content: '是否删除?',
       success: function (res) {

@@ -2,6 +2,7 @@ export {default as dva} from './dva'
 export {default as request} from './request'
 export { default as cookieParse } from './lib/cookie';
 export { default as router } from './router';
+export * from './supportAndDeal'
 export * from './upload'
 // export * from './upload-file-wx'
 export * from './tool'

@@ -89,7 +89,7 @@ export default class Rank extends Component<IProps, IState>{
             list.map((value: List[], index: number) => {
               return (
                 <SwiperItem
-                  key={value.length}
+                  key={value[0]._id}
                 >
                   <View
                     className='rank-content-item-wrapper'

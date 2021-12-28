@@ -9,7 +9,7 @@ import MediaPicker from '~components/mediaPicker'
 import { EAction } from '~utils/types'
 import { createFieldsStore } from '~components/wrapForm/fieldsStore'
 import style from '~theme/style'
-import { size, router, Upload, EMediaType } from '~utils'
+import { size, router, Upload, EMediaType, TaroShowModal } from '~utils'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import { postCommentToUser, postCommentToMovie, feedback, preCheckFeedback, putVideoPoster } from '~services'
 
@@ -150,7 +150,7 @@ export default class extends Component<any> {
   }
 
   private handleReset = () => {
-    Taro.showModal({
+    TaroShowModal({
       title: '提示',
       content: '是否确定清空输入的内容'
     }).then((res) => {

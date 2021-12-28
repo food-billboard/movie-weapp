@@ -13,7 +13,7 @@ import Rate from '~components/rate'
 import TagList from '~components/tagList'
 import { Item } from '~components/indexes'
 import { colorStyleChange } from '~theme/color'
-import { size, withTry, Upload, routeAlias, router, EMediaType, sleep } from '~utils'
+import { size, withTry, Upload, routeAlias, router, EMediaType, sleep, TaroShowModal } from '~utils'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import style from '~theme/style'
 import { getEditMovieInfo, editIssue, sendIssue } from '~services'
@@ -235,7 +235,7 @@ class Issue extends Component<any> {
 
   //重置
   public handleReset = async () => {
-    Taro.showModal({
+    TaroShowModal({
       title: '提示',
       content: '是否确定重置数据'
     }).then((res) => {
@@ -248,7 +248,7 @@ class Issue extends Component<any> {
 
   //取消
   public handleCancel = async () => {
-    Taro.showModal({
+    TaroShowModal({
       title: '提示',
       content: '是否取消'
     }).then((res) => {

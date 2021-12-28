@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { AtInput, AtForm, AtButton } from 'taro-ui'
 import { connect } from 'react-redux'
-import { router, withTry, routeAlias } from '~utils'
+import { router, withTry, routeAlias, TaroShowModal } from '~utils'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { mapDispatchToProps, mapStateToProps } from './connect'
@@ -34,7 +34,7 @@ class Register extends Component<any>{
   public onPasswordChange = (value: string, event: any) => {
     const { type } = event
     if (type == 'blur' && value.length < 6) {
-      Taro.showModal({
+      TaroShowModal({
         title: '修改失败',
         content: '密码长度不能低于6',
         showCancel: false
@@ -87,7 +87,7 @@ class Register extends Component<any>{
 
   //重置
   public reset = () => {
-    Taro.showModal({
+    TaroShowModal({
       title: '温馨提示',
       content: '您选择了重置，是否确认清空当前页面所有输入的信息',
       showCancel: true,

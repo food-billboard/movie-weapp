@@ -2,6 +2,7 @@ import Taro from '@tarojs/taro'
 import { ScrollView } from '@tarojs/components'
 import { AtTag } from 'taro-ui'
 import React, { memo, useCallback } from 'react'
+import { TaroShowModal } from '~utils'
 
 interface IProps {
   value: Model_Issue.IItem[]
@@ -15,7 +16,7 @@ export default memo((props: IProps) => {
   const handleDelete = useCallback((deleteItem: Model_Issue.IItem) => {
     const { _id } = deleteItem
     if(onChange) {
-      Taro.showModal({
+      TaroShowModal({
         title: '提示',
         content: '是否删除',
         success: function (res) {

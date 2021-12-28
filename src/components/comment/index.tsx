@@ -5,7 +5,7 @@ import noop from 'lodash/noop'
 import { IMAGE_CONFIG, SYSTEM_PAGE_SIZE } from '~config'
 import { AtTextarea } from "taro-ui"
 import style from '~theme/style'
-import { Upload } from '~utils'
+import { Upload, TaroShowModal } from '~utils'
 import MediaPicker, { IItem, EType } from '../mediaPicker'
 import Curtain from '../curtain'
 
@@ -53,7 +53,7 @@ export default class Comment extends Component<IProps>{
     if (!complete) {
       const data = this.mediaPickerRef.current!.state!.isVideo
       if (data) return this.mediaPickerRef.current!.videoClose()
-      await Taro.showModal({
+      await TaroShowModal({
         title: '温馨提示',
         content: '你填写的内容还没有提交，是否关闭',
       }).then(res => {

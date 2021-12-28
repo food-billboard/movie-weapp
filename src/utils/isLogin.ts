@@ -1,4 +1,5 @@
 import Taro from '@tarojs/taro'
+import { TaroShowModal } from '~utils'
 import router from './router'
 import { routeAlias } from './globalType'
 import { getToken } from './token'
@@ -37,7 +38,7 @@ export default {
       if(done) await done()
       return 
     } 
-    return Taro.showModal({
+    return TaroShowModal({
       title: '提示',
       content: '当前未登录，是否前往登录',
       ...dialog

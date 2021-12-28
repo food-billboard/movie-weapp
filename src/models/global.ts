@@ -1,6 +1,6 @@
 import Taro from '@tarojs/taro'
 import { noop } from 'lodash'
-import { router, routeAlias, setToken, getToken, clearToken } from '~utils'
+import { router, routeAlias, setToken, getToken, clearToken, TaroShowModal } from '~utils'
 import { signin, register, signout, getCustomerUserInfo, sendSMS, forget } from '~services'
 
 export default {
@@ -15,7 +15,7 @@ export default {
       function * unlogin() {
         Taro.hideLoading()
         if(!prompt) return false 
-        const res = yield Taro.showModal({
+        const res = yield TaroShowModal({
           title: '您还未登录',
           content: "是否前往登录"
         })
