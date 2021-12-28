@@ -51,6 +51,9 @@ export default class Media extends Component<IProps, IState> {
     this.state = {
       ...config
     }
+
+    // this.instance = Taro.createVideoContext(this.props.id || 'video')
+
   }
 
   public componentDidMount = () => {
@@ -83,7 +86,7 @@ export default class Media extends Component<IProps, IState> {
     clearInterval(this.timer)
   }
 
-  instance = Taro.createVideoContext(this.props.id || 'video', this)
+  instance
 
   timer: any
 
@@ -114,18 +117,16 @@ export default class Media extends Component<IProps, IState> {
   // }
   
   //seek
-  public seek = (time: number) => this.instance && this.instance.seek(time)
+  public seek = (time: number) => this.instance?.seek(time)
 
   //停止视频
-  public stop = () => this.instance && this.instance.stop()
+  public stop = () => this.instance?.stop()
 
   //播放视频
-  public play = () => {
-    this.instance && this.instance.play()
-  }
+  public play = () => this.instance?.play()
 
   //暂停视频
-  public pause = () => this.instance && this.instance.pause()
+  public pause = () => this.instance?.pause()
 
   public error = (err: any) => {
     console.log(err)

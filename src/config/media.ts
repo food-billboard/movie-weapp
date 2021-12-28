@@ -64,7 +64,6 @@ const _getVideoConfig = (key?: string | string[]) => {
   try {
     data = Taro.getStorageSync(VIDEO_KEY) || DEFAULT_VIDEO_CONFIG
   }catch(error) {
-    console.log(error)
     data = DEFAULT_VIDEO_CONFIG
   }
   if(!key) return data

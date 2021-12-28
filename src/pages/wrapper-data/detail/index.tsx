@@ -45,7 +45,7 @@ class Detail extends Component<any> {
 
   //获取数据
   public fetchData = async () => {
-    if(!this.id) {
+    if (!this.id) {
       Taro.showToast({
         title: '网络错误，请重试',
         icon: 'none',
@@ -57,21 +57,21 @@ class Detail extends Component<any> {
     const isLogin = await this.props.getUserInfo({ prompt: false })
     const method = isLogin ? getCustomerMovieDetail : getUserMovieDetail
     return method(this.id)
-    .then(data => {
-      const { comment} = data
-      this.setState({
-        data,
-        commentData: comment,
+      .then(data => {
+        const { comment } = data
+        this.setState({
+          data,
+          commentData: comment,
+        })
+        Taro.hideLoading()
       })
-      Taro.hideLoading()
-    })
-    .catch(err => {
-      Taro.showToast({
-        title: '数据获取出错',
-        icon: 'none'
+      .catch(err => {
+        Taro.showToast({
+          title: '数据获取出错',
+          icon: 'none'
+        })
+        Taro.hideLoading()
       })
-      Taro.hideLoading()
-    })
   }
 
   //打开评论界面
@@ -86,7 +86,7 @@ class Detail extends Component<any> {
   //收藏
   public store = async (store: boolean) => {
     const action = async (res) => {
-      if(!res) return 
+      if (!res) return
       Taro.showLoading({ mask: true, title: '稍等一下' })
       const method = store ? putStore : cancelStore
       await withTry(method)(this.id)
@@ -94,30 +94,30 @@ class Detail extends Component<any> {
       return this.fetchData()
     }
     return this.props.getUserInfo({ action })
-    .catch(() => {
-      Taro.showToast({
-        title: '操作失败，请重试',
-        icon: 'none'
+      .catch(() => {
+        Taro.showToast({
+          title: '操作失败，请重试',
+          icon: 'none'
+        })
       })
-    })
   }
 
   //评分
   public rate = async (value: number) => {
     const action = async (res) => {
-      if(!res) return 
+      if (!res) return
       Taro.showLoading({ mask: true, title: '稍等一下' })
       await withTry(putRate)(this.id, value)
       Taro.hideLoading()
       return this.fetchData()
     }
     return this.props.getUserInfo({ action })
-    .catch(() => {
-      Taro.showToast({
-        title: '操作失败，请重试',
-        icon: 'none'
+      .catch(() => {
+        Taro.showToast({
+          title: '操作失败，请重试',
+          icon: 'none'
+        })
       })
-    })
   }
 
   public render() {
@@ -156,7 +156,7 @@ class Detail extends Component<any> {
             />
           }
         </View>
-        <View 
+        <View
           className='description'
           style={merge(style.color('thirdly'), style.border(1, 'thirdly', 'solid', 'top'))}
         >
@@ -204,14 +204,14 @@ class Detail extends Component<any> {
                 title='卡司'
               />
             </View>
-            <Actor 
+            <Actor
               list={(actor || []).map(item => {
                 const { name, avatar } = item
                 return {
                   name,
                   image: avatar
                 }
-              })} 
+              })}
             />
           </View>
         </EmptyTry>

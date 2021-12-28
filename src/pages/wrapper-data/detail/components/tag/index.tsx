@@ -42,8 +42,8 @@ export default class extends Component<IProps, IState> {
             const { id, value } = val
             return (
               <AtTag
-                key={id}
-                name={id}
+                key={id || value}
+                name={id || value}
                 type='primary'
                 customStyle={{ ...TAG_STYLE, backgroundColor: randomColor(), ...(isObject(style) ? style : {}) }}
               >
