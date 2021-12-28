@@ -84,7 +84,6 @@ class UploadTask {
     return this.setBaseFileInfo()
     .then(this.fileUpload)
     .catch(_ => {
-      console.log(_)
       this.toast()
       return false 
     })
@@ -190,7 +189,7 @@ class UploadTask {
         offset: realOffset
       })
     }catch(err) {
-      console.log(err)
+    
     }finally {
       data = null 
     }

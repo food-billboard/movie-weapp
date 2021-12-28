@@ -139,9 +139,7 @@ class ListContent extends Component<IProps, IState>{
     this.setState({
       activeVideo: target,
       activeVideoPoster: poster
-    }, () => {
-      this.curtainRef.current?.handleShow()
-    })
+    }, this.curtainRef.current?.handleShow)
   }
 
   //监听视频关闭
@@ -153,9 +151,7 @@ class ListContent extends Component<IProps, IState>{
   }
 
   //视频关闭
-  private handleCloseVideo = () => {
-    this.curtainRef.current?.handleClose()
-  }
+  private handleCloseVideo = () => this.curtainRef.current?.handleClose()
 
   public render() {
     const { activeVideoPoster, activeVideo } = this.state
@@ -193,7 +189,7 @@ class ListContent extends Component<IProps, IState>{
                     className='comment-item-header-image'
                     onClick={this.getUser.bind(this, userId)}
                   >
-                    <AtAvatar image={avatar || ''} text='头像' circle></AtAvatar>
+                    <AtAvatar image={avatar || ''} text={username || "头像"} circle></AtAvatar>
                   </View>
                   <View
                     style={{ flexDirection: 'column', flex: 1 }}
@@ -288,6 +284,10 @@ class ListContent extends Component<IProps, IState>{
                               ...style.border(1, 'thirdly', 'dashed', 'all'),
                               boxSizing: 'border-box',
                               padding: `${SYSTEM_PAGE_SIZE(1)}px`
+                            }}
+                            imageStyle={{
+                              display: "flex",
+                              alignItems: "center"
                             }}
                           />
                         </View>

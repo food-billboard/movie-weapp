@@ -37,7 +37,6 @@ export default class Time extends Component<IProps>{
         title: '发生错误，请重试',
         icon: 'none'
       })
-      console.log(err)
     } finally {
       Taro.hideLoading()
     }

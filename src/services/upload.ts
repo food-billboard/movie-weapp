@@ -40,7 +40,6 @@ export const uploadFile = async (params: API_UPLOAD.IUploadParams) => {
     data: file
   }, true)
   .then(data => {
-    console.log(data)
     const { header } = data
     return header
   })

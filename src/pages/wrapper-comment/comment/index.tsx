@@ -196,8 +196,6 @@ export default class extends Component<any> {
         return acc 
       }, [])
 
-      console.log(media)
-
       Taro.showLoading({ mask: true, title: '数据提交中...' })
 
       Upload(newMedia)

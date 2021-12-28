@@ -139,7 +139,7 @@ export default class extends Component<IProps, IState> {
         })
       })
       .catch(_ => {
-        console.log(_)
+
         Taro.showToast({ mask: false, title: 'unknown error', duration: 500 })
       })
   }
