@@ -18,9 +18,9 @@ export default class Item extends Component<IItemProps>{
   public render() {
     const { type, value } = this.props
     return (
-      <View>
-        <Text className='title'>{type}</Text>
-        <Text>
+      <View className='movie-data-list-title-content'>
+        <Text className='movie-data-list-title'>{type}</Text>
+        <Text className='movie-data-list-title'>
           {Array.isArray(value) ? value.join('') : value}
         </Text>
       </View>

@@ -1,27 +1,29 @@
-@import "~taro-ui/dist/style/components/flex.scss";
-.title{
-    width:100%;
-    padding-top:10px;
-    height:120px;
-    .separate{
-        width:2px;
-        height:100px;
-        margin-top:10px;
-        border-radius:1px;
-    }
-    .text{
-        display:block;
-        text-align:center;
-        color:#333;
-    }
-    .message,
-    .folder{
-        text-align:center;
-    }
+@import '~taro-ui/dist/style/components/flex.scss';
+.title {
+  width: 100%;
+  padding-top: 10px;
+  height: 120px;
+  .separate {
+    width: 2px;
+    height: 100px;
+    margin-top: 10px;
+    border-radius: 1px;
+  }
+  .text {
+    display: block;
+    text-align: center;
+    color: #333;
+    font-size: 0.68267rem;
+    line-height: 1.5;
+  }
+  .message,
+  .folder {
+    text-align: center;
+  }
 }
 
 @media screen and (min-width: 700px) {
-    .text{
-        font-size:32px;
-    }
+  .text {
+    font-size: 32px;
+  }
 }

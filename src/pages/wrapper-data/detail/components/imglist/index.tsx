@@ -28,7 +28,11 @@ export default memo((props: IProps) => {
 
   const list = useMemo(() => {
     if(status === 'icon') {
-      return <Swipper className='data-detail-image-content-list' list={(props.list || [])} />
+      return (
+        <View className='data-detail-image-content-list'>
+          <Swipper list={(props.list || [])} />
+        </View>
+      )
     }
     return (
       (props.list || []).map(value => {

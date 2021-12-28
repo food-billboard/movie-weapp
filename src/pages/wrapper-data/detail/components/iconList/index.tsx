@@ -59,7 +59,7 @@ export default class extends Component<IProps, IState> {
       <View className='icon-list'>
         <View
           className='icon-list-text-content'
-          style={{ visibility: activeShow ? 'visible' : 'hidden', ...style.backgroundColor('primary'), ...style.color('disabled') }}
+          style={{ visibility: activeShow ? 'visible' : 'hidden', ...style.backgroundColor('thirdly'), ...style.color('disabled') }}
           onClick={() => { this.props.handleClick && this.props.handleClick() }}
         >
           {active}

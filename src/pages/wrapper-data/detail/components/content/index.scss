@@ -40,6 +40,7 @@
         @extend .ellipsis;
         text-align: left;
         line-height: 1.8;
+        font-size: 32px;
         .text {
           padding-left: .5em;
         }
@@ -53,6 +54,7 @@
         border-radius: 20px;
         box-sizing: border-box;
         padding: 0 5px;
+        font-size: 32px;
       }
     }
   }

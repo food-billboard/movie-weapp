@@ -97,9 +97,9 @@ class List extends Component<IProps>{
                 key={_id}
               >
                 <View
-                  className='list-content-main'
+                  className='list-content-main at-row'
                 >
-                  <View className='list-content-main-poster'>
+                  <View className='list-content-main-poster at-col at-col-4'>
                     <Swipper
                       style={{ height: '100px' }}
                       list={imageList}
@@ -112,7 +112,7 @@ class List extends Component<IProps>{
                       onClick={this.handleStore.bind(this, _id, !store)}
                     ></View>
                   </View>
-                  <View className='list-content-main-detail'
+                  <View className='list-content-main-detail at-col at-col-7'
                     style={merge(style.backgroundColor('disabled'), style.color('secondary'))}
                     onClick={this.goTo.bind(this, _id)}
                   >
@@ -138,7 +138,7 @@ class List extends Component<IProps>{
                       value={hot}
                     />
                   </View>
-                  <View className='list-content-main-slot'>
+                  <View className='list-content-main-slot at-col at-col-2'>
                     {/** TODO */}
                     <Picker
                       selector={this.OP_SELECTOR_MAP}

@@ -1,3 +1,4 @@
+@import "~taro-ui/dist/style/components/flex.scss";
 .list-component {
   .list-content {
     width: 100%;
@@ -5,7 +6,6 @@
     padding: 10px;
     margin-bottom: 20px;
     .list-content-main {
-      display: flex;
       &-poster {
         position: relative;
         left: 0;
@@ -38,6 +38,7 @@
         }
         &-rate {
           width: 100%;
+          line-height: 1.2;
         }
       }
       &-slot {
@@ -52,8 +53,11 @@
     }
   }
 }
-.title {
-  // color:#ff6600;
+.movie-data-list-title-content {
+  line-height: 1.2;
+  .movie-data-list-title {
+    font-size: 32px;
+  }
 }
 
 @media screen and (min-width: 700px) {

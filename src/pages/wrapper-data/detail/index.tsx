@@ -26,6 +26,10 @@ class Detail extends Component<any> {
     commentData: []
   }
 
+  public componentDidMount = () => {
+    this.setTitle()
+  }
+
   public componentDidShow = async () => {
     await this.fetchData()
     colorStyleChange()
@@ -141,8 +145,6 @@ class Detail extends Component<any> {
       ...nextInfo
     } = info
 
-    this.setTitle()
-
     return (
       <View id='detail' style={style.backgroundColor('bgColor')}>
         <View className='video'>
@@ -171,8 +173,8 @@ class Detail extends Component<any> {
               language: (language || []).map(item => ({ value: item.name })),
               createdAt,
               hot,
-              rate: rate || 0,
-              author_rate,
+              rate: parseFloat(rate) || 0,
+              author_rate: parseFloat(author_rate) || 0,
               store,
               author_description,
               author
