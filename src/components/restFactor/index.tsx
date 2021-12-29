@@ -144,7 +144,7 @@ class Rest extends Component<IProps> {
 
     return (
       <View
-        className='rest'
+        className='component-rest'
         style={_style}
       >
         {
@@ -161,12 +161,13 @@ class Rest extends Component<IProps> {
           list={value}
           handleChange={this.onSelectChange}
         ></TagList>
-        <View className='input at-row'>
-          <View className='at-col at-col-2'>
+        <View className='component-rest-input at-row'>
+          <View className='at-col at-col-2 '>
             <AtButton
               onClick={this.handleAdd}
               type='primary'
               customStyle={{ ...customStyle.backgroundColor('primary') }}
+              className='component-rest-input-btn'
             >添加</AtButton>
           </View>
           <View className='at-col at-col-10'>

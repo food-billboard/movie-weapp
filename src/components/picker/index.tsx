@@ -6,6 +6,8 @@ import customStyle from '~theme/style'
 import noop from 'lodash/noop'
 import { ICommonFormProps, isObject, format } from '~utils'
 
+import './index.scss'
+
 interface ISelector {
   disabled?: boolean
   onCancel?: () => any
@@ -200,7 +202,7 @@ export default class extends Component<IProps, IState> {
               value={value}
             >
               <View 
-                className='picker'
+                className='component-picker'
                 style={_style}
               >
                 {title}: {value}
@@ -221,7 +223,7 @@ export default class extends Component<IProps, IState> {
               disabled={disabled ? disabled : (multi.disabled || false)}
               onCancel={multi.onCancel || noop}
             >
-              <View className='picker'
+              <View className='component-picker'
                 style={{ ..._style as any }}
               >
                 {title}: {Array.isArray(value) ? value.join(' & ') : value}
@@ -242,7 +244,7 @@ export default class extends Component<IProps, IState> {
               disabled={disabled ? disabled : (date.disabled || false)}
               onCancel={date.onCancel || noop}
             >
-              <View className='picker'
+              <View className='component-picker'
                 style={{ ..._style }}
               >
                 {title}: {(value + '').length ? format(value, dateShow) : ''}
@@ -261,7 +263,7 @@ export default class extends Component<IProps, IState> {
               end={time.end || this.defaultConfig.end.time}
               disabled={disabled ? disabled : (time.disabled || false)}
             >
-              <View className='picker'
+              <View className='component-picker'
                 style={{ ..._style }}
               >
                 {title}: {(value + '').length ? format(value, this.defaultConfig.time) : ''}

@@ -34,7 +34,7 @@ export default class GTate extends Component<IProps, IState>{
     const { readonly = false, value, style: customerStyle = {}, size = 20 } = this.props
 
     return (
-      <View className='rate'
+      <View className='component-rate'
         style={{ ...customerStyle }}
       >
         {
@@ -55,8 +55,8 @@ export default class GTate extends Component<IProps, IState>{
             />
         }
         <Text
-          className='number'
-          style={{ ...style.color('secondary') }}
+          className='component-rate-number'
+          style={{ ...style.color('secondary'), fontSize: (size as number * 1.3) + "px" }}
         >{value}</Text>
       </View>
     )

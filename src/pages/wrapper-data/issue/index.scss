@@ -1,28 +1,20 @@
 .data-issue {
-  padding: 0 20px 160px 20px;
+  padding: 20px;
   box-sizing:border-box;
-  .video {
+  &-video {
     width:100%;
+    margin-bottom: 20px;
   }
-  .name{
+  &-name{
     width:100%;
     box-sizing:border-box;
   }
-  .description {
+  &-description {
     padding-bottom:40px;
   }
-  .language,
-  .publishTime,
-  .author_rate,
-  .video{
+  &-language,
+  &-publishTime,
+  &-image {
     margin-bottom:40px;
-  }
-  // .issue-fixed-fab {
-  //   position: fixed;
-  //   right: 0;
-  //   bottom: 25vw;
-  // }
-  .image {
-    margin-bottom: 80px;
   }
 }

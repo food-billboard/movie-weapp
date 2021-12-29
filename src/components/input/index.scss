@@ -1,16 +1,27 @@
-.input{
+.component-input,
+.component-textarea{
   border: none;
-  padding:12px 0;
-  height:68.8px;
+  font-size: 28px;
+  box-sizing: border-box;
 }
-.textarea{
-  border:none;
-  padding:12px 0;
+
+.component-input {
+  padding: 12px 0;
+  height: 68.8px;
+  input {
+    font-size: inherit !important;
+  }
+}
+.component-textarea {
+  padding: 12px;
+  textarea {
+    font-size: inherit !important;
+  }
 }
 
 @media screen and (min-width: 700px) {
-  .input,
-  .textarea{
-    font-size:32px;
+  .component-input,
+  .component-textarea {
+    font-size: 32px;
   }
 }

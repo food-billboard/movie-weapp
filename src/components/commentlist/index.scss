@@ -1,115 +1,115 @@
 // @import "~taro-ui/dist/style/components/icon.scss";
-@import "~taro-ui/dist/style/components/flex.scss";
-.comment-item{
-  padding:20px;
-  width:100%;
-  box-sizing:border-box;
-  margin-top:40px;
-  position:relative;
-  left:0;
-  top:0;
-  &-header{
-    width:100%;
-    display:flex;
+@import '~taro-ui/dist/style/components/flex.scss';
+.comment-item {
+  padding: 20px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 40px;
+  position: relative;
+  left: 0;
+  top: 0;
+  &-header {
+    width: 100%;
+    display: flex;
     align-items: center;
-    &-image{
-      margin-right:20px;
+    &-image {
+      margin-right: 20px;
     }
-    &-info{
-      display:flex;
+    &-info {
+      display: flex;
       align-items: center;
       line-height: 1.6;
-      &-username{
-        overflow:hidden;
-        display:flex;
+      &-username {
+        overflow: hidden;
+        display: flex;
         justify-content: flex-start;
         align-items: center;
-        flex:1;
-        &-content{
-          height:100%;
-          flex:0.05 1 auto;
+        flex: 1;
+        font-size: 32px;
+        &-content {
+          height: 100%;
+          flex: 0.05 1 auto;
           white-space: nowrap;
           overflow-x: scroll;
         }
         &-content::-webkit-scrollbar {
-          display:none
+          display: none;
         }
       }
-      .comment-item-up{
-        text-align:right;
-        margin-right:20px;
-        flex:1;
+      .comment-item-up {
+        text-align: right;
+        margin-right: 20px;
+        flex: 1;
       }
     }
-    .comment-item-header-sub-time{
-      font-size:small;
+    .comment-item-header-sub-time {
+      font-size: small;
     }
-    .comment-item-header-sub-rate{
-
+    .comment-item-header-sub-rate {
     }
   }
-  &-content{
-      width:100%;
-      height:160px;
-      padding:20px 0;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 4;
+  &-content {
+    width: 100%;
+    height: 160px;
+    padding: 20px 0;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+    word-break: break-all;
+    box-sizing: border-box;
+    font-size: 28px;
+  }
+  &-image-list {
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 20px;
+    &-image {
+      // height:220px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       overflow: hidden;
-      word-break: break-all;
-      box-sizing:border-box;
-      font-size: 32px;
-  }
-  &-image-list{
-      width:100%;
-      box-sizing:border-box;
-      padding-left:20px;
-      &-image{
-          // height:220px;
-          width:100%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          overflow:hidden;
-          box-sizing:border-box;
-          padding-right:20px;
-          margin-bottom:20px;
-          position:relative;
-          left:0;
-          top:0;
-          &-icon{
-              position:absolute;
-              left:50%;
-              top:50%;
-              transform:translateX(-50%) translateY(-50%);
-              font-size:64px;
-              border-radius:32px;
-              opacity:.6;
-          }
+      box-sizing: border-box;
+      padding-right: 20px;
+      margin-bottom: 20px;
+      position: relative;
+      left: 0;
+      top: 0;
+      &-icon {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        font-size: 64px;
+        border-radius: 32px;
+        opacity: 0.6;
       }
+    }
   }
-  .comment-item-footer{
-    height:50px;
-    white-space:nowrap;
-    &-img{
-        display:inline-block;
-        width:50px;
-        height:100%;
-        border-radius:50%;
-        overflow:hidden;
+  .comment-item-footer {
+    height: 50px;
+    white-space: nowrap;
+    &-img {
+      display: inline-block;
+      width: 50px;
+      height: 100%;
+      border-radius: 50%;
+      overflow: hidden;
     }
   }
 }
-.comment-item-video{
-  width:100%;
-  height:500px;
+.comment-item-video {
+  width: 100%;
+  height: 500px;
 }
 
 @media screen and (min-width: 700px) {
-    .name,
-    .up,
-    .time,
-    .content{
-        font-size:30px;
-    }
+  .name,
+  .up,
+  .time,
+  .content {
+    font-size: 30px;
+  }
 }

@@ -66,11 +66,11 @@ export default class extends Component<IProps, IState> {
         {
           !!hot.length &&
             <View
-              className='at-row hotsearch at-row__align--center'
+              className='at-row hot-search at-row__align--center'
               style={{ height: hotShow ? hotShow + 'px' : '0', ...style.backgroundColor('bgColor'), ...style.color('primary') }}
             >
               <View
-                className='at-col at-col-1 title'
+                className='at-col at-col-1 hot-search-title'
               >热搜</View>
               {
                 hot.map((value) => {

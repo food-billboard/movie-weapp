@@ -109,6 +109,7 @@ class List extends Component<IProps>{
                         'at-icon-heart': !store,
                         'at-icon-heart-2': store
                       })}
+                      style={style.color("primary")}
                       onClick={this.handleStore.bind(this, _id, !store)}
                     ></View>
                   </View>

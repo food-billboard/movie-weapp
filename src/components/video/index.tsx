@@ -24,6 +24,7 @@ export interface IProps {
   danmuList?: Array<IDanmu> | false
   title?: string
   mode?: EVideoMode
+  className?: string 
 }
 
 export interface IState extends IProps {}
@@ -174,6 +175,7 @@ export default class Media extends Component<IProps, IState> {
       id='video',
       src,
       poster,
+      className
     } = this.props
     const {
       mode,
@@ -186,7 +188,7 @@ export default class Media extends Component<IProps, IState> {
 
     return (
       <Video
-        className='video'
+        className={`video ${className}`}
         //待开发
         // danmuList={danmuList}
         style={style}

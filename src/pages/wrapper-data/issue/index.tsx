@@ -31,9 +31,6 @@ const fieldsStore = createFieldsStore('issue', {
 })
 
 const BUTTON_STYLE: any = {
-  position: 'fixed',
-  bottom: 0,
-  left: 0,
   width: '100%',
   height: SYSTEM_PAGE_SIZE(40) + 'px',
   zIndex: 9
@@ -289,7 +286,7 @@ class Issue extends Component<any> {
         <BaseForm
           name='issue'
         >
-          <View className='video'>
+          <View className='data-issue-video'>
             <AtTag
               customStyle={{ ...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly') }}
               type='primary'
@@ -309,7 +306,7 @@ class Issue extends Component<any> {
               error={!!size(fieldsStore.getFieldsError('video'))}
             ></GVideo>
           </View>
-          <View className='name'>
+          <View className='data-issue-name'>
             <AtTag
               customStyle={{ ...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly') }}
               type='primary'
@@ -390,7 +387,7 @@ class Issue extends Component<any> {
             })}
             isError={!!size(fieldsStore.getFieldsError('actor'))}
           />
-          <View className='classify'>
+          <View className='data-issue-classify'>
             <AtTag
               customStyle={{ ...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly') }}
               type='primary'
@@ -415,7 +412,7 @@ class Issue extends Component<any> {
               error={!!size(fieldsStore.getFieldsError('classify'))}
             ></GCheckBox>
           </View>
-          <View className='screen_time'>
+          <View className='data-issue-screen_time'>
             <AtTag
               customStyle={{ ...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly') }}
               type='primary'
@@ -441,7 +438,7 @@ class Issue extends Component<any> {
               error={!!size(fieldsStore.getFieldsError('screen_time'))}
             ></GCommentPicker>
           </View>
-          <View className='language'>
+          <View className='data-issue-language'>
             <AtTag
               customStyle={{ ...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly') }}
               type='primary'
@@ -466,7 +463,7 @@ class Issue extends Component<any> {
               error={!!size(fieldsStore.getFieldsError('language'))}
             ></GCheckBox>
           </View>
-          <View className='description'>
+          <View className='data-issue-description'>
             <AtTag
               customStyle={{ ...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly') }}
               type='primary'
@@ -488,7 +485,7 @@ class Issue extends Component<any> {
               error={!!size(fieldsStore.getFieldsError('description'))}
             ></GDescription>
           </View>
-          <View className='author_description'>
+          <View className='data-issue-author_description'>
             <AtTag
               customStyle={{ ...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly') }}
               type='primary'
@@ -512,7 +509,7 @@ class Issue extends Component<any> {
               error={!!size(fieldsStore.getFieldsError('author_description'))}
             ></GDescription>
           </View>
-          <View className='author_rate'>
+          <View className='data-issue-author_rate'>
             <AtTag
               customStyle={{ ...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly') }}
               type='primary'
@@ -534,7 +531,7 @@ class Issue extends Component<any> {
               value={fieldsStore.getFieldValue('author_rate')}
             ></Rate>
           </View>
-          <View className='another_name'>
+          <View className='data-issue-another_name'>
             <AtTag
               customStyle={{ ...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly') }}
               type='primary'
@@ -556,7 +553,7 @@ class Issue extends Component<any> {
               value={fieldsStore.getFieldValue('another_name')}
             ></Alias>
           </View>
-          <View className='image'>
+          <View className='data-issue-image'>
             <AtTag
               customStyle={{ ...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly') }}
               type='primary'
@@ -576,9 +573,11 @@ class Issue extends Component<any> {
               error={!!size(fieldsStore.getFieldsError('image'))}
             ></GImagePicker>
           </View>
-          <AtButton type='primary' onClick={this.handleSubmit} customStyle={{ ...BUTTON_STYLE, ...style.backgroundColor('primary'), ...style.border(1, 'thirdly', 'solid', 'all') }}>提交</AtButton>
-          <AtButton type='primary' onClick={this.handleReset} customStyle={{ ...BUTTON_STYLE, bottom: SYSTEM_PAGE_SIZE(40) + 'px', ...style.backgroundColor('secondary'), ...style.border(1, 'primary', 'solid', 'all') }}>重置</AtButton>
-          <AtButton type='primary' onClick={this.handleCancel} customStyle={{ ...BUTTON_STYLE, bottom: SYSTEM_PAGE_SIZE(80) + 'px', ...style.backgroundColor('thirdly'), ...style.border(1, 'primary', 'solid', 'all') }}>取消</AtButton>
+          <View className='at-row at-row__justify--between'>
+            <AtButton className='at-col at-col-3' type='primary' onClick={this.handleSubmit} customStyle={{ ...BUTTON_STYLE, ...style.backgroundColor('primary') }}>提交</AtButton>
+            <AtButton className='at-col at-col-3' type='primary' onClick={this.handleReset} customStyle={{ ...BUTTON_STYLE, ...style.backgroundColor('secondary') }}>重置</AtButton>
+            <AtButton className='at-col at-col-3' type='primary' onClick={this.handleCancel} customStyle={{ ...BUTTON_STYLE, ...style.backgroundColor('thirdly') }}>取消</AtButton>
+          </View>
         </BaseForm>
       </View>
     )

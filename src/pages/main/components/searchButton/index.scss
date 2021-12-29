@@ -1,11 +1,10 @@
 @import "~taro-ui/dist/style/components/flex.scss";
 
-.hotsearch{
+.hot-search{
   overflow: hidden;
   transition:.3s;
-  .title{
-    margin-top:5px;
-    margin-left:15px;
-    font-size:30px;
+  &-title{
+    margin:5px 5px 0 15px;
+    font-size:32px;
   }
 }

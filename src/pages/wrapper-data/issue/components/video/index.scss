@@ -1,1 +1,9 @@
 @import "~taro-ui/dist/style/components/flex.scss";
+
+.issue-video-container {
+  position: relative;
+  &-content {
+    height: 30vh;
+    position: relative !important;
+  }
+}

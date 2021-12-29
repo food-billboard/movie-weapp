@@ -149,14 +149,12 @@ class CommentMovie extends Component<any> {
         renderBottom={
           (_: () => any) => {
             return (
-              <View>
-                <GButton
-                  style={{ width: '100%', height: '92' }}
-                  type='secondary'
-                  value={new Array(2).fill('发布评论')}
-                  operate={this.publish}
-                />
-              </View>
+              <GButton
+                style={{ width: '100%', height: '92' }}
+                type='secondary'
+                value={new Array(2).fill('发布评论')}
+                operate={this.publish}
+              />
             )
           }
         }

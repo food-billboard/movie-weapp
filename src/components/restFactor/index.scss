@@ -1,5 +1,11 @@
 @import "~taro-ui/dist/style/components/flex.scss";
-.rest{
+.component-rest{
   box-sizing:border-box;
   padding:10px;
+  &-input {
+    &-btn {
+      height: 68.8px;
+      line-height: 68.8px;
+    }
+  }
 }

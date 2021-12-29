@@ -1,8 +1,9 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
+import classnames from 'classnames'
 import { AtSearchBar } from 'taro-ui'
-import { router, routeAlias } from '~utils'
+import { router, routeAlias, isH5 } from '~utils'
 import style from '~theme/style'
 
 import './index.scss'
@@ -43,11 +44,12 @@ class SearchButton extends Component<IProps, IState>{
   /**
    * 监听输入框改变
    */
-  public onChange = (value: string = '') => {
+  public onChange = (value: string = '', event: any) => {
+    const realValue = isH5 ? event.detail.value : value 
     this.setState({
-      value: value,
+      value: realValue,
     })
-    this.props.handleChange && this.props.handleChange(value)
+    this.props.handleChange && this.props.handleChange(realValue)
   }
 
   /**
@@ -100,8 +102,8 @@ class SearchButton extends Component<IProps, IState>{
     const { pointList, value } = this.state
 
     return (
-      <View className='searchbutton'>
-        <View className='search' onClick={this.handleClick}>
+      <View className='component-search-button'>
+        <View onClick={this.handleClick}>
           <AtSearchBar
             customStyle={{ ...style.backgroundColor('bgColor') }}
             onActionClick={this.confirm}
@@ -112,12 +114,15 @@ class SearchButton extends Component<IProps, IState>{
             onFocus={this.onFocus}
             focus={focus}
             disabled={disabled}
+            className={classnames('component-search-button-input', {
+              'component-search-button-input-h5': isH5
+            })}
           />
         </View>
         {
           !!pointList.length && (
             <View
-              className='point-list'
+              className='component-search-button-point-list'
               style={{ ...style.backgroundColor('disabled') }}
             >
               {
@@ -125,7 +130,7 @@ class SearchButton extends Component<IProps, IState>{
                   const { value: point } = val
                   return (
                     <View
-                      className='point'
+                      className='component-search-button-point-list-item'
                       key={point}
                       style={{ ...style.border(1, 'bgColor', 'dashed', 'bottom') }}
                     >

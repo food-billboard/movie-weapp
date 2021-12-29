@@ -135,6 +135,7 @@ export default class extends Component<IProps, IState> {
       disabled,
       textareaFixed = false,
       error: propsError = false,
+      className,
       ...nextProps
     } = this.props
 
@@ -154,7 +155,7 @@ export default class extends Component<IProps, IState> {
             disabled={stateDisabled ? stateDisabled : disabled}
             style={isObject(style) ? { ...style, ...errorStyle } : { ...errorStyle }}
             name='name'
-            className='input'
+            className={`component-input ${className}`}
             value={this.value}
             onInput={(e) => { this.handleChange.call(this, e.detail.value) }}
             type='text'
@@ -171,6 +172,7 @@ export default class extends Component<IProps, IState> {
             value={this.value}
             onInput={(value) => { this.handleChange(value.detail.value) }}
             maxlength={300}
+            className={`component-textarea ${className}`}
             placeholder={placeholder ? placeholder : ''}
             fixed={textareaFixed}
             onLineChange={this.props.handleLineChange}

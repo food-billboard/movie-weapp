@@ -1,9 +1,8 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { AtDivider } from 'taro-ui'
+import { merge } from 'lodash'
 import { TypeColor } from '~theme/color'
-
-import { isObject } from '~utils'
 
 import './index.scss'
 
@@ -41,7 +40,7 @@ export default class Divider extends Component<IProps> {
         fontColor={fontColor}
         fontSize={fontSize}
         lineColor={lineColor}
-        customStyle={other || {}}
+        customStyle={merge({ backgroundColor: TypeColor()['bgColor'] }, other || {})}
       >
         {content ? '' : childNode}
       </AtDivider>
