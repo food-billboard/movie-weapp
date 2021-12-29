@@ -1,8 +1,7 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
-import { View, Input } from '@tarojs/components'
+import { View, Input, Textarea } from '@tarojs/components'
 import { InputProps } from '@tarojs/components/types/Input'
-import { AtTextarea } from 'taro-ui'
 import { isObject, ICommonFormState, ICommonFormProps } from '~utils'
 import { FORM_ERROR } from '~config'
 
@@ -19,11 +18,10 @@ export interface IProps extends ICommonFormProps {
   type?: EInputType
   placeholder?: string | false
   disabled?: boolean
-  height?: number
-  count?: boolean
   textareaFixed?: boolean
   handleLineChange?: (e: any) => any
   inputType: InputProps["type"]
+  className?: string 
 }
 
 export interface IState extends ICommonFormState {
@@ -104,7 +102,7 @@ export default class extends Component<IProps, IState> {
     return value
   }
 
-  public handleChange = (value: string, _) => {
+  public handleChange = (value: string) => {
     const { error } = this.state
     const { handleChange, initialValue } = this.props
     const data = value
@@ -135,10 +133,9 @@ export default class extends Component<IProps, IState> {
       type,
       placeholder,
       disabled,
-      height = 100,
-      count = true,
       textareaFixed = false,
       error: propsError = false,
+      ...nextProps
     } = this.props
 
     const {
@@ -153,6 +150,7 @@ export default class extends Component<IProps, IState> {
         {
           type === EInputType.INPUT &&
           <Input
+            {...nextProps}
             disabled={stateDisabled ? stateDisabled : disabled}
             style={isObject(style) ? { ...style, ...errorStyle } : { ...errorStyle }}
             name='name'
@@ -166,18 +164,17 @@ export default class extends Component<IProps, IState> {
         }
         {
           type === EInputType.TEXTAREA &&
-          <AtTextarea
+          <Textarea
+            {...nextProps}
             disabled={stateDisabled ? stateDisabled : disabled}
-            customStyle={isObject(style) ? { ...style, ...errorStyle } : { ...errorStyle }}
+            style={isObject(style) ? { width: "100%", ...style, ...errorStyle } : { width: "100%", ...errorStyle }}
             value={this.value}
-            onChange={(value) => { this.handleChange.call(this, value) }}
-            maxLength={300}
+            onInput={(value) => { this.handleChange(value.detail.value) }}
+            maxlength={300}
             placeholder={placeholder ? placeholder : ''}
-            height={height}
-            count={count}
             fixed={textareaFixed}
-            onLinechange={(e) => { this.props.handleLineChange?.(e) }}
-          ></AtTextarea>
+            onLineChange={this.props.handleLineChange}
+          />
         }
       </View>
     )

@@ -1,6 +1,6 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
-import { View } from '@tarojs/components'
+import { View, Textarea } from '@tarojs/components'
 import { AtButton } from 'taro-ui'
 import { pick, merge, noop } from 'lodash'
 import BaseForm from '~components/wrapForm'
@@ -263,12 +263,12 @@ export default class extends Component<any> {
      return (
        <View className='user-comment'>
          <BaseForm name='comment' >
-            <View className='description'>
+            <View className='user-comment-description'>
               <GDescription
                 type={EInputType.TEXTAREA}
                 placeholder='说点什么吧...'
-                height={300}
-                style={{...style.backgroundColor('disabled'), marginBottom: '20px'}}
+                style={{...style.color('disabled'), marginBottom: '20px'}}
+                className='user-comment-description-textarea'
                 handleChange={
                   fieldsStore.getFieldProps('description', 'onChange', {
                     initialValue: ''
@@ -276,9 +276,9 @@ export default class extends Component<any> {
                 }
                 value={fieldsStore.getFieldValue('description')}
                 error={!!size(fieldsStore.getFieldsError('description'))}
-              ></GDescription>
+              />
             </View>
-            <View className='media'>
+            <View className='user-comment-media'>
               <MediaPicker
                 style={{marginBottom: `${SYSTEM_PAGE_SIZE(40)}px`}}
                 handleChange={
