@@ -36,7 +36,7 @@ export default class extends Component<IProps, IState> {
     const { list = [], style } = this.props
 
     return (
-      <View className='movie-tag'>
+      <View className='movie-detail-tag'>
         {
           list.map((val: API_USER.ItypeList) => {
             const { id, value } = val

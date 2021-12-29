@@ -1,29 +1,25 @@
 @import '~taro-ui/dist/style/components/flex.scss';
-.search-head {
+.page-search-head {
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1;
   width: 100vw;
 }
-.search-main {
+.page-search-main {
   box-sizing: border-box;
   padding: 160px 10px 0 10px;
   overflow-x: hidden;
-  .head {
-    margin-bottom: -30px;
-  }
-  .sub {
+  &-sub-content {
     margin-bottom: 20px;
-    .select {
+    &-look {
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .look {
-    }
-    .screen {
-    }
-    .select,
-    .look,
-    .screen {
+    &-select,
+    &-look,
+    &-screen {
       text-align: center;
       height: 60px;
       line-height: 60px;
@@ -31,7 +27,7 @@
     }
   }
 }
-.curtain {
+.page-search-curtain {
   position: fixed;
   width: 100%;
   height: 100%;

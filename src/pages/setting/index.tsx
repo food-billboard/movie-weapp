@@ -290,8 +290,8 @@ export default class Setting extends Component<any>{
     ]
 
     return (
-      <View className='setting'>
-        <View className='setting-list'>
+      <View className='page-setting'>
+        <View className='page-setting-list'>
           <List list={settingList} />
           <AtRadio
             customStyle={{marginTop: '48px'}}
@@ -307,7 +307,7 @@ export default class Setting extends Component<any>{
             handleClick={this.colorSelect}
           ></GColor>
         </View>
-        <View className='button'>
+        <View className='page-setting-button'>
           <Button
             type={type[index]}
             plain

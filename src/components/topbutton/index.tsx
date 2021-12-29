@@ -79,7 +79,7 @@ export default class Top extends Component<ITopProps> {
     const { size } = this.state
     const { content } = this.props
     return (
-      <View className='btn'>
+      <View className='component-top-btn'>
         <AtFab
           onClick={this.throttleClick}
           size={size}

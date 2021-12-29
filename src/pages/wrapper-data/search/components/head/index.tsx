@@ -73,7 +73,7 @@ export default class Head extends Component<IProps, IState>{
         current={this.state.current}
         tabList={this.tabList}
         onClick={this.handleClick.bind(this)}
-        className='head'
+        className='search-head-tabs'
       >
         {heads}
       </AtTabs>

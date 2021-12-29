@@ -11,8 +11,6 @@ import { getCustomerComment, getCustomerUserComment, getUserComment, cancelLike,
 import Origin from './components/originComment'
 import { mapDispatchToProps, mapStateToProps } from './connect'
 
-import './index.scss'
-
 class MyComment extends Component<any>{
 
   public state: any = {

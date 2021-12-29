@@ -1,8 +1,8 @@
-@import "~taro-ui/dist/style/components/icon.scss";
-@import "~taro-ui/dist/style/components/fab.scss";
-.btn{
-    position:fixed;
-    z-index:99;
-    right:16px;
-    bottom:150px;
+@import '~taro-ui/dist/style/components/icon.scss';
+@import '~taro-ui/dist/style/components/fab.scss';
+.component-top-btn {
+  position: fixed;
+  z-index: 99;
+  right: 16px;
+  bottom: 150px;
 }

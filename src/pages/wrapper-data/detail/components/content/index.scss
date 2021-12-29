@@ -1,5 +1,4 @@
 @import '~taro-ui/dist/style/components/flex.scss';
-// @import "~taro-ui/dist/style/components/icon.scss";
 .ellipsis {
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -19,12 +18,12 @@
   &-main {
     width: 100%;
     &-rate {
-      .up-rate {
+      &-up {
         display: flex;
         align-items: center;
-        .up-rate-title {
-          line-height: 1.8;
-        }
+      }
+      &-title {
+        line-height: 1.8;
       }
     }
     &-info {
@@ -65,15 +64,15 @@
 }
 
 @media screen and (min-width: 700px) {
-  .up-rate,
-  .actor,
-  .director,
-  .type,
-  .time-publish,
-  .area-lang,
-  .hot,
-  .look,
-  .description {
+  .data-detail-content-main-rate-up,
+  .data-detail-content-main-info-actor,
+  .data-detail-content-main-info-director,
+  .data-detail-content-main-info-type,
+  .data-detail-content-main-info-time-publish,
+  .data-detail-content-main-info-area-lang,
+  .data-detail-content-main-info-hot,
+  .data-detail-content-main-info-look,
+  .data-detail-content-main-info-description {
     font-size: 32px;
   }
 }

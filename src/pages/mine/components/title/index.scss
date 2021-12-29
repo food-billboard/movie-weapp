@@ -1,29 +1,29 @@
 @import '~taro-ui/dist/style/components/flex.scss';
-.title {
+.main-page-title-list {
   width: 100%;
   padding-top: 10px;
   height: 120px;
-  .separate {
+  &-separate {
     width: 2px;
     height: 100px;
     margin-top: 10px;
     border-radius: 1px;
   }
-  .text {
+  &-text {
     display: block;
     text-align: center;
     color: #333;
     font-size: 0.68267rem;
     line-height: 1.5;
   }
-  .message,
-  .folder {
+  &-message,
+  &-folder {
     text-align: center;
   }
 }
 
 @media screen and (min-width: 700px) {
-  .text {
+  .main-page-title-list-text {
     font-size: 32px;
   }
 }

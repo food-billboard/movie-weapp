@@ -98,7 +98,7 @@ export default memo((props: IProps) => {
 
   return (
     <View
-      className='loading'
+      className='component-image-loading'
       onClick={onClick}
       style={contentStyle}
     >

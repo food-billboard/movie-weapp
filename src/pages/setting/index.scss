@@ -1,13 +1,10 @@
-.setting{
-    width:100%;
-    overflow-x:hidden;
-    .setting-list{
-
-    }
-    .button{
-        width:100%;
-        position:fixed;
-        left:0;
-        bottom:0;
-    }
+.page-setting {
+  width: 100%;
+  overflow-x: hidden;
+  &-button {
+    width: 100%;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+  }
 }

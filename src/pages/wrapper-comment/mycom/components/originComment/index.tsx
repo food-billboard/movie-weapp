@@ -53,7 +53,7 @@ export default class extends Component<IProps> {
     } } = this.props
 
     return(
-      <View className='origin at-row'
+      <View className='my-comment-origin at-row'
         style={{...style.border(1, 'thirdly', 'dashed', 'all')}}
         onClick={() => { this.handleClick.call(this, _id, source_type) }}
       >

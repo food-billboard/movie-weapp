@@ -12,7 +12,7 @@ interface IProps {
 export default memo((props: IProps) => {
  
   return (
-    <View className='indexes-button'>
+    <View className='page-indexes-button'>
       <AtFab
         onClick={props.onClick?.bind(null, undefined)}
       >

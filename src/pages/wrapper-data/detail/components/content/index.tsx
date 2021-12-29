@@ -121,8 +121,8 @@ export default class Content extends Component<IProps, IState>{
             />
           </View>
           <View className='data-detail-content-main-rate'>
-            <View className='up-rate'>
-              <View className='up-rate-title'>楼主评分:</View>
+            <View className='data-detail-content-main-rate-up'>
+              <View className='data-detail-content-main-rate-title'>楼主评分:</View>
             </View>
             <View className='at-row at-row__align--center'>
               <View className='at-col at-col-9'>

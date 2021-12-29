@@ -1,24 +1,26 @@
+@import "~taro-ui/dist/style/components/flex.scss";
+
 .type,
-.time {
+.page-search-form-time {
   margin-bottom: 20px;
 }
-.classify {
+.page-search-form-classify {
   padding: 0 20px;
   box-sizing: border-box;
 }
-.time {
+.page-search-form-time {
   padding: 0 20px;
   box-sizing: border-box;
   margin-bottom: 196px;
 }
-.language {
+.page-search-form-language {
   margin-bottom: 40px;
 }
-.other {
+.page-search-form-other {
   padding-bottom: 184px;
 }
 
-.btn {
+.page-search-form-btn {
   position: absolute;
   bottom: 0;
   right: 0;

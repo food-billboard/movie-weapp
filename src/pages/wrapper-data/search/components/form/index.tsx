@@ -191,7 +191,7 @@ export default class Forms extends Component<IProps> {
           name='search-select' 
           style={{ height: '100vh', overflowY: 'auto', overflowX: 'hidden' }}
         >
-          <View className='price'>
+          {/* <View className='page-search-form-price'>
             <ChargePicker
               ref={this.chargeRef}
               onChange={fieldsStore.getFieldProps('price', 'onChange', {
@@ -207,8 +207,8 @@ export default class Forms extends Component<IProps> {
               value={fieldsStore.getFieldValue('price')}
               disabled
             />
-          </View>
-          <View className='classify'>
+          </View> */}
+          <View className='page-search-form-classify'>
             <AtTag
               customStyle={tagStyle}
               type='primary'
@@ -223,7 +223,7 @@ export default class Forms extends Component<IProps> {
               value={fieldsStore.getFieldValue('classify')}
             ></GCheckbox>
           </View>
-          <View className='time'>
+          <View className='page-search-form-time'>
             <AtTag
               customStyle={tagStyle}
               type='primary'
@@ -245,8 +245,8 @@ export default class Forms extends Component<IProps> {
 
             ></DateRangePicker>
           </View>
-          <View className='other' style={{ display: open ? 'block' : 'none', paddingBottom: open ? SYSTEM_PAGE_SIZE(92) + 'px' : 0 }}>
-            <View className='actor'>
+          <View className='page-search-form-other' style={{ display: open ? 'block' : 'none', paddingBottom: open ? SYSTEM_PAGE_SIZE(92) + 'px' : 0 }}>
+            <View className='page-search-form-actor'>
               <AtTag
                 onClick={this.handleIndexesVisible.bind(this, { type: EIndexesType.actor })}
                 customStyle={{ ...tagStyle, marginTop: '20px' }}
@@ -273,7 +273,7 @@ export default class Forms extends Component<IProps> {
                 }
               ></TagList>
             </View>
-            <View className='director'>
+            <View className='page-search-form-director'>
               <AtTag
                 onClick={this.handleIndexesVisible.bind(this, { type: EIndexesType.director })}
                 customStyle={tagStyle}
@@ -300,7 +300,7 @@ export default class Forms extends Component<IProps> {
                 }
               ></TagList>
             </View >
-            <View className='language'>
+            <View className='page-search-form-language'>
               <AtTag
                 customStyle={tagStyle}
                 type='primary'
@@ -315,7 +315,7 @@ export default class Forms extends Component<IProps> {
                 value={fieldsStore.getFieldValue('language')}
               ></GCheckbox>
             </View>
-            <View className='area'>
+            <View className='page-search-form-area'>
               <AtTag
                 customStyle={tagStyle}
                 type='primary'
@@ -342,7 +342,7 @@ export default class Forms extends Component<IProps> {
               ></TagList>
             </View>
           </View>
-          <View className='btn'>
+          <View className='page-search-form-btn at-row'>
             <AtButton
               onClick={this.onReset}
               type='secondary'
@@ -351,10 +351,12 @@ export default class Forms extends Component<IProps> {
                 ...style.border(1, 'primary', 'solid', 'all'),
                 ...style.color('primary')
               }}
+              className='at-col at-col-6'
             >重置</AtButton>
             <AtButton
               onClick={this.onSubmit}
               type='primary'
+              className='at-col at-col-6'
               customStyle={{ ...style.backgroundColor('primary'), ...style.border(1, 'primary', 'solid', 'all'), ...style.color('disabled') }}
             >确定</AtButton>
           </View>

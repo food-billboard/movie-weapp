@@ -200,7 +200,6 @@ export default class Index extends Component<any> {
               mask={false}
               right
               width='90vw'
-              className='drawer'
             >
               <Forms
                 visible={selectShow}
@@ -211,7 +210,7 @@ export default class Index extends Component<any> {
             {
               !!selectShow &&
                 <View
-                  className='curtain'
+                  className='page-search-curtain'
                   onClick={this.drawerClose}
                   style={{
                     opacity: selectShow ? '0.3' : '0',
@@ -220,7 +219,7 @@ export default class Index extends Component<any> {
                 ></View>
             }
             <View
-              className='search-head'
+              className='page-search-head'
             >
               <SearchBar
                 confirm={this.debounceConfirm}
@@ -232,26 +231,25 @@ export default class Index extends Component<any> {
               />
             </View>
             <View
-              className='search-main'
+              className='page-search-main'
               style={{
                 display: listShow && searchList.length ? 'block' : 'none',
               }}
             >
               <View
-                className='head-sub'
+                className='page-search-main-sub'
               >
-                <View className='at-row at-row__justify--around sub'>
-                  <View className='at-col at-col-5 select'>
+                <View className='at-row at-row__justify--around page-search-main-sub-content'>
+                  <View className='at-col at-col-5 page-search-main-sub-content-select'>
                     <RadioList screen={this.sortScreen} />
                   </View>
-                  <View className='at-col at-col-3 look'>
+                  <View className='at-col at-col-3 page-search-main-sub-content-look'>
                     <Method
                       screen={this.showMethod}
                     />
                   </View>
-                  <View className='at-col at-col-5 screen'>
+                  <View className='at-col at-col-5 page-search-main-sub-content-screen'>
                     <Text
-                      className='text'
                       onClick={this.drawerOpen}
                     >筛选</Text>
                   </View>

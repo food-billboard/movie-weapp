@@ -147,7 +147,7 @@ class Detail extends Component<any> {
 
     return (
       <View id='detail' style={style.backgroundColor('bgColor')}>
-        <View className='video'>
+        <View className='page-detail-video'>
           {
             !!video && <GVideo
               src={video}
@@ -157,7 +157,7 @@ class Detail extends Component<any> {
           }
         </View>
         <View
-          className='description'
+          className='page-detail-description'
           style={merge(style.color('thirdly'), style.border(1, 'thirdly', 'solid', 'top'))}
         >
           <Content
@@ -184,8 +184,8 @@ class Detail extends Component<any> {
         <EmptyTry
           value={images}
         >
-          <View className='image'>
-            <View className='title'>
+          <View className='page-detail-image'>
+            <View className='page-detail-title'>
               <Title
                 title='截图'
               />
@@ -198,8 +198,8 @@ class Detail extends Component<any> {
         <EmptyTry
           value={actor}
         >
-          <View className='actor'>
-            <View className='title'>
+          <View className='page-detail-actor'>
+            <View className='page-detail-title'>
               <Title
                 title='卡司'
               />
@@ -218,8 +218,8 @@ class Detail extends Component<any> {
         <EmptyTry
           value={tag}
         >
-          <View className='tag'>
-            <View className='title'>
+          <View className='page-detail-tag'>
+            <View className='page-detail-title'>
               <Title
                 title='大家都说'
               />
@@ -237,8 +237,8 @@ class Detail extends Component<any> {
         <EmptyTry
           value={commentData}
         >
-          <View className='comment'>
-            <View className='title'>
+          <View className='page-detail-comment'>
+            <View className='page-detail-title'>
               <Title
                 title='大家评论'
               />
@@ -256,7 +256,7 @@ class Detail extends Component<any> {
             />
           </View>
         </EmptyTry>
-        <View className='other'>
+        <View className='page-detail-other'>
           <GButton
             type='secondary'
             value={new Array(2).fill('说点什么吧')}

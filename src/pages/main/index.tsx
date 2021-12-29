@@ -77,13 +77,13 @@ export default class extends Component<any> {
     const secondaryColor = style.color('secondary')
 
     return (
-      <View className='index' style={style.backgroundColor('bgColor')}>
-        <View className='searchbar'>
+      <View className='main-page' style={style.backgroundColor('bgColor')}>
+        <View className='main-page-searchbar'>
           <SearchBar
             disabled
           />
         </View>
-        <View className='swiper'>
+        <View className='main-page-swiper'>
           <NoticeBar
             text={notice.notice}
           ></NoticeBar>
@@ -91,17 +91,17 @@ export default class extends Component<any> {
             list={swiper}
           />
         </View>
-        <View className='itemize'>
+        <View className='main-page-itemize'>
           <Itemize
             list={classify}
           />
         </View>
-        <View className='news'>
+        <View className='main-page-news'>
           <View className='at-row at-row__justify--between at-row__align--center'>
-            <Text className='news-title at-col'
+            <Text className='main-page-news-title at-col'
               style={{ ...secondaryColor }}
             >每日上新</Text>
-            <Text className='news-title at-col'
+            <Text className='main-page-news-title at-col'
               style={{ ...secondaryColor }}
               onClick={this.hanleExchangeDaily}
             >换一批</Text>
@@ -110,8 +110,8 @@ export default class extends Component<any> {
             list={daily}
           />
         </View>
-        <View className='rank'>
-          <Text className='rank-title'
+        <View className='main-page-rank'>
+          <Text className='main-page-rank-title'
             style={{ ...secondaryColor }}
           >排行榜</Text>
           {

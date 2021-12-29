@@ -74,7 +74,7 @@ class Login extends Component<any> {
     const { mobile, password } = this.state
 
     return (
-      <View className='login' style={{ ...style.backgroundColor('bgColor') }}>
+      <View className='page-login' style={{ ...style.backgroundColor('bgColor') }}>
         <AtForm>
           <AtInput
             name='mobile'
@@ -96,7 +96,7 @@ class Login extends Component<any> {
             // formType='submit'
             onClick={this.submit}
             type='primary'
-            className='submit'
+            className='page-login-submit'
             customStyle={{ ...style.border(1, 'primary', 'solid', 'all'), ...style.backgroundColor('primary') }}
           >
             登录
@@ -104,7 +104,7 @@ class Login extends Component<any> {
           <AtButton
             onClick={this.register}
             type='secondary'
-            className='register'
+            className='page-login-register'
             customStyle={{ ...style.color('primary'), ...style.border(1, 'primary', 'solid', 'all') }}
           >
             注册

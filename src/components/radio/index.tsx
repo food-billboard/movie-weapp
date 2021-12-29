@@ -171,7 +171,7 @@ export default class extends Component<IProps, IState> {
     return (
       <View style={isObject(style) ? style : {}}>
         <View
-          className='title'
+          className='component-radio-title'
           style={{
             ...customeStyle.backgroundColor('thirdly'),
             ...customeStyle.border(1, 'primary', 'solid', 'all'),

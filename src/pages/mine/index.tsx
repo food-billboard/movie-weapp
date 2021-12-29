@@ -84,8 +84,8 @@ class Mine extends Component<any>{
     } = userInfo
 
     return (
-      <View className='mine'>
-        <View className='head'>
+      <View className='mine-page'>
+        <View className='mine-page-head'>
           <IconHead
             list={{
               username,
@@ -96,17 +96,17 @@ class Mine extends Component<any>{
             }}
           />
         </View>
-        <View className='main'
+        <View className='mine-page-main'
           style={{ ...style.backgroundColor('disabled') }}
         >
           <View>
-            <View className='title'>
+            <View>
               <Title />
             </View>
-            <View className='iconlist'>
+            <View>
               <IconList />
             </View>
-            <View className='list'>
+            <View>
               <List
                 list={this.setting.map((val: IList) => {
                   const { iconInfo } = val

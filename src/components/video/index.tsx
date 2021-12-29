@@ -188,7 +188,7 @@ export default class Media extends Component<IProps, IState> {
 
     return (
       <Video
-        className={`video ${className}`}
+        className={`component-video ${className}`}
         //待开发
         // danmuList={danmuList}
         style={style}

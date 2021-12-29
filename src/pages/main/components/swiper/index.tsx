@@ -45,7 +45,7 @@ class Index extends Component<IProps>{
         indicatorActiveColor={typeColor['disabled']}
         circular
         indicatorDots
-        className='swiper'
+        className='main-swiper'
       >
         {list.map((value) => {
           const { _id: id, poster: image, type } = value

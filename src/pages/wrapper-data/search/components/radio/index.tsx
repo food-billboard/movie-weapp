@@ -89,8 +89,8 @@ export default class RadioList extends Component<IProps>{
     const { text, show, radioList } = this.state
 
     return (
-      <View className='radio'>
-        <Text className='select'
+      <View className='page-search-radio'>
+        <Text className='page-search-radio-select'
           onClick={this.showList}
         >
           {text}

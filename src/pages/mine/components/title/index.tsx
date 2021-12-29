@@ -49,23 +49,23 @@ export default class Title extends Component<IProps>{
     const typeColor = TypeColor()
 
     return (
-      <View className='title at-row at-row__justify--around'
+      <View className='main-page-title-list at-row at-row__justify--around'
         style={style.border(1, 'thirdly', 'solid', 'bottom')}
       >
-        <View className='message at-col at-col-5'
+        <View className='main-page-title-list-message at-col at-col-5'
           onClick={() => { this.handleClick.call(this, config.store) }}
         >
           <AtIcon value='message' size='30' color={typeColor['secondary']}></AtIcon>
-          <Text className='text'>{this.titleConfig.store}</Text>
+          <Text className='main-page-title-list-text'>{this.titleConfig.store}</Text>
         </View>
-        <View className='separate'
+        <View className='main-page-title-list-separate'
           style={style.backgroundColor('thirdly')}
         ></View>
-        <View className='folder at-col at-col-5'
+        <View className='main-page-title-list-folder at-col at-col-5'
           onClick={() => { this.handleClick.call(this, config.issue) }}
         >
           <AtIcon value='folder' size='30' color={typeColor['secondary']}></AtIcon>
-          <Text className='text'>{this.titleConfig.issue}</Text>
+          <Text className='main-page-title-list-text'>{this.titleConfig.issue}</Text>
         </View>
       </View>
     )

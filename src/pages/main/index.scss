@@ -1,38 +1,39 @@
-@import "~taro-ui/dist/style/components/flex.scss";
-.index {
+@import '~taro-ui/dist/style/components/flex.scss';
+@import 'src/theme/variable.scss';
+.main-page {
   flex-direction: column;
   width: 100%;
-  padding-bottom:20px;
-  .itemize{
-    box-sizing:border-box;
-    padding:10px 10px 10px 10px;
+  padding-bottom: 20px;
+  &-itemize {
+    box-sizing: border-box;
+    padding: 10px 10px 10px 10px;
   }
-  .news{
-    box-sizing:border-box;
-    padding:0 10px 10px 0;
-    .news-title{
-      margin-left:10px;
-      font-weight:bold;
+  &-news {
+    box-sizing: border-box;
+    padding: 0 10px 10px 0;
+    &-title {
+      margin-left: 10px;
+      font-weight: bold;
     }
-    .news-title:nth-last-of-type(1) {
-      margin-left:0;
-      margin-right:10px;
-      text-align:right;
-      font-size:28px;
+    &-title:nth-last-of-type(1) {
+      margin-left: 0;
+      margin-right: 10px;
+      text-align: right;
+      font-size: 28px;
     }
   }
-  .rank{
-    box-sizing:border-box;
-    padding:0 10px 10px 10px;
-    .rank-title{
-      font-weight:bold;
+  &-rank {
+    box-sizing: border-box;
+    padding: 0 10px 10px 10px;
+    &-title {
+      font-weight: bold;
     }
   }
 }
 
 @media screen and (min-width: 700px) {
-  .news-title,
-  .rank-title{
-    font-size:32px;
+  .main-page-news-title,
+  .main-page-rank-title {
+    font-size: 32px;
   }
 }

@@ -56,15 +56,15 @@ export default class extends Component<IProps, IState> {
     return (
       <View
         id='curtain'
-        className={`curtain-${show ? 'show' : 'hidden'}`}
+        className={`component-curtain-${show ? 'show' : 'hidden'}`}
         onTouchMove={this.stopMove}
       >
         <View
-          className='curtain-mask'
+          className='component-curtain-mask'
           style={{ ...customeStyle.backgroundColor('primary'), ...(isObject(curtainStyle) ? curtainStyle : {}) }}
         ></View>
         <View
-          className='curtain-main'
+          className='component-curtain-main'
           style={{
             ...customeStyle.backgroundColor('bgColor'),
             borderRadius: '6px',
@@ -74,7 +74,7 @@ export default class extends Component<IProps, IState> {
           {
             !!this.props.renderTitle &&
             <View
-              className='curtain-main-title'
+              className='component-curtain-main-title'
               style={{ ...customeStyle.border(1, 'disabled', 'solid', 'bottom') }}
             >
               {
@@ -82,13 +82,13 @@ export default class extends Component<IProps, IState> {
               }
             </View>
           }
-          <View className='curtain-main-content'>
+          <View className='component-curtain-main-content'>
             {this.props.renderMain}
           </View>
           {
             !!this.props.renderAction &&
             <View
-              className='curtain-main-action'
+              className='component-curtain-main-action'
               style={{ ...customeStyle.border(1, 'disabled', 'solid', 'top') }}
             >
               {this.props.renderAction}
@@ -96,7 +96,7 @@ export default class extends Component<IProps, IState> {
           }
           {
             !!this.props.renderOther &&
-            <View className='curtain-main-other'>
+            <View className='component-curtain-main-other'>
               {this.props.renderOther}
             </View>
           }

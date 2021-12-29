@@ -6,8 +6,6 @@ import { isObject } from '~utils'
 import { SYSTEM_PAGE_SIZE } from '~config/media'
 import { AtIconBaseProps } from 'taro-ui/types/base'
 
-import './index.scss'
-
 type up = 'up'
 type right = 'right'
 type down = 'down'

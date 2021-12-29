@@ -1,47 +1,43 @@
-@import "~taro-ui/dist/style/components/flex.scss";
-// @import "~taro-ui/dist/style/components/icon.scss";
-.header {
-  width:100%;
-  box-sizing:border-box;
+@import '~taro-ui/dist/style/components/flex.scss';
+.comment-detail-header {
+  width: 100%;
+  box-sizing: border-box;
   padding: 10px 20px 20px 20px;
-  .content{
-    width:100%;
-    &-header{
-      width:100%;
-      .user{
+  &-content {
+    width: 100%;
+    &-header {
+      width: 100%;
+      &-user {
         font-weight: bold;
-        text-align:left;
+        text-align: left;
         overflow-x: scroll;
       }
-      .user::-webkit-scrollbar{
+      &-user::-webkit-scrollbar {
         display: none;
       }
-      .time{
-        text-align:right;
+      &-time {
+        text-align: right;
         font-size: small;
         text-overflow: ellipsis;
         overflow: hidden;
       }
     }
-    .contnet-main {
-      padding:20px 0;
-      .content-main-text{
-
-      }
+    &-main {
+      padding: 20px 0;
     }
-    .content-footer {
-      width:100%;
-      padding:10px 0;
-      .content-footer-main{
-        text-align:center;
-        height:100%;
-        .content-footer-main-icon-content{
-          display:flex;
+    &-footer {
+      width: 100%;
+      padding: 10px 0;
+      &-main {
+        text-align: center;
+        height: 100%;
+        &-icon-content {
+          display: flex;
           justify-content: center;
           align-items: center;
-          .content-footer-icon{
-            font-size:40px;
-            margin-right:10px;
+          &-content-footer-icon {
+            font-size: 40px;
+            margin-right: 10px;
           }
         }
       }
@@ -50,15 +46,15 @@
 }
 
 @media screen and (min-width: 700px) {
-  .content-header{
-    height:160px;
+  .comment-detail-header-header {
+    height: 160px;
   }
-  .icon{
-    width:160px;
-    height:160px;
+  .comment-detail-header-content-footer-main-icon-content-footer-icon {
+    width: 160px;
+    height: 160px;
   }
-  .user,
-  .time{
-    line-height:160px;
+  .comment-detail-header-content-header-user,
+  .comment-detail-header-content-header-time {
+    line-height: 160px;
   }
 }

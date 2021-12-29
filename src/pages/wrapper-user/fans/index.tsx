@@ -70,7 +70,7 @@ export default class extends Component<any>{
             data.map((value) => {
               const { avatar, username, _id: id } = value
               return (
-                <View className='list'
+                <View className='page-fans'
                   style={{ ...style.border(1, 'disabled', 'solid', 'bottom') }}
                   key={id}
                   onClick={this.getUser.bind(this, id)}
@@ -82,13 +82,13 @@ export default class extends Component<any>{
                     text='头'
                   ></AtAvatar>
                   <View
-                    className='username'
+                    className='page-fans-username'
                     style={{ ...style.color('primary') }}
                   >
                     {username}
                   </View>
                   <Text
-                    className='enter'
+                    className='page-fans-enter'
                     style={{ ...style.color('thirdly') }}
                   >{'>'}</Text>
                 </View>

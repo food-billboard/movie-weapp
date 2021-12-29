@@ -60,11 +60,11 @@ export default class extends Component<IProps, IState> {
             return (
               <View
                 key={val}
-                className='item'
+                className='setting-color-list-item'
                 style={{ border: active === val ? `2px solid ${val}` : 'none' }}
                 onClick={(e) => { this.props.handleClick ? this.props.handleClick.call(this, val) : this.handleClick.call(this, val) }}
               >
-                <View className='content' style={{ backgroundColor: val }}></View>
+                <View className='setting-color-list-item-content' style={{ backgroundColor: val }}></View>
               </View>
             )
           })

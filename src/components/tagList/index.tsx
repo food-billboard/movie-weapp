@@ -76,7 +76,7 @@ export default class extends Component<IProps, IState> {
 
     return (
       <View 
-        className='tag-list at-row at-row--wrap at-row__justify--around'
+        className='component-tag-list at-row at-row--wrap at-row__justify--around'
         style={{ ...style.border(1, 'secondary', 'solid', 'all'), borderRadius: '20px', ...customerStyle, ...(error ? FORM_ERROR : {}) }}
       >
         {

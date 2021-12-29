@@ -44,11 +44,11 @@ export default class IconHead extends Component<IProps>{
     const { list } = this.props
     const { username = '', avatar = '', hot = 0, fans, attentions = 0 } = list
     return (
-      <View id='user-head'
+      <View id='component-user-head'
         style={{ ...style.backgroundColor('thirdly') }}
       >
-        <View className='user-head-icon'>
-          <View className='user-head-icon-content'
+        <View className='component-user-head-icon'>
+          <View className='component-user-head-icon-content'
             onClick={this.previewImage.bind(this, avatar)}
           >
             <AtAvatar
@@ -59,25 +59,25 @@ export default class IconHead extends Component<IProps>{
               customStyle={{ width: '100%', height: '100%' }}
             />
           </View>
-          <View className='user-head-icon-username' style={{ ...style.color('primary') }}>
+          <View className='component-user-head-icon-username' style={{ ...style.color('primary') }}>
             {username}
           </View>
         </View>
-        <View className='user-head-info at-row'
+        <View className='component-user-head-info at-row'
           style={{ ...style.color('disabled') }}
         >
-          <View className='at-col user-head-info-data'>
-            <Text className='user-head-info-data-count'
+          <View className='at-col component-user-head-info-data'>
+            <Text className='component-user-head-info-data-count'
               style={{ ...style.color('primary') }}
             >{formatNumber(fans)}</Text> 粉丝
           </View>
-          <View className='at-col user-head-info-data'>
-            <Text className='user-head-info-data-count'
+          <View className='at-col component-user-head-info-data'>
+            <Text className='component-user-head-info-data-count'
               style={{ ...style.color('primary') }}
             >{formatNumber(attentions)}</Text> 人关注
           </View>
-          <View className='at-col user-head-info-data'>
-            <Text className='user-head-info-data-count'
+          <View className='at-col component-user-head-info-data'>
+            <Text className='component-user-head-info-data-count'
               style={{ ...style.color('primary') }}
             >{formatNumber(hot)}</Text> 人觉得很赞
           </View>

@@ -14,8 +14,8 @@ export interface IState {}
 
 const GlobalEmpty = () => {
   return (
-    <View className='result-point'>
-      <Text className='result-text'>暂时没有数据，去看看其他的吧</Text>
+    <View className='component-result-point'>
+      <Text className='component-result-text'>暂时没有数据，去看看其他的吧</Text>
       <View className='at-icon at-icon-alert-circle'></View>
     </View>
   )

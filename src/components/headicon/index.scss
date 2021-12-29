@@ -1,43 +1,42 @@
-@import "~taro-ui/dist/style/components/flex.scss";
-#user-head{
-    width:100%;
-    padding:30px 0;
-    border-bottom-left-radius: 10%;
-    border-bottom-right-radius: 10%;
-    .user-head-icon{
-        width:100%;
-        text-align:center;
-        display:flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        .user-head-icon-content{
-            width:200px;
-            height:200px;
-        }
-        .user-head-icon-username{
-            width:80%;
-            font-weight:bold;
-            font-size:34px;
-            line-height:80px;
-            display:block;
-            text-align:center;
-            overflow-x: scroll;
-            text-shadow:0 0 2px white;
-        }
-        .user-head-icon-username::-webkit-scrollbar{
-            display:none;
-        }
+@import '~taro-ui/dist/style/components/flex.scss';
+#component-user-head {
+  width: 100%;
+  padding: 30px 0;
+  border-bottom-left-radius: 10%;
+  border-bottom-right-radius: 10%;
+  .component-user-head-icon {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .component-user-head-icon-content {
+      width: 200px;
+      height: 200px;
     }
-    .user-head-info{
-        font-size:24px;
-        &-data{
-            text-align:center;
-            &-count{
-                font-size:32px;
-                font-weight:bold;
-            }
-        }
+    .component-user-head-icon-username {
+      width: 80%;
+      font-weight: bold;
+      font-size: 34px;
+      line-height: 80px;
+      display: block;
+      text-align: center;
+      overflow-x: scroll;
+      text-shadow: 0 0 2px white;
     }
+    .component-user-head-icon-username::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  .component-user-head-info {
+    font-size: 24px;
+    &-data {
+      text-align: center;
+      &-count {
+        font-size: 32px;
+        font-weight: bold;
+      }
+    }
+  }
 }
-

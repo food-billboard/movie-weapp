@@ -1,32 +1,31 @@
 #detail {
   width: 100%;
-  // overflow-x: hidden;
-  // padding-bottom: 92px;
-  .description,
-  .image,
-  .actor,
-  .other {
+  .page-detail-description,
+  .page-detail-image,
+  .page-detail-actor,
+  .page-detail-other {
     margin-bottom: 40px;
   }
-  .video {
+  .page-detail-video {
     width: 100%;
     height: 400px;
     margin-bottom: 10px;
     box-sizing: border-box;
     border: 1px solid rgba(0, 0, 0, 0.1);
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    position: relative;
   }
-  .description {
+  .page-detail-description {
     width: 100%;
     box-sizing: border-box;
     padding: 40px;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
   }
-  .comment {
+  .page-detail-comment {
     margin-bottom: 120px;
   }
-  .other {
+  .page-detail-other {
     width: 100vw;
     height: 92px;
     position: sticky;
@@ -36,7 +35,7 @@
     box-sizing: border-box;
     z-index: 99;
   }
-  .title {
+  .page-detail-title {
     box-sizing: border-box;
     padding: 0 40px;
   }

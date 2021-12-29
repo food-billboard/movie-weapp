@@ -33,7 +33,7 @@ export interface IProps {
   like: (id: string, like: boolean) => any
 }
 
-export interface IState {}
+export interface IState { }
 
 const DEFAULT_CONTENT = {
   _id: '',
@@ -59,21 +59,21 @@ export default class extends Component<IProps, IState> {
   public getUser = (id: string) => router.push(routeAlias.user, { id })
 
   public render() {
-    
-    const { 
+
+    const {
       content
     } = this.props
     const {
-      _id:commentId,
+      _id: commentId,
       user_info: {
         avatar,
         username,
-        _id:userId
-      }={},
+        _id: userId
+      } = {},
       content: {
-        text='',
-        image=[],
-        video=[]
+        text = '',
+        image = [],
+        video = []
       },
       comment_users,
       createdAt,
@@ -82,67 +82,72 @@ export default class extends Component<IProps, IState> {
     } = merge({}, DEFAULT_CONTENT, content) as IContent
 
     return (
-      <View 
-        className='header'
+      <View
+        className='comment-detail-header'
         style={{ ...style.backgroundColor('thirdly') }}
       >
-        <View   
-          className={'content'}
+        <View
+          className='comment-detail-header-content'
         >
-          <View className='content-header at-row at-row__align--center'>
-            <View 
+          <View className='comment-detail-header-content-header at-row at-row__align--center'>
+            <View
               className='at-col at-col-2'
-              onClick={this.getUser.bind(this, userId)}  
+              onClick={this.getUser.bind(this, userId)}
             >
-              <AtAvatar 
+              <AtAvatar
                 image={avatar || ''}
                 circle
-                text={'头像'}
+                text='头像'
               />
             </View>
-            <View 
-              className='at-col at-col-7 user'
-              style={{...style.color('primary')}}
+            <View
+              className='at-col at-col-7 comment-detail-header-content-header-user'
+              style={{ ...style.color('primary') }}
             >
               {username}
             </View>
-            <View className='content-header-extra at-col at-col-3 time' style={{...style.color('secondary')}}>
+            <View
+              className='content-header-extra at-col at-col-3 at-col at-col-7 comment-detail-header-content-header-time'
+              style={{ ...style.color('secondary') }}
+            >
               {formatTime(createdAt)}
             </View>
           </View>
-          <View className='contnet-main'>
-            <View className='content-main-text'>
+
+          <View className='comment-detail-header-content-main'>
+            <View className='comment-detail-header-content-main-text'>
               <Ellipsis
                 text={text}
-                style={{...style.color('primary')}}
+                style={{ ...style.color('primary') }}
               />
             </View>
-            <View className='content-main-extra'>
+            <View className='comment-detail-header-content-main-extra'>
               {/* ToDo */}
             </View>
           </View>
-          <View className='content-footer'
-            style={{...style.border(1, 'disabled', 'dashed', 'top')}}
+
+          <View className='comment-detail-header-content-footer'
+            style={{ ...style.border(1, 'disabled', 'dashed', 'top') }}
           >
-              <View className='at-row at-row__align--center content-footer-main'>
-                <View className='at-col at-col-6 content-footer-main-icon-content'>
-                  <View 
-                    className={`content-footer-icon at-icon at-icon-message`}
-                    style={{...style.color('thirdly')}}
-                  ></View>
-                  <Text style={{...style.color('secondary')}}>{formatNumber(comment_users)}</Text>
-                </View>
-                <View 
-                  className='at-col at-col-6 content-footer-main-icon-content'
-                  onClick={this.props.like.bind(this, userId, commentId)}
-                >
-                  <View 
-                    className={`content-footer-icon at-icon at-icon-heart${like ? '-2' : ''}`}
-                    style={{...style.color('thirdly')}}
-                  ></View>
-                  <Text style={{...style.color('secondary')}}>{formatNumber(total_like)}</Text>
-                </View>
+            <View className='at-row at-row__align--center comment-detail-header-content-footer-main'>
+              <View className='at-col at-col-6 comment-detail-header-content-footer-main-icon-content'>
+                <View
+                  className='comment-detail-header-content-footer-main-icon-content-footer-icon at-icon at-icon-message'
+                  style={{ ...style.color('thirdly') }}
+                ></View>
+                <Text style={{ ...style.color('secondary') }}>{formatNumber(comment_users)}</Text>
               </View>
+              <View
+                className='at-col at-col-6 comment-detail-header-content-footer-main-icon-content-footer-icon'
+                onClick={this.props.like.bind(this, userId, commentId)}
+              >
+                <View
+                  className={`comment-detail-header-content-footer-main-icon-content-footer-icon at-icon at-icon-heart${like ? '-2' : ''}`}
+                  style={{ ...style.color('thirdly') }}
+                ></View>
+                <Text style={{ ...style.color('secondary') }}>{formatNumber(total_like)}</Text>
+              </View>
+            </View>
           </View>
         </View>
       </View>

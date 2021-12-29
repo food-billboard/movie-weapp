@@ -1,6 +1,5 @@
-// @import "~taro-ui/dist/style/components/icon.scss";
-.curtain-show {}
-.curtain-hidden {
+.component-curtain-show {}
+.component-curtain-hidden {
   display:none;
 }
 #curtain{
@@ -10,7 +9,7 @@
   left:0;
   top:0;
   z-index:1000;
-  .curtain-mask{
+  .component-curtain-mask{
     width:100%;
     height:100%;
     position:fixed;
@@ -19,7 +18,7 @@
     z-index:1000;
     opacity:.9;
   }
-  .curtain-main{
+  .component-curtain-main{
     width:100%;
     position:fixed;
     left:50%;

@@ -85,7 +85,7 @@ class IconList extends Component<IProps>{
     const realList = listLen % 2 == 0 ? list : [...list, null]
 
     return (
-      <View className='icon-list at-row at-row--wrap at-row__justify--around'>
+      <View className='component-icon-list at-row at-row--wrap at-row__justify--around'>
         {
           realList.map((value: API_USER.IMovieListData) => {
             if (!value) return (
@@ -97,28 +97,28 @@ class IconList extends Component<IProps>{
             const imageList = Array.isArray(images) ? images : [images]
             return (
               <View
-                className='icon-list-content at-col at-col-5'
+                className='component-icon-list-content at-col at-col-5'
                 style={{ ...style.backgroundColor('disabled') }}
                 key={_id}
               >
                 <View
-                  className='icon-list-content-poster'
+                  className='component-icon-list-content-poster'
                   onClick={(event) => { this.goTo.call(this, name, _id, event) }}
                 >
                   {/* <ImageLoading src={image} mode={'scaleToFill'} /> */}
                   <Swipper style={{ height: '100%' }} list={imageList} />
                   <View
                     onClick={this.handleStore.bind(this, _id, store)}
-                    className='at-icon at-icon-heart icon-list-content-poster-store'
+                    className='at-icon at-icon-heart component-icon-list-content-poster-store'
                   ></View>
                 </View>
-                <View className='icon-list-content-main'>
+                <View className='component-icon-list-content-main'>
                   <View
-                    className='icon-list-content-main-name'
+                    className='component-icon-list-content-main-name'
                     style={{ ...style.color('primary') }}
                     onClick={this.handleClick.bind(this, _id)}
                   >{name}</View>
-                  <View className='icon-list-content-main-rate'>
+                  <View className='component-icon-list-content-main-rate'>
                     <Rate
                       value={rate}
                       readonly
@@ -126,10 +126,10 @@ class IconList extends Component<IProps>{
                       size={8}
                     ></Rate>
                   </View>
-                  <View className='icon-list-content-main-extra'
+                  <View className='component-icon-list-content-main-extra'
                     style={{ ...style.color('secondary') }}
                   >
-                    <View className='icon-list-content-main-extra-count'>
+                    <View className='component-icon-list-content-main-extra-count'>
                       {formatNumber(hot)}
                       <Text style={{ fontSize: '70%' }}>人看</Text>
                     </View>

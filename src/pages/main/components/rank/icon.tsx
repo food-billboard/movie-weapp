@@ -15,11 +15,11 @@ export default class RankIcon extends Component<IProps>{
   render() {
     const { rank } = this.props
     return (
-      <View className='icon'
+      <View className='main-rank-icon'
         style={{ ...style.backgroundColor('disabled') }}
       >
         <Text 
-          className='icon-text'
+          className='main-rank-icon-text'
           style={{ ...style.color('thirdly'), fontSize: SYSTEM_PAGE_SIZE(14) + 'px' }}
         >▲{rank}</Text>
       </View>

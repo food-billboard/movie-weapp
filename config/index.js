@@ -10,6 +10,12 @@ const config = {
     '750': 1,
     '828': 1.81 / 2
   },
+  sass: {
+    resource: [
+      path.resolve(__dirname, "..", "src/theme/variable.scss")
+    ],
+    projectDirectory: path.resolve(__dirname, "..")
+  },
   alias: {
     '~assets': path.resolve(dirname, 'assets'),
     '~components': path.resolve(dirname, 'components'),

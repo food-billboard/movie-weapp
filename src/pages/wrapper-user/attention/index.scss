@@ -1,29 +1,29 @@
-.list{
-  width:100%;
-  height:100px;
-  box-sizing:border-box;
-  padding:0 20px;
-  display:flex;
+.page-attention {
+  width: 100%;
+  height: 100px;
+  box-sizing: border-box;
+  padding: 0 20px;
+  display: flex;
   align-items: center;
-  .username{
+  &-username {
     //   float:left;
-    flex:3;
-    margin-left:20px;
+    flex: 3;
+    margin-left: 20px;
     width: 100%;
     white-space: nowrap;
     overflow-x: scroll;
     // text-overflow: ellipsis;
   }
-  .enter{
-      float:right;
-      margin-right:50px;
-      font-weight:500;
-      font-size:50px;
+  &-enter {
+    float: right;
+    margin-right: 50px;
+    font-weight: 500;
+    font-size: 50px;
   }
 }
 
 @media screen and (min-width: 700px) {
-  .username{
-      font-size:32px;
+  .page-attention-username {
+    font-size: 32px;
   }
 }

@@ -1,24 +1,24 @@
-.text-ellipsis{
+.component-text-ellipsis{
   box-sizing:border-box;
   padding: 0 20px;
   line-height:1.5;
   font-size:30px;
 }
-.ellipsis-show,
-.ellipsis-hidden {
+.component-ellipsis-show,
+.component-ellipsis-hidden {
   word-break: break-all;
   text-indent:56px;
 }
-.ellipsis-show {
+.component-ellipsis-show {
   display:block;
 }
-.ellipsis-hidden{
+.component-ellipsis-hidden{
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   overflow: hidden;
 }
-.ellipsis-detail{
+.component-ellipsis-detail{
   line-height:30px;
   text-align:right;
 }

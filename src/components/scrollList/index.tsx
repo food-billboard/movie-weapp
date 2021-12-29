@@ -181,16 +181,16 @@ export default class List extends Component<IProps, IState> {
     const { divider = true } = this.props
 
     return (
-      <View className='list'>
+      <View className='component-scroll-list'>
         <View
           style={isObject(style) ? style : {}}
-          className='scroll-view'
+          className='component-scroll-list-view'
         >
           {
             !loading &&
             <View 
               id='scroll-header' 
-              className={fixHeader ? 'scroll-fix-header' : 'scroll-normal-header'} 
+              className={fixHeader ? 'component-scroll-list-fix-header' : 'component-scroll-list-normal-header'} 
               style={{ ...customStyle.backgroundColor('disabled') }}
             >
               {
@@ -224,7 +224,7 @@ export default class List extends Component<IProps, IState> {
           {
             !loading &&
             <View 
-              className={fixBottom ? 'scroll-fix-bottom' : 'scroll-normal-bottom'} 
+              className={fixBottom ? 'component-scroll-list-fix-bottom' : 'component-scroll-list-normal-bottom'} 
               id='scroll-bottom'
             >
               {this.props.renderBottom && this.props.renderBottom(this.watchBottomHeight)}
@@ -232,7 +232,7 @@ export default class List extends Component<IProps, IState> {
           }
         </View>
         <View
-          className='active'
+          className='component-scroll-list-active'
         >
           {loading &&
             <AtActivityIndicator

@@ -1,63 +1,64 @@
-@import "~taro-ui/dist/style/components/flex.scss";
+@import '~taro-ui/dist/style/components/flex.scss';
 $item_width: 125px;
-.header-type{
-    overflow:hidden;
-    transition:.3s;
-    font-size:32px;
-    position: relative;
-    z-index: 2;
+.page-classify-header {
+  overflow: hidden;
+  transition: 0.3s;
+  font-size: 32px;
+  position: relative;
+  z-index: 2;
 
-    .header{
-        position:fixed;
-        white-space:nowrap;
+  &-content {
+    position: fixed;
+    white-space: nowrap;
+    &-list {
+      height: 80px;
+      display: inline-block;
+      text-align: center;
+      line-height: 80px;
+      font-weight: bold;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      opacity: 0.6;
+      box-sizing: border-box;
+      padding: 0 10px;
     }
-    .text{
-        position:fixed;
-        left:0;
-        top:0;
-        display:inline-block;
-        width:$item_width;
-        height:80px;
-        line-height:80px;
-        z-index:9999;
-        text-indent:20px;
-        text-align:center;
-    }
-    .header-list{
-        height:80px;
-        display:inline-block;
-        text-align:center;
-        line-height:80px;
-        font-weight:bold;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        opacity: 0.6;
-        box-sizing: border-box;
-        padding: 0 10px;
-    }
-    .header-list-active {
-        opacity: 1;
-        text-shadow: 0 0 5px currentColor;
-    }
-    .header-list:nth-of-type(1) {
-        margin-left:$item_width;
-    }
-    .header-list-size{
-        width:$item_width;
-    }
-    .header-type-detail{
-        position:fixed;
-    }
+  }
+  &-text {
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: inline-block;
+    width: $item_width;
+    height: 80px;
+    line-height: 80px;
+    z-index: 9999;
+    text-indent: 20px;
+    text-align: center;
+  }
+
+  &-list-active {
+    opacity: 1;
+    text-shadow: 0 0 5px currentColor;
+  }
+  &-list:nth-of-type(1) {
+    margin-left: $item_width;
+  }
+  &-list-size {
+    width: $item_width;
+  }
+  &-type-detail {
+    position: fixed;
+  }
 }
-.classify-list {
-    position: relative;
-    z-index: 1;
-    margin-top: 20px;
+.page-classify-list {
+  position: relative;
+  z-index: 1;
+  margin-top: 20px;
 }
-.btn{
-    position:fixed;
-    right:20px;
-    bottom:50px;
-    z-index:999;
+.page-classify-btn {
+  position: fixed;
+  right: 20px;
+  bottom: 50px;
+  z-index: 999;
 }

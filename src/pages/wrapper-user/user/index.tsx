@@ -164,12 +164,12 @@ class User extends Component<any>{
       <View id='user'
         style={{ ...style.backgroundColor('bgColor') }}
       >
-        <View className='user-icon'>
+        <View className='page-user-icon'>
           <IconHead
             list={nextInfo}
           />
         </View>
-        <View className='user-list'
+        <View className='page-user-list'
           style={{ borderBottom: '1px solid rgb(237, 243, 248)' }}
         >
           <List

@@ -151,11 +151,11 @@ export default class Index extends Component<any> {
         <View
           className={
             classnames({
-              'header-list': true,
+              'page-classify-header-list': true,
               'at-col': typeShow,
               'at-col-2': typeShow,
-              'header-list-size': !typeShow,
-              'header-list-active': id == this.id
+              'page-classify-header-list-size': !typeShow,
+              'page-classify-header-list-active': id == this.id
             })
           }
           style={{ ...style.color('primary') }}
@@ -178,14 +178,14 @@ export default class Index extends Component<any> {
         autoFetch={false}
         renderContent={
           <View>
-            <View className='header-type' style={{
+            <View className='page-classify-header' style={{
               ...bgColor,
               height: Number(SYSTEM_PAGE_SIZE(headerHeight)) / 2 + 'px'
             }}
             >
               {
                 !!list.length &&
-                <Text className='text'
+                <Text className='page-classify-header-text'
                   style={{ ...style.color('thirdly'), ...bgColor }}
                 >分类: </Text>
               }
@@ -193,13 +193,13 @@ export default class Index extends Component<any> {
                 showType || !typeShow ?
                   <ScrollView
                     scrollX
-                    className='header'
+                    className='page-classify-header-content'
                     style={{ ...bgColor }}
                   >
                     {
                       !showType ?
                         <View
-                          className='header-list header-list-size'
+                          className='page-classify-header-content-list page-classify-header-list-size'
                           style={{ ...style.color('primary'), fontWeight: 'normal' }}
                           onClick={(e) => { this.handleControlTypeDetail.call(this, SHOW_TYPE.SHOW_MORE) }}
                         >
@@ -211,12 +211,12 @@ export default class Index extends Component<any> {
                   </ScrollView>
                   :
                   <View
-                    className='header-type-detail at-row at-row--wrap'
+                    className='page-classify-header-type-detail at-row at-row--wrap'
                     style={{ ...bgColor }}
                   >
                     {list}
                     <View
-                      className='header-list at-col at-col-2'
+                      className='page-classify-header-list at-col at-col-2'
                       style={{ ...style.color('primary'), fontWeight: 'normal' }}
                       onClick={(e) => { this.handleControlTypeDetail.call(this, SHOW_TYPE.HIDE_MORE) }}
                     >
@@ -225,7 +225,7 @@ export default class Index extends Component<any> {
                   </View>
               }
             </View>
-            <View className='classify-list'>
+            <View className='page-classify-list'>
               {
                 listShow ? (<LinearList list={data} reload={this.fetchData.bind(this, {}, true)} />) : (<IconList list={data} reload={this.fetchData.bind(this, {}, true)} />)
               }
@@ -236,7 +236,7 @@ export default class Index extends Component<any> {
         renderBottom={
           (_: () => any) => {
             return (
-              <View className='btn'>
+              <View className='page-classify-btn'>
                 <Fab value={listShow} change={this.listChange} />
               </View>
             )

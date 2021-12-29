@@ -126,7 +126,7 @@ class Register extends Component<any>{
   public render() {
     const { email, password, captcha } = this.state
     return (
-      <View className='register' style={{ ...style.backgroundColor('bgColor') }}>
+      <View className='page-forget' style={{ ...style.backgroundColor('bgColor') }}>
         <AtForm
           onSubmit={this.submit}
           onReset={this.reset}
@@ -166,7 +166,7 @@ class Register extends Component<any>{
           <AtButton
             onClick={this.submit}
             type='primary'
-            className='submit'
+            className='page-forget-submit'
             customStyle={{ ...style.backgroundColor('primary'), ...style.border(1, 'primary', 'solid', 'all') }}
           >
             提交

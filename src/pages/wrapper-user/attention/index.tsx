@@ -69,7 +69,7 @@ export default class extends Component<any>{
             {
               data.map(({ avatar, username, _id: id }) => {
                 return (
-                  <View className='list'
+                  <View className='page-attention'
                     style={{ ...style.border(1, 'disabled', 'solid', 'bottom') }}
                     key={id}
                     onClick={this.getUser.bind(this, id)}
@@ -80,13 +80,13 @@ export default class extends Component<any>{
                       image={avatar}
                       text='头'
                     ></AtAvatar>
-                    <View className='username'
+                    <View className='page-attention-username'
                       style={{ ...style.color('primary') }}
                     >
                       {username}
                     </View>
                     <Text 
-                      className='enter'
+                      className='page-attention-enter'
                       style={{ ...style.color('thirdly') }}
                     >{'>'}</Text>
                   </View>
