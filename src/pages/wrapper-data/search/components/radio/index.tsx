@@ -90,7 +90,7 @@ export default class RadioList extends Component<IProps>{
 
     return (
       <View className='page-search-radio'>
-        <Text className='page-search-radio-select'
+        <Text className='page-search-radio-select normal-font-size-class'
           onClick={this.showList}
         >
           {text}

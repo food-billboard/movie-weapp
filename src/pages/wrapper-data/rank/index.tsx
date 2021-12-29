@@ -145,6 +145,7 @@ export default class extends Component<any> {
                       circle
                       onClick={this.exchangeRank.bind(this, item)}
                       key={_id}
+                      className='sub-title-font-size-class'
                     >
                       {value}
                     </AtTag>

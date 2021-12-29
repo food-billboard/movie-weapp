@@ -56,7 +56,7 @@ export default class GTate extends Component<IProps, IState>{
         }
         <Text
           className='component-rate-number'
-          style={{ ...style.color('secondary'), fontSize: (size as number * 1.3) + "px" }}
+          style={{ ...style.color('secondary'), fontSize: size + "px" }}
         >{value}</Text>
       </View>
     )

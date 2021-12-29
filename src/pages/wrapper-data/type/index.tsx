@@ -178,7 +178,7 @@ export default class Index extends Component<any> {
         autoFetch={false}
         renderContent={
           <View>
-            <View className='page-classify-header' style={{
+            <View className='page-classify-header normal-font-size-class' style={{
               ...bgColor,
               height: Number(SYSTEM_PAGE_SIZE(headerHeight)) / 2 + 'px'
             }}

@@ -107,7 +107,7 @@ export default class extends Component<IProps, IState> {
               {username}
             </View>
             <View
-              className='content-header-extra at-col at-col-3 at-col at-col-7 comment-detail-header-content-header-time'
+              className='content-header-extra at-col at-col-3 at-col at-col-7 comment-detail-header-content-header-time normal-font-size-class'
               style={{ ...style.color('secondary') }}
             >
               {formatTime(createdAt)}
@@ -132,17 +132,17 @@ export default class extends Component<IProps, IState> {
             <View className='at-row at-row__align--center comment-detail-header-content-footer-main'>
               <View className='at-col at-col-6 comment-detail-header-content-footer-main-icon-content'>
                 <View
-                  className='comment-detail-header-content-footer-main-icon-content-footer-icon at-icon at-icon-message'
+                  className='comment-detail-header-content-footer-main-icon-content-footer-icon at-icon at-icon-message normal-font-size-class'
                   style={{ ...style.color('thirdly') }}
                 ></View>
                 <Text style={{ ...style.color('secondary') }}>{formatNumber(comment_users)}</Text>
               </View>
               <View
-                className='at-col at-col-6 comment-detail-header-content-footer-main-icon-content-footer-icon'
+                className='at-col at-col-6 comment-detail-header-content-footer-main-icon-content-footer-icon normal-font-size-class'
                 onClick={this.props.like.bind(this, userId, commentId)}
               >
                 <View
-                  className={`comment-detail-header-content-footer-main-icon-content-footer-icon at-icon at-icon-heart${like ? '-2' : ''}`}
+                  className={`comment-detail-header-content-footer-main-icon-content-footer-icon normal-font-size-class at-icon at-icon-heart${like ? '-2' : ''}`}
                   style={{ ...style.color('thirdly') }}
                 ></View>
                 <Text style={{ ...style.color('secondary') }}>{formatNumber(total_like)}</Text>

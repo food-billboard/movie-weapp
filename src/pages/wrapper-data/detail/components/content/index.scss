@@ -10,7 +10,6 @@
   &-title {
     width: 100%;
     font-weight: bold;
-    font-size: 48px;
     &-name {
       @extend .ellipsis;
     }
@@ -39,7 +38,6 @@
         @extend .ellipsis;
         text-align: left;
         line-height: 1.8;
-        font-size: 32px;
         .text {
           padding-left: .5em;
         }
@@ -47,20 +45,14 @@
       &-hot-text,
       &-look-text {
         color: rgba(0, 0, 0, 0.8);
-        font-size: 24px;
       }
       &-description {
         border-radius: 20px;
         box-sizing: border-box;
         padding: 0 5px;
-        font-size: 32px;
       }
     }
   }
-}
-
-.data-detail-content-icon {
-  font-size: 32px;
 }
 
 @media screen and (min-width: 700px) {

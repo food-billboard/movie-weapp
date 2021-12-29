@@ -102,10 +102,10 @@ export default class Content extends Component<IProps, IState>{
           className='data-detail-content-title at-row'
           style={{ ...style.color('primary') }}
         >
-          <View className='data-detail-content-title-name at-col at-col-10'>
+          <View className='data-detail-content-title-name title-font-size-class at-col at-col-10'>
             {name}
           </View>
-          <View className='data-detail-content-title-store at-col at-col-2'>
+          <View className='data-detail-content-title-store title-font-size-class at-col at-col-2'>
             <GStore
               movie={name}
               value={store}
@@ -122,7 +122,7 @@ export default class Content extends Component<IProps, IState>{
           </View>
           <View className='data-detail-content-main-rate'>
             <View className='data-detail-content-main-rate-up'>
-              <View className='data-detail-content-main-rate-title'>楼主评分:</View>
+              <View className='data-detail-content-main-rate-title sub-title-font-size-class'>楼主评分:</View>
             </View>
             <View className='at-row at-row__align--center'>
               <View className='at-col at-col-9'>
@@ -134,7 +134,7 @@ export default class Content extends Component<IProps, IState>{
               </View>
             </View>
           </View>
-          <View className='data-detail-content-main-info'>
+          <View className='data-detail-content-main-info normal-font-size-class'>
             <View className='data-detail-content-main-info-actor'>
               主演: 
               <Text className='text'

@@ -98,10 +98,10 @@ export default class extends Component<any> {
         </View>
         <View className='main-page-news'>
           <View className='at-row at-row__justify--between at-row__align--center'>
-            <Text className='main-page-news-title at-col'
+            <Text className='main-page-news-title title-font-size-class at-col'
               style={{ ...secondaryColor }}
             >每日上新</Text>
-            <Text className='main-page-news-title at-col'
+            <Text className='main-page-news-title title-font-size-class at-col'
               style={{ ...secondaryColor }}
               onClick={this.hanleExchangeDaily}
             >换一批</Text>
@@ -111,7 +111,7 @@ export default class extends Component<any> {
           />
         </View>
         <View className='main-page-rank'>
-          <Text className='main-page-rank-title'
+          <Text className='main-page-rank-title title-font-size-class'
             style={{ ...secondaryColor }}
           >排行榜</Text>
           {

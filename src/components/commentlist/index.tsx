@@ -197,7 +197,7 @@ class ListContent extends Component<IProps, IState>{
 
                     <View className='comment-item-header-info at-row'>
                       <View
-                        className='comment-item-header-info-username at-col at-col-8'
+                        className='comment-item-header-info-username sub-title-font-size-class at-col at-col-8'
                         style={style.color('thirdly')}
                       >
                         <Text
@@ -220,7 +220,7 @@ class ListContent extends Component<IProps, IState>{
                     </View>
 
                     <View
-                      className='comment-item-header-sub-time'
+                      className='comment-item-header-sub-time normal-font-size-class'
                       style={style.color('thirdly')}
                     >
                       {formatTime(createdAt)}
@@ -229,7 +229,7 @@ class ListContent extends Component<IProps, IState>{
                   </View>
                 </View>
                 <View
-                  className='comment-item-content'
+                  className='comment-item-content normal-font-size-class'
                   style={{ ...style.color('primary') }}
                   onClick={this.getDetail.bind(this, _id)}
                 >
@@ -270,7 +270,7 @@ class ListContent extends Component<IProps, IState>{
                           onClick={() => { this.handlePreviewMedia.apply(this, args) }}
                         >
                           <View
-                            className={`comment-item-image-list-image-icon at-icon ${ICON_TYPE[type]}`}
+                            className={`comment-item-image-list-image-icon big-icon-font-size-class at-icon ${ICON_TYPE[type]}`}
                             style={{
                               ...style.color('primary'),
                               textShadow: `0 0 2px ${TypeColor()['disabled']}`,

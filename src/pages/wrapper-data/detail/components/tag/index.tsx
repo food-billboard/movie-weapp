@@ -45,6 +45,7 @@ export default class extends Component<IProps, IState> {
                 key={id || value}
                 name={id || value}
                 type='primary'
+                className='normal-font-size-class'
                 customStyle={{ ...TAG_STYLE, backgroundColor: randomColor(), ...(isObject(style) ? style : {}) }}
               >
                 {value}

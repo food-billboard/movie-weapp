@@ -67,7 +67,7 @@ export default class Time extends Component<IProps>{
     const { open, text } = this.state
     return (
       <View
-        className='captcha-time'
+        className='captcha-time normal-font-size-class'
         style={{ ...style.color(open ? 'primary' : 'thirdly') }}
         onClick={this.handleClick}
       >

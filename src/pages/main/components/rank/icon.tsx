@@ -19,7 +19,7 @@ export default class RankIcon extends Component<IProps>{
         style={{ ...style.backgroundColor('disabled') }}
       >
         <Text 
-          className='main-rank-icon-text'
+          className='main-rank-icon-text normal-font-size-class'
           style={{ ...style.color('thirdly'), fontSize: SYSTEM_PAGE_SIZE(14) + 'px' }}
         >▲{rank}</Text>
       </View>

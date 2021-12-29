@@ -21,7 +21,7 @@ export default class extends Component<IProps> {
     const { title, fontStyle = {}, dividerStyle = {} } = this.props
 
     return (
-      <View className='page-detail-item-title'>
+      <View className='page-detail-item-title '>
         <AtTag
           customStyle={{
             ...style.color('primary'),
@@ -32,7 +32,7 @@ export default class extends Component<IProps> {
             zIndex: 2,
             ...(isObject(fontStyle) ? fontStyle : {})
           }}
-          className='page-detail-item-title-main'
+          className='page-detail-item-title-main sub-title-font-size-class'
         >{title}</AtTag>
         <View
           className='page-detail-item-title-divider'

@@ -75,7 +75,7 @@ export default class Rank extends Component<IProps, IState>{
         {
           !!type && (
             <Text
-              className='rank-title'
+              className='rank-title sub-title-font-size-class'
               style={{ ...style.backgroundColor('secondary'), ...style.color('disabled') }}
               onClick={() => { router.push(routeAlias.rank, { id, type }) }}
             >{type}</Text>

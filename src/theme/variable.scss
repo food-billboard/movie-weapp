@@ -1,6 +1,24 @@
 
-$normal-font-size: 24px;
+$normal-font-size: 32px;
 
-$title-font-size: 32px;
+$title-font-size: 40px;
 
-$sub-title-font-size: 28px;
+$sub-title-font-size: 36px;
+
+.normal-font-size-class {
+  font-size: $normal-font-size;
+}
+
+.title-font-size-class {
+  font-size: $title-font-size;
+}
+
+.sub-title-font-size-class {
+  font-size: $sub-title-font-size;
+}
+
+$big-icon-font-size: 60px;
+
+.big-icon-font-size-class {
+  font-size: $sub-title-font-size;
+}

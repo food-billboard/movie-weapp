@@ -24,7 +24,6 @@
         justify-content: flex-start;
         align-items: center;
         flex: 1;
-        font-size: 32px;
         &-content {
           height: 100%;
           flex: 0.05 1 auto;
@@ -41,11 +40,6 @@
         flex: 1;
       }
     }
-    .comment-item-header-sub-time {
-      font-size: small;
-    }
-    .comment-item-header-sub-rate {
-    }
   }
   &-content {
     width: 100%;
@@ -57,14 +51,12 @@
     overflow: hidden;
     word-break: break-all;
     box-sizing: border-box;
-    font-size: 28px;
   }
   &-image-list {
     width: 100%;
     box-sizing: border-box;
     padding-left: 20px;
     &-image {
-      // height:220px;
       width: 100%;
       display: flex;
       justify-content: center;
@@ -81,7 +73,6 @@
         left: 50%;
         top: 50%;
         transform: translateX(-50%) translateY(-50%);
-        font-size: 64px;
         border-radius: 32px;
         opacity: 0.6;
       }

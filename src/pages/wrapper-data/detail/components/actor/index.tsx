@@ -54,7 +54,7 @@ export default class extends Component<IProps, IState> {
                   }} 
                   loadingProps={{content: ''}}
                 />
-                <View className='data-actor-icon-list-text'>
+                <View className='data-actor-icon-list-text normal-font-size-class'>
                   <Text>{name}</Text>
                 </View>
               </View>

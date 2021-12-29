@@ -6,12 +6,13 @@ import SearchButton from '~components/searchbutton'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import { getHot } from '~services'
 import style from '~theme/style'
+import { normalFontSize } from '~theme/variable'
 import { router, routeAlias } from '~utils'
 import noop from 'lodash/noop'
 
 import './index.scss'
 
-const HOT_HEIGHT = SYSTEM_PAGE_SIZE(35)
+const HOT_HEIGHT = SYSTEM_PAGE_SIZE(normalFontSize)
 
 interface Hot {
   name: string,
@@ -70,7 +71,7 @@ export default class extends Component<IProps, IState> {
               style={{ height: hotShow ? hotShow + 'px' : '0', ...style.backgroundColor('bgColor'), ...style.color('primary') }}
             >
               <View
-                className='at-col at-col-1 hot-search-title'
+                className='at-col at-col-1 hot-search-title normal-font-size-class'
               >热搜</View>
               {
                 hot.map((value) => {

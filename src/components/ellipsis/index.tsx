@@ -46,7 +46,7 @@ export default class extends Component<IProps, IState> {
 
     return (
       <View
-        className='component-text-ellipsis'
+        className='component-text-ellipsis normal-font-size-class'
         style={{ ...style.color('secondary'), ...(isObject(customStyle) ? customStyle : {}) }}
         onClick={this.getDetail}
       >

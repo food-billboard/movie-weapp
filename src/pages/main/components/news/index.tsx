@@ -52,7 +52,7 @@ class News extends Component<IProps>{
                 key={id}
               >
                 <Text
-                  className='news-title'
+                  className='news-title normal-font-size-class'
                   style={{ ...style.color('primary'), textShadow: `0 0 2px ${TypeColor()['disabled']}` }}
                 >{title}</Text>
                 <ImageLoading

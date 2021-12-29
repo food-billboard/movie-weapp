@@ -86,7 +86,7 @@ export default class extends Component<any>{
                       {username}
                     </View>
                     <Text 
-                      className='page-attention-enter'
+                      className='page-attention-enter big-icon-font-size-class'
                       style={{ ...style.color('thirdly') }}
                     >{'>'}</Text>
                   </View>

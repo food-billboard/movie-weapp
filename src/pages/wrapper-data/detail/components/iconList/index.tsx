@@ -58,7 +58,7 @@ export default class extends Component<IProps, IState> {
     return (
       <View className='page-detail-icon-list'>
         <View
-          className='page-detail-icon-list-text-content'
+          className='page-detail-icon-list-text-content normal-font-size-class'
           style={{ visibility: activeShow ? 'visible' : 'hidden', ...style.backgroundColor('thirdly'), ...style.color('disabled') }}
           onClick={() => { this.props.handleClick && this.props.handleClick() }}
         >

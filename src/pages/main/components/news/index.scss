@@ -16,11 +16,11 @@
       position: absolute;
       left: 0;
       top: 0;
+      z-index: 1;
       font-weight: bold;
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
-      font-size: 28px;
       box-sizing: border-box;
       padding: 3px 5px 0 5px;
     }

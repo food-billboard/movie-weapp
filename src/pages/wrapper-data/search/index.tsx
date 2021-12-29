@@ -239,7 +239,7 @@ export default class Index extends Component<any> {
               <View
                 className='page-search-main-sub'
               >
-                <View className='at-row at-row__justify--around page-search-main-sub-content'>
+                <View className='at-row at-row__justify--around page-search-main-sub-content normal-font-size-class'>
                   <View className='at-col at-col-5 page-search-main-sub-content-select'>
                     <RadioList screen={this.sortScreen} />
                   </View>
