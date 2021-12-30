@@ -62,7 +62,7 @@ class Login extends Component<any> {
     if (currRouter && currRouter.params.target) {
       return router.replace(currRouter.params.target)
     }
-    Taro.switchTab({ url: '../../main/index' })
+    Taro.switchTab({ url: '/pages/mine/index' })
   }
 
   public register = () => router.push(routeAlias.register)
@@ -83,6 +83,7 @@ class Login extends Component<any> {
             placeholder='手机号'
             value={mobile}
             onChange={this.handleUser.bind(this)}
+            className='empty-bg-input'
           />
           <AtInput
             name='password'
@@ -91,6 +92,7 @@ class Login extends Component<any> {
             placeholder='请输入密码'
             value={password}
             onChange={this.handlePass.bind(this)}
+            className='empty-bg-input'
           />
           <AtButton
             onClick={this.submit}
@@ -100,7 +102,7 @@ class Login extends Component<any> {
           >
             登录
           </AtButton>
-          <View className='at-row at-row__justify--between'>
+          <View className='at-row at-row__justify--between sub-title-font-size-class'>
             <View 
               className='at-col page-login-register' 
               onClick={this.register}

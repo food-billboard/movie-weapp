@@ -137,6 +137,7 @@ class Register extends Component<any>{
             placeholder='请输入邮箱'
             value={email}
             onChange={this.onEmailChange}
+            className='empty-bg-input'
           />
           <AtInput
             name='mobile'
@@ -146,6 +147,7 @@ class Register extends Component<any>{
             value={mobile}
             required
             onChange={this.onMobileChange}
+            className='empty-bg-input'
           />
           <AtInput
             name='password'
@@ -155,6 +157,7 @@ class Register extends Component<any>{
             value={password}
             required
             onChange={this.onPasswordChange}
+            className='empty-bg-input'
           />
           <AtInput
             clear
@@ -165,6 +168,7 @@ class Register extends Component<any>{
             value={captcha}
             required
             onChange={this.onCaptchaChange}
+            className='empty-bg-input'
           >
             <Time
               getData={this.getData}

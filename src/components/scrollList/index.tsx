@@ -5,7 +5,7 @@ import { AtActivityIndicator } from 'taro-ui'
 import noop from 'lodash/noop'
 import GDivider from '~components/divider'
 import GResult from '~components/result'
-import { isObject, ESourceTypeList, sleep } from '~utils'
+import { ESourceTypeList, sleep } from '~utils'
 import customStyle from '~theme/style'
 import Top from '../topbutton'
 import './index.scss'
@@ -30,8 +30,6 @@ export interface IState {
   empty: boolean
   query: any
   loading: boolean
-  headerHeight: number
-  bottomHeight: number
   [key: string]: any
 }
 
@@ -63,14 +61,10 @@ export default class List extends Component<IProps, IState> {
     empty: false,
     query: {},
     loading: !!this.props.autoFetch,
-    headerHeight: 0,
-    bottomHeight: 0
   }
 
   public componentDidMount = async () => {
     await sleep(10)
-    this.watchBottomHeight()
-    this.watchHeaderHeight()
     const { autoFetch } = this.props
     if (!autoFetch) return
     const { query } = this.state
@@ -138,36 +132,39 @@ export default class List extends Component<IProps, IState> {
   }
 
   public getHeight(domId: string, key: string) {
-    let _domId = domId
-    if (!/^#.+/.test(_domId)) _domId = `#${_domId}`
-    const that = this
-    const query = Taro.createSelectorQuery() // query 是 SelectorQuery 对象
-    query.select(_domId).boundingClientRect() // select 后是 NodesRef 对象，然后 boundingClientRect 返回 SelectorQuery 对象
-    query.selectViewport().scrollOffset() // selectViewport 后是 NodesRef 对象，然后 scrollOffset 返回 SelectorQuery 对象
-    query.exec(function (res) { // exec 返回 NodesRef 对象
-      const [dom] = res.filter(currentDom => currentDom && currentDom.id == _domId.slice(1))
-      if (!dom) return
-      that.setState({
-        [key]: dom.height || 0
-      })
-    })
+    // ! 没啥用
+    // let _domId = domId
+    // if (!/^#.+/.test(_domId)) _domId = `#${_domId}`
+    // const that = this
+    // const query = Taro.createSelectorQuery() // query 是 SelectorQuery 对象
+    // query.select(_domId).boundingClientRect() // select 后是 NodesRef 对象，然后 boundingClientRect 返回 SelectorQuery 对象
+    // query.selectViewport().scrollOffset() // selectViewport 后是 NodesRef 对象，然后 scrollOffset 返回 SelectorQuery 对象
+    // query.exec(function (res) { // exec 返回 NodesRef 对象
+    //   const [dom] = res.filter(currentDom => currentDom && currentDom.id == _domId.slice(1))
+    //   if (!dom) return
+    //   that.setState({
+    //     [key]: dom.height || 0
+    //   })
+    // })
   }
 
   //获取header高度
   public watchHeaderHeight = () => {
-    const { fixHeader } = this.props
-    if (!fixHeader) return
-    setTimeout(() => {
-      this.getHeight('scroll-header', 'headerHeight')
-    }, 10)
+    // ! 没啥用
+    // const { fixHeader } = this.props
+    // if (!fixHeader) return
+    // setTimeout(() => {
+    //   this.getHeight('scroll-header', 'headerHeight')
+    // }, 10)
   }
 
   public watchBottomHeight = () => {
-    const { fixBottom } = this.props
-    if (!fixBottom) return
-    setTimeout(() => {
-      this.getHeight('scroll-bottom', 'bottomHeight')
-    }, 10)
+    // ! 没啥用
+    // const { fixBottom } = this.props
+    // if (!fixBottom) return
+    // setTimeout(() => {
+    //   this.getHeight('scroll-bottom', 'bottomHeight')
+    // }, 10)
   }
 
   public render() {
@@ -177,13 +174,15 @@ export default class List extends Component<IProps, IState> {
       style = {},
       emptyShow
     } = this.props
-    const { empty, loading, headerHeight, bottomHeight } = this.state
+    const { empty, loading } = this.state
     const { divider = true } = this.props
+
+    console.log(empty, divider, this.data, 2222)
 
     return (
       <View className='component-scroll-list'>
         <View
-          style={isObject(style) ? style : {}}
+          style={style || {}}
           className='component-scroll-list-view'
         >
           {
@@ -199,7 +198,9 @@ export default class List extends Component<IProps, IState> {
             </View>
           }
           <View 
-            style={{ ...customStyle.backgroundColor('bgColor'), paddingTop: `${fixHeader ? headerHeight : 0}px` }}
+            style={{ 
+              ...customStyle.backgroundColor('bgColor'), 
+            }}
           >
             {
               emptyShow ? (
@@ -216,7 +217,13 @@ export default class List extends Component<IProps, IState> {
             }
           </View>
           {
-            !!this.data.length && empty && divider && <GDivider lineColor='transparent' other={{ paddingBottom: `${fixBottom ? bottomHeight : 0}px` }} />
+            empty 
+            && divider 
+            && (
+              <GDivider 
+                lineColor='transparent' 
+              />
+            )
           }
           {/* <Top 
             ref={this.topRef} 

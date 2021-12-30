@@ -140,7 +140,7 @@ class CommentMovie extends Component<any> {
               <View id='commovie-header'>
                 <Header 
                   content={headerData}
-                  handleSizeChange={watch}
+                  // handleSizeChange={watch}
                 ></Header>
               </View>
             )

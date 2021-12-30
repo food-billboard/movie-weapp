@@ -122,29 +122,31 @@ class CommentDetail extends Component<any> {
         query={{ pageSize: 7 }}
         emptyShow={false}
         renderContent={
-          <View>
-            <Header content={headerData}
-              like={this.like}
-            ></Header>
-            <List
-              comment={this.publish}
-              list={data}
-              like={this.like}
-            ></List>
-          </View>
+          <List
+            comment={this.publish}
+            list={data}
+            like={this.like}
+          ></List>
         }
         fetch={this.throttleFetchData}
+        renderHeader={
+          () => {
+            return (
+              <Header content={headerData}
+                like={this.like}
+              ></Header>
+            )
+          }
+        }
         renderBottom={
           (_: () => any) => {
             return (
-              <View>
-                <GButton
-                  style={{ width: '100%', height: '92' }}
-                  type='secondary'
-                  value={new Array(2).fill('发布评论')}
-                  operate={this.publish}
-                />
-              </View>
+              <GButton
+                style={{ width: '100%', height: '92' }}
+                type='secondary'
+                value={new Array(2).fill('发布评论')}
+                operate={this.publish}
+              />
             )
           }
         }
