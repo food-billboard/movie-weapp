@@ -1,5 +1,10 @@
 .page-forget {
+  height: 100vh;
+  &-form {
+    background-color: transparent;
+  }
+  &-reset,
   &-submit {
-    margin: 30px 0;
+    margin: 24px 0;
   }
 }

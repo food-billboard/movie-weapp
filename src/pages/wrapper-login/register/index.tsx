@@ -34,22 +34,9 @@ class Register extends Component<any>{
 
   //监听密码输入
   public onPasswordChange = (value: string, event: any) => {
-    const { type } = event
-    if (type == 'blur' && value.length < 6) {
-      TaroShowModal({
-        title: '修改失败',
-        content: '密码长度不能低于6',
-        showCancel: false
-      }).then(_ => {
-        this.setState({
-          password: ''
-        })
-      })
-    } else {
-      this.setState({
-        password: value
-      })
-    }
+    this.setState({
+      password: value
+    })
   }
 
   //监听手机号输入
@@ -62,7 +49,7 @@ class Register extends Component<any>{
   public submit = async () => {
     const { email, password, mobile, captcha } = this.state
     let message!: string
-    if (password.length <= 8) {
+    if (password.length <= 10) {
       message = '密码格式长度不足'
     } else if (!this.emailValidate(email)) {
       message = '邮箱格式不正确'
@@ -138,6 +125,7 @@ class Register extends Component<any>{
     return (
       <View className='page-register' style={{ ...style.backgroundColor('bgColor') }}>
         <AtForm
+          className='page-register-form'
           onSubmit={this.submit}
           onReset={this.reset}
         >
@@ -182,21 +170,28 @@ class Register extends Component<any>{
               getData={this.getData}
             />
           </AtInput>
-          <AtButton
-            onClick={this.submit}
-            type='primary'
-            className='page-register-submit'
-            customStyle={{ ...style.backgroundColor('primary'), ...style.border(1, 'primary', 'solid', 'all') }}
-          >
-            提交
-          </AtButton>
-          <AtButton
-            onClick={this.reset}
-            type='secondary'
-            customStyle={{ ...style.border(1, 'primary', 'solid', 'all'), ...style.color('primary') }}
-          >
-            重置
-          </AtButton>
+          <View className='at-row at-row__justify--around'>
+            <View className='at-col at-col-4'>
+              <AtButton
+                onClick={this.submit}
+                type='primary'
+                className='page-register-submit'
+                customStyle={{ ...style.backgroundColor('primary'), ...style.border(1, 'primary', 'solid', 'all') }}
+              >
+                提交
+              </AtButton>
+            </View>
+            <View className='at-col at-col-4'>
+              <AtButton
+                onClick={this.reset}
+                type='secondary'
+                className='page-register-reset'
+                customStyle={{ ...style.border(1, 'primary', 'solid', 'all'), ...style.color('primary') }}
+              >
+                重置
+              </AtButton>
+            </View>
+          </View>
         </AtForm>
       </View>
     )

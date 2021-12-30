@@ -1,5 +1,10 @@
 .page-register {
-    &-submit {
-      margin: 30px 0;
-    }
+  height: 100vh;
+  &-form {
+    background-color: transparent;
   }
+  &-reset,
+  &-submit {
+    margin: 24px 0;
+  }
+}

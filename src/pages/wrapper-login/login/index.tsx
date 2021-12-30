@@ -75,7 +75,7 @@ class Login extends Component<any> {
 
     return (
       <View className='page-login' style={{ ...style.backgroundColor('bgColor') }}>
-        <AtForm>
+        <AtForm className='page-login-form'>
           <AtInput
             name='mobile'
             title='手机号'
@@ -93,7 +93,6 @@ class Login extends Component<any> {
             onChange={this.handlePass.bind(this)}
           />
           <AtButton
-            // formType='submit'
             onClick={this.submit}
             type='primary'
             className='page-login-submit'
@@ -101,21 +100,22 @@ class Login extends Component<any> {
           >
             登录
           </AtButton>
-          <AtButton
-            onClick={this.register}
-            type='secondary'
-            className='page-login-register'
-            customStyle={{ ...style.color('primary'), ...style.border(1, 'primary', 'solid', 'all') }}
-          >
-            注册
-          </AtButton>
-          <AtButton
-            onClick={this.forget}
-            type='secondary'
-            customStyle={{ ...style.color('primary'), ...style.border(1, 'primary', 'solid', 'all') }}
-          >
-            忘记密码
-          </AtButton>
+          <View className='at-row at-row__justify--between'>
+            <View 
+              className='at-col page-login-register' 
+              onClick={this.register}
+              style={{ ...style.color('primary') }}
+            >
+              注册
+            </View>
+            <View 
+              className='at-col page-login-forget' 
+              onClick={this.forget}
+              style={{ ...style.color('primary') }}
+            >
+              忘记密码
+            </View>
+          </View>
         </AtForm>
       </View>
     )
