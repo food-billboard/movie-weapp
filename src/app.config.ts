@@ -20,20 +20,20 @@ export default {
       {
         "pagePath": "pages/main/index",
         "text": "首页",
-        "iconPath": "./assets/home-icon.png",
-        "selectedIconPath": './assets/home-icon-active.png'
+        "iconPath": "./assets/home.png",
+        "selectedIconPath": './assets/home-active.png'
       },
       {
         "pagePath": "pages/news/index",
         "text": "消息",
-        "iconPath": "./assets/issue-icon.png",
-        "selectedIconPath": './assets/issue-icon-active.png'
+        "iconPath": "./assets/message.png",
+        "selectedIconPath": './assets/message-active.png'
       },
       {
         "pagePath": "pages/mine/index",
         "text": "我的",
-        "iconPath": "./assets/mine-icon.png",
-        "selectedIconPath": './assets/mine-icon.png'
+        "iconPath": "./assets/mine.png",
+        "selectedIconPath": './assets/mine-active.png'
       }
     ]
   },
