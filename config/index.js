@@ -66,6 +66,9 @@ const config = {
     publicPath: '/',
     staticDirectory: 'static',
     esnextModules: ['taro-ui'],
+    router: {
+      basename: process.env.NODE_ENV === 'development' ? '' : '/api/backend/moviet5/'
+    },
     module: {
       postcss: {
         autoprefixer: {

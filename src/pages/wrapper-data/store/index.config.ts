@@ -1,4 +1,4 @@
 export default {
   navigationBarTitleText: "收藏",
-  enablePullDownRefresh: true
+  enablePullDownRefresh: process.env.TARO_ENV === "weapp"
 }

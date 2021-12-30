@@ -19,6 +19,7 @@ export interface IProps {
   getUserInfo: TGetUserInfo
   reload: (...args: any[]) => Promise<any>
 }
+
 class IconList extends Component<IProps>{
 
   public static defaultProps: IProps = {
@@ -73,9 +74,16 @@ class IconList extends Component<IProps>{
     return this.props.reload()
   }
 
-  private getUserInfo = (e, id: string) => {
+  private getUserInfo = async (e, id: string) => {
     e.stopPropagation()
-    router.push(routeAlias.user, { id })
+    const result = await this.props.getUserInfo({ prompt: false })
+    if(result && result._id === id) {
+      Taro.switchTab({
+        url: "/pages/mine/index"
+      })
+    }else {
+      router.push(routeAlias.user, { id })
+    }
   }
 
   public render() {
@@ -91,6 +99,7 @@ class IconList extends Component<IProps>{
             if (!value) return (
               <View
                 className='at-col at-col-5'
+                key='component-icon-list-item'
               ></View>
             )
             const { _id, name, images, hot, rate, store, author } = value

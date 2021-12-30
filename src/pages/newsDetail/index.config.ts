@@ -1,3 +1,3 @@
 export default {
-  enablePullDownRefresh: true,
+  enablePullDownRefresh: process.env.TARO_ENV === "weapp",
 }

@@ -9,7 +9,7 @@ export default {
     userInfo: null
   },
   effects: {
-    * getUserInfo({ prompt=true, action, unloginAction=noop }, { call, put }) {
+    * getUserInfo({ prompt=true, action, unloginAction=noop, ignore=false }, { call, put }) {
       const token = yield getToken()
 
       function * unlogin() {

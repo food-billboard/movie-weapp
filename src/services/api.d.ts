@@ -110,3 +110,24 @@ declare namespace API_CHAT {
   }
 
 }
+
+declare namespace API_CUSTOMER {
+
+  export interface UserInfo {
+    _id:	string
+    friend_id:	string
+    hot: number
+    attentions: number 
+    friends: number
+    avatar: string
+    fans: number 
+    username: string
+    mobile: string 
+    description: string
+    email: string
+    createdAt: string 
+    updatedAt: string 
+
+  }
+
+}
