@@ -18,7 +18,7 @@ const RouterConfig = {
 const configs: IConfig = [
 
   // 拷贝静态资源
-  () => require('./assets'),
+  () => {},
 
   // 挂载 models
   (app) => models(app),
