@@ -16,7 +16,6 @@
           position: absolute;
           top: 5px;
           left: 5px;
-          font-size: 60px;
           color: yellowgreen;
           z-index: 1;
         }
@@ -30,7 +29,6 @@
           width: 100%;
           overflow: hidden;
           font-weight: bold;
-          font-size: 40px;
           overflow-x: scroll;
           white-space: nowrap;
         }
@@ -54,15 +52,7 @@
     }
   }
 }
-.movie-data-list-title-content {
-  line-height: 1.2;
-  .movie-data-list-title {
-    font-size: 28px;
-  }
-}
 
 @media screen and (min-width: 700px) {
-  .detail {
-    font-size: 32px;
-  }
+  
 }

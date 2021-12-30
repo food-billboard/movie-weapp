@@ -30,7 +30,6 @@
         overflow-x: scroll;
         width: 100%;
         line-height: 1.4;
-        font-size: 32px;
       }
       &-name::-webkit-scrollbar {
         display: none;
@@ -44,7 +43,6 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        font-size: 28px;
       }
     }
   }

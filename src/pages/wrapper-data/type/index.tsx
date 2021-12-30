@@ -1,42 +1,29 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
-import React, { Component } from 'react'
-import { View, ScrollView, Text } from '@tarojs/components'
-import classnames from 'classnames'
+import React, { Component, createRef } from 'react'
+import { View } from '@tarojs/components'
 import IconList from '~components/iconlist'
 import LinearList from '~components/list'
 import GScrollView from '~components/scrollList'
 import throttle from 'lodash/throttle'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
-import { SYSTEM_PAGE_SIZE } from '~config'
-import { getClassifyList, getClassify } from '~services'
+import { getClassifyList } from '~services'
 import { ESourceTypeList } from '~utils'
 import Fab from './components/fab'
+import ClassifyHeader, { IClassifyHeaderRef } from './components/header'
 
 import './index.scss'
 
 const INIT_QUERY = { currPage: 1, pageSize: 10 }
 
-const SINGLE_HEADER_HEIGHT = 80
-
-const SCROLL_MAX_SHOW_COUNT = 10
-
-enum SHOW_TYPE {
-  SHOW_MORE = 'SHOW_MORE',
-  HIDE_MORE = 'HIDE_MORE'
-}
-
 export default class Index extends Component<any> {
 
   public state = {
     data: [],
-    type: [],
     listShow: true,
-    typeShow: false
   }
 
   public componentDidMount = async () => {
-    await this.fetchTypeData()
     const { params: { id = null } = {} } = getCurrentInstance().router || {}
     if (!id) return
     this.getTypeDetail(id)
@@ -56,6 +43,8 @@ export default class Index extends Component<any> {
   public onReachBottom = async () => {
     await this.scrollRef.current!.handleToLower()
   }
+
+  classifyHeaderRef = createRef<IClassifyHeaderRef>()
 
   //电影分类id
   private _id
@@ -98,8 +87,7 @@ export default class Index extends Component<any> {
 
   //改变当前页面路由
   public getTypeDetail = async (id: string) => {
-    const { typeShow } = this.state
-    if (typeShow) this.setState({ typeShow: false })
+    this.classifyHeaderRef.current && this.classifyHeaderRef.current.close()
     this.id = id
     this.scrollRef.current!.fetchData({ INIT_QUERY }, true)
   }
@@ -112,62 +100,19 @@ export default class Index extends Component<any> {
     })
   }
 
-  //获取分类列表
-  public fetchTypeData = async () => {
-    const data = await getClassify(16)
-    this.setState({
-      type: data
-    })
-  }
-
   //设置标题
   public setTitle = (id: string) => {
-    const { type } = this.state
-    const [target]: any = type.filter((val: any) => val._id === id)
+    const classifyList = this.classifyHeaderRef.current?.classifyList || []
+    const [target]: any = classifyList.filter((val: any) => val._id === id)
     const title = target ? target.name : '分类'
     Taro.setNavigationBarTitle({ title })
   }
 
-  //控制详细分类的显示隐藏
-  public handleControlTypeDetail = (type: SHOW_TYPE) => {
-    let status = false
-    if (type === SHOW_TYPE.SHOW_MORE) status = true
-    this.setState({
-      typeShow: status
-    })
-  }
-
   public render() {
-    const { data, listShow, type, typeShow } = this.state
+    const { data, listShow } = this.state
 
     const bgColor = style.backgroundColor('bgColor')
-
-    const showType = type.length <= SCROLL_MAX_SHOW_COUNT
-
-
-    const list = type.map((val: any) => {
-      const { name, _id: id } = val
-      return (
-        <View
-          className={
-            classnames({
-              'page-classify-header-list': true,
-              'at-col': typeShow,
-              'at-col-2': typeShow,
-              'page-classify-header-list-size': !typeShow,
-              'page-classify-header-list-active': id == this.id
-            })
-          }
-          style={{ ...style.color('primary') }}
-          key={id}
-          onClick={(_) => { this.getTypeDetail.call(this, id) }}
-        >
-          {name}
-        </View>
-      )
-    })
-
-    const headerHeight = (showType || !typeShow) ? SINGLE_HEADER_HEIGHT : SINGLE_HEADER_HEIGHT * (Math.ceil((type.length + 2) / 6))
+  
     return (
       <GScrollView
         ref={this.scrollRef}
@@ -178,53 +123,11 @@ export default class Index extends Component<any> {
         autoFetch={false}
         renderContent={
           <View>
-            <View className='page-classify-header normal-font-size-class' style={{
-              ...bgColor,
-              height: Number(SYSTEM_PAGE_SIZE(headerHeight)) / 2 + 'px'
-            }}
-            >
-              {
-                !!list.length &&
-                <Text className='page-classify-header-text'
-                  style={{ ...style.color('thirdly'), ...bgColor }}
-                >分类: </Text>
-              }
-              {
-                showType || !typeShow ?
-                  <ScrollView
-                    scrollX
-                    className='page-classify-header-content'
-                    style={{ ...bgColor }}
-                  >
-                    {
-                      !showType ?
-                        <View
-                          className='page-classify-header-content-list page-classify-header-list-size'
-                          style={{ ...style.color('primary'), fontWeight: 'normal' }}
-                          onClick={(e) => { this.handleControlTypeDetail.call(this, SHOW_TYPE.SHOW_MORE) }}
-                        >
-                          展开
-                        </View>
-                        : null
-                    }
-                    {list}
-                  </ScrollView>
-                  :
-                  <View
-                    className='page-classify-header-type-detail at-row at-row--wrap'
-                    style={{ ...bgColor }}
-                  >
-                    {list}
-                    <View
-                      className='page-classify-header-list at-col at-col-2'
-                      style={{ ...style.color('primary'), fontWeight: 'normal' }}
-                      onClick={(e) => { this.handleControlTypeDetail.call(this, SHOW_TYPE.HIDE_MORE) }}
-                    >
-                      收起
-                    </View>
-                  </View>
-              }
-            </View>
+            <ClassifyHeader
+              ref={this.classifyHeaderRef}
+              currentValue={this.id}
+              onChange={this.getTypeDetail}
+            />
             <View className='page-classify-list'>
               {
                 listShow ? (<LinearList list={data} reload={this.fetchData.bind(this, {}, true)} />) : (<IconList list={data} reload={this.fetchData.bind(this, {}, true)} />)

@@ -114,7 +114,7 @@ class IconList extends Component<IProps>{
                 </View>
                 <View className='component-icon-list-content-main'>
                   <View
-                    className='component-icon-list-content-main-name'
+                    className='component-icon-list-content-main-name title-font-size-class'
                     style={{ ...style.color('primary') }}
                     onClick={this.handleClick.bind(this, _id)}
                   >{name}</View>
@@ -126,7 +126,7 @@ class IconList extends Component<IProps>{
                       size={8}
                     ></Rate>
                   </View>
-                  <View className='component-icon-list-content-main-extra'
+                  <View className='component-icon-list-content-main-extra sub-title-font-size-class'
                     style={{ ...style.color('secondary') }}
                   >
                     <View className='component-icon-list-content-main-extra-count'>

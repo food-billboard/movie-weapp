@@ -59,11 +59,11 @@ export default class IconHead extends Component<IProps>{
               customStyle={{ width: '100%', height: '100%' }}
             />
           </View>
-          <View className='component-user-head-icon-username' style={{ ...style.color('primary') }}>
+          <View className='component-user-head-icon-username title-font-size-class' style={{ ...style.color('primary') }}>
             {username}
           </View>
         </View>
-        <View className='component-user-head-info at-row'
+        <View className='component-user-head-info sub-title-font-size-class at-row'
           style={{ ...style.color('disabled') }}
         >
           <View className='at-col component-user-head-info-data'>

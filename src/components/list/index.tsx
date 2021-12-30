@@ -105,7 +105,7 @@ class List extends Component<IProps>{
                       list={imageList}
                     />
                     <View
-                      className={classnames('at-icon', 'list-content-icon', {
+                      className={classnames('at-icon', 'list-content-icon', 'big-icon-font-size-class', {
                         'at-icon-heart': !store,
                         'at-icon-heart-2': store
                       })}
@@ -117,7 +117,7 @@ class List extends Component<IProps>{
                     style={merge(style.backgroundColor('disabled'), style.color('secondary'))}
                     onClick={this.goTo.bind(this, _id)}
                   >
-                    <View className='list-content-main-detail-name'
+                    <View className='list-content-main-detail-name title-font-size-class'
                       style={style.color('primary')}
                     >
                       {name}

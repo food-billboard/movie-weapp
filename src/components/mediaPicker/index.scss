@@ -19,12 +19,12 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 15px;
     position: relative;
-    .image,
-    .video{
+    &-image,
+    &-video{
       width:100%;
       height:100%;
     }
-    .icon{
+    &-icon{
       position:absolute;
       left:-6px;
       top:0;
@@ -45,6 +45,5 @@
     position:absolute;
     right:0;
     top:0;
-    font-size:40px;
   }
 }

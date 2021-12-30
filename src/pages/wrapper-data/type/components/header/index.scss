@@ -1,0 +1,54 @@
+@import '~taro-ui/dist/style/components/flex.scss';
+
+$item_width: 125px;
+
+.page-classify-header {
+  overflow: hidden;
+  transition: 0.3s;
+  position: relative;
+  z-index: 2;
+
+  &-content {
+    position: fixed;
+    white-space: nowrap;
+    &-list {
+      height: 80px;
+      display: inline-block;
+      text-align: center;
+      line-height: 80px;
+      font-weight: bold;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      opacity: 0.6;
+      box-sizing: border-box;
+      padding: 0 10px;
+    }
+  }
+  &-text {
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: inline-block;
+    width: $item_width;
+    height: 80px;
+    line-height: 80px;
+    z-index: 9999;
+    text-indent: 20px;
+    text-align: center;
+  }
+
+  &-list-active {
+    opacity: 1;
+    text-shadow: 0 0 5px currentColor;
+  }
+  &-list:nth-of-type(1) {
+    margin-left: $item_width;
+  }
+  &-list-size {
+    width: $item_width;
+  }
+  &-type-detail {
+    position: fixed;
+  }
+}

@@ -101,7 +101,7 @@ export default class extends Component<IProps, IState> {
               />
             </View>
             <View
-              className='at-col at-col-7 comment-detail-header-content-header-user'
+              className='at-col at-col-7 comment-detail-header-content-header-user title-font-size-class'
               style={{ ...style.color('primary') }}
             >
               {username}
@@ -126,23 +126,28 @@ export default class extends Component<IProps, IState> {
             </View>
           </View>
 
-          <View className='comment-detail-header-content-footer'
+          <View
+            className='at-icon at-icon-message'
+            style={{ ...style.color('thirdly') }}
+          ></View>
+
+          <View className='comment-detail-header-content-footer normal-font-size-class'
             style={{ ...style.border(1, 'disabled', 'dashed', 'top') }}
           >
             <View className='at-row at-row__align--center comment-detail-header-content-footer-main'>
               <View className='at-col at-col-6 comment-detail-header-content-footer-main-icon-content'>
                 <View
-                  className='comment-detail-header-content-footer-main-icon-content-footer-icon at-icon at-icon-message normal-font-size-class'
+                  className='comment-detail-header-content-footer-main-icon-content-footer-icon at-icon at-icon-message'
                   style={{ ...style.color('thirdly') }}
                 ></View>
                 <Text style={{ ...style.color('secondary') }}>{formatNumber(comment_users)}</Text>
               </View>
               <View
-                className='at-col at-col-6 comment-detail-header-content-footer-main-icon-content-footer-icon normal-font-size-class'
+                className='at-col at-col-6 comment-detail-header-content-footer-main-icon-content-footer-icon'
                 onClick={this.props.like.bind(this, userId, commentId)}
               >
                 <View
-                  className={`comment-detail-header-content-footer-main-icon-content-footer-icon normal-font-size-class at-icon at-icon-heart${like ? '-2' : ''}`}
+                  className={`comment-detail-header-content-footer-main-icon-content-footer-icon at-icon at-icon-heart${like ? '-2' : ''}`}
                   style={{ ...style.color('thirdly') }}
                 ></View>
                 <Text style={{ ...style.color('secondary') }}>{formatNumber(total_like)}</Text>

@@ -202,7 +202,7 @@ export default class extends Component<IProps, IState> {
               value={value}
             >
               <View 
-                className='component-picker'
+                className='component-picker normal-font-size-class'
                 style={_style}
               >
                 {title}: {value}
@@ -223,7 +223,7 @@ export default class extends Component<IProps, IState> {
               disabled={disabled ? disabled : (multi.disabled || false)}
               onCancel={multi.onCancel || noop}
             >
-              <View className='component-picker'
+              <View className='component-picker normal-font-size-class'
                 style={{ ..._style as any }}
               >
                 {title}: {Array.isArray(value) ? value.join(' & ') : value}
@@ -244,7 +244,7 @@ export default class extends Component<IProps, IState> {
               disabled={disabled ? disabled : (date.disabled || false)}
               onCancel={date.onCancel || noop}
             >
-              <View className='component-picker'
+              <View className='component-picker normal-font-size-class'
                 style={{ ..._style }}
               >
                 {title}: {(value + '').length ? format(value, dateShow) : ''}
@@ -263,7 +263,7 @@ export default class extends Component<IProps, IState> {
               end={time.end || this.defaultConfig.end.time}
               disabled={disabled ? disabled : (time.disabled || false)}
             >
-              <View className='component-picker'
+              <View className='component-picker normal-font-size-class'
                 style={{ ..._style }}
               >
                 {title}: {(value + '').length ? format(value, this.defaultConfig.time) : ''}

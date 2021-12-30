@@ -84,7 +84,7 @@ export default class NewsHead extends Component<IProps, IState>{
             ></Ellipsis>
           </View>
         </View>
-        <View className='enter'
+        <View className='newsheader-enter big-icon-font-size-class'
           style={{ color: 'rgb(193, 193, 193)' }}
         >
           {'>'}

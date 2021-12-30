@@ -298,7 +298,7 @@ export default class extends Component<IProps, IState> {
                   className='media-content'
                 >
                   <View
-                    className='at-icon at-icon-close icon'
+                    className='at-icon at-icon-close media-content-icon'
                     style={{ ...style.color('primary'), fontSize: SYSTEM_PAGE_SIZE() + 'px' }}
                     onClick={(_) => { this.handleClose.call(this, url) }}
                   ></View>
@@ -306,7 +306,7 @@ export default class extends Component<IProps, IState> {
                     type === EType.IMAGE &&
                     <Image
                       onClick={() => { this.handlePreviewImage.call(this, url) }}
-                      className='image'
+                      className='media-content-image'
                       src={url}
                     ></Image>
                   }
@@ -315,7 +315,7 @@ export default class extends Component<IProps, IState> {
                     <Image
                       onClick={() => { this.handlePreviewVideo.call(this, url) }}
                       src={poster}
-                      className='video'
+                      className='media-content-video'
                     ></Image>
                   }
                 </View>
@@ -337,7 +337,7 @@ export default class extends Component<IProps, IState> {
           {
             close &&
             <View
-              className='at-icon at-icon-close video-icon'
+              className='at-icon at-icon-close video-icon normal-icon-font-size-class'
               style={{ ...style.color('primary'), fontSize: SYSTEM_PAGE_SIZE(40) + 'px' }}
               onClick={() => { this.videoClose.call(this) }}
             ></View>

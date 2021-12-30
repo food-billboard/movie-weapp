@@ -212,7 +212,7 @@ class ListContent extends Component<IProps, IState>{
                         onClick={this.props.like.bind(this, _id, like)}
                         style={style.color('thirdly')}
                       >
-                        <View className='up-text'>
+                        <View className='comment-item-up-text sub-title-font-size-class'>
                           {formatNumber(total_like)}
                           <AtIcon value={like ? 'heart-2' : 'heart'} size={SYSTEM_PAGE_SIZE(24)} customStyle={{ textIndent: '.2em' }} />
                         </View>
