@@ -14,10 +14,12 @@
         margin-right: 20px;
         .list-content-icon {
           position: absolute;
-          top: 5px;
-          left: 5px;
-          color: yellowgreen;
+          top: 0;
+          left: 0;
+          padding: 8px;
           z-index: 1;
+          background-color: rgba(0, 0, 0, 0.2);
+          border-radius: 4px;
         }
       }
       &-detail {

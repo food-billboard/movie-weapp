@@ -1,25 +1,14 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
-import classnames from 'classnames'
 import { View, Text } from '@tarojs/components'
-import noop from 'lodash/noop'
-import GRate from '~components/rate'
 import Ellipsis from '~components/ellipsis'
 import { formatTime, formatNumber, router, routeAlias } from '~utils'
 import style from '~theme/style'
 import { SYSTEM_PAGE_SIZE } from '~config'
-import GStore from '../store'
 
 import './index.scss'
 
-export interface IProps {
-  info: Info
-  rate: (value: number) => any
-  store: (store: boolean) => any
-}
-
 interface Info {
-  name: string
   district: API_USER.ItypeList[]
   glance: number
   director: API_USER.ItypeList[]
@@ -30,14 +19,14 @@ interface Info {
   language: API_USER.ItypeList[]
   description: string
   hot: number
-  rate: number
-  author_rate: number
-  store: boolean
   author_description: string
   author: {
     username: string 
     _id: string 
   }
+}
+export interface IProps {
+  info: Info
 }
 
 export interface IState { }
@@ -46,7 +35,6 @@ export default class Content extends Component<IProps, IState>{
 
   public static defaultProps: IProps = {
     info: {
-      name: '',
       district: [],
       glance: 0,
       director: [],
@@ -57,17 +45,12 @@ export default class Content extends Component<IProps, IState>{
       language: [],
       description: '',
       hot: 0,
-      rate: 0,
-      author_rate: 0,
-      store: false,
       author_description: '',
       author: {
         username: '',
         _id: ''
       }
     },
-    store: noop,
-    rate: noop,
   }
 
   public getUserInfo = (_id: string) => {
@@ -78,7 +61,6 @@ export default class Content extends Component<IProps, IState>{
     
     const { info } = this.props
     const {
-      name = '',
       district = [],
       glance = 0,
       director = [],
@@ -89,51 +71,13 @@ export default class Content extends Component<IProps, IState>{
       language = [],
       description = '',
       hot = 0,
-      rate,
-      author_rate,
-      store,
       author_description,
       author
     } = info
 
     return (
       <View className='data-detail-content'>
-        <View
-          className='data-detail-content-title at-row'
-          style={{ ...style.color('primary') }}
-        >
-          <View className='data-detail-content-title-name title-font-size-class at-col at-col-10'>
-            {name}
-          </View>
-          <View className='data-detail-content-title-store title-font-size-class at-col at-col-2'>
-            <GStore
-              movie={name}
-              value={store}
-              store={this.props.store}
-            />
-          </View>
-        </View>
         <View className='data-detail-content-main'>
-          <View className='data-detail-content-main-rate'>
-            <GRate
-              value={rate}
-              rate={this.props.rate}
-            />
-          </View>
-          <View className='data-detail-content-main-rate'>
-            <View className='data-detail-content-main-rate-up'>
-              <View className='data-detail-content-main-rate-title sub-title-font-size-class'>楼主评分:</View>
-            </View>
-            <View className='at-row at-row__align--center'>
-              <View className='at-col at-col-9'>
-                <GRate
-                  value={author_rate}
-                  rate={() => {}}
-                  readonly
-                />
-              </View>
-            </View>
-          </View>
           <View className='data-detail-content-main-info normal-font-size-class'>
             <View className='data-detail-content-main-info-actor'>
               主演: 

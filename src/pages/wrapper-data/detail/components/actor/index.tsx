@@ -50,7 +50,9 @@ export default class extends Component<IProps, IState> {
                 <ImageLoading 
                   src={image} 
                   customStyle={{
-                    height: `${SYSTEM_PAGE_SIZE(85)}px`
+                    height: `${SYSTEM_PAGE_SIZE(85)}px`,
+                    borderRadius: '4PX',
+                    overflow: 'hidden'
                   }} 
                   loadingProps={{content: ''}}
                 />

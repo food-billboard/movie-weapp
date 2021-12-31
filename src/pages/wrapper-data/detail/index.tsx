@@ -10,6 +10,7 @@ import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { withTry, router, routeAlias, EAction } from '~utils'
 import { getCustomerMovieDetail, getUserMovieDetail, putStore, cancelStore, putRate } from '~services'
+import Header from './components/header'
 import List from './components/imglist'
 import Content from './components/content'
 import IconList from './components/iconList'
@@ -160,9 +161,19 @@ class Detail extends Component<any> {
           className='page-detail-description'
           style={merge(style.color('thirdly'), style.border(1, 'thirdly', 'solid', 'top'))}
         >
-          <Content
+          <Header
             store={this.store}
             rate={this.rate}
+            info={{
+              name: nextInfo.name,
+              poster: poster,
+              rate: parseFloat(rate) || 0,
+              author_rate: parseFloat(author_rate) || 0,
+              store: store,
+              createdAt
+            }}
+          />
+          <Content
             info={{
               ...nextInfo,
               glance,
@@ -173,9 +184,6 @@ class Detail extends Component<any> {
               language: (language || []).map(item => ({ value: item.name })),
               createdAt,
               hot,
-              rate: parseFloat(rate) || 0,
-              author_rate: parseFloat(author_rate) || 0,
-              store,
               author_description,
               author
             }}

@@ -124,10 +124,12 @@ class List extends Component<IProps>{
                     </View>
                     <View className='list-content-main-detail-rate'>
                       <Rate
-                        value={rate}
+                        value={parseFloat((rate / 2).toFixed(1))}
                         readonly
                         rate={noop}
-                        size={10}
+                        size={16}
+                        max={5}
+                        origin={rate}
                       ></Rate>
                     </View>
                     <Item

@@ -129,10 +129,12 @@ class IconList extends Component<IProps>{
                   >{name}</View>
                   <View className='component-icon-list-content-main-rate'>
                     <Rate
-                      value={rate}
+                      value={parseFloat((rate / 2).toFixed(1))}
                       readonly
                       rate={noop}
-                      size={8}
+                      size={16}
+                      max={5}
+                      origin={rate}
                     ></Rate>
                   </View>
                   <View className='component-icon-list-content-main-extra sub-title-font-size-class'

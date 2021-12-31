@@ -1,0 +1,41 @@
+@import '~taro-ui/dist/style/components/flex.scss';
+.ellipsis {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.page-detail-header {
+
+  &-main {
+    display: flex !important;
+    flex-direction: column;
+  }
+
+  .data-detail-content {
+    &-title {
+      width: 100%;
+      font-weight: bold;
+      &-name {
+        @extend .ellipsis;
+      }
+      &-store {
+        height: 100%;
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    &-main {
+      &-rate {
+        &-up {
+          display: flex;
+          align-items: center;
+        }
+        &-title {
+          line-height: 1.8;
+        }
+      }
+    }
+  }
+
+}

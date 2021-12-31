@@ -18,8 +18,12 @@
       width: 100%;
       &-store {
         position: absolute;
-        left: 0;
-        top: 0;
+          top: 0;
+          left: 0;
+          padding: 8px;
+          z-index: 1;
+          background-color: rgba(0, 0, 0, 0.2);
+          border-radius: 4px;
       }
     }
     &-main {
@@ -38,6 +42,8 @@
         width: 100%;
         line-height: 1.4;
         margin-bottom: .5em;
+        display: flex;
+        justify-content: center;
       }
       &-extra {
         display: flex;

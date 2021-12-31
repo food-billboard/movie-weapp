@@ -1,0 +1,14 @@
+@import "~taro-ui/dist/style/components/icon.scss";
+
+.page-detail-store-button {
+  width: 150px !important;
+  position: relative;
+  margin: 0;
+  .at-button__text {
+    align-items: center;
+    display: flex;
+    & .at-icon {
+      margin-right: 8px;
+    }
+  }
+}
