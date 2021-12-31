@@ -37,7 +37,7 @@ export const getUserStore = ({ id, currPage=0, pageSize=30  }: { id: string, cur
 
 //每日上新
 export const getDailyNew = (count:number=10) => {
-  return request('GET', '/api/user/home/daily', {query: { count }})
+  return request<API_USER.IGetDailyRes>('GET', '/api/user/home/daily', {query: { count }})
 }
 
 //热搜

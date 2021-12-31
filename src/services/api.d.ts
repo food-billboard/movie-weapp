@@ -92,6 +92,19 @@ declare namespace API_USER {
     name: string 
     _id: string 
   }
+  
+  export interface IGetDailyResData {
+    createdAt: string 
+    video: string 
+    poster: string 
+    name: string 
+    _id: string 
+    author_rate: number 
+    author_description: string 
+  }
+  export interface IGetDailyRes {
+    data: IGetDailyResData[]
+  }
 
 }
 

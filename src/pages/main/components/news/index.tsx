@@ -1,6 +1,7 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { ScrollView, View, Text } from '@tarojs/components'
+import AtRate from '~components/rate'
 import { TypeColor, colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { router, routeAlias } from '~utils'
@@ -16,7 +17,7 @@ interface List {
 
 export interface IProps {
   count: number,
-  list: Array<List>
+  list: API_USER.IGetDailyResData[]
 }
 
 const MAX_COUNT = 10
@@ -44,7 +45,7 @@ class News extends Component<IProps>{
       >
         {
           list.map((value) => {
-            const { _id: id, name: title, poster: image } = value
+            const { _id: id, name: title, poster: image, author_rate } = value
 
             return (
               <View className='news-img'
@@ -57,6 +58,14 @@ class News extends Component<IProps>{
                 >{title}</Text>
                 <ImageLoading
                   src={image}
+                />
+                <AtRate
+                  value={parseFloat((author_rate / 2).toFixed(1))}
+                  readonly
+                  size={8}
+                  max={5}
+                  origin={author_rate}
+                  style={{marginTop: '12PX'}}
                 />
               </View>
             )

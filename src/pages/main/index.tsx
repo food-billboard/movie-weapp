@@ -38,7 +38,7 @@ export default class extends Component<any> {
   private getDaily = async () => await getDailyNew()
 
   //重新加载每日上新
-  public hanleExchangeDaily = async () => {
+  public handleExchangeDaily = async () => {
     return
     Taro.showLoading({ mask: true, title: '查找中' })
     const daily = await this.throttleGetDaily()
@@ -103,7 +103,7 @@ export default class extends Component<any> {
             >每日上新</Text>
             <Text className='main-page-news-title title-font-size-class at-col'
               style={{ ...secondaryColor }}
-              onClick={this.hanleExchangeDaily}
+              onClick={this.handleExchangeDaily}
             >换一批</Text>
           </View>
           <News

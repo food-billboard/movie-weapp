@@ -14,6 +14,8 @@ export interface IProps {
   readonly?: boolean
   style?: React.CSSProperties
   size?: number | string
+  max?: number 
+  origin?: number 
 }
 
 export interface IState { }
@@ -23,7 +25,8 @@ export default class GTate extends Component<IProps, IState>{
   public static defaultProps: IProps = {
     value: 0,
     rate: noop,
-    size: 20
+    size: 20,
+    max: 10
   }
 
   //监听分数变化
@@ -31,7 +34,7 @@ export default class GTate extends Component<IProps, IState>{
 
   public render() {
 
-    const { readonly = false, value, style: customerStyle = {}, size = 20 } = this.props
+    const { readonly = false, value, style: customerStyle = {}, size = 20, max=10, origin } = this.props
 
     return (
       <View className='component-rate'
@@ -42,14 +45,14 @@ export default class GTate extends Component<IProps, IState>{
             <AtRate
               className='star'
               size={SYSTEM_PAGE_SIZE(Number(size))}
-              max={10}
+              max={max}
               value={value}
             />
             :
             <AtRate
               className='star'
               size={SYSTEM_PAGE_SIZE(Number(size))}
-              max={10}
+              max={max}
               value={value}
               onChange={this.handleChange}
             />
@@ -57,7 +60,7 @@ export default class GTate extends Component<IProps, IState>{
         <Text
           className='component-rate-number'
           style={{ ...style.color('secondary'), fontSize: size + "px" }}
-        >{value}</Text>
+        >{origin || value}</Text>
       </View>
     )
   }

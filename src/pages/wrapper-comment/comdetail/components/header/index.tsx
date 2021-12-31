@@ -138,17 +138,17 @@ export default class extends Component<IProps, IState> {
               <View className='at-col at-col-6 comment-detail-header-content-footer-main-icon-content'>
                 <View
                   className='comment-detail-header-content-footer-main-icon-content-footer-icon at-icon at-icon-message'
-                  style={{ ...style.color('thirdly') }}
+                  style={{ ...style.color('secondary') }}
                 ></View>
                 <Text style={{ ...style.color('secondary') }}>{formatNumber(comment_users)}</Text>
               </View>
               <View
-                className='at-col at-col-6 comment-detail-header-content-footer-main-icon-content-footer-icon'
+                className='at-col at-col-6 comment-detail-header-content-footer-main-icon-content'
                 onClick={this.props.like.bind(this, userId, commentId)}
               >
                 <View
                   className={`comment-detail-header-content-footer-main-icon-content-footer-icon at-icon at-icon-heart${like ? '-2' : ''}`}
-                  style={{ ...style.color('thirdly') }}
+                  style={{ ...style.color('secondary') }}
                 ></View>
                 <Text style={{ ...style.color('secondary') }}>{formatNumber(total_like)}</Text>
               </View>
