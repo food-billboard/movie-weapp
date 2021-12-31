@@ -294,7 +294,11 @@ export default class Setting extends Component<any>{
         <View className='page-setting-list'>
           <List list={settingList} />
           <AtRadio
-            customStyle={{marginTop: '48px'}}
+            customStyle={{
+              marginTop: '48px',
+              // ! 注意这里，现在暂时不要色调的功能，以后可能会开启
+              display: 'none'
+            }}
             options={this.colorStyle}
             value={activeMode}
             onClick={this.colorStyleChange}
@@ -302,7 +306,9 @@ export default class Setting extends Component<any>{
           <GColor
             ref={this.colorRef}
             style={{
-              height: '48px'
+              height: '48px',
+              // ! 注意这里，现在暂时不要色调的功能，以后可能会开启
+              display: 'none'
             }}
             handleClick={this.colorSelect}
           ></GColor>

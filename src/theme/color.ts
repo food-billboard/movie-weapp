@@ -272,12 +272,21 @@ const color = {
 export const Color = Object.keys(color[DAY]);
 
 //默认颜色
+// ! 注意这里，现在暂时不要色调的功能，以后可能会开启
 export const defaultColor = Object.keys(color[DAY])[0];
 
 //小程序色调
 let _TypeColor = color[DAY]['#f5222d'];
 
 export function TypeColor() {
+  return {
+    primary: '#13c2c2',
+    secondary: '#36cfc9',
+    thirdly: '#5cdbd3',
+    disabled: '#b5f5ec',
+    bgColor:  '#fff' //'#e6fffb',
+  }
+  // ! 注意这里，现在暂时不要色调的功能，以后可能会开启
   return _TypeColor
 }
 
@@ -325,6 +334,10 @@ export const colorChange = (
 
 //样式修改
 export const colorStyleChange = (isTab = false) => {
+
+  // ! 注意这里，现在暂时不要色调的功能，以后可能会开启
+  return 
+
   //查看缓存
   const value = systemInfo.getColorStyle();
   const { style, color: styleColor } = value;
