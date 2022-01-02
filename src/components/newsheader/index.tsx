@@ -58,7 +58,7 @@ export default class NewsHead extends Component<IProps, IState>{
         onClick={this.handleClick.bind(this, id)}
       >
         <View 
-          className='newsheader-background' 
+          className='newsheader-background filter-background' 
           style={{
             background: `url(${image})`
           }}

@@ -1,6 +1,7 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View } from '@tarojs/components'
+import style from '~theme/style'
 
 export interface IProps {
   screen: () => any
@@ -31,7 +32,8 @@ export default class Methods extends Component<IProps, IState>{
     const { active } = this.state
     return (
       <View
-        className={`at-icon at-icon-${active ? 'list' : 'image'}`}
+        className={`normal-font-size-class at-icon at-icon-${active ? 'align-center' : 'image'}`}
+        style={style.color("primary")}
         onClick={this.change}
       ></View>
     )

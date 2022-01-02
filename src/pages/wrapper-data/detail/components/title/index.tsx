@@ -12,13 +12,14 @@ export interface IProps {
   fontStyle?: any
   dividerStyle?: any
   arrowText?: string
+  onClick?: (e: any) => any 
 }
 
 export default class extends Component<IProps> {
 
   public render() {
 
-    const { title, fontStyle = {}, dividerStyle = {} } = this.props
+    const { title, fontStyle = {}, dividerStyle = {}, onClick } = this.props
 
     return (
       <View className='page-detail-item-title '>
@@ -33,6 +34,7 @@ export default class extends Component<IProps> {
             ...(isObject(fontStyle) ? fontStyle : {})
           }}
           className='page-detail-item-title-main sub-title-font-size-class'
+          onClick={onClick}
         >{title}</AtTag>
         <View
           className='page-detail-item-title-divider'

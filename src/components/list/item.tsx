@@ -19,9 +19,11 @@ export default class Item extends Component<IItemProps>{
     const { type, value } = this.props
     return (
       <View className='movie-data-list-title-content normal-font-size-class'>
-        <Text className='movie-data-list-title'>{type}</Text>
+        <View className={`movie-data-list-title at-icon at-icon-${type}`}></View>
         <Text className='movie-data-list-title'>
-          {Array.isArray(value) ? value.join('') : value}
+          {
+            (Array.isArray(value) ? value.join('') : value) || "-"
+          }
         </Text>
       </View>
     )

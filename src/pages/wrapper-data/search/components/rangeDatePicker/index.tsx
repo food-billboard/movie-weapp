@@ -1,8 +1,10 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import Day from 'dayjs'
+import { merge } from 'lodash'
 import { View } from '@tarojs/components'
 import GPicker from '~components/picker'
+import style from '~theme/style'
 import './index.scss'
 
 export interface IProps {
@@ -55,6 +57,7 @@ export default class extends Component<IProps, IState> {
   public render() {
 
     const { value: { start = '', end = '' } = {} } = this.props
+    const commonStyle = merge({}, style.color('primary'))
 
     return (
       <View className='at-row'>
@@ -65,7 +68,7 @@ export default class extends Component<IProps, IState> {
               fields: 'day',
             }}
             title='起始时间'
-            style={{ marginBottom: '5px' }}
+            style={{ marginBottom: '5px', ...commonStyle }}
             handleChange={this.startChange}
             value={start}
           >
@@ -78,7 +81,7 @@ export default class extends Component<IProps, IState> {
               fields: 'day'
             }}
             title='结束时间'
-            style={{ paddingBottom: '20px' }}
+            style={commonStyle}
             handleChange={this.endChange}
             value={end}
           >

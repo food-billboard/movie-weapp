@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { AtCheckbox, AtButton } from 'taro-ui'
 import { View } from '@tarojs/components'
 import { isObject } from '~utils'
-import { FORM_ERROR, SYSTEM_PAGE_SIZE } from '~config'
+import { FORM_ERROR } from '~config'
 import styleColor  from '~theme/style'
 import TagList from '../tagList'
 
@@ -30,7 +30,7 @@ export interface IState {
 }
 
 const BUTTON_STYLE = {
-  height:SYSTEM_PAGE_SIZE(40) + 'px'
+  
 }
 
 const CheckBox: React.FC<IProps> = ({
@@ -90,12 +90,13 @@ const CheckBox: React.FC<IProps> = ({
         (needHiddenList ? !show : false) ?
         <AtButton 
           type='secondary'
+          size='small'
           onClick={open} 
           customStyle={{
             ...btnStyle,
             ...(error ? FORM_ERROR : {})
           }}
-        >打开</AtButton>
+        >展开</AtButton>
         : null
       }
       {
@@ -111,6 +112,7 @@ const CheckBox: React.FC<IProps> = ({
       <AtButton 
         type='secondary'
         onClick={close} 
+        size='small'
         customStyle={{ 
           ...btnStyle, 
           display: (needHiddenList ? show : false) ? 'block' : 'none' 

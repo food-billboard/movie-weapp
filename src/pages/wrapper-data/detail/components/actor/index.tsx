@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { ScrollView, View, Text } from '@tarojs/components'
 import ImageLoading from '~components/imageLoading'
 import { SYSTEM_PAGE_SIZE } from '~config'
+import style from '~theme/style'
 
 import './index.scss'
 
@@ -56,7 +57,7 @@ export default class extends Component<IProps, IState> {
                   }} 
                   loadingProps={{content: ''}}
                 />
-                <View className='data-actor-icon-list-text normal-font-size-class'>
+                <View style={style.color('secondary')} className='data-actor-icon-list-text normal-font-size-class'>
                   <Text>{name}</Text>
                 </View>
               </View>

@@ -133,11 +133,11 @@ class List extends Component<IProps>{
                       ></Rate>
                     </View>
                     <Item
-                      type='类型: '
+                      type='filter'
                       value={type}
                     />
                     <Item
-                      type='人气: '
+                      type='eye'
                       value={hot}
                     />
                   </View>
@@ -146,7 +146,7 @@ class List extends Component<IProps>{
                     <Picker
                       selector={this.OP_SELECTOR_MAP}
                     >
-                      <View className='at-icon at-icon-bullet-list'></View>
+                      <View className='at-icon at-icon-bullet-list' style={style.color("primary")}></View>
                     </Picker>
                   </View>
                 </View>

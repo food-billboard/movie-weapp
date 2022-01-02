@@ -177,8 +177,6 @@ export default class List extends Component<IProps, IState> {
     const { empty, loading } = this.state
     const { divider = true } = this.props
 
-    console.log(empty, divider, this.data, 2222)
-
     return (
       <View className='component-scroll-list'>
         <View
@@ -217,7 +215,8 @@ export default class List extends Component<IProps, IState> {
             }
           </View>
           {
-            empty 
+            !emptyShow 
+            && empty 
             && divider 
             && (
               <GDivider 

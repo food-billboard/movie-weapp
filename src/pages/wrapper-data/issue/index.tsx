@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { View } from '@tarojs/components'
 import { AtButton, AtTag } from 'taro-ui'
 import { connect } from 'react-redux'
+import { merge } from 'lodash'
 import GCommentPicker from '~components/picker'
 import GDescription, { EInputType } from '~components/input'
 import GImagePicker from '~components/imgPicker'
@@ -32,7 +33,6 @@ const fieldsStore = createFieldsStore('issue', {
 
 const BUTTON_STYLE: any = {
   width: '100%',
-  height: SYSTEM_PAGE_SIZE(40) + 'px',
   zIndex: 9
 }
 
@@ -44,9 +44,7 @@ const TAT_STYLE: any = {
 }
 
 const PICKER_STYLE: any = {
-  height: SYSTEM_PAGE_SIZE(46) + 'px',
-  lineHeight: SYSTEM_PAGE_SIZE(46) + 'px',
-  marginBottom: '5px'
+  marginBottom: '20px',
 }
 
 class Issue extends Component<any> {
@@ -420,7 +418,7 @@ class Issue extends Component<any> {
               上映时间
             </AtTag>
             <GCommentPicker
-              style={PICKER_STYLE}
+              style={merge({}, PICKER_STYLE, style.color('primary'))}
               date={{
                 fields: "day"
               }}
@@ -574,9 +572,9 @@ class Issue extends Component<any> {
             ></GImagePicker>
           </View>
           <View className='at-row at-row__justify--between'>
-            <AtButton className='at-col at-col-3' type='primary' onClick={this.handleSubmit} customStyle={{ ...BUTTON_STYLE, ...style.backgroundColor('primary') }}>提交</AtButton>
-            <AtButton className='at-col at-col-3' type='primary' onClick={this.handleReset} customStyle={{ ...BUTTON_STYLE, ...style.backgroundColor('secondary') }}>重置</AtButton>
-            <AtButton className='at-col at-col-3' type='primary' onClick={this.handleCancel} customStyle={{ ...BUTTON_STYLE, ...style.backgroundColor('thirdly') }}>取消</AtButton>
+            <AtButton size='small' className='at-col at-col-3' type='primary' onClick={this.handleSubmit} customStyle={{ ...BUTTON_STYLE, ...style.backgroundColor('primary') }}>提交</AtButton>
+            <AtButton size='small' className='at-col at-col-3' type='primary' onClick={this.handleReset} customStyle={{ ...BUTTON_STYLE, ...style.backgroundColor('secondary') }}>重置</AtButton>
+            <AtButton size='small' className='at-col at-col-3' type='primary' onClick={this.handleCancel} customStyle={{ ...BUTTON_STYLE, ...style.backgroundColor('thirdly') }}>取消</AtButton>
           </View>
         </BaseForm>
       </View>

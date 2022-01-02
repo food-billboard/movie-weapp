@@ -21,6 +21,7 @@ export interface IProps {
   list: Array<List>
   id: string
   style?: React.CSSProperties
+  autoplay?: boolean 
 }
 
 export interface IIconProps {
@@ -67,7 +68,7 @@ export default class Rank extends Component<IProps, IState>{
   }
 
   public render() {
-    const { type, id, style: propsStyle = {} } = this.props
+    const { type, id, style: propsStyle = {}, autoplay } = this.props
     const list = this.classify()
 
     return (
@@ -84,6 +85,7 @@ export default class Rank extends Component<IProps, IState>{
         <Swiper 
           className='rank-content'
           circular
+          autoplay={autoplay}
         >
           {
             list.map((value: List[], index: number) => {

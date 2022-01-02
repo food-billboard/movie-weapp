@@ -28,17 +28,6 @@ export default class Title extends Component<IProps>{
         router.push(routeAlias.store)
         break;
       case titleConfig.issue:
-        // Taro.hideTabBarRedDot({
-        //     index:2
-        // })
-
-        //TODO
-        Taro.showToast({
-          title: '功能完善中...',
-          icon: 'none',
-          duration: 1000
-        })
-        //
         router.push(routeAlias.issue)
         break;
     }

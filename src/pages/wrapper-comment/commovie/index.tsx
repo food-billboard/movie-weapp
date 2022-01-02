@@ -84,24 +84,8 @@ class CommentMovie extends Component<any> {
   public throttleFetchData = throttle(this.fetchData, 2000)
 
   //点赞/取消点赞
-  public like = async (id: string, like: boolean) => {
-    const action = async (res) => {
-      if(!res) return 
-      const method = like ? cancelLike : putLike
-
-      Taro.showLoading({ mask: true, title: '操作中' })
-      await withTry(method)(id)
-      Taro.hideLoading()
-      //刷新
-      await this.onPullDownRefresh()
-    }
-    return this.props.getUserInfo({ action })
-    .catch(() => {
-      Taro.showToast({
-        title: '操作失败，请重试',
-        icon: 'none'
-      })
-    })
+  public like = async () => {
+    await this.onPullDownRefresh()
   }
 
   /**
@@ -130,7 +114,7 @@ class CommentMovie extends Component<any> {
           <List
             comment={this.publish}
             list={data}
-            like={this.like}
+            onLike={this.like}
           ></List>
         }
         fetch={this.throttleFetchData}

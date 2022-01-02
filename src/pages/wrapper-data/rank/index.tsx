@@ -131,6 +131,7 @@ export default class extends Component<any> {
               style={{padding: '10px 10px 0 10px', boxSizing: 'border-box'}}
               type=''
               list={data}
+              autoplay
             />
             <ScrollView
               scrollX
@@ -141,7 +142,7 @@ export default class extends Component<any> {
                   const { _id, value } = item
                   return (
                     <AtTag 
-                      customStyle={{display: 'inline-block', marginLeft: '5px'}}
+                      customStyle={{ display: 'inline-block', marginLeft: '5px', ...style.color('primary') }}
                       circle
                       onClick={this.exchangeRank.bind(this, item)}
                       key={_id}

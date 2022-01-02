@@ -13,7 +13,7 @@ import { getCustomerMovieDetail, getUserMovieDetail, putStore, cancelStore, putR
 import Header from './components/header'
 import List from './components/imglist'
 import Content from './components/content'
-import IconList from './components/iconList'
+import CommentList from './components/commentList'
 import GTag from './components/tag'
 import Actor from './components/actor'
 import Title from './components/title'
@@ -82,6 +82,12 @@ class Detail extends Component<any> {
       postInfo: this.id
     }
     router.push(routeAlias.toComment, param)
+  }
+
+  public handleToMovieComment = () => {
+    router.push(routeAlias.comment, {
+      id: this.id 
+    })
   }
 
   //收藏
@@ -249,9 +255,10 @@ class Detail extends Component<any> {
             <View className='page-detail-title'>
               <Title
                 title='大家评论'
+                onClick={this.handleToMovieComment}
               />
             </View>
-            <IconList
+            <CommentList
               list={commentData?.map(comment => {
                 const { content: { text }, _id, user_info: { avatar } } = comment
                 return {
@@ -260,7 +267,7 @@ class Detail extends Component<any> {
                   image: avatar
                 }
               })}
-              handleClick={() => router.push(routeAlias.comment, { id: this.id })}
+              id={this.id}
             />
           </View>
         </EmptyTry>

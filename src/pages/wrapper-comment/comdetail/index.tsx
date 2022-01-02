@@ -21,6 +21,7 @@ class CommentDetail extends Component<any> {
   public componentDidShow = () => colorStyleChange()
 
   private scrollRef = React.createRef<GScrollView>()
+  private listRef = React.createRef()
 
   //评论id
   readonly id = getCurrentInstance().router?.params.id
@@ -75,24 +76,13 @@ class CommentDetail extends Component<any> {
 
   public throttleFetchData = throttle(this.fetchData, 2000)
 
+  public onLike = async () => {
+    await this.onPullDownRefresh()
+  }
+
   //点赞
   public like = async (id: string, like: boolean) => {
-    const action = async (res) => {
-      if (!res) return
-      const method = like ? cancelLike : putLike
-      Taro.showLoading({ mask: true, title: '操作中' })
-      await withTry(method)(id)
-      Taro.hideLoading()
-      //刷新
-      await this.onPullDownRefresh()
-    }
-    await this.props.getUserInfo({ action })
-      .catch(() => {
-        Taro.showToast({
-          title: '操作失败，请重试',
-          icon: 'none'
-        })
-      })
+    (this.listRef.current as any)?.like(id, like)
   }
 
   /**
@@ -125,7 +115,8 @@ class CommentDetail extends Component<any> {
           <List
             comment={this.publish}
             list={data}
-            like={this.like}
+            onLike={this.like}
+            ref={this.listRef as any}
           ></List>
         }
         fetch={this.throttleFetchData}

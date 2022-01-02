@@ -46,10 +46,22 @@ const Header = (props: {
         className='data-detail-content-title at-row'
         style={{ ...style.color('primary') }}
       >
-        <View className='at-col at-col-3'>
+        <View 
+          className='at-col at-col-3 filter-background-parent flex-dom-center padding-8'
+        >
+          <View 
+            className='filter-background'
+            style={{
+              background: `url(${poster})`
+            }}
+          >
+          </View>
           <ImageLoading
             src={poster}
             mode='widthFix'
+            imageStyle={{
+              height: 'unset'
+            }}
           />
         </View>
         <View className='at-col at-col-8 at-col__offset-1 page-detail-header-main'>

@@ -1,7 +1,8 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
-import { Video } from '@tarojs/components'
+import { Video, View } from '@tarojs/components'
 import { EVideoMode, setVideoConfig, getVideoConfig } from '~config'
+import errorImage from '~assets/404.png'
 
 import './index.scss'
 
@@ -24,10 +25,11 @@ export interface IProps {
   danmuList?: Array<IDanmu> | false
   title?: string
   mode?: EVideoMode
-  className?: string 
+  className?: string
+  wrapperClassName?: string 
 }
 
-export interface IState extends IProps {}
+export interface IState extends IProps { }
 
 export default class Media extends Component<IProps, IState> {
 
@@ -61,7 +63,7 @@ export default class Media extends Component<IProps, IState> {
     const { style, ...nextProps } = this.props
     //初始化配置
     const newState = Object.keys(nextProps).reduce((acc: any, cur: string) => {
-      if(typeof nextProps[cur] !== 'undefined') acc[cur] = nextProps[cur]
+      if (typeof nextProps[cur] !== 'undefined') acc[cur] = nextProps[cur]
       return acc
     }, {})
     this.setState({
@@ -78,7 +80,7 @@ export default class Media extends Component<IProps, IState> {
   public componentDidUpdate = (prevProps) => {
     const { src: prevSrc, poster: prevPoster } = prevProps
     const { src: nowSrc, poster: nowPoster } = this.props
-    if(prevSrc != nowSrc || prevPoster != nowPoster) {
+    if (prevSrc != nowSrc || prevPoster != nowPoster) {
       this.forceUpdate()
     }
   }
@@ -102,9 +104,9 @@ export default class Media extends Component<IProps, IState> {
 
   //video配置保存
   private storeConfig = () => {
-    if(!this.configHistory.length) return
+    if (!this.configHistory.length) return
     const newConfig = this.configHistory.reduce((acc: any, cur: any) => {
-      const [ [ key, value ] ] = Object.entries(cur)
+      const [[key, value]] = Object.entries(cur)
       acc[key] = value
       return acc
     }, {})
@@ -116,7 +118,7 @@ export default class Media extends Component<IProps, IState> {
   // public changeConfigSrc = (src: string) => {
   //   this.setState({ src })
   // }
-  
+
   //seek
   public seek = (time: number) => this.instance?.seek(time)
 
@@ -172,10 +174,11 @@ export default class Media extends Component<IProps, IState> {
   public render() {
     const {
       style,
-      id='video',
+      id = 'video',
       src,
       poster,
-      className
+      className,
+      wrapperClassName
     } = this.props
     const {
       mode,
@@ -187,32 +190,44 @@ export default class Media extends Component<IProps, IState> {
     //TODO
 
     return (
-      <Video
-        className={`component-video ${className}`}
-        //待开发
-        // danmuList={danmuList}
-        style={style}
-        src={src}
-        controls
-        showFullscreenBtn
-        showPlayBtn
-        showCenterPlayBtn
-        autoplay={autoplay}
-        poster={poster}
-        id={id}
-        loop={false}
-        muted={muted}
-        onError={this.error}
-        title={title}
-        enablePlayGesture
-        onPlay={this.handleOnPlay}
-        onPause={this.handleOnPause}
-        onTimeUpdate={this.handleTimeUpdate}
-        onFullscreenChange={this.handleFullScreenChange}
-        onProgress={this.handleProgress}
-        onLoadedMetaData={this.handleCompleteLoad}
+      <View className={`component-video-wrapper ${wrapperClassName}`}>
+        <Video
+          className={`component-video ${className}`}
+          //待开发
+          // danmuList={danmuList}
+          style={style}
+          src={src}
+          controls
+          showFullscreenBtn
+          showPlayBtn
+          showCenterPlayBtn
+          autoplay={autoplay}
+          poster={poster}
+          id={id}
+          loop={false}
+          muted={muted}
+          onError={this.error}
+          title={title}
+          enablePlayGesture
+          onPlay={this.handleOnPlay}
+          onPause={this.handleOnPause}
+          onTimeUpdate={this.handleTimeUpdate}
+          onFullscreenChange={this.handleFullScreenChange}
+          onProgress={this.handleProgress}
+          onLoadedMetaData={this.handleCompleteLoad}
         // objectFit={'contain'}
-      ></Video>
+        ></Video>
+        {
+          !src && (
+            <View 
+              className='component-video-error'
+              style={{
+                backgroundImage: `url(${errorImage})`
+              }}
+            ></View>
+          )
+        }
+      </View>
     )
   }
 }

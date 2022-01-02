@@ -4,6 +4,7 @@ import classnames from 'classnames'
 import { View } from '@tarojs/components'
 import ImageLoading from '~components/imageLoading'
 import Swipper from '~components/iconlist/swipper'
+import style from '~theme/style'
 
 import './index.scss'
 
@@ -59,7 +60,11 @@ export default memo((props: IProps) => {
 
   return (
     <View className='data-detail-image-list'>
-      <View onClick={changeStatus} className={classnames('at-icon', 'data-detail-image-content', 'image-list-icon', 'big-icon-font-size-class', { 'at-icon-image': status === 'icon' }, { 'at-icon-list': status === 'list' })}></View>
+      <View 
+        style={style.color("primary")}
+        onClick={changeStatus} 
+        className={classnames('at-icon', 'data-detail-image-content', 'image-list-icon', 'big-icon-font-size-class', { 'at-icon-image': status === 'icon' }, { 'at-icon-list': status === 'list' })}
+      ></View>
       {list}
     </View>
   )

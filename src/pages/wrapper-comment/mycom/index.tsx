@@ -72,22 +72,7 @@ class MyComment extends Component<any>{
 
   //点赞
   public like = async (id: string, like: boolean) => {
-    const action = async (res) => {
-      if(!res) return 
-      const method = like ? cancelLike : putLike
-      Taro.showLoading({ mask: true, title: '操作中' })
-      await withTry(method)(id)
-      Taro.hideLoading()
-      //刷新
-      await this.onPullDownRefresh()
-    }
-    return this.props.getUserInfo({ action })
-    .catch(() => {
-      Taro.showToast({
-        title: '操作失败，请重试',
-        icon: 'none'
-      })
-    })
+    await this.onPullDownRefresh()
   }
 
   public render() {
@@ -102,7 +87,7 @@ class MyComment extends Component<any>{
         renderContent={
           <List
             comment={this.publish}
-            like={this.like}
+            onLike={this.like}
             list={data}
             renderExtra={
               (item:any) => {

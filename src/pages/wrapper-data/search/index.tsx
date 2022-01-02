@@ -201,6 +201,12 @@ export default class Index extends Component<any> {
               right
               width='90vw'
             >
+              <View 
+                className='normal-title-font-size page-search-drawer-title'
+                style={style.color("primary")}
+              >
+                筛选
+              </View>
               <Forms
                 visible={selectShow}
                 ref={this.formRef}
@@ -251,6 +257,7 @@ export default class Index extends Component<any> {
                   <View className='at-col at-col-5 page-search-main-sub-content-screen'>
                     <Text
                       onClick={this.drawerOpen}
+                      style={style.color("primary")}
                     >筛选</Text>
                   </View>
                 </View>

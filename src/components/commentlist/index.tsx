@@ -4,10 +4,11 @@ import { View, Text, ScrollView, Block } from '@tarojs/components'
 import { AtIcon, AtAvatar } from 'taro-ui'
 import noop from 'lodash/noop'
 import { connect } from 'react-redux'
-import { router, formatTime, formatNumber, EMediaType, routeAlias, LoginTool } from '~utils'
+import { router, formatTime, formatNumber, EMediaType, routeAlias, LoginTool, withTry } from '~utils'
 import style from '~theme/style'
 import { TypeColor } from '~theme/color'
 import { SYSTEM_PAGE_SIZE } from '~config'
+import { putLike, cancelLike } from '~services'
 import VideoStaticImage from '~assets/video.png'
 import CurtainVideo from './components/curtainVideo'
 import Curtain from '../curtain'
@@ -63,9 +64,10 @@ interface IList {
 export interface IProps {
   list: Array<IList>
   renderExtra?: (item: IList) => React.ReactNode
-  like: (id: string, like: boolean) => any
-  comment: (isUserCall: boolean, user: string, commentId: string) => any
-  userInfo?: any 
+  onLike?: (id: string, like: boolean, success?: boolean) => any
+  comment?: (isUserCall: boolean, user: string, commentId: string) => any
+  userInfo?: any
+  getUserInfo?: TGetUserInfo
 }
 
 export interface IState {
@@ -82,9 +84,8 @@ const ICON_TYPE = {
 
 class ListContent extends Component<IProps, IState>{
 
-  public static defaultProps: IProps = {
+  public static defaultProps = {
     list: [],
-    like: noop,
     comment: noop,
   }
 
@@ -100,15 +101,39 @@ class ListContent extends Component<IProps, IState>{
     router.push(routeAlias.commentdetail, { id })
   }
 
+  //点赞/取消点赞
+  public like = async (id: string, like: boolean) => {
+    const action = async (res) => {
+      if (!res) return
+      const method = like ? cancelLike : putLike
+
+      Taro.showLoading({ mask: true, title: '操作中' })
+      await withTry(method)(id)
+      Taro.hideLoading()
+      //刷新
+    }
+    return this.props.getUserInfo?.({ action })
+      .then(() => {
+        this.props.onLike?.(id, like, true)
+      })
+      .catch(() => {
+        this.props.onLike?.(id, like, false)
+        Taro.showToast({
+          title: '操作失败，请重试',
+          icon: 'none'
+        })
+      })
+  }
+
   //获取用户信息
   public getUser = (id: string) => {
     const { _id } = this.props.userInfo || {}
-    if(LoginTool.isLogin() && _id === id) {
+    if (LoginTool.isLogin() && _id === id) {
       router.push(routeAlias.mine)
       Taro.switchTab({
         url: "../../mine/index"
       })
-      return 
+      return
     }
     router.push(routeAlias.user, { id })
   }
@@ -202,14 +227,14 @@ class ListContent extends Component<IProps, IState>{
                       >
                         <Text
                           className='comment-item-header-info-username-content'
-                          onClick={this.props.comment.bind(this, true, _id)}
+                          onClick={this.props.comment?.bind(this, true, _id)}
                           style={style.color('primary')}
                         >{username}</Text>
                         <Text style={{ flex: 1 }}>说: </Text>
                       </View>
                       <View
                         className='comment-item-up at-col at-col-4'
-                        onClick={this.props.like.bind(this, _id, like)}
+                        onClick={this.like.bind(this, _id, like)}
                         style={style.color('thirdly')}
                       >
                         <View className='comment-item-up-text sub-title-font-size-class'>

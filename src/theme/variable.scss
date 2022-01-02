@@ -34,3 +34,56 @@ $normal-icon-font-size: 40px;
   margin: 0;
   padding-left: 1.19467rem;
 }
+// 虚化背景父元素
+.filter-background-parent {
+  position: relative;
+}
+// 虚化背景
+.filter-background {
+  background-size: cover;
+  filter: blur(50px);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+// 元素flex居中
+.flex-dom-center {
+  display: flex;
+  align-items: center;
+}
+
+// padding 
+.padding-4 {
+  padding: 4px;
+}
+.padding-8 {
+  padding: 8px;
+}
+.padding-12 {
+  padding: 12px;
+}
+.padding-16 {
+  padding: 16px;
+}
+
+// margin 
+.margin-4 {
+  margin: 4px;
+}
+.margin-8 {
+  margin: 8px;
+}
+.margin-12 {
+  margin: 12px;
+}
+.margin-16 {
+  margin: 16px;
+}
+
+// border-box 
+.box-sizing-border {
+  box-sizing: border-box;
+}

@@ -4,6 +4,7 @@ import { View, Text } from '@tarojs/components'
 import { AtActionSheet, AtActionSheetItem } from 'taro-ui'
 import { withTry } from '~utils'
 import { getOrderList } from '~services'
+import style from '~theme/style'
 import './index.scss'
 
 export interface IProps {
@@ -90,8 +91,10 @@ export default class RadioList extends Component<IProps>{
 
     return (
       <View className='page-search-radio'>
-        <Text className='page-search-radio-select normal-font-size-class'
+        <Text 
+          className='page-search-radio-select normal-font-size-class'
           onClick={this.showList}
+          style={style.color("primary")}
         >
           {text}
         </Text>

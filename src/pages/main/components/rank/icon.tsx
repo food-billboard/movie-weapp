@@ -2,7 +2,6 @@ import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
 import style from '~theme/style'
-import { SYSTEM_PAGE_SIZE } from '~config'
 import { IIconProps as IProps } from './index'
 
 import './index.scss'
@@ -20,7 +19,7 @@ export default class RankIcon extends Component<IProps>{
       >
         <Text 
           className='main-rank-icon-text normal-font-size-class'
-          style={{ ...style.color('thirdly'), fontSize: SYSTEM_PAGE_SIZE(14) + 'px' }}
+          style={{ ...style.color('thirdly') }}
         >▲{rank}</Text>
       </View>
     )

@@ -159,7 +159,7 @@ export default class extends Component<IProps, IState> {
         <GVideo
           poster={this.value.poster || ''}
           src={this.value.src || ''}
-          className='issue-video-container-content'
+          wrapperClassName='issue-video-container-content'
         ></GVideo>
         <View className='at-row at-row__justify--between'>
           <AtButton onClick={this.handleAddPoster} className='at-col' customStyle={{...commonStyle, ...((posterError || error) ? FORM_ERROR : {}) }} >添加海报</AtButton>

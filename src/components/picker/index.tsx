@@ -68,9 +68,8 @@ export const fieldTypeSymbol = {
 
 const STYLE = {
   width: '100%',
-  height: SYSTEM_PAGE_SIZE(30) + 'px',
   backgroundColor: 'rgba(0, 0, 0, 0.1)',
-  lineHeight: SYSTEM_PAGE_SIZE(30) + 'px',
+  lineHeight: 2,
   boxSizing: 'border-box'
 }
 
