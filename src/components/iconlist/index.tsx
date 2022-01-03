@@ -118,7 +118,8 @@ class IconList extends Component<IProps>{
                   <Swipper style={{ height: '100%' }} list={imageList} />
                   <View
                     onClick={this.handleStore.bind(this, _id, store)}
-                    className='at-icon at-icon-heart component-icon-list-content-poster-store'
+                    className={`at-icon at-icon-heart${store ? "-2" : ""} component-icon-list-content-poster-store`}
+                    style={style.color('primary')}
                   ></View>
                 </View>
                 <View className='component-icon-list-content-main'>

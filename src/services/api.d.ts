@@ -1,3 +1,29 @@
+declare namespace API_COMMON {
+
+  export interface ICommonMovieData {
+    description: string
+    author_description: string 
+    name: string
+    poster: string
+    _id: string
+    store: boolean
+    rate: number
+    classify: {
+      name: string 
+    }[]
+    images: string[]
+    publish_time: string
+    hot: number 
+    author: {
+      username: string
+      id: string
+      avatar: string
+    }
+    author_rate: number 
+  }
+
+}
+
 declare namespace API_UPLOAD {
 
   export interface IPutVideoPosterParams {
@@ -41,6 +67,24 @@ declare namespace API_UPLOAD {
 }
 
 declare namespace API_USER {
+
+  export interface IGetMovieSpecialListData {
+    name: string 
+    description: string 
+    movie_count: number 
+    glance_count: number 
+    _id: string 
+    createdAt: string 
+    updatedAt: string 
+    poster: string 
+  }
+
+  export interface IGetMovieSpecialDetail {
+    poster: string 
+    name: string 
+    _id: string 
+    movie: API_COMMON.ICommonMovieData[]
+  }
 
   export interface ItypeList {
     value: string

@@ -215,7 +215,7 @@ export default class List extends Component<IProps, IState> {
             }
           </View>
           {
-            !emptyShow 
+            !!this.data.length 
             && empty 
             && divider 
             && (

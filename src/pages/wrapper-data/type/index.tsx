@@ -1,22 +1,24 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component, createRef } from 'react'
 import { View } from '@tarojs/components'
+import { connect } from 'react-redux'
 import IconList from '~components/iconlist'
 import LinearList from '~components/list'
 import GScrollView from '~components/scrollList'
 import throttle from 'lodash/throttle'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
-import { getClassifyList } from '~services'
-import { ESourceTypeList } from '~utils'
+import { getClassifyList, getCustomerClassifyList } from '~services'
+import { ESourceTypeList, login4Request } from '~utils'
 import Fab from './components/fab'
 import ClassifyHeader, { IClassifyHeaderRef } from './components/header'
+import { mapStateToProps, mapDispatchToProps } from './connect'
 
 import './index.scss'
 
 const INIT_QUERY = { currPage: 1, pageSize: 10 }
 
-export default class Index extends Component<any> {
+class Index extends Component<any> {
 
   public state = {
     data: [],
@@ -66,7 +68,8 @@ export default class Index extends Component<any> {
   public fetchData = async (query: any, isInit = false) => {
     const { data } = this.state
     if (!this.id) return []
-    const resData = await getClassifyList({ id: this.id, ...query })
+    const method = await login4Request(this.props.getUserInfo, getClassifyList, getCustomerClassifyList)
+    const resData = await method({ id: this.id, ...query })
 
     this.setState({
       data: [...(isInit ? [] : data), ...resData.map(item => {
@@ -150,3 +153,5 @@ export default class Index extends Component<any> {
     )
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Index) 

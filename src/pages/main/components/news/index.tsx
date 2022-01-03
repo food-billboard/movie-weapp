@@ -62,7 +62,7 @@ class News extends Component<IProps>{
                 <AtRate
                   value={parseFloat((author_rate / 2).toFixed(1))}
                   readonly
-                  size={8}
+                  size={12}
                   max={5}
                   origin={author_rate}
                   style={{marginTop: '12PX'}}

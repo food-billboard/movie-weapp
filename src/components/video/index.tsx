@@ -1,6 +1,6 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
-import { Video, View } from '@tarojs/components'
+import { Video, View, Image } from '@tarojs/components'
 import { EVideoMode, setVideoConfig, getVideoConfig } from '~config'
 import errorImage from '~assets/404.png'
 
@@ -219,12 +219,10 @@ export default class Media extends Component<IProps, IState> {
         ></Video>
         {
           !src && (
-            <View 
+            <Image 
               className='component-video-error'
-              style={{
-                backgroundImage: `url(${errorImage})`
-              }}
-            ></View>
+              src={errorImage}
+            />
           )
         }
       </View>

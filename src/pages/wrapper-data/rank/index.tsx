@@ -2,20 +2,22 @@ import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
 import { View, ScrollView } from '@tarojs/components'
 import { AtTag } from "taro-ui"
+import { connect } from 'react-redux'
 import throttle from 'lodash/throttle'
 import GScrollView from '~components/scrollList'
 import List from '~components/list'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
-import { router, routeAlias, ESourceTypeList } from '~utils'
-import { getRankList, getRankType } from '~services'
+import { router, routeAlias, ESourceTypeList, login4Request } from '~utils'
+import { getRankList, getRankType, getCustomerRankList } from '~services'
 import Rank from '../../main/components/rank'
+import { mapStateToProps, mapDispatchToProps } from './connect'
 
 enum showType {
   SHOW_MORE = 'SHOW_MORE',
   HIDE_MORE = 'HIDE_MORE'
 }
-export default class extends Component<any> {
+class RankList extends Component<any> {
 
   public state: any = {
     data: [],
@@ -72,7 +74,9 @@ export default class extends Component<any> {
   //数据获取
   public fetchData = async (query: any, isInit=false) => {
     const { data } = this.state
-    const resData = await getRankList({id: this.id, ...query})
+    const method = await login4Request(this.props.getUserInfo, getCustomerRankList, getRankList)
+
+    const resData = await method({id: this.id, ...query})
     this.setState({
       data: resData.length ? [ ...(isInit ? [] : data), ...resData.map(item => {
         const { classify, publish_time, ...nextItem } = item
@@ -163,3 +167,5 @@ export default class extends Component<any> {
     )
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(RankList)

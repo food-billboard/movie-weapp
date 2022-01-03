@@ -1,16 +1,18 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
-import Scroll from '~components/scrollList'
 import throttle from 'lodash/throttle'
+import { connect } from 'react-redux'
+import Scroll from '~components/scrollList'
 import IconList from '~components/iconlist'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
-import { router, routeAlias, ESourceTypeList } from '~utils'
-import { getSpecial } from '~services'
+import { router, routeAlias, ESourceTypeList, login4Request } from '~utils'
+import { getSpecial, getCustomerSpecial } from '~services'
+import { mapStateToProps, mapDispatchToProps } from './connect'
 
 let FIRST = true
 
-export default class extends Component<any>{
+class SpecialDetail extends Component<any>{
 
   public state: any = {
     data: [],
@@ -45,7 +47,8 @@ export default class extends Component<any>{
    */
   public fetchData = async (query: any, isInit = false) => {
     const { data } = this.state
-    const { name, movie } = await getSpecial({ id: this.id, ...query })
+    const method = await login4Request(this.props.getUserInfo, getSpecial, getCustomerSpecial)
+    const { name, movie } = await method({ id: this.id, ...query })
 
     this.setState({
       data: [...(isInit ? [] : data), ...movie.map(item => {
@@ -87,3 +90,5 @@ export default class extends Component<any>{
   }
 
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(SpecialDetail)

@@ -65,7 +65,15 @@ export const getSpecial = ({
   currPage?: number
   pageSize?: number 
 }) => {
-  return request('GET', '/api/user/home/special', { query: { _id: id, currPage, pageSize } })
+  return request<API_USER.IGetMovieSpecialDetail>('GET', '/api/user/home/special', { query: { _id: id, currPage, pageSize } })
+}
+
+// 专题列表
+export const getSpecialList = (params: {
+  currPage?: number
+  pageSize?: number 
+}) => {
+  return request<API_USER.IGetMovieSpecialListData[]>('GET', '/api/user/movie/special', { query: params })
 }
 
 //轮播图
@@ -106,7 +114,7 @@ export const getClassify = (count?:number) => {
 
 //分类列表
 export const getClassifyList = ({ id, currPage=0, pageSize=30, sort }: { id: string, currPage: number, pageSize: number, sort: any }) => {
-  return request('GET', '/api/user/movie/classify', {query: { _id: id, currPage, pageSize, sort }})
+  return request<API_COMMON.ICommonMovieData[]>('GET', '/api/user/movie/classify', {query: { _id: id, currPage, pageSize, sort }})
 }
 
 //电影详情
