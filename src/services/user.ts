@@ -188,3 +188,10 @@ export const getSearchDataList = (params: API_USER.ISearchDataParams) => {
     query: params
   })
 }
+
+// 专题列表
+export const getSpecialWrapperList = (params: API_COMMON.ICommonParams) => {
+  return request<API_USER.IGetWrapperSpecialData[]>('GET', '/api/user/movie/special', {
+    query: params
+  })
+}

@@ -22,6 +22,11 @@ declare namespace API_COMMON {
     author_rate: number 
   }
 
+  export interface ICommonParams {
+    currPage?: number 
+    pageSize?: number 
+  }
+
 }
 
 declare namespace API_UPLOAD {
@@ -148,6 +153,17 @@ declare namespace API_USER {
   }
   export interface IGetDailyRes {
     data: IGetDailyResData[]
+  }
+
+  export interface IGetWrapperSpecialData {
+    glance_count: number 
+    poster: string
+    createdAt: string
+    updatedAt: string
+    name: string
+    description: string
+    movie_count: number 
+    _id: string
   }
 
 }

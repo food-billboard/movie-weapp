@@ -11,6 +11,7 @@ import Swipers from './components/swiper'
 import Itemize from './components/itemize'
 import News from './components/news'
 import Rank from './components/rank'
+import Special from './components/special'
 
 import './index.scss'
 
@@ -109,6 +110,12 @@ export default class extends Component<any> {
           <News
             list={daily}
           />
+        </View>
+        <View className='main-page-special'>
+          <Text className='main-page-rank-title title-font-size-class'
+            style={{ ...secondaryColor }}
+          >专题</Text>
+          <Special />
         </View>
         <View className='main-page-rank'>
           <Text className='main-page-rank-title title-font-size-class'

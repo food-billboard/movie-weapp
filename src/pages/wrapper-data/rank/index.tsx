@@ -74,8 +74,7 @@ class RankList extends Component<any> {
   //数据获取
   public fetchData = async (query: any, isInit=false) => {
     const { data } = this.state
-    const method = await login4Request(this.props.getUserInfo, getCustomerRankList, getRankList)
-
+    const method = await login4Request(this.props.getUserInfo, getRankList, getCustomerRankList)
     const resData = await method({id: this.id, ...query})
     this.setState({
       data: resData.length ? [ ...(isInit ? [] : data), ...resData.map(item => {

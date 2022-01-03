@@ -332,7 +332,10 @@ export const getCustomerClassifyList = ({
   return request<API_COMMON.ICommonMovieData[]>(
     'GET',
     '/api/customer/movie/detail/classify',
-    { query: { _id: id, currPage, pageSize, sort } },
+    { 
+      query: { _id: id, currPage, pageSize, sort },
+      header: getToken(true),
+    },
   );
 };
 
@@ -349,6 +352,9 @@ export const getCustomerRankList = ({
   return request<API_COMMON.ICommonMovieData[]>(
     'GET',
     '/api/customer/movie/detail/rank',
-    { query: { _id: id, currPage, pageSize } },
+    { 
+      query: { _id: id, currPage, pageSize },
+      header: getToken(true),
+    },
   );
 };

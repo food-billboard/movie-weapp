@@ -21,6 +21,10 @@
       text-align: right;
     }
   }
+  &-special {
+    box-sizing: border-box;
+    padding: 0 10px 10px 10px;
+  }
   &-rank {
     box-sizing: border-box;
     padding: 0 10px 10px 10px;
