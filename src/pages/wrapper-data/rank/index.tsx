@@ -128,6 +128,7 @@ class RankList extends Component<any> {
         ref={this.scrollRef}
         sourceType={ESourceTypeList.Scope}
         query={{pageSize: 8}}
+        emptyShow={false}
         renderContent={
           <View>
             <Rank
@@ -142,14 +143,15 @@ class RankList extends Component<any> {
             >
               {
                 rankType.map(item => {
-                  const { _id, value } = item
+                  const { id, value } = item
                   return (
                     <AtTag 
                       customStyle={{ display: 'inline-block', marginLeft: '5px', ...style.color('primary') }}
                       circle
                       onClick={this.exchangeRank.bind(this, item)}
-                      key={_id}
+                      key={id}
                       className='sub-title-font-size-class'
+                      active={id === this.id}
                     >
                       {value}
                     </AtTag>

@@ -2370,6 +2370,14 @@ aggregate-error@^3.0.0:
     clean-stack "^2.0.0"
     indent-string "^4.0.0"
 
+aggregate-error@^4.0.0:
+  version "4.0.0"
+  resolved "http://192.168.10.162:8081/nexus/content/groups/npm-all/aggregate-error/-/aggregate-error-4.0.0.tgz#83dbdb53a0d500721281d22e19eee9bc352a89cd"
+  integrity sha1-g9vbU6DVAHISgdIuGe7pvDUqic0=
+  dependencies:
+    clean-stack "^4.0.0"
+    indent-string "^5.0.0"
+
 ajv-errors@^1.0.0:
   version "1.0.1"
   resolved "https://registry.nlark.com/ajv-errors/download/ajv-errors-1.0.1.tgz#f35986aceb91afadec4102fbd85014950cefa64d"
@@ -3924,6 +3932,13 @@ clean-stack@^2.0.0:
   resolved "https://registry.nlark.com/clean-stack/download/clean-stack-2.2.0.tgz?cache=0&sync_timestamp=1621915044030&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fclean-stack%2Fdownload%2Fclean-stack-2.2.0.tgz#ee8472dbb129e727b31e8a10a427dee9dfe4008b"
   integrity sha1-7oRy27Ep5yezHooQpCfe6d/kAIs=
 
+clean-stack@^4.0.0:
+  version "4.1.0"
+  resolved "http://192.168.10.162:8081/nexus/content/groups/npm-all/clean-stack/-/clean-stack-4.1.0.tgz#5ce5a2fd19a12aecdce8570daefddb7ac94b6b4e"
+  integrity sha1-XOWi/RmhKuzc6FcNrv3beslLa04=
+  dependencies:
+    escape-string-regexp "5.0.0"
+
 cli-boxes@^1.0.0:
   version "1.0.0"
   resolved "https://registry.nlark.com/cli-boxes/download/cli-boxes-1.0.0.tgz#4fa917c3e59c94a004cd61f8ee509da651687143"
@@ -5409,6 +5424,11 @@ escape-html@~1.0.3:
   version "1.0.3"
   resolved "https://registry.nlark.com/escape-html/download/escape-html-1.0.3.tgz#0258eae4d3d0c0974de1c169188ef0051d1d1988"
   integrity sha1-Aljq5NPQwJdN4cFpGI7wBR0dGYg=
+
+escape-string-regexp@5.0.0:
+  version "5.0.0"
+  resolved "http://192.168.10.162:8081/nexus/content/groups/npm-all/escape-string-regexp/-/escape-string-regexp-5.0.0.tgz#4683126b500b61762f2dbebace1806e8be31b1c8"
+  integrity sha1-RoMSa1ALYXYvLb66zhgG6L4xscg=
 
 escape-string-regexp@^1.0.2, escape-string-regexp@^1.0.5:
   version "1.0.5"
@@ -7284,6 +7304,11 @@ indent-string@^4.0.0:
   version "4.0.0"
   resolved "https://registry.npm.taobao.org/indent-string/download/indent-string-4.0.0.tgz?cache=0&sync_timestamp=1618679561483&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Findent-string%2Fdownload%2Findent-string-4.0.0.tgz#624f8f4497d619b2d9768531d58f4122854d7251"
   integrity sha1-Yk+PRJfWGbLZdoUx1Y9BIoVNclE=
+
+indent-string@^5.0.0:
+  version "5.0.0"
+  resolved "http://192.168.10.162:8081/nexus/content/groups/npm-all/indent-string/-/indent-string-5.0.0.tgz#4fd2980fccaf8622d14c64d694f4cf33c81951a5"
+  integrity sha1-T9KYD8yvhiLRTGTWlPTPM8gZUaU=
 
 infer-owner@^1.0.3, infer-owner@^1.0.4:
   version "1.0.4"
@@ -9765,6 +9790,13 @@ p-map@^4.0.0:
   integrity sha1-uy+Vpe2i7BaOySdOBqdHw+KQTSs=
   dependencies:
     aggregate-error "^3.0.0"
+
+p-map@^5.3.0:
+  version "5.3.0"
+  resolved "http://192.168.10.162:8081/nexus/content/groups/npm-all/p-map/-/p-map-5.3.0.tgz#2204823bc9f37f17ddc9e7f446293c4530b8a4cf"
+  integrity sha1-IgSCO8nzfxfdyef0Rik8RTC4pM8=
+  dependencies:
+    aggregate-error "^4.0.0"
 
 p-retry@^3.0.1:
   version "3.0.1"

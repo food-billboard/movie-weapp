@@ -68,6 +68,9 @@ $normal-icon-font-size: 40px;
 .padding-16 {
   padding: 16px;
 }
+.padding-32 {
+  padding: 16px;
+}
 
 // margin 
 .margin-4 {
@@ -83,7 +86,23 @@ $normal-icon-font-size: 40px;
   margin: 16px;
 }
 
+// border-radius 
+.border-radius-4 {
+  border-radius: 4px;
+}
+.border-radius-8 {
+  border-radius: 8px;
+}
+.border-radius-12 {
+  border-radius: 12px;
+}
+.border-radius-16 {
+  border-radius: 16px;
+}
+
 // border-box 
 .box-sizing-border {
   box-sizing: border-box;
 }
+
+
