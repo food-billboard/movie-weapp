@@ -1,10 +1,9 @@
 import Taro from '@tarojs/taro'
 import React, { useCallback, useEffect, useState } from 'react'
 import { View, Text } from '@tarojs/components'
-import pMap from 'p-map'
 import { getSpecialWrapperList, getSpecial } from '~services'
 import style from '~theme/style'
-import { router, routeAlias, withTry } from '~utils'
+import { router, routeAlias, withTry, pMap } from '~utils'
 import ImageLoading from '~components/imageLoading'
 
 import './index.scss'

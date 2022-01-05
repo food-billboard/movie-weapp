@@ -14,6 +14,7 @@ export * from './token'
 export * from './global/comment_value'
 export * from './string2base64'
 export { default as LoginTool } from './isLogin'
+export { default as pMap } from './p-map'
 // export * from './message'
 
 export const includes = (collection: any=[], value:any='') => {
