@@ -70,7 +70,7 @@ class Register extends Component<any>{
     Taro.hideLoading()
     if (data) {
       Taro.switchTab({
-        url: '../../main/index'
+        url: '/pages/main/index'
       })
     } else {
       Taro.showToast({

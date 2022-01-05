@@ -82,10 +82,6 @@ export default class extends Component<IProps, IState> {
 
   //媒体选择
   public handleSelect = (type: EMediaType) => {
-    Taro.showLoading({
-      title: '选择中',
-      mask: true
-    })
     if (type === EMediaType.IMAGE) {
       return Taro.chooseImage({
         count: IMAGE_CONFIG.count,
@@ -93,22 +89,20 @@ export default class extends Component<IProps, IState> {
         sourceType: ['album', 'camera'],
       })
         .then(data => {
-          Taro.hideLoading()
           return data
         })
         .catch(_ => {
-          Taro.hideLoading()
+          
         })
     } else if (type === EMediaType.VIDEO) {
       return Taro.chooseVideo({
         sourceType: ['album']
       })
         .then(data => {
-          Taro.hideLoading()
           return data
         })
         .catch(_ => {
-          Taro.hideLoading()
+         
         })
     }
   }

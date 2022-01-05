@@ -58,7 +58,7 @@ export default class extends Component<any> {
       content: '功能还在完善中...',
       success: function (_) {
         Taro.switchTab({
-          url: '../main/index'
+          url: '/pages/main/index'
         })
       }
     })

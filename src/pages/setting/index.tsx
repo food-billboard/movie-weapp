@@ -88,7 +88,7 @@ export default class Setting extends Component<any>{
         icon: 'success',
         duration: 1000,
         mask: true,
-        complete: Taro.switchTab.bind(this, { url: '../main/index' })
+        complete: Taro.switchTab.bind(this, { url: '/pages/main/index' })
       })
     }
   }

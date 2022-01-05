@@ -131,7 +131,7 @@ class ListContent extends Component<IProps, IState>{
     if (LoginTool.isLogin() && _id === id) {
       router.push(routeAlias.mine)
       Taro.switchTab({
-        url: "../../mine/index"
+        url: "/pages/mine/index"
       })
       return
     }

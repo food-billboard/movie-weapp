@@ -1,8 +1,9 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
-import { View, Textarea } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import { AtButton } from 'taro-ui'
 import { pick, merge, noop } from 'lodash'
+import { connect } from 'react-redux' 
 import BaseForm from '~components/wrapForm'
 import GDescription, { EInputType } from '~components/input'
 import MediaPicker from '~components/mediaPicker'
@@ -12,6 +13,7 @@ import style from '~theme/style'
 import { size, router, Upload, EMediaType, TaroShowModal } from '~utils'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import { postCommentToUser, postCommentToMovie, feedback, preCheckFeedback, putVideoPoster } from '~services'
+import { mapStateToProps, mapDispatchToProps } from './connect'
 
 import './index.scss'
 
@@ -21,7 +23,7 @@ const fieldsStore = createFieldsStore('comment', {
   }
 })
 
-export default class extends Component<any> {
+class Comment extends Component<any> {
 
   public state: any = {
     config: {
@@ -153,6 +155,9 @@ export default class extends Component<any> {
   }
 
   private handleSubmit = async () => {
+
+    const isLogin = await this.props.getUserInfo()
+    if(!isLogin) return 
 
     const { config: { action, param } } = this.state
     const values = fieldsStore.getFieldsValue()
@@ -325,3 +330,5 @@ export default class extends Component<any> {
      ) 
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Comment)

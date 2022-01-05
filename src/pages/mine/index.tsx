@@ -55,9 +55,9 @@ class Mine extends Component<any>{
   public fetchData = async () => {
     Taro.showLoading({ mask: true, title: '加载中' })
     await this.props.getUserInfo({ unloginAction: () => {
-      Taro.switchTab({ url: '../main/index' })
+      Taro.switchTab({ url: '/pages/main/index' })
     } })
-    .catch(_ => Taro.switchTab({ url: '../main/index' }))
+    .catch(_ => Taro.switchTab({ url: '/pages/main/index' }))
     Taro.hideLoading()
   }
 
