@@ -318,7 +318,6 @@ export default class Setting extends Component<any>{
             type={type[index]}
             plain
             onClick={this.handleButton.bind(this, index)}
-            style={{ ...style.backgroundColor('bgColor') }}
           >
             {value[index]}
           </Button>

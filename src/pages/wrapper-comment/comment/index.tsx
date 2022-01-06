@@ -10,7 +10,7 @@ import MediaPicker from '~components/mediaPicker'
 import { EAction } from '~utils/types'
 import { createFieldsStore } from '~components/wrapForm/fieldsStore'
 import style from '~theme/style'
-import { size, router, Upload, EMediaType, TaroShowModal } from '~utils'
+import { size, router, Upload, EMediaType, TaroShowModal, withTry } from '~utils'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import { postCommentToUser, postCommentToMovie, feedback, preCheckFeedback, putVideoPoster } from '~services'
 import { mapStateToProps, mapDispatchToProps } from './connect'
@@ -122,15 +122,14 @@ class Comment extends Component<any> {
     Taro.hideLoading()
     Taro.showLoading({ mask: true, title: '预检查中...' })
     const { description, video, image } = values
-    const data = await preCheckFeedback()
-    if (!data) {
+    const [err, ] = await withTry(preCheckFeedback)()
+    if (!!err) {
       Taro.showToast({
         title: '已达到每日反馈上限',
         icon: 'none',
         duration: 1000
       })
-      Taro.hideLoading()
-      throw new Error()
+      throw new Error("frequent");
     } else {
       return feedback({
         content: {
@@ -251,12 +250,14 @@ class Comment extends Component<any> {
         }
       })
       .catch(err => {
-        Taro.hideLoading()
-        if(err) Taro.showToast({
-          title: '发送错误，请重试',
-          icon: 'none',
-          duration: 1000
-        })
+        if(err.message !== "frequent") {
+          Taro.hideLoading()
+          Taro.showToast({
+            title: '发送错误，请重试',
+            icon: 'none',
+            duration: 1000
+          })
+        }
       })
       
       return resolve(null)

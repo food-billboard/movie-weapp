@@ -26,10 +26,8 @@ interface IProps {
 }
 
 const TAT_STYLE: any = {
-  boxSizing: 'border-box', 
   width:'100%', 
   marginBottom: '5px', 
-  ...style.border(1, 'primary', 'dashed', 'all')
 }
 
 const Indexes = memo((props: IProps) => {
@@ -89,6 +87,7 @@ const Indexes = memo((props: IProps) => {
     <View style={wrapperStyle}>
       <AtTag 
         onClick={onClick}
+        className='box-sizing-border'
         customStyle={{...TAT_STYLE, ...style.border(1, 'primary', 'dashed', 'all'), ...style.color('thirdly')}} 
         type='primary'
       >

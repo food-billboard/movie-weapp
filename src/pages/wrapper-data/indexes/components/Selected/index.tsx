@@ -19,12 +19,12 @@ export default memo((props: IProps) => {
       TaroShowModal({
         title: '提示',
         content: '是否删除',
-        success: function (res) {
-          if (res.confirm) {
-            onChange(value.filter(item => item._id != _id))
-          } else if (res.cancel) {
-            return 
-          }
+      })
+      .then(res => {
+        if (res.confirm) {
+          onChange(value.filter(item => item._id != _id))
+        } else if (res.cancel) {
+          return 
         }
       })
     }

@@ -54,17 +54,10 @@ export default class extends Component<IProps, IState> {
   //添加海报
   public handleAddPoster = () => {
     const { handleOnChange=noop } = this.props
-    Taro.showLoading({
-      title: '图片加载中...',
-      mask: true
-    })
     Taro.chooseImage({
       count: 1,
       sizeType: ['original', 'compressed'],
       sourceType: ['album', 'camera'], 
-      complete: () => {
-        Taro.hideLoading()
-      },
       success: (res) => {
         var tempFilePaths = res.tempFilePaths
         const { info } = this.state
@@ -84,16 +77,9 @@ export default class extends Component<IProps, IState> {
   //添加视频
   public handleAddMedia = () => {
     const { handleOnChange=noop } = this.props
-    Taro.showLoading({
-      title: '视频加载中...',
-      mask: true
-    })
     Taro.chooseVideo({
       sourceType: ['album'],
       compressed: true,
-      complete: () => {
-        Taro.hideLoading()
-      },
       success: (res) => {
         const file = res.tempFilePath
         const { info } = this.state

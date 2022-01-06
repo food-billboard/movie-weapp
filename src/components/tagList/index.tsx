@@ -47,15 +47,15 @@ export default class extends Component<IProps, IState> {
     TaroShowModal({
       title: '提示',
       content: '是否删除?',
-      success: function (res) {
-        const { confirm } = res
-        if (confirm) {
-          const { name, key } = item
-          const { list } = that.props
-          const newList = list.filter(targetItem => targetItem.name !== name && targetItem.key !== key)
-          Taro.showToast({ mask: false, icon: 'none', title: 'success~' })
-          that.props.handleChange && that.props.handleChange(newList)
-        }
+    })
+    .then(data => {
+      const { confirm } = data
+      if (confirm) {
+        const { name, key } = item
+        const { list } = that.props
+        const newList = list.filter(targetItem => targetItem.name !== name && targetItem.key !== key)
+        Taro.showToast({ mask: false, icon: 'none', title: 'success~' })
+        that.props.handleChange && that.props.handleChange(newList)
       }
     })
   }
