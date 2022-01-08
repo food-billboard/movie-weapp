@@ -77,9 +77,9 @@ export interface IState {
 
 //媒体的图标类型
 const ICON_TYPE = {
-  video: 'at-icon-video',
-  image: 'at-icon-image',
-  action: 'at-icon-soung'
+  [EMediaType.VIDEO]: 'at-icon-video',
+  [EMediaType.IMAGE]: 'at-icon-image',
+  [EMediaType.AUDIO]: 'at-icon-soung'
 }
 
 class ListContent extends Component<IProps, IState>{
@@ -297,9 +297,7 @@ class ListContent extends Component<IProps, IState>{
                           <View
                             className={`comment-item-image-list-image-icon big-icon-font-size-class at-icon ${ICON_TYPE[type]}`}
                             style={{
-                              ...style.color('primary'),
                               textShadow: `0 0 2px ${TypeColor()['disabled']}`,
-                              fontSize: SYSTEM_PAGE_SIZE(16) + 'px'
                             }}
                           ></View>
                           <ImageLoading

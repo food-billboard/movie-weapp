@@ -70,11 +70,11 @@
       top: 0;
       &-icon {
         position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translateX(-50%) translateY(-50%);
+        left: 0;
+        top: 0;
         border-radius: 32px;
         opacity: 0.6;
+        z-index: 1;
       }
     }
   }
