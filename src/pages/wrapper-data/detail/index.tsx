@@ -160,6 +160,7 @@ class Detail extends Component<any> {
               src={video}
               poster={poster}
               id={video}
+              wrapperClassName='page-detail-video'
             />
           }
         </View>

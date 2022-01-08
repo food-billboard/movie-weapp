@@ -1,4 +1,6 @@
 import Taro from '@tarojs/taro'
+import { merge } from 'lodash'
+import { TypeColor } from '~theme/color'
 
 export function supportAndDeal(methodKey: string, ...args: any) {
   try { 
@@ -28,7 +30,9 @@ export async function TaroShowModal(options: {
   /** 提示的标题 */
   title?: string
 }) {
-  return Taro.showModal(options)
+  return Taro.showModal(merge({
+    confirmColor: TypeColor().primary
+  }, options))
   .then(data => {
     const { cancel, confirm, errMsg } = data 
     return {

@@ -27,6 +27,7 @@ export interface IProps {
   mode?: EVideoMode
   className?: string
   wrapperClassName?: string 
+  wrapperStyle?: React.CSSProperties
 }
 
 export interface IState extends IProps { }
@@ -178,7 +179,8 @@ export default class Media extends Component<IProps, IState> {
       src,
       poster,
       className,
-      wrapperClassName
+      wrapperClassName,
+      wrapperStyle
     } = this.props
     const {
       mode,
@@ -190,7 +192,7 @@ export default class Media extends Component<IProps, IState> {
     //TODO
 
     return (
-      <View className={`component-video-wrapper ${wrapperClassName}`}>
+      <View style={wrapperStyle} className={`component-video-wrapper ${wrapperClassName}`}>
         <Video
           className={`component-video ${className}`}
           //待开发

@@ -57,7 +57,7 @@ export default class extends Component<IProps, IState> {
         onClick={this.handleCloseVideo}
       >
         <GVideo
-          style={{ width: '100%', height: '100%' }}
+          wrapperStyle={{ width: '100%', height: '100%' }}
           src={src || ''}
           autoplay
           poster={poster || ''}

@@ -142,15 +142,7 @@ class Comment extends Component<any> {
   }
 
   private handleReset = () => {
-    TaroShowModal({
-      title: '提示',
-      content: '是否确定清空输入的内容'
-    }).then((res) => {
-      const { confirm } = res
-      if(confirm) {
-        fieldsStore.initializeFields()
-      }
-    })
+    fieldsStore.initializeFields()
   }
 
   private handleSubmit = async () => {

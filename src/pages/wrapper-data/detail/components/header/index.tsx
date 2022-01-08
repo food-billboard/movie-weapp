@@ -1,6 +1,6 @@
 import React, { Component, useMemo } from 'react'
 import Taro from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import { View, Image } from '@tarojs/components'
 import Day from 'dayjs'
 import GRate from '~components/rate'
 import ImageLoading from '~components/imageLoading'
@@ -56,12 +56,17 @@ const Header = (props: {
             }}
           >
           </View>
-          <ImageLoading
+          <Image
             src={poster}
             mode='widthFix'
-            imageStyle={{
-              height: 'unset'
+            style={{ 
+              width: '100%', 
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center' 
             }}
+            webp
+            lazyLoad
           />
         </View>
         <View className='at-col at-col-8 at-col__offset-1 page-detail-header-main'>

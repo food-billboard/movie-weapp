@@ -3,7 +3,7 @@ import Taro from '@tarojs/taro'
 import { View, ScrollView } from '@tarojs/components'
 import ImageLoading from '~components/imageLoading'
 import style from '~theme/style'
-import { routeAlias, router, EAction } from '~utils'
+import { routeAlias, router } from '~utils'
 
 import './index.scss'
 
@@ -42,11 +42,9 @@ const CommentHeader = (props: {
 
   //打开评论界面
   const handleComment = useCallback(async () => {
-    let param: NComment.Comment_Params = {
-      action: EAction.COMMENT_MOVIE,
-      postInfo: id
-    }
-    router.push(routeAlias.toComment, param)
+    router.push(routeAlias.comment, {
+      id,
+    })
   }, [id])
 
   return (

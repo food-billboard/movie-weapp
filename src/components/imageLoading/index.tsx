@@ -1,14 +1,13 @@
 import Taro from '@tarojs/taro'
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { View, Image } from '@tarojs/components'
-import { AtActivityIndicator } from 'taro-ui'
-import { SYSTEM_PAGE_SIZE } from '~config'
 import { TypeColor } from '~theme/color'
 import style from '~theme/style'
 import { isObject } from '~utils'
 import { ImageProps } from '@tarojs/components/types/Image'
 import { AtActivityIndicatorProps } from 'taro-ui/types/activity-indicator'
 import fallback from '~assets/fallback.png'
+import loadingFallback from '~assets/loading-fallback.png'
 
 import './index.scss'
 
@@ -50,9 +49,7 @@ export default memo((props: IProps) => {
     imageStyle = false,
     onLoad,
     onError
-  } = useMemo(() => {
-    return props
-  }, [props])
+  } = props
 
   const handleLoad = useCallback((event) => {
     onLoad && onLoad(event)
@@ -63,11 +60,11 @@ export default memo((props: IProps) => {
     onError && onError(e)
     setError(true)
     setLoading(false)
-  }, [])
+  }, [onError])
 
   const onClick = useCallback((e) => {
     handleClick && handleClick(e)
-  }, [])
+  }, [handleClick])
 
   const contentStyle = useMemo(() => {
     return {
@@ -89,7 +86,13 @@ export default memo((props: IProps) => {
           {}
       )
     }
-  }, [loading])
+  }, [loading, customStyle, border])
+
+  const imageSrc = useMemo(() => {
+    if(error || !src) return fallback
+    if(loading) return loadingFallback
+    return src 
+  }, [error, src, loading])
 
   useEffect(() => {
     setError(false)
@@ -102,7 +105,7 @@ export default memo((props: IProps) => {
       onClick={onClick}
       style={contentStyle}
     >
-      {
+      {/* {
         loading ?
           <AtActivityIndicator
             content={content}
@@ -111,10 +114,14 @@ export default memo((props: IProps) => {
             size={SYSTEM_PAGE_SIZE(size)}
           ></AtActivityIndicator>
           : null
-      }
+      } */}
       <Image
-        style={{ visibility: loading ? 'hidden' : 'visible', width: '100%', height: '100%', ...(isObject(imageStyle) ? imageStyle : {}) }}
-        src={(error && !loading || !src) ? fallback : src}
+        style={{ 
+          width: '100%', 
+          height: '100%', 
+          ...(imageStyle || {})
+        }}
+        src={src}
         webp={webp}
         mode={mode}
         lazyLoad={lazyLoad}
