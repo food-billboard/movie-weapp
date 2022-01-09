@@ -207,7 +207,6 @@ class ListContent extends Component<IProps, IState>{
               <View
                 className='comment-item'
                 key={_id}
-                style={{ ...style.backgroundColor('disabled') }}
               >
                 <View className='comment-item-header'>
                   <View
