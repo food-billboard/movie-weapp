@@ -1,6 +1,7 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
 import { Provider } from 'react-redux'
+import { VideoPreview } from '~components/commentlist'
 import { dva, router, includes } from '~utils'
 import configure from './configure'
 
@@ -90,6 +91,7 @@ class App extends Component {
     return (
       <Provider store={store}>
         {this.props.children}
+        <VideoPreview h5Render />
       </Provider>
     )
   }

@@ -6,6 +6,7 @@ import merge from 'lodash/merge'
 import GVideo from '~components/video'
 import EmptyTry from '~components/empty-try'
 import GButton from '~components/button'
+import { VideoPreview } from '~components/commentlist'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { withTry, router, routeAlias, EAction } from '~utils'
@@ -279,6 +280,7 @@ class Detail extends Component<any> {
             operate={this.handleComment}
           />
         </View>
+        <VideoPreview />
       </View>
     )
   }

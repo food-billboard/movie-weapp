@@ -84,7 +84,7 @@ export default class extends Component<IProps, IState> {
     return (
       <View
         className='comment-detail-header'
-        style={{ ...style.backgroundColor('thirdly') }}
+        style={{ ...style.backgroundColor('disabled') }}
       >
         <View
           className='comment-detail-header-content'
@@ -125,12 +125,6 @@ export default class extends Component<IProps, IState> {
               {/* ToDo */}
             </View>
           </View>
-
-          <View
-            className='at-icon at-icon-message'
-            style={{ ...style.color('thirdly') }}
-          ></View>
-
           <View className='comment-detail-header-content-footer normal-font-size-class'
             style={{ ...style.border(1, 'disabled', 'dashed', 'top') }}
           >

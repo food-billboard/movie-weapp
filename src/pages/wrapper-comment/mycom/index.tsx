@@ -1,13 +1,14 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
+import { Block } from '@tarojs/components'
 import { connect } from 'react-redux'
 import throttle from 'lodash/throttle'
-import { List } from '~components/commentlist'
+import { List, VideoPreview } from '~components/commentlist'
 import GScrollView from '~components/scrollList'
 import { colorStyleChange } from '~theme/color'
 import style from '~theme/style'
-import { withTry, ESourceTypeList, router, routeAlias, EAction } from '~utils'
-import { getCustomerComment, getCustomerUserComment, getUserComment, cancelLike, putLike } from '~services'
+import { ESourceTypeList, router, routeAlias, EAction } from '~utils'
+import { getCustomerComment, getCustomerUserComment, getUserComment } from '~services'
 import Origin from './components/originComment'
 import { mapDispatchToProps, mapStateToProps } from './connect'
 
@@ -78,34 +79,37 @@ class MyComment extends Component<any>{
   public render() {
     const { data } = this.state
     return (
-      <GScrollView
-        ref={this.scrollRef}
-        query={{ pageSize: 6 }}
-        style={{ ...style.backgroundColor('bgColor') }}
-        sourceType={ESourceTypeList.Scope}
-        scrollWithAnimation
-        renderContent={
-          <List
-            comment={this.publish}
-            onLike={this.like}
-            list={data}
-            renderExtra={
-              (item:any) => {
-                const { source_type, source } = item
-                return (
-                  <Origin
-                    info={{
-                      source,
-                      source_type
-                    }}
-                  />
-                )
+      <Block>
+        <GScrollView
+          ref={this.scrollRef}
+          query={{ pageSize: 6 }}
+          style={{ ...style.backgroundColor('bgColor') }}
+          sourceType={ESourceTypeList.Scope}
+          scrollWithAnimation
+          renderContent={
+            <List
+              comment={this.publish}
+              onLike={this.like}
+              list={data}
+              renderExtra={
+                (item: any) => {
+                  const { source_type, source } = item
+                  return (
+                    <Origin
+                      info={{
+                        source,
+                        source_type
+                      }}
+                    />
+                  )
+                }
               }
-            }
-          ></List>
-        }
-        fetch={this.throttleFetchData}
-      ></GScrollView>
+            ></List>
+          }
+          fetch={this.throttleFetchData}
+        ></GScrollView>
+        <VideoPreview />
+      </Block>
     )
   }
 }

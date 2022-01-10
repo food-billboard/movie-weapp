@@ -1,15 +1,15 @@
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import React, { Component } from 'react'
-import { View } from '@tarojs/components'
+import { View, Block } from '@tarojs/components'
 import throttle from 'lodash/throttle'
 import { connect } from 'react-redux'
 import GButton from '~components/button'
 import Header from '~components/newsheader'
-import { List } from '~components/commentlist'
+import { List, VideoPreview } from '~components/commentlist'
 import GScrollView from '~components/scrollList'
 import style from '~theme/style'
 import { colorStyleChange } from '~theme/color'
-import { withTry, ESourceTypeList, router, routeAlias, EAction } from '~utils'
+import { ESourceTypeList, router, routeAlias, EAction } from '~utils'
 import { getCustomerMovieCommentList, getMovieCommentList, getMovieDetailSimple, putLike, cancelLike } from '~services'
 import { mapDispatchToProps, mapStateToProps } from './connect'
 
@@ -43,7 +43,7 @@ class CommentMovie extends Component<any> {
   //获取电影数据
   public fetchMovieData = async () => {
 
-    if(!this.id) {
+    if (!this.id) {
       Taro.showToast({
         title: '网络错误，请重试',
         icon: 'none',
@@ -73,10 +73,10 @@ class CommentMovie extends Component<any> {
     const { data } = this.state
     const { userInfo } = this.props
     const method = userInfo ? getCustomerMovieCommentList : getMovieCommentList
-    const { comment=[] } = await method({ id: this.id, ...query }) || {}
+    const { comment = [] } = await method({ id: this.id, ...query }) || {}
 
     this.setState({
-      data: [ ...(isInit ? [] : [...data]), ...(comment || [])]
+      data: [...(isInit ? [] : [...data]), ...(comment || [])]
     })
     return comment
   }
@@ -94,10 +94,10 @@ class CommentMovie extends Component<any> {
    * commentId: 评论id
    */
   public publish = async (isUserCall: boolean, commentId: string) => {
-    const param:NComment.Comment_Params = {
+    const param: NComment.Comment_Params = {
       action: isUserCall ? EAction.COMMENT_USER : EAction.COMMENT_MOVIE,
       postInfo: commentId || this.id
-    } 
+    }
     router.push(routeAlias.toComment, param)
   }
 
@@ -105,45 +105,48 @@ class CommentMovie extends Component<any> {
     const { headerData, data } = this.state
 
     return (
-      <GScrollView
-        ref={this.scrollRef}
-        sourceType={ESourceTypeList.Scope}
-        query={{ pageSize: 6 }}
-        style={{ ...style.backgroundColor('bgColor') }}
-        renderContent={
-          <List
-            comment={this.publish}
-            list={data}
-            onLike={this.like}
-          ></List>
-        }
-        fetch={this.throttleFetchData}
-        renderHeader={
-          (watch: () => any) => {
-            return (
-              <View id='commovie-header'>
-                <Header 
-                  content={headerData}
+      <Block>
+        <GScrollView
+          ref={this.scrollRef}
+          sourceType={ESourceTypeList.Scope}
+          query={{ pageSize: 6 }}
+          style={{ ...style.backgroundColor('bgColor') }}
+          renderContent={
+            <List
+              comment={this.publish}
+              list={data}
+              onLike={this.like}
+            ></List>
+          }
+          fetch={this.throttleFetchData}
+          renderHeader={
+            (watch: () => any) => {
+              return (
+                <View id='commovie-header'>
+                  <Header
+                    content={headerData}
                   // handleSizeChange={watch}
-                ></Header>
-              </View>
-            )
+                  ></Header>
+                </View>
+              )
+            }
           }
-        }
-        renderBottom={
-          (_: () => any) => {
-            return (
-              <GButton
-                style={{ width: '100%', height: '92' }}
-                type='secondary'
-                value={new Array(2).fill('发布评论')}
-                operate={this.publish}
-              />
-            )
+          renderBottom={
+            (_: () => any) => {
+              return (
+                <GButton
+                  style={{ width: '100%', height: '92' }}
+                  type='secondary'
+                  value={new Array(2).fill('发布评论')}
+                  operate={this.publish}
+                />
+              )
+            }
           }
-        }
-      >
-      </GScrollView>
+        >
+        </GScrollView>
+        <VideoPreview />
+      </Block>
     )
   }
 }

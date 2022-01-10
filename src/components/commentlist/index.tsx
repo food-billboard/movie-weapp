@@ -10,8 +10,8 @@ import { TypeColor } from '~theme/color'
 import { SYSTEM_PAGE_SIZE } from '~config'
 import { putLike, cancelLike } from '~services'
 import VideoStaticImage from '~assets/video.png'
-import CurtainVideo from './components/curtainVideo'
 import Curtain from '../curtain'
+import VideoPreview, { PreviewVideo } from './components/VideoPreview'
 import ImageLoading from '../imageLoading'
 import EmptyTry from '../empty-try'
 import { mapStateToProps, mapDispatchToProps } from './connect'
@@ -70,11 +70,6 @@ export interface IProps {
   getUserInfo?: TGetUserInfo
 }
 
-export interface IState {
-  activeVideo: string | null
-  activeVideoPoster: string | null
-}
-
 //媒体的图标类型
 const ICON_TYPE = {
   [EMediaType.VIDEO]: 'at-icon-video',
@@ -82,16 +77,11 @@ const ICON_TYPE = {
   [EMediaType.AUDIO]: 'at-icon-soung'
 }
 
-class ListContent extends Component<IProps, IState>{
+class ListContent extends Component<IProps>{
 
   public static defaultProps = {
     list: [],
     comment: noop,
-  }
-
-  public state: IState = {
-    activeVideo: '',
-    activeVideoPoster: ''
   }
 
   private curtainRef = React.createRef<Curtain>()
@@ -161,25 +151,13 @@ class ListContent extends Component<IProps, IState>{
 
   //查看视频
   public handlePreviewVideo = (target: string, poster: string) => {
-    this.setState({
-      activeVideo: target,
-      activeVideoPoster: poster
-    }, this.curtainRef.current?.handleShow)
-  }
-
-  //监听视频关闭
-  public handleVideoClose = () => {
-    this.setState({
-      activeVideo: null,
-      activeVideoPoster: null
+    PreviewVideo({
+      src: target,
+      poster
     })
   }
 
-  //视频关闭
-  private handleCloseVideo = () => this.curtainRef.current?.handleClose()
-
   public render() {
-    const { activeVideoPoster, activeVideo } = this.state
     const { list } = this.props
 
     return (
@@ -354,21 +332,14 @@ class ListContent extends Component<IProps, IState>{
             )
           })
         }
-        <Curtain
-          ref={this.curtainRef}
-          handleClose={this.handleVideoClose}
-          curtainStyle={{ backgroundColor: '#000', opacity: 1 }}
-          renderMain={
-            <CurtainVideo
-              src={activeVideo || ''}
-              poster={activeVideoPoster || ''}
-              handleClose={this.handleCloseVideo}
-            ></CurtainVideo>
-          }
-        ></Curtain>
       </Block>
     )
   }
 }
 
-export const List = connect(mapStateToProps, mapDispatchToProps)(ListContent)
+const List = connect(mapStateToProps, mapDispatchToProps)(ListContent)
+
+export {
+  List,
+  VideoPreview
+}
