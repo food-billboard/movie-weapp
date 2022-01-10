@@ -24,7 +24,7 @@ export interface IState {
   error: boolean
 }
 
-export default memo((props: IProps) => {
+export default (props: IProps) => {
 
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<boolean>(false)
@@ -121,14 +121,15 @@ export default memo((props: IProps) => {
           height: '100%', 
           ...(imageStyle || {})
         }}
-        src={src}
+        src={error ? fallback : src}
         webp={webp}
         mode={mode}
-        lazyLoad={lazyLoad}
+        // ! 暂时去掉，当图片为404时可能出现无限调用接口
+        // lazyLoad={lazyLoad}
         showMenuByLongpress={showMenuByLongpress}
         onError={handleError}
         onLoad={handleLoad}
       />
     </View>
   )
-})
+}
