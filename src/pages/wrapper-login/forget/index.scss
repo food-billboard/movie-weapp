@@ -2,6 +2,9 @@
   height: 100vh;
   &-form {
     background-color: transparent;
+    &::after {
+      border: none;
+    }
   }
   &-reset,
   &-submit {

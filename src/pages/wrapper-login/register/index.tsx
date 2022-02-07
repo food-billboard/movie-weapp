@@ -168,7 +168,7 @@ class Register extends Component<any>{
             value={captcha}
             required
             onChange={this.onCaptchaChange}
-            className='empty-bg-input'
+            className='empty-bg-input page-register-captcha'
           >
             <Time
               getData={this.getData}

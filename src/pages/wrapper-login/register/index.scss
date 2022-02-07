@@ -2,9 +2,17 @@
   height: 100vh;
   &-form {
     background-color: transparent;
+    &::after {
+      border: none;
+    }
   }
   &-reset,
   &-submit {
     margin: 24px 0;
+  }
+  &-captcha {
+    .at-input__children::after {
+      border: none;
+    }
   }
 }

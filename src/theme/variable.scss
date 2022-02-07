@@ -1,9 +1,15 @@
 
+$small-font-size: 28px;
+
 $normal-font-size: 32px;
 
 $title-font-size: 40px;
 
 $sub-title-font-size: 36px;
+
+.small-font-size-class {
+  font-size: $small-font-size;
+}
 
 .normal-font-size-class {
   font-size: $normal-font-size;
@@ -55,6 +61,16 @@ $normal-icon-font-size: 40px;
   align-items: center;
 }
 
+// width 
+.w-100 {
+  width: 100%;
+}
+
+// display 
+.dis-b {
+  display: block;
+}
+
 // padding 
 .padding-4 {
   padding: 4px;
@@ -103,6 +119,13 @@ $normal-icon-font-size: 40px;
 // border-box 
 .box-sizing-border {
   box-sizing: border-box;
+}
+
+// ellipsis 
+.text-ellipsis {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 

@@ -59,26 +59,26 @@ export default class IconHead extends Component<IProps>{
               customStyle={{ width: '100%', height: '100%' }}
             />
           </View>
-          <View className='component-user-head-icon-username title-font-size-class' style={{ ...style.color('primary') }}>
+          <View className='component-user-head-icon-username title-font-size-class' style={{ ...style.color('disabled') }}>
             {username}
           </View>
         </View>
         <View className='component-user-head-info sub-title-font-size-class at-row'
-          style={{ ...style.color('disabled') }}
+          style={{ ...style.color('primary') }}
         >
           <View className='at-col component-user-head-info-data'>
             <Text className='component-user-head-info-data-count'
-              style={{ ...style.color('primary') }}
+              style={{ ...style.color('disabled') }}
             >{formatNumber(fans)}</Text> 粉丝
           </View>
           <View className='at-col component-user-head-info-data'>
             <Text className='component-user-head-info-data-count'
-              style={{ ...style.color('primary') }}
+              style={{ ...style.color('disabled') }}
             >{formatNumber(attentions)}</Text> 人关注
           </View>
           <View className='at-col component-user-head-info-data'>
             <Text className='component-user-head-info-data-count'
-              style={{ ...style.color('primary') }}
+              style={{ ...style.color('disabled') }}
             >{formatNumber(hot)}</Text> 人觉得很赞
           </View>
         </View>
