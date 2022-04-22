@@ -87,7 +87,7 @@ class Detail extends Component<any> {
 
   public handleToMovieComment = () => {
     router.push(routeAlias.comment, {
-      id: this.id 
+      id: this.id
     })
   }
 
@@ -142,7 +142,7 @@ class Detail extends Component<any> {
       author_rate,
       store,
       author_description,
-      author
+      author,
     }, commentData = [] } = this.state
     const {
       actor,
@@ -156,14 +156,12 @@ class Detail extends Component<any> {
     return (
       <View id='detail' style={style.backgroundColor('bgColor')}>
         <View className='page-detail-video'>
-          {
-            !!video && <GVideo
-              src={video}
-              poster={poster}
-              id={video}
-              wrapperClassName='page-detail-video'
-            />
-          }
+          <GVideo
+            src={video}
+            poster={poster}
+            id={video}
+            wrapperClassName='page-detail-video'
+          />
         </View>
         <View
           className='page-detail-description'
@@ -178,7 +176,8 @@ class Detail extends Component<any> {
               rate: parseFloat(rate) || 0,
               author_rate: parseFloat(author_rate) || 0,
               store: store,
-              createdAt
+              createdAt,
+              screen_time: nextInfo.screen_time
             }}
           />
           <Content

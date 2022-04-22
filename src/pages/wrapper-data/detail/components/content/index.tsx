@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { View, Text } from '@tarojs/components'
 import Ellipsis from '~components/ellipsis'
 import { formatTime, formatNumber, router, routeAlias } from '~utils'

@@ -18,6 +18,7 @@ const Header = (props: {
     author_rate: number
     store: boolean
     createdAt: string 
+    screen_time: string 
   }
   rate: (value: number) => any
   store: (store: boolean) => any
@@ -29,16 +30,16 @@ const Header = (props: {
       store,
       rate,
       author_rate,
-      createdAt,
-      poster=''
+      screen_time,
+      poster='',
     }={},
     store: storeMethod,
     rate: rateMethod
   } = props
 
   const createYear = useMemo(() => {
-    return Day(createdAt).format("YYYY")
-  }, [createdAt])
+    return Day(screen_time).format("YYYY")
+  }, [screen_time])
 
   return (
     <View className='page-detail-header'>
@@ -66,7 +67,7 @@ const Header = (props: {
               alignItems: 'center' 
             }}
             webp
-            lazyLoad
+            // lazyLoad
           />
         </View>
         <View className='at-col at-col-8 at-col__offset-1 page-detail-header-main'>
