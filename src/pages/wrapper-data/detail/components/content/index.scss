@@ -11,14 +11,9 @@
     width: 100%;
     &-info {
       width: 100%;
-      &-actor,
       &-type,
-      &-time-publish,
-      &-area-lang,
       &-hot,
-      &-look,
-      &-author,
-      &-director {
+      &-author{
         @extend .ellipsis;
         text-align: left;
         line-height: 1.8;
@@ -41,13 +36,7 @@
 
 @media screen and (min-width: 700px) {
   .data-detail-content-main-rate-up,
-  .data-detail-content-main-info-actor,
-  .data-detail-content-main-info-director,
-  .data-detail-content-main-info-type,
-  .data-detail-content-main-info-time-publish,
-  .data-detail-content-main-info-area-lang,
   .data-detail-content-main-info-hot,
-  .data-detail-content-main-info-look,
   .data-detail-content-main-info-description {
     font-size: 32px;
   }

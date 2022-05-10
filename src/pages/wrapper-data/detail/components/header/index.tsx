@@ -1,9 +1,8 @@
-import React, { Component, useMemo } from 'react'
+import { useMemo } from 'react'
 import Taro from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import Day from 'dayjs'
 import GRate from '~components/rate'
-import ImageLoading from '~components/imageLoading'
 import style from '~theme/style'
 
 import GStore from '../store'
@@ -18,7 +17,8 @@ const Header = (props: {
     author_rate: number
     store: boolean
     createdAt: string 
-    screen_time: string 
+    screen_time: string,
+    rate_person: number 
   }
   rate: (value: number) => any
   store: (store: boolean) => any
@@ -32,6 +32,7 @@ const Header = (props: {
       author_rate,
       screen_time,
       poster='',
+      rate_person
     }={},
     store: storeMethod,
     rate: rateMethod
@@ -102,6 +103,11 @@ const Header = (props: {
               rate={() => { }}
               readonly
             />
+          </View>
+          <View
+            className='small-font-size-class at-col at-col-3'
+          >
+            {rate_person || 0}人评分
           </View>
         </View>
       </View>

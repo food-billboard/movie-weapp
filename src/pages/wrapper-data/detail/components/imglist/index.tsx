@@ -16,7 +16,7 @@ export interface IState {}
 
 export default memo((props: IProps) => {
 
-  const [ status, setStatus ] = useState<'icon' | 'list'>('icon')
+  const [ status, setStatus ] = useState<'icon' | 'list'>('list')
 
   const handlePreviewImage = useCallback((image: string) => {
     if (image && image.length) {

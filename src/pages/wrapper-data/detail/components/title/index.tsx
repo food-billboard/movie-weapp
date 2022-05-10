@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { AtTag } from 'taro-ui'
 import { View } from '@tarojs/components'
 import style from '~theme/style'

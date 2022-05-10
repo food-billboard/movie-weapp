@@ -185,10 +185,7 @@ class Detail extends Component<any> {
               ...nextInfo,
               glance,
               district: (district || []).map(item => ({ value: item.name })),
-              director: (director || []).map(item => ({ value: item.name })),
-              actor: (actor || []).map(item => ({ value: item.name })),
               classify: (classify || []).map(item => ({ value: item.name })),
-              language: (language || []).map(item => ({ value: item.name })),
               createdAt,
               hot,
               author_description,
@@ -216,7 +213,7 @@ class Detail extends Component<any> {
           <View className='page-detail-actor'>
             <View className='page-detail-title'>
               <Title
-                title='卡司'
+                title='演员'
               />
             </View>
             <Actor
@@ -236,7 +233,7 @@ class Detail extends Component<any> {
           <View className='page-detail-tag'>
             <View className='page-detail-title'>
               <Title
-                title='大家都说'
+                title='热议'
               />
             </View>
             <GTag
@@ -255,7 +252,7 @@ class Detail extends Component<any> {
           <View className='page-detail-comment'>
             <View className='page-detail-title'>
               <Title
-                title='大家评论'
+                title='评论'
                 onClick={this.handleToMovieComment}
               />
             </View>

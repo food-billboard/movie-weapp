@@ -47,6 +47,7 @@ export default class extends Component<IProps, IState> {
                 type='primary'
                 className='normal-font-size-class'
                 customStyle={{ ...TAG_STYLE, backgroundColor: randomColor(), ...(isObject(style) ? style : {}) }}
+                size='small'
               >
                 {value}
               </AtTag>
