@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { merge } from 'lodash'
 import { View, Text } from '@tarojs/components'
 import { AtAvatar } from 'taro-ui'
@@ -72,8 +72,6 @@ export default class extends Component<IProps, IState> {
       } = {},
       content: {
         text = '',
-        image = [],
-        video = []
       },
       comment_users,
       createdAt,
@@ -84,7 +82,7 @@ export default class extends Component<IProps, IState> {
     return (
       <View
         className='comment-detail-header'
-        style={{ ...style.backgroundColor('disabled') }}
+        style={{ ...style.border(1, 'disabled', 'solid', 'bottom') }}
       >
         <View
           className='comment-detail-header-content'
@@ -101,13 +99,13 @@ export default class extends Component<IProps, IState> {
               />
             </View>
             <View
-              className='at-col at-col-7 comment-detail-header-content-header-user title-font-size-class'
+              className='at-col at-col-7 comment-detail-header-content-header-user sub-title-font-size-class'
               style={{ ...style.color('primary') }}
             >
               {username}
             </View>
             <View
-              className='content-header-extra at-col at-col-3 at-col at-col-7 comment-detail-header-content-header-time normal-font-size-class'
+              className='content-header-extra at-col at-col-3 at-col at-col-7 comment-detail-header-content-header-time small-font-size-class'
               style={{ ...style.color('secondary') }}
             >
               {formatTime(createdAt)}
@@ -119,6 +117,7 @@ export default class extends Component<IProps, IState> {
               <Ellipsis
                 text={text}
                 style={{ ...style.color('primary') }}
+                sizeClassName='small-font-size-class'
               />
             </View>
             <View className='comment-detail-header-content-main-extra'>

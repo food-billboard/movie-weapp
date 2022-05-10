@@ -188,18 +188,13 @@ export default class List extends Component<IProps, IState> {
             <View 
               id='scroll-header' 
               className={fixHeader ? 'component-scroll-list-fix-header' : 'component-scroll-list-normal-header'} 
-              style={{ ...customStyle.backgroundColor('disabled') }}
             >
               {
                 this.props.renderHeader && this.props.renderHeader(this.watchHeaderHeight)
               }
             </View>
           }
-          <View 
-            style={{ 
-              ...customStyle.backgroundColor('bgColor'), 
-            }}
-          >
+          <View>
             {
               emptyShow ? (
                 <GResult

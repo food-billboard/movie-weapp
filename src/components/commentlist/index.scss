@@ -40,6 +40,11 @@
         text-align: right;
         margin-right: 20px;
         flex: 1;
+        &-text {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+        }
       }
     }
   }
@@ -75,7 +80,7 @@
         left: 0;
         top: 0;
         border-radius: 32px;
-        opacity: 0.6;
+        opacity: 0.3;
         z-index: 1;
       }
     }

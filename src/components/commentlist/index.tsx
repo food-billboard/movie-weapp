@@ -214,15 +214,15 @@ class ListContent extends Component<IProps>{
                         onClick={this.like.bind(this, _id, like)}
                         style={style.color('thirdly')}
                       >
-                        <View className='comment-item-up-text sub-title-font-size-class'>
+                        <View className='comment-item-up-text normal-font-size-class'>
                           {formatNumber(total_like)}
-                          <AtIcon value={like ? 'heart-2' : 'heart'} size={SYSTEM_PAGE_SIZE(24)} customStyle={{ textIndent: '.2em' }} />
+                          <AtIcon value={like ? 'heart-2' : 'heart'} size={SYSTEM_PAGE_SIZE(20)} customStyle={{ textIndent: '.2em' }} />
                         </View>
                       </View>
                     </View>
 
                     <View
-                      className='comment-item-header-sub-time normal-font-size-class'
+                      className='comment-item-header-sub-time small-font-size-class'
                       style={style.color('thirdly')}
                     >
                       {formatTime(createdAt)}
@@ -231,7 +231,7 @@ class ListContent extends Component<IProps>{
                   </View>
                 </View>
                 <View
-                  className='comment-item-content normal-font-size-class'
+                  className='comment-item-content small-font-size-class'
                   style={{ ...style.color('primary') }}
                   onClick={this.getDetail.bind(this, _id)}
                 >
@@ -272,7 +272,7 @@ class ListContent extends Component<IProps>{
                           onClick={() => { this.handlePreviewMedia.apply(this, args) }}
                         >
                           <View
-                            className={`comment-item-image-list-image-icon big-icon-font-size-class at-icon ${ICON_TYPE[type]}`}
+                            className={`comment-item-image-list-image-icon sub-icon-font-size-class at-icon ${ICON_TYPE[type]}`}
                             style={{
                               textShadow: `0 0 2px ${TypeColor()['disabled']}`,
                             }}

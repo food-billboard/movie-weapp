@@ -107,7 +107,6 @@ class CommentDetail extends Component<any> {
       <Block>
         <GScrollView
           ref={this.scrollRef}
-          style={{ ...style.backgroundColor('bgColor') }}
           sourceType={ESourceTypeList.Scope}
           scrollWithAnimation
           query={{ pageSize: 7 }}
@@ -134,7 +133,7 @@ class CommentDetail extends Component<any> {
             (_: () => any) => {
               return (
                 <GButton
-                  style={{ width: '100%', height: '92' }}
+                  style={{ width: '100%', height: '92', marginTop: data.length === 0 ? 20 : 0 }}
                   type='secondary'
                   value={new Array(2).fill('发布评论')}
                   operate={this.publish}
