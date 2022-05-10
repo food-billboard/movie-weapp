@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import React, { Component } from 'react'
+import { Component, useCallback } from 'react'
 import { AtAvatar } from 'taro-ui'
 import { View, Text } from '@tarojs/components'
 import { connect } from 'react-redux'
@@ -20,22 +20,29 @@ export interface IProps {
   reload: (...args: any[]) => Promise<any>
 }
 
-class IconList extends Component<IProps>{
+const IconListItemInternal = (props: Omit<IProps, 'list'> & {
+  value: API_USER.IMovieListData | null 
+}) => {
 
-  public static defaultProps: IProps = {
-    list: [],
-    handleClick: noop,
-    getUserInfo: () => Promise.resolve(),
-    reload: () => Promise.resolve()
-  }
+  const { value, getUserInfo: propsGetUserInfo, reload, handleClick: propsHandleClick } = props
 
-  public handleClick = (id: string) => this.props.handleClick(id)
+  const handleClick = (id: string) => propsHandleClick(id)
 
-  //路由跳转
-  public goTo = (_, id, __) => router.push(routeAlias.detail, { id })
+  const getUserInfo = useCallback(async (e, id: string) => {
+    e.stopPropagation()
+    const result = await propsGetUserInfo({ prompt: false })
+    if (result && result._id === id) {
+      Taro.switchTab({
+        url: "/pages/mine/index"
+      })
+    } else {
+      router.push(routeAlias.user, { id })
+    }
+  }, [propsGetUserInfo])
 
-  //收藏
-  public handleStore = async (id: string, isStore?: boolean) => {
+  const goTo = useCallback((_, id, __) => router.push(routeAlias.detail, { id }), [])
+
+  const handleStore = useCallback(async (id: string, isStore?: boolean) => {
     let method
     if (typeof isStore === 'undefined' || isStore) {
       method = putStore
@@ -63,7 +70,7 @@ class IconList extends Component<IProps>{
       }
       Taro.showToast(toastConfig)
     }
-    await this.props.getUserInfo({ action })
+    await propsGetUserInfo({ action })
       .catch(_ => {
         Taro.showToast({
           title: '未登录无法操作',
@@ -71,19 +78,77 @@ class IconList extends Component<IProps>{
           duration: 1000
         })
       })
-    return this.props.reload()
-  }
+    return reload()
+  }, [propsGetUserInfo, reload])
 
-  private getUserInfo = async (e, id: string) => {
-    e.stopPropagation()
-    const result = await this.props.getUserInfo({ prompt: false })
-    if(result && result._id === id) {
-      Taro.switchTab({
-        url: "/pages/mine/index"
-      })
-    }else {
-      router.push(routeAlias.user, { id })
-    }
+  if (!value) return (
+    <View
+      className='at-col at-col-5'
+      key='component-icon-list-item'
+    ></View>
+  )
+  const { _id, name, images, hot, rate, store, author } = value
+  const imageList = Array.isArray(images) ? images : [images]
+  return (
+    <View
+      className='component-icon-list-content at-col at-col-5'
+      style={{ ...style.backgroundColor('disabled') }}
+      key={_id}
+    >
+      <View
+        className='component-icon-list-content-poster'
+        onClick={(event) => { goTo.call(null, name, _id, event) }}
+      >
+        {/* <ImageLoading src={image} mode={'scaleToFill'} /> */}
+        <Swipper style={{ height: '100%' }} list={imageList} />
+        <View
+          onClick={handleStore.bind(null, _id, store)}
+          className={`at-icon at-icon-heart${store ? "-2" : ""} component-icon-list-content-poster-store`}
+          style={style.color('primary')}
+        ></View>
+      </View>
+      <View className='component-icon-list-content-main'>
+        <View
+          className='component-icon-list-content-main-name title-font-size-class'
+          style={{ ...style.color('primary') }}
+          onClick={handleClick.bind(null, _id)}
+        >{name}</View>
+        <View className='component-icon-list-content-main-rate'>
+          <Rate
+            value={parseFloat((rate / 2).toFixed(1))}
+            readonly
+            rate={noop}
+            size={16}
+            max={5}
+            origin={rate}
+          ></Rate>
+        </View>
+        <View className='component-icon-list-content-main-extra sub-title-font-size-class'
+          style={{ ...style.color('secondary') }}
+        >
+          <View className='component-icon-list-content-main-extra-count'>
+            {formatNumber(hot)}
+            <Text style={{ fontSize: '70%' }}>人看</Text>
+          </View>
+          <View onClick={(e) => getUserInfo.call(this, e, author._id)}>
+            <AtAvatar size='small' circle image={author.avatar} text={author.username}></AtAvatar>
+          </View>
+        </View>
+      </View>
+    </View>
+  )
+
+}
+
+export const IconListItem = connect(mapStateToProps, mapDispatchToProps)(IconListItemInternal)
+
+class IconList extends Component<IProps>{
+
+  public static defaultProps: IProps = {
+    list: [],
+    handleClick: noop,
+    getUserInfo: () => Promise.resolve(),
+    reload: () => Promise.resolve()
   }
 
   public render() {
@@ -96,61 +161,13 @@ class IconList extends Component<IProps>{
       <View className='component-icon-list at-row at-row--wrap at-row__justify--around'>
         {
           realList.map((value: API_USER.IMovieListData) => {
-            if (!value) return (
-              <View
-                className='at-col at-col-5'
-                key='component-icon-list-item'
-              ></View>
-            )
-            const { _id, name, images, hot, rate, store, author } = value
-            const imageList = Array.isArray(images) ? images : [images]
             return (
-              <View
-                className='component-icon-list-content at-col at-col-5'
-                style={{ ...style.backgroundColor('disabled') }}
-                key={_id}
-              >
-                <View
-                  className='component-icon-list-content-poster'
-                  onClick={(event) => { this.goTo.call(this, name, _id, event) }}
-                >
-                  {/* <ImageLoading src={image} mode={'scaleToFill'} /> */}
-                  <Swipper style={{ height: '100%' }} list={imageList} />
-                  <View
-                    onClick={this.handleStore.bind(this, _id, store)}
-                    className={`at-icon at-icon-heart${store ? "-2" : ""} component-icon-list-content-poster-store`}
-                    style={style.color('primary')}
-                  ></View>
-                </View>
-                <View className='component-icon-list-content-main'>
-                  <View
-                    className='component-icon-list-content-main-name title-font-size-class'
-                    style={{ ...style.color('primary') }}
-                    onClick={this.handleClick.bind(this, _id)}
-                  >{name}</View>
-                  <View className='component-icon-list-content-main-rate'>
-                    <Rate
-                      value={parseFloat((rate / 2).toFixed(1))}
-                      readonly
-                      rate={noop}
-                      size={16}
-                      max={5}
-                      origin={rate}
-                    ></Rate>
-                  </View>
-                  <View className='component-icon-list-content-main-extra sub-title-font-size-class'
-                    style={{ ...style.color('secondary') }}
-                  >
-                    <View className='component-icon-list-content-main-extra-count'>
-                      {formatNumber(hot)}
-                      <Text style={{ fontSize: '70%' }}>人看</Text>
-                    </View>
-                    <View onClick={(e) => this.getUserInfo.call(this, e, author._id)}>
-                      <AtAvatar size='small' circle image={author.avatar} text={author.username}></AtAvatar>
-                    </View>
-                  </View>
-                </View>
-              </View>
+              <IconListItem
+                key={value?._id}
+                value={value}
+                reload={this.props.reload}
+                handleClick={this.props.handleClick}
+              />
             )
           })
         }

@@ -1,51 +1,32 @@
 @import '~taro-ui/dist/style/components/flex.scss';
+.rank-main-wrapper {
+  padding: 40px;
+  margin-bottom: 20px;
+  border-radius: 30px;
+  overflow: hidden;
+}
 .rank-main {
+  display: flex;
+  color: white;
+  align-items: center;
+  padding: 10px;
   .rank-title {
-    margin-top: 20px;
-    display: inline-block;
     padding: 5px 10px;
-    border-radius: 30px;
     box-sizing: border-box;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    max-width: 100%;
+    width: 250px;
+    font-weight: bold;
+    text-align: center;
   }
   .rank-content {
     width: 100%;
-    border-radius: 10px;
     overflow: hidden;
   }
-  .sub-flex {
-    min-height: 300px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-evenly;
-  }
-  .rank-content-item-wrapper {
+  .rank-content-item {
     width: 100%;
     height: 100%;
-    .rank-list {
-      position: relative;
-      left: 0;
-      top: 0;
-      display: inline-block;
-    }
-  }
-}
-.main-rank-icon {
-  position: absolute;
-  left: 20px;
-  top: 15px;
-  width: 70px;
-  height: 25px;
-  border-radius: 15px;
-  text-align: center;
-  &-text {
-    position: absolute;
-    top: -20px;
-    left: 10px;
-    font-weight: bold;
+    display: flex;
   }
 }

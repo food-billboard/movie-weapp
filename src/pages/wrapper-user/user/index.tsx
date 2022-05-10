@@ -26,7 +26,7 @@ class User extends Component<any>{
   readonly router = getCurrentInstance().router
 
   get id() {
-    return this.router?.params._id
+    return this.router?.params.id
   }
 
   public componentDidShow = () => colorStyleChange()
@@ -35,7 +35,6 @@ class User extends Component<any>{
 
   //数据获取
   public fetchData = async () => {
-
     if (!this.id) {
       Taro.showToast({
         title: '网络错误，请重试',

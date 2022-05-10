@@ -5,7 +5,6 @@ import { merge } from 'lodash'
 import style from '~theme/style'
 import ImageLoading from '~components/imageLoading'
 import { router, routeAlias } from '~utils'
-import RankIcon from './icon'
 
 import './index.scss'
 
@@ -21,7 +20,6 @@ export interface IProps {
   list: Array<List>
   id: string
   style?: React.CSSProperties
-  autoplay?: boolean 
 }
 
 export interface IIconProps {
@@ -42,88 +40,59 @@ export default class Rank extends Component<IProps, IState>{
   //获取详细信息
   public getDetail = (id: string) => router.push(routeAlias.detail, { id })
 
-  public classify = () => {
-    const { list = [] } = this.props
-    let newList: Array<any> = []
-    const len = (i: number) => {
-      if (i == 0) return 1
-      if (i == 1) return 4
-      return len(i - 1) * 4
-    }
-    let i = 0
-    let counter = 0
-    list.forEach((item: List) => {
-      counter ++
-      const newItem = merge({}, item, { index: counter })
-      if(!Array.isArray(newList[i])) newList[i] = []
-      if(newList[i].length < len(i)) {
-        newList[i].push(newItem)
-      }else {
-        i++
-        if(!Array.isArray(newList[i])) newList[i] = []
-        newList[i].push(newItem)
-      }
-    })
-    return newList.slice(0, 3)
-  }
-
   public render() {
-    const { type, id, style: propsStyle = {}, autoplay } = this.props
-    const list = this.classify()
+    const { type, id, style: propsStyle = {}, list } = this.props
 
     return (
-      <View className='rank-main' style={propsStyle}>
-        {
-          !!type && (
-            <Text
-              className='rank-title sub-title-font-size-class'
-              style={{ ...style.backgroundColor('secondary'), ...style.color('disabled') }}
-              onClick={() => { router.push(routeAlias.rank, { id, type }) }}
-            >{type}</Text>
-          )
-        }
-        <Swiper 
-          className='rank-content'
-          circular
-          autoplay={autoplay}
-        >
+      <View className='rank-main-wrapper' style={propsStyle}>
+        <View className='rank-main filter-background-parent'>
           {
-            list.map((value: List[], index: number) => {
-              return (
-                <SwiperItem
-                  key={value[0]._id}
-                >
-                  <View
-                    className='rank-content-item-wrapper'
-                  >
-                    {
-                      value.map((item: List & { index: number }) => {
-                        const { _id, poster, index: rank } = item
-                        return (
-                          <View
-                            className='rank-list'
-                            style={{ width: `${100 / Math.pow(2, index) - 1}%`, height: `${100 / Math.pow(2, index) - 1}%` }}
-                            key={_id}
-                            onClick={this.getDetail.bind(this, _id)}
-                          >
-                            <ImageLoading
-                              src={poster}
-                              customStyle={{
-                                padding:'10rpx',
-                                boxSizing: 'border-box'
-                              }}
-                            />
-                            <RankIcon rank={rank} />
-                          </View>
-                        )
-                      })
-                    }
-                  </View>
-                </SwiperItem>
-              )
-            })
+            !!list[0]?.poster && (
+              <View
+                className='filter-background'
+                style={{
+                  backgroundImage: `url(${list[0].poster})`,
+                  filter:'blur(5px)',
+                  backgroundSize: '100% 100%'
+                }}
+              >
+              </View>
+            )
           }
-        </Swiper>
+          <View
+            className='rank-title sub-title-font-size-class pos-re'
+            onClick={() => { router.push(routeAlias.rank, { id, type }) }}
+          >
+            {type}
+          </View>
+          <View
+            className='rank-content pos-re normal-font-size-class'
+          >
+            {
+              list.slice(0, 3).map((item, index) => {
+                const { name, _id } = item 
+                return (
+                  <View
+                    className='rank-content-item'
+                    key={item._id}
+                    onClick={this.getDetail.bind(this, _id)}
+                  >
+                    <Text
+                      className='rank-content-item-index'
+                    >
+                      {index + 1}.
+                    </Text>
+                    <Text
+                      className='rank-content-item-content'
+                    >
+                      {name}
+                    </Text>
+                  </View>
+                )
+              })
+            }
+          </View>
+        </View>
       </View>
     )
   }

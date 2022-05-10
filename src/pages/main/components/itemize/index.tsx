@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { AtGrid } from 'taro-ui'
 import { router, routeAlias } from '~utils'
 
@@ -16,7 +16,7 @@ export interface IProps {
 
 export interface IState {}
 
-const COLUMN_COUNT = 4
+const COLUMN_COUNT = 5
 
 class Itemize extends Component<IProps, IState>{
   public static defaultProps:IProps = {

@@ -35,6 +35,12 @@ $normal-icon-font-size: 40px;
   font-size: $normal-icon-font-size;
 }
 
+.pos-re {
+  position: relative;
+}
+.pos-ab {
+  position: absolute;
+}
 
 .empty-bg-input {
   margin: 0;

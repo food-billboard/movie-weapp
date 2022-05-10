@@ -17,7 +17,6 @@ import RadioList from './components/radio'
 import Method from './components/method'
 import Forms from './components/form'
 import SearchBar from '../../main/components/searchButton'
-import Head from './components/head'
 import { FormData } from './interface'
 
 import './index.scss'

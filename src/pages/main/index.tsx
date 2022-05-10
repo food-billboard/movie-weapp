@@ -7,7 +7,7 @@ import { TypeColor, colorStyleChange } from '~theme/color'
 import style from '~theme/style'
 import { getDailyNew, getNotice, getRank, getSwiper, getClassify } from '~services'
 import SearchBar from './components/searchButton'
-import Swipers from './components/swiper'
+import Swiper from './components/swiper'
 import Itemize from './components/itemize'
 import News from './components/news'
 import Rank from './components/rank'
@@ -88,7 +88,7 @@ export default class extends Component<any> {
           <NoticeBar
             text={notice.notice}
           ></NoticeBar>
-          <Swipers
+          <Swiper
             list={swiper}
           />
         </View>
@@ -114,13 +114,13 @@ export default class extends Component<any> {
         <View className='main-page-special'>
           <Text className='main-page-rank-title title-font-size-class'
             style={{ ...secondaryColor }}
-          >专题</Text>
+          >专题集合</Text>
           <Special />
         </View>
         <View className='main-page-rank'>
           <Text className='main-page-rank-title title-font-size-class'
             style={{ ...secondaryColor }}
-          >排行榜</Text>
+          >电影榜单</Text>
           {
             rank.filter(item => !!item.match.length).map(value => {
               const { match, name, _id } = value

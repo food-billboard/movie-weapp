@@ -43,25 +43,10 @@ const SpecialList = () => {
           const { _id, poster, name, movie_count, movie } = item
           return (
             <View
-              className='page-home-special-item filter-background-parent padding-16 box-sizing-border border-radius-12'
+              className='page-home-special-item padding-16 box-sizing-border border-radius-12'
               onClick={handleToDetail.bind(null, item)}
               key={_id}
             >
-              <View
-                className='filter-background'
-                style={{
-                  backgroundImage: `url(${poster})`,
-                  filter:'blur(5px)',
-                  backgroundSize: '100% 100%'
-                }}
-              >
-              </View>
-              <Text 
-                className='page-home-special-item-title title-font-size-class'
-                style={style.color('primary')}
-              >
-                {name}
-              </Text>
               <View className='at-row page-home-special-item-main'>
                 <View className='page-home-special-item-movie at-col at-col-6'>
                   {
@@ -85,8 +70,19 @@ const SpecialList = () => {
                     })
                   }
                 </View>
-                <View className='at-col at-col-6 page-home-special-item-movie-count sub-title-font-size-class padding-32' style={style.color('secondary')}>
-                  +{movie_count || 0}
+                <View className='at-col at-col-6 padding-32 page-home-special-item-info'>
+                  <Text 
+                    className='page-home-special-item-title normal-font-size-class text-ellipsis'
+                    style={style.color('primary')}
+                  >
+                    {name}
+                  </Text>
+                  <Text
+                    className='page-home-special-item-movie-count normal-font-size-class'
+                    style={style.color('secondary')}
+                  >
+                    +{movie_count || 0}
+                  </Text>
                 </View>
               </View>
             </View>
