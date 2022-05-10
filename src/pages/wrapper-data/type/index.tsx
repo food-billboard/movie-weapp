@@ -139,15 +139,15 @@ class Index extends Component<any> {
           </View>
         }
         fetch={this.throttleFetchData}
-        renderBottom={
-          (_: () => any) => {
-            return (
-              <View className='page-classify-btn'>
-                <Fab value={listShow} change={this.listChange} />
-              </View>
-            )
-          }
-        }
+        // renderBottom={
+        //   (_: () => any) => {
+        //     return (
+        //       <View className='page-classify-btn'>
+        //         <Fab value={listShow} change={this.listChange} />
+        //       </View>
+        //     )
+        //   }
+        // }
       >
       </GScrollView>
     )

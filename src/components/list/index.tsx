@@ -1,8 +1,9 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
-import { View } from '@tarojs/components'
+import { View, Text } from '@tarojs/components'
 import classnames from 'classnames'
 import { connect } from 'react-redux'
+import Day from 'dayjs'
 import noop from 'lodash/noop'
 import merge from 'lodash/merge'
 import style from '~theme/style'
@@ -22,7 +23,7 @@ export interface IProps {
   style?: React.CSSProperties
   getUserInfo: TGetUserInfo
   reload?: (...args: any[]) => Promise<any>
-  actionDisabled?: boolean 
+  actionDisabled?: boolean
 }
 
 class List extends Component<IProps>{
@@ -30,7 +31,7 @@ class List extends Component<IProps>{
     list: [],
     getUserInfo: () => Promise.resolve(),
     reload: () => Promise.resolve(),
-    actionDisabled: false 
+    actionDisabled: false
   }
 
   public goTo = (id: string) => {
@@ -40,7 +41,7 @@ class List extends Component<IProps>{
   //收藏
   handleStore = async (id: string, isStore: boolean, e: any) => {
     e.stopPropagation()
-    if(this.props.actionDisabled) return 
+    if (this.props.actionDisabled) return
     let method
     if (isStore) {
       method = putStore
@@ -92,23 +93,23 @@ class List extends Component<IProps>{
       <View className='list-component'>
         {
           list.map((value: API_USER.IMovieListData) => {
-            const { images, name, type, hot, _id, rate, description, store } = value
+            const { images, name, type, hot, _id, rate, description, store, time } = value
             const imageList = Array.isArray(images) ? images : [images]
             return (
               <View className='list-content'
-                style={merge(propsStyle || {}, style.backgroundColor('disabled'))}
+                style={merge(propsStyle || {})}
                 key={_id}
               >
                 <View
                   className='list-content-main at-row'
                 >
-                  <View className='list-content-main-poster at-col at-col-4'>
+                  <View className='list-content-main-poster at-col at-col-3'>
                     <Swipper
                       style={{ height: '100px' }}
                       list={imageList}
                     />
                     <View
-                      className={classnames('at-icon', 'list-content-icon', 'big-icon-font-size-class', {
+                      className={classnames('at-icon', 'list-content-icon', 'sub-icon-font-size-class', {
                         'at-icon-heart': !store,
                         'at-icon-heart-2': store
                       })}
@@ -117,20 +118,29 @@ class List extends Component<IProps>{
                     ></View>
                   </View>
                   <View className='list-content-main-detail at-col at-col-7'
-                    style={merge(style.backgroundColor('disabled'), style.color('secondary'))}
+                    style={merge(style.color('secondary'))}
                     onClick={this.goTo.bind(this, _id)}
                   >
-                    <View className='list-content-main-detail-name title-font-size-class'
+                    <View className='list-content-main-detail-name normal-font-size-class'
                       style={style.color('primary')}
                     >
                       {name}
+                      {
+                        !!time && (
+                          <Text
+                            className='list-content-main-detail-name-sub'
+                          >
+                            （{Day(time).format('YYYY')}）
+                          </Text>
+                        )
+                      }
                     </View>
                     <View className='list-content-main-detail-rate'>
                       <Rate
                         value={parseFloat((rate / 2).toFixed(1))}
                         readonly
                         rate={noop}
-                        size={16}
+                        size={14}
                         max={5}
                         origin={rate}
                       ></Rate>
@@ -153,12 +163,22 @@ class List extends Component<IProps>{
                     </Picker>
                   </View>
                 </View>
-                <View className='list-content-description'>
-                  <Ellipsis
-                    text={description || '这位作者什么也没有留下...'}
-                    needPoint={false}
-                    style={{ borderRadius: '30px' }}
-                  ></Ellipsis>
+                <View className='at-row'>
+                  <View
+                    className='list-content-description at-col__offset-3'
+                  >
+                    <View
+                      className='list-content-description-wrapper'
+                    >
+                      <Ellipsis
+                        text={description || '这位作者什么也没有留下...'}
+                        needPoint={false}
+                        style={{ borderRadius: '30px', ...style.color('thirdly') }}
+                        sizeClassName='small-font-size-class'
+                      />
+                    </View>
+                  </View>
+
                 </View>
               </View>
             )

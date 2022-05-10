@@ -21,7 +21,7 @@ export interface IProps {
 }
 
 const IconListItemInternal = (props: Omit<IProps, 'list'> & {
-  value: API_USER.IMovieListData | null 
+  value: API_USER.IMovieListData | null
 }) => {
 
   const { value, getUserInfo: propsGetUserInfo, reload, handleClick: propsHandleClick } = props
@@ -83,7 +83,7 @@ const IconListItemInternal = (props: Omit<IProps, 'list'> & {
 
   if (!value) return (
     <View
-      className='at-col at-col-5'
+      className='at-col at-col-4'
       key='component-icon-list-item'
     ></View>
   )
@@ -91,47 +91,50 @@ const IconListItemInternal = (props: Omit<IProps, 'list'> & {
   const imageList = Array.isArray(images) ? images : [images]
   return (
     <View
-      className='component-icon-list-content at-col at-col-5'
-      style={{ ...style.backgroundColor('disabled') }}
+      className='component-icon-list-content-wrapper at-col at-col-4'
       key={_id}
     >
       <View
-        className='component-icon-list-content-poster'
-        onClick={(event) => { goTo.call(null, name, _id, event) }}
+        className='component-icon-list-content'
       >
-        {/* <ImageLoading src={image} mode={'scaleToFill'} /> */}
-        <Swipper style={{ height: '100%' }} list={imageList} />
         <View
-          onClick={handleStore.bind(null, _id, store)}
-          className={`at-icon at-icon-heart${store ? "-2" : ""} component-icon-list-content-poster-store`}
-          style={style.color('primary')}
-        ></View>
-      </View>
-      <View className='component-icon-list-content-main'>
-        <View
-          className='component-icon-list-content-main-name title-font-size-class'
-          style={{ ...style.color('primary') }}
-          onClick={handleClick.bind(null, _id)}
-        >{name}</View>
-        <View className='component-icon-list-content-main-rate'>
-          <Rate
-            value={parseFloat((rate / 2).toFixed(1))}
-            readonly
-            rate={noop}
-            size={16}
-            max={5}
-            origin={rate}
-          ></Rate>
-        </View>
-        <View className='component-icon-list-content-main-extra sub-title-font-size-class'
-          style={{ ...style.color('secondary') }}
+          className='component-icon-list-content-poster'
+          onClick={(event) => { goTo.call(null, name, _id, event) }}
         >
-          <View className='component-icon-list-content-main-extra-count'>
-            {formatNumber(hot)}
-            <Text style={{ fontSize: '70%' }}>人看</Text>
+          {/* <ImageLoading src={image} mode={'scaleToFill'} /> */}
+          <Swipper style={{ height: '100%' }} list={imageList} />
+          <View
+            onClick={handleStore.bind(null, _id, store)}
+            className={`at-icon at-icon-heart${store ? "-2" : ""} component-icon-list-content-poster-store`}
+            style={style.color('primary')}
+          ></View>
+        </View>
+        <View className='component-icon-list-content-main'>
+          <View
+            className='component-icon-list-content-main-name normal-font-size-class'
+            style={{ ...style.color('primary') }}
+            onClick={handleClick.bind(null, _id)}
+          >{name}</View>
+          <View className='component-icon-list-content-main-rate'>
+            <Rate
+              value={parseFloat((rate / 2).toFixed(1))}
+              readonly
+              rate={noop}
+              size={14}
+              max={5}
+              origin={rate}
+            ></Rate>
           </View>
-          <View onClick={(e) => getUserInfo.call(this, e, author._id)}>
-            <AtAvatar size='small' circle image={author.avatar} text={author.username}></AtAvatar>
+          <View className='component-icon-list-content-main-extra normal-font-size-class'
+            style={{ ...style.color('secondary') }}
+          >
+            <View className='component-icon-list-content-main-extra-count'>
+              {formatNumber(hot)}
+              <Text style={{ fontSize: '70%' }}>人看</Text>
+            </View>
+            <View onClick={(e) => getUserInfo.call(this, e, author._id)}>
+              <AtAvatar className='component-icon-list-content-main-extra-avatar' size='small' circle image={author.avatar} text={author.username}></AtAvatar>
+            </View>
           </View>
         </View>
       </View>

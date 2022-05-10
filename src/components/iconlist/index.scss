@@ -2,16 +2,25 @@
 .component-icon-list {
   display: flex;
   flex-wrap: wrap;
-  &-content {
+  &-content-wrapper {
     box-sizing: border-box;
-    padding: 20px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
+    padding: 0 10px;
+  }
+  &-content-wrapper:nth-of-type(3n) {
+    padding-right: 20px;
+  }
+  &-content-wrapper:nth-of-type(3n + 1) {
+    padding-left: 20px;
+  }
+  &-content {
+    padding: 10px;
     box-shadow: 0 20px 20px 0px rgba(0, 0, 0, 0.12);
     display: flex;
     flex-direction: column;
     border-radius: 5px;
     &-poster {
-      height: 200px;
+      height: 150px;
       position: relative;
       left: 0;
       top: 0;
@@ -28,7 +37,6 @@
     }
     &-main {
       &-name {
-        font-weight: bold;
         text-align: center;
         white-space: nowrap;
         overflow-x: scroll;
@@ -41,7 +49,6 @@
       &-rate {
         width: 100%;
         line-height: 1.4;
-        margin-bottom: .5em;
         display: flex;
         justify-content: center;
       }
@@ -49,6 +56,10 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        &-avatar{
+          width: 60px;
+          height: 60px;
+        }
       }
     }
   }

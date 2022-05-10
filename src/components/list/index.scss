@@ -1,9 +1,10 @@
 @import "~taro-ui/dist/style/components/flex.scss";
 .list-component {
+  padding: 0 20px;
   .list-content {
     width: 100%;
     box-sizing: border-box;
-    padding: 10px;
+    padding: 10px 0;
     margin-bottom: 20px;
     .list-content-main {
       &-poster {
@@ -11,12 +12,12 @@
         left: 0;
         top: 0;
         flex: 2;
-        margin-right: 20px;
+        margin-right: 40px;
         .list-content-icon {
           position: absolute;
           top: 0;
           left: 0;
-          padding: 8px;
+          padding: 4px;
           z-index: 1;
           background-color: rgba(0, 0, 0, 0.2);
           border-radius: 4px;
@@ -30,9 +31,11 @@
         &-name {
           width: 100%;
           overflow: hidden;
-          font-weight: bold;
           overflow-x: scroll;
           white-space: nowrap;
+          &-sub {
+            opacity: 0.6;
+          }
         }
         &-name::-webkit-scrollbar {
           display: none;
@@ -51,7 +54,10 @@
       width: 100%;
       padding: 10px 0;
       margin-top: 10px;
-      border: 1px dashed rgba(0, 0, 0, 0.1);
+      &-wrapper {
+        background-color: #f7f7f7;
+        margin-left: 40px;
+      }
     }
   }
 }

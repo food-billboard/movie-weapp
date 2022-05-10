@@ -1,5 +1,6 @@
 import Taro from '@tarojs/taro'
 import React, { Component } from 'react'
+import classnames from 'classnames'
 import { View, Text } from '@tarojs/components'
 import style from '~theme/style'
 import { isObject } from '~utils'
@@ -10,6 +11,8 @@ export interface IProps {
   text: string
   needPoint?: boolean
   style?: React.CSSProperties
+  className?: string 
+  sizeClassName?: string 
   onChange?: (...args: any[]) => any
 }
 
@@ -41,12 +44,12 @@ export default class extends Component<IProps, IState> {
 
   public render() {
 
-    const { style: customStyle = {}, text, needPoint = true } = this.props
+    const { style: customStyle = {}, text, needPoint = true, className, sizeClassName } = this.props
     const { show } = this.state
 
     return (
       <View
-        className='component-text-ellipsis normal-font-size-class'
+        className={classnames('component-text-ellipsis', sizeClassName || 'normal-font-size-class', className)}
         style={{ ...style.color('secondary'), ...(isObject(customStyle) ? customStyle : {}) }}
         onClick={this.getDetail}
       >
