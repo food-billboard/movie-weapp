@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import React, { Component } from 'react'
+import { Component, createRef } from 'react'
 import { View, Text } from '@tarojs/components'
 import throttle from 'lodash/throttle'
 import NoticeBar from '~components/noticeBar'
@@ -12,6 +12,7 @@ import Itemize from './components/itemize'
 import News from './components/news'
 import Rank from './components/rank'
 import Special from './components/special'
+import TopData, { TopDataRef } from './components/topData'
 
 import './index.scss'
 
@@ -27,6 +28,12 @@ export default class extends Component<any> {
   }
 
   public componentDidMount = async () => await this.fetchData()
+
+  topDataRef = createRef<TopDataRef>()
+
+  public onReachBottom = async () => {
+    await this.topDataRef.current?.loadData()
+  }
 
   //色调修改时重绘用
   public componentDidShow = () => {
@@ -134,6 +141,14 @@ export default class extends Component<any> {
               )
             })
           }
+        </View>
+        <View className='main-page-top-data'>
+          <Text className='main-page-top-data-title title-font-size-class'
+            style={{ ...secondaryColor }}
+          >找电影</Text>
+          <TopData
+            ref={this.topDataRef}
+          />
         </View>
       </View>
     )

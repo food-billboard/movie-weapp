@@ -32,6 +32,13 @@
       font-weight: bold;
     }
   }
+  &-top-data {
+    box-sizing: border-box;
+    padding: 0 10px 10px 10px;
+    &-title {
+      font-weight: bold;
+    }
+  }
 }
 
 @media screen and (min-width: 700px) {

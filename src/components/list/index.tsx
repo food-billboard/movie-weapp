@@ -21,14 +21,16 @@ export interface IProps {
   list: API_USER.IMovieListData[]
   style?: React.CSSProperties
   getUserInfo: TGetUserInfo
-  reload: (...args: any[]) => Promise<any>
+  reload?: (...args: any[]) => Promise<any>
+  actionDisabled?: boolean 
 }
 
 class List extends Component<IProps>{
   public static defaultProps: IProps = {
     list: [],
     getUserInfo: () => Promise.resolve(),
-    reload: () => Promise.resolve()
+    reload: () => Promise.resolve(),
+    actionDisabled: false 
   }
 
   public goTo = (id: string) => {
@@ -38,6 +40,7 @@ class List extends Component<IProps>{
   //收藏
   handleStore = async (id: string, isStore: boolean, e: any) => {
     e.stopPropagation()
+    if(this.props.actionDisabled) return 
     let method
     if (isStore) {
       method = putStore
