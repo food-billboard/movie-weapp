@@ -51,10 +51,9 @@ export default class extends Component<IProps, IState> {
       <View
         className={classnames('component-text-ellipsis', sizeClassName || 'normal-font-size-class', className)}
         style={{ ...style.color('secondary'), ...(isObject(customStyle) ? customStyle : {}) }}
-        onClick={this.getDetail}
       >
         <Text
-          onClick={(e) => { !needPoint && this.getDetail(e) }}
+          onClick={(e) => { needPoint && this.getDetail(e) }}
           className={`component-ellipsis-${show ? 'show' : 'hidden'}`}
         >
           {text}

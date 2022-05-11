@@ -143,6 +143,7 @@ class Detail extends Component<any> {
       store,
       author_description,
       author,
+      rate_person,
     }, commentData = [] } = this.state
     const {
       actor,
@@ -177,7 +178,8 @@ class Detail extends Component<any> {
               author_rate: parseFloat(author_rate) || 0,
               store: store,
               createdAt,
-              screen_time: nextInfo.screen_time
+              screen_time: nextInfo.screen_time,
+              rate_person
             }}
           />
           <Content

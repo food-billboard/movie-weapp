@@ -163,10 +163,10 @@ class IconList extends Component<IProps>{
     return (
       <View className='component-icon-list at-row at-row--wrap at-row__justify--around'>
         {
-          realList.map((value: API_USER.IMovieListData) => {
+          realList.map((value: API_USER.IMovieListData, index) => {
             return (
               <IconListItem
-                key={value?._id}
+                key={value?._id || index}
                 value={value}
                 reload={this.props.reload}
                 handleClick={this.props.handleClick}

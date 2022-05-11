@@ -73,7 +73,7 @@ export default class NewsHead extends Component<IProps, IState>{
         </View>
         <View className='newsheader-detail'>
           <View className='newsheader-detail-content'>
-            <View className='newsheader-detail-content-name' style={{ ...style.color('primary') }}>
+            <View className='newsheader-detail-content-name sub-title-font-size-class' style={{ ...style.color('primary') }}>
               {name}
             </View>
             <Ellipsis
@@ -81,6 +81,7 @@ export default class NewsHead extends Component<IProps, IState>{
               style={{ padding: '10rpx 0 10rpx 15rpx', marginTop: '20rpx', ...style.border(1, 'bgColor', 'dashed', 'all'), borderRadius: '10rpx' }}
               needPoint={false}
               onChange={this.handleSizeChange}
+              sizeClassName='small-font-size-class'
             ></Ellipsis>
           </View>
         </View>

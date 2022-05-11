@@ -337,7 +337,9 @@ class ListContent extends Component<IProps>{
   }
 }
 
-const List = connect(mapStateToProps, mapDispatchToProps)(ListContent)
+const List = connect(mapStateToProps, mapDispatchToProps, null, {
+  forwardRef: true,
+})(ListContent)
 
 export {
   List,

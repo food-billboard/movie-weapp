@@ -163,19 +163,19 @@ class List extends Component<IProps>{
                     </Picker>
                   </View>
                 </View>
-                <View className='at-row'>
+                <View className='at-row over-hid'>
                   <View
-                    className='list-content-description at-col__offset-3'
+                    className='list-content-description at-col__offset-3 over-hid'
                   >
                     <View
-                      className='list-content-description-wrapper'
+                      className='list-content-description-wrapper small-font-size-class over-hid'
                     >
-                      <Ellipsis
-                        text={description || '这位作者什么也没有留下...'}
-                        needPoint={false}
+                      <View
+                        className='text-ellipsis'
                         style={{ borderRadius: '30px', ...style.color('thirdly') }}
-                        sizeClassName='small-font-size-class'
-                      />
+                      >
+                        {description || '这位作者什么也没有留下...'}
+                      </View>
                     </View>
                   </View>
 

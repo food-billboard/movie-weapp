@@ -72,6 +72,7 @@ export default (props: IProps) => {
       height: '100%',
       display: 'flex',
       alignItems: 'center',
+      opacity: loading ? 0.4 : 1,
       ...(loading ? style.backgroundColor('disabled') : {}),
       ...(
         typeof border === 'string' ?
