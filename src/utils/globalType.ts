@@ -126,4 +126,5 @@ export interface ICommonFormProps {
 
 
 // export const API_DOMAIN = 'http://localhost:4000'
-export const API_DOMAIN = 'http://47.97.27.23'
+console.log(process.env.TARO_APP_API, 22222)
+export const API_DOMAIN = process.env.TARO_APP_API

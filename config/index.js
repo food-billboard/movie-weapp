@@ -30,6 +30,7 @@ const config = {
   //   '@tarojs/plugin-sass',
   //   "@tarojs/plugin-uglify"
   // ],
+  plugins: ["taro-plugin-environment"],
   framework: 'react',
   copy: {
     patterns: [
